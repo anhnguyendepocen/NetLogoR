@@ -1,18 +1,18 @@
 Package: NetLogoR
-Title: A port of NetLogo functions and language to R. 
+Title: A port of NetLogo functions and language to R.
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr", 
+    person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr",
     role = c("aut")),
     person(c("Eliot", "J", "B"), "McIntire", email="eliot.mcintire@canada.ca",
     role=c("aut", "cre")),
     person(c("Alex", "M"), "Chubaty", email="alexander.chubaty@canada.ca",
-    role=c("aut", "cre")),
+    role=c("aut")),
     person("Her Majesty the Queen in Right of Canada, as represented by the Minister of Natural Resources Canada",
     role="cph")
     )
 Description: There is no support for time in this package. It is intended to be used with SpaDES.
-Depends: 
+Depends:
   R (>= 3.2.2)
 Suggests:
   SpaDES
