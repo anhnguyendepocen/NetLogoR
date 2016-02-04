@@ -1,0 +1,77 @@
+---
+title: "Brainstorm"
+author: "Sarah Bauduin, Eliot McIntire"
+date: "4 février 2016"
+output: html_document
+---
+
+* **SB:** For the links, I'll make it a column in the turtles spdf to link two turtles together instead of doing it an agent by itself. I've never worked on any examples of links in the Railsback and Grimm's book or at their class in Germany so it must not be that common to use links anyways.  
+**EM:** I think links won`t work as columns. I would imagine that a single agent could have many links. So, it needs to be something different. Lets leave this.  
+**SB:** Yes, turtles can have multiple links so you’re right, the column thing won’t work. I’ll deal with links later.
+
+* **SB:** Same for the breed, I'll make it a column. It is simpler this way.   
+**EM:** Can an individual agent have more than one breed? If yes, then the column approach is inefficient.  
+**SB:** Turtles can only have one breed so the column will work for that.
+
+* **SB:** For the torus and topology I will make the wrap an argument in the functions when needed but just deal with the whole world wrapped (and not do the box and cylinders).   
+**EM:** See function called “wrap” in SpaDES. It is used inside the function “crw”. The wrap function may work for everything we need, but it may not. 
+
+* **SB:** I will leave all the drawing and plotting functions for now as SpaDES and R already have theirs. We can see later if we want to implement some of them.   
+**EM:** Yes. “penDown() could make some change.
+
+* **SB:** I couldn't find the McIntire-lab github. Is it in eliotmcintire or PredictiveEcology? I couldn't find it in any of them.   
+**EM:** It is in eliotmcintire, which is a private repository, for which you need to be invited. I don’t have your username. When I get it, you will have access.  
+**SB:** Got it, with the SpaDES one too.
+
+* **SB:** This programming guide is a document we will provide with the package. Is it a problem (for right, authorship, etc.) that some of it is a copy and paste of the NetLogo's website. Do I need to rephrase the stuffs that I copied? Should we deal with that later?   
+**EM:** I think we can be up front and say, “This is a SpaDES Netlogo version that is derived directly from http://..... With modifications for R. i.e., cite the whole document as a copy with modifications.
+
+* **SB:** In NetLogo the world and the patches are 2 different things, the world is like an empty raster which give the settings (extent, patch size, coordinates) and the patches are "agents", they are all the cells that fill the world. In R it is the same. Do we keep the world as a different thing of the patches, which we keep then as agents? Or do we define the patches as Raster objects only and forget about the world as an (empty) entity?   
+But then, sometimes we need to deal with only a subset of the patches (e.g., only the red patches). At this time, the red patches use functions and act as agents because they are doing stuffs like turtles (except moving). So do we define a single patch as an agent?   
+**EM:** World is “irrelevant” I think. For one, we don’t need the world to be defined in any real sense. For example, we can have many rasters that don’t have the same projection, extent etc. and everything will still work. Having said that, we can define a makeWorld() function or something that crops/reprojects things so all maps have the same extent. We can make objects of class “World”, which would be simply a raster that has an additional label “World”  
+**SB:** The way I was thinking about it was that we specify which “world” (raster layer) the turtles are moving on in each function. So yes, layers can be different for different functions. 
+I agree the world itself is not relevant.
+
+* **SB:** I'm still not sure how to define agentsets. In NetLogo, one turtle is one agent. All the turtles in the world are the "turtles". We are translating the NetLogo functions in a way that they take the turtles spdf (= the turtles). In NetLogo, agentsets are a subset of all the turtles, for example only the male turtles. Then actions are occuring only on this subset. I'm confusing how we are going to do that in our case
+```{r, eval=FALSE}
+move(turtles) #is doable
+males<-turtles[turtles$sex=="male"]; move(males) #is doable
+```
+**EM:** So, from one perspective, we can just leave the “longer” version:
+```{r, eval=FALSE}
+turtles[turtles$sex=="male",] <- crw(turtles[turtles$sex=="male",]) # Note comma… it needs to be there because it is a data.frame, and that will work. 
+```
+Crw will take the argument, which is actually a SpatialPointsDataFrame still even with the subsetting, and return a SpatialPointsDataFrame, and you just assign it back to the original subset.  
+**SB:** But then, we need somehow to reinstate the males into the turtles so that the next move(turtles) will have the new males position in it.
+Another way would be to have an argument in the functions to define agentsets and therefore act only on certain turtles. Such as: 
+```{r, eval=FALSE}
+move(turtles,subset=turtles[turtles$sex=="male"])
+```
+**EM:**Yes, this would also work. We would presumably make it simpler… using dplyr functions, for example:
+```{r,eval=FALSE}
+turtles <- move(turtles, "male", …) … which would do something like:
+move <- function(agent, agentset, …) {
+mutate(turtles, 	
+  x = ifelse(sex == agentset, crw(x, ...), x)
+) # this takes turtles, for individuals with sex == “male”, and then takes the does crw with them. 
+```
+This will get complicated quickly. I think we should start with the first version above, where the user just keeps track of them themselves via subsetting on th left and right side together.
+It is doable this 2nd way but, it might get slow because of copying of object… if you take entire turtles object, and change only 10% of it, then assign it back to the object called “turtles”, R will copy the whole object back overwriting the original.  
+**SB:**I'm worry that this would be too specific and it would work only in certain cases.
+In NetLogo, I feel that turtles are always as single entities and any actions performed on agentsets (groups of turtles) occur at the single entity level. And so when using "turtles" to act on ALL the turtles, the grouping of all single turtles is made and therefore any changes that happened in any other grouping is present.
+Sorry if it's confusing :)  
+**EM:** Did the first suggestion with subsetting left side and right side help?  
+**SB:**Yes your 1st suggestion would work, but it’s not really pretty 
+Can we combine your 1st suggestion with my 2nd in something like:
+```{r, eval=FALSE}
+turtles<-move(turtles,agentset=turtles[turtles$sex=="male",])
+#with inside the function the reinstatement
+move<-function(agent,agentset){
+  agentset_moved<-walk(agentset)
+  agent[agentset]<-agentset_moved
+  return(agent)
+}  
+```
+
+* **SB:** I looked at the NetLogo functions and try to rank them as easy or hard to do but the agentset issue was bothering me. More than half of the functions should be easy to do, if they act on all the turtles (the complete spdf). I'm not sure how the agentset issue would impact it. The functions I thought would be the hardest to translate are mostly the ones related to drawing and plotting.  
+**EM:** Agentset … we can think about this later. But start with the functions that are easy, working on “entire” agents. They should work on the “subsetted” version also.
