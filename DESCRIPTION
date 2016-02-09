@@ -11,11 +11,14 @@ Authors@R: c(
     person("Her Majesty the Queen in Right of Canada, as represented by the Minister of Natural Resources Canada",
     role="cph")
     )
-Description: There is no support for time in this package. It is intended to be used with SpaDES.
+Description: There is no support for time in this package. It is intended to be
+    used with SpaDES.
 Depends:
-  R (>= 3.2.2)
+    R (>= 3.2.2)
 Suggests:
-  SpaDES
+    SpaDES
+Imports:
+    raster
 License: GPL-3
 VignetteBuilder: knitr
 ByteCompile: yes
