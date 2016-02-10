@@ -53,12 +53,24 @@ setGeneric(
 #' @rdname createWorld
 setMethod(
   "createWorld",
-  #signature = c("numeric", "numeric", "numeric", "numeric", "numeric"), # not working
-  #signature = c("numeric", "numeric", "numeric", "numeric", "numeric", ...), # not working
+  signature = c("numeric", "numeric", "numeric", "numeric", "numeric"),
   definition = function(minPxcor = -16, maxPxcor = 16, minPycor = -16,
                         maxPycor = 16, patchSize = 1, ...) {
     worldRaster <- raster(xmn = minPxcor, xmx = maxPxcor, ymn = minPycor,
                           ymx = maxPycor, res = patchSize, ...)
+    return(worldRaster)
+  }
+)
+
+#' @export
+#' @rdname createWorld
+setMethod(
+  "createWorld",
+  signature = c("numeric", "numeric", "numeric", "numeric", "missing"),
+  definition = function(minPxcor = -16, maxPxcor = 16, minPycor = -16,
+                        maxPycor = 16, ...) {
+    worldRaster <- raster(xmn = minPxcor, xmx = maxPxcor, ymn = minPycor,
+                          ymx = maxPycor, res = 1, ...)
     return(worldRaster)
   }
 )

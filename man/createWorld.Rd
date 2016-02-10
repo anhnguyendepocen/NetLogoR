@@ -3,14 +3,20 @@
 \docType{methods}
 \name{createWorld}
 \alias{createWorld}
-\alias{createWorld,ANY-method}
+\alias{createWorld,numeric,numeric,numeric,numeric,missing-method}
+\alias{createWorld,numeric,numeric,numeric,numeric,numeric-method}
 \title{Create a world}
 \usage{
 createWorld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
   maxPycor = 16, patchSize = 1, ...)
 
-\S4method{createWorld}{ANY}(minPxcor = -16, maxPxcor = 16, minPycor = -16,
-  maxPycor = 16, patchSize = 1, ...)
+
+  \S4method{createWorld}{numeric,numeric,numeric,numeric,numeric}(minPxcor = -16,
+  maxPxcor = 16, minPycor = -16, maxPycor = 16, patchSize = 1, ...)
+
+
+  \S4method{createWorld}{numeric,numeric,numeric,numeric,missing}(minPxcor = -16,
+  maxPxcor = 16, minPycor = -16, maxPycor = 16, patchSize = 1, ...)
 }
 \arguments{
 \item{minPxcor}{Minimum x coordinate (raster left border).
