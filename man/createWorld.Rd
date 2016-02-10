@@ -3,15 +3,14 @@
 \docType{methods}
 \name{createWorld}
 \alias{createWorld}
-\alias{createWorld,numeric,numeric,numeric,numeric,numeric-method}
+\alias{createWorld,ANY-method}
 \title{Create a world}
 \usage{
 createWorld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
   maxPycor = 16, patchSize = 1, ...)
 
-
-  \S4method{createWorld}{numeric,numeric,numeric,numeric,numeric}(minPxcor = -16,
-  maxPxcor = 16, minPycor = -16, maxPycor = 16, patchSize = 1, ...)
+\S4method{createWorld}{ANY}(minPxcor = -16, maxPxcor = 16, minPycor = -16,
+  maxPycor = 16, patchSize = 1, ...)
 }
 \arguments{
 \item{minPxcor}{Minimum x coordinate (raster left border).
@@ -43,10 +42,10 @@ Arguments of the \code{raster} function from the raster package may be added.
 }
 \examples{
 # Create a square world of 25 patches.
-          world <- createWorld(minPxcor = 0, maxPxcor = 5, minPycor = 0, maxPycor = 5)
-          # Give the patches random values between 0 and 10.
-          world[] <- runif(n = 25, min = 0, max = 10)
-          plot(world)
+world <- createWorld(minPxcor = 0, maxPxcor = 5, minPycor = 0, maxPycor = 5)
+# Give the patches random values between 0 and 10.
+world[] <- runif(n = 25, min = 0, max = 10)
+plot(world)
 
 }
 \author{
