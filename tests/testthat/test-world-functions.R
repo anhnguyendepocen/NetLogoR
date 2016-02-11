@@ -17,8 +17,7 @@ test_that("maxPxcor handles RasterStack", {
   w1[] <- runif(100)
   w2 <- createWorld(0, 10, 0, 10)
   w2[] <- runif(100)
-  library(raster); on.exit(detach("package:raster"))
-  w3 <- stack(w1,w2)
+  w3 <- stack(w1, w2)
 
   maxW1 <- maxPxcor(w1)
   maxW3 <- maxPxcor(w3)
@@ -31,8 +30,7 @@ test_that("maxPycor handles RasterStack", {
   w1[] <- runif(100)
   w2 <- createWorld(0, 10, 0, 10)
   w2[] <- runif(100)
-  library(raster); on.exit(detach("package:raster"))
-  w3 <- stack(w1,w2)
+  w3 <- stack(w1, w2)
 
   maxW1 <- maxPycor(w1)
   maxW3 <- maxPycor(w3)
