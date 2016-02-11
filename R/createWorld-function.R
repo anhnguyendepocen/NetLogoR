@@ -74,3 +74,15 @@ setMethod(
     return(worldRaster)
   }
 )
+
+#' @export
+#' @rdname createWorld
+setMethod(
+  "createWorld",
+  signature = c("missing", "missing", "missing", "missing", "missing"),
+  definition = function(...) {
+    worldRaster <- raster(xmn = -16, xmx = 16, ymn = -16, ymx = 16,
+                          res = 1, ...)
+    return(worldRaster)
+  }
+)

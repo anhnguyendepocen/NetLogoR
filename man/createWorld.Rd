@@ -3,6 +3,7 @@
 \docType{methods}
 \name{createWorld}
 \alias{createWorld}
+\alias{createWorld,missing,missing,missing,missing,missing-method}
 \alias{createWorld,numeric,numeric,numeric,numeric,missing-method}
 \alias{createWorld,numeric,numeric,numeric,numeric,numeric-method}
 \title{Create a world}
@@ -16,6 +17,10 @@ createWorld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
 
 
   \S4method{createWorld}{numeric,numeric,numeric,numeric,missing}(minPxcor = -16,
+  maxPxcor = 16, minPycor = -16, maxPycor = 16, patchSize = 1, ...)
+
+
+  \S4method{createWorld}{missing,missing,missing,missing,missing}(minPxcor = -16,
   maxPxcor = 16, minPycor = -16, maxPycor = 16, patchSize = 1, ...)
 }
 \arguments{
