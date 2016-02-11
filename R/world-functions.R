@@ -86,3 +86,57 @@ setMethod(
     return(worldRaster)
   }
 )
+
+
+################################################################################
+#' Maximum pxcor
+#'
+#' Report the maximum x-coordinate for patches.
+#'
+#' @param worldRaster A \code{Raster} or \code{RasterStack} object.
+#'
+#' @return A numeric value
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' world <- createWorld()
+#' maxPxcor(worldRaster = world)
+#'
+#' @export
+#' @docType methods
+#' @rdname maxPxcor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "maxPxcor",
+  function(worldRaster) {
+    standardGeneric("maxPxcor")
+  })
+
+#' @export
+#' @rdname maxPxcor
+setMethod(
+  "maxPxcor",
+  signature = "RasterLayer",
+  definition = function(worldRaster) {
+    maxPxcorRaster <- worldRaster@extent@xmax
+    return(maxPxcorRaster)
+  }
+)
+
+#' @export
+#' @rdname maxPxcor
+setMethod(
+  "maxPxcor",
+  signature = "RasterStack",
+  definition = function(worldRaster) {
+    worldRaster_l <- worldRaster[[1]] # take the 1st layer of the stack
+    maxPxcorRaster <- maxPxcor(worldRaster = worldRaster_l)
+    return(maxPxcorRaster)
+  }
+)
