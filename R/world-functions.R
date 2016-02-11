@@ -140,3 +140,57 @@ setMethod(
     return(maxPxcorRaster)
   }
 )
+
+
+################################################################################
+#' Maximum pycor
+#'
+#' Report the maximum y-coordinate for patches.
+#'
+#' @param worldRaster A \code{Raster} or \code{RasterStack} object.
+#'
+#' @return A numeric value
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' world <- createWorld()
+#' maxPycor(worldRaster = world)
+#'
+#' @export
+#' @docType methods
+#' @rdname maxPycor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "maxPycor",
+  function(worldRaster) {
+    standardGeneric("maxPycor")
+  })
+
+#' @export
+#' @rdname maxPycor
+setMethod(
+  "maxPycor",
+  signature = "RasterLayer",
+  definition = function(worldRaster) {
+    maxPycorRaster <- worldRaster@extent@ymax
+    return(maxPycorRaster)
+  }
+)
+
+#' @export
+#' @rdname maxPycor
+setMethod(
+  "maxPycor",
+  signature = "RasterStack",
+  definition = function(worldRaster) {
+    worldRaster_l <- worldRaster[[1]] # take the 1st layer of the stack
+    maxPycorRaster <- maxPycor(worldRaster = worldRaster_l)
+    return(maxPycorRaster)
+  }
+)

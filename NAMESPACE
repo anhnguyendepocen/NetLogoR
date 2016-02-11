@@ -2,7 +2,9 @@
 
 export(createWorld)
 export(maxPxcor)
+export(maxPycor)
 exportMethods(createWorld)
 exportMethods(maxPxcor)
+exportMethods(maxPycor)
 import(methods)
 import(raster)
