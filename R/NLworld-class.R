@@ -23,9 +23,10 @@
 #'             Northwestern University. Evanston, IL.
 #'
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
+#' @exportClass NLworld
 #'
 setClass(
   "NLworld",
-  contains = C("RasterLayer", "RasterStack")
+  contains = c("RasterLayer", "RasterStack")
 )
 

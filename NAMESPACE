@@ -3,6 +3,7 @@
 export(createWorld)
 export(maxPxcor)
 export(maxPycor)
+exportClasses(NLworld)
 exportMethods(createWorld)
 exportMethods(maxPxcor)
 exportMethods(maxPycor)
