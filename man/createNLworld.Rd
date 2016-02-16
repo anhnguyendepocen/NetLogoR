@@ -36,7 +36,7 @@ A NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPy
 Create an empty grid of patches of class \code{NLworld}.
 }
 \details{
-See \code{help("NLworld)} for more details on the NLworld.
+See \code{help("NLworld")} for more details on the NLworld.
 }
 \examples{
 # Create a square world of 25 patches.
