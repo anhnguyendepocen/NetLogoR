@@ -35,7 +35,4 @@ w3 <- NLstack(w1, w2)
 \author{
 Sarah Bauduin
 }
-\references{
-
-}
 

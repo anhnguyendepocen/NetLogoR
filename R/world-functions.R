@@ -1,23 +1,23 @@
 ################################################################################
-#' Create a NLworld
+#' Create a \code{NLworld}
 #'
 #' Create an empty grid of patches of class \code{NLworld}.
 #'
-#' @param minPxcor  \code{pxcor} for patches on the left border of the NLworld.
+#' @param minPxcor  \code{pxcor} for patches on the left border of the \code{NLworld}
 #'                  Default value = \code{-16}, as in NetLogo.
 #'
-#' @param maxPxcor  \code{pxcor} for patches on the right border of the NLworld.
+#' @param maxPxcor  \code{pxcor} for patches on the right border of the \code{NLworld}
 #'                  Default value = \code{16}, as in NetLogo.
 #'
-#' @param minPycor  \code{pycor} for patches at the bottom of the NLworld.
+#' @param minPycor  \code{pycor} for patches at the bottom of the \code{NLworld}
 #'                  Default value \code{-16}, as in NetLogo.
 #'
-#' @param maxPycor  \code{pycor} for patches at the top of the NLworld.
+#' @param maxPycor  \code{pycor} for patches at the top of the \code{NLworld}
 #'                  Default value \code{16}, as in NetLogo.
 #'
-#' @details See \code{help("NLworld)} for more details on the NLworld.
+#' @details See \code{help("NLworld")} for more details on the \code{NLworld}
 #'
-#' @return A NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#' @return A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches. Patches value are NA.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
@@ -96,6 +96,102 @@ setMethod(
     return(world)
   }
 )
+
+
+################################################################################
+#' Convert to a \code{NLworld}
+#'
+#' Convert a \code{Raster*} object into a \code{NLworld}.
+#'
+#' @param raster A \code{RasterLayer} or a \code{RasterStack} object.
+#'
+#' @details See \code{help("NLworld")} for more details on the \code{NLworld}.
+#'
+#' @return A \code{NLworld} or \code{NLworldStack} object depending on the input.
+#'         Patches value are retained from the \code{Raster*} object.
+#'
+#' @examples
+#'
+#' @export
+#' @docType methods
+#' @rdname convertNLworld
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "convertNLworld",
+  function(raster) {
+    standardGeneric("convertNLworld")
+  })
+
+
+#' @export
+#' @rdname convertNLworld
+setMethod(
+  "convertNLworld",
+  signature = c("RasterLayer"),
+  definition = function(raster) {
+
+    world <- as(raster, "NLworld")
+
+    # find the patch intersecting x = 0 and/or y = 0 to start the patches coordinates
+    # otherwise the left patches have their pxcor = 0
+    # and the bottom patches have their pycor = 0.
+    patch0y <- colFromX(object = world, x = 0)
+    patchx0 <- rowFromY(object = world, y = 0)
+
+    if(!is.na(patch0y) & !is.na(patchx0)){
+
+      world@minPxcor <- -(patch0y - 1)
+      world@maxPxcor <- world@ncols - patch0y
+      world@minPycor <- -(world@nrows - patchx0)
+      world@maxPycor <- patchx0 - 1
+
+    } else if(!is.na(patch0y)){
+
+      world@minPxcor <- -(patch0y - 1)
+      world@maxPxcor <- world@ncols - patch0y
+      world@minPycor <- 0
+      world@maxPycor <- world@nrows - 1
+
+    } else if(!is.na(patchx0)){
+
+      world@minPxcor <- 0
+      world@maxPxcor <- world@ncols - 1
+      world@minPycor <- -(world@nrows - patchx0)
+      world@maxPycor <- patchx0 - 1
+
+    } else {
+
+      world@minPxcor <- 0
+      world@maxPxcor <- world@ncols - 1
+      world@minPycor <- 0
+      world@maxPycor <- world@nrows - 1
+
+    }
+
+    world@pxcor = (world@minPxcor + colFromCell(world, 1:(world@nrows * world@ncols))) - 1
+    world@pycor = (world@maxPycor - rowFromCell(world, 1:(world@nrows * world@ncols))) + 1
+
+    return(world)
+})
+
+
+#' @export
+#' @rdname convertNLworld
+setMethod(
+  "convertNLworld",
+  signature = c("RasterStack"),
+  definition = function(raster) {
+
+    worldStack <- as(raster, "NLworldStack")
+
+    for(i in 1:nlayers(worldStack)){
+      worldStack[[i]] <- convertNLworld(raster = worldStack[[i]])
+    }
+
+    return(worldStack)
+})
 
 
 ################################################################################

@@ -32,10 +32,10 @@ setClass(
   "NLworld",
   contains = "RasterLayer",
   slots = c(
-    maxPxcor = "numeric",
     minPxcor = "numeric",
-    maxPycor = "numeric",
+    maxPxcor = "numeric",
     minPycor = "numeric",
+    maxPycor = "numeric",
     pxcor = "numeric",
     pycor = "numeric"
   )
@@ -70,8 +70,6 @@ setClass(
 #'
 #' @return A \code{NLworldStack} object with the \code{NLworld} stacked as layers.
 #'
-#' @references
-#'
 #' @examples
 #' # Create 2 worlds with the default settings but different values.
 #' w1 <- createNLworld()
@@ -88,7 +86,6 @@ setClass(
 #'
 #' @author Sarah Bauduin
 #'
-
 setGeneric(
   "NLstack",
   function(world1, world2) {
