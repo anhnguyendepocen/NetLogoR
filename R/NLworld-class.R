@@ -30,14 +30,22 @@
 #'
 setClass(
   "NLworld",
-  contains = c("RasterLayer", "RasterStack"),
-  slots = c(
+  contains = c("RasterLayer"),
+  representation (
     maxPxcor = "numeric",
     minPxcor = "numeric",
     maxPycor = "numeric",
     minPycor = "numeric",
     pxcor = "numeric",
     pycor = "numeric"
+  ) ,
+  prototype (
+    maxPxcor = 1,
+    minPxcor = 0,
+    maxPycor = 1,
+    minPycor = 0,
+    pxcor = 0.1,
+    pycor = 0.1
   )
 )
 
