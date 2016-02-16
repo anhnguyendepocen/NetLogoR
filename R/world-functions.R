@@ -268,3 +268,89 @@ setMethod(
     return(world@minPycor)
   }
 )
+
+
+################################################################################
+#' NLworld width
+#'
+#' Report the width of the \code{NLworld} in patch number.
+#'
+#' @param world A \code{NLworld} object representing the world.
+#'
+#' @return A numeric value
+#'
+#' @details It equals \code{NLworld@maxPxcor - NLworld@minPxcor + 1}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' worldWidth(world = w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname worldWidth
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "worldWidth",
+  function(world) {
+    standardGeneric("worldWidth")
+  })
+
+#' @export
+#' @rdname worldWidth
+setMethod(
+  "worldWidth",
+  signature = "NLworld",
+  definition = function(world) {
+    return(world@maxPxcor - world@minPxcor + 1)
+  }
+)
+
+
+################################################################################
+#' NLworld height
+#'
+#' Report the height of the \code{NLworld} in patch number.
+#'
+#' @param world A \code{NLworld} object representing the world.
+#'
+#' @return A numeric value
+#'
+#' @details It equals \code{NLworld@maxPycor - NLworld@minPycor + 1}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' worldHeight(world = w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname worldHeight
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "worldHeight",
+  function(world) {
+    standardGeneric("worldHeight")
+  })
+
+#' @export
+#' @rdname worldHeight
+setMethod(
+  "worldHeight",
+  signature = "NLworld",
+  definition = function(world) {
+    return(world@maxPycor - world@minPycor + 1)
+  }
+)
