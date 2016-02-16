@@ -15,10 +15,10 @@
 #' @param maxPycor  \code{pycor} for patches at the top of the NLworld.
 #'                  Default value \code{16}, as in NetLogo.
 #'
-#' @details See \code{help("NLworld)} for more details on the NLworld.
+#' @details See \code{help("NLworld")} for more details on the NLworld.
 #'
 #' @return A NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
-#'         patches. Patches value are NA.
+#'         patches. Patch value are \code{NA}.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
