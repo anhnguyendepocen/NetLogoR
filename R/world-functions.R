@@ -99,7 +99,7 @@ setMethod(
 
 
 ################################################################################
-#' Get maximum pxcor
+#' Maximum pxcor
 #'
 #' Report the patches maximum \code{pxcor} in a NLworld.
 #'
@@ -116,24 +116,24 @@ setMethod(
 #' @examples
 #' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' getMaxPxcor(world = w1)
+#' maxPxcor(world = w1)
 #'
 #' @export
 #' @docType methods
-#' @rdname getMaxPxcor
+#' @rdname maxPxcor
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "getMaxPxcor",
+  "maxPxcor",
   function(world) {
-    standardGeneric("getMaxPxcor")
+    standardGeneric("maxPxcor")
   })
 
 #' @export
-#' @rdname getMaxPxcor
+#' @rdname maxPxcor
 setMethod(
-  "getMaxPxcor",
+  "maxPxcor",
   signature = "NLworld",
   definition = function(world) {
     return(world@maxPxcor)
@@ -142,7 +142,7 @@ setMethod(
 
 
 ################################################################################
-#' Get maximum pycor
+#' Maximum pycor
 #'
 #' Report the patches maximum \code{pycor} in a NLworld.
 #'
@@ -159,24 +159,24 @@ setMethod(
 #' @examples
 #' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' getMaxPycor(world = w1)
+#' maxPycor(world = w1)
 #'
 #' @export
 #' @docType methods
-#' @rdname getMaxPycor
+#' @rdname maxPycor
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "getMaxPycor",
+  "maxPycor",
   function(world) {
-    standardGeneric("getMaxPycor")
+    standardGeneric("maxPycor")
   })
 
 #' @export
-#' @rdname getMaxPycor
+#' @rdname maxPycor
 setMethod(
-  "getMaxPycor",
+  "maxPycor",
   signature = "NLworld",
   definition = function(world) {
     return(world@maxPycor)
@@ -185,7 +185,7 @@ setMethod(
 
 
 ################################################################################
-#' Get minimum pxcor
+#' Minimum pxcor
 #'
 #' Report the patches minimum \code{pxcor} in a NLworld.
 #'
@@ -202,24 +202,24 @@ setMethod(
 #' @examples
 #' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' getMinPxcor(world = w1)
+#' minPxcor(world = w1)
 #'
 #' @export
 #' @docType methods
-#' @rdname getMinPxcor
+#' @rdname minPxcor
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "getMinPxcor",
+  "minPxcor",
   function(world) {
-    standardGeneric("getMinPxcor")
+    standardGeneric("minPxcor")
   })
 
 #' @export
-#' @rdname getMinPxcor
+#' @rdname minPxcor
 setMethod(
-  "getMinPxcor",
+  "minPxcor",
   signature = "NLworld",
   definition = function(world) {
     return(world@minPxcor)
@@ -228,7 +228,7 @@ setMethod(
 
 
 ################################################################################
-#' Get minimum pycor
+#' Minimum pycor
 #'
 #' Report the patches minimum \code{pycor} in a NLworld.
 #'
@@ -245,24 +245,24 @@ setMethod(
 #' @examples
 #' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' getMinPycor(world = w1)
+#' minPycor(world = w1)
 #'
 #' @export
 #' @docType methods
-#' @rdname getMinPycor
+#' @rdname minPycor
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "getMinPycor",
+  "minPycor",
   function(world) {
-    standardGeneric("getMinPycor")
+    standardGeneric("minPycor")
   })
 
 #' @export
-#' @rdname getMinPycor
+#' @rdname minPycor
 setMethod(
-  "getMinPycor",
+  "minPycor",
   signature = "NLworld",
   definition = function(world) {
     return(world@minPycor)
