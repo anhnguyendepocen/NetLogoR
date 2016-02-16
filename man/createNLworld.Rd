@@ -40,10 +40,10 @@ See \code{help("NLworld)} for more details on the NLworld.
 }
 \examples{
 # Create a square world of 25 patches.
-world <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 # Give the patches random values between 0 and 10.
-world[] <- runif(n = 25, min = 0, max = 10)
-plot(world)
+w1[] <- runif(n = 25, min = 0, max = 10)
+plot(w1)
 
 }
 \author{

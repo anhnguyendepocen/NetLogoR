@@ -26,10 +26,10 @@
 #'
 #' @examples
 #' # Create a square world of 25 patches.
-#' world <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' # Give the patches random values between 0 and 10.
-#' world[] <- runif(n = 25, min = 0, max = 10)
-#' plot(world)
+#' w1[] <- runif(n = 25, min = 0, max = 10)
+#' plot(w1)
 #'
 #' @export
 #' @docType methods
@@ -94,5 +94,177 @@ setMethod(
     world@pycor = (16 - rowFromCell(world, 1:(world@nrows * world@ncols))) + 1
 
     return(world)
+  }
+)
+
+
+################################################################################
+#' Get maximum pxcor
+#'
+#' Report the patches maximum \code{pxcor} in a NLworld.
+#'
+#' @param world A \code{NLworld} object representing the world.
+#'
+#' @return A numeric value
+#'
+#' @details Does the same as accessing the slot with \code{NLworld@maxPxcor}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' getMaxPxcor(world = w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname getMaxPxcor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "getMaxPxcor",
+  function(world) {
+    standardGeneric("getMaxPxcor")
+  })
+
+#' @export
+#' @rdname getMaxPxcor
+setMethod(
+  "getMaxPxcor",
+  signature = "NLworld",
+  definition = function(world) {
+    return(world@maxPxcor)
+  }
+)
+
+
+################################################################################
+#' Get maximum pycor
+#'
+#' Report the patches maximum \code{pycor} in a NLworld.
+#'
+#' @param world A \code{NLworld} object representing the world.
+#'
+#' @return A numeric value
+#'
+#' @details Does the same as accessing the slot with \code{NLworld@maxPycor}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' getMaxPycor(world = w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname getMaxPycor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "getMaxPycor",
+  function(world) {
+    standardGeneric("getMaxPycor")
+  })
+
+#' @export
+#' @rdname getMaxPycor
+setMethod(
+  "getMaxPycor",
+  signature = "NLworld",
+  definition = function(world) {
+    return(world@maxPycor)
+  }
+)
+
+
+################################################################################
+#' Get minimum pxcor
+#'
+#' Report the patches minimum \code{pxcor} in a NLworld.
+#'
+#' @param world A \code{NLworld} object representing the world.
+#'
+#' @return A numeric value
+#'
+#' @details Does the same as accessing the slot with \code{NLworld@minPxcor}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' getMinPxcor(world = w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname getMinPxcor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "getMinPxcor",
+  function(world) {
+    standardGeneric("getMinPxcor")
+  })
+
+#' @export
+#' @rdname getMinPxcor
+setMethod(
+  "getMinPxcor",
+  signature = "NLworld",
+  definition = function(world) {
+    return(world@minPxcor)
+  }
+)
+
+
+################################################################################
+#' Get minimum pycor
+#'
+#' Report the patches minimum \code{pycor} in a NLworld.
+#'
+#' @param world A \code{NLworld} object representing the world.
+#'
+#' @return A numeric value
+#'
+#' @details Does the same as accessing the slot with \code{NLworld@minPycor}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' getMinPycor(world = w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname getMinPycor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "getMinPycor",
+  function(world) {
+    standardGeneric("getMinPycor")
+  })
+
+#' @export
+#' @rdname getMinPycor
+setMethod(
+  "getMinPycor",
+  signature = "NLworld",
+  definition = function(world) {
+    return(world@minPycor)
   }
 )
