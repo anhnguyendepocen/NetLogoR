@@ -1,29 +1,24 @@
 ################################################################################
-#' Create a world
+#' Create a NLworld
 #'
-#' Create empty patches at the extent and resolution given for the world.
+#' Create an empty grid of patches of class \code{NLworld}.
 #'
-#' @param minPxcor  Minimum x coordinate (raster left border).
+#' @param minPxcor  \code{pxcor} for patches on the left border of the NLworld.
+#'                  Default value = \code{-16}, as in NetLogo.
+#'
+#' @param maxPxcor  \code{pxcor} for patches on the right border of the NLworld.
+#'                  Default value = \code{16}, as in NetLogo.
+#'
+#' @param minPycor  \code{pycor} for patches at the bottom of the NLworld.
 #'                  Default value \code{-16}, as in NetLogo.
 #'
-#' @param maxPxcor  Maximum x coordinate (raster right border).
+#' @param maxPycor  \code{pycor} for patches at the top of the NLworld.
 #'                  Default value \code{16}, as in NetLogo.
 #'
-#' @param minPycor  Minimum y coordinate (raster bottom border).
-#'                  Default value \code{-16}, as in NetLogo.
+#' @details See \code{help("NLworld)} for more details on the NLworld.
 #'
-#' @param maxPycor  Maximum y coordinate (raster top border).
-#'                  Default value \code{16}, as in NetLogo.
-#'
-#' @param patchSize Numeric vector of length 1 or 2 to set the raster resolution.
-#'                  Default value \1.
-#'
-#' @param ...       Additional arguments, see Details
-#'
-#' @details Arguments of the \code{raster} function from the raster package may be added.
-#'
-#' @return A RasterLayer object with extent and resolution as given by the parameters.
-#'         Cells value are NA.
+#' @return A NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#'         patches. Patches value are NA.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -31,166 +26,73 @@
 #'
 #' @examples
 #' # Create a square world of 25 patches.
-#' world <- createWorld(minPxcor = 0, maxPxcor = 5, minPycor = 0, maxPycor = 5)
+#' world <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' # Give the patches random values between 0 and 10.
 #' world[] <- runif(n = 25, min = 0, max = 10)
 #' plot(world)
 #'
 #' @export
 #' @docType methods
-#' @rdname createWorld
+#' @rdname createNLworld
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "createWorld",
-  function(minPxcor = -16, maxPxcor = 16, minPycor = -16, maxPycor = 16,
-           patchSize = 1, ...) {
-  standardGeneric("createWorld")
+  "createNLworld",
+  function(minPxcor = -16, maxPxcor = 16, minPycor = -16, maxPycor = 16) {
+  standardGeneric("createNLworld")
 })
 
 #' @export
-#' @rdname createWorld
+#' @rdname createNLworld
 setMethod(
-  "createWorld",
-  signature = c("numeric", "numeric", "numeric", "numeric", "numeric"),
+  "createNLworld",
+  signature = c("numeric", "numeric", "numeric", "numeric"),
   definition = function(minPxcor = -16, maxPxcor = 16, minPycor = -16,
-                        maxPycor = 16, patchSize = 1, ...) {
-    worldRaster <- raster(xmn = minPxcor, xmx = maxPxcor, ymn = minPycor,
-                          ymx = maxPycor, res = patchSize, ...)
-    return(worldRaster)
-  }
-)
+                        maxPycor = 16) {
 
-#' @export
-#' @rdname createWorld
-setMethod(
-  "createWorld",
-  signature = c("numeric", "numeric", "numeric", "numeric", "missing"),
-  definition = function(minPxcor = -16, maxPxcor = 16, minPycor = -16,
-                        maxPycor = 16, ...) {
-    worldRaster <- raster(xmn = minPxcor, xmx = maxPxcor, ymn = minPycor,
-                          ymx = maxPycor, res = 1, ...)
-    return(worldRaster)
-  }
-)
+    world <- new("NLworld",
+                 minPxcor = minPxcor, maxPxcor = maxPxcor,
+                 minPycor = minPycor, maxPycor = maxPycor)
 
-#' @export
-#' @rdname createWorld
-setMethod(
-  "createWorld",
-  signature = c("missing", "missing", "missing", "missing", "missing"),
-  definition = function(...) {
-    worldRaster <- raster(xmn = -16, xmx = 16, ymn = -16, ymx = 16,
-                          res = 1, ...)
-    return(worldRaster)
+    # define the raster coordinates with the NLworld extent
+    world@extent@xmin <- minPxcor
+    world@extent@xmax <- maxPxcor + 1
+    world@extent@ymin <- minPycor
+    world@extent@ymax <- maxPycor + 1
+    res(world) <- 1
+
+    # define the patch coordinates with the raster row and column numbers
+    world@pxcor = (minPxcor + colFromCell(world, 1:(world@nrows * world@ncols))) - 1
+    world@pycor = (maxPycor - rowFromCell(world, 1:(world@nrows * world@ncols))) + 1
+
+    return(world)
   }
 )
 
 
-################################################################################
-#' Maximum pxcor
-#'
-#' Report the maximum x-coordinate for patches.
-#'
-#' @param worldRaster A \code{Raster} or \code{RasterStack} object.
-#'
-#' @return A numeric value
-#'
-#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
-#'             Center for Connected Learning and Computer-Based Modeling,
-#'             Northwestern University. Evanston, IL.
-#'
-#' @examples
-#' # Create a world with the default settings.
-#' world <- createWorld()
-#' maxPxcor(worldRaster = world)
-#'
 #' @export
-#' @docType methods
-#' @rdname maxPxcor
-#'
-#' @author Sarah Bauduin
-#'
-setGeneric(
-  "maxPxcor",
-  function(worldRaster) {
-    standardGeneric("maxPxcor")
-  })
-
-#' @export
-#' @rdname maxPxcor
+#' @rdname createNLworld
 setMethod(
-  "maxPxcor",
-  signature = "RasterLayer",
-  definition = function(worldRaster) {
-    maxPxcorRaster <- worldRaster@extent@xmax
-    return(maxPxcorRaster)
-  }
-)
+  "createNLworld",
+  signature = c("missing", "missing", "missing", "missing"),
+  definition = function() {
 
-#' @export
-#' @rdname maxPxcor
-setMethod(
-  "maxPxcor",
-  signature = "RasterStack",
-  definition = function(worldRaster) {
-    worldRaster_l <- worldRaster[[1]] # take the 1st layer of the stack
-    maxPxcorRaster <- maxPxcor(worldRaster = worldRaster_l)
-    return(maxPxcorRaster)
-  }
-)
+    world <- new("NLworld",
+                 minPxcor = -16, maxPxcor = 16,
+                 minPycor = -16, maxPycor = 16)
 
+    # define the raster coordinates with the NLworld extent
+    world@extent@xmin <- -16
+    world@extent@xmax <- 16 + 1
+    world@extent@ymin <- -16
+    world@extent@ymax <- 16 + 1
+    res(world) <- 1
 
-################################################################################
-#' Maximum pycor
-#'
-#' Report the maximum y-coordinate for patches.
-#'
-#' @param worldRaster A \code{Raster} or \code{RasterStack} object.
-#'
-#' @return A numeric value
-#'
-#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
-#'             Center for Connected Learning and Computer-Based Modeling,
-#'             Northwestern University. Evanston, IL.
-#'
-#' @examples
-#' # Create a world with the default settings.
-#' world <- createWorld()
-#' maxPycor(worldRaster = world)
-#'
-#' @export
-#' @docType methods
-#' @rdname maxPycor
-#'
-#' @author Sarah Bauduin
-#'
-setGeneric(
-  "maxPycor",
-  function(worldRaster) {
-    standardGeneric("maxPycor")
-  })
+    # define the patch coordinates with the raster row and column numbers
+    world@pxcor = (-16 + colFromCell(world, 1:(world@nrows * world@ncols))) - 1
+    world@pycor = (16 - rowFromCell(world, 1:(world@nrows * world@ncols))) + 1
 
-#' @export
-#' @rdname maxPycor
-setMethod(
-  "maxPycor",
-  signature = "RasterLayer",
-  definition = function(worldRaster) {
-    maxPycorRaster <- worldRaster@extent@ymax
-    return(maxPycorRaster)
-  }
-)
-
-#' @export
-#' @rdname maxPycor
-setMethod(
-  "maxPycor",
-  signature = "RasterStack",
-  definition = function(worldRaster) {
-    worldRaster_l <- worldRaster[[1]] # take the 1st layer of the stack
-    maxPycorRaster <- maxPycor(worldRaster = worldRaster_l)
-    return(maxPycorRaster)
+    return(world)
   }
 )

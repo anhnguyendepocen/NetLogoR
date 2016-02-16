@@ -29,56 +29,12 @@ setClass(
   "NLworld",
   contains = c("RasterLayer", "RasterStack"),
   slots = c(
-    maxPxcor = "numeric", # the functions maxPxcor, minPxcor, maxPycor, minPycor ...
-    minPxcor = "numeric", # ... need to be renamed into getMaxPxcor, getMinPxcor, etc.
-    maxPycor = "numeric", # maxPxcor, minPxcor, maxPycor, minPycor are single values...
-    minPycor = "numeric", # ... defining the NLworld extent
-    pxcor = "numeric", # pxcor and pycor are patch coordinates...
-    pycor = "numeric", # one value per patch
-    pacthSize = "numeric"
-  ),
-  prototype = c(
-    pxcor = (minPxcor + colFromCell(NLworld, 1:(NLworld@nrows * NLworld@ncols))) - 1, # define the patch coordinates with the raster row and column numbers
-    pycor = (maxPycor - rowFromCell(NLworld, 1:(NLworld@nrows * NLworld@ncols))) + 1,
-    patchSize = 1
+    maxPxcor = "numeric",
+    minPxcor = "numeric",
+    maxPycor = "numeric",
+    minPycor = "numeric",
+    pxcor = "numeric",
+    pycor = "numeric"
   )
 )
 
-
-#' @export
-#' @importFrom NetLogoR getMaxPycor
-#' @importFrom NetLogoR getMinPxcor
-#' @name [
-#' @docType methods
-#' @rdname NLworld-class
-setMethod(
-  "[",
-  signature(worldRaster = "NLworld", pxcor = "numeric", pycor = "numeric"),
-  definition = function(worldRaster, pxcor, pycor) {
-
-    maxPycor <- getMaxPycor(worldRaster = worldRaster)
-    minPxcor <- getMinPxcor(worldRaster = worldRaster)
-
-    nrow_R<- (maxPycor - pycor) + 1 # define raster row and column numbers with pxcor and pycor
-    ncol_R<- (pxcor - minPxcor) + 1
-    cellsExtract <- worldRaster[nrow_R, ncol_R]
-
-    return(cellsExtract)
-})
-
-
-#' @export
-#' @importFrom NetLogoR getMaxPycor
-#' @importFrom NetLogoR getMinPxcor
-#' @name [<-
-#' @rdname NLworld-class
-setReplaceMethod(
-  "[",
-  signature(worldRaster = "NLworld", pxcor = "numeric", pycor = "numeric", value = "numeric"),
-  definition = function(worldRaster, pxcor, pycor, value) {
-
-    worldRaster[pxcor, pycor] <- value
-
-    validObject(worldRaster)
-    return(worldRaster)
-})
