@@ -5,7 +5,7 @@
 \alias{NLworld-class}
 \title{The \code{NLworld} class}
 \description{
-Behaves the same as a Raster* object except:
+Behaves the same as a \code{RasterLayer} object except:
 }
 \details{
 A \code{NLworld} is a grid composed of squared patches of resolution 1.
