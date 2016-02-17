@@ -1,7 +1,7 @@
 ################################################################################
 #' The \code{NLworld} class
 #'
-#' Behaves the same as a Raster* object except:
+#' Behaves the same as a \code{RasterLayer} object except:
 #'
 #' A \code{NLworld} is a grid composed of squared patches of resolution 1.
 #' Patches have two coordinates \code{pxcor} and \code{pycor}.
@@ -19,7 +19,7 @@
 #' been redefined to extract \code{NLworld} patches using the patches' coordinates
 #' \code{[pxcor,pyxor]}.
 #'
-#' @inheritParams raster
+#' @inheritParams RasterLayer
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -49,3 +49,72 @@ setClass(
   )
 )
 
+
+################################################################################
+#' The \code{NLworldStack} class
+#'
+#' Behaves the same as a \code{RasterStack} object except that it is a collection
+#' of \code{NLworld} objects.
+#'
+#' @inheritParams RasterStack
+#'
+#' @author Sarah Bauduin
+#' @exportClass NLworldStack
+#'
+setClass(
+  "NLworldStack",
+  contains = "RasterStack"
+)
+
+
+################################################################################
+#' Creating a \code{NLworldStack}
+#'
+#' Stacking several \code{NLworld} together to obtain a single \code{NlworldStack}
+#' which contains different layers for the different \code{NLworld} values.
+#'
+#' @param world1 A \code{NLworld} object.
+#' @param world2 A \code{NLworld} object.
+#'
+#' @return A \code{NLworldStack} object with the \code{NLworld} stacked as layers.
+#'
+#' @references
+#'
+#' @examples
+#' # Create 2 worlds with the default settings but different values.
+#' w1 <- createNLworld()
+#' w2 <- createNLworld()
+#' w1[] <- runif(n = 1089)
+#' w2[] <- runif(n = 1089)
+#' # Stack the 2 world together.
+#' w3 <- NLstack(w1, w2)
+#'
+#' @export
+#' @importFrom raster addLayer
+#' @docType methods
+#' @rdname NLstack
+#'
+#' @author Sarah Bauduin
+#'
+
+setGeneric(
+  "NLstack",
+  function(world1, world2) {
+    standardGeneric("NLstack")
+  })
+
+#' @export
+#' @rdname NLstack
+setMethod(
+  "NLstack",
+  signature(world1 = "NLworld", world2 = "NLworld"),
+  definition = function(world1, world2) {
+
+    worldStack <- new("NLworldStack")
+    world1@data@names <- deparse(substitute(world1)) # name the layer with the object name
+    worldStack1 <- addLayer(worldStack, world1)
+    world2@data@names <- deparse(substitute(world2))
+    worldStack12 <- addLayer(worldStack1, world2)
+
+    return(worldStack12)
+  })
