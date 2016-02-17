@@ -38,14 +38,6 @@ setClass(
     maxPycor = "numeric",
     pxcor = "numeric",
     pycor = "numeric"
-  ) ,
-  prototype (
-    maxPxcor = 1,
-    minPxcor = 0,
-    maxPycor = 1,
-    minPycor = 0,
-    pxcor = 0.1,
-    pycor = 0.1
   )
 )
 
