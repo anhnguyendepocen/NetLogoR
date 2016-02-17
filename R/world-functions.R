@@ -15,17 +15,10 @@
 #' @param maxPycor  \code{pycor} for patches at the top of the \code{NLworld}
 #'                  Default value \code{16}, as in NetLogo.
 #'
-<<<<<<< HEAD
-#' @details See \code{help("NLworld")} for more details on the \code{NLworld}
-#'
-#' @return A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
-#'         patches. Patches value are NA.
-=======
 #' @details See \code{help("NLworld")} for more details on the NLworld.
 #'
-#' @return A NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#' @return A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches. Patch value are \code{NA}.
->>>>>>> origin/master
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -133,34 +126,27 @@ setMethod(
     patch0y <- colFromX(object = world, x = 0)
     patchx0 <- rowFromY(object = world, y = 0)
 
-    if(!is.na(patch0y) & !is.na(patchx0)){
+    if(!is.na(patch0y)){
 
       world@minPxcor <- -(patch0y - 1)
       world@maxPxcor <- world@ncols - patch0y
-      world@minPycor <- -(world@nrows - patchx0)
-      world@maxPycor <- patchx0 - 1
-
-    } else if(!is.na(patch0y)){
-
-      world@minPxcor <- -(patch0y - 1)
-      world@maxPxcor <- world@ncols - patch0y
-      world@minPycor <- 0
-      world@maxPycor <- world@nrows - 1
-
-    } else if(!is.na(patchx0)){
-
-      world@minPxcor <- 0
-      world@maxPxcor <- world@ncols - 1
-      world@minPycor <- -(world@nrows - patchx0)
-      world@maxPycor <- patchx0 - 1
 
     } else {
 
       world@minPxcor <- 0
       world@maxPxcor <- world@ncols - 1
+
+    }
+
+    if(!is.na(patchx0)){
+
+      world@minPycor <- -(world@nrows - patchx0)
+      world@maxPycor <- patchx0 - 1
+
+    } else {
+
       world@minPycor <- 0
       world@maxPycor <- world@nrows - 1
-
     }
 
     world@pxcor = (world@minPxcor + colFromCell(world, 1:(world@nrows * world@ncols))) - 1

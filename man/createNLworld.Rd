@@ -29,23 +29,14 @@ Default value \code{-16}, as in NetLogo.}
 Default value \code{16}, as in NetLogo.}
 }
 \value{
-<<<<<<< HEAD
 A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
-        patches. Patches value are NA.
-=======
-A NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
         patches. Patch value are \code{NA}.
->>>>>>> origin/master
 }
 \description{
 Create an empty grid of patches of class \code{NLworld}.
 }
 \details{
-<<<<<<< HEAD
-See \code{help("NLworld")} for more details on the \code{NLworld}
-=======
 See \code{help("NLworld")} for more details on the NLworld.
->>>>>>> origin/master
 }
 \examples{
 # Create a square world of 25 patches.

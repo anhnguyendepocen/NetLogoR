@@ -30,14 +30,8 @@
 #'
 setClass(
   "NLworld",
-<<<<<<< HEAD
-  contains = "RasterLayer",
-  slots = c(
-=======
   contains = c("RasterLayer"),
   representation (
-    maxPxcor = "numeric",
->>>>>>> origin/master
     minPxcor = "numeric",
     maxPxcor = "numeric",
     minPycor = "numeric",
