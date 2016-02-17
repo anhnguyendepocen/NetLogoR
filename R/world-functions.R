@@ -85,22 +85,8 @@ setMethod(
   signature = c("missing", "missing", "missing", "missing"),
   definition = function() {
 
-    world <- new("NLworld",
-                 minPxcor = -16, maxPxcor = 16,
-                 minPycor = -16, maxPycor = 16)
+     createNLworld(-16, 16, -16, 16)
 
-    # define the raster coordinates with the NLworld extent
-    world@extent@xmin <- -16
-    world@extent@xmax <- 16 + 1
-    world@extent@ymin <- -16
-    world@extent@ymax <- 16 + 1
-    res(world) <- 1
-
-    # define the patch coordinates with the raster row and column numbers
-    world@pxcor = (-16 + colFromCell(world, 1:(world@nrows * world@ncols))) - 1
-    world@pycor = (16 - rowFromCell(world, 1:(world@nrows * world@ncols))) + 1
-
-    return(world)
   }
 )
 

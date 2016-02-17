@@ -30,14 +30,28 @@
 #'
 setClass(
   "NLworld",
+<<<<<<< HEAD
   contains = "RasterLayer",
   slots = c(
+=======
+  contains = c("RasterLayer"),
+  representation (
+    maxPxcor = "numeric",
+>>>>>>> origin/master
     minPxcor = "numeric",
     maxPxcor = "numeric",
     minPycor = "numeric",
     maxPycor = "numeric",
     pxcor = "numeric",
     pycor = "numeric"
+  ) ,
+  prototype (
+    maxPxcor = 1,
+    minPxcor = 0,
+    maxPycor = 1,
+    minPycor = 0,
+    pxcor = 0.1,
+    pycor = 0.1
   )
 )
 
@@ -78,6 +92,9 @@ setClass(
 #' w2[] <- runif(n = 1089)
 #' # Stack the 2 world together.
 #' w3 <- NLstack(w1, w2)
+#'
+#' library(SpaDES)
+#' Plot(w3)
 #'
 #' @export
 #' @importFrom raster addLayer
