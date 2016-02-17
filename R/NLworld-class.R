@@ -89,6 +89,9 @@ setClass(
 #' # Stack the 2 world together.
 #' w3 <- NLstack(w1, w2)
 #'
+#' library(SpaDES)
+#' Plot(w3)
+#'
 #' @export
 #' @importFrom raster addLayer
 #' @docType methods
@@ -96,7 +99,6 @@ setClass(
 #'
 #' @author Sarah Bauduin
 #'
-
 setGeneric(
   "NLstack",
   function(world1, world2) {
