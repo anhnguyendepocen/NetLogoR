@@ -5,6 +5,16 @@ test_that("createNLworld works with default values", {
   expect_identical(w1, w2)
 })
 
+test_that("importNLworld works with RasterLayer and RasterStack", {
+  rl <- raster(system.file("external/test.grd", package="raster"))
+  rs <- stack(rl, rl) # the layer names changed
+  wl <- convertNLworld(rl)
+  ws <- convertNLworld(rs)
+  ws1 <- ws[[1]]
+  ws1@data@names <- rl@data@names # rename same as in wl
+  expect_identical(wl,ws1)
+})
+
 test_that("maxPxcor works", {
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
   m1 <- maxPxcor(w1)

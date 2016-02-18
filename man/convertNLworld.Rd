@@ -27,6 +27,12 @@ Convert a \code{Raster*} object into a \code{NLworld}.
 See \code{help("NLworld")} for more details on the \code{NLworld}.
 }
 \examples{
+r <- raster(system.file("external/test.grd", package="raster")) # from the raster package
+plot(r)
+maxPxcor(r) # does not work
+world <- convertNLworld(raster = r)
+plot(world)
+maxPxcor(world) # works
 
 }
 \author{

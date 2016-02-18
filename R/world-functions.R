@@ -97,6 +97,12 @@ setMethod(
 #'         Patches value are retained from the \code{Raster*} object.
 #'
 #' @examples
+#' r <- raster(system.file("external/test.grd", package="raster")) # from the raster package
+#' plot(r)
+#' maxPxcor(r) # does not work
+#' world <- convertNLworld(raster = r)
+#' plot(world)
+#' maxPxcor(world) # works
 #'
 #' @export
 #' @docType methods

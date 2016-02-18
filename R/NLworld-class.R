@@ -103,9 +103,13 @@ setMethod(
   definition = function(world1, world2) {
 
     worldStack <- new("NLworldStack")
-    world1@data@names <- deparse(substitute(world1)) # name the layer with the object name
+    if(world1@data@names == ""){
+      world1@data@names <- deparse(substitute(world1)) # name the layer with the object name
+    }
     worldStack1 <- addLayer(worldStack, world1)
-    world2@data@names <- deparse(substitute(world2))
+    if(world2@data@names == ""){
+      world2@data@names <- deparse(substitute(world2))
+    }
     worldStack12 <- addLayer(worldStack1, world2)
 
     return(worldStack12)
