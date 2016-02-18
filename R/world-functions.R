@@ -435,3 +435,111 @@ setMethod(
     return(world@maxPycor - world@minPycor + 1)
   }
 )
+
+
+################################################################################
+#' Clear turtles
+#'
+#' Kill all \code{turtles}.
+#'
+#' @param turtles A \code{SpatialPointsDataFrame} object representing the turtles.
+#'
+#' @details Remove the \code{turtles} object from the R environment.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create one turtle.
+#' t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
+#' t1
+#' clearTurtles(turtles = t1)
+#' t1 # does not work
+#'
+#' @export
+#' @docType methods
+#' @rdname clearTurtles
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "clearTurtles",
+  function(turtles) {
+    standardGeneric("clearTurtles")
+  }
+)
+
+#' @export
+#' @rdname clearTurtles
+setMethod(
+  "clearTurtles",
+  signature = c("SpatialPointsDataFrame"),
+  definition = function(turtles) {
+    rm(list = deparse(substitute(turtles)), pos = globalenv())
+  }
+)
+
+
+################################################################################
+#' Clear patches
+#'
+#' Reset all patches value to \code{NA}.
+#'
+#' @param world A \code{NLworld} or \code{NLworldStack} object.
+#'
+#' @return An empty \code{NLworld} object.
+#'
+#' @details Similar as setValues(world, NA).
+#'          The name of the layer is reset to "".
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' w1[] <- runif(n = 1089)
+#' w1_val <- values(w1)
+#' summary(w1_val)
+#'
+#' w1 <- clearPatches(world = w1)
+#' w1_val <- values(w1)
+#' summary(w1_val)
+#'
+#' @export
+#' @docType methods
+#' @rdname clearPatches
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "clearPatches",
+  function(world) {
+    standardGeneric("clearPatches")
+  }
+)
+
+#' @export
+#' @rdname clearPatches
+setMethod(
+  "clearPatches",
+  signature = c("NLworld"),
+  definition = function(world) {
+    worldNA <- setValues(world, NA)
+    worldNA@data@names <- ""
+    return(worldNA)
+  }
+)
+
+#' @export
+#' @rdname clearPatches
+setMethod(
+  "clearPatches",
+  signature = c("NLworldStack"),
+  definition = function(world) {
+    world_l <- world[[1]]
+    clearPatches(world = world_l)
+  }
+)
