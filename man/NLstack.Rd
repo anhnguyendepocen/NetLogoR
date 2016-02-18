@@ -3,17 +3,15 @@
 \docType{methods}
 \name{NLstack}
 \alias{NLstack}
-\alias{NLstack,NLworld,NLworld-method}
+\alias{NLstack,ANY-method}
 \title{Creating a \code{NLworldStack}}
 \usage{
-NLstack(world1, world2)
+NLstack(...)
 
-\S4method{NLstack}{NLworld,NLworld}(world1, world2)
+\S4method{NLstack}{ANY}(...)
 }
 \arguments{
-\item{world1}{A \code{NLworld} object.}
-
-\item{world2}{A \code{NLworld} object.}
+\item{...}{\code{NLworld} objects.}
 }
 \value{
 A \code{NLworldStack} object with the \code{NLworld} stacked as layers.

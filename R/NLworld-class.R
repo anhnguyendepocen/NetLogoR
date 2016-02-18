@@ -65,8 +65,7 @@ setClass(
 #' Stacking several \code{NLworld} together to obtain a single \code{NlworldStack}
 #' which contains different layers for the different \code{NLworld} values.
 #'
-#' @param world1 A \code{NLworld} object.
-#' @param world2 A \code{NLworld} object.
+#' @param ... \code{NLworld} objects.
 #'
 #' @return A \code{NLworldStack} object with the \code{NLworld} stacked as layers.
 #'
@@ -91,7 +90,7 @@ setClass(
 #'
 setGeneric(
   "NLstack",
-  function(world1, world2) {
+  function(...) {
     standardGeneric("NLstack")
   })
 
@@ -99,18 +98,23 @@ setGeneric(
 #' @rdname NLstack
 setMethod(
   "NLstack",
-  signature(world1 = "NLworld", world2 = "NLworld"),
-  definition = function(world1, world2) {
+  definition = function(...) {
 
+    dots <- list(...)
+    layerNames <- as.list(substitute(list(...)))[-1L] # the first element is "list"
     worldStack <- new("NLworldStack")
-    if(world1@data@names == ""){
-      world1@data@names <- deparse(substitute(world1)) # name the layer with the object name
-    }
-    worldStack1 <- addLayer(worldStack, world1)
-    if(world2@data@names == ""){
-      world2@data@names <- deparse(substitute(world2))
-    }
-    worldStack12 <- addLayer(worldStack1, world2)
 
-    return(worldStack12)
-  })
+    for (i in seq_along(dots)) {
+      world <- dots[[i]]
+      if(class(world) != "NLworld"){
+        stop("One of the argument is not of class NLworld", call. = FALSE)
+      }
+      if(world@data@names == ""){
+        world@data@names <- layerNames[i] # name the layer with the object name
+      }
+      worldStack <- addLayer(worldStack, world)
+    }
+    return(worldStack)
+  }
+)
+
