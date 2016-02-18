@@ -77,9 +77,7 @@ setClass(
 #' w2[] <- runif(n = 1089)
 #' # Stack the 2 world together.
 #' w3 <- NLstack(w1, w2)
-#'
-#' library(SpaDES)
-#' Plot(w3)
+#' plot(w3)
 #'
 #' @export
 #' @importFrom raster addLayer
