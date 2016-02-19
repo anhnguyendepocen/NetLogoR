@@ -102,7 +102,14 @@ setMethod(
   definition = function(...) {
 
     dots <- list(...)
-    layerNames <- as.list(substitute(list(...)))[-1L] # the first element is "list"
+    browser()
+    # Use this to get object names:
+    layerNames <- objectNames("NLstack")
+    if(any(duplicated(sapply(layerNames, function(x) x$objs)))) {
+      stop("Please use unique layer names")
+    }
+    # instead of this, as this isn't reliable when programming:
+    #layerNames <- as.list(substitute(list(...)))[-1L] # the first element is "list"
     worldStack <- new("NLworldStack")
 
     for (i in seq_along(dots)) {
@@ -111,7 +118,7 @@ setMethod(
         stop("One of the argument is not of class NLworld", call. = FALSE)
       }
       if(world@data@names == ""){
-        world@data@names <- layerNames[i] # name the layer with the object name
+        world@data@names <- list(as.name(layerNames[[i]]$objs))  # name the layer with the object name
       }
       worldStack <- addLayer(worldStack, world)
     }
