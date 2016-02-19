@@ -476,7 +476,8 @@ setMethod(
   "clearTurtles",
   signature = c("SpatialPointsDataFrame"),
   definition = function(turtles) {
-    rm(list = deparse(substitute(turtles)), pos = globalenv())
+    parentFrame <- parent.frame(1)
+    rm(list = deparse(substitute(turtles)), envir = parent.frame())
   }
 )
 

@@ -72,7 +72,7 @@ test_that("worldHeight works", {
 test_that("clearTurtles works", {
   t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
   clearTurtles(turtles = t1)
-  expect_false(exists("t1"))
+  expect_false(exists("t1", inherits = FALSE)) # If you have the object in global it will find it, unless inherits FALSE
 })
 
 test_that("clearPacthes works", {
