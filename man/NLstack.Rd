@@ -3,12 +3,12 @@
 \docType{methods}
 \name{NLstack}
 \alias{NLstack}
-\alias{NLstack,ANY-method}
+\alias{NLstack,NLworld-method}
 \title{Creating a \code{NLworldStack}}
 \usage{
 NLstack(...)
 
-\S4method{NLstack}{ANY}(...)
+\S4method{NLstack}{NLworld}(...)
 }
 \arguments{
 \item{...}{\code{NLworld} objects.}
@@ -28,9 +28,7 @@ w1[] <- runif(n = 1089)
 w2[] <- runif(n = 1089)
 # Stack the 2 world together.
 w3 <- NLstack(w1, w2)
-
-library(SpaDES)
-Plot(w3)
+plot(w3)
 
 }
 \author{

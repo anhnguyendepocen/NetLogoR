@@ -88,14 +88,17 @@ setClass(
 #'
 setGeneric(
   "NLstack",
+  signature = "...",
   function(...) {
     standardGeneric("NLstack")
   })
 
 #' @export
+#' @importFrom SpaDES objectNames
 #' @rdname NLstack
 setMethod(
   "NLstack",
+  signature = "NLworld",
   definition = function(...) {
 
     dots <- list(...)
