@@ -553,7 +553,7 @@ setMethod(
 #'
 #' Change the size of the \code{NLworld}. Previous patches and turtles are lost.
 #'
-#' @param world     A \code{NLworld} object representing the current world.
+#' @param world     A \code{NLworld} or \code{NLworldStack} object representing the current world.
 #'
 #' @param minPxcor  \code{pxcor} for patches on the left border of the new \code{NLworld}
 #'                  Default value = \code{-16}, as in NetLogo.

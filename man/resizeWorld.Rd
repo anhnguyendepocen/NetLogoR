@@ -44,7 +44,7 @@ resizeWorld(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles)
   \S4method{resizeWorld}{NLworldStack,missing,missing,missing,missing,missing}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} object representing the current world.}
+\item{world}{A \code{NLworld} or \code{NLworldStack} object representing the current world.}
 
 \item{minPxcor}{\code{pxcor} for patches on the left border of the new \code{NLworld}
 Default value = \code{-16}, as in NetLogo.}
