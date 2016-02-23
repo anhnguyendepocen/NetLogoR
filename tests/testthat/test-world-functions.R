@@ -86,11 +86,12 @@ test_that("clearPacthes works", {
 
 test_that("clearPacthes handles NLworld and NLworldStack", {
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 3, minPycor = 0, maxPycor = 3)
+  w1 <- setValues(w1, runif(16))
   w2 <- setValues(w1, 1:16)
-  w3 <- NLstack(w2, w2)
-  w2_NA <- clearPatches(w2)
+  w3 <- NLstack(w1, w2)
+  w1_NA <- clearPatches(w1)
   w3_NA <- clearPatches(w3)
 
-  expect_identical(w2_NA, w3_NA)
+  expect_identical(w1_NA, w3_NA)
 })
 

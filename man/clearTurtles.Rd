@@ -6,12 +6,16 @@
 \alias{clearTurtles,SpatialPointsDataFrame-method}
 \title{Clear turtles}
 \usage{
-clearTurtles(turtles)
+clearTurtles(turtles, envir = parent.frame(n = 1))
 
-\S4method{clearTurtles}{SpatialPointsDataFrame}(turtles)
+\S4method{clearTurtles}{SpatialPointsDataFrame}(turtles,
+  envir = parent.frame(n = 1))
 }
 \arguments{
 \item{turtles}{A \code{SpatialPointsDataFrame} object representing the turtles.}
+
+\item{envir}{The R environment wher the turtles are.
+Default value is \code{parent.frame(n = 1)}}
 }
 \description{
 Kill all \code{turtles}.

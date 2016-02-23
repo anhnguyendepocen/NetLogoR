@@ -444,6 +444,9 @@ setMethod(
 #'
 #' @param turtles A \code{SpatialPointsDataFrame} object representing the turtles.
 #'
+#' @param envir   The R environment wher the turtles are.
+#'                Default value is \code{parent.frame(n = 1)}
+#'
 #' @details Remove the \code{turtles} object from the R environment.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
@@ -465,7 +468,7 @@ setMethod(
 #'
 setGeneric(
   "clearTurtles",
-  function(turtles) {
+  function(turtles, envir = parent.frame(n = 1)) {
     standardGeneric("clearTurtles")
   }
 )
@@ -475,9 +478,8 @@ setGeneric(
 setMethod(
   "clearTurtles",
   signature = c("SpatialPointsDataFrame"),
-  definition = function(turtles) {
-    parentFrame <- parent.frame(1)
-    rm(list = deparse(substitute(turtles)), envir = parent.frame())
+  definition = function(turtles, envir) {
+    rm(list = deparse(substitute(turtles)), envir = envir)
   }
 )
 
@@ -542,5 +544,156 @@ setMethod(
   definition = function(world) {
     world_l <- world[[1]]
     clearPatches(world = world_l)
+  }
+)
+
+
+################################################################################
+#' Resize NLworld
+#'
+#' Change the size of the \code{NLworld}. Previous patches and turtles are lost.
+#'
+#' @param world     A \code{NLworld} object representing the current world.
+#'
+#' @param minPxcor  \code{pxcor} for patches on the left border of the new \code{NLworld}
+#'                  Default value = \code{-16}, as in NetLogo.
+#'
+#' @param maxPxcor  \code{pxcor} for patches on the right border of the new \code{NLworld}
+#'                  Default value = \code{16}, as in NetLogo.
+#'
+#' @param minPycor  \code{pycor} for patches at the bottom of the new \code{NLworld}
+#'                  Default value \code{-16}, as in NetLogo.
+#'
+#' @param maxPycor  \code{pycor} for patches at the top of the new \code{NLworld}
+#'                  Default value \code{16}, as in NetLogo.
+#'
+#' @param turtles  A \code{SpatialPointsDataFrame} object representing the turtles.
+#'
+#' @return A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#'         patches. Patch value are \code{NA}.
+#'
+#' @details By using \code{resizeWorld}, the previous \code{NLworld}, patches and
+#'          turtles are deleted.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a world with the default settings.
+#' w1 <- createNLworld()
+#' w1[] <- runif(n = 1089)
+#' # Create one turtle
+#' t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
+#' w2 <- resizeWorld(world = w1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, turtles = t1)
+
+#' w2[] <- runif(n = 100)
+#' plot(w1) # does not work, w1 does not exist anymore
+#' plot(w2)
+#'
+#' @export
+#' @importFrom sp SpatialPointsDataFrame
+#' @docType methods
+#' @rdname resizeWorld
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "resizeWorld",
+  function(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles) {
+    standardGeneric("resizeWorld")
+  })
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworld", "numeric", "numeric", "numeric", "numeric", "SpatialPointsDataFrame"), # works
+  definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles) {
+    rm(list = deparse(substitute(world)), envir = parent.frame(n = 1))
+    rm(list = deparse(substitute(turtles)), envir = parent.frame(n = 1)) # I could not make clearTurles works here
+    newWorld <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor,
+                              minPycor = minPycor, maxPycor = maxPycor)
+  }
+)
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworld", "numeric", "numeric", "numeric", "numeric", "missing"), # does not work (old world still there)
+  definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor) {
+    rm(list = deparse(substitute(world)), envir = parent.frame(n = 1)) # why this doesn't work here?
+    newWorld <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor,
+                              minPycor = minPycor, maxPycor = maxPycor)
+  }
+)
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworld", "missing", "missing", "missing", "missing", "SpatialPointsDataFrame"), # does not work (old world and old turtles still there)
+  definition = function(world, turtles) {
+    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
+                maxPycor = 16, turtles = turtles)
+  }
+)
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworld", "missing", "missing", "missing", "missing", "missing"), # does not work (old world still there)
+  definition = function(world) {
+    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
+                maxPycor = 16)
+  }
+)
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworldStack", "numeric", "numeric", "numeric", "numeric", "SpatialPointsDataFrame"), # works
+  definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles) {
+    rm(list = deparse(substitute(world)), envir = parent.frame(n = 1))
+    rm(list = deparse(substitute(turtles)), envir = parent.frame(n = 1))
+    newWorld <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor,
+                              minPycor = minPycor, maxPycor = maxPycor)
+  }
+)
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworldStack", "numeric", "numeric", "numeric", "numeric", "missing"), # does not work (old world still there)
+  definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor) {
+    rm(list = deparse(substitute(world)), envir = parent.frame(n = 1))
+    newWorld <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor,
+                              minPycor = minPycor, maxPycor = maxPycor)
+  }
+)
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworldStack", "missing", "missing", "missing", "missing", "SpatialPointsDataFrame"), # does not work (old world and old turtles still there)
+  definition = function(world, turtles) {
+    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
+                maxPycor = 16, turtles = turtles)
+  }
+)
+
+#' @export
+#' @rdname resizeWorld
+setMethod(
+  "resizeWorld",
+  signature = c("NLworldStack", "missing", "missing", "missing", "missing", "missing"), # does not work (old world still there)
+  definition = function(world) {
+    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
+                maxPycor = 16)
   }
 )
