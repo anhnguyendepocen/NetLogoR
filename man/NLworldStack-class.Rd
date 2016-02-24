@@ -3,7 +3,16 @@
 \docType{class}
 \name{NLworldStack-class}
 \alias{NLworldStack-class}
+\alias{[}
+\alias{[<-}
 \title{The \code{NLworldStack} class}
+\usage{
+\S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, drop)
+
+\S4method{[}{NLworldStack,numeric,numeric,matrix}(x, i, j) <- value
+
+\S4method{[}{NLworldStack,numeric,numeric,numeric}(x, i, j) <- value
+}
 \description{
 Behaves the same as a \code{RasterStack} object except that it is a collection
 of \code{NLworld} objects.
