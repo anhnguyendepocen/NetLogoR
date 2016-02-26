@@ -76,3 +76,45 @@ test_that("diffuse works for NLworldStack with 8 neighbors", {
   expect_identical(as.numeric(ws2$w1[2,2]),val22)
 })
 
+test_that("isPatch works", {
+  w1 <- createNLworld(0, 2, 0, 2)
+  expect_false(isPatch(w1, 1, 3))
+  expect_true(isPatch(w1, 1, 1))
+
+  w1[] <- c(1,3,6,2,8,10,3,8,2)
+  expect_identical(isPatch(w1, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+
+  w2 <- createNLworld(0, 2, 0, 2)
+  w2[] <- runif(9)
+  ws <- NLstack(w1, w2)
+
+  # Same as for w1
+  expect_false(isPatch(ws, 1, 3))
+  expect_true(isPatch(ws, 1, 1))
+  expect_identical(isPatch(ws, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+})
+
+test_that("neighbors works", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  n4 <- neighbors(world = w1, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
+  n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
+  n43 <- cbind(pxcor = c(1, 0), pycor = c(0, 1))
+  expect_identical(n4[[1]], n41)
+  expect_identical(n4[[3]], n43)
+
+  n8 <- neighbors(world = w1, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
+  n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
+  expect_identical(n8[[2]], n82)
+
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLstack(w1, w2)
+
+  # Same as for w1
+  n4 <- neighbors(world = ws, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
+  expect_identical(n4[[1]], n41)
+  expect_identical(n4[[3]], n43)
+  n8 <- neighbors(world = ws, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
+  expect_identical(n8[[2]], n82)
+})

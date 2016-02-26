@@ -82,3 +82,219 @@ setMethod(
     return(world)
   }
 )
+
+
+################################################################################
+#' Distance in a \code{NLworld*}
+#'
+#' Reports the distance from agent(s) to other agent(s). Agents can be patches or
+#' turtles.
+#'
+#' ## !!! Only implemented for the patches so far !!!
+#'
+#' @param world    A \code{NLworld*} object.
+#'
+#' @param from     A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                 second column \code{pycor} representing the coordinates of the
+#'                 patch(es) from which the distances will be computed.
+#'
+#' @param to       A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                 second column \code{pycor} representing the coordinates of the
+#'                 patch(es) to which the distances will be computed.
+#'
+#' @param torus    Logical to determine if the \code{NLworld*} is wrapped.
+#'                 Default is \code{torus = FALSE}.
+#'
+#' @param allPairs Logical. Only relevant if the number of agents in \code{from}
+#'                 and \code{to} is the same. If \code{FALSE}, the distance between
+#'                 each point in \code{from} with the corresponding \code{to} is
+#'                 returned. If \code{TRUE}, a full distance matrix is returned.
+#'                 Default is \code{FALSE}.
+#'
+#' @details Distances from or to a patch is measured from the center of the patch.
+#'          If the \code{NLworld*} is wrapped (\code{torus = TRUE}), the distance
+#'          around the sides of the \code{NLworld*} is reported only if smaller than
+#'          the one calculated with \code{torus = FALSE}.
+#'
+#' @return A vector of distances between patches if \code{from} and/or \code{to} is
+#'         a single patch, or if \code{from} and \code{to} were of same length and
+#'         \code{allPairs = FALSE}. Otherwise, a matrix of distances between each pair
+#'         of patches between \code{from} and \code{to} with the rows representing the
+#'         patches \code{from} and the columns the patches \code{to}.
+#'         The order of the distances follow the order of the given patches coordinates.
+#'
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a NLworld
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' distCorner <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 9, pycor = 9))
+#'
+#' @export
+#' @docType methods
+#' @rdname NLdist
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "NLdist",
+  function(world, from, to, torus = FALSE, allPairs = FALSE) {
+    standardGeneric("NLdist")
+  })
+
+#' @export
+#' @rdname NLdist
+setMethod(
+  "NLdist",
+  signature = c(world = "NLworld", from = "matrix", to = "matrix"),
+  definition = function(world, from, to, torus, allPairs) {
+
+    dist <- pointDistance(p1 = from, p2 = to, lonlat = FALSE, allpairs = allPairs)
+
+    if(torus == TRUE){
+      # cannot understand what SpaDES wrap function does
+    }
+    return(dist)
+  }
+)
+
+
+################################################################################
+#' Is patch?
+#'
+#' Reports \code{TRUE} if the patch(es) exist, \code{FALSE} otherwise
+#'
+#' @param world A \code{NLworld*} object.
+#'
+#' @param pxcor A numeric value or vector of \code{pxcor} coordinate(s).
+#'
+#' @param pycor A numeric value or vector of \code{pycor} coordinate(s).
+#'
+#' @return \code{TRUE} or \code{FALSE} if the patch(es) exist(s) or no, in the
+#'         order of the coordinates given.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a NLworld
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' isPatch(world = w1, pxcor = -1, pycor = 2)
+#'
+#' @export
+#' @docType methods
+#' @rdname isPatch
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "isPatch",
+  function(world, pxcor, pycor) {
+    standardGeneric("isPatch")
+  })
+
+#' @export
+#' @rdname NLdist
+setMethod(
+  "isPatch",
+  signature = c("NLworld", "numeric", "numeric"),
+  definition = function(world, pxcor, pycor) {
+    pExist <- c()
+    for(i in 1:length(pxcor)){
+      pVal <- world[pxcor[i], pycor[i]]
+      if(length(pVal) == 0){
+        pExist[i] <- FALSE
+      } else {
+        pExist[i] <- TRUE
+      }
+    }
+    return(pExist)
+  }
+)
+
+#' @export
+#' @rdname NLdist
+setMethod(
+  "isPatch",
+  signature = c("NLworldStack", "numeric", "numeric"),
+  definition = function(world, pxcor, pycor) {
+    world_l <- world[[1]]
+    isPatch(world = world_l, pxcor = pxcor, pycor = pycor)
+  }
+)
+
+
+################################################################################
+#' Neighbors
+#'
+#' Reports the 8 or 4 surrounding patches (neighbors) around patch(es) or turtle(s).
+#'
+#' ## !!! Only implemented for the patches so far !!!
+#'
+#' @param world      A \code{NLworld*} object.
+#'
+#' @param agent      A matrix (ncol = 2) with the first column \code{pxcor} and
+#'                   the second column \code{pycor} representing the patch(es)
+#'                   coordinates for which neighbors will be reported.
+#'
+#' @param nNeighbors 4 or 8 for the number of neighbor patches.
+#'
+#' @return
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a NLworld
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' neighbors(world = w1, agent = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 4)
+#'
+#' @export
+#' @docType methods
+#' @rdname neighbors
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "neighbors",
+  function(world, agent, nNeighbors) {
+    standardGeneric("neighbors")
+  })
+
+#' @export
+#' @rdname neighbors
+setMethod(
+  "neighbors",
+  signature = c("NLworld", "matrix", "numeric"),
+  definition = function(world, agent, nNeighbors) {
+
+    cellNum <- cellFromPxcorPycor(world = world, pxcor = agent[,1], pycor = agent[,2])
+    neighbors_df <- adjacent(world, cells = cellNum, directions = nNeighbors)
+    pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors_df[,2])
+    listAgent <- list()
+    for(i in 1:length(cellNum)) {
+      listAgent[[i]] <- pCoords[neighbors_df[,1] == cellNum[i],]
+    }
+
+    return(listAgent)
+  }
+)
+
+#' @export
+#' @rdname neighbors
+setMethod(
+  "neighbors",
+  signature = c("NLworldStack", "matrix", "numeric"),
+  definition = function(world, agent, nNeighbors) {
+    world_l <- world[[1]]
+    neighbors(world = world_l, agent = agent, nNeighbors = nNeighbors)
+  }
+)
+
+
+

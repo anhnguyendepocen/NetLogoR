@@ -229,3 +229,133 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' Patch number from \code{pxcor} and \code{pycor}
+#'
+#' Report the cell numbers as defined for a \code{Raster*} object with the patches
+#' coordinates
+#'
+#' @param world A \code{NLworld*} object.
+#'
+#' @param pxcor A vector of \code{pxcor} coordinates.
+#'
+#' @param pycor A vector of \code{pycor} coordinates.
+#'
+#' @return A vector of patch number
+#'
+#' @examples
+#' # Create a world.
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
+#'
+#' @export
+#' @docType methods
+#' @rdname cellFromPxcorPycor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "cellFromPxcorPycor",
+  function(world, pxcor, pycor) {
+    standardGeneric("cellFromPxcorPycor")
+  })
+
+#' @export
+#' @rdname cellFromPxcorPycor
+setMethod(
+  "cellFromPxcorPycor",
+  signature = c("NLworld", "numeric", "numeric"),
+  definition = function(world, pxcor, pycor) {
+
+    pxcor_ <- world@pxcor
+    pycor_ <- world@pycor
+    cell_ <- 1:(world@nrows * world@ncols)
+
+    df1 <- data.frame(pxcor_, pycor_, cell_)
+    df2 <- data.frame(pxcor_ = pxcor, pycor_ = pycor, rank = 1:length(pxcor))
+    df3 <- merge(df1, df2, all.y = TRUE)
+    df4 <- df3[order(df3[,"rank"]),]
+
+    return(as.numeric(df4$cell_))
+  }
+)
+
+#' @export
+#' @rdname cellFromPxcorPycor
+setMethod(
+  "cellFromPxcorPycor",
+  signature = c("NLworldStack", "numeric", "numeric"),
+  definition = function(world, pxcor, pycor) {
+
+    world_l <- world[[1]]
+    cellFromPxcorPycor(world = world_l, pxcor = pxcor, pycor = pycor)
+
+  }
+)
+
+
+################################################################################
+#' \code{pxcor} and \code{pycor} from patch number
+#'
+#' Report the patch coordinates from the patch number defined as the cell number
+#' for a \code{Raster*} object.
+#'
+#' @param world   A \code{NLworld*} object.
+#'
+#' @param cellNum A vector of cell numbers.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#'         column \code{pycor} in the order of the cell number given.
+#'
+#' @examples
+#' # Create a world.
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' cellNum <- cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
+#' PxcorPycorFromCell( world = w1, cellNum = cellNum)
+#'
+#' @export
+#' @docType methods
+#' @rdname PxcorPycorFromCell
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "PxcorPycorFromCell",
+  function(world, cellNum) {
+    standardGeneric("PxcorPycorFromCell")
+  })
+
+#' @export
+#' @rdname PxcorPycorFromCell
+setMethod(
+  "PxcorPycorFromCell",
+  signature = c("NLworld", "numeric"),
+  definition = function(world, cellNum) {
+
+    pxcor_ <- world@pxcor
+    pycor_ <- world@pycor
+    cell_ <- 1:(world@nrows * world@ncols)
+
+    df1 <- data.frame(pxcor_, pycor_, cell_)
+    df2 <- data.frame(cellNum, rank = 1:length(cellNum))
+    df3 <- merge(df1, df2, by.x = "cell_", by.y = "cellNum", all.y = TRUE)
+    df4 <- df3[order(df3[,"rank"]),]
+
+    pCoords <- cbind(pxcor = df4$pxcor_, pycor = df4$pycor_)
+    return(pCoords)
+  }
+)
+
+#' @export
+#' @rdname PxcorPycorFromCell
+setMethod(
+  "PxcorPycorFromCell",
+  signature = c("NLworldStack", "numeric"),
+  definition = function(world, cellNum) {
+
+    world_l <- world[[1]]
+    PxcorPycorFromCell(world = world_l, cellNum = cellNum)
+
+  }
+)
