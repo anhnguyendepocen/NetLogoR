@@ -297,4 +297,200 @@ setMethod(
 )
 
 
+################################################################################
+#' Patch
+#'
+#' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
+#' \code{xcor} and \code{ycor} coordinates.
+#'
+#' @param world A \code{NLworld*} object.
+#'
+#' @param xcor  A vector of \code{xcor} coordinates.
+#'
+#' @param ycor  A vector of \code{ycor} coordinates.
+#'
+#' @param torus Logical to determine if the \code{NLworld*} is wrapped.
+#'              Default is \code{torus = FALSE}.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patch(es) coordinates. Each row represents
+#'         a patch and the order is the one given in the coordinates \code{xcor} and
+#'         \code{ycor}.
+#'
+#' @details If \code{torus == FALSE} or \code{torus == TRUE} and \code{xcor} and \code{ycor}
+#'          are within the world's extent, this function is equivalent to round
+#'          the values \code{xcor} and \code{ycor}.
+#'          If \code{torus == FALSE} and \code{xcor} and \code{ycor} are outside
+#'          the world's extent, \code{NA} is returned.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a NLworld
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' patch(world = w1, xcor = 8.9, ycor = -0.1)
+#' patch(world = w1, xcor = 0, ycor = 10, torus = TRUE)
+#' patch(world = w1, xcor = 0, ycor = 10, torus = FALSE)
+#'
+#' @export
+#' @importFrom SpaDES wrap
+#' @docType methods
+#' @rdname patch
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patch",
+  function(world, xcor, ycor, torus = FALSE) {
+    standardGeneric("patch")
+  })
 
+#' @export
+#' @rdname patch
+setMethod(
+  "patch",
+  signature = c("NLworld", "numeric", "numeric", "logical"),
+  definition = function(world, xcor, ycor, torus) {
+
+    pxcor_ori <- round(xcor)
+    pycor_ori <- round(ycor)
+
+    XYwrap <- wrap(cbind(x = pxcor_ori, y = pycor_ori), extent(world))
+    pxcor_w <- XYwrap[,1]
+    pycor_w <- XYwrap[,2]
+
+    if(torus == FALSE){
+      pxcor_w[pxcor_w != pxcor_ori] <- NA
+      pycor_w[pycor_w != pycor_ori] <- NA
+    }
+
+    pCoords <- cbind(pxcor = pxcor_w, pycor = pycor_w)
+    return(pCoords)
+  }
+)
+
+#' @export
+#' @rdname patch
+setMethod(
+  "patch",
+  signature = c("NLworld", "numeric", "numeric", "missing"),
+  definition = function(world, xcor, ycor) {
+    patch(world = world, xcor = xcor, ycor = ycor, torus = FALSE)
+  }
+)
+
+#' @export
+#' @rdname patch
+setMethod(
+  "patch",
+  signature = c("NLworldStack", "numeric", "numeric", "logical"),
+  definition = function(world, xcor, ycor, torus) {
+    world_l <- world[[1]]
+    patch(world = world_l, xcor = xcor, ycor = ycor, torus = torus)
+  }
+)
+
+#' @export
+#' @rdname patch
+setMethod(
+  "patch",
+  signature = c("NLworldStack", "numeric", "numeric", "missing"),
+  definition = function(world, xcor, ycor) {
+    patch(world = world, xcor = xcor, ycor = ycor, torus = FALSE)
+  }
+)
+
+
+################################################################################
+#' Other patches
+#'
+#' Reports all patches coordinates \code{pxcor} and \code{pycor} except for the one(s)
+#' with coordinates \code{pxcor} and \code{pycor} given.
+#'
+#' @param world A \code{NLworld*} object.
+#'
+#' @param agent A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'              second column \code{pycor} representing the coordinates for the
+#'              patches to be discarded.
+#'
+#' @param torus Logical to determine if the \code{NLworld*} is wrapped.
+#'              Default is \code{torus = FALSE}.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates. Each row represents
+#'         a patch and the order is the one of the cellnumbers as defined for a
+#'         \code{Raster*} object.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Create a NLworld
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+#' otherPatches <- other(world = w1, agent = cbind(pxcor = 0, pycor = 0))
+#' nrow(otherPatches) ## 99 patches left
+#'
+#' @export
+#' @importFrom SpaDES wrap
+#' @docType methods
+#' @rdname other
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "other",
+  function(world, agent, torus = FALSE) {
+    standardGeneric("other")
+  })
+
+#' @export
+#' @rdname other
+setMethod(
+  "other",
+  signature = c("NLworld", "matrix", "logical"),
+  definition = function(world, agent, torus) {
+
+    if(torus == TRUE){
+      agent <- wrap(cbind(x = agent[,1], y = agent[,2]), extent(world))
+    }
+
+    allpCoords <- cbind(pxcor = world@pxcor, pycor = world@pycor)
+    pCoords <- allpCoords[!duplicated(rbind(agent, allpCoords))[-(1:nrow(agent))],]
+
+    return(pCoords)
+  }
+)
+
+#' @export
+#' @rdname other
+setMethod(
+  "other",
+  signature = c("NLworld", "matrix", "missing"),
+  definition = function(world, agent) {
+    other(world = world, agent = agent, torus = FALSE)
+  }
+)
+
+#' @export
+#' @rdname other
+setMethod(
+  "other",
+  signature = c("NLworldStack", "matrix", "logical"),
+  definition = function(world, agent, torus) {
+    world_l <- world[[1]]
+    other(world = world_l, agent = agent, torus = torus)
+  }
+)
+
+#' @export
+#' @rdname other
+setMethod(
+  "other",
+  signature = c("NLworldStack", "matrix", "missing"),
+  definition = function(world, agent) {
+    other(world = world, agent = agent, torus = FALSE)
+  }
+)

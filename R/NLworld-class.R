@@ -108,6 +108,10 @@ setMethod(
     xValues <- values(x)
     cellValues <- xValues[cells,]
 
+    if(class(cellValues) != "matrix"){
+      cellValues <- matrix(cellValues, ncol = nlayers(x), byrow = TRUE, dimnames = list(NULL, names(cellValues)))
+    }
+
     return(cellValues)
   }
 )

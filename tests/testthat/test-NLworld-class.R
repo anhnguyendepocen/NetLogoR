@@ -38,7 +38,7 @@ test_that("[] works with NLworldStack and pxcor and pycor",{
   ws <- NLstack(w1, w2)
 
   ws_00 <- ws[0,0]
-  expect_identical(as.numeric(ws_00), c(3,30))
+  expect_identical(ws_00, cbind(w1 = 3, w2 = 30))
 
   ws_01_11 <- ws[c(0, 1),1]
   expect_identical(ws_01_11, cbind(w1 = c(1, 2), w2 = c(10, 20)))
