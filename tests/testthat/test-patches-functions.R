@@ -131,13 +131,13 @@ test_that("isPatch works", {
 
 test_that("neighbors works", {
   w1 <- createNLworld(0, 9, 0, 9)
-  n4 <- neighbors(world = w1, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
+  n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
   n43 <- cbind(pxcor = c(1, 0), pycor = c(0, 1))
   expect_identical(n4[[1]], n41)
   expect_identical(n4[[3]], n43)
 
-  n8 <- neighbors(world = w1, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
+  n8 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
   expect_identical(n8[[2]], n82)
 
@@ -147,10 +147,10 @@ test_that("neighbors works", {
   ws <- NLstack(w1, w2)
 
   # Same as for w1
-  n4 <- neighbors(world = ws, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
+  n4 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
   expect_identical(n4[[1]], n41)
   expect_identical(n4[[3]], n43)
-  n8 <- neighbors(world = ws, agent = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
+  n8 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
   expect_identical(n8[[2]], n82)
 })
 
@@ -172,20 +172,51 @@ test_that("patch works", {
 test_that("other works", {
   w1 <- createNLworld(0, 9, 0, 9)
   w1[] <- 1:100
-  otherPatches <- other(world = w1, agent = cbind(pxcor = 0, pycor = 0))
-  expect_identical(as.numeric(nrow(otherPatches)), 99)
-  otherPatches <- other(world = w1, agent = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
-  expect_identical(as.numeric(nrow(otherPatches)), 97)
-  otherPatches <- other(world = w1, agent = cbind(pxcor = 0, pycor = -1))
-  expect_identical(as.numeric(nrow(otherPatches)), 100)
+  otherPatches <- other(world = w1, agents = cbind(pxcor = 0, pycor = 0))
+  expect_equivalent(nrow(otherPatches), 99)
+  otherPatches <- other(world = w1, agents = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
+  expect_equivalent(nrow(otherPatches), 97)
+  otherPatches <- other(world = w1, agents = cbind(pxcor = 0, pycor = -1))
+  expect_equivalent(nrow(otherPatches), 100)
 
   w2 <- w1
   w2[] <- 100:1
   ws <- NLstack(w1, w2)
-  otherPatches <- other(world = ws, agent = cbind(pxcor = 0, pycor = 0))
-  expect_identical(as.numeric(nrow(otherPatches)), 99)
-  otherPatches <- other(world = ws, agent = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
-  expect_identical(as.numeric(nrow(otherPatches)), 97)
-  otherPatches <- other(world = ws, agent = cbind(pxcor = 0, pycor = -1))
-  expect_identical(as.numeric(nrow(otherPatches)), 100)
+  otherPatches <- other(world = ws, agents = cbind(pxcor = 0, pycor = 0))
+  expect_equivalent(nrow(otherPatches), 99)
+  otherPatches <- other(world = ws, agents = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
+  expect_equivalent(nrow(otherPatches), 97)
+  otherPatches <- other(world = ws, agents = cbind(pxcor = 0, pycor = -1))
+  expect_equivalent(nrow(otherPatches), 100)
+})
+
+test_that("noPatches works", {
+  p1 <- noPatches()
+  expect_equivalent(nrow(p1), 0)
+  expect_equivalent(ncol(p1), 2)
+})
+
+test_that("patchAt works", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = 1, dy = 2)
+  expect_identical(p1, patch(w1, c(0+1, 1+1, 3+1), c(0+2, 1+2, 5+2)))
+  p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = c(1,3,5), dy = c(2, 4, 6))
+  expect_identical(p1, patch(w1, c(1, 4, 8), c(2, 5, 11)))
+  p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = c(1,3,5), dy = c(2, 4, 6), torus = TRUE)
+  expect_identical(p1, patch(w1, c(1, 4, 8), c(2, 5, 1)))
+
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLstack(w1, w2)
+  p1 <- patchAt(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = 1, dy = 2)
+  expect_identical(p1, patch(ws, c(0+1, 1+1, 3+1), c(0+2, 1+2, 5+2)))
+  p1 <- patchAt(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = c(1,3,5), dy = c(2, 4, 6))
+  expect_identical(p1, patch(ws, c(1, 4, 8), c(2, 5, 11)))
+  p1 <- patchAt(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = c(1,3,5), dy = c(2, 4, 6), torus = TRUE)
+  expect_identical(p1, patch(ws, c(1, 4, 8), c(2, 5, 1)))
+
+  w1 <- createNLworld(-5, 5, -5, 5)
+  p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dx = -4, dy = 1)
+  expect_identical(p1, patch(w1, c(-4, -6, -1), c(1, 2, 6)))
 })

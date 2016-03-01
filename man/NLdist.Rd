@@ -4,6 +4,7 @@
 \name{NLdist}
 \alias{NLdist}
 \alias{NLdist,NLworld,matrix,matrix-method}
+\alias{NLdist,NLworldStack,matrix,matrix-method}
 \alias{isPatch,NLworld,numeric,numeric-method}
 \alias{isPatch,NLworldStack,numeric,numeric-method}
 \title{Distance in a \code{NLworld*}}
@@ -11,6 +12,9 @@
 NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
 
 \S4method{NLdist}{NLworld,matrix,matrix}(world, from, to, torus = FALSE,
+  allPairs = FALSE)
+
+\S4method{NLdist}{NLworldStack,matrix,matrix}(world, from, to, torus = FALSE,
   allPairs = FALSE)
 
 \S4method{isPatch}{NLworld,numeric,numeric}(world, pxcor, pycor)
@@ -26,28 +30,32 @@ patch(es) from which the distances will be computed.}
 
 \item{to}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
-patch(es) to which the distances will be computed.}
+patch(es) to which the distances will be computed.
+A matrix (ncol = 2) with the first column \code{xcor} and the
+second column \code{ycor} representing the coordinates of the
+locations to which the distances will be computed.}
 
 \item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
 Default is \code{torus = FALSE}.}
 
-\item{allPairs}{Logical. Only relevant if the number of agents in \code{from}
-and \code{to} is the same. If \code{FALSE}, the distance between
-each point in \code{from} with the corresponding \code{to} is
-returned. If \code{TRUE}, a full distance matrix is returned.
-Default is \code{FALSE}.}
+\item{allPairs}{Logical. Only relevant if the number of agents/locations in
+\code{from} and \code{to} is the same. If \code{FALSE}, the
+distance between each agent/location in \code{from} with the
+corresponding \code{to} is returned. If \code{TRUE}, a full
+distance matrix is returned. Default is \code{allPairs = FALSE}.}
 }
 \value{
 A vector of distances between patches if \code{from} and/or \code{to} is
         a single patch, or if \code{from} and \code{to} were of same length and
-        \code{allPairs = FALSE}. Otherwise, a matrix of distances between each pair
-        of patches between \code{from} and \code{to} with the rows representing the
-        patches \code{from} and the columns the patches \code{to}.
-        The order of the distances follow the order of the given patches coordinates.
+        \code{allPairs = FALSE}. The order of the distances follow the order of
+        the given patches coordinates.
+        If \code{from} and \code{to} are of same length and \code{allPairs = TRUE},
+        a matrix of distances between each pair of patches with the rows representing
+        the patches \code{from} and the columns the patches \code{to} is returned.
 }
 \description{
-Reports the distance from agent(s) to other agent(s). Agents can be patches or
-turtles.
+Reports the distance from agent(s) to other agent(s) or to defined locations
+(coordinates). Agents can be patches or turtles.
 }
 \details{
 ## !!! Only implemented for the patches so far !!!
@@ -56,12 +64,13 @@ Distances from or to a patch is measured from the center of the patch.
          If the \code{NLworld*} is wrapped (\code{torus = TRUE}), the distance
          around the sides of the \code{NLworld*} is reported only if smaller than
          the one calculated with \code{torus = FALSE}.
+         Coordinates (patches, turtles or locations) must be inside the world extent.
 }
 \examples{
 # Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-distCorner <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 9, pycor = 9))
-distCorner <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 9, pycor = 9), torus = TRUE)
+NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)))
+NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)), torus = TRUE)
 
 }
 \author{

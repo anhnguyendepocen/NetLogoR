@@ -7,23 +7,25 @@
 \alias{neighbors,NLworldStack,matrix,numeric-method}
 \title{Neighbors}
 \usage{
-neighbors(world, agent, nNeighbors)
+neighbors(world, agents, nNeighbors)
 
-\S4method{neighbors}{NLworld,matrix,numeric}(world, agent, nNeighbors)
+\S4method{neighbors}{NLworld,matrix,numeric}(world, agents, nNeighbors)
 
-\S4method{neighbors}{NLworldStack,matrix,numeric}(world, agent, nNeighbors)
+\S4method{neighbors}{NLworldStack,matrix,numeric}(world, agents, nNeighbors)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}
 
-\item{agent}{A matrix (ncol = 2) with the first column \code{pxcor} and
+\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and
 the second column \code{pycor} representing the patch(es)
 coordinates for which neighbors will be reported.}
 
 \item{nNeighbors}{4 or 8 for the number of neighbor patches.}
 }
 \value{
-
+A list with each item being the patches coordinates of the neighbors for
+        each of the agents. The list items follow the order of the matrix rows for
+        the agents.
 }
 \description{
 Reports the 8 or 4 surrounding patches (neighbors) around patch(es) or turtle(s).
@@ -34,7 +36,7 @@ Reports the 8 or 4 surrounding patches (neighbors) around patch(es) or turtle(s)
 \examples{
 # Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-neighbors(world = w1, agent = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 4)
+neighbors(world = w1, agents = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 4)
 
 }
 \author{

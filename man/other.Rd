@@ -2,21 +2,24 @@
 % Please edit documentation in R/patches-functions.R
 \docType{methods}
 \name{other}
+\alias{noPatches,missing-method}
 \alias{other}
 \alias{other,NLworld,matrix-method}
 \alias{other,NLworldStack,matrix-method}
 \title{Other patches}
 \usage{
-other(world, agent)
+other(world, agents)
 
-\S4method{other}{NLworld,matrix}(world, agent)
+\S4method{other}{NLworld,matrix}(world, agents)
 
-\S4method{other}{NLworldStack,matrix}(world, agent)
+\S4method{other}{NLworldStack,matrix}(world, agents)
+
+\S4method{noPatches}{missing}()
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}
 
-\item{agent}{A matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates for the
 patches to be discarded.}
 }
@@ -33,7 +36,7 @@ with coordinates \code{pxcor} and \code{pycor} given.
 \examples{
 # Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
-otherPatches <- other(world = w1, agent = cbind(pxcor = 0, pycor = 0))
+otherPatches <- other(world = w1, agents = cbind(pxcor = 0, pycor = 0))
 nrow(otherPatches) ## 99 patches left
 
 }
