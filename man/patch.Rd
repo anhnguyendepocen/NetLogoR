@@ -3,23 +3,15 @@
 \docType{methods}
 \name{patch}
 \alias{patch}
-\alias{patch,NLworld,numeric,numeric,logical-method}
-\alias{patch,NLworld,numeric,numeric,missing-method}
-\alias{patch,NLworldStack,numeric,numeric,logical-method}
-\alias{patch,NLworldStack,numeric,numeric,missing-method}
+\alias{patch,NLworld,numeric,numeric-method}
+\alias{patch,NLworldStack,numeric,numeric-method}
 \title{Patch}
 \usage{
-patch(world, xcor, ycor, torus = FALSE)
+patch(world, xcor, ycor)
 
-\S4method{patch}{NLworld,numeric,numeric,logical}(world, xcor, ycor,
-  torus = FALSE)
+\S4method{patch}{NLworld,numeric,numeric}(world, xcor, ycor)
 
-\S4method{patch}{NLworld,numeric,numeric,missing}(world, xcor, ycor)
-
-\S4method{patch}{NLworldStack,numeric,numeric,logical}(world, xcor, ycor,
-  torus = FALSE)
-
-\S4method{patch}{NLworldStack,numeric,numeric,missing}(world, xcor, ycor)
+\S4method{patch}{NLworldStack,numeric,numeric}(world, xcor, ycor)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}
@@ -27,9 +19,6 @@ patch(world, xcor, ycor, torus = FALSE)
 \item{xcor}{A vector of \code{xcor} coordinates.}
 
 \item{ycor}{A vector of \code{ycor} coordinates.}
-
-\item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
-Default is \code{torus = FALSE}.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
@@ -42,18 +31,14 @@ Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
 \code{xcor} and \code{ycor} coordinates.
 }
 \details{
-If \code{torus == FALSE} or \code{torus == TRUE} and \code{xcor} and \code{ycor}
-         are within the world's extent, this function is equivalent to round
-         the values \code{xcor} and \code{ycor}.
-         If \code{torus == FALSE} and \code{xcor} and \code{ycor} are outside
-         the world's extent, \code{NA} is returned.
+This function is equivalent to round the values \code{xcor} and \code{ycor}.
+         If \code{xcor} or \code{ycor} are outside the world's extent, \code{NA, NA} is
+         returned for the patch coordinates.
 }
 \examples{
 # Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-patch(world = w1, xcor = 8.9, ycor = -0.1)
-patch(world = w1, xcor = 0, ycor = 10, torus = TRUE)
-patch(world = w1, xcor = 0, ycor = 10, torus = FALSE)
+patch(world = w1, xcor = c(8.9, 5), ycor = c(-0.1, 12.4))
 
 }
 \author{

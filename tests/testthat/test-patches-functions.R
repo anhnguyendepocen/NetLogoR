@@ -124,16 +124,14 @@ test_that("patch works", {
   w1[] <- 1:100
   expect_identical(patch(world = w1, xcor = 0.1, ycor = -0.4), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = w1, xcor = c(1, 0), ycor = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
-  expect_identical(patch(world = w1, xcor = -1, ycor = 0, torus = TRUE), cbind(pxcor = 9, pycor = 0))
-  expect_identical(patch(world = w1, xcor = -1, ycor = 0, torus = FALSE), cbind(pxcor = NA, pycor = 0))
+  expect_identical(patch(world = w1, xcor = -1, ycor = 0), cbind(pxcor = as.numeric(NA), pycor = as.numeric(NA)))
 
   w2 <- w1
   w2[] <- 100:1
   ws <- NLstack(w1, w2)
   expect_identical(patch(world = ws, xcor = 0.1, ycor = -0.4), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = ws, xcor = c(1, 0), ycor = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
-  expect_identical(patch(world = ws, xcor = -1, ycor = 0, torus = TRUE), cbind(pxcor = 9, pycor = 0))
-  expect_identical(patch(world = ws, xcor = -1, ycor = 0, torus = FALSE), cbind(pxcor = NA, pycor = 0))
+  expect_identical(patch(world = ws, xcor = -1, ycor = 0), cbind(pxcor = as.numeric(NA), pycor = as.numeric(NA)))
 })
 
 test_that("other works", {
@@ -143,10 +141,8 @@ test_that("other works", {
   expect_identical(as.numeric(nrow(otherPatches)), 99)
   otherPatches <- other(world = w1, agent = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
   expect_identical(as.numeric(nrow(otherPatches)), 97)
-  otherPatches <- other(world = w1, agent = cbind(pxcor = 0, pycor = -1), torus = FALSE)
+  otherPatches <- other(world = w1, agent = cbind(pxcor = 0, pycor = -1))
   expect_identical(as.numeric(nrow(otherPatches)), 100)
-  otherPatches <- other(world = w1, agent = cbind(pxcor = 0, pycor = -1), torus = TRUE)
-  expect_identical(as.numeric(nrow(otherPatches)), 99)
 
   w2 <- w1
   w2[] <- 100:1
@@ -155,8 +151,6 @@ test_that("other works", {
   expect_identical(as.numeric(nrow(otherPatches)), 99)
   otherPatches <- other(world = ws, agent = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
   expect_identical(as.numeric(nrow(otherPatches)), 97)
-  otherPatches <- other(world = ws, agent = cbind(pxcor = 0, pycor = -1), torus = FALSE)
+  otherPatches <- other(world = ws, agent = cbind(pxcor = 0, pycor = -1))
   expect_identical(as.numeric(nrow(otherPatches)), 100)
-  otherPatches <- other(world = ws, agent = cbind(pxcor = 0, pycor = -1), torus = TRUE)
-  expect_identical(as.numeric(nrow(otherPatches)), 99)
 })

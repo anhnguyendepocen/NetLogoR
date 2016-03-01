@@ -3,21 +3,15 @@
 \docType{methods}
 \name{other}
 \alias{other}
-\alias{other,NLworld,matrix,logical-method}
-\alias{other,NLworld,matrix,missing-method}
-\alias{other,NLworldStack,matrix,logical-method}
-\alias{other,NLworldStack,matrix,missing-method}
+\alias{other,NLworld,matrix-method}
+\alias{other,NLworldStack,matrix-method}
 \title{Other patches}
 \usage{
-other(world, agent, torus = FALSE)
+other(world, agent)
 
-\S4method{other}{NLworld,matrix,logical}(world, agent, torus = FALSE)
+\S4method{other}{NLworld,matrix}(world, agent)
 
-\S4method{other}{NLworld,matrix,missing}(world, agent)
-
-\S4method{other}{NLworldStack,matrix,logical}(world, agent, torus = FALSE)
-
-\S4method{other}{NLworldStack,matrix,missing}(world, agent)
+\S4method{other}{NLworldStack,matrix}(world, agent)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}
@@ -25,9 +19,6 @@ other(world, agent, torus = FALSE)
 \item{agent}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates for the
 patches to be discarded.}
-
-\item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
-Default is \code{torus = FALSE}.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
