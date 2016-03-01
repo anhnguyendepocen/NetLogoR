@@ -76,6 +76,41 @@ test_that("diffuse works for NLworldStack with 8 neighbors", {
   expect_identical(as.numeric(ws2$w1[1,1]),val11)
 })
 
+test_that("distance works for patches", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  dist <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 1, pycor = 1))
+  expect_identical(as.numeric(dist), sqrt(1^2+1^2))
+  dist <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(0,0), pycor = c(1,9)))
+  expect_identical(dist, c(1, 9))
+  dist <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE)
+  expect_identical(dist, c(1, 1))
+  dist <- NLdist(world = w1, from = cbind(pxcor = c(0,0), pycor = c(0,1)), to = cbind(pxcor = c(0,0), pycor = c(2,9)))
+  expect_identical(dist, c(2, 8))
+  dist <- NLdist(world = w1, from = cbind(pxcor = c(0,0), pycor = c(0,1)), to = cbind(pxcor = c(0,0), pycor = c(2,9)), allPairs = TRUE)
+  expect_identical(dist[,1], c(2, 1))
+  expect_identical(dist[,2], c(9, 8))
+
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLstack(w1, w2)
+  dist <- NLdist(world = ws, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 1, pycor = 1))
+  expect_identical(as.numeric(dist), sqrt(1^2+1^2))
+  dist <- NLdist(world = ws, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(0,0), pycor = c(1,9)))
+  expect_identical(dist, c(1, 9))
+  dist <- NLdist(world = ws, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE)
+  expect_identical(dist, c(1, 1))
+  dist <- NLdist(world = ws, from = cbind(pxcor = c(0,0), pycor = c(0,1)), to = cbind(pxcor = c(0,0), pycor = c(2,9)))
+  expect_identical(dist, c(2, 8))
+  dist <- NLdist(world = ws, from = cbind(pxcor = c(0,0), pycor = c(0,1)), to = cbind(pxcor = c(0,0), pycor = c(2,9)), allPairs = TRUE)
+  expect_identical(dist[,1], c(2, 1))
+  expect_identical(dist[,2], c(9, 8))
+
+  w3 <- createNLworld(-5, 5, -10, -2)
+  dist <- NLdist(world = w3, from = cbind(pxcor = -2, pycor = -5), to = cbind(pxcor = c(-1,5), pycor = c(-5, -5)), torus = TRUE)
+  expect_identical(dist, c(1, 4))
+})
+
 test_that("isPatch works", {
   w1 <- createNLworld(0, 2, 0, 2)
   expect_false(isPatch(w1, 1, 3))

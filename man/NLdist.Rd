@@ -61,6 +61,7 @@ Distances from or to a patch is measured from the center of the patch.
 # Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 distCorner <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 9, pycor = 9))
+distCorner <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 9, pycor = 9), torus = TRUE)
 
 }
 \author{

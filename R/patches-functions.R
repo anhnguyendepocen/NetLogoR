@@ -118,10 +118,11 @@ setMethod(
 #'
 #' @return A vector of distances between patches if \code{from} and/or \code{to} is
 #'         a single patch, or if \code{from} and \code{to} were of same length and
-#'         \code{allPairs = FALSE}. Otherwise, a matrix of distances between each pair
-#'         of patches between \code{from} and \code{to} with the rows representing the
-#'         patches \code{from} and the columns the patches \code{to}.
-#'         The order of the distances follow the order of the given patches coordinates.
+#'         \code{allPairs = FALSE}. The order of the distances follow the order of
+#'         the given patches coordinates.
+#'         If \code{from} and \code{to} are of same length and \code{allPairs = TRUE},
+#'         a matrix of distances between each pair of patches with the rows representing
+#'         the patches \code{from} and the columns the patches \code{to} is returned.
 #'
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
@@ -131,7 +132,8 @@ setMethod(
 #' @examples
 #' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' distCorner <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 9, pycor = 9))
+#' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)))
+#' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)), torus = TRUE)
 #'
 #' @export
 #' @docType methods
@@ -155,9 +157,40 @@ setMethod(
     dist <- pointDistance(p1 = from, p2 = to, lonlat = FALSE, allpairs = allPairs)
 
     if(torus == TRUE){
+      # Need to create coordinates for "to" in a wrapped world
+      # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
+      to1 <- cbind(pxcor = to[,1] - (world@maxPxcor - world@minPxcor) - 1, pycor = to[,2] + (world@maxPycor - world@minPycor) + 1)
+      to2 <- cbind(pxcor = to[,1], pycor = to[,2] + (world@maxPycor - world@minPycor) + 1)
+      to3 <- cbind(pxcor = to[,1] + (world@maxPxcor - world@minPxcor) + 1, pycor = to[,2] + (world@maxPycor - world@minPycor) + 1)
+      to4 <- cbind(pxcor = to[,1] - (world@maxPxcor - world@minPxcor) - 1, pycor = to[,2])
+      to5 <- cbind(pxcor = to[,1] + (world@maxPxcor - world@minPxcor) + 1, pycor = to[,2])
+      to6 <- cbind(pxcor = to[,1] - (world@maxPxcor - world@minPxcor) - 1, pycor = to[,2] - (world@maxPycor - world@minPycor) - 1)
+      to7 <- cbind(pxcor = to[,1], pycor = to[,2] - (world@maxPycor - world@minPycor) - 1)
+      to8 <- cbind(pxcor = to[,1] + (world@maxPxcor - world@minPxcor) + 1, pycor = to[,2] - (world@maxPycor - world@minPycor) - 1)
 
+      dist1 <- pointDistance(p1 = from, p2 = to1, lonlat = FALSE, allpairs = allPairs)
+      dist2 <- pointDistance(p1 = from, p2 = to2, lonlat = FALSE, allpairs = allPairs)
+      dist3 <- pointDistance(p1 = from, p2 = to3, lonlat = FALSE, allpairs = allPairs)
+      dist4 <- pointDistance(p1 = from, p2 = to4, lonlat = FALSE, allpairs = allPairs)
+      dist5 <- pointDistance(p1 = from, p2 = to5, lonlat = FALSE, allpairs = allPairs)
+      dist6 <- pointDistance(p1 = from, p2 = to6, lonlat = FALSE, allpairs = allPairs)
+      dist7 <- pointDistance(p1 = from, p2 = to7, lonlat = FALSE, allpairs = allPairs)
+      dist8 <- pointDistance(p1 = from, p2 = to8, lonlat = FALSE, allpairs = allPairs)
+
+      dist <- pmin(dist, dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8)
     }
     return(dist)
+  }
+)
+
+#' @export
+#' @rdname NLdist
+setMethod(
+  "NLdist",
+  signature = c(world = "NLworldStack", from = "matrix", to = "matrix"),
+  definition = function(world, from, to, torus, allPairs) {
+    world_l <- world[[1]]
+    NLdist(world = world_l, from = from, to = to, torus = torus, allPairs = allPairs)
   }
 )
 
