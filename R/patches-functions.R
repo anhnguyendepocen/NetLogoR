@@ -802,3 +802,119 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' Random pxcor
+#'
+#' Reports random pxcor coordinate(s) between minPxcor and maxPxcor.
+#'
+#' @param world A \code{NLworld*} object.
+#'
+#' @param n     Integer. Represent how many random pxcor needs to be generated.
+#'
+#' @return A vector of integer.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' pxcor10 <- randPxcor(world = w1, n = 10)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname randPxcor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "randPxcor",
+  function(world, n) {
+    standardGeneric("randPxcor")
+  })
+
+#' @export
+#' @rdname randPxcor
+setMethod(
+  "randPxcor",
+  signature = c("NLworld", "numeric"),
+  definition = function(world, n) {
+    minPxcor <- world@minPxcor
+    maxPxcor <- world@maxPxcor
+    pxcor <- sample(minPxcor:maxPxcor, size = n, replace = TRUE)
+    return(pxcor)
+  }
+)
+
+#' @export
+#' @rdname randPxcor
+setMethod(
+  "randPxcor",
+  signature = c("NLworldStack", "numeric"),
+  definition = function(world, n) {
+    world_l <- world[[1]]
+    randPxcor(world = world_l, n = n)
+  }
+)
+
+
+################################################################################
+#' Random pycor
+#'
+#' Reports random pycor coordinate(s) between minPycor and maxPycor.
+#'
+#' @param world A \code{NLworld*} object.
+#'
+#' @param n     Integer. Represent how many random pycor needs to be generated.
+#'
+#' @return A vector of integer.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' pycor10 <- randPycor(world = w1, n = 10)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname randPycor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "randPycor",
+  function(world, n) {
+    standardGeneric("randPycor")
+  })
+
+#' @export
+#' @rdname randPycor
+setMethod(
+  "randPycor",
+  signature = c("NLworld", "numeric"),
+  definition = function(world, n) {
+    minPycor <- world@minPycor
+    maxPycor <- world@maxPycor
+    pycor <- sample(minPycor:maxPycor, size = n, replace = TRUE)
+    return(pycor)
+  }
+)
+
+#' @export
+#' @rdname randPycor
+setMethod(
+  "randPycor",
+  signature = c("NLworldStack", "numeric"),
+  definition = function(world, n) {
+    world_l <- world[[1]]
+    randPycor(world = world_l, n = n)
+  }
+)
+
+
+

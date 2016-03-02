@@ -4,23 +4,23 @@
 \name{minPxcor}
 \alias{minPxcor}
 \alias{minPxcor,NLworld-method}
+\alias{minPxcor,NLworldStack-method}
 \title{Minimum pxcor}
 \usage{
 minPxcor(world)
 
 \S4method{minPxcor}{NLworld}(world)
+
+\S4method{minPxcor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} object representing the world.}
+\item{world}{A \code{NLworld*} object representing the world.}
 }
 \value{
 A numeric value
 }
 \description{
-Report the patches minimum \code{pxcor} in a NLworld.
-}
-\details{
-Does the same as accessing the slot with \code{NLworld@minPxcor}
+Report the patches minimum \code{pxcor} in a \code{NLworld*}.
 }
 \examples{
 # Create a world with the default settings.

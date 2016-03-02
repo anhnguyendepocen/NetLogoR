@@ -4,23 +4,23 @@
 \name{maxPxcor}
 \alias{maxPxcor}
 \alias{maxPxcor,NLworld-method}
+\alias{maxPxcor,NLworldStack-method}
 \title{Maximum pxcor}
 \usage{
 maxPxcor(world)
 
 \S4method{maxPxcor}{NLworld}(world)
+
+\S4method{maxPxcor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} object representing the world.}
+\item{world}{A \code{NLworld*} object representing the world.}
 }
 \value{
 A numeric value
 }
 \description{
-Report the patches maximum \code{pxcor} in a NLworld.
-}
-\details{
-Does the same as accessing the slot with \code{NLworld@maxPxcor}
+Report the patches maximum \code{pxcor} in a \code{NLworld*}.
 }
 \examples{
 # Create a world with the default settings.

@@ -22,6 +22,14 @@ test_that("maxPxcor works", {
 
   expect_identical(m1, m2)
   expect_identical(m1, 10)
+
+  w2 <- w1
+  w1[] <- runif(231)
+  w2[] <- runif(231)
+  ws <- NLstack(w1, w2)
+  m3 <- maxPxcor(ws)
+  expect_identical(m3, m2)
+  expect_identical(m3, 10)
 })
 
 test_that("maxPycor works", {
@@ -31,6 +39,14 @@ test_that("maxPycor works", {
 
   expect_identical(m1, m2)
   expect_identical(m1, 15)
+
+  w2 <- w1
+  w1[] <- runif(231)
+  w2[] <- runif(231)
+  ws <- NLstack(w1, w2)
+  m3 <- maxPycor(ws)
+  expect_identical(m3, m2)
+  expect_identical(m3, 15)
 })
 
 test_that("minPxcor works", {
@@ -40,6 +56,14 @@ test_that("minPxcor works", {
 
   expect_identical(m1, m2)
   expect_identical(m1, 0)
+
+  w2 <- w1
+  w1[] <- runif(231)
+  w2[] <- runif(231)
+  ws <- NLstack(w1, w2)
+  m3 <- minPxcor(ws)
+  expect_identical(m3, m2)
+  expect_identical(m3, 0)
 })
 
 test_that("minPycor works", {
@@ -49,6 +73,14 @@ test_that("minPycor works", {
 
   expect_identical(m1, m2)
   expect_identical(m1, -5)
+
+  w2 <- w1
+  w1[] <- runif(231)
+  w2[] <- runif(231)
+  ws <- NLstack(w1, w2)
+  m3 <- minPycor(ws)
+  expect_identical(m3, m2)
+  expect_identical(m3, -5)
 })
 
 test_that("worldWidth works", {

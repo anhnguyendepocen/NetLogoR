@@ -182,13 +182,11 @@ setMethod(
 ################################################################################
 #' Maximum pxcor
 #'
-#' Report the patches maximum \code{pxcor} in a NLworld.
+#' Report the patches maximum \code{pxcor} in a \code{NLworld*}.
 #'
-#' @param world A \code{NLworld} object representing the world.
+#' @param world A \code{NLworld*} object representing the world.
 #'
 #' @return A numeric value
-#'
-#' @details Does the same as accessing the slot with \code{NLworld@maxPxcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -221,17 +219,25 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname maxPxcor
+setMethod(
+  "maxPxcor",
+  signature = "NLworldStack",
+  definition = function(world) {
+    world_l <- world[[1]]
+    maxPxcor(world = world_l)
+  }
+)
 
 ################################################################################
 #' Maximum pycor
 #'
-#' Report the patches maximum \code{pycor} in a NLworld.
+#' Report the patches maximum \code{pycor} in a \code{NLworld*}.
 #'
-#' @param world A \code{NLworld} object representing the world.
+#' @param world A \code{NLworld*} object representing the world.
 #'
 #' @return A numeric value
-#'
-#' @details Does the same as accessing the slot with \code{NLworld@maxPycor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -264,17 +270,25 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname maxPycor
+setMethod(
+  "maxPycor",
+  signature = "NLworldStack",
+  definition = function(world) {
+    world_l <- world[[1]]
+    maxPycor(world = world_l)
+  }
+)
 
 ################################################################################
 #' Minimum pxcor
 #'
-#' Report the patches minimum \code{pxcor} in a NLworld.
+#' Report the patches minimum \code{pxcor} in a \code{NLworld*}.
 #'
-#' @param world A \code{NLworld} object representing the world.
+#' @param world A \code{NLworld*} object representing the world.
 #'
 #' @return A numeric value
-#'
-#' @details Does the same as accessing the slot with \code{NLworld@minPxcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -307,17 +321,25 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname minPxcor
+setMethod(
+  "minPxcor",
+  signature = "NLworldStack",
+  definition = function(world) {
+    world_l <- world[[1]]
+    minPxcor(world = world_l)
+  }
+)
 
 ################################################################################
 #' Minimum pycor
 #'
-#' Report the patches minimum \code{pycor} in a NLworld.
+#' Report the patches minimum \code{pycor} in a \code{NLworld*}.
 #'
-#' @param world A \code{NLworld} object representing the world.
+#' @param world A \code{NLworld*} object representing the world.
 #'
 #' @return A numeric value
-#'
-#' @details Does the same as accessing the slot with \code{NLworld@minPycor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -350,6 +372,16 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname minPycor
+setMethod(
+  "minPycor",
+  signature = "NLworldStack",
+  definition = function(world) {
+    world_l <- world[[1]]
+    minPycor(world = world_l)
+  }
+)
 
 ################################################################################
 #' NLworld width

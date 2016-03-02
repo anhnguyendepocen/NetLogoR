@@ -4,23 +4,23 @@
 \name{minPycor}
 \alias{minPycor}
 \alias{minPycor,NLworld-method}
+\alias{minPycor,NLworldStack-method}
 \title{Minimum pycor}
 \usage{
 minPycor(world)
 
 \S4method{minPycor}{NLworld}(world)
+
+\S4method{minPycor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} object representing the world.}
+\item{world}{A \code{NLworld*} object representing the world.}
 }
 \value{
 A numeric value
 }
 \description{
-Report the patches minimum \code{pycor} in a NLworld.
-}
-\details{
-Does the same as accessing the slot with \code{NLworld@minPycor}
+Report the patches minimum \code{pycor} in a \code{NLworld*}.
 }
 \examples{
 # Create a world with the default settings.

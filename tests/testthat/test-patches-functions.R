@@ -253,21 +253,24 @@ test_that("patchAt works", {
   expect_identical(p1, patch(w1, c(4, 2, 7), c(0, 1, 5)))
 })
 
-test_that("patches works", {
-  w1 <- createNLworld(0, 9, 0, 9)
-  allPatches <- patches(world = w1)
-  expect_equivalent(nrow(allPatches), 100)
-  expect_equivalent(ncol(allPatches), 2)
-})
+test_that("randPxcor and randPycor works", {
+  w1 <- createNLworld(0, 9, -10, -5)
+  pxcor100 <- randPxcor(world = w1, n = 100)
+  expect_equivalent(min(pxcor100), minPxcor(w1))
+  expect_equivalent(max(pxcor100), maxPxcor(w1))
 
-test_that("patchSet works", {
-  w1 <- createNLworld(0, 9, 0, 9)
-  p1 <- patch(world = w1, xcor = c(0,1,2,3), ycor = c(0,1,2,3))
-  p2 <- patch(world = w1, xcor = c(0,1,2,3), ycor = c(1,2,3,3))
-  set1 <- patchSet(p1, p2)
-  expect_equivalent(nrow(set1), 7)
-  expect_equivalent(ncol(set1), 2)
-  pAll <- patches(w1)
-  set2 <- patchSet(pAll, p1, p2)
-  expect_equivalent(pAll, set2)
+  w1[] <- runif(60)
+  w2 <- w1
+  w2[] <- runif(60)
+  ws <- NLstack(w1, w2)
+  pxcor100 <- randPxcor(world = ws, n = 100)
+  expect_equivalent(min(pxcor100), minPxcor(ws))
+  expect_equivalent(max(pxcor100), maxPxcor(ws))
+
+  pycor100 <- randPycor(world = w1, n = 100)
+  expect_equivalent(min(pycor100), minPycor(w1))
+  expect_equivalent(max(pycor100), maxPycor(w1))
+  pycor100 <- randPycor(world = ws, n = 100)
+  expect_equivalent(min(pycor100), minPycor(ws))
+  expect_equivalent(max(pycor100), maxPycor(ws))
 })

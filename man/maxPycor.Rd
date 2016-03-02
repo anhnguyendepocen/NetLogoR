@@ -4,23 +4,23 @@
 \name{maxPycor}
 \alias{maxPycor}
 \alias{maxPycor,NLworld-method}
+\alias{maxPycor,NLworldStack-method}
 \title{Maximum pycor}
 \usage{
 maxPycor(world)
 
 \S4method{maxPycor}{NLworld}(world)
+
+\S4method{maxPycor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} object representing the world.}
+\item{world}{A \code{NLworld*} object representing the world.}
 }
 \value{
 A numeric value
 }
 \description{
-Report the patches maximum \code{pycor} in a NLworld.
-}
-\details{
-Does the same as accessing the slot with \code{NLworld@maxPycor}
+Report the patches maximum \code{pycor} in a \code{NLworld*}.
 }
 \examples{
 # Create a world with the default settings.
