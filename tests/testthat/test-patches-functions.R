@@ -252,3 +252,22 @@ test_that("patchAt works", {
   p1 <- patchDist(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dist = -4, head = 270, torus = FALSE)
   expect_identical(p1, patch(w1, c(4, 2, 7), c(0, 1, 5)))
 })
+
+test_that("patches works", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  allPatches <- patches(world = w1)
+  expect_equivalent(nrow(allPatches), 100)
+  expect_equivalent(ncol(allPatches), 2)
+})
+
+test_that("patchSet works", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  p1 <- patch(world = w1, xcor = c(0,1,2,3), ycor = c(0,1,2,3))
+  p2 <- patch(world = w1, xcor = c(0,1,2,3), ycor = c(1,2,3,3))
+  set1 <- patchSet(p1, p2)
+  expect_equivalent(nrow(set1), 7)
+  expect_equivalent(ncol(set1), 2)
+  pAll <- patches(w1)
+  set2 <- patchSet(pAll, p1, p2)
+  expect_equivalent(pAll, set2)
+})

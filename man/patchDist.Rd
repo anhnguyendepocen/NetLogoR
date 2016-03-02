@@ -4,6 +4,7 @@
 \name{patchDist}
 \alias{patchDist}
 \alias{patchDist,NLworld,matrix,numeric,numeric-method}
+\alias{patchDist,NLworldStack,matrix,numeric,numeric-method}
 \title{Patch at some distance}
 \usage{
 patchDist(world, agents, dist, head, torus = FALSE)
@@ -11,8 +12,8 @@ patchDist(world, agents, dist, head, torus = FALSE)
 \S4method{patchDist}{NLworld,matrix,numeric,numeric}(world, agents, dist, head,
   torus = FALSE)
 
-\S4method{patchDist}{NLworld,matrix,numeric,numeric}(world, agents, dist, head,
-  torus = FALSE)
+\S4method{patchDist}{NLworldStack,matrix,numeric,numeric}(world, agents, dist,
+  head, torus = FALSE)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}

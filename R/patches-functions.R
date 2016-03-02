@@ -694,3 +694,111 @@ setMethod(
     patchDist(world = world_l, agents = agents, dist = dist, head = head, torus = torus)
   }
 )
+
+
+################################################################################
+#' Patches of the world
+#'
+#' Reports the coordinates \code{pxcor} and \code{pycor} of all patches in the
+#' \code{NLworld*}
+#'
+#' @param world A \code{NLworld*} object.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates. The order of the patches
+#'         follows the order of the cellnumbers as defined for a \code{Raster*}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+#' allPatches <- patches(world = w1)
+#' nrow(allPatches)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname patches
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patches",
+  function(world) {
+    standardGeneric("patches")
+  })
+
+#' @export
+#' @rdname patches
+setMethod(
+  "patches",
+  signature = "NLworld",
+  definition = function(world) {
+    return(cbind(pxcor = world@pxcor, pycor = world@pycor))
+  }
+)
+
+#' @export
+#' @rdname patches
+setMethod(
+  "patches",
+  signature = "NLworldStack",
+  definition = function(world) {
+    world_l <- world[[1]]
+    patches(world = world_l)
+  }
+)
+
+
+################################################################################
+#' Patch set
+#'
+#' Reports a patch agentset as the the coordinates \code{pxcor} and \code{pycor}
+#' of all patches in the inputs.
+#'
+#' @param ... Matrices (ncol = 2) of patch(es) coordinates with the first column
+#'            \code{pxcor} and the second column \code{pycor}.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates.
+#'
+#' @details Duplicate patches among the inputs are removed in the return matrix.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0,1,2), pycor = c(0,0,0)), dx = 1, dy = 1)
+#' p2 <- patchDist(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
+#' p3 <- patch(world = w1, xcor = 4.3, ycor = 8)
+#' set1 <- patchSet(p1, p2, p3)
+#'
+#' @export
+#' @docType methods
+#' @rdname patchSet
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patchSet",
+  function(...) {
+    standardGeneric("patchSet")
+  })
+
+#' @export
+#' @rdname patchSet
+setMethod(
+  "patchSet",
+  signature = "matrix",
+  definition = function(...) {
+
+    dots <-list(...)
+    pCoords <- unique(do.call(rbind, dots))
+    return(pCoords)
+  }
+)
+
