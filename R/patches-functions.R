@@ -606,3 +606,91 @@ setMethod(
     patchAt(world = world_l, agents = agents, dx = dx, dy = dy, torus = torus)
   }
 )
+
+
+################################################################################
+#' Patch at some distance
+#'
+#' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at certain
+#' distance and heading of the calling agent(s).
+#'
+#' !!! Only implemented for the patches so far !!!
+#'
+#' @param world  A \code{NLworld*} object.
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               calling patches.
+#'
+#' @param dist   Numeric. Distance from the caller. \code{dist} must be a single
+#'               value or of the length of \code{agents}.
+#'
+#' @param head   Numeric. Absolute angle from the caller. \code{head} must be a
+#'               single value or of the length of \code{agents}. Angle(s) are in
+#'               degrees with 0 being North.
+#'
+#' @param torus  Logical to determine if the \code{NLworld*} is wrapped.
+#'               Default is \code{torus = FALSE}.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates. The order of the patches
+#'         are the ones of the agents.
+#'
+#' @details If \code{torus = FALSE} and the patch at distance \code{(dist)} and
+#'          heading \code{head} of the caller is outside the world, \code{NA} is
+#'          returned. Otherwise, if \code{torus = TRUE}, the patch coordinates from
+#'          the wrapped world are returned.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' patchCorner <- patchDist(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
+#'
+#'
+#' @export
+#' @importFrom SpaDES wrap
+#' @importFrom CircStats rad
+#' @docType methods
+#' @rdname patchDist
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patchDist",
+  function(world, agents, dist, head, torus = FALSE) {
+    standardGeneric("patchDist")
+  })
+
+#' @export
+#' @rdname patchDist
+setMethod(
+  "patchDist",
+  signature = c(world = "NLworld", agents = "matrix", dist = "numeric", head = "numeric"),
+  definition = function(world, agents, dist, head, torus) {
+
+    pxcor <- agents[,1] + sin(rad(head)) * dist
+    pycor <- agents[,2] + cos(rad(head)) * dist
+
+    if(torus == TRUE){
+      pCoords <- wrap(cbind(x = pxcor, y = pycor), extent(world))
+      pxcor <- pCoords[,1]
+      pycor <- pCoords[,2]
+    }
+
+    return(patch(world = world, xcor = pxcor, ycor = pycor))
+  }
+)
+
+#' @export
+#' @rdname patchDist
+setMethod(
+  "patchDist",
+  signature = c(world = "NLworldStack", agents = "matrix", dist = "numeric", head = "numeric"),
+  definition = function(world, agents, dist, head, torus) {
+    world_l <- world[[1]]
+    patchDist(world = world_l, agents = agents, dist = dist, head = head, torus = torus)
+  }
+)

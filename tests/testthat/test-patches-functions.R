@@ -220,3 +220,35 @@ test_that("patchAt works", {
   p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dx = -4, dy = 1)
   expect_identical(p1, patch(w1, c(-4, -6, -1), c(1, 2, 6)))
 })
+
+test_that("patchAt works", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  p1 <- patchDist(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = 45)
+  expect_identical(p1, patch(w1, c(2, 3, 5), c(2, 3, 7)))
+  p1 <- patchDist(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = -45, torus = TRUE)
+  p2 <- patchDist(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = 315, torus = TRUE)
+  expect_identical(p1, patch(w1, c(8, 9, 1), c(2, 3, 7)))
+  expect_identical(p1, p2)
+  p1 <- patchDist(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = -45)
+  expect_identical(p1, patch(w1, c(NA, NA, 1), c(NA, NA, 7)))
+
+
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLstack(w1, w2)
+  p1 <- patchDist(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = 45)
+  expect_identical(p1, patch(ws, c(2, 3, 5), c(2, 3, 7)))
+  p1 <- patchDist(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = -45, torus = TRUE)
+  p2 <- patchDist(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = 315, torus = TRUE)
+  expect_identical(p1, patch(ws, c(8, 9, 1), c(2, 3, 7)))
+  expect_identical(p1, p2)
+  p1 <- patchDist(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, head = -45)
+  expect_identical(p1, patch(ws, c(-2, -1, 1), c(-2, -1, 7)))
+
+  w1 <- createNLworld(-5, 5, -5, 5)
+  p1 <- patchDist(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dist = 4, head = 270, torus = TRUE)
+  expect_identical(p1, patch(w1, c(-4, 5, -1), c(0, 1, 5)))
+  p1 <- patchDist(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dist = -4, head = 270, torus = FALSE)
+  expect_identical(p1, patch(w1, c(4, 2, 7), c(0, 1, 5)))
+})
