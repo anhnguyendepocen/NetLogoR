@@ -291,3 +291,147 @@ setMethod(
     withMin(world = world_l, agents = agents)
   }
 )
+
+
+################################################################################
+#' One with maximum
+#'
+#' Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
+#' variable equals to the maximum value.
+#'
+#'!!! Only implemented for patches so far !!!
+#'
+#' @param world  A \code{NLworld*} object.
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to be evaluated.
+#'
+#' @param pVar   If the world is a \code{NLworldStack}, pVar is the name (characters)
+#'               of the layer used for evaluating the maximum patch value.
+#'
+#' @return A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+#'         the second column \code{pycor} representing the coordinates for the patch
+#'         (or one of the patches) with the maximum value among the agents.
+#'
+#' @details If there are several agents with the maximum value, one is chosen randomly.
+#'          To access to all agents with their variable equal to the maximum value,
+#'          use \code{withMax()}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' pMax <- maxOneOf(world = w1, agents = patches(world = w1))
+#' plot(w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname maxOneOf
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "maxOneOf",
+  function(world, agents, pVar) {
+    standardGeneric("maxOneOf")
+  })
+
+#' @export
+#' @rdname maxOneOf
+setMethod(
+  "maxOneOf",
+  signature = c("NLworld", "matrix", "missing"),
+  definition = function(world, agents) {
+    maxAgents <- withMax(world = world, agents = agents)
+    row <- sample(1:nrow(maxAgents), size = 1)
+    return(maxAgents[row,])
+  }
+)
+
+#' @export
+#' @rdname maxOneOf
+setMethod(
+  "maxOneOf",
+  signature = c("NLworldStack", "matrix", "character"),
+  definition = function(world, agents, pVar) {
+    maxAgents <- withMax(world = world, agents = agents, pVar = pVar)
+    row <- sample(1:nrow(maxAgents), size = 1)
+    return(maxAgents[row,])
+  }
+)
+
+
+################################################################################
+#' One with minimum
+#'
+#' Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
+#' variable equals to the minimum value.
+#'
+#'!!! Only implemented for patches so far !!!
+#'
+#' @param world  A \code{NLworld*} object.
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to be evaluated.
+#'
+#' @param pVar   If the world is a \code{NLworldStack}, pVar is the name (characters)
+#'               of the layer used for evaluating the minimum patch value.
+#'
+#' @return A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+#'         the second column \code{pycor} representing the coordinates for the patch
+#'         (or one of the patches) with the minimum value among the agents.
+#'
+#' @details If there are several agents with the minimum value, one is chosen randomly.
+#'          To access to all agents with their variable equal to the minimum value,
+#'          use \code{withMin()}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' pMin <- minOneOf(world = w1, agents = patches(world = w1))
+#' plot(w1)
+#'
+#' @export
+#' @docType methods
+#' @rdname minOneOf
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "minOneOf",
+  function(world, agents, pVar) {
+    standardGeneric("minOneOf")
+  })
+
+#' @export
+#' @rdname minOneOf
+setMethod(
+  "minOneOf",
+  signature = c("NLworld", "matrix", "missing"),
+  definition = function(world, agents) {
+    minAgents <- withMin(world = world, agents = agents)
+    row <- sample(1:nrow(minAgents), size = 1)
+    return(minAgents[row,])
+  }
+)
+
+#' @export
+#' @rdname minOneOf
+setMethod(
+  "minOneOf",
+  signature = c("NLworldStack", "matrix", "character"),
+  definition = function(world, agents, pVar) {
+    minAgents <- withMin(world = world, agents = agents, pVar = pVar)
+    row <- sample(1:nrow(minAgents), size = 1)
+    return(minAgents[row,])
+  }
+)

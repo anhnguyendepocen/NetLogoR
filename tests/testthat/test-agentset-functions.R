@@ -64,3 +64,46 @@ test_that("withMin works",{
   expect_identical(pMinw1, patch(ws, xcor = c(1,1), ycor = c(4,1)))
   expect_identical(pMinw2, patch(ws, xcor = c(2,2), ycor = c(4,2)))
 })
+
+test_that("maxOneOf works",{
+  w1 <- createNLworld(0, 4, 0, 4)
+  w1[] <- sample(1:5, size = 25, replace = TRUE)
+  allpMax <- withMax(world = w1, agents = patches(world = w1))
+  onepMax <- maxOneOf(world = w1, agents = patches(world = w1))
+  compare <- cbind(a = as.numeric(allpMax[,1])==as.numeric(onepMax[1]),b = as.numeric(allpMax[,2])==as.numeric(onepMax[2]))
+  rowTRUE <- compare[compare[,1] == TRUE & compare[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+
+  w2 <- w1
+  w2[] <- 1 / values(w1)
+  ws <- NLstack(w1, w2)
+  onepMax1 <- maxOneOf(world = ws, agents = patches(world = w1), pVar = "w1")
+  onepMax2 <- maxOneOf(world = ws, agents = patches(world = w1), pVar = "w2")
+  compare1 <- cbind(a = as.numeric(allpMax[,1])==as.numeric(onepMax1[1]),b = as.numeric(allpMax[,2])==as.numeric(onepMax1[2]))
+  rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+  compare2 <- onepMax2 == onepMax1
+  expect_less_than(length(compare2[compare2 == TRUE]), 2)
+})
+
+test_that("minOneOf works",{
+  w1 <- createNLworld(0, 4, 0, 4)
+  w1[] <- sample(1:5, size = 25, replace = TRUE)
+  allpMin <- withMin(world = w1, agents = patches(world = w1))
+  onepMin <- minOneOf(world = w1, agents = patches(world = w1))
+  compare <- cbind(a = as.numeric(allpMin[,1])==as.numeric(onepMin[1]),b = as.numeric(allpMin[,2])==as.numeric(onepMin[2]))
+  rowTRUE <- compare[compare[,1] == TRUE & compare[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+
+  w2 <- w1
+  w2[] <- 1 / values(w1)
+  ws <- NLstack(w1, w2)
+  onepMin1 <- minOneOf(world = ws, agents = patches(world = w1), pVar = "w1")
+  onepMin2 <- minOneOf(world = ws, agents = patches(world = w1), pVar = "w2")
+  compare1 <- cbind(a = as.numeric(allpMin[,1])==as.numeric(onepMin1[1]),b = as.numeric(allpMin[,2])==as.numeric(onepMin1[2]))
+  rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+  compare2 <- onepMin2 == onepMin1
+  expect_less_than(length(compare2[compare2 == TRUE]), 2)
+})
+

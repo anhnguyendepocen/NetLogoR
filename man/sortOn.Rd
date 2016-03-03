@@ -35,11 +35,11 @@ according to their value.
 !!! Only implemented for patches so far !!!
 
 The sorting of the agents based on their value is done in a increasing order.
-         Ties are sorted randomly.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
+plot(w1)
 p1 <- sortOn(world = w1, agents = patches(world = w1))
 
 }
