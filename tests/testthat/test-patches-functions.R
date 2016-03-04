@@ -159,14 +159,20 @@ test_that("patch works", {
   w1[] <- 1:100
   expect_identical(patch(world = w1, xcor = 0.1, ycor = -0.4), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = w1, xcor = c(1, 0), ycor = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
-  expect_identical(patch(world = w1, xcor = -1, ycor = 0), cbind(pxcor = as.numeric(NA), pycor = as.numeric(NA)))
+  expect_identical(patch(world = w1, xcor = c(0,-1), ycor = c(0,0)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, xcor = c(0,-1), ycor = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = w1, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
 
   w2 <- w1
   w2[] <- 100:1
   ws <- NLstack(w1, w2)
   expect_identical(patch(world = ws, xcor = 0.1, ycor = -0.4), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = ws, xcor = c(1, 0), ycor = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
-  expect_identical(patch(world = ws, xcor = -1, ycor = 0), cbind(pxcor = as.numeric(NA), pycor = as.numeric(NA)))
+  expect_identical(patch(world = ws, xcor = c(0,-1), ycor = c(0,0)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, xcor = c(0,-1), ycor = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = ws, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
 })
 
 test_that("other works", {

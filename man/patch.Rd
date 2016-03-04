@@ -7,11 +7,13 @@
 \alias{patch,NLworldStack,numeric,numeric-method}
 \title{Patch}
 \usage{
-patch(world, xcor, ycor)
+patch(world, xcor, ycor, duplicate = FALSE, torus = FALSE)
 
-\S4method{patch}{NLworld,numeric,numeric}(world, xcor, ycor)
+\S4method{patch}{NLworld,numeric,numeric}(world, xcor, ycor,
+  duplicate = FALSE, torus = FALSE)
 
-\S4method{patch}{NLworldStack,numeric,numeric}(world, xcor, ycor)
+\S4method{patch}{NLworldStack,numeric,numeric}(world, xcor, ycor,
+  duplicate = FALSE, torus = FALSE)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}
@@ -19,26 +21,37 @@ patch(world, xcor, ycor)
 \item{xcor}{A vector of \code{xcor} coordinates.}
 
 \item{ycor}{A vector of \code{ycor} coordinates.}
+
+\item{duplicate}{Logical. If more than one set of coordinates \code{xcor, ycor}
+fall into the same patch and \code{duplicate == TRUE}, the
+patch coordinates are returned the number of times the coordinates.
+If \code{duplicate == FALSE}, the patch coordinates are only
+returned once.
+Default is \code{duplicate == FALSE}.}
+
+\item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
+Default is \code{torus = FALSE}.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patch(es) coordinates. Each row represents
-        a patch and the order is the one given in the coordinates \code{xcor} and
-        \code{ycor}.
+        \code{pycor} representing the patch(es) coordinates at \code{xcor, ycor}.
 }
 \description{
 Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
 \code{xcor} and \code{ycor} coordinates.
 }
 \details{
-This function is equivalent to round the values \code{xcor} and \code{ycor}.
-         If \code{xcor} or \code{ycor} are outside the world's extent, \code{NA, NA} is
-         returned for the patch coordinates.
+If \code{xcor} or \code{ycor} are outside the world's extent and
+         \code{torus = FALSE}, no patch coordinates are returned; if \code{torus = TRUE},
+         the patch coordinates from the wrapped world are returned.
 }
 \examples{
 # Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-patch(world = w1, xcor = c(8.9, 5), ycor = c(-0.1, 12.4))
+patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4))
+patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
+patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
+patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
 
 }
 \author{

@@ -1,3 +1,50 @@
+test_that("NLall works",{
+  w1 <- createNLworld(0, 4, 0, 4)
+  w1[] <- sample(1:5, size = 25, replace = TRUE)
+  expect_identical(NLall(world = w1, agents = patches(world = w1), val = 5), FALSE)
+  w2 <- w1
+  w2[] <- 5
+  expect_identical(NLall(world = w2, agents = patches(world = w2), val = 5), TRUE)
+  w3 <- w2
+  w3[0,0] <- 4
+  expect_identical(NLall(world = w2, agents = patch(world = w2, xcor = c(0,1,2,3,4), ycor = c(4,4,4,4,4)), val = 5), TRUE)
+
+  ws <- NLstack(w1, w2, w3)
+  expect_identical(NLall(world = ws, agents = patches(world = ws), pVar = "w1", val = 5), FALSE)
+  expect_identical(NLall(world = ws, agents = patches(world = ws), pVar = "w2", val = 5), TRUE)
+  expect_identical(NLall(world = ws, agents = patch(world = ws, xcor = c(0,1,2,3,4), ycor = c(4,4,4,4,4)), pVar = "w3", val = 5), TRUE)
+})
+
+test_that("NLany works",{
+  w1 <- createNLworld(0, 4, 0, 4)
+  p1 <- noPatches()
+  p2 <- patch(world = w1, xcor = 0, ycor = 0)
+  p3 <- patch(world = w1, xcor = -1, ycor = -1)
+  p4 <- patches(world = w1)
+  p5 <- patch(world = w1, xcor = c(-1, 0), ycor = c(-1, 0))
+  expect_identical(NLany(p1), FALSE)
+  expect_identical(NLany(p2), TRUE)
+  expect_identical(NLany(p3), FALSE)
+  expect_identical(NLany(p4), TRUE)
+  expect_identical(NLany(p5), TRUE)
+})
+
+test_that("count works",{
+  w1 <- createNLworld(0, 4, 0, 4)
+  p1 <- noPatches()
+  p2 <- patch(world = w1, xcor = 0, ycor = 0)
+  p3 <- patch(world = w1, xcor = -1, ycor = -1)
+  p4 <- patches(world = w1)
+  p5 <- patch(world = w1, xcor = c(-1, 0), ycor = c(-1, 0))
+  p6 <- patch(world = w1, xcor = c(-1, 0), ycor = c(0, 0))
+  expect_equivalent(count(p1), 0)
+  expect_equivalent(count(p2), 1)
+  expect_equivalent(count(p3), 0)
+  expect_equivalent(count(p4), 25)
+  expect_equivalent(count(p5), 1)
+  expect_equivalent(count(p6), 1)
+})
+
 test_that("sortOn works",{
   w1 <- createNLworld(0, 4, 0, 4)
   w1[] <- 25:1

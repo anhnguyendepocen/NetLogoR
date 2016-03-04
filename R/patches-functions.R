@@ -349,20 +349,28 @@ setMethod(
 #' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
 #' \code{xcor} and \code{ycor} coordinates.
 #'
-#' @param world A \code{NLworld*} object.
+#' @param world      A \code{NLworld*} object.
 #'
-#' @param xcor  A vector of \code{xcor} coordinates.
+#' @param xcor       A vector of \code{xcor} coordinates.
 #'
-#' @param ycor  A vector of \code{ycor} coordinates.
+#' @param ycor       A vector of \code{ycor} coordinates.
+#'
+#' @param duplicate  Logical. If more than one set of coordinates \code{xcor, ycor}
+#'                   fall into the same patch and \code{duplicate == TRUE}, the
+#'                   patch coordinates are returned the number of times the coordinates.
+#'                   If \code{duplicate == FALSE}, the patch coordinates are only
+#'                   returned once.
+#'                   Default is \code{duplicate == FALSE}.
+#'
+#' @param torus      Logical to determine if the \code{NLworld*} is wrapped.
+#'                   Default is \code{torus = FALSE}.
 #'
 #' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the patch(es) coordinates. Each row represents
-#'         a patch and the order is the one given in the coordinates \code{xcor} and
-#'         \code{ycor}.
+#'         \code{pycor} representing the patch(es) coordinates at \code{xcor, ycor}.
 #'
-#' @details This function is equivalent to round the values \code{xcor} and \code{ycor}.
-#'          If \code{xcor} or \code{ycor} are outside the world's extent, \code{NA, NA} is
-#'          returned for the patch coordinates.
+#' @details If \code{xcor} or \code{ycor} are outside the world's extent and
+#'          \code{torus = FALSE}, no patch coordinates are returned; if \code{torus = TRUE},
+#'          the patch coordinates from the wrapped world are returned.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -371,9 +379,13 @@ setMethod(
 #' @examples
 #' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' patch(world = w1, xcor = c(8.9, 5), ycor = c(-0.1, 12.4))
+#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4))
+#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
+#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
+#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
 #'
 #' @export
+#' @importFrom SpaDES wrap
 #' @docType methods
 #' @rdname patch
 #'
@@ -381,7 +393,7 @@ setMethod(
 #'
 setGeneric(
   "patch",
-  function(world, xcor, ycor) {
+  function(world, xcor, ycor, duplicate = FALSE, torus = FALSE) {
     standardGeneric("patch")
   })
 
@@ -389,18 +401,29 @@ setGeneric(
 #' @rdname patch
 setMethod(
   "patch",
-  signature = c("NLworld", "numeric", "numeric"),
-  definition = function(world, xcor, ycor) {
+  signature = c(world = "NLworld", xcor = "numeric", ycor = "numeric"),
+  definition = function(world, xcor, ycor, duplicate, torus) {
 
     pxcor_ <- round(xcor)
     pycor_ <- round(ycor)
 
-    pxcor <- ifelse(pxcor_ < world@minPxcor | pxcor_ > world@maxPxcor, NA, pxcor_)
-    pycor <- ifelse(pycor_ < world@minPycor | pycor_ > world@maxPycor, NA, pycor_)
-    pxcor[is.na(pycor)] <- NA
-    pycor[is.na(pxcor)] <- NA
+    if(torus == TRUE){
+      pCoords <- wrap(cbind(x = pxcor_, y = pycor_), extent(world))
+      pxcor_ <- pCoords[,1]
+      pycor_ <- pCoords[,2]
+    }
 
+    pxcorNA <- ifelse(pxcor_ < world@minPxcor | pxcor_ > world@maxPxcor, NA, pxcor_)
+    pycorNA <- ifelse(pycor_ < world@minPycor | pycor_ > world@maxPycor, NA, pycor_)
+    pxcorNA[is.na(pycorNA)] <- NA
+    pycorNA[is.na(pxcorNA)] <- NA
+    pxcor = pxcorNA[!is.na(pxcorNA)]
+    pycor = pycorNA[!is.na(pycorNA)]
     pCoords <- matrix(data = cbind(pxcor, pycor), ncol = 2, nrow = length(pxcor), dimnames = list(NULL, c("pxcor", "pycor")))
+
+    if(duplicate == FALSE){
+      pCoords <- unique(pCoords)
+    }
     return(pCoords)
   }
 )
@@ -409,10 +432,10 @@ setMethod(
 #' @rdname patch
 setMethod(
   "patch",
-  signature = c("NLworldStack", "numeric", "numeric"),
-  definition = function(world, xcor, ycor) {
+  signature = c(world = "NLworldStack", xcor = "numeric", ycor = "numeric"),
+  definition = function(world, xcor, ycor, duplicate, torus) {
     world_l <- world[[1]]
-    patch(world = world_l, xcor = xcor, ycor = ycor)
+    patch(world = world_l, xcor = xcor, ycor = ycor, duplicate = duplicate, torus = torus)
   }
 )
 

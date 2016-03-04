@@ -1,4 +1,186 @@
 ################################################################################
+#' All
+#'
+#' Reports \code{TRUE} if all the agents have their variable equal to a given value,
+#' or \code{FALSE} otherwise.
+#'
+#'!!! Only implemented for patches so far !!!
+#'
+#' @param world  A \code{NLworld*} object.
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates of the
+#'               patches to be evaluated.
+#'
+#' @param pVar   If the world is a \code{NLworldStack}, pVar is the name (characters)
+#'               of the layer used for evaluating the conditional value.
+#'
+#' @param val    Numeric or character depending on the variable class.
+#'
+#' @return Logical. \code{TRUE} if all the agents have their variable equal to \code{val},
+#'         return \code{FALSE} otherwise.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' NLall(world = w1, agents = patches(world = w1), val = 5)
+#' w2 <- w1
+#' w2[] <- 5
+#' NLall(world = w2, agents = patches(world = w2), val = 5)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname NLall
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "NLall",
+  function(world, agents, pVar, val) {
+    standardGeneric("NLall")
+  })
+
+#' @export
+#' @rdname NLall
+setMethod(
+  "NLall",
+  signature = c("NLworld", "matrix", "missing", "numeric"),
+  definition = function(world, agents, val) {
+    values <- values(world)
+    pxcorW <- world@pxcor
+    pycorW <- world@pycor
+    agentsVal <- values[pxcorW == agents[,1] & pycorW == agents[,2]]
+    compare <- agentsVal == val
+    allTrue <- ifelse(length(compare[compare == TRUE]) == length(compare), TRUE, FALSE)
+    return(allTrue)
+  }
+)
+
+#' @export
+#' @rdname NLall
+setMethod(
+  "NLall",
+  signature = c("NLworldStack", "matrix", "character", "numeric"),
+  definition = function(world, agents, pVar, val) {
+    names_l <- names(world)
+    l <- match(pVar, names_l)
+    world_l <- world[[l]]
+    NLall(world = world_l, agents = agents, val = val)
+  }
+)
+
+
+################################################################################
+#' Any
+#'
+#' Reports \code{TRUE} if the given agentset \code{agents} is non empty, or \code{FALSE}
+#' otherwise.
+#'
+#'!!! Only implemented for patches so far !!!
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates of the
+#'               patches to be evaluated.
+#'
+#' @return Logical. \code{TRUE} if there is at least one patch coordinates in the
+#'         \code{agents}, return \code{FALSE} otherwise.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' p1 <- noPatches()
+#' p2 <- patch(world = w1, xcor = 0, ycor = 0)
+#' NLany(p1)
+#' NLany(p2)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname NLany
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "NLany",
+  function(agents) {
+    standardGeneric("NLany")
+  })
+
+#' @export
+#' @rdname NLany
+setMethod(
+  "NLany",
+  signature = c("matrix"),
+  definition = function(agents) {
+    anyAgents <- ifelse(nrow(agents) == 0, FALSE, TRUE)
+
+    if(anyAgents == TRUE){
+      nonNAs <- apply(agents, 2, function(x) length(which(!is.na(x))))
+      if(sum(nonNAs) == 0){
+        anyAgents <- FALSE
+      }
+    }
+
+    return(anyAgents)
+  }
+)
+
+
+################################################################################
+#' Count
+#'
+#' Reports the number of agents.
+#'
+#'!!! Only implemented for patches so far !!!
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates of the
+#'               patches to be counted
+#'
+#' @return Integer.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4) # 25 patches
+#' p1 <- patches(world = w1)
+#' count(p1) # 25
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname count
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "count",
+  function(agents) {
+    standardGeneric("count")
+  })
+
+#' @export
+#' @rdname count
+setMethod(
+  "count",
+  signature = c("matrix"),
+  definition = function(agents) {
+    return(nrow(agents))
+  }
+)
+
+
+################################################################################
 #' Sort on
 #'
 #' Reports the coordinates \code{pxcor} and \code{pycor} of the patches sorted
