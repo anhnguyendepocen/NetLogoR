@@ -1,22 +1,26 @@
 ################################################################################
+#' \code{NLworld*}
+#'
+#' \code{NLworld*} comprises two classes: \code{NLworld} and \code{NLworldStack}.
+#'
+#'
 #' The \code{NLworld} class
 #'
-#' Behaves the same as a \code{RasterLayer} object except:
-#'
-#' A \code{NLworld} is a grid composed of squared patches.
-#' Patches have two coordinates \code{pxcor} and \code{pycor}, considered as the
-#' coordinates of their center.
-#' \code{pxcor} and \code{pycor} are always integer and increment by 1.
-#' When creating a new \code{NLworld}, the extent of the \code{NLworld} is of
-#' \code{xmin = minPxcor}, \code{xmax = maxPxcor}, \code{ymin = minPycor}, and
-#' \code{ymax = maxPycor}. The number of patches is equal to
-#' \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
-#' \code{pxcor} can be seen as a column number and \code{pycor} can be seen as a
-#' row number but increasing as you move up. However, \code{pxcor} and \code{pycor}
-#' can be negative if there are patches to the left or below the patch \code{[0,0]}.
+#' A \code{NLworld} object is a grid composed of squared patches that behaves
+#' mostly the same as a \code{RasterLayer} object.
+#' Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
+#' coordinates of their center. \code{pxcor} and \code{pycor} are always integer
+#' and increment by 1. When creating a \code{NLworld}, the extent of the \code{NLworld}
+#' is \code{xmin = minPxcor - 0.5}, \code{xmax = maxPxcor + 0.5},
+#' \code{ymin = minPycor - 0.5}, and \code{ymax = maxPycor + 0.5}. The number of
+#' patches is equal to \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
+#' \code{pxcor} can be seen as column numbers, increasing as you move right and
+#' \code{pycor} can be seen as row numbers but increasing as you move up. However,
+#' \code{pxcor} and \code{pycor} can be negative if there are patches to the left
+#' or below the patch \code{[0,0]}.
 #'
 #' The use of \code{[]} to extract \code{Raster*} cell values by row and column numbers
-#' has been redefined to extract \code{NLworld} patches using the patches' coordinates
+#' has been redefined to extract \code{NLworld*} patches using the patches' coordinates
 #' \code{[pxcor,pyxor]}. When multiple coordinates are provided, the order of the
 #' values returned matches the order of the cell numbers as defined for a \code{Raster*}.
 #' Similarly, when replacing values of several patches using \code{[]<-}, the values
@@ -81,8 +85,8 @@ setReplaceMethod(
 ################################################################################
 #' The \code{NLworldStack} class
 #'
-#' Behaves the same as a \code{RasterStack} object except that it is a collection
-#' of \code{NLworld} objects.
+#' A \code{NLworldStack} object is similar to a \code{RasterStack} object as it is
+#' a collection of \code{NLworld} objects.
 #'
 #' @inheritParams RasterStack
 #'
@@ -235,10 +239,10 @@ setMethod(
 
 
 ################################################################################
-#' Patch number from \code{pxcor} and \code{pycor}
+#' Cells number from patches coordinates
 #'
-#' Report the cell numbers as defined for a \code{Raster*} object with the patches
-#' coordinates
+#' Report the cells number as defined for a \code{Raster*} object with the patches
+#' coordinates \code{pxcor} and \code{pycor}.
 #'
 #' @param world A \code{NLworld*} object.
 #'
@@ -246,7 +250,7 @@ setMethod(
 #'
 #' @param pycor A vector of \code{pycor} coordinates.
 #'
-#' @return A vector of patch number
+#' @return A vector of cells number.
 #'
 #' @examples
 #' # Create a world.
@@ -300,17 +304,17 @@ setMethod(
 
 
 ################################################################################
-#' \code{pxcor} and \code{pycor} from patch number
+#' Patches coordinates from cells number
 #'
-#' Report the patch coordinates from the patch number defined as the cell number
-#' for a \code{Raster*} object.
+#' Report the patches coordinates \code{pxcor} and \code{pycor} from the cells
+#' number as defined for a \code{Raster*} object.
 #'
 #' @param world   A \code{NLworld*} object.
 #'
-#' @param cellNum A vector of cell numbers.
+#' @param cellNum A vector of cells number.
 #'
 #' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
-#'         column \code{pycor} in the order of the cell number given.
+#'         column \code{pycor} in the order of the cells number given.
 #'
 #' @examples
 #' # Create a world.

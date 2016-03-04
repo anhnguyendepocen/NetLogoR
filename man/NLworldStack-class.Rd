@@ -14,8 +14,8 @@
 \S4method{[}{NLworldStack,numeric,numeric,numeric}(x, i, j) <- value
 }
 \description{
-Behaves the same as a \code{RasterStack} object except that it is a collection
-of \code{NLworld} objects.
+A \code{NLworldStack} object is similar to a \code{RasterStack} object as it is
+a collection of \code{NLworld} objects.
 }
 \author{
 Sarah Bauduin

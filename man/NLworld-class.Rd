@@ -5,30 +5,33 @@
 \alias{NLworld-class}
 \alias{[}
 \alias{[<-}
-\title{The \code{NLworld} class}
+\title{\code{NLworld*}}
 \usage{
 \S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, drop)
 
 \S4method{[}{NLworld,numeric,numeric,numeric}(x, i, j) <- value
 }
 \description{
-Behaves the same as a \code{RasterLayer} object except:
+\code{NLworld*} comprises two classes: \code{NLworld} and \code{NLworldStack}.
 }
 \details{
-A \code{NLworld} is a grid composed of squared patches.
-Patches have two coordinates \code{pxcor} and \code{pycor}, considered as the
-coordinates of their center.
-\code{pxcor} and \code{pycor} are always integer and increment by 1.
-When creating a new \code{NLworld}, the extent of the \code{NLworld} is of
-\code{xmin = minPxcor}, \code{xmax = maxPxcor}, \code{ymin = minPycor}, and
-\code{ymax = maxPycor}. The number of patches is equal to
-\code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
-\code{pxcor} can be seen as a column number and \code{pycor} can be seen as a
-row number but increasing as you move up. However, \code{pxcor} and \code{pycor}
-can be negative if there are patches to the left or below the patch \code{[0,0]}.
+The \code{NLworld} class
+
+A \code{NLworld} object is a grid composed of squared patches that behaves
+mostly the same as a \code{RasterLayer} object.
+Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
+coordinates of their center. \code{pxcor} and \code{pycor} are always integer
+and increment by 1. When creating a \code{NLworld}, the extent of the \code{NLworld}
+is \code{xmin = minPxcor - 0.5}, \code{xmax = maxPxcor + 0.5},
+\code{ymin = minPycor - 0.5}, and \code{ymax = maxPycor + 0.5}. The number of
+patches is equal to \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
+\code{pxcor} can be seen as column numbers, increasing as you move right and
+\code{pycor} can be seen as row numbers but increasing as you move up. However,
+\code{pxcor} and \code{pycor} can be negative if there are patches to the left
+or below the patch \code{[0,0]}.
 
 The use of \code{[]} to extract \code{Raster*} cell values by row and column numbers
-has been redefined to extract \code{NLworld} patches using the patches' coordinates
+has been redefined to extract \code{NLworld*} patches using the patches' coordinates
 \code{[pxcor,pyxor]}. When multiple coordinates are provided, the order of the
 values returned matches the order of the cell numbers as defined for a \code{Raster*}.
 Similarly, when replacing values of several patches using \code{[]<-}, the values

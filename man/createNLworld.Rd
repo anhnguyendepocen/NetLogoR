@@ -5,7 +5,7 @@
 \alias{createNLworld}
 \alias{createNLworld,missing,missing,missing,missing-method}
 \alias{createNLworld,numeric,numeric,numeric,numeric-method}
-\title{Create a \code{NLworld}}
+\title{Create a \code{NLworld} object.}
 \usage{
 createNLworld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
   maxPycor = 16)
@@ -16,27 +16,27 @@ createNLworld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
 \S4method{createNLworld}{missing,missing,missing,missing}()
 }
 \arguments{
-\item{minPxcor}{\code{pxcor} for patches on the left border of the \code{NLworld}
-Default value = \code{-16}, as in NetLogo.}
+\item{minPxcor}{\code{pxcor} for patches on the left border of the \code{NLworld}.
+Default value is \code{-16}, as in NetLogo.}
 
-\item{maxPxcor}{\code{pxcor} for patches on the right border of the \code{NLworld}
-Default value = \code{16}, as in NetLogo.}
+\item{maxPxcor}{\code{pxcor} for patches on the right border of the \code{NLworld}.
+Default value is \code{16}, as in NetLogo.}
 
-\item{minPycor}{\code{pycor} for patches at the bottom of the \code{NLworld}
-Default value \code{-16}, as in NetLogo.}
+\item{minPycor}{\code{pycor} for patches at the bottom of the \code{NLworld}.
+Default value is \code{-16}, as in NetLogo.}
 
-\item{maxPycor}{\code{pycor} for patches at the top of the \code{NLworld}
-Default value \code{16}, as in NetLogo.}
+\item{maxPycor}{\code{pycor} for patches at the top of the \code{NLworld}.
+Default value is \code{16}, as in NetLogo.}
 }
 \value{
 A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
-        patches. Patch value are \code{NA}.
+        patches. Patches value are \code{NA}.
 }
 \description{
 Create an empty grid of patches of class \code{NLworld}.
 }
 \details{
-See \code{help("NLworld")} for more details on the NLworld.
+See \code{help("NLworld*")} for more details on the \code{NLworld} class.
 }
 \examples{
 # Create a square world of 25 patches.

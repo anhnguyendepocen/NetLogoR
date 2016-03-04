@@ -5,7 +5,7 @@
 \alias{convertNLworld}
 \alias{convertNLworld,RasterLayer-method}
 \alias{convertNLworld,RasterStack-method}
-\title{Convert to a \code{NLworld}}
+\title{Convert to a \code{NLworld*} object.}
 \usage{
 convertNLworld(raster)
 
@@ -17,19 +17,23 @@ convertNLworld(raster)
 \item{raster}{A \code{RasterLayer} or a \code{RasterStack} object.}
 }
 \value{
-A \code{NLworld} or \code{NLworldStack} object depending on the input.
+A \code{NLworld} or a \code{NLworldStack} object depending on the input.
         Patches value are retained from the \code{Raster*} object.
 }
 \description{
-Convert a \code{Raster*} object into a \code{NLworld}.
+Convert a \code{RasterLayer} object into a \code{NLworld} object or a \code{RasterStack}
+into a {NLworldStack} object.
 }
 \details{
-See \code{help("NLworld")} for more details on the \code{NLworld}.
+See \code{help("NLworld*")} for more details on the \code{NLworld*} classes.
+         The \code{Raster*} is resampled to match the coordinates system and
+         resolution of a \code{NLworld*} using a bilinear interpolation. The
+         extent will be bigger by 1 on the width and on the height.
 }
 \examples{
 r <- raster(system.file("external/test.grd", package="raster")) # from the raster package
 plot(r)
-maxPxcor(r) # does not work
+# maxPxcor(r) # does not work
 world <- convertNLworld(raster = r)
 plot(world)
 maxPxcor(world) # works
