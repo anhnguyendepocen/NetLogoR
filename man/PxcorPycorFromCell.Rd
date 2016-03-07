@@ -5,7 +5,7 @@
 \alias{PxcorPycorFromCell}
 \alias{PxcorPycorFromCell,NLworld,numeric-method}
 \alias{PxcorPycorFromCell,NLworldStack,numeric-method}
-\title{Patch coordinates from cell numbers}
+\title{Patches coordinates from cells number}
 \usage{
 PxcorPycorFromCell(world, cellNum)
 
@@ -16,15 +16,15 @@ PxcorPycorFromCell(world, cellNum)
 \arguments{
 \item{world}{A \code{NLworld*} object.}
 
-\item{cellNum}{A vector of cell numbers.}
+\item{cellNum}{A vector of cells number.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second
-        column \code{pycor} in the order of the cell numbers given.
+        column \code{pycor} in the order of the cells number given.
 }
 \description{
-Report the patch coordinates \code{pxcor} and \code{pycor} from the cell number
-as defined for a \code{Raster*} object.
+Report the patches coordinates \code{pxcor} and \code{pycor} from the cells
+number as defined for a \code{Raster*} object.
 }
 \examples{
 # Create a world.

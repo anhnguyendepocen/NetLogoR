@@ -33,10 +33,15 @@ See \code{help("NLworld*")} for more details on the \code{NLworld*} classes.
 \examples{
 r <- raster(system.file("external/test.grd", package="raster")) # from the raster package
 plot(r)
-# maxPxcor(r) # does not work
+extent(r)
 world <- convertNLworld(raster = r)
 plot(world)
-maxPxcor(world) # works
+extent(world)
+minPxcor(world)
+maxPxcor(world)
+minPycor(world)
+maxPycor(world)
+
 
 }
 \author{

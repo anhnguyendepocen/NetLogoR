@@ -1,278 +1,135 @@
 ---
 title: "Programming Guide NetLogoR"
 author: "Sarah Bauduin, Eliot McIntire"
-date: "4 février 2016"
+date: "March, 7th 2016"
 output: html_document
 ---
 
 This document is based on the [NetLogo’s Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html). It describes how the NetLogo’s programming language is translated in the R language.
 
 
-## Agents
+### World and agents
 
-In NetLogoR, turtles are agents that move around in a world. Turtles are represented as a SpatialPointDataFrame object. The world is two dimensional and is divided up into a grid of patches. The world is a raster object. Each patch is a piece of "ground" over which turtles can move. Patches are agents that cannot move. The observer is the person giving instructions (i.e., coding).  
-**I know you don’t want to call patches “agents” but we need a term to call turtles and patches together. I kept agents for now.**  
-**I skipped the links for now.**
+In NetLogoR, the world is a `NLworld*` object. It is either a `NLworld` or a `NLworldStack` object. The world is two dimensional and is divided into a grid of square patches. 
 
-
-Patches have coordinates. The patch at coordinates (0, 0) is called the origin and the coordinates of the other patches are the horizontal and vertical distances from this one. We call the patch's coordinates `pxcor` and `pycor`. Just like in the standard mathematical coordinate plane, `pxcor` increases as you move to the right and `pycor` increases as you move up.
-
-The total number of patches is determined by the world extent. If the raster representing the world is created by the observer, the extent and coordinates (`min-pxcor`, `max-pxcor`, `min-pycor`, and `max-pycor`) are defined at that time by the observer. If the raster is imported, the extent and coordinates are the ones from the imported file. Turtles have coordinates too: `xcor` and `ycor`. A patch's coordinates are always integers, but a turtle's coordinates can have decimals. This means that a turtle can be positioned at any point within its patch; it doesn't have to be in the center of the patch.
+There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates `pxcor` and `pycor`, representing their center, in a `matrix` object. See `help("NLworld")` for more details on the patch coordinates system. Turtles are defined by their coordinates `xcor` and `ycor` in a `SpatialPointDataFrame` object. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).
 
 
-## Procedures
+### Procedures
 
-In NetLogoR, functions tell agents what to do. Functions can either give an action for an agent to carry out, resulting in some effect, or give instructions for computing a value.
+In NetLogoR, R functions act on agents. Functions can either transform agents or used them to compute some value. Functions available from the R software and different packages can be used, as well as the functions from NetLogoR. The NetLogoR functions are a translation into the R language of the NetLogo’s primitives (i.e., “built-in commands and reporters”). You can create new functions or wrap several existing functions into one. The rules to do so are imposed by the R language.  
 
-Functions available from the R software and different packages can be used, as well as the functions from NetLogoR. The NetLogoR functions are a translation into the R language of the NetLogo’s primitives (i.e., “built-in commands and reporters”). **You** can create new functions or wrap several existing functions into one. The rules to do so are imposed by the R language.  
-**Maybe we should only use “you” or only “the observer” but not mix both.**
-
-Functions take arguments, R objects or values, which are used to carry out actions or compute results. Here are two functions:  
+Functions take arguments which are R objects and values. Arguments are used to carry out actions and compute results.
 ```{r, eval=FALSE}
-turtles<-create-turtles(10) # create 10 turtles
-turtles<-fd(turtles,1) # move all the turtles forward of 1 step
-```
-**Double check with the functions**
-
-The R language uses # to add "comments" to the script. Comments can make your code easier to read and understand, but they don't affect its behavior.
-
-A function is run either by the observer who sends the function to the R console to be executed or by a scheduler function which wrap one or several functions and send them according to the schedule to the R console.
-
-In NetLogoR, you have to specify which turtles or patches are to run each function; it is one of the function argument, usually the first one. If there is no agents argument, the code is run by the observer. In the code above, `create-turtle` is run by the observer. The `fd` function takes up a turtles argument and perform the action on these agents.
-
-
-## Variables
-
-A global variable is an R object and it has only one value. You can think of global variables as belonging to the observer.
-
-Agent variables are places to store values (such as numbers) for an agent. An agent variable can be a turtle variable or a patch variable. Turtles variables are columns in the dataframe of the SpatialPointsDataFrame. Patches variables are raster layers. Each turtle has its own value for every turtle variable. The same goes for patches. You can have turtle and patch variables define by the same name as they are not stored in the same R object. All the agent variables built into NetLogo are available in NetLogoR. See the [NetLogo Dictionary](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) for the list of all agent variables. Any variable already built for the agent that you don't set has a null starting value (i.e., NA value).
-
-You can also define your own variables. You can make a global variable by creating an R object, like this:  
-```{r, eval=FALSE}
-score<-15
+w1 <- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = 0, maxPycor = 10) # create a world according to the given extent
+pDist <- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 1, pycor = 1) # report the distance between the patch [pxcor = 0, pycor = 0] and the patch [pxcor = 1, pycor = 1]
 ```
 
-You can also define new turtle and patch variables like this:  
-```{r, eval=FALSE}
-...
-```
-**Let’s see how we define the different agents variables**
+In NetLogoR, it is one of the function argument which specify which turtle(s) or patch(es) are involved in the function. For example, in the `NLdist` function, the argument `from` takes one patch coordinates and the argument `to` takes another patch coordinates.
 
-Global variables can be read and set at any time by any agent. As well, a turtle can read and set patch variables of the patch it is standing on. For example, this code:  
+The result of a function which acts on agents or computes a value need to be assigned to an object name to be kept and re-used later in the model. Functions create new objects, they do not directly modify the ones given as arguments. For example, when moving turtles around using the `fd` function, the result (i.e., the turtles with new coordinates) need to be re-assigned to the turtles object.
+```{r, eval=FALSE}
+turtles <- fd(turtles, 1)
+```
+
+In NetLogo, pressing a button runs some code. To perform the button action in NetLogoR, the code must be sent to the R console to be executed. The code can be sent directly by the observer or by a scheduler function (e.g., see SpaDES package) which sends the code according to the schedule to the R console.
+
+The R language uses # to add comments to the script. Comments can make your code easier to read and understand, but they don't affect its behavior.
+
+
+### Variables
+
+R objects which are not world, patches or turtles can be seen as global variables.
+
+Agent variables are places to store different values for an agent. An agent variable can be a patch or a turtle variable. Each `NLworld` holds one variable for the patches. `NLworldStack` hold several variables for the patches as the different world layers. Turtles variables are columns in the dataframe of the `SpatialPointsDataFrame` object. You can have patch and turtle variables defined by the same name as they are not stored in the same object. 
+
+All the turtles variables built-in into NetLogo are available in NetLogoR when creating turtles. See the [NetLogo Dictionary](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) for the list of all turtles variables. Any variable already built-in for the turtles that you do not set to a specified value has a null starting value (i.e., `NA` value).
+
+To create a global variable you create an R object.  
+```{r, eval=FALSE}
+score <- 15
+```
+
+To create a new patch variable, you create a new `NLworld` with the same extent as the one(s) previously built and assign new values. 
+```{r, eval=FALSE}
+pQuality <- w1 # copy the world w1 already built
+pQuality[] <- runif(n = length(w1), min = 0, max = 1) # for all patches, assign a random value between 0 and 1
+```
+
+To create a new turtle variable, ... (to complete) 
 ```{r, eval=FALSE}
 ...
 ```
-causes every turtle to make the patch it is standing on red.  
-**Adapt the code to our functions**
 
-*In other situations where you want an agent to read a different agent's variable, you can use of. Example:*  
-*show [color] of turtle 5*  
-*;; prints current color of turtle with who number 5*  
-*You can also use of with a more complicated expression than just a variable name, for example:*  
-*show [xcor + ycor] of turtle 5*  
-*;; prints the sum of the x and y coordinates of*  
-*;; turtle with who number 5*  
-**Section from NetLogo. Need to be adapted to the format of our agent**
-
-Local variables may occur in NetLogoR as inherent to the R software. Variables only defined inside functions are locals and cannot be accessed outside of this function.
-
-
-## Tick counter
-
-In many NetLogoR models, time passes in discrete steps
-Time can be defined as a global variable in the model setup, like this:  
+Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.
 ```{r, eval=FALSE}
-time<-0
-```
-and then can be incremented in the model when needed (e.g., at the end of the procedure affecting all the agents), like this:  
-```{r, eval=FALSE}
-time<-time+1
+pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents
 ```
 
-Otherwise, the SpaDES package contains a scheduler which handles time and schedules functions. 
+Local variables may occur in NetLogoR as inherent to the R software. For example, variables only defined inside functions are local variables and therefore cannot be accessed outside of the functions.
 
+Turtle’s breed is a turtle variable and different breeds can be defined. You can then create different turtle agentset according to the different breeds and have them to behave differently. For example, you could have breeds called `sheep` and `wolf`, and have the wolves try to eat the sheep.
 
-## Colors
-
-Colors are built-in as part of the R language. Please see R manuals and packages associated with plotting to determine how to use colors.
-
-
-## Agent actions ("Ask" in NetLogo)
-
-Functions acting on agents or which use agent’s variables take as an argument the agents to be involved. By executing the function with its appropriate set of argument filled, the specified agents are modified/used.
-When you ask a set of agents to run more than one command (i.e., functions), all agents perform each command before doing the next one.
+You define turtles' breed by filling the breed column in the `SpatialPointsDataFrame`.
 ```{r, eval=FALSE}
-turtles<-fd(turtles,1)
-turtles<-set(turtles,color,”red”)
+turtles[turtles$breed,] <- "sheep"
 ```
-first all the turtles move, then they all turn red.  
-**Double check with our functions**
 
-It is possible to build a model so that each agent must finish a set of several commands before the next agent starts. However, we do not recommend this way of programming as it will significantly slow the model. 
-
-
-## Agentsets
-
-An agentset is exactly what its name implies, a set of agents. An agentset can contain either turtles or patches but not the two types at once.
-
-An agentset is in order according to one of the agents’ variable.  
-**SB: I wonder if this gonna be a problem because NetLogo says there is no order in the agentset so turtles do the different actions in a different order.**  
-**EM: Agentset column. The random order thing.**  
-**SB: I don't understand your answer :)**
-
-The `turtles` object is an agentset containing all turtles and the `patches` object contain all patches.
-
-But you can construct agentsets that contain only some turtles or some patches. For example, all the red turtles or only the patches with pxcor evenly divisible by five. These agentsets can then be passed on as an argument in various functions.
-
-**Start of NetLogo section**  
-One way is to use turtles-here or turtles-at, to make an agentset containing only the turtles on my patch, or only the turtles on some other patch at some x and y offsets. There's also turtles-on so you can get the set of turtles standing on a given patch or set of patches, or the set of turtles standing on the same patch as a given turtle or set of turtles.
-Here are some more examples of how to make agentsets:
-;; all other turtles:
-other turtles
-;; all other turtles on this patch:
-other turtles-here
-;; all red turtles:
-turtles with [color = red]
-;; all red turtles on my patch
-turtles-here with [color = red]
-;; patches on right side of view
-patches with [pxcor > 0]
-;; all turtles less than 3 patches away
-turtles in-radius 3
-;; the four patches to the east, north, west, and south
-patches at-points [[1 0] [0 1] [-1 0] [0 -1]]
-;; shorthand for those four patches
-neighbors4
-;; turtles in the first quadrant that are on a green patch
-turtles with [(xcor > 0) and (ycor > 0)
-              and (pcolor = green)]
-;; turtles standing on my neighboring four patches
-turtles-on neighbors4
-;; all the links connected to turtle 0
-[my-links] of turtle 0
-Note the use of other to exclude this agent. This is common.
-Once you have created an agentset, here are some simple things you can do:
-•	Use ask to make the agents in the agentset do something
-•	Use any? to see if the agentset is empty
-•	Use all? to see if every agent in an agentset satisfies a condition.
-•	Use count to find out exactly how many agents are in the set
-And here are some more complex things you can do:
-•	Pick a random agent from the set using one-of. For example, we can make a randomly chosen turtle turn green:
-•	ask one-of turtles [ set color green ]
-Or tell a randomly chosen patch to sprout a new turtle:
-ask one-of patches [ sprout 1 ]
-•	Use the max-one-of or min-one-of reporters to find out which agent is the most or least along some scale. For example, to remove the richest turtle, you could say
-•	ask max-one-of turtles [sum assets] [ die ]
-•	Make a histogram of the agentset using the histogram command (in combination with of).
-•	Use of to make a list of values, one for each agent in the agentset. Then use one of NetLogo's list primitives to do something with the list. (See the "Lists" section below.) For example, to find out how rich turtles are on the average, you could say
-•	show mean [sum assets] of turtles
-•	Use turtle-set, patch-set and link-set reporters to make new agentsets by gathering together agents from a variety of possible sources.
-•	Use no-turtles, no-patches and no-links reporters to make empty agentsets.
-•	Check whether two agentsets are equal using = or !=.
-•	Use member? to see whether a particular agent is a member of an agentset.  
-**End of NetLogo section. Just to be stored somewhere. Needs to be adapted to our functions**
-
-Agentsets can grow. New agents can be added to the agentset. In the case of turtles, if the agentset already contains all the agents of the world, new agents can be created. In the case of patches, if the agentset already contains all the patches of the world, this agentset cannot grow. The world extent is inherent of the model and therefore new patches cannot be created.  
-**Can we grow a raster?**
-
-**Start of NetLogo section**  
-The following interaction shows the special behavior. Assume the Code tab has globals [g]. Then:
-observer> clear-all
-observer> create-turtles 5
-observer> set g turtles
-observer> print count g
-5
-observer> create-turtles 5
-observer> print count g
-10
-observer> set g turtle-set turtles
-observer> print count g
-10
-observer> create-turtles 5
-observer> print count g
-10
-observer> print count turtles
-15
-The turtles agentset grows when new turtles are born, but other agentsets don't grow. If I write turtle-set turtles, I get a new, normal agentset containing just the turtles that currently exist. New turtles don't join when they're born.  
-**End of NetLogo section. Just to be stored somewhere. Needs to be adapted to our functions**
-
-
-## Breeds
-
-Turtle’s breed is an agent variable. Different "breeds" of turtles can be defined. Then, you can make the different breeds behave differently. For example, you could have breeds called `sheep` and `wolves`, and have the wolves try to eat the sheep.
-
-You define turtle breeds by filling the breed column in the SpatialPointsDataFrame like this:
+You can then define a sheep agentset.
 ```{r, eval=FALSE}
-turtles[turtles$breed,]<-"sheep"
+sheep <- turtles[turtles$breed == "sheep",]
 ```
-**Adapt to the way we define the agent. Put an example with wolf**
 
-When you define a breed such as `sheep`, the observer can create an agentset of that breed, like this:
+One agent can change breed.
 ```{r, eval=FALSE}
-sheep<-turtles[turtles$breed=="sheep",]
+turtles[turtles$who == 5, "breed"] <- "wolf" # the turtle number 5 became wolf
 ```
-**Adapt with our format**
 
-One agent can change breed, like this:
+
+### Agentsets
+
+The `NLworld*` object contains all patches and the `turtles` object contains all turtles. An agentset is a set of agents and you can construct agentsets that contain only some patches or some turtles. An agentset cannot contain the two agent types at once. A patch agentset is a matrix that contains some patches coordinates. A turtle agentset is a `SpatialPointDataFrame` object containing a subset of the turtles. Agentsets can then be passed on as an argument in functions. Agentsets can be redefined at any time. 
+
+
+### World topology
+
+By default, a `NLworld*` is bounded so it does not "wrap". Patches on the sides of the world will have fewer than 8 neighbors and turtles will not move beyond the edges of the world. What happen to the turtles when they reach the edge of the world must be defined. 
+
+However you can make the world a torus (“wrap”), so that when a turtle moves past the edge of the world, it disappears and reappears on the opposite edge and every patch has the same number of neighbor patches. If you're a patch on the edge of the world, some of your neighbors are on the opposite edge. The option for a torus world is an argument in the NetLogoR functions.
+
+
+### Tick counter
+
+It is common that time passes in discrete steps.
+Time can be defined as a global variable in the model setup ...
 ```{r, eval=FALSE}
-...
+time <- 0
 ```
-**Give example with our format of agentset and function**
+... and then can be incremented in the model when needed (e.g., at the end of the procedure affecting all the agents).  
+```{r, eval=FALSE}
+time <- time + 1
+```
+
+If a scheduler function is used in the model, time is handled with the scheduling of the functions. 
 
 
-## Buttons
+### Lists and strings
 
-There is no interface built-in as part of NetLogoR, therefore there are no buttons.
-
-In NetLogo, pressing a button runs some code. To perform the button action in NetLogoR, the code must to be sent to the R console, directly by the observer or by a model scheduler, to be executed.
+Lists may be seen as global variables holding one or more values and strings may be seen as global variables holding characters. Lists and strings are inherent to the R language. Please see R manuals for any related questions.
 
 
-## Lists
+### Math and random numbers
 
-Lists may be seen as global variables holding one or more values.
-
-Lists are inherent to the R language. Please see R manuals for any related questions.
+R is a software dedicated for data management and statistical analyses. The notation and basic rules of math, as well as the random number generation, are inherent to the software. Please see R manuals for any related questions.
 
 
-## Math
-
-R is a software dedicated for data management and statistical analyses therefore the notation and basic rules of math are inherent to the software. Please see R manuals for any related questions.
-
-
-## Random numbers
-
-Random number generation is inherent to the R software. Please see R manuals for any related questions.
-
-
-## Turtle shapes
-
-No specific plotting functions are defined in NetLogoR. Basic plotting functions are available in R and in different packages. Please refer to their help manuals for any related questions.
-
-
-## View and plots
-
-There is no interface built-in as part of NetLogoR. However, you can still plot the agent positions in the world (“view”) as well as any other plots (e.g., the number of turtles through time ) on the R plot interface. To do so, you need to specifically code for these procedures in the model using R functions and of different packages. Please refer to their manuals for any related questions.
-
-
-## Strings
-
-Similarly to lists, strings may be seen as global variables holding characters.
-
-Strings are inherent to the R language. Please see R manuals for any related questions.
-
-
-## Output
-
-This section is about output to the screen. There is no interface built-in as part of NetLogoR but functions to generate outputs on the screen are available as part of the R software and from different packages. Please see their manuals for any related questions.
-
-
-## File input/output
+### Input/output
 
 Reading and writing files is inherent to the R language. Please see R manuals for any related questions on basic functions, as well as the different packages, for more complex functions to manage files.
 
 
-## Topology
+### View, plot, screen output
 
-The way the world of patches is connected can change. By default the world is bounded, it does not "wrap". Patches along that boundary will have fewer than 8 neighbors and turtles will not move beyond the edge of the world. What happens to the agents when they reach the edge of the world is defined by the observer. There are a few common options: the turtle is reflected back into the world (either systematically or randomly), the turtle exits the system (dies), or the turtle is hidden.
+There is no interface built-in as part of NetLogoR. 
 
-However you can make the world a torus (“wrap”), so when a turtle moves past the edge of the world, it disappears and reappears on the opposite edge and every patch has the same number of "neighbor" patches. If you're a patch on the edge of the world, some of your "neighbors" are on the opposite edge. The torus world is an option in functions affecting turtles positions.
+However, you can still plot the agent positions in the world (i.e., “view” in NetLogo) as well as any other plots (e.g., the number of turtles through time ) on the R plot interface. You can also generate outputs on the screen using different functions. To do so, you need to specifically code for these procedures in the model using R functions and of different packages. Please refer to their manuals for any related questions.

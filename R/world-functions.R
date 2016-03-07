@@ -158,12 +158,12 @@ setMethod(
   signature = c("RasterStack"),
   definition = function(raster) {
 
-    layersR <- list()
-    for(i in 1:nlayers(raster)){
-      layersR[[i]] <- convertNLworld(raster = raster[[i]])
-    }
+    worldStack <- new("NLworldStack")
 
-    #worldStack <- NLstack(unlist(layersR))
+    for(i in 1:nlayers(raster)){
+      world <- convertNLworld(raster = raster[[i]])
+      worldStack <- addLayer(worldStack, world)
+    }
 
     return(worldStack)
 })

@@ -6,14 +6,16 @@ test_that("createNLworld works with default values", {
 })
 
 test_that("convertNLworld works with RasterLayer and RasterStack", {
-  r1 <- raster(system.file("external/test.grd", package="raster"))
+  r1 <- raster(nrows=10, ncols=10, xmn=-5, xmx=10, ymn=2, ymx=20)
+  r1[]<-runif(100)
   r2 <- r1
+  r2[]<-runif(100)
   rs <- stack(r1, r2)
-  wl <- convertNLworld(r1)
-  #ws <- convertNLworld(rs)
-  #ws1 <- ws[[1]]
-  #ws1@data@names <- r1@data@names # rename same as in wl
-  #expect_identical(wl,ws1)
+  w1 <- convertNLworld(r1)
+  ws <- convertNLworld(rs)
+  ws1 <- ws[[1]]
+  ws1@data@names <- w1@data@names
+  expect_identical(w1,ws1)
 })
 
 test_that("maxPxcor works", {
