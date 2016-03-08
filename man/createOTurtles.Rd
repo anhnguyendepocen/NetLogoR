@@ -45,6 +45,8 @@ w1[] <- runif(25)
 t1 <- createOTurtles(world = w1, n = 10)
 plot(w1)
 points(t1, pch = 16, col = t1@data$color)
+t1 <- fd(world = w1, turtles = t1, step = 1)
+points(t1, pch = 16, col = t1@data$color)
 
 
 }

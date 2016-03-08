@@ -72,6 +72,7 @@ setMethod(
     if(missing(coords))
       li$coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
                          ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), n))
+
     if(missing(breed))
       li$breed <- rep("turtle", n)
 
@@ -87,7 +88,7 @@ setMethod(
     }
 
     if(missing(color))
-      li$color <- palette(rainbow(n))
+      li$color <- rainbow(n)
 
     turtles<-SpatialPointsDataFrame(coords = li$coords,
                                     data = data.frame(who = seq(from = 0, to = n - 1, by = 1),
@@ -95,7 +96,8 @@ setMethod(
                                                       prevX = rep(NA, n),
                                                       prevY = rep(NA, n),
                                                       breed = li$breed,
-                                                      color = li$color))
+                                                      color = li$color,
+                                                      stringsAsFactors=FALSE))
     return(turtles)
   }
 )
@@ -139,7 +141,7 @@ setMethod(
 #' t1 <- createOTurtles(world = w1, n = 10)
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
-#' t1 <- fd(turtles = t1, step = 1) # adapt to the function
+#' t1 <- fd(world = w1, turtles = t1, step = 1)
 #' points(t1, pch = 16, col = t1@data$color)
 #'
 #'
@@ -178,9 +180,91 @@ setMethod(
     }
 
     if(missing(color))
-      li$color <- palette(rainbow(n))
+      li$color <- rainbow(n)
 
 
     createTurtles(world = world, n = n, heading = heading, breed = li$breed, color = li$color)
   }
 )
+
+
+################################################################################
+#' Forward
+#'
+#' Move the turtles forward of \code{step} distance(s).
+#'
+#' @param world   A \code{NLworld*} object, representing the world in which the
+#'                turtles move onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the agents that will move
+#'                forward.
+#'
+#' @param step    Numeric. Distance(s) by which the turtles will move forward. Must
+#'                be of length 1 if all turtles move the same distance or of length
+#'                turtles if each turtle moves a different distance.
+#'
+#' @param torus   Logical to determine if the \code{NLworld*} is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A SpatialPointsDataFrame with updated coordinates.
+#'
+#' @details If the \code{NLworld*} is wrapped (\code{torus = TRUE}) and the distance
+#'          to move lead the turtle outside of the world's extent, it is
+#'          relocated on the other of the world, inside the world's extent. Otherwise,
+#'          if \code{torus = FALSE}, the turtle moves past the world's extent.
+#'          If a given \code{step} value is negative, then the turtle moves
+#'          backward.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- runif(25)
+#' t1 <- createOTurtles(world = w1, n = 10)
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- fd(world = w1, turtles = t1, step = 1)
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @importFrom CircStats rad
+#' @importFrom SpaDES wrap
+#' @docType methods
+#' @rdname fd
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "fd",
+  function(world, turtles, step, torus = FALSE) {
+    standardGeneric("fd")
+  })
+
+#' @export
+#' @rdname fd
+setMethod(
+  "fd",
+  signature = c(world = "NLworld", turtles = "SpatialPointsDataFrame", step = "numeric"),
+  definition = function(world, turtles, step, torus) {
+
+    turtles@data$prevX <- turtles@coords[,1]
+    turtles@data$prevY <- turtles@coords[,2]
+
+    fdXcor <- turtles@coords[,1] + cos(rad(turtles@data$heading)) * step
+    fdYcor <- turtles@coords[,2] + sin(rad(turtles@data$heading)) * step
+    if(torus == TRUE){
+      tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
+      fdXcor <- tCoords[,1]
+      fdYcor <- tCoords[,2]
+    }
+
+    turtles <- SpatialPointsDataFrame(coords = cbind(xcor = fdXcor, ycor = fdYcor), data = turtles@data)
+    return(turtles)
+  }
+)
+
+
