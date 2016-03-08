@@ -255,8 +255,8 @@ setMethod(
     turtles@data$prevX <- turtles@coords[,1]
     turtles@data$prevY <- turtles@coords[,2]
 
-    fdXcor <- turtles@coords[,1] + cos(rad(turtles@data$heading)) * step
-    fdYcor <- turtles@coords[,2] + sin(rad(turtles@data$heading)) * step
+    fdXcor <- round(turtles@coords[,1] + sin(rad(turtles@data$heading)) * step, digits = 5)
+    fdYcor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * step, digits = 5)
     if(torus == TRUE){
       tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
       fdXcor <- tCoords[,1]
@@ -428,3 +428,136 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' dx
+#'
+#' Reports the x-increment (i.e., the amount by which the turtles' xcor would change)
+#' if the turtles were to move forward of \code{step} distance(s) with their current
+#' heading.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the agents that were to
+#'                move forward.
+#'
+#' @param step    Numeric. The distance(s) the turtles would have to move forward to
+#'                compute the x-increment value. Must be of length 1 if all the
+#'                turtles would have to move the same distance or of the same length
+#'                as the turtles object. The default value is \code{step = 1}.
+#'
+#' @return A vector of the length of the turtles object.
+#'
+#' @details Reports the sine of the turtles' heading multiplied by the \code{step}
+#'          value(s). Heading 0 is north and angles are calculated in degrees in a
+#'          clockwise manner.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createOTurtles(world = w1, n = 10)
+#' dx(turtles = t1)
+#'
+#'
+#' @export
+#' @importFrom CircStats rad
+#' @docType methods
+#' @rdname dx
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "dx",
+  function(turtles, step = 1) {
+    standardGeneric("dx")
+  })
+
+#' @export
+#' @rdname dx
+setMethod(
+  "dx",
+  signature = c("SpatialPointsDataFrame", "numeric"),
+  definition = function(turtles, step) {
+    xIncr <- round(sin(rad(turtles@data$heading)) * step, digits = 5)
+    return(xIncr)
+  }
+)
+
+#' @export
+#' @rdname dx
+setMethod(
+  "dx",
+  signature = c("SpatialPointsDataFrame", "missing"),
+  definition = function(turtles) {
+    dx(turtles = turtles, step = 1)
+  }
+)
+
+
+################################################################################
+#' dy
+#'
+#' Reports the y-increment (i.e., the amount by which the turtles' ycor would change)
+#' if the turtles were to move forward of \code{step} distance(s) with their current
+#' heading.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the agents that were to
+#'                move forward.
+#'
+#' @param step    Numeric. The distance(s) the turtles would have to move forward to
+#'                compute the y-increment value. Must be of length 1 if all the
+#'                turtles would have to move the same distance or of the same length
+#'                as the turtles object. The default value is \code{step = 1}.
+#'
+#' @return A vector of the length of the turtles object.
+#'
+#' @details Reports the cosine of the turtles' heading multiplied by the \code{step}
+#'          value(s). Heading 0 is north and angles are calculated in degrees in a
+#'          clockwise manner.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createOTurtles(world = w1, n = 10)
+#' dy(turtles = t1)
+#'
+#'
+#' @export
+#' @importFrom CircStats rad
+#' @docType methods
+#' @rdname dy
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "dy",
+  function(turtles, step = 1) {
+    standardGeneric("dy")
+  })
+
+#' @export
+#' @rdname dy
+setMethod(
+  "dy",
+  signature = c("SpatialPointsDataFrame", "numeric"),
+  definition = function(turtles, step) {
+    yIncr <- round(cos(rad(turtles@data$heading)) * step, digits = 5)
+    return(yIncr)
+  }
+)
+
+#' @export
+#' @rdname dy
+setMethod(
+  "dy",
+  signature = c("SpatialPointsDataFrame", "missing"),
+  definition = function(turtles) {
+    dy(turtles = turtles, step = 1)
+  }
+)
