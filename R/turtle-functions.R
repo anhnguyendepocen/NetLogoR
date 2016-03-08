@@ -63,7 +63,7 @@ setGeneric(
 #' @rdname createTurtles
 setMethod(
   "createTurtles",
-  signature = c(world = "NLworld", n = "numeric"),
+  signature = c(world = "NLworlds", n = "numeric"),
   definition = function(world, n, coords, heading, breed, color) {
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
@@ -161,7 +161,7 @@ setGeneric(
 #' @rdname createOTurtles
 setMethod(
   "createOTurtles",
-  signature = c(world = "NLworld", n = "numeric"),
+  signature = c(world = "NLworlds", n = "numeric"),
   definition = function(world, n, breed, color) {
 
     heading <- 0
@@ -191,7 +191,8 @@ setMethod(
 ################################################################################
 #' Forward
 #'
-#' Move the turtles forward of \code{step} distance(s).
+#' Move the turtles forward of \code{step} distance(s) in the direction of the
+#' turtles' heading.
 #'
 #' @param world   A \code{NLworld*} object, representing the world in which the
 #'                turtles move onto.
@@ -248,7 +249,7 @@ setGeneric(
 #' @rdname fd
 setMethod(
   "fd",
-  signature = c(world = "NLworld", turtles = "SpatialPointsDataFrame", step = "numeric"),
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", step = "numeric"),
   definition = function(world, turtles, step, torus) {
 
     turtles@data$prevX <- turtles@coords[,1]
@@ -267,4 +268,163 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' Backward
+#'
+#' Move the turtles backward of \code{step} distance(s) regarding the direction
+#' of the turtles' heading.
+#'
+#' @param world   A \code{NLworld*} object, representing the world in which the
+#'                turtles move onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the agents that will move
+#'                backward.
+#'
+#' @param step    Numeric. Distance(s) by which the turtles will move backward.
+#'                Must be of length 1 if all turtles move the same distance or
+#'                of length turtles if each turtle moves a different distance.
+#'
+#' @param torus   Logical to determine if the \code{NLworld*} is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A SpatialPointsDataFrame with updated coordinates.
+#'
+#' @details If the \code{NLworld*} is wrapped (\code{torus = TRUE}) and the distance
+#'          to move lead the turtle outside of the world's extent, it is
+#'          relocated on the other of the world, inside the world's extent. Otherwise,
+#'          if \code{torus = FALSE}, the turtle moves past the world's extent.
+#'          If a given \code{step} value is negative, then the turtle moves
+#'          forward.
+#'          This function is equivalent to the forward function with the distance(s)
+#'          to move equal to \code{step * -1}.
+#'          The turtles' heading is not affected by the function (i.e., the turtles
+#'          do not head backward).
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- runif(25)
+#' t1 <- createOTurtles(world = w1, n = 10)
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- fd(world = w1, turtles = t1, step = 2)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- bk(world = w1, turtles = t1, step = 1)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- fd(world = w1, turtles = t1, step = 0.5)
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname fd
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "bk",
+  function(world, turtles, step, torus = FALSE) {
+    standardGeneric("bk")
+  })
+
+#' @export
+#' @rdname bk
+setMethod(
+  "bk",
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", step = "numeric"),
+  definition = function(world, turtles, step, torus) {
+
+    fd(world = world, turtles = turtles, step = (step * -1), torus = torus)
+
+  }
+)
+
+
+################################################################################
+#' Home
+#'
+#' Move the turtles back "home".
+#'
+#' @param world   A \code{NLworld*} object, representing the world in which the
+#'                turtles move onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the agents to move.
+#'
+#' @param home    Character. Can take one of the following options to define where
+#'                is home for the turtles.
+#'                \code{home = "home0"} will place the turtles at the location
+#'                \code{xcor = 0, ycor = 0}.
+#'                \code{home = "center"} will place the turtles at the center of
+#'                the world.
+#'                \code{home = "pCorner"} will place the turtles at the center of
+#'                the patch located in the left bottom corner of the world.
+#'                \code{home = "corner"} will place the turtles at the left bottom
+#'                corner of the world.
+#'
+#' @return A SpatialPointsDataFrame with updated coordinates.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- runif(25)
+#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- home(world = w1, turtles = t1, home = "pCorner")
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname home
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "home",
+  function(world, turtles, home) {
+    standardGeneric("home")
+  })
+
+#' @export
+#' @rdname home
+setMethod(
+  "home",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "character"),
+  definition = function(world, turtles, home) {
+
+    if(home == "home0"){
+      if(world@extent@xmin <= 0 & world@extent@xmax >= 0 & world@extent@ymin <= 0 & world@extent@ymax >= 0){
+        turtles@coords <- cbind(xcor = rep(0, length(turtles)), ycor = rep(0, length(turtles)))
+      } else {
+        stop("The world provided does not contain the location [xcor = 0, ycor = 0]")
+      }
+    }
+
+    if(home == "center"){
+      turtles@coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), length(turtles)),
+                              ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), length(turtles)))
+    }
+
+    if(home == "pCorner"){
+      turtles@coords <- cbind(xcor = rep(minPxcor(world = world), length(turtles)),
+                              ycor = rep(minPycor(world = world), length(turtles)))
+    }
+
+    if(home == "corner"){
+      turtles@coords <- cbind(xcor = rep(world@extent@xmin, length(turtles)), ycor = rep(world@extent@ymin, length(turtles)))
+    }
+
+    return(turtles)
+  }
+)
 

@@ -25,6 +25,37 @@ test_that("createTurtles works with different missing inputs",{
   expect_equivalent(t1@data$prevX, rep(NA, 10))
   expect_equivalent(t1@data$prevY, rep(NA, 10))
   expect_equivalent(length(t1), 10)
+
+  # Same tests for the NLworldStack
+  w2 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- runif(25)
+  w2[] <- runif(25)
+  ws <-NLstack(w1, w2)
+
+  t1 <- createTurtles(world = ws, n = 10)
+  expect_identical(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), t1@coords)
+  t2 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)))
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t2@coords)
+
+  t3 <- createTurtles(world = ws, n = 10, heading = 0)
+  expect_identical(rep(0, 10), t3@data$heading)
+  t4 <- createTurtles(world = ws, n = 10, heading = 1:10)
+  expect_identical(1:10, t4@data$heading)
+  t1head <- t1@data$heading >= 0 & t1@data$heading <= 360
+  expect_identical(t1head, rep(TRUE, 10))
+
+  t5 <- createTurtles(world = ws, n = 10, breed = "caribou")
+  expect_identical(rep("caribou", 10), t5@data$breed)
+  t6 <- createTurtles(world = ws, n = 10, breed = c(rep("caribou", 5), rep("moose", 5)))
+  expect_identical(c(rep("caribou", 5), rep("moose", 5)), t6@data$breed)
+  t1breed <- t1@data$breed == rep("turtle", 10)
+  expect_identical(t1breed, rep(TRUE, 10))
+
+  expect_equivalent(length(unique(t1@data$color)), 10)
+  expect_equivalent(t1@data$who, 0:9)
+  expect_equivalent(t1@data$prevX, rep(NA, 10))
+  expect_equivalent(t1@data$prevY, rep(NA, 10))
+  expect_equivalent(length(t1), 10)
 })
 
 test_that("createOTurtles works",{
@@ -46,6 +77,30 @@ test_that("createOTurtles works",{
   expect_equivalent(t1@data$prevX, rep(NA, 10))
   expect_equivalent(t1@data$prevY, rep(NA, 10))
   expect_equivalent(length(t1), 10)
+
+  # Same tests for the NLworldStack
+  w2 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- runif(25)
+  w2[] <- runif(25)
+  ws <-NLstack(w1, w2)
+
+  t1 <- createOTurtles(world = ws, n = 10)
+  expect_identical(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), t1@coords)
+  expect_identical(seq(0, 360 - (360 / 10), by = 360 /10), t1@data$heading)
+
+  t5 <- createOTurtles(world = ws, n = 10, breed = "caribou")
+  expect_identical(rep("caribou", 10), t5@data$breed)
+  t6 <- createOTurtles(world = ws, n = 10, breed = c(rep("caribou", 5), rep("moose", 5)))
+  expect_identical(c(rep("caribou", 5), rep("moose", 5)), t6@data$breed)
+  t1breed <- t1@data$breed == rep("turtle", 10)
+  expect_identical(t1breed, rep(TRUE, 10))
+
+  expect_equivalent(length(unique(t1@data$color)), 10)
+  expect_equivalent(t1@data$who, 0:9)
+  expect_equivalent(t1@data$prevX, rep(NA, 10))
+  expect_equivalent(t1@data$prevY, rep(NA, 10))
+  expect_equivalent(length(t1), 10)
+
 })
 
 test_that("fd works",{
@@ -60,4 +115,85 @@ test_that("fd works",{
   expect_identical(t1@coords, t4@coords)
   t5 <- fd(world = w1, turtles = t1, step = -1, torus = TRUE)
   expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
+
+  # Same tests for the NLworldStack
+  w2 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- runif(25)
+  w2[] <- runif(25)
+  ws <-NLstack(w1, w2)
+
+  t1 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 0)
+  t2 <- fd(world = ws, turtles = t1, step = 1)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
+  t3 <- fd(world = ws, turtles = t1, step = 5, torus = FALSE)
+  t4 <- fd(world = ws, turtles = t1, step = 5, torus = TRUE)
+  expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
+  expect_identical(t1@coords, t4@coords)
+  t5 <- fd(world = ws, turtles = t1, step = -1, torus = TRUE)
+  expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
+})
+
+test_that("bk works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 0)
+  t2 <- bk(world = w1, turtles = t1, step = -1)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
+  t3 <- bk(world = w1, turtles = t1, step = -5, torus = FALSE)
+  t4 <- bk(world = w1, turtles = t1, step = -5, torus = TRUE)
+  expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
+  expect_identical(t1@coords, t4@coords)
+  t5 <- bk(world = w1, turtles = t1, step = 1, torus = TRUE)
+  expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
+
+  # Same tests for the NLworldStack
+  w2 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- runif(25)
+  w2[] <- runif(25)
+  ws <-NLstack(w1, w2)
+
+  t1 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 0)
+  t2 <- bk(world = ws, turtles = t1, step = -1)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
+  t3 <- bk(world = ws, turtles = t1, step = -5, torus = FALSE)
+  t4 <- bk(world = ws, turtles = t1, step = -5, torus = TRUE)
+  expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
+  expect_identical(t1@coords, t4@coords)
+  t5 <- bk(world = ws, turtles = t1, step = 1, torus = TRUE)
+  expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
+
+})
+
+test_that("home works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+  t2 <- home(world = w1, turtles = t1, home = "home0")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t2@coords)
+  t3 <- home(world = w1, turtles = t1, home = "center")
+  expect_identical(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), t3@coords)
+  t4 <- home(world = w1, turtles = t1, home = "pCorner")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t4@coords)
+  t5 <- home(world = w1, turtles = t1, home = "corner")
+  expect_identical(cbind(xcor = rep(-0.5, 10), ycor = rep(-0.5, 10)), t5@coords)
+
+  # Same tests for the NLworldStack
+  w2 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- runif(25)
+  w2[] <- runif(25)
+  ws <-NLstack(w1, w2)
+
+  t1 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+  t2 <- home(world = ws, turtles = t1, home = "home0")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t2@coords)
+  t3 <- home(world = ws, turtles = t1, home = "center")
+  expect_identical(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), t3@coords)
+  t4 <- home(world = ws, turtles = t1, home = "pCorner")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t4@coords)
+  t5 <- home(world = ws, turtles = t1, home = "corner")
+  expect_identical(cbind(xcor = rep(-0.5, 10), ycor = rep(-0.5, 10)), t5@coords)
+
+  w3 <- createNLworld(minPxcor = -5, maxPxcor = -1, minPycor = -10, maxPycor = -5)
+  expect_error(home(world = w3, turtles = t1, home = "home0"))
 })

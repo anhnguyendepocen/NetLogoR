@@ -5,18 +5,13 @@
 \alias{NLworld-class}
 \alias{[}
 \alias{[<-}
-\title{\code{NLworld*}}
+\title{The \code{NLworld} class}
 \usage{
 \S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, drop)
 
 \S4method{[}{NLworld,numeric,numeric,numeric}(x, i, j) <- value
 }
 \description{
-\code{NLworld*} comprises two classes: \code{NLworld} and \code{NLworldStack}.
-}
-\details{
-The \code{NLworld} class
-
 A \code{NLworld} object is a grid composed of squared patches that behaves
 mostly the same as a \code{RasterLayer} object.
 Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
@@ -29,7 +24,8 @@ patches is equal to \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) +
 \code{pycor} can be seen as row numbers but increasing as you move up. However,
 \code{pxcor} and \code{pycor} can be negative if there are patches to the left
 or below the patch \code{[0,0]}.
-
+}
+\details{
 The use of \code{[]} to extract \code{Raster*} cell values by row and column numbers
 has been redefined to extract \code{NLworld*} patches using the patches' coordinates
 \code{[pxcor,pyxor]}. When multiple coordinates are provided, the order of the

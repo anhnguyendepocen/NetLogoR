@@ -119,7 +119,7 @@ $(document).ready(function () {
 <div id="world-and-agents" class="section level3">
 <h3>World and agents</h3>
 <p>In NetLogoR, the world is a <code>NLworld*</code> object. It is either a <code>NLworld</code> or a <code>NLworldStack</code> object. The world is two dimensional and is divided into a grid of square patches.</p>
-<p>There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates <code>pxcor</code> and <code>pycor</code>, representing their center, in a <code>matrix</code> object. See <code>help(&quot;NLworld&quot;)</code> for more details on the patch coordinates system. Turtles are defined by their coordinates <code>xcor</code> and <code>ycor</code> in a <code>SpatialPointDataFrame</code> object. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).</p>
+<p>There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates <code>pxcor</code> and <code>pycor</code>, representing their center, in <code>matrix</code> objects. See <code>help(&quot;NLworld&quot;)</code> for more details on the patch coordinates system. Turtles are defined by their coordinates <code>xcor</code> and <code>ycor</code> in <code>SpatialPointDataFrame</code> objects. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).</p>
 </div>
 <div id="procedures" class="section level3">
 <h3>Procedures</h3>
@@ -127,38 +127,43 @@ $(document).ready(function () {
 <p>Functions take arguments which are R objects and values. Arguments are used to carry out actions and compute results.</p>
 <pre class="r"><code>w1 &lt;- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = 0, maxPycor = 10) # create a world according to the given extent
 pDist &lt;- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 1, pycor = 1) # report the distance between the patch [pxcor = 0, pycor = 0] and the patch [pxcor = 1, pycor = 1]</code></pre>
-<p>In NetLogoR, it is one of the function argument which specify which turtle(s) or patch(es) are involved in the function. For example, in the <code>NLdist</code> function, the argument <code>from</code> takes one patch coordinates and the argument <code>to</code> takes another patch coordinates.</p>
+<p>In NetLogoR, it is one of the function argument which specify which patch(es) or turtle(s) are involved in the function. For example, in the <code>NLdist</code> function, the argument <code>from</code> takes one patch coordinates and the argument <code>to</code> takes another patch coordinates.</p>
 <p>The result of a function which acts on agents or computes a value need to be assigned to an object name to be kept and re-used later in the model. Functions create new objects, they do not directly modify the ones given as arguments. For example, when moving turtles around using the <code>fd</code> function, the result (i.e., the turtles with new coordinates) need to be re-assigned to the turtles object.</p>
-<pre class="r"><code>turtles &lt;- fd(turtles, 1)</code></pre>
+<pre class="r"><code>t1 &lt;- createTurtles(world = w1, n = 10) # create 10 turtles
+t1 &lt;- fd(world = w1, turtles = t1, step = 1) # move all the turtles by 1</code></pre>
 <p>In NetLogo, pressing a button runs some code. To perform the button action in NetLogoR, the code must be sent to the R console to be executed. The code can be sent directly by the observer or by a scheduler function (e.g., see SpaDES package) which sends the code according to the schedule to the R console.</p>
 <p>The R language uses # to add comments to the script. Comments can make your code easier to read and understand, but they don’t affect its behavior.</p>
 </div>
 <div id="variables" class="section level3">
 <h3>Variables</h3>
-<p>R objects which are not world, patches or turtles can be seen as global variables.</p>
-<p>Agent variables are places to store different values for an agent. An agent variable can be a patch or a turtle variable. Each <code>NLworld</code> holds one variable for the patches. <code>NLworldStack</code> hold several variables for the patches as the different world layers. Turtles variables are columns in the dataframe of the <code>SpatialPointsDataFrame</code> object. You can have patch and turtle variables defined by the same name as they are not stored in the same object.</p>
-<p>All the turtles variables built-in into NetLogo are available in NetLogoR when creating turtles. See the <a href="https://ccl.northwestern.edu/netlogo/docs/dictionary.html">NetLogo Dictionary</a> for the list of all turtles variables. Any variable already built-in for the turtles that you do not set to a specified value has a null starting value (i.e., <code>NA</code> value).</p>
+<p>R objects which are not worlds, patches or turtles can be seen as global variables.</p>
+<p>Agent variables are places to store different values for an agent. An agent variable can be a patch or a turtle variable. Each <code>NLworld</code> object holds only one variable for the patches. A <code>NLworldStack</code> object holds several variables for the patches as the different world layers. Turtles variables are columns in the dataframe of the <code>SpatialPointsDataFrame</code> object. You can have patch and turtle variables defined by the same name as they are not stored in the same object.</p>
 <p>To create a global variable you create an R object.</p>
 <pre class="r"><code>score &lt;- 15</code></pre>
 <p>To create a new patch variable, you create a new <code>NLworld</code> with the same extent as the one(s) previously built and assign new values.</p>
-<pre class="r"><code>pQuality &lt;- w1 # copy the world w1 already built
+<pre class="r"><code>pQuality &lt;- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = 0, maxPycor = 10)
 pQuality[] &lt;- runif(n = length(w1), min = 0, max = 1) # for all patches, assign a random value between 0 and 1</code></pre>
-<p>To create a new turtle variable, … (to complete)</p>
+<p>Several turtles variables built-in into NetLogo are created as the same time when creating turtles in NetLogoR. To create a new turtle variable, … (to complete)</p>
 <pre class="r"><code>...</code></pre>
+<p>Turtle’s breed is a turtle variable and different breeds can be defined. You can have the breeds behaving differently, for example, you could have breeds called <code>sheep</code> and <code>wolf</code>, and have the wolves try to eat the sheep. You can either specify different breeds in the same turtles object or create two objects, one sheep and one wolf.</p>
+<p>You define turtles’ breed by filling the breed column in the <code>SpatialPointsDataFrame</code>.</p>
+<pre class="r"><code>turtles &lt;- createTurtles(world = w1, n = 10, breed = c(rep(&quot;sheep&quot;, 5), rep(&quot;wolf&quot;, 5))) # 5 sheep and 5 wolves
+# OR
+sheep &lt;- createTurtles(world = w1, n = 5, breed = &quot;sheep&quot;) # 5 sheep
+wolves &lt;- createTurtles(world = w1, n = 5, breed = &quot;wolf&quot;) # 5 wolves</code></pre>
+<p>You can after define agentsets based on breeds.</p>
+<pre class="r"><code>sheep &lt;- turtles[turtles$breed == &quot;sheep&quot;,] # 5 sheeps
+wolves &lt;- turtles[turtles$breed == &quot;wolf&quot;,] # 5 wolves</code></pre>
+<p>One agent can change breed. If doing so, it is better to keep all the moving agents in the same object.</p>
+<pre class="r"><code>turtles[turtles$who == 0, &quot;breed&quot;] &lt;- &quot;wolf&quot; # the turtle number 0 which was &quot;sheep&quot; became &quot;wolf&quot;
+sheep[sheep$who == 0, &quot;breed&quot;] &lt;- &quot;wolf&quot; # confusing!</code></pre>
 <p>Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.</p>
 <pre class="r"><code>pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents</code></pre>
 <p>Local variables may occur in NetLogoR as inherent to the R software. For example, variables only defined inside functions are local variables and therefore cannot be accessed outside of the functions.</p>
-<p>Turtle’s breed is a turtle variable and different breeds can be defined. You can then create different turtle agentset according to the different breeds and have them to behave differently. For example, you could have breeds called <code>sheep</code> and <code>wolf</code>, and have the wolves try to eat the sheep.</p>
-<p>You define turtles’ breed by filling the breed column in the <code>SpatialPointsDataFrame</code>.</p>
-<pre class="r"><code>turtles[turtles$breed,] &lt;- &quot;sheep&quot;</code></pre>
-<p>You can then define a sheep agentset.</p>
-<pre class="r"><code>sheep &lt;- turtles[turtles$breed == &quot;sheep&quot;,]</code></pre>
-<p>One agent can change breed.</p>
-<pre class="r"><code>turtles[turtles$who == 5, &quot;breed&quot;] &lt;- &quot;wolf&quot; # the turtle number 5 became wolf</code></pre>
 </div>
 <div id="agentsets" class="section level3">
 <h3>Agentsets</h3>
-<p>The <code>NLworld*</code> object contains all patches and the <code>turtles</code> object contains all turtles. An agentset is a set of agents and you can construct agentsets that contain only some patches or some turtles. An agentset cannot contain the two agent types at once. A patch agentset is a matrix that contains some patches coordinates. A turtle agentset is a <code>SpatialPointDataFrame</code> object containing a subset of the turtles. Agentsets can then be passed on as an argument in functions. Agentsets can be redefined at any time.</p>
+<p>A <code>NLworld*</code> object contains all patches and the <code>turtles</code> object contains all turtles. An agentset is a set of agents and you can construct agentsets that contain only some patches or some turtles. An agentset cannot contain the two agent types at once. A patch agentset is a matrix that contains some patches coordinates. A turtle agentset is a <code>SpatialPointDataFrame</code> object containing a subset of the turtles. Agentsets can then be passed on as an argument in functions. Agentsets can be redefined at any time.</p>
 </div>
 <div id="world-topology" class="section level3">
 <h3>World topology</h3>

@@ -1,9 +1,4 @@
 ################################################################################
-#' \code{NLworld*}
-#'
-#' \code{NLworld*} comprises two classes: \code{NLworld} and \code{NLworldStack}.
-#'
-#'
 #' The \code{NLworld} class
 #'
 #' A \code{NLworld} object is a grid composed of squared patches that behaves
@@ -235,6 +230,23 @@ setMethod(
     }
     return(worldStack)
   }
+)
+
+
+################################################################################
+#' The \code{NLworlds} class
+#'
+#' This class is the union of the \code{NLworld} and \code{NLworldStack} classes.
+#'
+#' @slot members  NLworld, NLworldStack
+#'
+#' @aliases NLworlds
+#' @name NLworlds-class
+#' @rdname NLworlds-class
+#' @author Sarah Bauduin
+#' @exportClass NLworlds
+setClassUnion(name="NLworlds",
+              members=c("NLworld", "NLworldStack")
 )
 
 

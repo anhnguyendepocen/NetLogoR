@@ -3,12 +3,12 @@
 \docType{methods}
 \name{createTurtles}
 \alias{createTurtles}
-\alias{createTurtles,NLworld,numeric-method}
+\alias{createTurtles,NLworlds,numeric-method}
 \title{Create turtles}
 \usage{
 createTurtles(world, n, coords, heading, breed, color)
 
-\S4method{createTurtles}{NLworld,numeric}(world, n, coords, heading, breed,
+\S4method{createTurtles}{NLworlds,numeric}(world, n, coords, heading, breed,
   color)
 }
 \arguments{

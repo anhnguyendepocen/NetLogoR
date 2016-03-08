@@ -3,12 +3,12 @@
 \docType{methods}
 \name{createOTurtles}
 \alias{createOTurtles}
-\alias{createOTurtles,NLworld,numeric-method}
+\alias{createOTurtles,NLworlds,numeric-method}
 \title{Create ordered turtles}
 \usage{
 createOTurtles(world, n, breed, color)
 
-\S4method{createOTurtles}{NLworld,numeric}(world, n, breed, color)
+\S4method{createOTurtles}{NLworlds,numeric}(world, n, breed, color)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object, representing the world in which the turtles

@@ -2,14 +2,17 @@
 % Please edit documentation in R/turtle-functions.R
 \docType{methods}
 \name{fd}
+\alias{bk}
 \alias{fd}
-\alias{fd,NLworld,SpatialPointsDataFrame,numeric-method}
+\alias{fd,NLworlds,SpatialPointsDataFrame,numeric-method}
 \title{Forward}
 \usage{
 fd(world, turtles, step, torus = FALSE)
 
-\S4method{fd}{NLworld,SpatialPointsDataFrame,numeric}(world, turtles, step,
+\S4method{fd}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles, step,
   torus = FALSE)
+
+bk(world, turtles, step, torus = FALSE)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object, representing the world in which the
@@ -25,12 +28,32 @@ turtles if each turtle moves a different distance.}
 
 \item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
 Default is \code{torus = FALSE}.}
+
+\item{world}{A \code{NLworld*} object, representing the world in which the
+turtles move onto.}
+
+\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the agents that will move
+backward.}
+
+\item{step}{Numeric. Distance(s) by which the turtles will move backward.
+Must be of length 1 if all turtles move the same distance or
+of length turtles if each turtle moves a different distance.}
+
+\item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
+Default is \code{torus = FALSE}.}
 }
 \value{
 A SpatialPointsDataFrame with updated coordinates.
+
+A SpatialPointsDataFrame with updated coordinates.
 }
 \description{
-Move the turtles forward of \code{step} distance(s).
+Move the turtles forward of \code{step} distance(s) in the direction of the
+turtles' heading.
+
+Move the turtles backward of \code{step} distance(s) regarding the direction
+of the turtles' heading.
 }
 \details{
 If the \code{NLworld*} is wrapped (\code{torus = TRUE}) and the distance
@@ -39,6 +62,17 @@ If the \code{NLworld*} is wrapped (\code{torus = TRUE}) and the distance
          if \code{torus = FALSE}, the turtle moves past the world's extent.
          If a given \code{step} value is negative, then the turtle moves
          backward.
+
+If the \code{NLworld*} is wrapped (\code{torus = TRUE}) and the distance
+         to move lead the turtle outside of the world's extent, it is
+         relocated on the other of the world, inside the world's extent. Otherwise,
+         if \code{torus = FALSE}, the turtle moves past the world's extent.
+         If a given \code{step} value is negative, then the turtle moves
+         forward.
+         This function is equivalent to the forward function with the distance(s)
+         to move equal to \code{step * -1}.
+         The turtles' heading is not affected by the function (i.e., the turtles
+         do not head backward).
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
@@ -50,11 +84,30 @@ t1 <- fd(world = w1, turtles = t1, step = 1)
 points(t1, pch = 16, col = t1@data$color)
 
 
+w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1[] <- runif(25)
+t1 <- createOTurtles(world = w1, n = 10)
+plot(w1)
+points(t1, pch = 16, col = t1@data$color)
+t1 <- fd(world = w1, turtles = t1, step = 2)
+points(t1, pch = 16, col = t1@data$color)
+t1 <- bk(world = w1, turtles = t1, step = 1)
+points(t1, pch = 16, col = t1@data$color)
+t1 <- fd(world = w1, turtles = t1, step = 0.5)
+points(t1, pch = 16, col = t1@data$color)
+
+
 }
 \author{
 Sarah Bauduin
+
+Sarah Bauduin
 }
 \references{
+Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+            Center for Connected Learning and Computer-Based Modeling,
+            Northwestern University. Evanston, IL.
+
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
