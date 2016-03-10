@@ -259,8 +259,8 @@ setMethod(
     fdYcor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * step, digits = 5)
     if(torus == TRUE){
       tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
-      fdXcor <- tCoords[,1]
-      fdYcor <- tCoords[,2]
+      fdXcor <- round(tCoords[,1], digits = 5)
+      fdYcor <- round(tCoords[,2], digits = 5)
     }
 
     turtles <- SpatialPointsDataFrame(coords = cbind(xcor = fdXcor, ycor = fdYcor), data = turtles@data)
@@ -559,5 +559,294 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "missing"),
   definition = function(turtles) {
     dy(turtles = turtles, step = 1)
+  }
+)
+
+
+################################################################################
+#' Die
+#'
+#' Kill the turtle(s).
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()}.
+#'
+#' @param who     Numeric. The who number(s) of the turtle(s) that die(s).
+#'
+#' @return A SpatialPointsDataFrame of length equal to \code{length(turtles) - length(who)}.
+#'
+#' @details The who numbers of the other turtles are maintained.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(world = w1, n = 10)
+#' length(t1)
+#' t1 <- die(turtles = t1, who = c(2, 3, 4))
+#' length(t1)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname die
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "die",
+  function(turtles, who) {
+    standardGeneric("die")
+  })
+
+#' @export
+#' @rdname die
+setMethod(
+  "die",
+  signature = c("SpatialPointsDataFrame", "numeric"),
+  definition = function(turtles, who) {
+    iTurtles <- match(who, turtles@data$who)
+    newCoords <- cbind(xcor = turtles@coords[-iTurtles,1], ycor = turtles@coords[-iTurtles,2])
+    newData <- turtles@data[-iTurtles,]
+    newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
+    return(newTurtles)
+  }
+)
+
+
+################################################################################
+#' Hatch
+#'
+#' Create new turtle(s) from a parent turtle.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} containing the parent turtle.
+#'
+#' @param who     Numeric. The who number of the parent turtle.
+#'
+#' @param n       Numeric. The number of new turtle(s) to create.
+#'
+#' @param breed   Character. The breed for the turtle(s) to be created. If missing,
+#'                the created turtle(s) is/are of the same breed as the parent turtle.
+#'
+#' @return A SpatialPointsDataFrame of length equal to \code{length(turtles) + n}.
+#'
+#' @details The created turtle(s) inherit(s) of all the data from the parent turtle,
+#'          except for the breed if specified otherwise, and for the who number.
+#'          The who numbers of the turtles created take on following the highest
+#'          who number among the turtles.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(world = w1, n = 10)
+#' length(t1)
+#' t1 <- hatch(turtles = t1, who = 0, n = 2)
+#' length(t1)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname hatch
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "hatch",
+  function(turtles, who, n, breed) {
+    standardGeneric("hatch")
+  })
+
+#' @export
+#' @rdname hatch
+setMethod(
+  "hatch",
+  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "character"),
+  definition = function(turtles, who, n, breed) {
+
+    iTurtle <- match(who, turtles@data$who)
+    parentCoords <- turtles@coords[iTurtle,]
+    parentData <- turtles@data[iTurtle,]
+    newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
+    newData <- rbind(turtles@data, parentData[rep(seq_len(nrow(parentData)), each = n),])
+    rownames(newData) <- seq_len(nrow(newData))
+
+    # Update the who numbers and breed
+    newData[(nrow(turtles) + 1):nrow(newData), "who"] <- (max(turtles@data$who) + 1):(max(turtles@data$who) + n)
+    newData[(nrow(turtles) + 1):nrow(newData), "breed"] <- rep(breed, n)
+
+    newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
+    return(newTurtles)
+  }
+)
+
+#' @export
+#' @rdname hatch
+setMethod(
+  "hatch",
+  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "missing"),
+  definition = function(turtles, who, n) {
+    breed <- turtles@data[turtles@data$who == who, "breed"]
+    hatch(turtles = turtles, who = who, n = n, breed = breed)
+  }
+)
+
+
+################################################################################
+#' Can move
+#'
+#' Reports \code{TRUE} or \code{FALSE} if the turtle(s) can move the given distance(s)
+#' without leaving the world's extent.
+#'
+#' @param world   A \code{NLworlds} object, representing the world in which the
+#'                turtles would move onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtle(s) to be
+#'                evaluated.
+#'
+#' @param step    Numeric. The distance(s) the turtles would move. Must be of
+#'                length 1 if all the turtles would move the same distance or
+#'                of the same length as the turtles object.
+#'
+#' @return A vector of logical of length equal to \code{length(turtles)}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(world = w1, n = 10)
+#' canMove(world = w1, turtles = t1, step = 1:10)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname canMove
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "canMove",
+  function(world, turtles, step) {
+    standardGeneric("canMove")
+  })
+
+#' @export
+#' @rdname canMove
+setMethod(
+  "canMove",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "numeric"),
+  definition = function(world, turtles, step) {
+    wrapFalse <- fd(world = world, turtles = turtles, step = step, torus = FALSE)
+    wrapTrue <- fd(world = world, turtles = turtles, step = step, torus = TRUE)
+    test <- wrapFalse@coords == wrapTrue@coords
+    return(test[,1] & test[,2])
+  }
+)
+
+
+################################################################################
+#' Random xcor
+#'
+#' Reports random xcor coordinate(s) inside the world's extent.
+#'
+#' @param world A \code{NLworlds} object.
+#'
+#' @param n     Numeric. The number of xcor coordinates to generate.
+#'
+#' @return A vector of xcor coordinate values of length \code{n}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(world = w1, n = 10,
+#'                     coords = cbind(xcor = randomXcor(world = w1, n = 10), ycor = randomYcor(world = w1, n = 10)))
+#' w1[] <- runif(25)
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname randomXcor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "randomXcor",
+  function(world, n) {
+    standardGeneric("randomXcor")
+  })
+
+#' @export
+#' @rdname randomXcor
+setMethod(
+  "randomXcor",
+  signature = c("NLworlds", "numeric"),
+  definition = function(world, n) {
+    xmin <- world@extent@xmin
+    xmax <- world@extent@xmax
+    xcor <- round(runif(n = n, min = xmin, max = xmax), digits = 5)
+    return(xcor)
+  }
+)
+
+
+################################################################################
+#' Random ycor
+#'
+#' Reports random ycor coordinate(s) inside the world's extent.
+#'
+#' @param world A \code{NLworlds} object.
+#'
+#' @param n     Numeric. The number of ycor coordinates to generate.
+#'
+#' @return A vector of ycor coordinate values of length \code{n}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(world = w1, n = 10,
+#'                     coords = cbind(xcor = randomXcor(world = w1, n = 10), ycor = randomYcor(world = w1, n = 10)))
+#' w1[] <- runif(25)
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname randomYcor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "randomYcor",
+  function(world, n) {
+    standardGeneric("randomYcor")
+  })
+
+#' @export
+#' @rdname randomYcor
+setMethod(
+  "randomYcor",
+  signature = c("NLworlds", "numeric"),
+  definition = function(world, n) {
+    ymin <- world@extent@ymin
+    ymax <- world@extent@ymax
+    ycor <- round(runif(n = n, min = ymin, max = ymax), digits = 5)
+    return(ycor)
   }
 )

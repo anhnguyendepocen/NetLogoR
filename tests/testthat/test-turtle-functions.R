@@ -196,3 +196,81 @@ test_that("home works",{
   w3 <- createNLworld(minPxcor = -5, maxPxcor = -1, minPycor = -10, maxPycor = -5)
   expect_error(home(world = w3, turtles = t1, home = "home0"))
 })
+
+test_that("dx and dy works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  expect_equivalent(dx(turtles = t1), 1)
+  expect_equivalent(dx(turtles = t1, step = 2), 2)
+  expect_equivalent(dy(turtles = t1), 0)
+  expect_equivalent(dy(turtles = t1, step = 2), 0)
+  t2 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 0)
+  expect_equivalent(dx(turtles = t2), 0)
+  expect_equivalent(dx(turtles = t2, step = 2), 0)
+  expect_equivalent(dy(turtles = t2), 1)
+  expect_equivalent(dy(turtles = t2, step = 2), 2)
+  t3 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 225)
+  expect_equivalent(dx(turtles = t3, step = sqrt(2)), -1)
+  expect_equivalent(dy(turtles = t3, step = sqrt(2)), -1)
+})
+
+test_that("die works",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
+  t2 <- die(turtles = t1, who = 1:9)
+  expect_equivalent(length(t2), 1)
+  expect_equivalent(t2@coords, cbind(xcor = 1, ycor = 10))
+  expect_equivalent(t2@data$who, 0)
+  t3 <- die(turtles = t1, who = 0)
+  expect_equivalent(length(t3), 9)
+  expect_equivalent(t3@coords, cbind(xcor = 2:10, ycor = 9:1))
+  expect_equivalent(t3@data$who, 1:9)
+})
+
+test_that("hatch works",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
+  t2 <- hatch(turtles = t1, who = 1, n = 1)
+  expect_equivalent(length(t2), length(t1) + 1)
+  expect_equivalent(t2@coords[11,], c(2, 9))
+  expect_equivalent(t2@data$heading[11], t1@data$heading[2])
+  expect_identical(t2@data$breed[11], "turtle")
+  t3 <- hatch(turtles = t1, who = 4, n = 2, breed = "moose")
+  expect_equivalent(length(t3), length(t1) + 2)
+  expect_equivalent(t3@coords[11:12,], cbind(xcor = c(5, 5), ycor = c(6, 6)))
+  expect_equivalent(t3@data$heading[12], t1@data$heading[5])
+  expect_identical(t3@data$breed[11], "moose")
+})
+
+test_that("canMove works",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+  t1 <- createOTurtles(world = w1, n = 4)
+  expect_identical(canMove(world = w1, turtles = t1, step = 1), rep(TRUE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, step = 4), rep(TRUE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, step = 6), rep(FALSE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, step = c(1,4,6,4)), c(TRUE, TRUE, FALSE, TRUE))
+
+  w2 <- w1
+  w1[] <- runif(100)
+  w2[] <- runif(100)
+  ws <-NLstack(w1, w2)
+  expect_identical(canMove(world = ws, turtles = t1, step = 1), rep(TRUE, 4))
+  expect_identical(canMove(world = ws, turtles = t1, step = 4), rep(TRUE, 4))
+  expect_identical(canMove(world = ws, turtles = t1, step = 6), rep(FALSE, 4))
+  expect_identical(canMove(world = ws, turtles = t1, step = c(1,4,6,4)), c(TRUE, TRUE, FALSE, TRUE))
+})
+
+test_that("randomXcor and randomYcor works",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 100, minPycor = -100, maxPycor = -1)
+  t1 <- createTurtles(world = w1, n = 10000,
+                     coords = cbind(xcor = randomXcor(world = w1, n = 10000), ycor = randomYcor(world = w1, n = 10000)))
+  expect_identical(canMove(world = w1, turtles = t1, step = 0), rep(TRUE, length(t1)))
+
+  w2 <- w1
+  w1[] <- runif(10000)
+  w2[] <- runif(10000)
+  ws <-NLstack(w1, w2)
+  t2 <- createTurtles(world = ws, n = 10000,
+                      coords = cbind(xcor = randomXcor(world = ws, n = 10000), ycor = randomYcor(world = ws, n = 10000)))
+  expect_identical(canMove(world = ws, turtles = t2, step = 0), rep(TRUE, length(t2)))
+})
