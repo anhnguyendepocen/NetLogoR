@@ -274,3 +274,75 @@ test_that("randomXcor and randomYcor works",{
                       coords = cbind(xcor = randomXcor(world = ws, n = 10000), ycor = randomYcor(world = ws, n = 10000)))
   expect_identical(canMove(world = ws, turtles = t2, step = 0), rep(TRUE, length(t2)))
 })
+
+test_that("randomXcor and randomYcor works",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+
+  # Patches to patch
+  pTOp <- towards(world = w1, from = patches(world = w1), to = patches(world = w1))
+  expect_equivalent(pTOp, rep(0, 100))
+  pTOp <- towards(world = w1, from = patches(world = w1), to = patch(world = w1, xcor = 1, ycor = 1), torus = FALSE)
+  expect_equivalent(pTOp[1], 180)
+  pTOp <- towards(world = w1, from = patches(world = w1), to = patch(world = w1, xcor = 1, ycor = 1), torus = TRUE)
+  expect_equivalent(pTOp[1], 0)
+
+  # Patches to location
+  pTOl <- towards(world = w1, from = patches(world = w1), to = cbind(x = 4, y = 8), torus = FALSE)
+  expect_equivalent(pTOl[21], 90)
+  pTOl <- towards(world = w1, from = patches(world = w1), to = cbind(x = 4, y = 8), torus = FALSE)
+  expect_equivalent(pTOl[30], 270)
+  pTOl <- towards(world = w1, from = patches(world = w1), to = cbind(x = 4, y = 8), torus = TRUE)
+  expect_equivalent(pTOl[30], 90)
+
+  # Patches to turtle
+  t1 <- createTurtles(world = w1, n = 1)
+  pTOt <- towards(world = w1, from = patches(world = w1), to = t1, torus = FALSE)
+  expect_equivalent(pTOt[100], 315)
+  t2 <- createTurtles(world = w1, n = 1, coord = cbind(xcor = 5.5, ycor = 10.5))
+  pTOt <- towards(world = w1, from = patches(world = w1), to = t2, torus = TRUE)
+  expect_equivalent(pTOt[95], 135)
+
+  # Turtles to patch
+  t3 <- createTurtles(world = w1, n = 4, coords = cbind(xcor = c(2,5,6,7), ycor = c(4,6,2,9)))
+  tTOp <- towards(world = w1, from = t3, to = patch(world = w1, xcor = 5, ycor = 4), torus = FALSE)
+  expect_equivalent(tTOp[1], 90)
+  tTOp <- towards(world = w1, from = t3, to = patch(world = w1, xcor = 7, ycor = 2), torus = TRUE)
+  expect_equivalent(tTOp[4], 0)
+
+  # Turtles to location
+  tTOl <- towards(world = w1, from = t3, to = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOl[1], 90)
+  tTOl <- towards(world = w1, from = t3, to = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOl[3], 45)
+  tTOl <- towards(world = w1, from = t3, to = cbind(x = 8, y = 4), torus = TRUE)
+  expect_equivalent(tTOl[1], 270)
+
+  # Turtles to turtle
+  tTOt <- towards(world = w1, from = t3, to = t3, torus = FALSE)
+  expect_equivalent(tTOt, rep(0, 4))
+  tTOt <- towards(world = w1, from = t3, to = t2, torus = FALSE)
+  expect_equivalent(tTOt[4], 315)
+
+  w2 <- w1
+  w1[] <- runif(100)
+  w2[] <- runif(100)
+  ws <-NLstack(w1, w2)
+  # Patches to patch
+  pTOp <- towards(world = ws, from = patches(world = ws), to = patch(world = ws, xcor = 1, ycor = 1), torus = TRUE)
+  expect_equivalent(pTOp[1], 0)
+  # Patches to location
+  pTOl <- towards(world = ws, from = patches(world = ws), to = cbind(x = 4, y = 8), torus = TRUE)
+  expect_equivalent(pTOl[30], 90)
+  # Patches to turtle
+  pTOt <- towards(world = ws, from = patches(world = ws), to = t2, torus = TRUE)
+  expect_equivalent(pTOt[95], 135)
+  # Turtles to patch
+  tTOp <- towards(world = ws, from = t3, to = patch(world = ws, xcor = 7, ycor = 2), torus = TRUE)
+  expect_equivalent(tTOp[4], 0)
+  # Turtles to location
+  tTOl <- towards(world = ws, from = t3, to = cbind(x = 8, y = 4), torus = TRUE)
+  expect_equivalent(tTOl[1], 270)
+  # Turtles to turtle
+  tTOt <- towards(world = ws, from = t3, to = t2, torus = FALSE)
+  expect_equivalent(tTOt[4], 315)
+})

@@ -3,20 +3,16 @@
 \docType{methods}
 \name{patch}
 \alias{patch}
-\alias{patch,NLworld,numeric,numeric-method}
-\alias{patch,NLworldStack,numeric,numeric-method}
+\alias{patch,NLworlds,numeric,numeric-method}
 \title{Patch}
 \usage{
 patch(world, xcor, ycor, duplicate = FALSE, torus = FALSE)
 
-\S4method{patch}{NLworld,numeric,numeric}(world, xcor, ycor,
-  duplicate = FALSE, torus = FALSE)
-
-\S4method{patch}{NLworldStack,numeric,numeric}(world, xcor, ycor,
+\S4method{patch}{NLworlds,numeric,numeric}(world, xcor, ycor,
   duplicate = FALSE, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
+\item{world}{A \code{NLworlds} object.}
 
 \item{xcor}{A vector of \code{xcor} coordinates.}
 
@@ -29,7 +25,7 @@ If \code{duplicate == FALSE}, the patch coordinates are only
 returned once.
 Default is \code{duplicate == FALSE}.}
 
-\item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
+\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{

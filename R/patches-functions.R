@@ -349,7 +349,7 @@ setMethod(
 #' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
 #' \code{xcor} and \code{ycor} coordinates.
 #'
-#' @param world      A \code{NLworld*} object.
+#' @param world      A \code{NLworlds} object.
 #'
 #' @param xcor       A vector of \code{xcor} coordinates.
 #'
@@ -362,7 +362,7 @@ setMethod(
 #'                   returned once.
 #'                   Default is \code{duplicate == FALSE}.
 #'
-#' @param torus      Logical to determine if the \code{NLworld*} is wrapped.
+#' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
 #'                   Default is \code{torus = FALSE}.
 #'
 #' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
@@ -401,7 +401,7 @@ setGeneric(
 #' @rdname patch
 setMethod(
   "patch",
-  signature = c(world = "NLworld", xcor = "numeric", ycor = "numeric"),
+  signature = c(world = "NLworlds", xcor = "numeric", ycor = "numeric"),
   definition = function(world, xcor, ycor, duplicate, torus) {
 
     pxcor_ <- round(xcor)
@@ -413,8 +413,8 @@ setMethod(
       pycor_ <- pCoords[,2]
     }
 
-    pxcorNA <- ifelse(pxcor_ < world@minPxcor | pxcor_ > world@maxPxcor, NA, pxcor_)
-    pycorNA <- ifelse(pycor_ < world@minPycor | pycor_ > world@maxPycor, NA, pycor_)
+    pxcorNA <- ifelse(pxcor_ < minPxcor(world) | pxcor_ > maxPxcor(world), NA, pxcor_)
+    pycorNA <- ifelse(pycor_ < minPycor(world) | pycor_ > maxPycor(world), NA, pycor_)
     pxcorNA[is.na(pycorNA)] <- NA
     pycorNA[is.na(pxcorNA)] <- NA
     pxcor = pxcorNA[!is.na(pxcorNA)]
@@ -425,17 +425,6 @@ setMethod(
       pCoords <- unique(pCoords)
     }
     return(pCoords)
-  }
-)
-
-#' @export
-#' @rdname patch
-setMethod(
-  "patch",
-  signature = c(world = "NLworldStack", xcor = "numeric", ycor = "numeric"),
-  definition = function(world, xcor, ycor, duplicate, torus) {
-    world_l <- world[[1]]
-    patch(world = world_l, xcor = xcor, ycor = ycor, duplicate = duplicate, torus = torus)
   }
 )
 

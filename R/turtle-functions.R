@@ -850,3 +850,149 @@ setMethod(
     return(ycor)
   }
 )
+
+
+################################################################################
+#' Towards
+#'
+#' Reports the heading from agent(s) towards other agent(s) or location(s) [x,y].
+#'
+#' @param world A \code{NLworlds} object.
+#'
+#' @param from  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'              second column \code{pycor} representing the coordinates of the
+#'              patch(es) from which the heading will be computed.
+#'              A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'              \code{createOTurtles()} representing the turtle(s) from which the
+#'              heading will be computed.
+#'
+#' @param to    A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'              second column \code{pycor} representing the coordinates of the
+#'              patch(es) to which the heading will be computed.
+#'              A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'              \code{createOTurtles()} representing the turtle(s) to which the
+#'              heading will be computed.
+#'              A matrix (ncol = 2) with the first column \code{x} and the second
+#'              column \code{y} representing the coordinates of the location(s) to
+#'              which the heading will be computed.
+#'              \code{to} must be of length 1 or of the same length as \code{from}.
+#'
+#' @param torus  Logical to determine if the \code{NLworlds} object is wrapped.
+#'               Default is \code{torus = FALSE}.
+#'
+#' @return A vector of angles in degrees of the length of \code{from}.
+#'
+#' @details If \code{torus = TRUE} and the distances from one agent to its [x,y]
+#'          location is smaller around the sides of the world than across it, then
+#'          the heading to the location going around the sides of the world is
+#'          reported.
+#'          The heading from an agent to itself or its location will return 0.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' towards(world = w1, from = patches(world = w1), to = cbind(x = 0, y = 0))
+#' t1 <- createTurtles(world = w1, n = 10)
+#' towards(world = w1, from = t1, to = cbind(x = 0, y = 0))
+#'
+#'
+#' @export
+#' @importFrom CircStats deg
+#' @docType methods
+#' @rdname towards
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "towards",
+  function(world, from, to, torus = FALSE) {
+    standardGeneric("towards")
+  })
+
+#' @export
+#' @rdname towards
+setMethod(
+  "towards",
+  signature = c(world = "NLworlds", from = "matrix", to = "matrix"),
+  definition = function(world, from, to, torus) {
+
+    heading <- deg(atan2(to[,1] - from[,1], to[,2] - from[,2])) # angles between -180 and 180
+    heading[heading < 0] <- heading[heading < 0] + 360
+
+    if(torus == TRUE){
+      # Need to create coordinates for "to" in a wrapped world
+      # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
+      # Find the smallest distances across or around the world
+
+      if(nrow(to) == 1 & nrow(from) != 1){
+        to <- cbind(x = rep(to[,1], nrow(from)), y = rep(to[,2], nrow(from)))
+      }
+
+      toShortest <- to
+
+      for(i in 1:nrow(from)){
+        to1 <- cbind(to[i,1] - (world@extent@xmax - world@extent@xmin), to[i,2] + (world@extent@ymax - world@extent@ymin))
+        to2 <- cbind(to[i,1], to[i,2] + (world@extent@ymax - world@extent@ymin))
+        to3 <- cbind(to[i,1] + (world@extent@xmax - world@extent@xmin), to[i,2] + (world@extent@ymax - world@extent@ymin))
+        to4 <- cbind(to[i,1] - (world@extent@xmax - world@extent@xmin), to[i,2])
+        to5 <- cbind(to[i,1] + (world@extent@xmax - world@extent@xmin), to[i,2])
+        to6 <- cbind(to[i,1] - (world@extent@xmax - world@extent@xmin), to[i,2] - (world@extent@ymax - world@extent@ymin))
+        to7 <- cbind(to[i,1], to[i,2] - (world@extent@ymax - world@extent@ymin))
+        to8 <- cbind(to[i,1] + (world@extent@xmax - world@extent@xmin), to[i,2] - (world@extent@ymax - world@extent@ymin))
+
+
+        dist <- pointDistance(p1 = from[i,], p2 = to[i,], lonlat = FALSE, allpairs = FALSE)
+        dist1 <- pointDistance(p1 = from[i,], p2 = to1, lonlat = FALSE, allpairs = FALSE)
+        dist2 <- pointDistance(p1 = from[i,], p2 = to2, lonlat = FALSE, allpairs = FALSE)
+        dist3 <- pointDistance(p1 = from[i,], p2 = to3, lonlat = FALSE, allpairs = FALSE)
+        dist4 <- pointDistance(p1 = from[i,], p2 = to4, lonlat = FALSE, allpairs = FALSE)
+        dist5 <- pointDistance(p1 = from[i,], p2 = to5, lonlat = FALSE, allpairs = FALSE)
+        dist6 <- pointDistance(p1 = from[i,], p2 = to6, lonlat = FALSE, allpairs = FALSE)
+        dist7 <- pointDistance(p1 = from[i,], p2 = to7, lonlat = FALSE, allpairs = FALSE)
+        dist8 <- pointDistance(p1 = from[i,], p2 = to8, lonlat = FALSE, allpairs = FALSE)
+
+        allDist <- c(dist, dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8)
+        distMin <- min(allDist)
+        allToCoords <- rbind(to[i,], to1, to2, to3, to4, to5, to6, to7, to8)
+        toShortest[i,] <- allToCoords[match(distMin, allDist),]
+      }
+
+      heading <- deg(atan2(toShortest[,1] - from[,1], toShortest[,2] - from[,2])) # angles between -180 and 180
+      heading[heading < 0] <- heading[heading < 0] + 360
+    }
+    return(heading)
+  }
+)
+
+#' @export
+#' @rdname towards
+setMethod(
+  "towards",
+  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "matrix"),
+  definition = function(world, from, to, torus) {
+    towards(world = world, from = from@coords, to = to, torus = torus)
+  }
+)
+
+#' @export
+#' @rdname towards
+setMethod(
+  "towards",
+  signature = c(world = "NLworlds", from = "matrix", to = "SpatialPointsDataFrame"),
+  definition = function(world, from, to, torus) {
+    towards(world = world, from = from, to = to@coords, torus = torus)
+  }
+)
+
+#' @export
+#' @rdname towards
+setMethod(
+  "towards",
+  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "SpatialPointsDataFrame"),
+  definition = function(world, from, to, torus) {
+    towards(world = world, from = from@coords, to = to@coords, torus = torus)
+  }
+)
