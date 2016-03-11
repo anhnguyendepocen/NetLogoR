@@ -25,7 +25,7 @@
 #'
 #' @param color   String of characters of length \code{n} representing the color
 #'                of each turtle when plotted. If missing, colors are assigned using
-#'                the function \code{palette(rainbow(n))}.
+#'                the function \code{rainbow(n)}.
 #'
 #' @return A SpatialPointsDataFrame object of length \code{n} with the columns for
 #'         the dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
@@ -120,7 +120,7 @@ setMethod(
 #'
 #' @param color   String of characters of length \code{n} representing the color
 #'                of each turtle when plotted. If missing, colors are assigned using
-#'                the function \code{palette(rainbow(n))}.
+#'                the function \code{rainbow(n)}.
 #'
 #' @return A SpatialPointsDataFrame object of length \code{n} with the columns for
 #'         the dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
@@ -882,11 +882,11 @@ setMethod(
 #'
 #' @return A vector of angles in degrees of the length of \code{from}.
 #'
-#' @details If \code{torus = TRUE} and the distances from one agent to its [x,y]
-#'          location is smaller around the sides of the world than across it, then
-#'          the heading to the location going around the sides of the world is
-#'          reported.
-#'          The heading from an agent to itself or its location will return 0.
+#' @details If \code{torus = TRUE} and the distance from one agent \code{from} to
+#'          its corresponding agent or location \code{to} is smaller around the
+#'          sides of the world than across it, then the heading to the agent or location
+#'          going around the sides of the world is reported.
+#'          The heading from an agent to itself or its own location will return 0.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -996,3 +996,210 @@ setMethod(
     towards(world = world, from = from@coords, to = to@coords, torus = torus)
   }
 )
+
+
+################################################################################
+#' Face
+#'
+#' Set the turtles' heading towards some agent(s) or location(s) [x,y].
+#'
+#' @param world   A \code{NLworlds} object.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtle(s) from which
+#'                the heading will be modified.
+#'
+#' @param to      A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates of the
+#'                patch(es) towards which the turtles' heading will be set
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtle(s) towards which
+#'                the turtles' heading will be set
+#'                A matrix (ncol = 2) with the first column \code{x} and the second
+#'                column \code{y} representing the coordinates of the location(s)
+#'                towards which the heading will be set
+#'                \code{to} must be of length 1 or of the same length as \code{from}.
+#'
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A SpatialPointsDataFrame representing the turtles with updated headings.
+#'
+#' @details If \code{torus = TRUE} and the distance from one turtle \code{from} to
+#'          its corresponding agent or location \code{to} is smaller around the
+#'          sides of the world than across it, then the heading to the agent or location
+#'          going around the sides of the world is given to the turtle.
+#'          There is no change in heading for a turtle towards itself or its own location.
+#'          This function is similar to setting the agents' heading to the results of
+#'          the \code{towards()} function.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- runif(25)
+#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(pxcor = randomXcor(world = w1, n = 10),
+#'                                                        pycor = randomYcor(world = w1, n = 10)))
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
+#' t1 <- fd(world = w1, turtles = t1, step = 0.5)
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname face
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "face",
+  function(world, turtles, to, torus = FALSE) {
+    standardGeneric("face")
+  })
+
+#' @export
+#' @rdname face
+setMethod(
+  "face",
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", to = "matrix"),
+  definition = function(world, turtles, to, torus) {
+
+    newHeading <- towards(world = world, from = turtles, to = to, torus = torus)
+
+    if(nrow(to) == 1 & nrow(turtles) != 1){
+      to <- cbind(x = rep(to[,1], nrow(turtles)), y = rep(to[,2], nrow(turtles)))
+    }
+    # Do not change the heading if the turtles is facing its position
+    for(i in 1:nrow(turtles@coords)){
+      if(turtles@coords[i,1] == to[i,1] & turtles@coords[i,2] == to[i,2]){
+        newHeading[i] <- turtles@data$heading[i]
+      }
+    }
+    newData <- turtles@data
+    newData[, "heading"] <- newHeading
+    newTurtles <- SpatialPointsDataFrame(coords = turtles@coords, data = newData)
+    return(newTurtles)
+  }
+)
+
+#' @export
+#' @rdname face
+setMethod(
+  "face",
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", to = "SpatialPointsDataFrame"),
+  definition = function(world, turtles, to, torus) {
+    face(world = world, turtles = turtles, to = to@coords, torus = torus)
+  }
+)
+
+
+################################################################################
+#' Left
+#'
+#' Rotate the turtles's heading to the left.
+#'
+#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtle(s) to rotate.
+#'
+#' @param nDegrees Numeric. The number of degrees by which to rotate the turtles'
+#'                 heading to the left. Must be of length 1 or of the same length
+#'                 as the \code{turtles}.
+#'
+#' @return A SpatialPointsDataFrame representing the turtles with updated headings.
+#'
+#' @details If \code{nDegrees} is negative, the turtle rotate to the right.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' t1 <- createTurtles(world = w1, n = 10)
+#' t1@data
+#' t1 <- left(turtles = t1, nDegrees = 180)
+#' t1@data
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname left
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "left",
+  function(turtles, nDegrees) {
+    standardGeneric("left")
+  })
+
+#' @export
+#' @rdname left
+setMethod(
+  "left",
+  signature = c("SpatialPointsDataFrame", "numeric"),
+  definition = function(turtles, nDegrees) {
+    newHeading <- turtles@data$heading - nDegrees
+    newHeading[newHeading < 0] <- newHeading[newHeading < 0] + 360
+    newHeading[newHeading >= 360] <- newHeading[newHeading >= 360] - 360
+
+    newData <- turtles@data
+    newData[, "heading"] <- newHeading
+    newTurtles <- SpatialPointsDataFrame(coords = turtles@coords, data = newData)
+    return(newTurtles)
+  }
+)
+
+
+################################################################################
+#' Right
+#'
+#' Rotate the turtles's heading to the right.
+#'
+#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtle(s) to rotate.
+#'
+#' @param nDegrees Numeric. The number of degrees by which to rotate the turtles'
+#'                 heading to the right Must be of length 1 or of the same length
+#'                 as the \code{turtles}.
+#'
+#' @return A SpatialPointsDataFrame representing the turtles with updated headings.
+#'
+#' @details If \code{nDegrees} is negative, the turtle rotate to the left.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' t1 <- createTurtles(world = w1, n = 10)
+#' t1@data
+#' t1 <- right(turtles = t1, nDegrees = 180)
+#' t1@data
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname right
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "right",
+  function(turtles, nDegrees) {
+    standardGeneric("right")
+  })
+
+#' @export
+#' @rdname right
+setMethod(
+  "right",
+  signature = c("SpatialPointsDataFrame", "numeric"),
+  definition = function(turtles, nDegrees) {
+    left(turtles = turtles, nDegrees = -nDegrees)
+  }
+)
+

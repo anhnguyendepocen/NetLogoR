@@ -111,6 +111,39 @@ test_that("distance works for patches", {
   expect_identical(dist, c(1, 4))
 })
 
+test_that("distance works with turtles", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  t1 <- createTurtles(world = w1, n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
+  # Patches to turtles
+  distPT <- NLdist(world = w1, from = cbind(pxcor = 2, pycor = 3), to = t1)
+  expect_identical(distPT, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+  distPT <- NLdist(world = w1, from = cbind(pxcor = 8, pycor = 1), to = t1)
+  expect_identical(distPT[1], 7)
+  distPT <- NLdist(world = w1, from = cbind(pxcor = 8, pycor = 1), to = t1, torus = TRUE)
+  expect_identical(distPT[1], 3)
+
+  # Turtles to patches
+  distTP <- NLdist(world = w1, from = t1, to = cbind(pxcor = 2, pycor = 3))
+  expect_identical(distTP, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+
+  # Turtles to turtles
+  distTT <- NLdist(world = w1, from = t1, to = t1)
+  expect_equivalent(distTT, rep(0, 4))
+  distTT <- NLdist(world = w1, from = t1, to = t1, allPairs = TRUE)
+  expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
+
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLstack(w1, w2)
+  distPT <- NLdist(world = ws, from = cbind(pxcor = 8, pycor = 1), to = t1, torus = TRUE)
+  expect_identical(distPT[1], 3)
+  distTP <- NLdist(world = ws, from = t1, to = cbind(pxcor = 2, pycor = 3))
+  expect_identical(distTP, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+  distTT <- NLdist(world = ws, from = t1, to = t1, allPairs = TRUE)
+  expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
+})
+
 test_that("isPatch works", {
   w1 <- createNLworld(0, 2, 0, 2)
   expect_false(isPatch(w1, 1, 3))

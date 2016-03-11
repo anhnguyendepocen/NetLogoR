@@ -54,11 +54,11 @@ A vector of angles in degrees of the length of \code{from}.
 Reports the heading from agent(s) towards other agent(s) or location(s) [x,y].
 }
 \details{
-If \code{torus = TRUE} and the distances from one agent to its [x,y]
-         location is smaller around the sides of the world than across it, then
-         the heading to the location going around the sides of the world is
-         reported.
-         The heading from an agent to itself or its location will return 0.
+If \code{torus = TRUE} and the distance from one agent \code{from} to
+         its corresponding agent or location \code{to} is smaller around the
+         sides of the world than across it, then the heading to the agent or location
+         going around the sides of the world is reported.
+         The heading from an agent to itself or its own location will return 0.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

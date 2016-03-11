@@ -275,7 +275,7 @@ test_that("randomXcor and randomYcor works",{
   expect_identical(canMove(world = ws, turtles = t2, step = 0), rep(TRUE, length(t2)))
 })
 
-test_that("randomXcor and randomYcor works",{
+test_that("towards works",{
   w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 
   # Patches to patch
@@ -345,4 +345,31 @@ test_that("randomXcor and randomYcor works",{
   # Turtles to turtle
   tTOt <- towards(world = ws, from = t3, to = t2, torus = FALSE)
   expect_equivalent(tTOt[4], 315)
+})
+
+test_that("face works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(world = w1, n = 5)
+  t2 <- face(world = w1, turtles = t1, to = cbind(x = 2, y = 0))
+  expect_identical(t2@data$heading, rep(180, 5))
+  t3 <- face(world = w1, turtles = t1, to = patch(world = w1, xcor = 0, ycor = 2))
+  expect_identical(t3@data$heading, rep(270, 5))
+  t4 <-createTurtles(world = w1, n = 1, coords = cbind(xcor = 1, ycor = 3))
+  t5 <- face(world = w1, turtles = t1, to = t4)
+  expect_identical(t5@data$heading, rep(315, 5))
+  t6 <- face(world = w1, turtles = t4, to = cbind(x = 1, y = 0), torus = FALSE)
+  t7 <- face(world = w1, turtles = t4, to = cbind(x = 1, y = 0), torus = TRUE)
+  expect_identical(t6@data$heading, 180)
+  expect_identical(t7@data$heading, 0)
+  t8 <- face(world = w1, turtles = t1, to = t1)
+  expect_identical(t8@data$heading, t1@data$heading)
+})
+
+test_that("left and right work",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createOTurtles(world = w1, n = 4)
+  t2 <- left(turtles = t1, nDegrees = 45)
+  expect_identical(t2@data$heading, c(315, 45, 135, 225))
+  t3 <- right(turtles = t2, nDegrees = 45)
+  expect_identical(t3@data$heading, t1@data$heading)
 })

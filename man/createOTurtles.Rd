@@ -22,7 +22,7 @@ different breeds. If missing, \code{breed = "turtle"} for all turtles.}
 
 \item{color}{String of characters of length \code{n} representing the color
 of each turtle when plotted. If missing, colors are assigned using
-the function \code{palette(rainbow(n))}.}
+the function \code{rainbow(n)}.}
 }
 \value{
 A SpatialPointsDataFrame object of length \code{n} with the columns for

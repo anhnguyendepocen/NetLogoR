@@ -85,27 +85,31 @@ setMethod(
 
 
 ################################################################################
-#' Distance in a \code{NLworld*}
+#' Distance in a \code{NLworlds} object.
 #'
-#' Reports the distance from agent(s) to other agent(s) or to defined locations
+#' Reports the distance from agent(s) to other agent(s) or to defined location(s)
 #' (coordinates). Agents can be patches or turtles.
 #'
-#' ## !!! Only implemented for the patches so far !!!
-#'
-#' @param world    A \code{NLworld*} object.
+#' @param world    A \code{NLworlds} object.
 #'
 #' @param from     A matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                 second column \code{pycor} representing the coordinates of the
-#'                 patch(es) from which the distances will be computed.
+#'                 patch(es) from which the distance(s) will be computed.
+#'                 A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtle(s) from which
+#'                 the distance(s) will be computed.
 #'
 #' @param to       A matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                 second column \code{pycor} representing the coordinates of the
-#'                 patch(es) to which the distances will be computed.
+#'                 patch(es) to which the distance(s) will be computed.
+#'                 A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtle(s) to which
+#'                 the distance(s) will be computed.
 #'                 A matrix (ncol = 2) with the first column \code{xcor} and the
 #'                 second column \code{ycor} representing the coordinates of the
-#'                 locations to which the distances will be computed.
+#'                 location(s) to which the distance(s) will be computed.
 #'
-#' @param torus    Logical to determine if the \code{NLworld*} is wrapped.
+#' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
 #'                 Default is \code{torus = FALSE}.
 #'
 #' @param allPairs Logical. Only relevant if the number of agents/locations in
@@ -115,19 +119,17 @@ setMethod(
 #'                 distance matrix is returned. Default is \code{allPairs = FALSE}.
 #'
 #' @details Distances from or to a patch is measured from the center of the patch.
-#'          If the \code{NLworld*} is wrapped (\code{torus = TRUE}), the distance
-#'          around the sides of the \code{NLworld*} is reported only if smaller than
-#'          the one calculated with \code{torus = FALSE}.
+#'          If \code{torus = TRUE}, the distance around the sides of the world is
+#'          reported only if smaller than the one across the world (i.e., as calculated
+#'          with \code{torus = FALSE}).
 #'          Coordinates (patches, turtles or locations) must be inside the world extent.
 #'
-#' @return A vector of distances between patches if \code{from} and/or \code{to} is
-#'         a single patch, or if \code{from} and \code{to} were of same length and
-#'         \code{allPairs = FALSE}. The order of the distances follow the order of
-#'         the given patches coordinates.
-#'         If \code{from} and \code{to} are of same length and \code{allPairs = TRUE},
-#'         a matrix of distances between each pair of patches with the rows representing
-#'         the patches \code{from} and the columns the patches \code{to} is returned.
-#'
+#' @return A vector of distances if \code{from} and/or \code{to} is of length 1,
+#'         or if \code{from} and \code{to} were of same length and \code{allPairs = FALSE}.
+#'         The order of the distances follows the order of the agents.
+#'         A matrix of distances between \code{from} (rows) and \code{to} (columns)
+#'         if \code{from} and \code{to} are of different length or of same length
+#'         but \code{allPairs = TRUE}.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -138,6 +140,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)))
 #' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)), torus = TRUE)
+#' t1 <- createTurtles(world = w1, n = 2, coords = cbind(xcor = randomXcor(world = w1, n = 2),
+#'                                                       ycor = randomYcor(world = w1, n = 2)))
+#' NLdist(world = w1, from = t1, to = patch(world = w1, xcor = c(1,9), ycor = c(1,9)), allPairs = TRUE)
+#'
 #'
 #' @export
 #' @docType methods
@@ -155,13 +161,13 @@ setGeneric(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworld", from = "matrix", to = "matrix"),
+  signature = c(world = "NLworlds", from = "matrix", to = "matrix"),
   definition = function(world, from, to, torus, allPairs) {
 
-    if(min(from[,1]) < (world@minPxcor - 0.5) | min(from[,1]) > (world@maxPxcor + 0.5) |
-       min(from[,2]) < (world@minPycor - 0.5) | min(from[,2]) > (world@maxPycor + 0.5) |
-       min(to[,1]) < (world@minPxcor - 0.5) | min(to[,1]) > (world@maxPxcor + 0.5) |
-       min(to[,2]) < (world@minPycor - 0.5) | min(to[,2]) > (world@maxPycor + 0.5)){
+    if(min(from[,1]) < world@extent@xmin | max(from[,1]) > world@extent@xmax |
+       min(from[,2]) < world@extent@ymin | max(from[,2]) > world@extent@ymax |
+       min(to[,1]) < world@extent@xmin | max(to[,1]) > world@extent@xmax |
+       min(to[,2]) < world@extent@ymin | max(to[,2]) > world@extent@ymax){
       stop("Given coordinates are outside the world extent.")
     }
 
@@ -170,14 +176,14 @@ setMethod(
     if(torus == TRUE){
       # Need to create coordinates for "to" in a wrapped world
       # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
-      to1 <- cbind(pxcor = to[,1] - (world@maxPxcor - world@minPxcor) - 1, pycor = to[,2] + (world@maxPycor - world@minPycor) + 1)
-      to2 <- cbind(pxcor = to[,1], pycor = to[,2] + (world@maxPycor - world@minPycor) + 1)
-      to3 <- cbind(pxcor = to[,1] + (world@maxPxcor - world@minPxcor) + 1, pycor = to[,2] + (world@maxPycor - world@minPycor) + 1)
-      to4 <- cbind(pxcor = to[,1] - (world@maxPxcor - world@minPxcor) - 1, pycor = to[,2])
-      to5 <- cbind(pxcor = to[,1] + (world@maxPxcor - world@minPxcor) + 1, pycor = to[,2])
-      to6 <- cbind(pxcor = to[,1] - (world@maxPxcor - world@minPxcor) - 1, pycor = to[,2] - (world@maxPycor - world@minPycor) - 1)
-      to7 <- cbind(pxcor = to[,1], pycor = to[,2] - (world@maxPycor - world@minPycor) - 1)
-      to8 <- cbind(pxcor = to[,1] + (world@maxPxcor - world@minPxcor) + 1, pycor = to[,2] - (world@maxPycor - world@minPycor) - 1)
+      to1 <- cbind(pxcor = to[,1] - (world@extent@xmax - world@extent@xmin), pycor = to[,2] + (world@extent@ymax - world@extent@ymin))
+      to2 <- cbind(pxcor = to[,1], pycor = to[,2] + (world@extent@ymax - world@extent@ymin))
+      to3 <- cbind(pxcor = to[,1] + (world@extent@xmax - world@extent@xmin), pycor = to[,2] + (world@extent@ymax - world@extent@ymin))
+      to4 <- cbind(pxcor = to[,1] - (world@extent@xmax - world@extent@xmin), pycor = to[,2])
+      to5 <- cbind(pxcor = to[,1] + (world@extent@xmax - world@extent@xmin), pycor = to[,2])
+      to6 <- cbind(pxcor = to[,1] - (world@extent@xmax - world@extent@xmin), pycor = to[,2] - (world@extent@ymax - world@extent@ymin))
+      to7 <- cbind(pxcor = to[,1], pycor = to[,2] - (world@extent@ymax - world@extent@ymin))
+      to8 <- cbind(pxcor = to[,1] + (world@extent@xmax - world@extent@xmin), pycor = to[,2] - (world@extent@ymax - world@extent@ymin))
 
       dist1 <- pointDistance(p1 = from, p2 = to1, lonlat = FALSE, allpairs = allPairs)
       dist2 <- pointDistance(p1 = from, p2 = to2, lonlat = FALSE, allpairs = allPairs)
@@ -198,10 +204,29 @@ setMethod(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworldStack", from = "matrix", to = "matrix"),
+  signature = c(world = "NLworlds", from = "matrix", to = "SpatialPointsDataFrame"),
   definition = function(world, from, to, torus, allPairs) {
-    world_l <- world[[1]]
-    NLdist(world = world_l, from = from, to = to, torus = torus, allPairs = allPairs)
+    NLdist(world = world, from = from, to = to@coords, torus = torus, allPairs = allPairs)
+  }
+)
+
+#' @export
+#' @rdname NLdist
+setMethod(
+  "NLdist",
+  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "matrix"),
+  definition = function(world, from, to, torus, allPairs) {
+    NLdist(world = world, from = from@coords, to = to, torus = torus, allPairs = allPairs)
+  }
+)
+
+#' @export
+#' @rdname NLdist
+setMethod(
+  "NLdist",
+  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "SpatialPointsDataFrame"),
+  definition = function(world, from, to, torus, allPairs) {
+    NLdist(world = world, from = from@coords, to = to@coords, torus = torus, allPairs = allPairs)
   }
 )
 
