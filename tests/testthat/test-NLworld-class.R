@@ -1,9 +1,12 @@
 test_that("NLstack() works similar as stack()",{
-  rl1 <- raster(system.file("external/test.grd", package="raster"))
+  rl1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
+  rl1[] <- runif(2268)
   rl1@data@names <- "test1"
   rl2 <- rl1
+  rl2[] <- runif(2268)
   rl2@data@names <- "test2"
   rl3 <- rl1
+  rl3[] <- runif(2268)
   rl3@data@names <- "test3"
   s <- stack(rl1, rl2, rl3)
   sNL <- convertNLworld(s)

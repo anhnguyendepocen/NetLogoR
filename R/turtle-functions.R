@@ -1203,3 +1203,113 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' Downhill
+#'
+#' Move the turtles to their neighboring patch with the lowest value for the pacthes'
+#' variable.
+#'
+#' @param world      A \code{NLworlds} object, representing the world in which the
+#'                   turtles move onto.
+#'
+#' @param pVar       If the world is a \code{NLworldStack}, pVar is the name
+#'                   (characters) of the layer used to define the patches's variable
+#'                   used to move downihll.
+#'
+#' @param turtles    A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                   by \code{createOTurtles()} representing the moving turtles.
+#'
+#' @param nNeighbors 4 or 8 for the number of neighbor patches considered to move
+#'                   downhill.
+#'
+#' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
+#'                   Default is \code{torus = FALSE}.
+#'
+#' @return A SpatialPointsDataFrame representing the turtles with updated locations
+#'         and headings.
+#'
+#' @details The turtles face the chosen patches and then move to their center. Both
+#'          headings and locations are updated with \code{downhill}.
+#'          If no neighboring patch has a smaller value than the patch where the
+#'          turtle is currently located, the turtle stays on this patch. It still
+#'          moves to the patch center if it was not already on it.
+#'          If there are multiple neighboring patches with the same lowest value,
+#'          the turtle chooses one patch at random.
+#'          If \code{torus = FALSE}, turtles cannot move on the other side of the world.
+#'          If a turtle is located on a patch on the edge of the world, it has fewer
+#'          neighborhing patches for option to move than \code{nNeighbors}. If
+#'          \code{torus = TRUE}, turtles can move on the other side of the world to
+#'          go downhill and their choice of neighborhing patches is always among
+#'          \code{nNeighbors} patches.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+#' w1[] <- runif(100)
+#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname downhill
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "downhill",
+  function(world, pVar, turtles, nNeighbors, torus = FALSE) {
+    standardGeneric("downhill")
+  })
+
+#' @export
+#' @rdname downhill
+setMethod(
+  "downhill",
+  signature = c(world = "NLworld", pVar = "missing",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
+  definition = function(world, turtles, nNeighbors, torus) {
+    pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
+    pValues <- values(world) # ordered by cellNumbers
+
+    pMinNeighbors <- list()
+    for(i in 1:length(pNeighbors)){
+      pNeighbors[[i]] <- rbind(pNeighbors[[i]], patch(world = world, xcor = turtles@coords[i,1], ycor = turtles@coords[i,2])) # add the patch the turtle is located on
+      pNeighbors[[i]] <- cbind(pNeighbors[[i]], cellNum = cellFromPxcorPycor(world = world, pxcor = pNeighbors[[i]][,"pxcor"], pycor = pNeighbors[[i]][,"pycor"]))
+      pNeighbors[[i]] <- cbind(pNeighbors[[i]], pVal = pValues[pNeighbors[[i]][,"cellNum"]])
+      pMinNeighbors[[i]] <- pNeighbors[[i]][pNeighbors[[i]][,"pVal"] == min(pNeighbors[[i]][,"pVal"]), c("pxcor", "pycor")]
+      # If there are more than 1 patch with a minimum value, select a random one
+      if(class(pMinNeighbors[[i]]) == "matrix"){ # otherwise it is "numeric"
+        pMinNeighbors[[i]] <- pMinNeighbors[[i]][sample(nrow(pMinNeighbors[[i]]), 1), ]
+      }
+    }
+
+    pMinNeighbors <- do.call(rbind, pMinNeighbors)
+    newTurtles <- face(world = world, turtles = turtles, to = pMinNeighbors, torus = torus)
+    # MoveTo function?
+    newTurtles@coords <- cbind(xcor = pMinNeighbors[,1], ycor = pMinNeighbors[,2]) # pxcor and pycor otherwise for the names
+    newTurtles@data$prevX <- turtles@coords[,1]
+    newTurtles@data$prevY <- turtles@coords[,2]
+    return(newTurtles)
+  }
+)
+
+#' @export
+#' @rdname downhill
+setMethod(
+  "downhill",
+  signature = c(world = "NLworldStack", pVar = "character",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
+  definition = function(world, pVar, turtles, nNeighbors, torus) {
+    pos_l <- which(names(world) == pVar, TRUE) # find the layer
+    world_l <- world[[pos_l]]
+    downhill(world = world_l, turtles = turtles, nNeighbors = nNeighbors, torus = torus)
+  }
+)
+

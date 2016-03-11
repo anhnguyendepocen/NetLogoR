@@ -300,21 +300,32 @@ setMethod(
 ################################################################################
 #' Neighbors
 #'
-#' Reports the 8 or 4 surrounding patches (neighbors) around patch(es) or turtle(s).
+#' Reports the 4 or 8 surrounding patches (neighbors) around patch(es) or turtle(s).
 #'
-#' ## !!! Only implemented for the patches so far !!!
-#'
-#' @param world      A \code{NLworld*} object.
+#' @param world      A \code{NLworlds} object.
 #'
 #' @param agents     A matrix (ncol = 2) with the first column \code{pxcor} and
 #'                   the second column \code{pycor} representing the patch(es)
 #'                   coordinates for which neighbors will be reported.
+#'                   A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                   by \code{createOTurtles()} representing the turtles around
+#'                   which the neighbors patches will be reported.
 #'
 #' @param nNeighbors 4 or 8 for the number of neighbor patches.
 #'
+#' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
+#'                   Default is \code{torus = FALSE}.
+#'
 #' @return A list with each item being the patches coordinates of the neighbors for
-#'         each of the agents. The list items follow the order of the matrix rows for
-#'         the agents.
+#'         each of the agents. The list items follows the order of the agents.
+#'
+#' @details The patch around which the neighbors are identified if \code{agents}
+#'          are patches or the patch on which the turtle is located if \code{agents}
+#'          are turtles is not reported.
+#'          If \code{torus = FALSE}, \code{agents} located on the edges of the world
+#'          have less than \code{nNeighbors} patches. If \code{torus = FALSE}, agents
+#'          located on the egdes of the world all have \code{nNeighbors} patches which
+#'          some may be on the other side of the world.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -323,9 +334,14 @@ setMethod(
 #' @examples
 #' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' neighbors(world = w1, agents = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 4)
+#' neighbors(world = w1, agents = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 8)
+#' t1 <- createTurtles(world = w1, n = 3, coords = cbind(xcor = randomXcor(world = w1, n = 3),
+#'                                                       ycor = randomYcor(world = w1, n = 3)))
+#' neighbors(world = w1, agents = t1, nNeighbors = 4)
+#'
 #'
 #' @export
+#' @importFrom SpaDES adj
 #' @docType methods
 #' @rdname neighbors
 #'
@@ -333,7 +349,7 @@ setMethod(
 #'
 setGeneric(
   "neighbors",
-  function(world, agents, nNeighbors) {
+  function(world, agents, nNeighbors, torus = FALSE) {
     standardGeneric("neighbors")
   })
 
@@ -341,11 +357,12 @@ setGeneric(
 #' @rdname neighbors
 setMethod(
   "neighbors",
-  signature = c("NLworld", "matrix", "numeric"),
-  definition = function(world, agents, nNeighbors) {
+  signature = c(world = "NLworlds", agents = "matrix", nNeighbors = "numeric"),
+  definition = function(world, agents, nNeighbors, torus) {
 
     cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    neighbors_df <- adjacent(world, cells = cellNum, directions = nNeighbors)
+    neighbors_df <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+
     pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors_df[,2])
     listAgents <- list()
     for(i in 1:length(cellNum)) {
@@ -360,10 +377,10 @@ setMethod(
 #' @rdname neighbors
 setMethod(
   "neighbors",
-  signature = c("NLworldStack", "matrix", "numeric"),
-  definition = function(world, agents, nNeighbors) {
-    world_l <- world[[1]]
-    neighbors(world = world_l, agents = agents, nNeighbors = nNeighbors)
+  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", nNeighbors = "numeric"),
+  definition = function(world, agents, nNeighbors, torus) {
+    pTurtles <- patch(world = world, xcor = agents@coords[,1], ycor = agents@coords[,2], duplicate = TRUE)
+    neighbors(world = world, agents = pTurtles, nNeighbors = nNeighbors, torus = torus)
   }
 )
 

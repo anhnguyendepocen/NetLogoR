@@ -162,11 +162,11 @@ test_that("isPatch works", {
   expect_identical(isPatch(ws, c(0, 1), c(3, 1)), c(FALSE, TRUE))
 })
 
-test_that("neighbors works", {
+test_that("neighbors works with patches", {
   w1 <- createNLworld(0, 9, 0, 9)
   n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
-  n43 <- cbind(pxcor = c(1, 0), pycor = c(0, 1))
+  n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
   expect_identical(n4[[1]], n41)
   expect_identical(n4[[3]], n43)
 
@@ -185,6 +185,49 @@ test_that("neighbors works", {
   expect_identical(n4[[3]], n43)
   n8 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
   expect_identical(n8[[2]], n82)
+
+  # With torus = TRUE
+  nCorner <- neighbors(world = w1, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = FALSE)
+  expect_equivalent(nrow(nCorner[[1]]), 2)
+  nCorner <- neighbors(world = w1, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = TRUE)
+  expect_equivalent(nrow(nCorner[[1]]), 4)
+  expect_identical(nCorner[[1]], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
+  nCorner <- neighbors(world = ws, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = TRUE)
+  expect_equivalent(nrow(nCorner[[1]]), 4)
+  expect_identical(nCorner[[1]], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
+})
+
+test_that("neighbors works with turtles", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  t1 <- createTurtles(world = w1, n = 4, coords = cbind(xcor = c(0, 9, 0, 9), ycor = c(9, 9, 0, 0)))
+  n4 <- neighbors(world = w1, agents = t1, nNeighbors = 4)
+  n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
+  n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
+  expect_identical(n4[[1]], n41)
+  expect_identical(n4[[3]], n43)
+
+  n8 <- neighbors(world = w1, agents = t1, nNeighbors = 8)
+  n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
+  expect_identical(n8[[2]], n82)
+
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLstack(w1, w2)
+
+  # Same as for w1
+  n4 <- neighbors(world = ws, agents = t1, nNeighbors = 4)
+  expect_identical(n4[[1]], n41)
+  expect_identical(n4[[3]], n43)
+  n8 <- neighbors(world = ws, agents = t1, nNeighbors = 8)
+  expect_identical(n8[[2]], n82)
+
+  # With torus = TRUE
+  t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 0.2, ycor = 0.3))
+  nCorner <- neighbors(world = w1, agents = t1, nNeighbors = 8, torus = TRUE)
+  expect_equivalent(nrow(nCorner[[1]]), 8)
+  expect_equivalent(sum(nCorner[[1]][,"pxcor"]), 3*9+3*1+2*0)
+  expect_equivalent(sum(nCorner[[1]][,"pycor"]), 3*9+3*1+2*0)
 })
 
 test_that("patch works", {
