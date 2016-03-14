@@ -3,56 +3,59 @@
 \docType{methods}
 \name{patchAt}
 \alias{patchAt}
-\alias{patchAt,NLworld,matrix,numeric,numeric-method}
-\alias{patchAt,NLworldStack,matrix,numeric,numeric-method}
+\alias{patchAt,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
+\alias{patchAt,NLworlds,matrix,numeric,numeric-method}
 \title{Patch at}
 \usage{
 patchAt(world, agents, dx, dy, torus = FALSE)
 
-\S4method{patchAt}{NLworld,matrix,numeric,numeric}(world, agents, dx, dy,
+\S4method{patchAt}{NLworlds,matrix,numeric,numeric}(world, agents, dx, dy,
   torus = FALSE)
 
-\S4method{patchAt}{NLworldStack,matrix,numeric,numeric}(world, agents, dx, dy,
-  torus = FALSE)
+\S4method{patchAt}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
+  agents, dx, dy, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
+\item{world}{A \code{NLworlds} object.}
 
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-calling patches.}
+second column \code{pycor} representing the coordinates of the
+patches from wich \code{(dx, dy)} are computed.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles from wich
+\code{(dx, dy)} are computed.}
 
-\item{dx}{Numeric. Distance to east from the caller. If \code{dx} is negative, the
+\item{dx}{Numeric. Distance to east from the agent. If \code{dx} is negative, the
 distance to the west is computed. \code{dx} must be a single value or
 of the length of \code{agents}.}
 
-\item{dy}{Numeric. Distance to the north from the caller. If \code{dy} is negative,
+\item{dy}{Numeric. Distance to the north from the agent. If \code{dy} is negative,
 the distance to the south is computed. \code{dy} must be a single value or
 of the length of \code{agents}.}
 
-\item{torus}{Logical to determine if the \code{NLworld*} is wrapped.
+\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the patches coordinates. The order of the patches
-        are the ones of the agents.
+        follows the order of the agents.
 }
 \description{
 Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at \code{(dx, dy)}
-distance of the calling agent(s).
+distance of the agent(s).
 }
 \details{
-!!! Only implemented for the patches so far !!!
-
 If \code{torus = FALSE} and the patch at distance \code{(dx, dy)}
-         of the caller is outside the world, \code{NA} is returned. Otherwise,
-         if \code{torus = TRUE}, the patch coordinates from the wrapped world are
+         of the agent is outside of the world's extent, \code{NA} is returned.
+         If \code{torus = TRUE}, the patch coordinates from the wrapped world are
          returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 patchCorner <- patchAt(world = w1, agents = cbind(pxcor = 0, pycor = 0), dx = 1, dy = 1)
+t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 0, ycor = 0))
+patchCorner <- patchAt(world = w1, agents = t1, dx = 1, dy = 1)
 
 
 }

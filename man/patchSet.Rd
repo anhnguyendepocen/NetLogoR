@@ -28,7 +28,7 @@ Duplicate patches among the inputs are removed in the return matrix.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0,1,2), pycor = c(0,0,0)), dx = 1, dy = 1)
-p2 <- patchDist(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
+p2 <- patchDistHead(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
 p3 <- patch(world = w1, xcor = 4.3, ycor = 8)
 set1 <- patchSet(p1, p2, p3)
 

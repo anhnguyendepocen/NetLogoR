@@ -6,10 +6,10 @@
 \alias{patch,NLworlds,numeric,numeric-method}
 \title{Patch}
 \usage{
-patch(world, xcor, ycor, duplicate = FALSE, torus = FALSE)
+patch(world, xcor, ycor, duplicate = FALSE, torus = FALSE, out = FALSE)
 
 \S4method{patch}{NLworlds,numeric,numeric}(world, xcor, ycor,
-  duplicate = FALSE, torus = FALSE)
+  duplicate = FALSE, torus = FALSE, out = FALSE)
 }
 \arguments{
 \item{world}{A \code{NLworlds} object.}
@@ -27,6 +27,9 @@ Default is \code{duplicate == FALSE}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
+
+\item{out}{Logical to determine if coordinates for patches outside of the
+world should be returned. Default is \code{out = FALSE}.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
@@ -37,9 +40,11 @@ Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
 \code{xcor} and \code{ycor} coordinates.
 }
 \details{
-If \code{xcor} or \code{ycor} are outside the world's extent and
-         \code{torus = FALSE}, no patch coordinates are returned; if \code{torus = TRUE},
-         the patch coordinates from the wrapped world are returned.
+If \code{xcor} or \code{ycor} are outside the world's extent,
+         \code{torus = FALSE} and \code{out = FALSE}, no patch coordinates are returned,
+         if \code{out = TRUE} \code{NA} is returned for both patch coordinates.
+         If \code{torus = TRUE}, the patch coordinates from the wrapped world are
+         returned.
 }
 \examples{
 # Create a NLworld

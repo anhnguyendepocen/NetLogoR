@@ -1313,3 +1313,218 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' Uphill
+#'
+#' Move the turtles to their neighboring patch with the highest value for the pacthes'
+#' variable.
+#'
+#' @param world      A \code{NLworlds} object, representing the world in which the
+#'                   turtles move onto.
+#'
+#' @param pVar       If the world is a \code{NLworldStack}, pVar is the name
+#'                   (characters) of the layer used to define the patches's variable
+#'                   used to move uphill.
+#'
+#' @param turtles    A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                   by \code{createOTurtles()} representing the moving turtles.
+#'
+#' @param nNeighbors 4 or 8 for the number of neighbor patches considered to move
+#'                   uphill.
+#'
+#' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
+#'                   Default is \code{torus = FALSE}.
+#'
+#' @return A SpatialPointsDataFrame representing the turtles with updated locations
+#'         and headings.
+#'
+#' @details The turtles face the chosen patches and then move to their center. Both
+#'          headings and locations are updated with \code{uphill}.
+#'          If no neighboring patch has a larger value than the patch where the
+#'          turtle is currently located, the turtle stays on this patch. It still
+#'          moves to the patch center if it was not already on it.
+#'          If there are multiple neighboring patches with the same highest value,
+#'          the turtle chooses one patch at random.
+#'          If \code{torus = FALSE}, turtles cannot move on the other side of the world.
+#'          If a turtle is located on a patch on the edge of the world, it has fewer
+#'          neighborhing patches for option to move than \code{nNeighbors}. If
+#'          \code{torus = TRUE}, turtles can move on the other side of the world to
+#'          go uphill and their choice of neighborhing patches is always among
+#'          \code{nNeighbors} patches.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+#' w1[] <- runif(100)
+#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' plot(w1)
+#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
+#' points(t1, pch = 16, col = t1@data$color)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname uphill
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "uphill",
+  function(world, pVar, turtles, nNeighbors, torus = FALSE) {
+    standardGeneric("uphill")
+  })
+
+#' @export
+#' @rdname uphill
+setMethod(
+  "uphill",
+  signature = c(world = "NLworld", pVar = "missing",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
+  definition = function(world, turtles, nNeighbors, torus) {
+    # Uphill is the inverse of downhill
+    worldInv <- world
+    worldInv[] <- 1 / values(world)
+    downhill(world = worldInv, turtles = turtles, nNeighbors = nNeighbors, torus = torus)
+  }
+)
+
+#' @export
+#' @rdname uphill
+setMethod(
+  "uphill",
+  signature = c(world = "NLworldStack", pVar = "character",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
+  definition = function(world, pVar, turtles, nNeighbors, torus) {
+    pos_l <- which(names(world) == pVar, TRUE) # find the layer
+    world_l <- world[[pos_l]]
+    uphill(world = world_l, turtles = turtles, nNeighbors = nNeighbors, torus = torus)
+  }
+)
+
+
+################################################################################
+#' Patch ahead
+#'
+#' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
+#' distance ahead of the turtle(s).
+#'
+#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the moving turtles.
+#'
+#' @param dist    Numeric. Distance(s) from the turtle(s) to identify the patch.
+#'                Must be of length 1 if the same distance is applied to all turtles
+#'                or of length \code{turtles} if each turtle has a different distance.
+#'
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates at \code{dist} of the
+#'         \code{turtles}. The order of the patches follows the order of the \code{turtles}.
+#'
+#' @details If \code{torus = FALSE} and the patch at distance \code{dist} of the turtle
+#'          is outside the world, \code{NA} is returned for the patch coordinates. Otherwise,
+#'          if \code{torus = TRUE}, the patch coordinates from the wrapped world are
+#'          returned.
+#'          The distances from the turtles are computed with their current heading.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' patchAhead(world = w1, turtles = t1, dist = 1)
+#'
+#'
+#' @export
+#' @importFrom CircStats rad
+#' @docType methods
+#' @rdname patchAhead
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patchAhead",
+  function(world, turtles, dist, torus = FALSE) {
+    standardGeneric("patchAhead")
+  })
+
+#' @export
+#' @rdname patchAhead
+setMethod(
+  "patchAhead",
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
+  definition = function(world, turtles, dist, torus) {
+
+    xcor <- round(turtles@coords[,1] + sin(rad(turtles@data$heading)) * dist, digits = 5)
+    ycor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * dist, digits = 5)
+    pAhead <- patch(world = world, xcor = xcor, ycor = ycor, duplicate = TRUE, torus = torus, out = TRUE)
+    return(pAhead)
+
+  }
+)
+
+
+################################################################################
+#' Patch here
+#'
+#' Reports the patch(es) coordinates under the turtle(s).
+#'
+#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the moving turtles.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates at the \code{turtles}
+#'         location. The order of the patches follows the order of the \code{turtles}.
+#'
+#' @details If a turtle is located outside of the world's extent, \code{NA} is returned
+#'          for its patch coordinates.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' patchHere(world = w1, turtles = t1)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname patchHere
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patchHere",
+  function(world, turtles) {
+    standardGeneric("patchHere")
+  })
+
+#' @export
+#' @rdname patchHere
+setMethod(
+  "patchHere",
+  signature = c("NLworlds", "SpatialPointsDataFrame"),
+  definition = function(world, turtles) {
+
+    pTurtles <- patch(world = world, xcor = turtles@coords[,1], ycor = turtles@coords[,2], duplicate = TRUE, out = TRUE)
+    return(pTurtles)
+
+  }
+)
+
+
