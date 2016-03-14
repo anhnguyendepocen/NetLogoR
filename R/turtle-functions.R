@@ -48,6 +48,13 @@
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #'
+#' \dontrun{
+#' # Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
+#'   library(SpaDES)
+#'   clearPlot()
+#'   Plot(w1)
+#'   Plot(t1, addTo="w1") # automatically uses color column in SpatialPointsDataFrame
+#' }
 #'
 #' @export
 #' @docType methods
@@ -150,6 +157,14 @@ setMethod(
 #' t1 <- fd(world = w1, turtles = t1, step = 1)
 #' points(t1, pch = 16, col = t1@data$color)
 #'
+#' \dontrun{
+#' # Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
+#'   library(SpaDES)
+#'   clearPlot()
+#'   Plot(w1)
+#'   Plot(t1, addTo="w1") # automatically uses color column in SpatialPointsDataFrame
+#' }
+#'
 #'
 #' @export
 #' @docType methods
@@ -174,6 +189,7 @@ setMethod(
     for(i in 2:n){
       heading <- c(heading, heading[i - 1] + 360 / n)
     }
+
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
     names(li) <- names(match.call())[-1]
@@ -776,7 +792,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(world = w1, n = 10,
-#'                     coords = cbind(xcor = randomXcor(world = w1, n = 10), ycor = randomYcor(world = w1, n = 10)))
+#'                     coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                    ycor = randomYcor(world = w1, n = 10)))
 #' w1[] <- runif(25)
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
@@ -845,7 +862,7 @@ setGeneric(
   })
 
 #' @export
-#' @rdname randomYcor
+#' @rdname randomXcor
 setMethod(
   "randomYcor",
   signature = c("NLworlds", "numeric"),
