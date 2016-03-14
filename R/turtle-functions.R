@@ -185,9 +185,15 @@ setMethod(
   signature = c(world = "NLworlds", n = "numeric"),
   definition = function(world, n, breed, color) {
 
-    heading <- 0
-    for(i in 2:n){
-      heading <- c(heading, heading[i - 1] + 360 / n)
+#     heading <- 0
+#     for(i in 2:n){
+#       heading <- c(heading, heading[i - 1] + 360 / n)
+#     }
+
+    heading <- numeric(n)
+    heading[1] <- 0
+    if(n>1) {
+      heading[2:n] <- heading[1:(n-1)] + (360 / n)*(1:(n-1))
     }
 
 

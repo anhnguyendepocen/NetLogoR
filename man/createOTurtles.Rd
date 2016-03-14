@@ -48,6 +48,14 @@ points(t1, pch = 16, col = t1@data$color)
 t1 <- fd(world = w1, turtles = t1, step = 1)
 points(t1, pch = 16, col = t1@data$color)
 
+\dontrun{
+# Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
+  library(SpaDES)
+  clearPlot()
+  Plot(w1)
+  Plot(t1, addTo="w1") # automatically uses color column in SpatialPointsDataFrame
+}
+
 
 }
 \author{

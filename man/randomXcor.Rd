@@ -4,24 +4,44 @@
 \name{randomXcor}
 \alias{randomXcor}
 \alias{randomXcor,NLworlds,numeric-method}
+\alias{randomYcor}
 \title{Random xcor}
 \usage{
 randomXcor(world, n)
 
 \S4method{randomXcor}{NLworlds,numeric}(world, n)
+
+randomYcor(world, n)
 }
 \arguments{
 \item{world}{A \code{NLworlds} object.}
 
 \item{n}{Numeric. The number of xcor coordinates to generate.}
+
+\item{world}{A \code{NLworlds} object.}
+
+\item{n}{Numeric. The number of ycor coordinates to generate.}
 }
 \value{
 A vector of xcor coordinate values of length \code{n}.
+
+A vector of ycor coordinate values of length \code{n}.
 }
 \description{
 Reports random xcor coordinate(s) inside the world's extent.
+
+Reports random ycor coordinate(s) inside the world's extent.
 }
 \examples{
+w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtles(world = w1, n = 10,
+                    coords = cbind(xcor = randomXcor(world = w1, n = 10),
+                                   ycor = randomYcor(world = w1, n = 10)))
+w1[] <- runif(25)
+plot(w1)
+points(t1, pch = 16, col = t1@data$color)
+
+
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(world = w1, n = 10,
                     coords = cbind(xcor = randomXcor(world = w1, n = 10), ycor = randomYcor(world = w1, n = 10)))
@@ -33,8 +53,14 @@ points(t1, pch = 16, col = t1@data$color)
 }
 \author{
 Sarah Bauduin
+
+Sarah Bauduin
 }
 \references{
+Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+            Center for Connected Learning and Computer-Based Modeling,
+            Northwestern University. Evanston, IL.
+
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.

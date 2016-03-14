@@ -58,6 +58,13 @@ t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = runif(10, 0, 4), y
 plot(w1)
 points(t1, pch = 16, col = t1@data$color)
 
+\dontrun{
+# Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
+  library(SpaDES)
+  clearPlot()
+  Plot(w1)
+  Plot(t1, addTo="w1") # automatically uses color column in SpatialPointsDataFrame
+}
 
 }
 \author{
