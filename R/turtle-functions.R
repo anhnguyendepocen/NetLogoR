@@ -10,12 +10,14 @@
 #'
 #' @param coords  A matrix (ncol = 2, nrow = n) with the first column \code{xcor}
 #'                and the second column \code{ycor} representing the coordinates
-#'                for the turtles to be created. Given coordinates must be inside
-#'                the world's extent. If missing, turtles are put in the center of
-#'                the world.
+#'                for the turtles to be created. \code{nrow(coords)} must be either
+#'                equal to 1 if all turtles have the same initial position or equal
+#'                to \code{n} if different turtles have different initial position.
+#'                Given coordinates must be inside the world's extent. If missing,
+#'                turtles are put in the center of the world.
 #'
 #' @param heading Numeric value(s) between 0 and 360. Either of length 1 representing
-#'                the heading for all turtles or of length \code{n} if the different
+#'                the heading for all turtles or of length \code{n} if different
 #'                turtles have different headings. If missing, a random heading is
 #'                assigned for each turtle.
 #'
@@ -72,6 +74,10 @@ setMethod(
     if(missing(coords))
       li$coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
                          ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), n))
+
+    if(nrow(li$coords) == 1){
+      li$coords <- cbind(xcor = as.numeric(rep(li$coords[,1], n)), ycor = as.numeric(rep(li$coords[,2], n)))
+    }
 
     if(missing(breed))
       li$breed <- rep("turtle", n)
@@ -1528,3 +1534,140 @@ setMethod(
 )
 
 
+################################################################################
+#' Patch left
+#'
+#' Reports the patch(es) coordinates at a given distance to the left of the turtle(s).
+#'
+#' @param world     A \code{NLworlds} object where the turtles evolve onto.
+#'
+#' @param turtles   A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                  by \code{createOTurtles()} representing the moving turtles.
+#'
+#' @param dist     Numeric. Distance from the turtles. \code{dist} must be a single
+#'                 value or of the length of \code{turtles}.
+#'
+#' @param nDegrees Numeric. The number of degrees the turtle's heading should rotate
+#'                 to the left to locate the patch. Must be of length 1 or of the
+#'                 same length as the \code{turtles}.
+#'
+#' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
+#'                 Default is \code{torus = FALSE}.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#'         column \code{pycor} representing the patches coordinates at \code{dist}
+#'         of the turtles location and \code{nDegrees} to the left of their heading.
+#'         The order of the patches follows the order of the \code{turtles}.
+#'
+#' @details If \code{nDegrees} is negative, the turtle would rotate to the right.
+#'          If \code{dist} is negative, the turtle would move backward.
+#'          If a turtle is located outside of the world's extent, \code{NA} is
+#'          returned for its patch coordinates.
+#'          If \code{torus = FALSE} and the patch at distance \code{dist} and
+#'          heading \code{nDregrees} to the left of the turtles is outside the
+#'          world's extent, \code{NA} is returned. If \code{torus = TRUE}, the
+#'          patch coordinates from the wrapped world are returned.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' patchLeft(world = w1, turtles = t1, dist = 2, nDegrees = 90)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname patchLeft
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patchLeft",
+  function(world, turtles, dist, nDegrees, torus = FALSE) {
+    standardGeneric("patchLeft")
+  })
+
+#' @export
+#' @rdname patchLeft
+setMethod(
+  "patchLeft",
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", nDegrees = "numeric"),
+  definition = function(world, turtles, dist, nDegrees, torus) {
+
+    tLeft <- left(turtles = turtles, nDegrees = nDegrees)
+    tFd <- fd(world = world, turtles = tLeft, step = dist, torus = torus)
+    pLeftFd <- patchHere(world = world, turtles = tFd)
+
+    return(pLeftFd)
+  }
+)
+
+
+################################################################################
+#' Patch right
+#'
+#' Reports the patch(es) coordinates at a given distance to the right of the turtle(s).
+#'
+#' @param world     A \code{NLworlds} object where the turtles evolve onto.
+#'
+#' @param turtles   A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                  by \code{createOTurtles()} representing the moving turtles.
+#'
+#' @param dist     Numeric. Distance from the turtles. \code{dist} must be a single
+#'                 value or of the length of \code{turtles}.
+#'
+#' @param nDegrees Numeric. The number of degrees the turtle's heading should rotate
+#'                 to the right to locate the patch. Must be of length 1 or of the
+#'                 same length as the \code{turtles}.
+#'
+#' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
+#'                 Default is \code{torus = FALSE}.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#'         column \code{pycor} representing the patches coordinates at \code{dist}
+#'         of the turtles location and \code{nDegrees} to the right of their heading.
+#'         The order of the patches follows the order of the \code{turtles}.
+#'
+#' @details If \code{nDegrees} is negative, the turtle would rotate to the left.
+#'          If \code{dist} is negative, the turtle would move backward.
+#'          If a turtle is located outside of the world's extent, \code{NA} is
+#'          returned for its patch coordinates.
+#'          If \code{torus = FALSE} and the patch at distance \code{dist} and
+#'          heading \code{nDregrees} to the right of the turtles is outside the
+#'          world's extent, \code{NA} is returned. If \code{torus = TRUE}, the
+#'          patch coordinates from the wrapped world are returned.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' patchRight(world = w1, turtles = t1, dist = 2, nDegrees = 90)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname patchRight
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "patchRight",
+  function(world, turtles, dist, nDegrees, torus = FALSE) {
+    standardGeneric("patchRight")
+  })
+
+#' @export
+#' @rdname patchRight
+setMethod(
+  "patchRight",
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", nDegrees = "numeric"),
+  definition = function(world, turtles, dist, nDegrees, torus) {
+    patchLeft(world = world, turtles = turtles, dist = dist, nDegrees = -nDegrees, torus = torus)
+  }
+)

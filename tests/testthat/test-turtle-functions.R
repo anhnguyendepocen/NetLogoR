@@ -37,6 +37,9 @@ test_that("createTurtles works with different missing inputs",{
   t2 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)))
   expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t2@coords)
 
+  t2 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = 0, ycor = 0))
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t2@coords)
+
   t3 <- createTurtles(world = ws, n = 10, heading = 0)
   expect_identical(rep(0, 10), t3@data$heading)
   t4 <- createTurtles(world = ws, n = 10, heading = 1:10)
@@ -487,4 +490,27 @@ test_that("patchHere works",{
   pTurtles <- patchHere(world = w1, turtles = t2)
   expect_identical(pTurtles, cbind(pxcor = c(4, NA, NA), pycor = c(4, NA, NA)))
   expect_identical(pTurtles, patch(world = w1, xcor = 4:6, ycor = 4:6, duplicate = TRUE, out = TRUE))
+})
+
+test_that("patchLeft and patchRight work",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(world = w1, n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = 0)
+  pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = FALSE)
+  expect_identical(pLeft, cbind(pxcor = c(NA, 0, 1, 2, NA), pycor = c(NA, 2, 3, 4, NA)))
+  pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = TRUE)
+  expect_identical(pLeft, cbind(pxcor = c(4, 0, 1, 2, 3), pycor = c(1, 2, 3, 4, 0)))
+
+  pRight <- patchRight(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = FALSE)
+  expect_identical(pRight, cbind(pxcor = c(1, 2, 3, 4, NA), pycor = c(1, 2, 3, 4, NA)))
+  pRight <- patchRight(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = TRUE)
+  expect_identical(pRight, cbind(pxcor = c(1, 2, 3, 4, 0), pycor = c(1, 2, 3, 4, 0)))
+
+  pRight <- patchRight(world = w1, turtles = t1, dist = 1, nDegrees = -45, torus = TRUE)
+  expect_identical(pLeft, pRight)
+
+  t2 <- createTurtles(world = w1, n = 2, coords = cbind(xcor = 2, ycor = 2), heading = 180)
+  pLeft <- patchLeft(world = w1, turtles = t2, dist = c(2, 0.8), nDegrees = c(90, -90))
+  expect_identical(pLeft, cbind(pxcor = c(4, 1), pycor = c(2, 2)))
+  pRight <- patchRight(world = w1, turtles = t2, dist = c(2, 0.8), nDegrees = c(90, -90))
+  expect_identical(pRight, cbind(pxcor = c(0, 3), pycor = c(2, 2)))
 })

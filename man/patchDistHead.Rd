@@ -52,7 +52,8 @@ If \code{torus = FALSE} and the patch at distance \code{dist} and
          wrapped world are returned.
          If \code{agents} are turtles, their heading is not taken into account; the
          given absolute heading \code{head} is used. To find a patch at certain
-         distance from a turtle with the turtle's heading, look at \code{pacthAhead()}.
+         distance from a turtle with the turtle's heading, look at \code{pacthAhead()},
+         \code{pacthLeft()} or \code{pacthRight()}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

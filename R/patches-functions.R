@@ -708,7 +708,8 @@ setMethod(
 #'          wrapped world are returned.
 #'          If \code{agents} are turtles, their heading is not taken into account; the
 #'          given absolute heading \code{head} is used. To find a patch at certain
-#'          distance from a turtle with the turtle's heading, look at \code{pacthAhead()}.
+#'          distance from a turtle with the turtle's heading, look at \code{pacthAhead()},
+#'          \code{pacthLeft()} or \code{pacthRight()}.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,

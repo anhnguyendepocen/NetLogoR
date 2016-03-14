@@ -19,12 +19,14 @@ will evolve.}
 
 \item{coords}{A matrix (ncol = 2, nrow = n) with the first column \code{xcor}
 and the second column \code{ycor} representing the coordinates
-for the turtles to be created. Given coordinates must be inside
-the world's extent. If missing, turtles are put in the center of
-the world.}
+for the turtles to be created. \code{nrow(coords)} must be either
+equal to 1 if all turtles have the same initial position or equal
+to \code{n} if different turtles have different initial position.
+Given coordinates must be inside the world's extent. If missing,
+turtles are put in the center of the world.}
 
 \item{heading}{Numeric value(s) between 0 and 360. Either of length 1 representing
-the heading for all turtles or of length \code{n} if the different
+the heading for all turtles or of length \code{n} if different
 turtles have different headings. If missing, a random heading is
 assigned for each turtle.}
 
