@@ -322,7 +322,7 @@ setMethod(
 #'
 #' @export
 #' @docType methods
-#' @rdname fd
+#' @rdname bk
 #'
 #' @author Sarah Bauduin
 #'
