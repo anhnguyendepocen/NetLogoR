@@ -53,7 +53,7 @@ points(t1, pch = 16, col = t1@data$color)
   library(SpaDES)
   clearPlot()
   Plot(w1)
-  Plot(t1, addTo="w1") # automatically uses color column in SpatialPointsDataFrame
+  Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 }
 
 

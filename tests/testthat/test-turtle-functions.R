@@ -103,15 +103,20 @@ test_that("createOTurtles works",{
   expect_equivalent(t1@data$prevX, rep(NA, 10))
   expect_equivalent(t1@data$prevY, rep(NA, 10))
   expect_equivalent(length(t1), 10)
+
+  # Create one turtle
+  t7 <- createOTurtles(world = w1, n = 1)
+  expect_identical(t7@data$heading, 0)
+  expect_identical(cbind(xcor = 2, ycor = 2), t7@coords)
 })
 
 test_that("fd works",{
- w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 90)
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   t2 <- fd(world = w1, turtles = t1, step = 1)
   expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
   expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
-  t3 <- fd(world = w1, turtles = t1, step = 5, torus = FALSE)
+  t3 <- fd(world = w1, turtles = t1, step = 5, torus = FALSE, out = TRUE)
   t4 <- fd(world = w1, turtles = t1, step = 5, torus = TRUE)
   expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
   expect_identical(t1@coords, t4@coords)
@@ -134,6 +139,24 @@ test_that("fd works",{
   expect_identical(t1@coords, t4@coords)
   t5 <- fd(world = ws, turtles = t1, step = -1, torus = TRUE)
   expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
+
+  # Argument out
+  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t3out <- fd(world = w1, turtles = t1, step = 5, torus = FALSE, out = FALSE)
+  expect_identical(t3out@coords, t1@coords)
+  t1 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t3out <- fd(world = ws, turtles = t1, step = 5, torus = FALSE, out = FALSE)
+  expect_identical(t3out@coords, t1@coords)
+
+  t6 <- createTurtles(world = w1, n = 2, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t7.1 <- fd(world = w1, turtles = t6, step = c(5, 1), torus = FALSE, out = TRUE)
+  t7.2 <- fd(world = w1, turtles = t6, step = c(5, 1), torus = FALSE, out = FALSE)
+  t7.3 <- fd(world = w1, turtles = t6, step = c(5, 1), torus = TRUE, out = TRUE)
+  t7.4 <- fd(world = w1, turtles = t6, step = c(5, 1), torus = TRUE, out = FALSE)
+  expect_identical(t7.1@coords, cbind(xcor = c(5, 1), ycor = c(0, 0)))
+  expect_identical(t7.2@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
+  expect_identical(t7.3@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
+  expect_identical(t7.4@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
 })
 
 test_that("bk works",{
@@ -166,6 +189,23 @@ test_that("bk works",{
   t5 <- bk(world = ws, turtles = t1, step = 1, torus = TRUE)
   expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
 
+  # Argument out
+  t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t3out <- bk(world = w1, turtles = t1, step = -5, torus = FALSE, out = FALSE)
+  expect_identical(t3out@coords, t1@coords)
+  t1 <- createTurtles(world = ws, n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t3out <- bk(world = ws, turtles = t1, step = -5, torus = FALSE, out = FALSE)
+  expect_identical(t3out@coords, t1@coords)
+
+  t6 <- createTurtles(world = w1, n = 2, coords = cbind(xcor = 4, ycor = 0), heading = 90)
+  t7.1 <- bk(world = w1, turtles = t6, step = c(5, 1), torus = FALSE, out = TRUE)
+  t7.2 <- bk(world = w1, turtles = t6, step = c(5, 1), torus = FALSE, out = FALSE)
+  t7.3 <- bk(world = w1, turtles = t6, step = c(5, 1), torus = TRUE, out = TRUE)
+  t7.4 <- bk(world = w1, turtles = t6, step = c(5, 1), torus = TRUE, out = FALSE)
+  expect_identical(t7.1@coords, cbind(xcor = c(-1, 3), ycor = c(0, 0)))
+  expect_identical(t7.2@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
+  expect_identical(t7.3@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
+  expect_identical(t7.4@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
 })
 
 test_that("home works",{
@@ -513,4 +553,46 @@ test_that("patchLeft and patchRight work",{
   expect_identical(pLeft, cbind(pxcor = c(4, 1), pycor = c(2, 2)))
   pRight <- patchRight(world = w1, turtles = t2, dist = c(2, 0.8), nDegrees = c(90, -90))
   expect_identical(pRight, cbind(pxcor = c(0, 3), pycor = c(2, 2)))
+})
+
+test_that("setXY work",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(world = w1, n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
+  t2 <- setXY(world = w1, turtles = t1, xcor = 1, ycor = 1, torus = FALSE)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(t2@coords, cbind(xcor = rep(1, 5), ycor = rep(1, 5)))
+  t3 <- setXY(world = w1, turtles = t1, xcor = c(1, 1, 1, 1, 5), ycor = rep(1, 5), torus = TRUE)
+  expect_identical(t1@coords, cbind(xcor = t3@data$prevX, ycor = t3@data$prevY))
+  expect_identical(t3@coords, cbind(xcor = c(1, 1, 1, 1, 0), ycor = rep(1, 5)))
+})
+
+test_that("sprout work",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- sprout(world = w1, patches = cbind(pxcor = 2, pycor = 2), n = 3)
+  t2 <- sprout(world = w1, patches = cbind(pxcor = c(1,2,3), pycor = c(1,2,3)), n = 3)
+  t3 <- sprout(world = w1, patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
+  t4 <- sprout(world = w1, patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1)
+  t5 <- sprout(world = w1, patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
+               breed = "wolf", heading = c(0, 180))
+  expect_identical(t1@coords, cbind(xcor = c(2, 2, 2), ycor = c(2, 2, 2)))
+  expect_identical(t2@coords, cbind(xcor = c(1, 2, 3), ycor = c(1, 2, 3)))
+  expect_identical(t3@coords, cbind(xcor = c(2, 2, 2, 3, 3, 3), ycor = c(2, 2, 2, 3, 3, 3)))
+  expect_identical(t4@coords, cbind(xcor = c(2, 2, 2, 3, 2), ycor = c(2, 2, 2, 0, 3)))
+  expect_identical(t4@coords, t5@coords)
+  expect_equivalent(length(unique(t3@data$who)), 6)
+  expect_equivalent(length(unique(t4@data$color)), 5)
+  expect_identical(t5@data$breed, c(t1@data$breed, "wolf", "wolf"))
+})
+
+test_that("inspect work",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createOTurtles(world = w1, n = 4)
+  inspect_t1.1 <- inspect(turtles = t1, who = 1)
+  df_t1.1 <- cbind.data.frame(who = 1, heading = 90, prevX = NA, prevY = NA, xcor = 2, ycor = 2)
+  expect_equivalent(df_t1.1, inspect_t1.1[, c("who", "heading", "prevX", "prevY", "xcor", "ycor")]) # color removed b/c unknown
+
+  inspect_t1.12 <- inspect(turtles = t1, who = c(1,2))
+  df_t1.12 <- cbind.data.frame(who = c(1, 2), heading = c(90, 180), prevX = c(NA, NA),
+                              prevY = c(NA, NA), xcor = c(2, 2), ycor = c(2, 2))
+  expect_equivalent(df_t1.12, inspect_t1.12[, c("who", "heading", "prevX", "prevY", "xcor", "ycor")]) # color removed b/c unknown
 })
