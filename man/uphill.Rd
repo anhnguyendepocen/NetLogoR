@@ -58,8 +58,8 @@ The turtles face the chosen patches and then move to their center. Both
 \examples{
 w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 w1[] <- runif(100)
-t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-                                                       ycor = randomYcor(world = w1, n = 10)))
+t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+                                           ycor = randomYcor(world = w1, n = 10)))
 plot(w1)
 points(t1, pch = 16, col = t1@data$color)
 t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)

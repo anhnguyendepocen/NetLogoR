@@ -3,18 +3,19 @@
 \docType{methods}
 \name{createTurtles}
 \alias{createTurtles}
-\alias{createTurtles,NLworlds,numeric-method}
+\alias{createTurtles,numeric,matrix,missing-method}
+\alias{createTurtles,numeric,missing,NLworlds-method}
 \title{Create turtles}
 \usage{
-createTurtles(world, n, coords, heading, breed, color)
+createTurtles(n, coords, world, heading, breed, color)
 
-\S4method{createTurtles}{NLworlds,numeric}(world, n, coords, heading, breed,
-  color)
+\S4method{createTurtles}{numeric,matrix,missing}(n, coords, world, heading,
+  breed, color)
+
+\S4method{createTurtles}{numeric,missing,NLworlds}(n, coords, world, heading,
+  breed, color)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object, representing the world in which the turtles
-will evolve.}
-
 \item{n}{Integer. The number of new turtles to create.}
 
 \item{coords}{A matrix (ncol = 2, nrow = n) with the first column \code{xcor}
@@ -23,12 +24,16 @@ for the turtles to be created. \code{nrow(coords)} must be either
 equal to 1 if all turtles have the same initial position or equal
 to \code{n} if different turtles have different initial position.
 Given coordinates must be inside the world's extent. If missing,
-turtles are put in the center of the world.}
+turtles are put in the center of the \code{world}.}
+
+\item{world}{A \code{NLworlds} object, representing the world in which the turtles
+will evolve. If \code{coords} are provided, \code{world} should
+not be provided.}
 
 \item{heading}{Numeric value(s) between 0 and 360. Either of length 1 representing
 the heading for all turtles or of length \code{n} if different
 turtles have different headings. If missing, a random heading is
-assigned for each turtle.}
+assigned to each turtle.}
 
 \item{breed}{String of characters. Either of length 1 representing the breed
 for all turtles or of length \code{n} if the different turtles have
@@ -54,17 +59,13 @@ The identity of the turtles is defined by their "who" number. This
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- runif(25)
-t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
-plot(w1)
-points(t1, pch = 16, col = t1@data$color)
+t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
 
-\dontrun{
-# Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
-  library(SpaDES)
-  clearPlot()
-  Plot(w1)
-  Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
-}
+library(SpaDES)
+clearPlot()
+Plot(w1)
+Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
+
 
 }
 \author{

@@ -40,7 +40,7 @@ The created turtle(s) inherit(s) of all the data from the parent turtle,
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(world = w1, n = 10)
+t1 <- createTurtles(n = 10, world = w1)
 length(t1)
 t1 <- hatch(turtles = t1, who = 0, n = 2)
 length(t1)

@@ -20,8 +20,8 @@ Reports random ycor coordinate(s) inside the world's extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(world = w1, n = 10,
-                    coords = cbind(xcor = randomXcor(world = w1, n = 10), ycor = randomYcor(world = w1, n = 10)))
+t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+                                           ycor = randomYcor(world = w1, n = 10)))
 w1[] <- runif(25)
 plot(w1)
 points(t1, pch = 16, col = t1@data$color)

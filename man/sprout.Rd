@@ -3,32 +3,28 @@
 \docType{methods}
 \name{sprout}
 \alias{sprout}
-\alias{sprout,NLworlds,matrix,numeric-method}
+\alias{sprout,numeric,matrix-method}
 \title{Sprout}
 \usage{
-sprout(world, patches, n, turtles, breed, heading, color)
+sprout(n, patches, turtles, breed, heading, color)
 
-\S4method{sprout}{NLworlds,matrix,numeric}(world, patches, n, turtles, breed,
-  heading, color)
+\S4method{sprout}{numeric,matrix}(n, patches, turtles, breed, heading, color)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object where the turtles are created on.}
+\item{n}{Integer. Number of new turtle(s) to create.}
 
 \item{patches}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
 patch(es) on which the new turtles are created. \code{nrow(patches)}
 must be equal to 1 or to \code{n}.}
 
-\item{n}{Integer. Number of new turtle(s) to create.}
-
 \item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the existing turtles
-in the world.}
+by \code{createOTurtles()} representing existing turtles.}
 
 \item{...}{Additional arguments (see details).}
 }
 \value{
-A SpatialPointsDataFrame with the created turtles.
+A SpatialPointsDataFrame with the new created turtles.
 }
 \description{
 Create new turtles on specific patch(es).
@@ -45,9 +41,8 @@ The additional arguments to be passed on are some of the function
          starts at 0.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- sprout(world = w1, patches = cbind(pxcor = 2, pycor = 2), n = 3)
-t2 <- sprout(world = w1, patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
+t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)
+t2 <- sprout(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
 
 
 }

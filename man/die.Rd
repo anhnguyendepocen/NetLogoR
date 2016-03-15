@@ -27,7 +27,7 @@ The who numbers of the other turtles are maintained.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(world = w1, n = 10)
+t1 <- createTurtles(n = 10, world = w1)
 length(t1)
 t1 <- die(turtles = t1, who = c(2, 3, 4))
 length(t1)

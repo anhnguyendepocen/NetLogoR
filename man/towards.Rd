@@ -63,7 +63,7 @@ If \code{torus = TRUE} and the distance from one agent \code{from} to
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 towards(world = w1, from = patches(world = w1), to = cbind(x = 0, y = 0))
-t1 <- createTurtles(world = w1, n = 10)
+t1 <- createTurtles(n = 10, world = w1)
 towards(world = w1, from = t1, to = cbind(x = 0, y = 0))
 
 

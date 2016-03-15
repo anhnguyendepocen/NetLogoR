@@ -28,10 +28,10 @@ Rotate the turtles's heading to the right.
 If \code{nDegrees} is negative, the turtle rotate to the left.
 }
 \examples{
-t1 <- createTurtles(world = w1, n = 10)
-t1@data
+t1 <- createTurtles(n = 10, world = w1)
+t1@data$heading
 t1 <- right(turtles = t1, nDegrees = 180)
-t1@data
+t1@data$heading
 
 
 }

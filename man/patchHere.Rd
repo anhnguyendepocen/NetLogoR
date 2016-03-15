@@ -30,8 +30,8 @@ If a turtle is located outside of the world's extent, \code{NA} is returned
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-                                                       ycor = randomYcor(world = w1, n = 10)))
+t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+                                           ycor = randomYcor(world = w1, n = 10)))
 patchHere(world = w1, turtles = t1)
 
 

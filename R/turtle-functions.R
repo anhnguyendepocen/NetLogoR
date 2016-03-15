@@ -3,9 +3,6 @@
 #'
 #' Create \code{n} new turtles with a set of defined variables.
 #'
-#' @param world   A \code{NLworld*} object, representing the world in which the turtles
-#'                will evolve.
-#'
 #' @param n       Integer. The number of new turtles to create.
 #'
 #' @param coords  A matrix (ncol = 2, nrow = n) with the first column \code{xcor}
@@ -14,12 +11,16 @@
 #'                equal to 1 if all turtles have the same initial position or equal
 #'                to \code{n} if different turtles have different initial position.
 #'                Given coordinates must be inside the world's extent. If missing,
-#'                turtles are put in the center of the world.
+#'                turtles are put in the center of the \code{world}.
+#'
+#' @param world   A \code{NLworlds} object, representing the world in which the turtles
+#'                will evolve. If \code{coords} are provided, \code{world} should
+#'                not be provided.
 #'
 #' @param heading Numeric value(s) between 0 and 360. Either of length 1 representing
 #'                the heading for all turtles or of length \code{n} if different
 #'                turtles have different headings. If missing, a random heading is
-#'                assigned for each turtle.
+#'                assigned to each turtle.
 #'
 #' @param breed   String of characters. Either of length 1 representing the breed
 #'                for all turtles or of length \code{n} if the different turtles have
@@ -44,17 +45,13 @@
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(25)
-#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
 #'
-#' \dontrun{
-#' # Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
-#'   library(SpaDES)
-#'   clearPlot()
-#'   Plot(w1)
-#'   Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
-#' }
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
+#'
 #'
 #' @export
 #' @docType methods
@@ -64,7 +61,7 @@
 #'
 setGeneric(
   "createTurtles",
-  function(world, n, coords, heading, breed, color) {
+  function(n, coords, world, heading, breed, color) {
     standardGeneric("createTurtles")
   })
 
@@ -72,25 +69,14 @@ setGeneric(
 #' @rdname createTurtles
 setMethod(
   "createTurtles",
-  signature = c(world = "NLworlds", n = "numeric"),
-  definition = function(world, n, coords, heading, breed, color) {
+  signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
+  definition = function(n, coords, world, heading, breed, color) {
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
     names(li) <- names(match.call())[-1]
 
-    if(missing(coords))
-      li$coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
-                         ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), n))
-
     if(nrow(li$coords) == 1){
       li$coords <- cbind(xcor = as.numeric(rep(li$coords[,1], n)), ycor = as.numeric(rep(li$coords[,2], n)))
-    }
-
-    if(missing(breed))
-      li$breed <- rep("turtle", n)
-
-    if(length(li$breed) == 1){
-      li$breed <- rep(li$breed, n)
     }
 
     if(missing(heading))
@@ -98,6 +84,13 @@ setMethod(
 
     if(length(li$heading) == 1){
       li$heading <- rep(li$heading, n)
+    }
+
+    if(missing(breed))
+      li$breed <- rep("turtle", n)
+
+    if(length(li$breed) == 1){
+      li$breed <- rep(li$breed, n)
     }
 
     if(missing(color))
@@ -115,6 +108,40 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname createTurtles
+setMethod(
+  "createTurtles",
+  signature = c("numeric", "missing", "NLworlds", "ANY", "ANY", "ANY"),
+  definition = function(n, coords, world, heading, breed, color) {
+
+    li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
+    names(li) <- names(match.call())[-1]
+
+    if(missing(heading))
+      li$heading <- runif(n = n, min = 0, max = 360)
+
+    if(length(li$heading) == 1){
+      li$heading <- rep(li$heading, n)
+    }
+
+    if(missing(breed))
+      li$breed <- rep("turtle", n)
+
+    if(length(li$breed) == 1){
+      li$breed <- rep(li$breed, n)
+    }
+
+    if(missing(color))
+      li$color <- rainbow(n)
+
+    coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
+                    ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), n))
+
+    createTurtles(n = n, coords = coords, heading = li$heading, breed = li$breed, color = li$color)
+  }
+)
+
 
 ################################################################################
 #' Create ordered turtles
@@ -122,10 +149,10 @@ setMethod(
 #' Create \code{n} new turtles at the center of the world with their headings evenly
 #' distributed.
 #'
-#' @param world   A \code{NLworld*} object, representing the world in which the turtles
-#'                will evolve.
-#'
 #' @param n       Integer. The number of new turtles to create.
+#'
+#' @param world   A \code{NLworlds} object, representing the world in which the turtles
+#'                will evolve.
 #'
 #' @param breed   String of characters. Either of length 1 representing the breed
 #'                for all turtles or of length \code{n} if the different turtles have
@@ -151,7 +178,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(25)
-#' t1 <- createOTurtles(world = w1, n = 10)
+#' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- fd(world = w1, turtles = t1, step = 1)
@@ -174,7 +201,7 @@ setMethod(
 #'
 setGeneric(
   "createOTurtles",
-  function(world, n, breed, color) {
+  function(n, world, breed, color) {
     standardGeneric("createOTurtles")
   })
 
@@ -182,13 +209,13 @@ setGeneric(
 #' @rdname createOTurtles
 setMethod(
   "createOTurtles",
-  signature = c(world = "NLworlds", n = "numeric"),
-  definition = function(world, n, breed, color) {
+  signature = c(n = "numeric", world = "NLworlds"),
+  definition = function(n, world, breed, color) {
 
     heading <- numeric(n)
     heading[1] <- 0
-    if(n>1) {
-      heading[2:n] <- heading[1:(n-1)] + (360 / n)*(1:(n-1))
+    if(n > 1) {
+      heading[2:n] <- heading[1:(n-1)] + (360 / n) * (1:(n - 1))
     }
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
@@ -204,7 +231,7 @@ setMethod(
     if(missing(color))
       li$color <- rainbow(n)
 
-    createTurtles(world = world, n = n, heading = heading, breed = li$breed, color = li$color)
+    createTurtles(n = n, world = world, heading = heading, breed = li$breed, color = li$color)
   }
 )
 
@@ -432,7 +459,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(25)
-#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- home(world = w1, turtles = t1, home = "pCorner")
@@ -639,7 +666,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(world = w1, n = 10)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' length(t1)
 #' t1 <- die(turtles = t1, who = c(2, 3, 4))
 #' length(t1)
@@ -700,7 +727,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(world = w1, n = 10)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' length(t1)
 #' t1 <- hatch(turtles = t1, who = 0, n = 2)
 #' length(t1)
@@ -778,7 +805,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(world = w1, n = 10)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' canMove(world = w1, turtles = t1, step = 1:10)
 #'
 #'
@@ -825,9 +852,8 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(world = w1, n = 10,
-#'                     coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                    ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                           ycor = randomYcor(world = w1, n = 10)))
 #' w1[] <- runif(25)
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
@@ -876,8 +902,8 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(world = w1, n = 10,
-#'                     coords = cbind(xcor = randomXcor(world = w1, n = 10), ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                            ycor = randomYcor(world = w1, n = 10)))
 #' w1[] <- runif(25)
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
@@ -952,7 +978,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' towards(world = w1, from = patches(world = w1), to = cbind(x = 0, y = 0))
-#' t1 <- createTurtles(world = w1, n = 10)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' towards(world = w1, from = t1, to = cbind(x = 0, y = 0))
 #'
 #'
@@ -1097,8 +1123,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(25)
-#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(pxcor = randomXcor(world = w1, n = 10),
-#'                                                        pycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = cbind(pxcor = randomXcor(world = w1, n = 10),
+#'                                            pycor = randomYcor(world = w1, n = 10)))
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
@@ -1175,10 +1201,10 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- createTurtles(world = w1, n = 10)
-#' t1@data
+#' t1 <- createTurtles(n = 10, world = w1)
+#' t1@data$heading
 #' t1 <- left(turtles = t1, nDegrees = 180)
-#' t1@data
+#' t1@data$heading
 #'
 #'
 #' @export
@@ -1232,10 +1258,10 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- createTurtles(world = w1, n = 10)
-#' t1@data
+#' t1 <- createTurtles(n = 10, world = w1)
+#' t1@data$heading
 #' t1 <- right(turtles = t1, nDegrees = 180)
-#' t1@data
+#' t1@data$heading
 #'
 #'
 #' @export
@@ -1307,8 +1333,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                            ycor = randomYcor(world = w1, n = 10)))
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
@@ -1417,8 +1443,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                            ycor = randomYcor(world = w1, n = 10)))
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
@@ -1497,8 +1523,8 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                            ycor = randomYcor(world = w1, n = 10)))
 #' patchAhead(world = w1, turtles = t1, dist = 1)
 #'
 #'
@@ -1554,8 +1580,8 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                                        ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                            ycor = randomYcor(world = w1, n = 10)))
 #' patchHere(world = w1, turtles = t1)
 #'
 #'
@@ -1625,7 +1651,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchLeft(world = w1, turtles = t1, dist = 2, nDegrees = 90)
 #'
 #'
@@ -1697,7 +1723,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchRight(world = w1, turtles = t1, dist = 2, nDegrees = 90)
 #'
 #'
@@ -1759,8 +1785,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(world = w1, n = 5, coords = cbind(xcor = randomXcor(world = w1, n = 5),
-#'                                                       ycor = randomYcor(world = w1, n = 5)))
+#' t1 <- createTurtles(n = 5, coords = cbind(xcor = randomXcor(world = w1, n = 5),
+#'                                           ycor = randomYcor(world = w1, n = 5)))
 #' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
@@ -1817,22 +1843,19 @@ setMethod(
 #'
 #' Create new turtles on specific patch(es).
 #'
-#' @param world   A \code{NLworlds} object where the turtles are created on.
+#' @param n       Integer. Number of new turtle(s) to create.
 #'
 #' @param patches A matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
 #'                patch(es) on which the new turtles are created. \code{nrow(patches)}
 #'                must be equal to 1 or to \code{n}.
 #'
-#' @param n       Integer. Number of new turtle(s) to create.
-#'
 #' @param ...     Additional arguments (see details).
 #'
 #' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the existing turtles
-#'                in the world.
+#'                by \code{createOTurtles()} representing existing turtles.
 #'
-#' @return A SpatialPointsDataFrame with the created turtles.
+#' @return A SpatialPointsDataFrame with the new created turtles.
 #'
 #' @details The additional arguments to be passed on are some of the function
 #'          \code{createTurtles()} which are: heading, breed and color. If not
@@ -1849,9 +1872,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- sprout(world = w1, patches = cbind(pxcor = 2, pycor = 2), n = 3)
-#' t2 <- sprout(world = w1, patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
+#' t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)
+#' t2 <- sprout(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
 #'
 #'
 #' @export
@@ -1862,7 +1884,7 @@ setMethod(
 #'
 setGeneric(
   "sprout",
-  function(world, patches, n, turtles, breed, heading, color) {
+  function(n, patches, turtles, breed, heading, color) {
 
     standardGeneric("sprout")
   })
@@ -1871,8 +1893,8 @@ setGeneric(
 #' @rdname sprout
 setMethod(
   "sprout",
-  signature = c(world = "NLworlds", patches = "matrix", n = "numeric"),
-  definition = function(world, patches, n, turtles, breed, heading, color) {
+  signature = c(n = "numeric", patches = "matrix"),
+  definition = function(n, patches, turtles, breed, heading, color) {
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
     names(li) <- names(match.call())[-1]
@@ -1899,7 +1921,7 @@ setMethod(
     if(missing(color))
       li$color <- rainbow(n)
 
-    newTurtles <- createTurtles(world = world, n = n, coords = li$patches, heading = li$heading, breed = li$breed, color = li$color)
+    newTurtles <- createTurtles(n = n, coords = li$patches, heading = li$heading, breed = li$breed, color = li$color)
 
     if(missing(turtles)){
       return(newTurtles)

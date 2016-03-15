@@ -3,18 +3,18 @@
 \docType{methods}
 \name{createOTurtles}
 \alias{createOTurtles}
-\alias{createOTurtles,NLworlds,numeric-method}
+\alias{createOTurtles,numeric,NLworlds-method}
 \title{Create ordered turtles}
 \usage{
-createOTurtles(world, n, breed, color)
+createOTurtles(n, world, breed, color)
 
-\S4method{createOTurtles}{NLworlds,numeric}(world, n, breed, color)
+\S4method{createOTurtles}{numeric,NLworlds}(n, world, breed, color)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object, representing the world in which the turtles
-will evolve.}
-
 \item{n}{Integer. The number of new turtles to create.}
+
+\item{world}{A \code{NLworlds} object, representing the world in which the turtles
+will evolve.}
 
 \item{breed}{String of characters. Either of length 1 representing the breed
 for all turtles or of length \code{n} if the different turtles have
@@ -42,7 +42,7 @@ The identity of the turtles is defined by their "who" number. This
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- runif(25)
-t1 <- createOTurtles(world = w1, n = 10)
+t1 <- createOTurtles(n = 10, world = w1)
 plot(w1)
 points(t1, pch = 16, col = t1@data$color)
 t1 <- fd(world = w1, turtles = t1, step = 1)

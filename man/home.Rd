@@ -37,7 +37,7 @@ Move the turtles back "home".
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- runif(25)
-t1 <- createTurtles(world = w1, n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
 plot(w1)
 points(t1, pch = 16, col = t1@data$color)
 t1 <- home(world = w1, turtles = t1, home = "pCorner")

@@ -113,7 +113,7 @@ test_that("distance works for patches", {
 
 test_that("distance works with turtles", {
   w1 <- createNLworld(0, 9, 0, 9)
-  t1 <- createTurtles(world = w1, n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
+  t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
   # Patches to turtles
   distPT <- NLdist(world = w1, from = cbind(pxcor = 2, pycor = 3), to = t1)
   expect_identical(distPT, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
@@ -199,7 +199,7 @@ test_that("neighbors works with patches", {
 
 test_that("neighbors works with turtles", {
   w1 <- createNLworld(0, 9, 0, 9)
-  t1 <- createTurtles(world = w1, n = 4, coords = cbind(xcor = c(0, 9, 0, 9), ycor = c(9, 9, 0, 0)))
+  t1 <- createTurtles(n = 4, coords = cbind(xcor = c(0, 9, 0, 9), ycor = c(9, 9, 0, 0)))
   n4 <- neighbors(world = w1, agents = t1, nNeighbors = 4)
   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
   n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
@@ -223,7 +223,7 @@ test_that("neighbors works with turtles", {
   expect_identical(n8[[2]], n82)
 
   # With torus = TRUE
-  t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 0.2, ycor = 0.3))
+  t1 <- createTurtles(n = 1, coords = cbind(xcor = 0.2, ycor = 0.3))
   nCorner <- neighbors(world = w1, agents = t1, nNeighbors = 8, torus = TRUE)
   expect_equivalent(nrow(nCorner[[1]]), 8)
   expect_equivalent(sum(nCorner[[1]][,"pxcor"]), 3*9+3*1+2*0)
@@ -309,7 +309,7 @@ test_that("patchAt works with patches", {
 
 test_that("patchAt works with turtles", {
   w1 <- createNLworld(0, 9, 0, 9)
-  t1 <- createTurtles(world = w1, n = 3, coords = cbind(xcor = c(0.2, 0.9, 3.1), ycor = c(-0.4, 1, 5.4)))
+  t1 <- createTurtles(n = 3, coords = cbind(xcor = c(0.2, 0.9, 3.1), ycor = c(-0.4, 1, 5.4)))
   p1 <- patchAt(world = w1, agents = t1, dx = 1, dy = 2)
   expect_identical(p1, patch(w1, c(0+1, 1+1, 3+1), c(0+2, 1+2, 5+2)))
   p1 <- patchAt(world = w1, agents = t1, dx = c(1,3,5), dy = c(2, 4, 6))
@@ -329,7 +329,7 @@ test_that("patchAt works with turtles", {
   expect_identical(p1, patch(ws, c(1, 4, 8), c(2, 5, 1)))
 
   w1 <- createNLworld(-5, 5, -5, 5)
-  t2 <- createTurtles(world = w1, n = 3, coords = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)))
+  t2 <- createTurtles(n = 3, coords = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)))
   p1 <- patchAt(world = w1, agents = t2, dx = -4, dy = 1)
   expect_identical(p1, patch(w1, c(-4, -6, -1), c(1, 2, 6), out = TRUE, duplicate = TRUE))
 })
@@ -367,7 +367,7 @@ test_that("patchDistHead works with patches", {
 
 test_that("patchDistHead works with turtles", {
   w1 <- createNLworld(0, 9, 0, 9)
-  t1 <- createTurtles(world = w1, n = 3, coords = cbind(xcor = c(0.1, 0.9, 3), ycor = c(-0.4, 1, 5.2)))
+  t1 <- createTurtles(n = 3, coords = cbind(xcor = c(0.1, 0.9, 3), ycor = c(-0.4, 1, 5.2)))
   p1 <- patchDistHead(world = w1, agents = t1, dist = 3, head = 45)
   expect_identical(p1, patch(w1, c(2, 3, 5), c(2, 3, 7)))
   p1 <- patchDistHead(world = w1, agents = t1, dist = 3, head = -45, torus = TRUE)
@@ -391,7 +391,7 @@ test_that("patchDistHead works with turtles", {
   expect_identical(p1, patch(ws, c(-2, -1, 1), c(-2, -1, 7), duplicate = TRUE, out = TRUE))
 
   w1 <- createNLworld(-5, 5, -5, 5)
-  t2 <- createTurtles(world = w1, n = 3, coords = cbind(pxcor = c(-0.1, -2.2, 3.4), pycor = c(0.2, 0.8, 5.4)))
+  t2 <- createTurtles(n = 3, coords = cbind(pxcor = c(-0.1, -2.2, 3.4), pycor = c(0.2, 0.8, 5.4)))
   p1 <- patchDistHead(world = w1, agents = t2, dist = 4, head = 270, torus = TRUE)
   expect_identical(p1, patch(w1, c(-4, 5, -1), c(0, 1, 5)))
   p1 <- patchDistHead(world = w1, agents = t2, dist = -4, head = 270, torus = FALSE)

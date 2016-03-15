@@ -48,7 +48,7 @@ If \code{nDegrees} is negative, the turtle would rotate to the left.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 patchRight(world = w1, turtles = t1, dist = 2, nDegrees = 90)
 
 
