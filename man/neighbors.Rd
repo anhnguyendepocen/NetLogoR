@@ -50,8 +50,8 @@ The patch around which the neighbors are identified if \code{agents}
 # Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 neighbors(world = w1, agents = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 8)
-t1 <- createTurtles(world = w1, n = 3, coords = cbind(xcor = randomXcor(world = w1, n = 3),
-                                                      ycor = randomYcor(world = w1, n = 3)))
+t1 <- createTurtles(n = 3, coords = cbind(xcor = randomXcor(world = w1, n = 3),
+                                          ycor = randomYcor(world = w1, n = 3)))
 neighbors(world = w1, agents = t1, nNeighbors = 4)
 
 

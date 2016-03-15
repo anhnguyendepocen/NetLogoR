@@ -58,7 +58,7 @@ If \code{torus = FALSE} and the patch at distance \code{dist} and
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 patchCorner <- patchDistHead(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
-t1 <- createTurtles(world = w1, n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
+t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
 patchCorner <- patchDistHead(world = w1, agents = t1, dist = 1, head = 45)
 
 
