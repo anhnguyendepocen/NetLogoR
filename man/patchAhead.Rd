@@ -42,8 +42,7 @@ If \code{torus = FALSE} and the patch at distance \code{dist} of the turtle
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-                                           ycor = randomYcor(world = w1, n = 10)))
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 patchAhead(world = w1, turtles = t1, dist = 1)
 
 

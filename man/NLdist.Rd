@@ -83,8 +83,7 @@ Distances from or to a patch is measured from the center of the patch.
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)))
 NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)), torus = TRUE)
-t1 <- createTurtles(n = 2, coords = cbind(xcor = randomXcor(world = w1, n = 2),
-                                          ycor = randomYcor(world = w1, n = 2)))
+t1 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2))
 NLdist(world = w1, from = t1, to = patch(world = w1, xcor = c(1,9), ycor = c(1,9)), allPairs = TRUE)
 
 

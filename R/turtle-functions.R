@@ -922,7 +922,7 @@ setGeneric(
   })
 
 #' @export
-#' @rdname randomXcor
+#' @rdname randomYcor
 setMethod(
   "randomYcor",
   signature = c("NLworlds", "numeric"),
@@ -1123,8 +1123,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(25)
-#' t1 <- createTurtles(n = 10, coords = cbind(pxcor = randomXcor(world = w1, n = 10),
-#'                                            pycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
@@ -1333,8 +1332,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                            ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
@@ -1443,8 +1441,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                            ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' plot(w1)
 #' points(t1, pch = 16, col = t1@data$color)
 #' t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
@@ -1523,8 +1520,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                            ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' patchAhead(world = w1, turtles = t1, dist = 1)
 #'
 #'
@@ -1580,8 +1576,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                            ycor = randomYcor(world = w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' patchHere(world = w1, turtles = t1)
 #'
 #'
@@ -1755,8 +1750,6 @@ setMethod(
 #'
 #' Set the turtles \code{xcor} and \code{ycor} coordinates.
 #'
-#' @param world   A \code{NLworlds} object where the turtles evolve onto.
-#'
 #' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
@@ -1765,6 +1758,10 @@ setMethod(
 #'
 #' @param ycor    Numeric. X coordinates for the turles. Must be of length 1 or
 #'                of the same length as the \code{turtles}
+#'
+#' @param world   A \code{NLworlds} object where the turtles evolve onto. Only
+#'                needed if \code{torus = TRUE}. Should not be provided if
+#'                \code{torus = FALSE}.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
@@ -1785,19 +1782,17 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 5, coords = cbind(xcor = randomXcor(world = w1, n = 5),
-#'                                           ycor = randomYcor(world = w1, n = 5)))
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5))
 #' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- setXY(world = w1, turtles = t1, xcor = 1:5, ycor = 1:5)
+#' t1 <- setXY(turtles = t1, xcor = 1:5, ycor = 1:5)
 #' Plot(t1, addTo ="w1")
 #'
 #'
 #' @export
-#' @importFrom SpaDES wrap
 #' @docType methods
 #' @rdname setXY
 #'
@@ -1805,7 +1800,7 @@ setMethod(
 #'
 setGeneric(
   "setXY",
-  function(world, turtles, xcor, ycor, torus = FALSE) {
+  function(turtles, xcor, ycor, world, torus = FALSE) {
     standardGeneric("setXY")
   })
 
@@ -1813,27 +1808,36 @@ setGeneric(
 #' @rdname setXY
 setMethod(
   "setXY",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", xcor = "numeric", ycor = "numeric"),
-  definition = function(world, turtles, xcor, ycor, torus) {
+  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "missing", "ANY"),
+  definition = function(turtles, xcor, ycor, torus) {
 
     if(length(xcor) == 1 & length(turtles) != 1){
-      xcor <- rep(xcor, length(turtles))
+      xcor <- as.numeric(rep(xcor, length(turtles)))
     }
     if(length(ycor) == 1 & length(turtles) != 1){
-      ycor <- rep(ycor, length(turtles))
+      ycor <- as.numeric(rep(ycor, length(turtles)))
     }
-
     tCoords <- cbind(xcor, ycor)
-    if(torus == TRUE){
-      tCoords <- wrap(cbind(x = xcor, y = ycor), extent(world))
-      colnames(tCoords) <- c("xcor", "ycor")
-    }
 
     turtles@data$prevX <- turtles@coords[,1]
     turtles@data$prevY <- turtles@coords[,2]
 
     newTurtles <- SpatialPointsDataFrame(coords = tCoords, data = turtles@data)
     return(newTurtles)
+  }
+)
+
+#' @export
+#' @importFrom SpaDES wrap
+#' @rdname setXY
+setMethod(
+  "setXY",
+  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "NLworlds", "logical"),
+  definition = function(turtles, xcor, ycor, world, torus) {
+
+    wrapCoords <- wrap(cbind(x = xcor, y = ycor), extent(world))
+    setXY(turtles = turtles, xcor = wrapCoords[,1], ycor = wrapCoords[,2], torus = FALSE)
+
   }
 )
 
@@ -1980,5 +1984,130 @@ setMethod(
   definition = function(turtles, who) {
     tData <- cbind(turtles[turtles$who %in% who,]@data, turtles[turtles$who %in% who,]@coords)
     return(tData)
+  }
+)
+
+
+################################################################################
+#' Move to
+#'
+#' Move the turtle(s) to the same location as the given agent(s).
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the moving turtles.
+#'
+#' @param to      A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates of the
+#'                patch(es) where the \code{turtles} move to.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtle(s) whose
+#'                location(s) the \code{turtles} move to.
+#'                \code{nrow(to)} (if matrix) or \code{length(to)} (if SpatialPointsDataFrame)
+#'                must be equal to 1 or to \code{length(turtles)}.
+#'
+#' @return A SpatialPointsDataFrame representing the moving turtles with updated
+#'         coordinates and updated data for their previous coordinates (i.e.,
+#'         \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+#'
+#' @details The turtle's heading is not changed.
+#'          If a turtle is moving to a patch location, it will be located at
+#'          the patch center.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1[] <- runif(100)
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5))
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo ="w1")
+#'
+#' t1 <- moveTo(turtles = t1, to = t1[t1$who == 0,]) # move to the location of turtle 0
+#' Plot(t1, addTo ="w1")
+#' t1 <- moveTo(turtles = t1, to = patch(world = w1, xcor = 9, ycor = 9))
+#' Plot(t1, addTo ="w1")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname moveTo
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "moveTo",
+  function(turtles, to) {
+    standardGeneric("moveTo")
+  })
+
+#' @export
+#' @rdname moveTo
+setMethod(
+  "moveTo",
+  signature = c("SpatialPointsDataFrame", "matrix"),
+  definition = function(turtles, to) {
+    setXY(turtles = turtles, xcor = as.numeric(to[,1]), ycor = as.numeric(to[,2]), torus = FALSE)
+  }
+)
+
+#' @export
+#' @rdname moveTo
+setMethod(
+  "moveTo",
+  signature = c("SpatialPointsDataFrame", "SpatialPointsDataFrame"),
+  definition = function(turtles, to) {
+    moveTo(turtles = turtles, to = to@coords)
+  }
+)
+
+
+################################################################################
+#' Random xY cor
+#'
+#' Reports random xcor and ycor coordinates inside the world's extent.
+#'
+#' @param world A \code{NLworlds} object.
+#'
+#' @param n     Numeric. The number of set of coordinates to generate.
+#'
+#' @return A matrix (ncol = 2) with the first column \code{xcor} and the second
+#'         column \code{ycor} with nrow = \code{n}.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' w1[] <- runif(25)
+#'
+#' library(Spades)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname randomXYcor
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "randomXYcor",
+  function(world, n) {
+    standardGeneric("randomXYcor")
+  })
+
+#' @export
+#' @rdname randomXYcor
+setMethod(
+  "randomXYcor",
+  signature = c("NLworlds", "numeric"),
+  definition = function(world, n) {
+    xycor <- cbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
+    return(xycor)
   }
 )

@@ -4,14 +4,11 @@
 \name{randomXcor}
 \alias{randomXcor}
 \alias{randomXcor,NLworlds,numeric-method}
-\alias{randomYcor,NLworlds,numeric-method}
 \title{Random xcor}
 \usage{
 randomXcor(world, n)
 
 \S4method{randomXcor}{NLworlds,numeric}(world, n)
-
-\S4method{randomYcor}{NLworlds,numeric}(world, n)
 }
 \arguments{
 \item{world}{A \code{NLworlds} object.}

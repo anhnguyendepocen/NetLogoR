@@ -54,8 +54,7 @@ If \code{torus = TRUE} and the distance from one turtle \code{from} to
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- runif(25)
-t1 <- createTurtles(n = 10, coords = cbind(pxcor = randomXcor(world = w1, n = 10),
-                                           pycor = randomYcor(world = w1, n = 10)))
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 plot(w1)
 points(t1, pch = 16, col = t1@data$color)
 t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))

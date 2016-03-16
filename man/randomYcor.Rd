@@ -3,9 +3,12 @@
 \docType{methods}
 \name{randomYcor}
 \alias{randomYcor}
+\alias{randomYcor,NLworlds,numeric-method}
 \title{Random ycor}
 \usage{
 randomYcor(world, n)
+
+\S4method{randomYcor}{NLworlds,numeric}(world, n)
 }
 \arguments{
 \item{world}{A \code{NLworlds} object.}

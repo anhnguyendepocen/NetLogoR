@@ -558,7 +558,10 @@ test_that("patchLeft and patchRight work",{
 test_that("setXY work",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
-  t2 <- setXY(world = w1, turtles = t1, xcor = 1, ycor = 1, torus = FALSE)
+  t2 <- setXY(turtles = t1, xcor = 1, ycor = 1, torus = FALSE)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(t2@coords, cbind(xcor = rep(1, 5), ycor = rep(1, 5)))
+  t2 <- setXY(turtles = t1, xcor = 1, ycor = 1)
   expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
   expect_identical(t2@coords, cbind(xcor = rep(1, 5), ycor = rep(1, 5)))
   t3 <- setXY(world = w1, turtles = t1, xcor = c(1, 1, 1, 1, 5), ycor = rep(1, 5), torus = TRUE)
@@ -594,4 +597,42 @@ test_that("inspect work",{
   df_t1.12 <- cbind.data.frame(who = c(1, 2), heading = c(90, 180), prevX = c(NA, NA),
                               prevY = c(NA, NA), xcor = c(2, 2), ycor = c(2, 2))
   expect_equivalent(df_t1.12, inspect_t1.12[, c("who", "heading", "prevX", "prevY", "xcor", "ycor")]) # color removed b/c unknown
+})
+
+test_that("moveTo work to move to turtles location",{
+  t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
+  t2 <- moveTo(turtles = t1, to = t1[t1$who == 3,])
+  expect_identical(t2@coords, cbind(xcor = c(4, 4, 4, 4), ycor = c(4, 4, 4, 4)))
+  expect_identical(cbind(xcor = t2@data$prevX, ycor = t2@data$prevY), t1@coords)
+  expect_identical(t2@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
+  t3 <- moveTo(turtles = t1, to = t1)
+  expect_identical(t1@coords, t3@coords)
+  expect_identical(cbind(xcor = t3@data$prevX, ycor = t3@data$prevY), t1@coords)
+  expect_identical(t3@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
+})
+
+test_that("moveTo work to move to patches location",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
+  t2 <- moveTo(turtles = t1, to = patch(world = w1, xcor = 4, ycor = 4))
+  expect_identical(t2@coords, cbind(xcor = c(4, 4, 4, 4), ycor = c(4, 4, 4, 4)))
+  expect_identical(cbind(xcor = t2@data$prevX, ycor = t2@data$prevY), t1@coords)
+  expect_identical(t2@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
+  t3 <- moveTo(turtles = t1, to = patch(world = w1, xcor = c(1, 2, 3, 4), ycor = c(1, 2, 3, 4)))
+  expect_identical(t1@coords, t3@coords)
+  expect_identical(cbind(xcor = t3@data$prevX, ycor = t3@data$prevY), t1@coords)
+  expect_identical(t3@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
+})
+
+test_that("randomXYcor work",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 100, minPycor = -100, maxPycor = -1)
+  t1 <- createTurtles(n = 10000, coords = randomXYcor(world = w1, n = 10000))
+  expect_identical(canMove(world = w1, turtles = t1, step = 0), rep(TRUE, length(t1)))
+
+  w2 <- w1
+  w1[] <- runif(10000)
+  w2[] <- runif(10000)
+  ws <-NLstack(w1, w2)
+  t2 <- createTurtles(n = 10000, coords = randomXYcor(world = w1, n = 10000))
+  expect_identical(canMove(world = ws, turtles = t2, step = 0), rep(TRUE, length(t2)))
 })

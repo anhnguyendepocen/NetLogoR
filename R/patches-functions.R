@@ -140,8 +140,7 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)))
 #' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)), torus = TRUE)
-#' t1 <- createTurtles(n = 2, coords = cbind(xcor = randomXcor(world = w1, n = 2),
-#'                                           ycor = randomYcor(world = w1, n = 2)))
+#' t1 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2))
 #' NLdist(world = w1, from = t1, to = patch(world = w1, xcor = c(1,9), ycor = c(1,9)), allPairs = TRUE)
 #'
 #'
@@ -335,8 +334,7 @@ setMethod(
 #' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' neighbors(world = w1, agents = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 8)
-#' t1 <- createTurtles(n = 3, coords = cbind(xcor = randomXcor(world = w1, n = 3),
-#'                                           ycor = randomYcor(world = w1, n = 3)))
+#' t1 <- createTurtles(n = 3, coords = randomXYcor(world = w1, n = 3))
 #' neighbors(world = w1, agents = t1, nNeighbors = 4)
 #'
 #'

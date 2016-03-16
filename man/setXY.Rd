@@ -3,17 +3,20 @@
 \docType{methods}
 \name{setXY}
 \alias{setXY}
-\alias{setXY,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
+\alias{setXY,SpatialPointsDataFrame,numeric,numeric,NLworlds,logical-method}
+\alias{setXY,SpatialPointsDataFrame,numeric,numeric,missing,ANY-method}
 \title{Set xcor and ycor}
 \usage{
-setXY(world, turtles, xcor, ycor, torus = FALSE)
+setXY(turtles, xcor, ycor, world, torus = FALSE)
 
-\S4method{setXY}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
-  turtles, xcor, ycor, torus = FALSE)
+\S4method{setXY}{SpatialPointsDataFrame,numeric,numeric,missing,ANY}(turtles,
+  xcor, ycor, torus)
+
+
+  \S4method{setXY}{SpatialPointsDataFrame,numeric,numeric,NLworlds,logical}(turtles,
+  xcor, ycor, world, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object where the turtles evolve onto.}
-
 \item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
@@ -22,6 +25,10 @@ of the same length as the \code{turtles}.}
 
 \item{ycor}{Numeric. X coordinates for the turles. Must be of length 1 or
 of the same length as the \code{turtles}}
+
+\item{world}{A \code{NLworlds} object where the turtles evolve onto. Only
+needed if \code{torus = TRUE}. Should not be provided if
+\code{torus = FALSE}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
@@ -43,14 +50,13 @@ If \code{torus = TRUE} and the given coordinates \code{xcor} or \code{ycor}
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 w1[] <- runif(100)
-t1 <- createTurtles(n = 5, coords = cbind(xcor = randomXcor(world = w1, n = 5),
-                                          ycor = randomYcor(world = w1, n = 5)))
+t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5))
 library(SpaDES)
 clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1")
 
-t1 <- setXY(world = w1, turtles = t1, xcor = 1:5, ycor = 1:5)
+t1 <- setXY(turtles = t1, xcor = 1:5, ycor = 1:5)
 Plot(t1, addTo ="w1")
 
 
