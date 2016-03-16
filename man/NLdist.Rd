@@ -7,8 +7,6 @@
 \alias{NLdist,NLworlds,SpatialPointsDataFrame,matrix-method}
 \alias{NLdist,NLworlds,matrix,SpatialPointsDataFrame-method}
 \alias{NLdist,NLworlds,matrix,matrix-method}
-\alias{isPatch,NLworld,numeric,numeric-method}
-\alias{isPatch,NLworldStack,numeric,numeric-method}
 \title{Distance in a \code{NLworlds} object.}
 \usage{
 NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
@@ -25,10 +23,6 @@ NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
 
   \S4method{NLdist}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
   from, to, torus = FALSE, allPairs = FALSE)
-
-\S4method{isPatch}{NLworld,numeric,numeric}(world, pxcor, pycor)
-
-\S4method{isPatch}{NLworldStack,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
 \item{world}{A \code{NLworlds} object.}

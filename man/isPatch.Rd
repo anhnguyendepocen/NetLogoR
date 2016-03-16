@@ -3,9 +3,15 @@
 \docType{methods}
 \name{isPatch}
 \alias{isPatch}
+\alias{isPatch,NLworld,numeric,numeric-method}
+\alias{isPatch,NLworldStack,numeric,numeric-method}
 \title{Is patch?}
 \usage{
 isPatch(world, pxcor, pycor)
+
+\S4method{isPatch}{NLworld,numeric,numeric}(world, pxcor, pycor)
+
+\S4method{isPatch}{NLworldStack,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}

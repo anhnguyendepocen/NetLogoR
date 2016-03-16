@@ -2,7 +2,6 @@
 % Please edit documentation in R/patches-functions.R
 \docType{methods}
 \name{other}
-\alias{noPatches,missing-method}
 \alias{other}
 \alias{other,NLworld,matrix-method}
 \alias{other,NLworldStack,matrix-method}
@@ -13,8 +12,6 @@ other(world, agents)
 \S4method{other}{NLworld,matrix}(world, agents)
 
 \S4method{other}{NLworldStack,matrix}(world, agents)
-
-\S4method{noPatches}{missing}()
 }
 \arguments{
 \item{world}{A \code{NLworld*} object.}

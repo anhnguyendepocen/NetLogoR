@@ -2067,7 +2067,7 @@ setMethod(
 
 
 ################################################################################
-#' Random xY cor
+#' Random XY cor
 #'
 #' Reports random xcor and ycor coordinates inside the world's extent.
 #'
@@ -2083,7 +2083,7 @@ setMethod(
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' w1[] <- runif(25)
 #'
-#' library(Spades)
+#' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
 #' Plot(t1, addTo = "w1")
@@ -2111,3 +2111,423 @@ setMethod(
     return(xycor)
   }
 )
+
+
+################################################################################
+#' Is turtle?
+#'
+#' Reports \code{TRUE} if the turtle(s) exist(s), \code{FALSE} otherwise.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing turtles.
+#'
+#' @param who     Numeric. The who number(s) of the turtle(s) to check.
+#'
+#' @param breed   String of characters. To specify the breed of turtles to check
+#'                for existence. Must be of length 1 or of length \code{n}. If
+#'                \code{breed} is of length \code{n} then the order of breeds
+#'                should follow the order of \code{who}. If missing, there is
+#'                no distinction based upon breed to check existence.
+#'
+#' @return \code{TRUE} or \code{FALSE} if the turtle(s) with the given who number(s)
+#'         and potentially given \code{breed} exist(s) or no, in the given \code{turtles}.
+#'
+#' @details If \code{breed} is provided, the turtle with the given \code{who} number
+#'          AND given \code{breed} must exists inside \code{turtles} for \code{TRUE}
+#'          to be returned.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
+#' isTurtle(turtles = t1, who = 3, breed = "sheep")
+#' isTurtle(turtles = t1, who = 9, breed = "sheep")
+#' isTurtle(turtles = t1, who = c(3, 9))
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname isTurtle
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "isTurtle",
+  function(turtles, who, breed) {
+    standardGeneric("isTurtle")
+  })
+
+#' @export
+#' @rdname isTurtle
+setMethod(
+  "isTurtle",
+  signature = c("SpatialPointsDataFrame", "numeric", "missing"),
+  definition = function(turtles, who) {
+
+    tExist <- who %in% turtles@data$who
+    return(tExist)
+
+  }
+)
+
+#' @export
+#' @rdname isTurtle
+setMethod(
+  "isTurtle",
+  signature = c("SpatialPointsDataFrame", "numeric", "character"),
+  definition = function(turtles, who, breed) {
+
+    whoExist <- isTurtle(turtles = turtles, who = who)
+
+    if(length(breed) == 1 & length(who) != 1){
+      breed <- rep(breed, length(who))
+    }
+    whoTurtles <- turtles@data[turtles@data$who %in% who,] # select the who turtles
+    whoTurtles <- whoTurtles[match(who, whoTurtles$who),] # order them by the order of given who
+    breedExist <- whoTurtles$breed == breed
+
+    return(whoExist & breedExist)
+
+  }
+)
+
+
+################################################################################
+#' Turtle
+#'
+#' Reports the turtle(s) according to its/their who number(s) and breed(s).
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing turtles.
+#'
+#' @param who     Numeric. The who number(s) of the turtle(s) to report.
+#'
+#' @param breed   String of characters. To specify the breed of turtles to report.
+#'                Must be of length 1 or of length \code{n}. If \code{breed} is
+#'                of length \code{n} then the order of breeds should follow the
+#'                order of \code{who}. If missing, there is no distinction based
+#'                upon breed to report turtle(s).
+#'
+#' @return A SpatialPointsDataFrame of the selected turtle(s).
+#'
+#' @details If no turtle match the given who number(s) with potentially the given
+#'          \code{breed}, then an empty SpatialPointsDataFrame is returned.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t2 <- turtle(turtles = t1, who = 2)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname turtle
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "turtle",
+  function(turtles, who, breed) {
+    standardGeneric("turtle")
+  })
+
+#' @export
+#' @rdname turtle
+setMethod(
+  "turtle",
+  signature = c("SpatialPointsDataFrame", "numeric", "missing"),
+  definition = function(turtles, who) {
+    return(turtles[turtles$who %in% who, ])
+  }
+)
+
+#' @export
+#' @rdname turtle
+setMethod(
+  "turtle",
+  signature = c("SpatialPointsDataFrame", "numeric", "character"),
+  definition = function(turtles, who, breed) {
+
+    whoTurtles <- turtle(turtles = turtles, who = who)
+
+    if(length(breed) == 1 & length(who) != 1){
+      breed <- rep(breed, length(who))
+    }
+
+    tSelect <- whoTurtles@data
+    tSelect <- tSelect[match(who, tSelect$who),] # order them by the order of given who
+    whoBreed <- tSelect[tSelect$breed == breed, "who"]
+
+    turtle(turtles = turtles, who = whoBreed)
+  }
+)
+
+
+################################################################################
+#' Turtles on
+#'
+#' Reports the turtle(s) at some patch(es) or on the same patch(es) as some turtle(s).
+#'
+#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles among which the
+#'                one(s) on the same patch(es) as the \code{agents} is/are going to
+#'                be reported.
+#'
+#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates of the
+#'                patch(es) where to look for turtles.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing turtles whose patch location
+#'                is/are the patch(es) where to look for turtles.
+#'                Patch(es) or turtle(s) location must be inside the world's extent.
+#'
+#' @param breed   String of characters. To specify the breed(s) of turtles to report.
+#'                If missing, there is no distinction based upon breed to report turtle(s).
+#'
+#' @return A SpatialPointsDataFrame representing the turtle(s) among \code{turtles}
+#'         which are located on the \code{agent} patch(es) and of the given \code{breed}
+#'         if specified.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1[] <- runif(100)
+#' t1 <- createTurtles(n = 500, coords = randomXYcor(world = w1, n = 500))
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
+#'
+#' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = 2, ycor = 2))
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname turtlesOn
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "turtlesOn",
+  function(world, turtles, agents, breed) {
+    standardGeneric("turtlesOn")
+  })
+
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "missing"),
+  definition = function(world, turtles, agents) {
+    pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
+    pTurtles <- cbind(pTurtles, turtles@data$who)
+
+    pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+
+    if(nrow(pOn) == 0){
+      return(noTurtles())
+    } else {
+      turtle(turtles = turtles, who = pOn[,3])
+    }
+  }
+)
+
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "character"),
+  definition = function(world, turtles, agents, breed) {
+    tBreed <- turtles[turtles$breed %in% breed,]
+    turtlesOn(world = world, turtles = tBreed, agents = agents)
+  }
+)
+
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "missing"),
+  definition = function(world, turtles, agents) {
+    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents))
+  }
+)
+
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "character"),
+  definition = function(world, turtles, agents, breed) {
+    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), breed = breed)
+  }
+)
+
+
+################################################################################
+#' No turtles
+#'
+#' Reports an empty turtle agentset.
+#'
+#' @return An empty SpatialPointsDataFrame but with the turtle variables defined
+#'         as when using \code{createTurtles()} or \code{createOTurtles()}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' t1 <- noTurtles()
+#' length(t1)
+#'
+#' @export
+#' @docType methods
+#' @rdname noTurtles
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "noTurtles",
+  function(x) {
+    standardGeneric("noTurtles")
+  })
+
+#' @export
+#' @rdname noTurtles
+setMethod(
+  "noTurtles",
+  signature = "missing",
+  definition = function() {
+    t0 <- SpatialPointsDataFrame(coords = cbind(xcor = 0, ycor = 0), data = data.frame(who = 0, heading = 0,prevX = 0,
+                                                                                       prevY = 0, breed = "turtle",
+                                                                                       color = "white",stringsAsFactors=FALSE))
+    return(t0[t0$who == 1,])
+  }
+)
+
+
+################################################################################
+#' Turtles at
+#'
+#' Reports the turtle(s) on the patch(es) at \code{(dx, dy)} distance of the agent(s).
+#'
+#'@param world   A \code{NLworlds} object where the turtles evolve onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles among which the
+#'                one(s) at \code{(dx, dy)} distance of the \code{agents} is/are
+#'                going to be reported.
+#'
+#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates of the
+#'                patches from wich \code{(dx, dy)} are computed.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles from wich
+#'                \code{(dx, dy)} are computed.
+#'
+#' @param dx      Numeric. Distance to east from the agent. If \code{dx} is negative, the
+#'                distance to the west is computed. \code{dx} must be a single value or
+#'                of the length of \code{agents}.
+#'
+#' @param dy      Numeric. Distance to the north from the agent. If \code{dy} is negative,
+#'                the distance to the south is computed. \code{dy} must be a single value or
+#'                of the length of \code{agents}.
+#'
+#' @param breed   String of characters. To specify the breed of turtles to report.
+#'                If missing, there is no distinction based upon breed to report turtle(s).
+#'
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A SpatialPointsDataFrame representing the turtle(s) among \code{turtles}
+#'         which are located on the patch(es) at \code{(dx, dy)} distance of the
+#'         \code{agents}.
+#'
+#' @details If \code{torus = FALSE} and the pacth at distance \code{(dx, dy)}
+#'          of the agent is outside of the world's extent, no turtle is returned.
+#'          If \code{torus = TRUE}, the turtle located on the patch whose coordinates
+#'          are defined from the wrapped world is returned.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9), breed = c(rep("sheep", 5), rep("wolf", 5)))
+#' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(turtles = t1, who = 0), dx = 1, dy = 1)
+#' t3 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(3,4,5), ycor = c(3,4,5)),
+#'                 dx = 1, dy = 1, breed = "sheep")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname turtlesAt
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "turtlesAt",
+  function(world, turtles, agents, dx, dy, breed, torus = FALSE) {
+    standardGeneric("turtlesAt")
+  })
+
+#' @export
+#' @rdname turtlesAt
+setMethod(
+  "turtlesAt",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric", "numeric", "missing", "ANY"),
+  definition = function(world, turtles, agents, dx, dy, torus) {
+    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
+    turtlesOn(world = world, turtles = turtles, agents = pAt)
+  }
+)
+
+#' @export
+#' @rdname turtlesAt
+setMethod(
+  "turtlesAt",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "numeric", "numeric", "missing", "ANY"),
+  definition = function(world, turtles, agents, dx, dy, torus) {
+    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
+    turtlesOn(world = world, turtles = turtles, agents = pAt)
+  }
+)
+
+#' @export
+#' @rdname turtlesAt
+setMethod(
+  "turtlesAt",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric", "numeric", "character", "ANY"),
+  definition = function(world, turtles, agents, dx, dy, breed, torus) {
+    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
+    turtlesOn(world = world, turtles = turtles, agents = pAt, breed = breed)
+  }
+)
+
+#' @export
+#' @rdname turtlesAt
+setMethod(
+  "turtlesAt",
+  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "numeric", "numeric", "character", "ANY"),
+  definition = function(world, turtles, agents, dx, dy, breed, torus) {
+    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
+    turtlesOn(world = world, turtles = turtles, agents = pAt, breed = breed)
+  }
+)
+
+
+

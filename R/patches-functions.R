@@ -266,7 +266,7 @@ setGeneric(
   })
 
 #' @export
-#' @rdname NLdist
+#' @rdname isPatch
 setMethod(
   "isPatch",
   signature = c("NLworld", "numeric", "numeric"),
@@ -285,7 +285,7 @@ setMethod(
 )
 
 #' @export
-#' @rdname NLdist
+#' @rdname isPatch
 setMethod(
   "isPatch",
   signature = c("NLworldStack", "numeric", "numeric"),
@@ -575,7 +575,7 @@ setGeneric(
   })
 
 #' @export
-#' @rdname other
+#' @rdname noPatches
 setMethod(
   "noPatches",
   signature = "missing",
@@ -980,6 +980,3 @@ setMethod(
     randPycor(world = world_l, n = n)
   }
 )
-
-
-

@@ -3,9 +3,12 @@
 \docType{methods}
 \name{noPatches}
 \alias{noPatches}
+\alias{noPatches,missing-method}
 \title{No patches}
 \usage{
 noPatches(x)
+
+\S4method{noPatches}{missing}()
 }
 \value{
 An empty matrix (ncol = 2) with the first column \code{pxcor} and the

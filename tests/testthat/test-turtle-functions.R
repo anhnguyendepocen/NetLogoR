@@ -555,7 +555,7 @@ test_that("patchLeft and patchRight work",{
   expect_identical(pRight, cbind(pxcor = c(0, 3), pycor = c(2, 2)))
 })
 
-test_that("setXY work",{
+test_that("setXY works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
   t2 <- setXY(turtles = t1, xcor = 1, ycor = 1, torus = FALSE)
@@ -569,7 +569,7 @@ test_that("setXY work",{
   expect_identical(t3@coords, cbind(xcor = c(1, 1, 1, 1, 0), ycor = rep(1, 5)))
 })
 
-test_that("sprout work",{
+test_that("sprout works",{
   t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)
   t2 <- sprout(patches = cbind(pxcor = c(1,2,3), pycor = c(1,2,3)), n = 3)
   t3 <- sprout(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
@@ -586,7 +586,7 @@ test_that("sprout work",{
   expect_identical(t5@data$breed, c(t1@data$breed, "wolf", "wolf"))
 })
 
-test_that("inspect work",{
+test_that("inspect works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createOTurtles(world = w1, n = 4)
   inspect_t1.1 <- inspect(turtles = t1, who = 1)
@@ -599,7 +599,7 @@ test_that("inspect work",{
   expect_equivalent(df_t1.12, inspect_t1.12[, c("who", "heading", "prevX", "prevY", "xcor", "ycor")]) # color removed b/c unknown
 })
 
-test_that("moveTo work to move to turtles location",{
+test_that("moveTo works to move to turtles location",{
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
   t2 <- moveTo(turtles = t1, to = t1[t1$who == 3,])
   expect_identical(t2@coords, cbind(xcor = c(4, 4, 4, 4), ycor = c(4, 4, 4, 4)))
@@ -611,7 +611,7 @@ test_that("moveTo work to move to turtles location",{
   expect_identical(t3@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
 })
 
-test_that("moveTo work to move to patches location",{
+test_that("moveTo works to move to patches location",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
   t2 <- moveTo(turtles = t1, to = patch(world = w1, xcor = 4, ycor = 4))
@@ -624,7 +624,7 @@ test_that("moveTo work to move to patches location",{
   expect_identical(t3@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
 })
 
-test_that("randomXYcor work",{
+test_that("randomXYcor works",{
   w1 <- createNLworld(minPxcor = 1, maxPxcor = 100, minPycor = -100, maxPycor = -1)
   t1 <- createTurtles(n = 10000, coords = randomXYcor(world = w1, n = 10000))
   expect_identical(canMove(world = w1, turtles = t1, step = 0), rep(TRUE, length(t1)))
@@ -635,4 +635,135 @@ test_that("randomXYcor work",{
   ws <-NLstack(w1, w2)
   t2 <- createTurtles(n = 10000, coords = randomXYcor(world = w1, n = 10000))
   expect_identical(canMove(world = ws, turtles = t2, step = 0), rep(TRUE, length(t2)))
+})
+
+test_that("isTurtle works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
+  expect_identical(isTurtle(turtles = t1, who = 3), TRUE)
+  expect_identical(isTurtle(turtles = t1, who = 3, breed = "sheep"), TRUE)
+  expect_identical(isTurtle(turtles = t1, who = 9, breed = "sheep"), FALSE)
+  expect_identical(isTurtle(turtles = t1, who = 9, breed = "moose"), FALSE)
+  expect_identical(isTurtle(turtles = t1, who = c(3, 9)), c(TRUE, TRUE))
+  expect_identical(isTurtle(turtles = t1, who = c(3, 9), breed = "sheep"), c(TRUE, FALSE))
+  expect_identical(isTurtle(turtles = t1, who = c(9, 3), breed = "sheep"), c(FALSE, TRUE))
+  expect_identical(isTurtle(turtles = t1, who = c(3, 9), breed = c("wolf", "sheep")), c(FALSE, FALSE))
+  expect_identical(isTurtle(turtles = t1, who = c(3, 9), breed = c("wolf", "wolf")), c(FALSE, TRUE))
+  expect_identical(isTurtle(turtles = t1, who = c(3, 9), breed = "wolf"), c(FALSE, TRUE))
+  expect_identical(isTurtle(turtles = t1, who = c(3, 9), breed = c("sheep", "wolf")), c(TRUE, TRUE))
+  expect_identical(isTurtle(turtles = t1, who = c(3,11, 9)), c(TRUE, FALSE, TRUE))
+  expect_identical(isTurtle(turtles = t1, who = c(3,11, 9), breed = "sheep"), c(TRUE, FALSE, FALSE))
+  expect_identical(isTurtle(turtles = t1, who = c(3,11, 9), breed = c("sheep", "sheep", "wolf")), c(TRUE, FALSE, TRUE))
+})
+
+test_that("turtle works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
+  t2 <- turtle(t1, 3)
+  expect_identical(t2@data$who, 3)
+  expect_identical(t2@data$breed, "sheep")
+  expect_equivalent(length(t2), 1)
+  t3 <- turtle(t1, 3, "sheep")
+  expect_identical(t2, t3)
+  t4 <- turtle(t1, 9, "sheep")
+  expect_equivalent(length(t4), 0)
+  t5 <- turtle(t1, 9, "moose")
+  expect_equivalent(length(t5), 0)
+  t6 <- turtle(t1, who = c(3, 9))
+  expect_identical(t6@data$who, c(3, 9))
+  expect_identical(t6@data$breed, c("sheep", "wolf"))
+  expect_equivalent(length(t6), 2)
+  t7 <- turtle(t1, who = c(3, 9), breed = "sheep")
+  expect_identical(t7@data$who, 3)
+  expect_identical(t7@data$breed, "sheep")
+  expect_equivalent(length(t7), 1)
+  t8 <- turtle(t1, who = c(9, 3), breed = "sheep")
+  expect_identical(t7, t8)
+  t9 <- turtle(t1, who = c(3, 9), breed = c("wolf", "sheep"))
+  expect_equivalent(length(t9), 0)
+  t10 <- turtle(t1, who = c(3, 9), breed = c("wolf", "wolf"))
+  expect_identical(t10@data$who, 9)
+  expect_identical(t10@data$breed, "wolf")
+  expect_equivalent(length(t10), 1)
+  t11 <- turtle(t1, who = c(3, 9), breed = "wolf")
+  expect_identical(t10, t11)
+  t12 <- turtle(t1, who = c(3, 11, 9))
+  expect_identical(t12, t6)
+  t13 <- turtle(t1, who = c(3, 11, 9), breed = "sheep")
+  expect_identical(t13, t8)
+  t14 <- turtle(t1, who = c(3, 11, 9), breed = c("sheep", "sheep", "wolf"))
+  expect_identical(t14, t12)
+  t15 <- turtle(t6, 3)
+  expect_identical(t15, t13)
+})
+
+test_that("turtlesOn works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9), breed = c(rep("sheep", 5), rep("wolf", 5)))
+  t2 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who == 0,])
+  expect_identical(t2@coords, cbind(xcor = 0, ycor = 0))
+  t3 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = 0, ycor = 0))
+  expect_identical(t3@coords, cbind(xcor = 0, ycor = 0))
+  t4 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who == 0,], breed = "sheep")
+  expect_identical(t4@coords, cbind(xcor = 0, ycor = 0))
+  t5 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = 0, ycor = 0), breed = "sheep")
+  expect_identical(t5@coords, cbind(xcor = 0, ycor = 0))
+
+  t6 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),])
+  expect_identical(t6@coords, cbind(xcor = c(0,5,6), ycor = c(0,5,6)))
+  t7 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,5,6), ycor = c(0,5,6)))
+  expect_identical(t7@coords, cbind(xcor = c(0,5,6), ycor = c(0,5,6)))
+  t8 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], breed = "sheep")
+  expect_identical(t8@coords, cbind(xcor = 0, ycor = 0))
+  t9 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,5,6), ycor = c(0,5,6)), breed = "sheep")
+  expect_identical(t9@coords, cbind(xcor = 0, ycor = 0))
+
+  t10 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], breed = c("sheep", "wolf"))
+  expect_identical(t10@coords, t6@coords)
+  t11 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,5,6), ycor = c(0,5,6)), breed = c("sheep", "wolf"))
+  expect_identical(t11@coords, t7@coords)
+
+  t12 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], breed = "moose")
+  expect_equivalent(length(t12), 0)
+})
+
+test_that("noTurtles works",{
+  t1 <- noTurtles()
+  expect_equivalent(length(t1), 0)
+  expect_equivalent(nrow(t1@coords), 0)
+  expect_equivalent(nrow(t1@data), 0)
+})
+
+test_that("turtlesAt works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9), breed = c(rep("sheep", 5), rep("wolf", 5)))
+  t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(turtles = t1, who = 0), dx = 1, dy = 1)
+  t3 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = 0, ycor = 0), dx = 1, dy = 1)
+  t4 <- turtlesAt(world = w1, turtles = t1, agents = turtle(turtles = t1, who = 0), dx = 1, dy = 1, breed = "sheep")
+  t5 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = 0, ycor = 0), dx = 1, dy = 1, breed = "sheep")
+  expect_identical(t2@coords, cbind(xcor = 1, ycor = 1))
+  expect_identical(t3@coords, t2@coords)
+  expect_identical(t4@coords, t2@coords)
+  expect_identical(t5@coords, t2@coords)
+
+  t6 <- turtlesAt(world = w1, turtles = t1, agents = turtle(turtles = t1, who = c(0,1)), dx = c(1,2), dy = c(1,2))
+  expect_identical(t6@coords, cbind(xcor = c(1, 3), ycor = c(1, 3)))
+  t7 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,1), ycor = c(0,1)), dx = c(1,2), dy = c(1,2))
+  expect_identical(t7@coords, t6@coords)
+  t8 <- turtlesAt(world = w1, turtles = t1, agents = turtle(turtles = t1, who = c(0,1)), dx = c(1,2), dy = c(1,2), breed = "sheep")
+  expect_identical(t8@coords, t6@coords)
+  t9 <- turtlesAt(world = w1, turtles = t1, agents = turtle(turtles = t1, who = c(0,1)), dx = c(1,2), dy = c(1,2), breed = "wolf")
+  expect_equivalent(length(t9), 0)
+
+  t10 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,4), ycor = c(0,4)), dx = c(1,2), dy = c(1,2), breed = "sheep")
+  expect_identical(t10@coords, t2@coords)
+  t11 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,4), ycor = c(0,4)),
+                   dx = c(1,2), dy = c(1,2), breed = c("sheep", "wolf"))
+  expect_identical(t11@coords, cbind(xcor = c(1, 6), ycor = c(1, 6)))
+  t12 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,8), ycor = c(0,8)),
+                   dx = c(1,2), dy = c(1,2), breed = c("sheep", "wolf"))
+  expect_identical(t12@coords, t2@coords)
+  t13 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(0,8), ycor = c(0,8)),
+                   dx = 10, dy = 10, breed = c("sheep", "wolf"))
+  expect_equivalent(length(t13), 0)
 })

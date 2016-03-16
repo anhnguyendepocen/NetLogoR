@@ -4,7 +4,7 @@
 \name{randomXYcor}
 \alias{randomXYcor}
 \alias{randomXYcor,NLworlds,numeric-method}
-\title{Random xY cor}
+\title{Random XY cor}
 \usage{
 randomXYcor(world, n)
 
@@ -27,7 +27,7 @@ w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 w1[] <- runif(25)
 
-library(Spades)
+library(SpaDES)
 clearPlot()
 Plot(w1)
 Plot(t1, addTo = "w1")
