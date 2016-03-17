@@ -487,11 +487,11 @@ setMethod(
 #' Reports all patches coordinates \code{pxcor} and \code{pycor} except for the one(s)
 #' with coordinates \code{pxcor} and \code{pycor} given.
 #'
-#' @param world  A \code{NLworld*} object.
+#' @param world   A \code{NLworld*} object.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
-#'               second column \code{pycor} representing the coordinates for the
-#'               patches to be discarded.
+#' @param patches A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates for the
+#'                patches to be discarded.
 #'
 #' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the patches coordinates. Each row represents
@@ -505,43 +505,43 @@ setMethod(
 #' @examples
 #' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
-#' otherPatches <- other(world = w1, agents = cbind(pxcor = 0, pycor = 0))
-#' nrow(otherPatches) ## 99 patches left
+#' other <- otherPatches(world = w1, patches = cbind(pxcor = 0, pycor = 0))
+#' nrow(other) ## 99 patches left
 #'
 #' @export
 #' @docType methods
-#' @rdname other
+#' @rdname otherPatches
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "other",
-  function(world, agents) {
-    standardGeneric("other")
+  "otherPatches",
+  function(world, patches) {
+    standardGeneric("otherPatches")
   })
 
 #' @export
-#' @rdname other
+#' @rdname otherPatches
 setMethod(
-  "other",
+  "otherPatches",
   signature = c("NLworld", "matrix"),
-  definition = function(world, agents) {
+  definition = function(world, patches) {
 
     allpCoords <- cbind(pxcor = world@pxcor, pycor = world@pycor)
-    pCoords <- allpCoords[!duplicated(rbind(agents, allpCoords))[-(1:nrow(agents))],]
+    pCoords <- allpCoords[!duplicated(rbind(patches, allpCoords))[-(1:nrow(patches))],]
 
     return(pCoords)
   }
 )
 
 #' @export
-#' @rdname other
+#' @rdname otherPatches
 setMethod(
-  "other",
+  "otherPatches",
   signature = c("NLworldStack", "matrix"),
-  definition = function(world, agents) {
+  definition = function(world, patches) {
     world_l <- world[[1]]
-    other(world = world_l, agents = agents)
+    otherPatches(world = world_l, patches = patches)
   }
 )
 

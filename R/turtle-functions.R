@@ -2760,3 +2760,76 @@ setMethod(
     subHeadings(heading1 = heading1@data$heading, heading2 = heading2@data$heading, range360 = range360)
   }
 )
+
+
+################################################################################
+#' Other turtles
+#'
+#' Reports all turtles except for specific one(s).
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles.
+#'
+#' @param except  A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtle(s) to remove from
+#'                \code{turtles}.
+#'
+#' @return A SpatialPointsDataFrame representing the \code{turtles} with the one(s)
+#'         given as \code{except} removed.
+#'
+#' @details Carefull: this function removes turtles only based on similar who numbers
+#'          and breeds.
+#'          No data is updated for the other turtles.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
+#' t2 <- otherTurtles(turtles = t1, except = turtle(turtles = t1, who = 0))
+#' length(t2)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname otherTurtles
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "otherTurtles",
+  function(turtles, except) {
+    standardGeneric("otherTurtles")
+  })
+
+#' @export
+#' @rdname otherTurtles
+setMethod(
+  "otherTurtles",
+  signature = c("SpatialPointsDataFrame", "SpatialPointsDataFrame"),
+  definition = function(turtles, except) {
+    t1Data <- turtles@data[,c("who", "breed")]
+    t2Data <- except@data[,c("who", "breed")]
+    sameTurtles <- merge(t1Data, t2Data)
+
+    if(nrow(sameTurtles) == 0){
+      # If turtles does not contain except
+      return(turtles)
+    } else {
+
+      tRemove <- match(sameTurtles$who, t1Data$who)
+      newCoords <- turtles@coords[-tRemove,]
+      newData <- turtles@data[-tRemove,]
+
+      if(nrow(newCoords) == 0){
+        # If turtles and except are the same
+        noTurtles()
+      } else {
+
+        newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
+        return(newTurtles)
+      }
+    }
+  }
+)

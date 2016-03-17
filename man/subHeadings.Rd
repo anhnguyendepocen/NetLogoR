@@ -7,7 +7,7 @@
 \alias{subHeadings,SpatialPointsDataFrame,numeric-method}
 \alias{subHeadings,numeric,SpatialPointsDataFrame-method}
 \alias{subHeadings,numeric,numeric-method}
-\title{substract headings}
+\title{Substract headings}
 \usage{
 subHeadings(heading1, heading2, range360 = FALSE)
 

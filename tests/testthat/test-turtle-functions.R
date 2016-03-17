@@ -819,3 +819,21 @@ test_that("subHeadings works",{
   angles9 <- subHeadings(heading1 = t1, heading2 = t1)
   expect_equivalent(angles9, rep(0, 4))
 })
+
+test_that("otherTurtles works",{
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
+  t2 <- otherTurtles(turtles = t1, except = turtle(turtles = t1, who = 0))
+  expect_equivalent(length(t2), 9)
+  expect_identical(t2@data, t1@data[2:10,])
+  t3 <- otherTurtles(turtles = t1, except = turtle(turtles = t1, who = c(1, 2, 3)))
+  expect_equivalent(length(t3), 7)
+  expect_identical(t3@data, t1@data[c(1, 5:10),])
+
+  t4 <- otherTurtles(turtles = turtle(turtles = t1, who = c(1, 2, 3)), except = turtle(turtles = t1, who = 0))
+  expect_identical(t4, turtle(turtles = t1, who = c(1, 2, 3)))
+  t5 <- otherTurtles(turtles = turtle(turtles = t1, who = 0), except = turtle(turtles = t1, who = c(1, 2, 3)))
+  expect_identical(t5, turtle(turtles = t1, who = 0))
+
+  t6 <- otherTurtles(turtles = t1, except = t1)
+  expect_equivalent(length(t6), 0)
+})
