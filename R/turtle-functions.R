@@ -2424,7 +2424,7 @@ setMethod(
 #'
 #' Reports the turtle(s) on the patch(es) at \code{(dx, dy)} distance of the agent(s).
 #'
-#'@param world   A \code{NLworlds} object where the turtles evolve onto.
+#' @param world   A \code{NLworlds} object where the turtles evolve onto.
 #'
 #' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles among which the
@@ -2530,4 +2530,233 @@ setMethod(
 )
 
 
+################################################################################
+#' Turtle set
+#'
+#' Reports a turtle agentset as a SpatialPointsDataFrame objects containing all
+#' turtles provided in the inputs.
+#'
+#' @param ... SpatialPointsDataFrame objects created by \code{createTurtles()} or
+#'            by \code{createOTurtles()} representing turtles.
+#'
+#' @return A SpatialPointsDataFrame object with all the turtles provided in the
+#'         inputs.
+#'
+#' @details This functions does not affect turtles coordinates and variables.
+#'          Therefore there may be multiple turtles with the same variable (e.g.,
+#'          who number, color, ...) . This must be taken care of prior or later
+#'          using \code{turtleSet()}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = "sheep")
+#' t2 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2), breed = "wolf")
+#' t3 <- createTurtles(n = 1, coords = randomXYcor(world = w1, n = 1), breed = "sheperd")
+#' tAll <- turtleSet(t1, t2, t3)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname turtleSet
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "turtleSet",
+  function(...) {
+    standardGeneric("turtleSet")
+  })
 
+#' @export
+#' @rdname turtleSet
+setMethod(
+  "turtleSet",
+  signature = "SpatialPointsDataFrame",
+  definition = function(...) {
+
+    dots <-list(...)
+
+    allCoords <- dots[[1]]@coords
+    allData <- dots[[1]]@data
+    for(i in 2:length(dots)){
+      allCoords <- rbind(allCoords, dots[[i]]@coords)
+      allData <- rbind(allData, dots[[i]]@data)
+    }
+
+    allTurtles <- SpatialPointsDataFrame(coords = allCoords, data = allData)
+    return(allTurtles)
+  }
+)
+
+
+################################################################################
+#' Turtles own variable
+#'
+#' Create a new variable for the turtle(s) provided.
+#'
+#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                 \code{createOTurtles()} representing turtles.
+#'
+#' @param tVarName Characters. Name of the new variable to create.
+#'
+#' @param tVar     Any type of vector representing the value of \code{tVarName}.
+#'                 \code{length(tVar)} must be equal to 1 or to \code{length(turtles)}.
+#'                 If missing, \code{NA} is given.
+#'
+#' @return A SpatialPointsDataFrame representing the \code{turtles} with the new
+#'         variable \code{tVarName} added.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
+#' t1 <- turtlesOwn(turtles = t1, tVarName = "sex", tVar = c("F", "F", "F", "M", "M"))
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname turtlesOwn
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "turtlesOwn",
+  function(turtles, tVarName, tVar) {
+    standardGeneric("turtlesOwn")
+  })
+
+#' @export
+#' @rdname turtlesOwn
+setMethod(
+  "turtlesOwn",
+  signature = c("SpatialPointsDataFrame", "character", "missing"),
+  definition = function(turtles, tVarName) {
+    newData <- cbind(turtles@data, rep(NA, length(turtles)))
+    colnames(newData)[ncol(turtles@data) + 1] <- tVarName
+    turtles@data <- newData
+    return(turtles)
+  }
+)
+
+#' @export
+#' @rdname turtlesOwn
+setMethod(
+  "turtlesOwn",
+  signature = c("SpatialPointsDataFrame", "character", "ANY"),
+  definition = function(turtles, tVarName, tVar) {
+    newTurtles <- turtlesOwn(turtles = turtles, tVarName = tVarName)
+    turtles@data[,tVarName] <- tVar
+    return(turtles)
+  }
+)
+
+
+################################################################################
+#' Substract headings
+#'
+#' Compute the difference between \code{heading1} and \code{heading2}.
+#'
+#' @param heading1 A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                 \code{createOTurtles()} representing turtle(s) with its/their
+#'                 heading(s).
+#'                 A numeric vector.
+#'
+#' @param heading2 A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                 \code{createOTurtles()} representing turtle(s) with its/their
+#'                 heading(s).
+#'                 A numeric vector.
+#'                 \code{heading2} must be of length 1 or of length \code{heading1}.
+#'
+#' @param range360 Logical. Determine if the returned value(s) are between 0° and
+#'                 360° (\code{range360 = TRUE}) or between -180° and 180°
+#'                 (\code{range360 = FALSE}). Default is \code{range360 = FALSE}.
+#'
+#' @return A numeric vector of values representing the smallest angle in degrees
+#'         by which \code{heading1} could be rotated to produce \code{heading2}
+#'         (i.e., the target heading). Note: this is the opposite as in NetLogo where
+#'         heading1 is the target.
+#'
+#' @details Positive values mean clockwise rotation, negative value mean counterclockwise.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createOTurtles(n = 10, world = w1)
+#' subHeadings(heading1 = t1, heading2 = 0)
+#'
+#'
+#' @export
+#' @importFrom CircStats rad
+#' @importFrom CircStats deg
+#' @docType methods
+#' @rdname subHeadings
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "subHeadings",
+  function(heading1, heading2, range360 = FALSE) {
+    standardGeneric("subHeadings")
+  })
+
+#' @export
+#' @rdname subHeadings
+setMethod(
+  "subHeadings",
+  signature = c(heading1 = "numeric", heading2 = "numeric"),
+  definition = function(heading1, heading2, range360) {
+
+    if(length(heading2) != length(heading1)){
+      if(length(heading2) == 1){
+        heading2 <- rep(heading2, length(heading1))
+      } else {
+        stop("heading2 must be of length 1 or length(heading1)")
+      }
+    }
+
+    angles <- deg(atan2(sin(rad(heading2) - rad(heading1)), cos(rad(heading2) - rad(heading1))))
+
+    if(range360 == TRUE){
+      angles[angles < 0] <- angles[angles < 0] + 360
+    }
+
+    return(angles)
+  }
+)
+
+#' @export
+#' @rdname subHeadings
+setMethod(
+  "subHeadings",
+  signature = c(heading1 = "SpatialPointsDataFrame", heading2 = "numeric"),
+  definition = function(heading1, heading2, range360) {
+    subHeadings(heading1 = heading1@data$heading, heading2 = heading2, range360 = range360)
+  }
+)
+#' @export
+#' @rdname subHeadings
+setMethod(
+  "subHeadings",
+  signature = c(heading1 = "numeric", heading2 = "SpatialPointsDataFrame"),
+  definition = function(heading1, heading2, range360) {
+    subHeadings(heading1 = heading1, heading2 = heading2@data$heading, range360 = range360)
+  }
+)
+#' @export
+#' @rdname subHeadings
+setMethod(
+  "subHeadings",
+  signature = c(heading1 = "SpatialPointsDataFrame", heading2 = "SpatialPointsDataFrame"),
+  definition = function(heading1, heading2, range360) {
+    subHeadings(heading1 = heading1@data$heading, heading2 = heading2@data$heading, range360 = range360)
+  }
+)

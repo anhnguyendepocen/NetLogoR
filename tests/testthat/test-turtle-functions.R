@@ -767,3 +767,55 @@ test_that("turtlesAt works",{
                    dx = 10, dy = 10, breed = c("sheep", "wolf"))
   expect_equivalent(length(t13), 0)
 })
+
+test_that("turtleSet works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = "sheep")
+  t2 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2), breed = "wolf")
+  t3 <- createTurtles(n = 1, coords = randomXYcor(world = w1, n = 1), breed = "sheperd")
+  tAll <- turtleSet(t1, t2, t3)
+  expect_identical(tAll@coords[1:10,], t1@coords)
+  expect_identical(tAll@coords[11:12,], t2@coords)
+  expect_equivalent(tAll@coords[13,], as.numeric(t3@coords))
+  expect_identical(tAll@data[1:10,], t1@data)
+  expect_equivalent(tAll@data[11:12,], t2@data)
+  expect_equivalent(tAll@data[13,], t3@data)
+  tAll2 <- turtleSet(t1, t1)
+  expect_identical(tAll2@coords, rbind(t1@coords, t1@coords))
+  expect_identical(tAll2@data, rbind(t1@data, t1@data))
+})
+
+test_that("turtlesOwn works",{
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
+  t2 <- turtlesOwn(turtles = t1, tVarName = "age", tVar = c(1, 2, 3, 4, 5))
+  expect_identical(t2@data, cbind(t1@data, age = c(1, 2, 3, 4, 5)))
+  t3 <- turtlesOwn(turtles = t2, tVarName = "sex")
+  expect_identical(t3@data, cbind(t2@data, sex = rep(NA, 5)))
+})
+
+test_that("subHeadings works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  t1 <- createOTurtles(n = 4, world = w1)
+  angles1 <- subHeadings(heading1 = t1, heading2 = 0)
+  expect_equivalent(angles1, c(0, -90, -180, 90))
+  angles2 <- subHeadings(heading1 = t1, heading2 = 0, range360 = TRUE)
+  expect_equivalent(angles2, c(0, 270, 180, 90))
+
+  angles3 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = 0)
+  expect_equivalent(angles3, c(0, -90, -180, 90))
+  angles4 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = 0, range360 = TRUE)
+  expect_equivalent(angles4, c(0, 270, 180, 90))
+
+  angles5 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = turtle(turtles = t1, who = 0))
+  expect_equivalent(angles5, c(0, -90, -180, 90))
+  angles6 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = turtle(turtles = t1, who = 0), range360 = TRUE)
+  expect_equivalent(angles6, c(0, 270, 180, 90))
+
+  angles7 <- subHeadings(heading1 = t1, heading2 = turtle(turtles = t1, who = 0))
+  expect_equivalent(angles7, c(0, -90, -180, 90))
+  angles8 <- subHeadings(heading1 = t1, heading2 = turtle(turtles = t1, who = 0), range360 = TRUE)
+  expect_equivalent(angles8, c(0, 270, 180, 90))
+
+  angles9 <- subHeadings(heading1 = t1, heading2 = t1)
+  expect_equivalent(angles9, rep(0, 4))
+})

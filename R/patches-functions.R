@@ -820,7 +820,7 @@ setMethod(
 ################################################################################
 #' Patch set
 #'
-#' Reports a patch agentset as the the coordinates \code{pxcor} and \code{pycor}
+#' Reports a patch agentset as the coordinates \code{pxcor} and \code{pycor}
 #' of all patches in the inputs.
 #'
 #' @param ... Matrices (ncol = 2) of patch(es) coordinates with the first column
@@ -829,7 +829,7 @@ setMethod(
 #' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the patches coordinates.
 #'
-#' @details Duplicate patches among the inputs are removed in the return matrix.
+#' @details Duplicate patches among the inputs are removed in the returned matrix.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -841,6 +841,7 @@ setMethod(
 #' p2 <- patchDistHead(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
 #' p3 <- patch(world = w1, xcor = 4.3, ycor = 8)
 #' set1 <- patchSet(p1, p2, p3)
+#'
 #'
 #' @export
 #' @docType methods

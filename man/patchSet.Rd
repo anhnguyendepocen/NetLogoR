@@ -19,11 +19,11 @@ A matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the patches coordinates.
 }
 \description{
-Reports a patch agentset as the the coordinates \code{pxcor} and \code{pycor}
+Reports a patch agentset as the coordinates \code{pxcor} and \code{pycor}
 of all patches in the inputs.
 }
 \details{
-Duplicate patches among the inputs are removed in the return matrix.
+Duplicate patches among the inputs are removed in the returned matrix.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
@@ -31,6 +31,7 @@ p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0,1,2), pycor = c(0,0,0)), dx
 p2 <- patchDistHead(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
 p3 <- patch(world = w1, xcor = 4.3, ycor = 8)
 set1 <- patchSet(p1, p2, p3)
+
 
 }
 \author{
