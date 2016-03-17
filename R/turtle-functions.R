@@ -2833,3 +2833,133 @@ setMethod(
     }
   }
 )
+
+
+################################################################################
+#' Layout on a circle
+#'
+#' Arranges the turtles in a circle centered on the world with the given radius.
+#'
+#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles.
+#'
+#' @param radius  Numeric. One value representing the radius of the cercle.
+#'
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A SpatialPointsDataFrame representing the turtles with updated coordinates
+#'         and updated data for their previous coordinates (i.e., \code{turtles@data$prevX}
+#'         and \code{turtles@data$prevY}).
+#'
+#' @details The turtles point outwards.
+#'          If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
+#'          \code{radius} values lead a turtle outside of the world's extent, it is
+#'          relocated on the other side of the world, inside the world's extent. If
+#'          \code{torus = FALSE} and \code{out = TRUE}, the turtle are located past
+#'          the world's extent.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1[] <- runif(100)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
+#'
+#' t2 <- layoutCircle(world = w1, turtles = t1, radius = 3)
+#' Plot(t2, addTo = "w1")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname layoutCircle
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "layoutCircle",
+  function(world, turtles, radius, torus = FALSE) {
+    standardGeneric("layoutCircle")
+  })
+
+#' @export
+#' @rdname layoutCircle
+setMethod(
+  "layoutCircle",
+  signature = c(world = "NLworld", turtles = "SpatialPointsDataFrame", radius = "numeric"),
+  definition = function(world, turtles, radius, torus) {
+    tSurrogates <- createOTurtles(n = length(turtles), world = world)
+    turtles@coords <- tSurrogates@coords
+    turtles@data$heading <- tSurrogates@data$heading
+    fd(world = world, turtles = turtles, step = radius, torus = torus, out = TRUE)
+  }
+)
+
+
+################################################################################
+#' Of
+#'
+#' Reports the value of the turtle(s)' variable(s).
+#'
+#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtles.
+#'
+#' @param tVarName Characters. The name of the turtle's variable. \code{tVarName}
+#'                 can be equal to \code{coords}, \code{xcor}, \code{ycor}, \code{who},
+#'                 \code{heading}, \code{prevCoords}, \code{prevX}, \code{prevY},
+#'                 \code{breed}, \code{color} or any of the variables created with
+#'                 \code{turtlesOwn()}.
+#'
+#' @return The \code{tVarName} value(s) for the \code{turtles}. The class depends
+#'         on the class of the variable. The order of the values follows the order
+#'         of the \code{turtles}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' of(turtles = t1, tVarName = "heading")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname of
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "of",
+  function(turtles, tVarName) {
+    standardGeneric("of")
+  })
+
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("SpatialPointsDataFrame", "character"),
+  definition = function(turtles, tVarName) {
+    if(tVarName == "coords"){
+      return(turtles@coords)
+    } else if(tVarName == "xcor"){
+      return(turtles@coords[,1])
+    } else if(tVarName == "ycor"){
+      return(turtles@coords[,2])
+    } else if(tVarName == "prevCoords"){
+      return(cbind(turtles@data$prevX, turtles@data$prevY))
+    } else {
+      return(turtles@data[,tVarName])
+    }
+  }
+)
