@@ -3,35 +3,44 @@
 \docType{methods}
 \name{NLany}
 \alias{NLany}
+\alias{NLany,SpatialPointsDataFrame-method}
 \alias{NLany,matrix-method}
 \title{Any}
 \usage{
 NLany(agents)
 
 \S4method{NLany}{matrix}(agents)
+
+\S4method{NLany}{SpatialPointsDataFrame}(agents)
 }
 \arguments{
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
-patches to be evaluated.}
+patches to evaluate.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles to evaluate.}
 }
 \value{
-Logical. \code{TRUE} if there is at least one patch coordinates in the
+Logical. \code{TRUE} if there is at least one patch or one turtle in the
         \code{agents}, return \code{FALSE} otherwise.
 }
 \description{
-Reports \code{TRUE} if the given agentset \code{agents} is non empty, or \code{FALSE}
-otherwise.
-}
-\details{
-!!! Only implemented for patches so far !!!
+Reports \code{TRUE} if the given agentset \code{agents} is non empty, or
+\code{FALSE} otherwise.
 }
 \examples{
+# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 p1 <- noPatches()
 p2 <- patch(world = w1, xcor = 0, ycor = 0)
 NLany(p1)
 NLany(p2)
+
+# Turtles
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t2 <- noTurtles()
+NLany(t1)
+NLany(t2)
 
 
 }

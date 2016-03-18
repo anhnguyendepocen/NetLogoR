@@ -3,17 +3,22 @@
 \docType{methods}
 \name{count}
 \alias{count}
+\alias{count,SpatialPointsDataFrame-method}
 \alias{count,matrix-method}
 \title{Count}
 \usage{
 count(agents)
 
 \S4method{count}{matrix}(agents)
+
+\S4method{count}{SpatialPointsDataFrame}(agents)
 }
 \arguments{
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
-patches to be counted}
+patches to count.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles to count.}
 }
 \value{
 Integer.
@@ -21,13 +26,15 @@ Integer.
 \description{
 Reports the number of agents.
 }
-\details{
-!!! Only implemented for patches so far !!!
-}
 \examples{
+# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4) # 25 patches
 p1 <- patches(world = w1)
 count(p1) # 25
+
+# Turtles
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+count(t1) # 10
 
 
 }

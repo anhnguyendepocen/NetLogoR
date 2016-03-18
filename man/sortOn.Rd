@@ -3,44 +3,65 @@
 \docType{methods}
 \name{sortOn}
 \alias{sortOn}
-\alias{sortOn,NLworld,matrix,missing-method}
-\alias{sortOn,NLworldStack,matrix,character-method}
+\alias{sortOn,SpatialPointsDataFrame,missing,character-method}
+\alias{sortOn,matrix,NLworld,missing-method}
+\alias{sortOn,matrix,NLworldStack,character-method}
 \title{Sort on}
 \usage{
-sortOn(world, agents, pVar)
+sortOn(agents, world, varName)
 
-\S4method{sortOn}{NLworld,matrix,missing}(world, agents)
+\S4method{sortOn}{matrix,NLworld,missing}(agents, world)
 
-\S4method{sortOn}{NLworldStack,matrix,character}(world, agents, pVar)
+\S4method{sortOn}{matrix,NLworldStack,character}(agents, world, varName)
+
+\S4method{sortOn}{SpatialPointsDataFrame,missing,character}(agents, varName)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
-
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
-patches to be sorted.}
+patches to sort.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles to sort.}
 
-\item{pVar}{If the world is a \code{NLworldStack}, pVar is the name (characters)
-of the layer used for sorting the patches.}
+\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+Must not be provided if \code{agents} are turtles.}
+
+\item{varName}{Characters. The name of the variable on which the sorting is based.
+If \code{agents} are patches and the \code{world} is a \code{NLworld}
+object, \code{varName} must not be provided. If \code{agents} are
+patches and the \code{world} is a \code{NLworldStack} object, \code{varName}
+refers to the layer used for sorting the patches. If \code{agents}
+are turtles, \code{varName} is one of the turtles' variable. \code{varName}
+can be equal to \code{"xcor"}, \code{"ycor"}, any of the variables created
+when turtles were created, as well as any variable created using
+\code{turtlesOwn()}.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the coordinates of the sorted patches.
+        \code{pycor} representing the coordinates of the sorted patches if \code{agents}
+        are patches.
+        A vector of who numbers representing the sorted turtles if \code{agents} are
+        turtles.
 }
 \description{
 Reports the coordinates \code{pxcor} and \code{pycor} of the patches sorted
 according to their value.
+Reports the who numbers of the turtles sorted according to their value.
 }
 \details{
-!!! Only implemented for patches so far !!!
-
 The sorting of the agents based on their value is done in a increasing order.
 }
 \examples{
+# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
 plot(w1)
-p1 <- sortOn(world = w1, agents = patches(world = w1))
+p1 <- sortOn(agents = patches(world = w1), world = w1)
+
+# Turtles
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+sortdHeadingst1 <- sortOn(agents = t1, varName = "heading")
+
 
 }
 \author{

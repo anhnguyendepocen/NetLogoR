@@ -3,47 +3,63 @@
 \docType{methods}
 \name{NLall}
 \alias{NLall}
-\alias{NLall,NLworld,matrix,missing,numeric-method}
-\alias{NLall,NLworldStack,matrix,character,numeric-method}
+\alias{NLall,SpatialPointsDataFrame,missing,character-method}
+\alias{NLall,matrix,NLworld,missing-method}
+\alias{NLall,matrix,NLworldStack,character-method}
 \title{All}
 \usage{
-NLall(world, agents, pVar, val)
+NLall(agents, world, varName, val)
 
-\S4method{NLall}{NLworld,matrix,missing,numeric}(world, agents, val)
+\S4method{NLall}{matrix,NLworld,missing}(agents, world, val)
 
-\S4method{NLall}{NLworldStack,matrix,character,numeric}(world, agents, pVar,
-  val)
+\S4method{NLall}{matrix,NLworldStack,character}(agents, world, varName, val)
+
+\S4method{NLall}{SpatialPointsDataFrame,missing,character}(agents, varName, val)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
-
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
-patches to be evaluated.}
+patches to evaluate.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles to evaluate.}
 
-\item{pVar}{If the world is a \code{NLworldStack}, pVar is the name (characters)
-of the layer used for evaluating the conditional value.}
+\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+Must not be provided if \code{agents} are turtles.}
 
-\item{val}{Numeric or character depending on the variable class.}
+\item{varName}{Characters. The name of the variable to evaluate for the \code{agents}
+value. If \code{agents} are patches and the \code{world} is a
+\code{NLworld} object, \code{varName} must not be provided. If
+\code{agents} are patches and the \code{world} is a \code{NLworldStack}
+object, \code{varName} refers to the layer used for evaluating patches
+values. If \code{agents} are turtles, \code{varName} is one of
+the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+\code{"ycor"}, any of the variables created when turtles were created,
+as well as any variable created using \code{turtlesOwn()}.}
+
+\item{val}{Numeric or characters depending on the variable class. Can be of
+any length.}
 }
 \value{
-Logical. \code{TRUE} if all the agents have their variable equal to \code{val},
-        return \code{FALSE} otherwise.
+Logical. \code{TRUE} if all the \code{agents} have their variable equal to
+        \code{val}, return \code{FALSE} otherwise.
 }
 \description{
 Reports \code{TRUE} if all the agents have their variable equal to a given value,
 or \code{FALSE} otherwise.
 }
-\details{
-!!! Only implemented for patches so far !!!
-}
 \examples{
+# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
-NLall(world = w1, agents = patches(world = w1), val = 5)
+NLall(agents = patches(world = w1), world = w1, val = 5)
 w2 <- w1
 w2[] <- 5
-NLall(world = w2, agents = patches(world = w2), val = 5)
+NLall(agents = patches(world = w2), world = w2, val = 5)
+
+# Turtles
+t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
+NLall(agents = t1, varName = "xcor", val = 1)
+NLall(agents = t1, varName = "heading", val = 2)
 
 
 }

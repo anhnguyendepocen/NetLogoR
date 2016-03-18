@@ -2914,10 +2914,10 @@ setMethod(
 #'                 by \code{createOTurtles()} representing the turtles.
 #'
 #' @param tVarName Characters. The name of the turtle's variable. \code{tVarName}
-#'                 can be equal to \code{coords}, \code{xcor}, \code{ycor}, \code{who},
-#'                 \code{heading}, \code{prevCoords}, \code{prevX}, \code{prevY},
-#'                 \code{breed}, \code{color} or any of the variables created with
-#'                 \code{turtlesOwn()}.
+#'                 can be equal to \code{"coords"}, \code{"xcor"}, \code{"ycor"},
+#'                 \code{"who"}, \code{"heading"}, \code{"prevCoords"}, \code{"prevX"},
+#'                 \code{"prevY"}, \code{"breed"}, \code{"color"} or any of the
+#'                 variables created with \code{turtlesOwn()}.
 #'
 #' @return The \code{tVarName} value(s) for the \code{turtles}. The class depends
 #'         on the class of the variable. The order of the values follows the order

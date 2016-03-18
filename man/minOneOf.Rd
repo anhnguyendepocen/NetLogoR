@@ -3,47 +3,68 @@
 \docType{methods}
 \name{minOneOf}
 \alias{minOneOf}
-\alias{minOneOf,NLworld,matrix,missing-method}
-\alias{minOneOf,NLworldStack,matrix,character-method}
+\alias{minOneOf,SpatialPointsDataFrame,missing,character-method}
+\alias{minOneOf,matrix,NLworld,missing-method}
+\alias{minOneOf,matrix,NLworldStack,character-method}
 \title{One with minimum}
 \usage{
-minOneOf(world, agents, pVar)
+minOneOf(agents, world, varName)
 
-\S4method{minOneOf}{NLworld,matrix,missing}(world, agents)
+\S4method{minOneOf}{matrix,NLworld,missing}(agents, world)
 
-\S4method{minOneOf}{NLworldStack,matrix,character}(world, agents, pVar)
+\S4method{minOneOf}{matrix,NLworldStack,character}(agents, world, varName)
+
+\S4method{minOneOf}{SpatialPointsDataFrame,missing,character}(agents, varName)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
-
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates for the
-patches to be evaluated.}
+patches to evaluate.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles to evaluate.}
 
-\item{pVar}{If the world is a \code{NLworldStack}, pVar is the name (characters)
-of the layer used for evaluating the minimum patch value.}
+\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+Must not be provided if \code{agents} are turtles.}
+
+\item{varName}{Characters. The name of the variable to evaluate for the minimum value.
+If \code{agents} are patches and the \code{world} is a \code{NLworld}
+object, \code{varName} must not be provided. If \code{agents} are
+patches and the \code{world} is a \code{NLworldStack} object,
+\code{varName} refers to the layer used for evaluating patches
+values. If \code{agents} are turtles, \code{varName} is one of
+the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+\code{"ycor"}, any of the variables created when turtles were created,
+as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
 A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
         the second column \code{pycor} representing the coordinates for the patch
-        (or one of the patches) with the minimum value among the agents.
+        (or one of the patches) with the minimum value among the \code{agents}.
+        A SpatialPointsDataFrame of length 1 representing the turtle (or one of
+        the turtles) which has its \code{varName} equals to the minimum value
+        among the \code{agents}.
 }
 \description{
 Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
 variable equals to the minimum value.
+Reports one turtle which has its variable equals to the minimum values.
 }
 \details{
-!!! Only implemented for patches so far !!!
-
-If there are several agents with the minimum value, one is chosen randomly.
-         To access to all agents with their variable equal to the minimum value,
-         use \code{withMin()}.
+If there are several \code{agents}. with the minimum value, one is chosen
+         randomly. To access to all agents with their variable equal to the minimum
+         value, use \code{withMin()}.
 }
 \examples{
+# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
-pMin <- minOneOf(world = w1, agents = patches(world = w1))
 plot(w1)
+pMin <- minOneOf(agents = patches(world = w1), world = w1)
+
+# Turtles
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+t2 <- minOneOf(agents = t1, varName = "heading")
+
 
 }
 \author{

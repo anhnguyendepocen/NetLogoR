@@ -3,46 +3,68 @@
 \docType{methods}
 \name{NLwith}
 \alias{NLwith}
-\alias{NLwith,NLworld,matrix,missing,numeric-method}
-\alias{NLwith,NLworldStack,matrix,character,numeric-method}
+\alias{NLwith,SpatialPointsDataFrame,missing,character-method}
+\alias{NLwith,matrix,NLworld,missing-method}
+\alias{NLwith,matrix,NLworldStack,character-method}
 \title{NLwith}
 \usage{
-NLwith(world, agents, pVar, val)
+NLwith(agents, world, varName, val)
 
-\S4method{NLwith}{NLworld,matrix,missing,numeric}(world, agents, val)
+\S4method{NLwith}{matrix,NLworld,missing}(agents, world, val)
 
-\S4method{NLwith}{NLworldStack,matrix,character,numeric}(world, agents, pVar,
+\S4method{NLwith}{matrix,NLworldStack,character}(agents, world, varName, val)
+
+\S4method{NLwith}{SpatialPointsDataFrame,missing,character}(agents, varName,
   val)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
-
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
-patches to be evaluated.}
+patches to evaluate.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles to evaluate.}
 
-\item{pVar}{If the world is a \code{NLworldStack}, pVar is the name (characters)
-of the layer used for evaluating the conditional value.}
+\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+Must not be provided if \code{agents} are turtles.}
 
-\item{val}{Numeric or character depending on the variable class.}
+\item{varName}{Characters. The name of the variable to evaluate.
+If \code{agents} are patches and the \code{world} is a \code{NLworld}
+object, \code{varName} must not be provided. If \code{agents} are
+patches and the \code{world} is a \code{NLworldStack} object,
+\code{varName} refers to the layer used for evaluating patches
+values. If \code{agents} are turtles, \code{varName} is one of
+the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+\code{"ycor"}, any of the variables created when turtles were created,
+as well as any variable created using \code{turtlesOwn()}.}
+
+\item{val}{Numeric or characters depending on the variable class. Can be of
+any length. Any \code{agents} with their variable equals to any
+\code{val} is returned.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the coordinates of the patches with their value
         equal to \code{val}.
+        A SpatialPointsDataFrame representing the turtles which have their
+        \code{varName == val}.
 }
 \description{
 Reports the coordinates \code{pxcor} and \code{pycor} of the patches with their
 variable equals to a specific value.
-}
-\details{
-!!! Only implemented for patches so far !!!
+Reports the turtles which have their variable equals to a specific value.
 }
 \examples{
+# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
-p2 <- NLwith(world = w1, agents = patches(world = w1), val = 2)
 plot(w1)
+p2 <- NLwith(agents = patches(world = w1), world = w1, val = 2)
+
+# Turtles
+t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+t2 <- NLwith(agents = t1, varName = "breed", val = "sheep")
+t3 <- NLwith(agents = t1, varName = "breed", val = c("sheep", "wolf"))
+
 
 }
 \author{

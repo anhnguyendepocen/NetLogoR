@@ -3,43 +3,62 @@
 \docType{methods}
 \name{withMin}
 \alias{withMin}
-\alias{withMin,NLworld,matrix,missing-method}
-\alias{withMin,NLworldStack,matrix,character-method}
+\alias{withMin,SpatialPointsDataFrame,missing,character-method}
+\alias{withMin,matrix,NLworld,missing-method}
+\alias{withMin,matrix,NLworldStack,character-method}
 \title{With minimum}
 \usage{
-withMin(world, agents, pVar)
+withMin(agents, world, varName)
 
-\S4method{withMin}{NLworld,matrix,missing}(world, agents)
+\S4method{withMin}{matrix,NLworld,missing}(agents, world)
 
-\S4method{withMin}{NLworldStack,matrix,character}(world, agents, pVar)
+\S4method{withMin}{matrix,NLworldStack,character}(agents, world, varName)
+
+\S4method{withMin}{SpatialPointsDataFrame,missing,character}(agents, varName)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
-
 \item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates for the
-patches to be evaluated.}
+patches to evaluate.
+A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles to evaluate.}
 
-\item{pVar}{If the world is a \code{NLworldStack}, pVar is the name (characters)
-of the layer used for evaluating the minimum patch value.}
+\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+Must not be provided if \code{agents} are turtles.}
+
+\item{varName}{Characters. The name of the variable to evaluate for the minimum value.
+If \code{agents} are patches and the \code{world} is a \code{NLworld}
+object, \code{varName} must not be provided. If \code{agents} are
+patches and the \code{world} is a \code{NLworldStack} object,
+\code{varName} refers to the layer used for evaluating patches
+values. If \code{agents} are turtles, \code{varName} is one of
+the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+\code{"ycor"}, any of the variables created when turtles were created,
+as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
 A matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the coordinates for the patches with the minimum
-        value among the agents.
+        value among the \code{agents}.
+        A SpatialPointsDataFrame representing the turtles which have their
+        \code{varName} equals to the minimum values among the \code{agents}.
 }
 \description{
 Reports the coordinates \code{pxcor} and \code{pycor} of the patches which
 have their variable equals to the minimum value.
-}
-\details{
-!!! Only implemented for patches so far !!!
+Reports the turtles which have their variable equals to the minimum values.
 }
 \examples{
+# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
-pMin <- withMin(world = w1, agents = patches(world = w1))
 plot(w1)
+pMin <- withMin(agents = patches(world = w1), world = w1)
+
+# Turtles
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+t2 <- withMin(agents = t1, varName = "heading")
+
 
 }
 \author{
