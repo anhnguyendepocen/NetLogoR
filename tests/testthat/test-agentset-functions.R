@@ -274,3 +274,28 @@ test_that("minOneOf works with turtles",{
   expect_error(minOneOf(agents = t1, varName = "prevX"))
 })
 
+test_that("isNLclass works",{
+  w1 <- createNLworld(0, 4, 0, 4)
+  t1 <- createTurtles(n = 10, randomXYcor(w1, n = 10))
+  expect_identical(isNLclass(agents = patch(w1, xcor = 0, ycor = 0), class = "patch"), TRUE)
+  expect_identical(isNLclass(agents = patches(w1), class = "patchset"), TRUE)
+  expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "turtle"), TRUE)
+  expect_identical(isNLclass(agents = t1, class = "turtleset"), TRUE)
+  expect_identical(isNLclass(agents = patch(w1, xcor = 0, ycor = 0), class = "agent"), TRUE)
+  expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "agent"), TRUE)
+  expect_identical(isNLclass(agents = patches(w1), class = "agentset"), TRUE)
+  expect_identical(isNLclass(agents = t1, class = "agentset"), TRUE)
+
+  expect_identical(isNLclass(agents = patch(w1, xcor = c(0,2), ycor = c(1,0)), class = "patch"), FALSE)
+  expect_identical(isNLclass(agents = noPatches(), class = "patchset"), FALSE)
+  expect_identical(isNLclass(agents = turtle(t1, who = c(0,2)), class = "turtle"), FALSE)
+  expect_identical(isNLclass(agents = noTurtles(), class = "turtleset"), FALSE)
+  expect_identical(isNLclass(agents = cbind(xcor = 2, ycor = 3), class = "agent"), FALSE)
+  expect_identical(isNLclass(agents = patches(w1), class = "agent"), FALSE)
+  expect_identical(isNLclass(agents = patch(w1, xcor = 0, ycor = 0), class = "agentset"), FALSE)
+  expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "agentset"), FALSE)
+
+  t2 <- turtlesOwn(turtles = t1, tVarName = "age")
+  expect_identical(isNLclass(agents = t2, class = "agentset"), TRUE)
+  expect_identical(isNLclass(agents = t2, class = "turtleset"), TRUE)
+})

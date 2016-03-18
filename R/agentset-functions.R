@@ -872,3 +872,121 @@ setMethod(
     return(minAgents[row,])
   }
 )
+
+
+################################################################################
+#' Test class
+#'
+#' Reports \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
+#' \code{class} tested.
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to evaluate.
+#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
+#'
+#' @param class  Characters. Must be equal to \code{"agent"}, \code{"agentset"},
+#'               \code{"patch"}, \code{"patchset"}. \code{"turtle"} or \code{"turtleset"}.
+#'
+#' @return Logical. \code{TRUE} if \code{agents} is of the \code{class} tested.
+#'
+#' @details Careful! The class tested do not correspond to actual R classes.
+#'          \code{agents} is \code{"patch"} if it is a matrix (ncol = 2) with the
+#'          first column \code{pxcor} and the second column \code{pycor} and only
+#'          one row. \code{agents} is \code{"patcheset"} if the matrix has more than
+#'          one row.
+#'          \code{agents} is \code{"turtle"} if it is a SpatialPointsDataFrame
+#'          of length 1 with the variables created when using \code{createTurtles()}
+#'          or \code{createOTurtles()}. \code{agents} is \code{"turtleset"} if the
+#'          SpatialPointsDataFrame is of length larger than 1.
+#'          \code{agents} is \code{"agent"} if it is either \code{"patch"} or
+#'          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either
+#'          \code{"patcheset"} or \code{"turtleset"}.
+#'          This function does not test if the patch(es) exist(s) within a world
+#'          according to the coordinates. For this, use \code{isPatches()}. This
+#'          function does not test if the turtle(s) exist(s) given their who
+#'          number(s) and breed(s). For this, use \code{isTurtles()}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+#' isNLclass(agents = patches(world = w1), class = "patch")
+#' isNLclass(agents = patches(world = w1), class = "patcheset")
+#' isNLclass(agents = t1, class = "agentset")
+#' isNLclass(agents = t1, class = "turtleset")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname isNLclass
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "isNLclass",
+  function(agents, class) {
+    standardGeneric("isNLclass")
+  })
+
+#' @export
+#' @rdname isNLclass
+setMethod(
+  "isNLclass",
+  signature = c("matrix", "character"),
+  definition = function(agents, class) {
+    # If it is this signature, it is a matrix, therefore patch or patches
+    if(class == "agent"){
+      class <- "patch"
+    }
+    if(class == "agentset"){
+      class <- "patchset"
+    }
+
+    if((colnames(agents) == c("pxcor", "pycor") && nrow(agents) != 0)){
+      if(nrow(agents) == 1){
+        agentsClass <- "patch"
+      } else {
+        agentsClass <- "patchset"
+      }
+    } else {
+      agentsClass <- "nothing"
+    }
+
+    matchClass <- ifelse(class == agentsClass, TRUE, FALSE)
+    return(matchClass)
+  }
+)
+
+#' @export
+#' @rdname isNLclass
+setMethod(
+  "isNLclass",
+  signature = c("SpatialPointsDataFrame", "character"),
+  definition = function(agents, class) {
+    # If it is this signature, it is a SPDF, therefore turtle or turtles
+    if(class == "agent"){
+      class <- "turtle"
+    }
+    if(class == "agentset"){
+      class <- "turtleset"
+    }
+
+    if((colnames(agents@data[1:6]) == c("who", "heading", "prevX", "prevY", "breed", "color") && length(agents) != 0)){
+      if(length(agents) == 1){
+        agentsClass <- "turtle"
+      } else {
+        agentsClass <- "turtleset"
+      }
+    } else {
+      agentsClass <- "nothing"
+    }
+
+    matchClass <- ifelse(class == agentsClass, TRUE, FALSE)
+    return(matchClass)
+  }
+)
