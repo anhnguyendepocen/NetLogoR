@@ -820,21 +820,42 @@ test_that("subHeadings works",{
   expect_equivalent(angles9, rep(0, 4))
 })
 
-test_that("otherTurtles works",{
+test_that("other works with patches", {
+  w1 <- createNLworld(0, 9, 0, 9)
+  w1[] <- 1:100
+  p1 <- other(agents = patches(w1), except = cbind(pxcor = 0, pycor = 0))
+  expect_equivalent(nrow(p1), 99)
+  p2 <- other(agents = patches(w1), except = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
+  expect_equivalent(nrow(p2), 97)
+  p3 <- other(agents = patches(w1), except = cbind(pxcor = 0, pycor = -1))
+  expect_equivalent(nrow(p3), 100)
+
+  w2 <- w1
+  w2[] <- 100:1
+  ws <- NLstack(w1, w2)
+  p4 <- other(agents = patches(ws), except = cbind(pxcor = 0, pycor = 0))
+  expect_equivalent(nrow(p4), 99)
+  p5 <- other(agents = patches(ws), except = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
+  expect_equivalent(nrow(p5), 97)
+  p6 <- other(agents = patches(ws), except = cbind(pxcor = 0, pycor = -1))
+  expect_equivalent(nrow(p6), 100)
+})
+
+test_that("other works with turtles",{
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
-  t2 <- otherTurtles(turtles = t1, except = turtle(turtles = t1, who = 0))
+  t2 <- other(agents = t1, except = turtle(turtles = t1, who = 0))
   expect_equivalent(length(t2), 9)
   expect_identical(t2@data, t1@data[2:10,])
-  t3 <- otherTurtles(turtles = t1, except = turtle(turtles = t1, who = c(1, 2, 3)))
+  t3 <- other(agents = t1, except = turtle(turtles = t1, who = c(1, 2, 3)))
   expect_equivalent(length(t3), 7)
   expect_identical(t3@data, t1@data[c(1, 5:10),])
 
-  t4 <- otherTurtles(turtles = turtle(turtles = t1, who = c(1, 2, 3)), except = turtle(turtles = t1, who = 0))
+  t4 <- other(agents = turtle(turtles = t1, who = c(1, 2, 3)), except = turtle(turtles = t1, who = 0))
   expect_identical(t4, turtle(turtles = t1, who = c(1, 2, 3)))
-  t5 <- otherTurtles(turtles = turtle(turtles = t1, who = 0), except = turtle(turtles = t1, who = c(1, 2, 3)))
+  t5 <- other(agents = turtle(turtles = t1, who = 0), except = turtle(turtles = t1, who = c(1, 2, 3)))
   expect_identical(t5, turtle(turtles = t1, who = 0))
 
-  t6 <- otherTurtles(turtles = t1, except = t1)
+  t6 <- other(agents = t1, except = t1)
   expect_equivalent(length(t6), 0)
 })
 

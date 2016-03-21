@@ -2763,67 +2763,95 @@ setMethod(
 
 
 ################################################################################
-#' Other turtles
+#' Other
 #'
-#' Reports all turtles except for specific one(s).
+#' Reports all \code{agents} except specific one(s).
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles.
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates of the
+#'               patches to evaluate.
+#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param except  A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtle(s) to remove from
-#'                \code{turtles}.
+#' @param except A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates of the
+#'               patch(es) to remove from the \code{agents}.
+#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtle(s) to remove from
+#'               the \code{agents}.
 #'
-#' @return A SpatialPointsDataFrame representing the \code{turtles} with the one(s)
-#'         given as \code{except} removed.
+#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#'         column \code{pycor} representing the patches in \code{agents} with
+#'         the patch(es) in \code{except} removed.
+#'         A SpatialPointsDataFrame representing the turtles in \code{agents} with
+#'         the turtle(s) in \code{except} removed.
 #'
-#' @details Carefull: this function removes turtles only based on similar who numbers
+#' @details Both \code{agents} and \code{except} must be of the same class (e.g., both
+#'          patches or both turtles).
+#'          Carefull: this function removes turtles only based on similar who numbers
 #'          and breeds.
-#'          No data is updated for the other turtles.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
+#' # Patches
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+#' p1 <- other(agents = patches(world = w1), except = cbind(pxcor = 0, pycor = 0))
+#' nrow(p1)
+#'
+#'# Turtles
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
-#' t2 <- otherTurtles(turtles = t1, except = turtle(turtles = t1, who = 0))
+#' t2 <- other(agents = t1, except = turtle(turtles = t1, who = 0))
 #' length(t2)
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname otherTurtles
+#' @rdname other
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "otherTurtles",
-  function(turtles, except) {
-    standardGeneric("otherTurtles")
+  "other",
+  function(agents, except) {
+    standardGeneric("other")
   })
 
 #' @export
-#' @rdname otherTurtles
+#' @rdname other
 setMethod(
-  "otherTurtles",
+  "other",
+  signature = c("matrix", "matrix"),
+  definition = function(agents, except) {
+
+    pCoords <- agents[!duplicated(rbind(except, agents))[-(1:nrow(except))],]
+    return(pCoords)
+  }
+)
+
+#' @export
+#' @rdname other
+setMethod(
+  "other",
   signature = c("SpatialPointsDataFrame", "SpatialPointsDataFrame"),
-  definition = function(turtles, except) {
-    t1Data <- turtles@data[,c("who", "breed")]
+  definition = function(agents, except) {
+    t1Data <- agents@data[,c("who", "breed")]
     t2Data <- except@data[,c("who", "breed")]
     sameTurtles <- merge(t1Data, t2Data)
 
     if(nrow(sameTurtles) == 0){
-      # If turtles does not contain except
-      return(turtles)
+      # If agents does not contain except
+      return(agents)
     } else {
 
       tRemove <- match(sameTurtles$who, t1Data$who)
-      newCoords <- turtles@coords[-tRemove,]
-      newData <- turtles@data[-tRemove,]
+      newCoords <- agents@coords[-tRemove,]
+      newData <- agents@data[-tRemove,]
 
       if(nrow(newCoords) == 0){
-        # If turtles and except are the same
+        # If agents and except are the same
         noTurtles()
       } else {
 
