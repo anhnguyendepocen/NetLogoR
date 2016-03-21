@@ -675,7 +675,7 @@ setMethod(
 #'
 #' Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
 #' variable equals to the maximum value.
-#' Reports one turtle which has its variable equals to the minimum values.
+#' Reports one turtle which has its variable equals to the maximum value.
 #'
 #' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
@@ -743,7 +743,8 @@ setMethod(
   definition = function(agents, world) {
     maxAgents <- withMax(world = world, agents = agents)
     row <- sample(1:nrow(maxAgents), size = 1)
-    return(maxAgents[row,])
+    maxAgent <- maxAgents[row,]
+    return(cbind(pxcor = maxAgent[1], pycor = maxAgent[2]))
   }
 )
 
@@ -753,9 +754,9 @@ setMethod(
   "maxOneOf",
   signature = c("matrix", "NLworldStack", "character"),
   definition = function(agents, world, varName) {
-    maxAgents <- withMax(world = world, agents = agents, varName = varName)
-    row <- sample(1:nrow(maxAgents), size = 1)
-    return(maxAgents[row,])
+    pos_l <- which(names(world) == varName, TRUE) # find the layer
+    world_l <- world[[pos_l]]
+    maxOneOf(agents = agents, world = world_l)
   }
 )
 
@@ -766,8 +767,12 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, varName) {
     maxAgents <- withMax(agents = agents, varName = varName)
-    row <- sample(1:nrow(maxAgents), size = 1)
-    return(maxAgents[row,])
+    if(length(maxAgents) == 1){
+      return(maxAgents)
+    } else {
+      whoSample <- sample(maxAgents@data$who, size = 1)
+      turtle(turtles = maxAgents, who = whoSample)
+    }
   }
 )
 
@@ -777,7 +782,7 @@ setMethod(
 #'
 #' Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
 #' variable equals to the minimum value.
-#' Reports one turtle which has its variable equals to the minimum values.
+#' Reports one turtle which has its variable equals to the minimum value.
 #'
 #' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
@@ -845,7 +850,8 @@ setMethod(
   definition = function(agents, world) {
     minAgents <- withMin(world = world, agents = agents)
     row <- sample(1:nrow(minAgents), size = 1)
-    return(minAgents[row,])
+    minAgent <- minAgents[row,]
+    return(cbind(pxcor = minAgent[1], minAgent[2]))
   }
 )
 
@@ -855,9 +861,9 @@ setMethod(
   "minOneOf",
   signature = c("matrix", "NLworldStack", "character"),
   definition = function(agents, world, varName) {
-    minAgents <- withMin(world = world, agents = agents, varName = varName)
-    row <- sample(1:nrow(minAgents), size = 1)
-    return(minAgents[row,])
+    pos_l <- which(names(world) == varName, TRUE) # find the layer
+    world_l <- world[[pos_l]]
+    minOneOf(agents = agents, world = world_l)
   }
 )
 
@@ -868,8 +874,12 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, varName) {
     minAgents <- withMin(agents = agents, varName = varName)
-    row <- sample(1:nrow(minAgents), size = 1)
-    return(minAgents[row,])
+    if(length(minAgents) == 1){
+      return(minAgents)
+    } else {
+      whoSample <- sample(minAgents@data$who, size = 1)
+      turtle(turtles = minAgents, who = whoSample)
+    }
   }
 )
 
@@ -988,5 +998,436 @@ setMethod(
 
     matchClass <- ifelse(class == agentsClass, TRUE, FALSE)
     return(matchClass)
+  }
+)
+
+
+################################################################################
+#' N- of
+#'
+#' Reports an agentset composed of n agents chosen randomly.
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to choose from.
+#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to choose from.
+#'
+#' @param n      Integer. The number of patches or turtles to select from \code{agents}
+#'               to return. \code{n} must be less or equal to the number of \code{agents}.
+#'
+#' @return A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor}
+#'         and the second  column \code{pycor} representing the coordinates of the
+#'         chosen patch(es) from \code{agents}.
+#'         A SpatialPointsDataFrame of length \code{n} representing the turtle(s)
+#'         chosen from \code{agents}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Patches
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' pSelect <- nOf(agents = patches(world = w1), n = 5)
+#'
+#' # Turtles
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' tSelect <- nOf(agents = t1, n = 2)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname nOf
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "nOf",
+  function(agents, n) {
+    standardGeneric("nOf")
+  })
+
+#' @export
+#' @rdname nOf
+setMethod(
+  "nOf",
+  signature = c("matrix", "numeric"),
+  definition = function(agents, n) {
+    row <- sample(1:nrow(agents), size = n, replace = FALSE)
+    row <- row[order(row)]
+    patches <- agents[row,]
+
+    if(length(row) == 1){ # to keep the class = matrix
+      patches <- cbind(pxcor = patches[1], pycor = patches[2])
+    }
+
+    return(patches)
+  }
+)
+
+#' @export
+#' @rdname nOf
+setMethod(
+  "nOf",
+  signature = c("SpatialPointsDataFrame", "numeric"),
+  definition = function(agents, n) {
+    row <- sample(1:length(agents), size = n, replace = FALSE)
+    row <- row[order(row)]
+    newCoords <- agents@coords[row,]
+    newData <- agents@data[row,]
+
+    if(length(row) == 1){ # to keep the class = matrix
+      newCoords <- cbind(xcor = newCoords[1], ycor = newCoords[2])
+    }
+
+    newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
+    return(newTurtles)
+  }
+)
+
+
+################################################################################
+#' One of
+#'
+#' Reports one agent randomly chosen from \code{agents}.
+#'
+#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to choose from.
+#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to choose from.
+#'
+#' @return A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+#'         the second  column \code{pycor} representing the coordinates of the
+#'         chosen patch from \code{agents}.
+#'         A SpatialPointsDataFrame of length 1 representing the turtle chosen
+#'         from \code{agents}.
+#'
+#' @details This function is similar as using \code{nOf(agents, n = 1)}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Patches
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' pSelect <- oneOf(agents = patches(world = w1))
+#'
+#' # Turtles
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' tSelect <- oneOf(agents = t1)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname oneOf
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "oneOf",
+  function(agents) {
+    standardGeneric("oneOf")
+  })
+
+#' @export
+#' @rdname oneOf
+setMethod(
+  "oneOf",
+  signature = c("matrix"),
+  definition = function(agents) {
+    nOf(agents = agents, n = 1)
+  }
+)
+
+#' @export
+#' @rdname oneOf
+setMethod(
+  "oneOf",
+  signature = c("SpatialPointsDataFrame"),
+  definition = function(agents) {
+    nOf(agents = agents, n = 1)
+  }
+)
+
+
+################################################################################
+#' N- with maximum
+#'
+#' Reports the n patches coordinates \code{pxcor} and \code{pycor} which have
+#' their variable among the maximum values.
+#' Reports the n turtles which have their variable amog the maximum values.
+#'
+#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates for the
+#'                patches to evaluate.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'
+#' @param n      Integer. The number of patches or turtles to select from \code{agents}
+#'               to return. \code{n} must be less or equal to the number of \code{agents}.
+#'
+#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'                Must not be provided if \code{agents} are turtles.
+#'
+#' @param varName Characters. The name of the variable to evaluate for their values.
+#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'                object, \code{varName} must not be provided. If \code{agents} are
+#'                patches and the \code{world} is a \code{NLworldStack} object,
+#'                \code{varName} refers to the layer used for evaluating patches
+#'                values. If \code{agents} are turtles, \code{varName} is one of
+#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+#'                \code{"ycor"}, any of the variables created when turtles were created,
+#'                as well as any variable created using \code{turtlesOwn()}.
+#'
+#' @return A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
+#'         the second column \code{pycor} representing the coordinates for the \code{n}
+#'         patches which have their variable value among the maximum values among the
+#'         \code{agents}.
+#'         A SpatialPointsDataFrame of length \code{n} representing the turtles which
+#'         have their \code{varName} value among the maximum values among the \code{agents}.
+#'
+#' @details If there is a tie that would make the number of returned patches or turtles larger
+#'          than \code{n}, the tie is broken randomly.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Patches
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- sample(1:10, size = 25, replace = TRUE)
+#' plot(w1)
+#' p1 <- maxNof(agents = patches(world = w1), n = 6, world = w1)
+#'
+#' # Turtles
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+#' t2 <- maxNof(agents = t1, n = 5, varName = "heading")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname maxNof
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "maxNof",
+  function(agents, n, world, varName) {
+    standardGeneric("maxNof")
+  })
+
+#' @export
+#' @rdname maxNof
+setMethod(
+  "maxNof",
+  signature = c("matrix", "numeric", "NLworld", "missing"),
+  definition = function(agents, n, world) {
+
+    if(n == 1){
+      maxOneOf(agents = agents, world = world)
+    } else if(n == 0){
+      noPatches()
+    } else if(n == nrow(agents)){
+      return(agents)
+    } else {
+
+      pxcor <- agents[,1]
+      pycor <- agents[,2]
+      val <- world[pxcor, pycor]
+      agentsVal <- cbind(val, agents)
+      agentsVal <- agentsVal[order(-agentsVal[,"val"]),] # decreasing order
+
+      minVal <- min(agentsVal[1:n, "val"], na.rm = TRUE)
+      maxAgents <- agentsVal[agentsVal[,"val"] >= minVal,]
+
+      # To break ties randomly
+      if(nrow(maxAgents) != n){
+        nToRemove <- nrow(maxAgents) - n # how many ties to remove
+        toKeep <- sample(1:nrow(maxAgents[maxAgents[,"val"] == minVal,]),
+                         size = nrow(maxAgents[maxAgents[,"val"] == minVal,]) -nToRemove) # rows to keep
+        maxAgents <- rbind(maxAgents[maxAgents[,"val"] > minVal,], maxAgents[maxAgents[,"val"] == minVal,][toKeep,])
+      }
+
+      return(cbind(pxcor = maxAgents[,"pxcor"], pycor = maxAgents[,"pycor"]))
+    }
+  }
+)
+
+#' @export
+#' @rdname maxNof
+setMethod(
+  "maxNof",
+  signature = c("matrix", "numeric", "NLworldStack", "character"),
+  definition = function(agents, n, world, varName) {
+    pos_l <- which(names(world) == varName, TRUE) # find the layer
+    world_l <- world[[pos_l]]
+    maxNof(agents = agents, n = n, world = world_l)
+  }
+)
+
+#' @export
+#' @rdname maxNof
+setMethod(
+  "maxNof",
+  signature = c("SpatialPointsDataFrame", "numeric", "missing", "character"),
+  definition = function(agents, n, varName) {
+
+    if(n == 1){
+      maxOneOf(agents = agents, varName = varName)
+    } else if(n == 0){
+      noTurtles()
+    } else if(n == length(agents)){
+      return(agents)
+    } else {
+
+      tData <- agents@data
+      rownames(tData) <- 1:nrow(tData)
+      tData <- tData[order(-tData[,varName]),] # decreasing order
+
+      minVal <- min(tData[1:n, varName], na.rm = TRUE)
+      maxAgents <- tData[tData[,varName] >= minVal,]
+
+      # To break ties randomly
+      if(nrow(maxAgents) != n){
+        nToRemove <- nrow(maxAgents) - n # how many ties to remove
+        toKeep <- sample(1:nrow(maxAgents[maxAgents[,varName] == minVal,]),
+                         size = nrow(maxAgents[maxAgents[,varName] == minVal,]) -nToRemove) # rows to keep
+        maxAgents <- rbind(maxAgents[maxAgents[,varName] > minVal,], maxAgents[maxAgents[,varName] == minVal,][toKeep,])
+      }
+
+      tSelect <- as.numeric(rownames(maxAgents))
+      tSelect <- sort(tSelect)
+
+      tSelectCoords <- cbind(xcor = agents@coords[tSelect,1], ycor = agents@coords[tSelect,2])
+      tSelectData <- agents@data[tSelect,]
+      maxTurtles <- SpatialPointsDataFrame(coords = tSelectCoords, data = tSelectData)
+      return(maxTurtles)
+    }
+  }
+)
+
+
+################################################################################
+#' N- with minimum
+#'
+#' Reports the n patches coordinates \code{pxcor} and \code{pycor} which have
+#' their variable among the minimum values.
+#' Reports the n turtles which have their variable amog the minimum values.
+#'
+#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates for the
+#'                patches to evaluate.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'
+#' @param n      Integer. The number of patches or turtles to select from \code{agents}
+#'               to return. \code{n} must be less or equal to the number of \code{agents}.
+#'
+#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'                Must not be provided if \code{agents} are turtles.
+#'
+#' @param varName Characters. The name of the variable to evaluate for their values.
+#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'                object, \code{varName} must not be provided. If \code{agents} are
+#'                patches and the \code{world} is a \code{NLworldStack} object,
+#'                \code{varName} refers to the layer used for evaluating patches
+#'                values. If \code{agents} are turtles, \code{varName} is one of
+#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+#'                \code{"ycor"}, any of the variables created when turtles were created,
+#'                as well as any variable created using \code{turtlesOwn()}.
+#'
+#' @return A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
+#'         the second column \code{pycor} representing the coordinates for the \code{n}
+#'         patches which have their variable value among the minimum values among the
+#'         \code{agents}.
+#'         A SpatialPointsDataFrame of length \code{n} representing the turtles which
+#'         have their \code{varName} value among the minimum values among the \code{agents}.
+#'
+#' @details If there is a tie that would make the number of returned patches or turtles larger
+#'          than \code{n}, the tie is broken randomly.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Patches
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- sample(1:10, size = 25, replace = TRUE)
+#' plot(w1)
+#' p1 <- minNof(agents = patches(world = w1), n = 6, world = w1)
+#'
+#' # Turtles
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+#' t2 <- minNof(agents = t1, n = 5, varName = "heading")
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname minNof
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "minNof",
+  function(agents, n, world, varName) {
+    standardGeneric("minNof")
+  })
+
+#' @export
+#' @rdname minNof
+setMethod(
+  "minNof",
+  signature = c("matrix", "numeric", "NLworld", "missing"),
+  definition = function(agents, n, world) {
+
+    if(n == 1){
+      minOneOf(agents = agents, world = world)
+    } else if(n == 0){
+      noPatches()
+    } else if(n == nrow(agents)){
+      return(agents)
+    } else {
+
+      maxPatches <- maxNof(agents = agents, n = nrow(agents) - n, world = world)
+      other(agents = agents, except = maxPatches)
+    }
+  }
+)
+
+#' @export
+#' @rdname minNof
+setMethod(
+  "minNof",
+  signature = c("matrix", "numeric", "NLworldStack", "character"),
+  definition = function(agents, n, world, varName) {
+    pos_l <- which(names(world) == varName, TRUE) # find the layer
+    world_l <- world[[pos_l]]
+    minNof(agents = agents, n = n, world = world_l)
+  }
+)
+
+#' @export
+#' @rdname minNof
+setMethod(
+  "minNof",
+  signature = c("SpatialPointsDataFrame", "numeric", "missing", "character"),
+  definition = function(agents, n, varName) {
+
+    if(n == 1){
+      minOneOf(agents = agents, varName = varName)
+    } else if(n == 0){
+      noTurtles()
+    } else if(n == length(agents)){
+      return(agents)
+    } else {
+
+      maxTurtles <- maxNof(agents = agents, n = length(agents) - n, varName = varName)
+      other(agents = agents, except = maxTurtles)
+    }
   }
 )

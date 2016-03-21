@@ -34,15 +34,15 @@ Reports \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
 Careful! The class tested do not correspond to actual R classes.
          \code{agents} is \code{"patch"} if it is a matrix (ncol = 2) with the
          first column \code{pxcor} and the second column \code{pycor} and only
-         one row. \code{agents} is \code{"patches"} if the matrix has more than
+         one row. \code{agents} is \code{"patcheset"} if the matrix has more than
          one row.
          \code{agents} is \code{"turtle"} if it is a SpatialPointsDataFrame
          of length 1 with the variables created when using \code{createTurtles()}
-         or \code{createOTurtles()}. \code{agents} is \code{"turtles"} if the
+         or \code{createOTurtles()}. \code{agents} is \code{"turtleset"} if the
          SpatialPointsDataFrame is of length larger than 1.
          \code{agents} is \code{"agent"} if it is either \code{"patch"} or
          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either
-         \code{"patches"} or \code{"turtles"}.
+         \code{"patcheset"} or \code{"turtleset"}.
          This function does not test if the patch(es) exist(s) within a world
          according to the coordinates. For this, use \code{isPatches()}. This
          function does not test if the turtle(s) exist(s) given their who
@@ -51,10 +51,10 @@ Careful! The class tested do not correspond to actual R classes.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-isNLclass(agents = patches(world = w1), class = "pacth")
-isNLclass(agents = patches(world = w1), class = "pacthes")
+isNLclass(agents = patches(world = w1), class = "patch")
+isNLclass(agents = patches(world = w1), class = "patcheset")
 isNLclass(agents = t1, class = "agentset")
-isNLclass(agents = t1, class = "turtles")
+isNLclass(agents = t1, class = "turtleset")
 
 
 }

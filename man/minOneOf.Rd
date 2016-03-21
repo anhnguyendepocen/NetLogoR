@@ -47,7 +47,7 @@ A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
 \description{
 Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
 variable equals to the minimum value.
-Reports one turtle which has its variable equals to the minimum values.
+Reports one turtle which has its variable equals to the minimum value.
 }
 \details{
 If there are several \code{agents}. with the minimum value, one is chosen
