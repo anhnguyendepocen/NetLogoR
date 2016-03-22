@@ -1431,3 +1431,169 @@ setMethod(
     }
   }
 )
+
+
+################################################################################
+#' In radius
+#'
+#' Reports the patch(es) or turtle(s) from \code{agents2} within given distance(s)
+#' of each patch or turtle from \code{agents1}.
+#'
+#' @param agents1 A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates for the
+#'                patch(es) from which the \code{radius} distance(s) is/are calculared
+#'                to select agent(s) from \code{agents2}.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtle(s) from which the
+#'                \code{radius} distance(s) is/are calculared to select agent(s) from
+#'                \code{agents2}.
+#'
+#' @param radius  Numeric. The distance(s) from \code{agents1} to locate agents from
+#'                \code{agents2}. Must be of length 1 or of length \code{agent1}.
+#'
+#' @param agents2 A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates for the
+#'                patch(es) to which the \code{radius} distance(s) is/are calculared
+#'                from \code{agents1}.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtle(s) to which the
+#'                \code{radius} distance(s) is/are calculared from \code{agents1}.
+#'
+#' @param wolrd   A \code{NLworlds} object representing the world where the agents
+#'                are located.
+#'
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A list of length equal to \code{nrow(agents1)} if \code{agents1} are patches
+#'         or equal to \code{length(agents1)} if \code{agents1} are turtles.
+#'         List items are either matrices (ncol = 2) with the first column \code{pxcor}
+#'         and the second column \code{pycor} representing the coordinates of the
+#'         patch(es) within \code{radius} distance(s) for each \code{agents1} if
+#'         \code{agents2} are patches, or SpatialPointsDataFrame objects representing
+#'         the turtle(s) within \code{radius} distance(s) for each \code{agents1} if
+#'         \code{agents2} are turtles.
+#'
+#' @details Distances from and to patches are calculated from/to their center.
+#'          If \code{torus = TRUE}, the \code{radius} distance(s) are calculared
+#'          around the sides of the world to select \code{agents2}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' # Patches
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
+#'
+#' # Turtles
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+#' t2 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
+#' t3 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
+#' t4 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname inRadius
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "inRadius",
+  function(agents1, radius, agents2, world, torus = FALSE) {
+    standardGeneric("inRadius")
+  })
+
+#' @export
+#' @rdname inRadius
+setMethod(
+  "inRadius",
+  signature = c(agents1 = "matrix", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
+  definition = function(agents1, radius, agents2, world, torus) {
+
+    # Distances from agents1 to every agents2
+    distAgents <- NLdist(from = agents1, to = agents2, world = world, torus = torus, allPairs = TRUE)
+
+    if(nrow(agents1) == 1){ # distAgents is a vector of length = nrow(agents2)
+
+      withinDist <- distAgents <= radius
+      withinDist <- which(withinDist) # element position where distAgents <= radius
+      list_agents <- list()
+
+      if(length(withinDist) == 0){
+        list_agents[[1]] <- noPatches()
+      } else {
+        agent2Select <- cbind(pxcor = agents2[withinDist, 1], pycor = agents2[withinDist, 2])
+        list_agents[[1]] <- agent2Select # list of 1 element
+      }
+
+    } else if(nrow(agents2) == 1){
+
+      withinDist <- distAgents <= radius
+      withinDist_list <- split(withinDist, 1:length(withinDist)) # list of nrow(agents1) elements
+      list_agents <- lapply(withinDist_list, function(x){
+        if(x == TRUE){
+          agents2
+        } else {
+          noPatches()
+        }
+      })
+
+    } else { # distAgents is a matrix of nrow = nrow(agents1) and ncol = nrow(agents2)
+
+      if(length(radius) == 1){
+        radius <- rep(radius, nrow(agents1))
+      }
+      radiusMat <- matrix(rep(radius, each = nrow(agents2)), ncol = nrow(agents2), byrow=TRUE) # radius is a matrix of nrow = nrow(agents1) and ncol = nrow(agents2)
+      withinDist <- distAgents <= radiusMat
+      withinDist_list <- split(withinDist, row(withinDist))
+      withinDist_list <- lapply(withinDist_list, function(x){which(x)}) # element position where distAgents <= radius
+      list_agents <- lapply(withinDist_list, function(x){
+        if(length(x) == 0){
+          noPatches()
+        } else {
+          cbind(pxcor = agents2[x, 1], pycor = agents2[x, 2])
+        }
+      })
+    }
+
+    return(list_agents)
+  }
+)
+
+#' @export
+#' @rdname inRadius
+setMethod(
+  "inRadius",
+  signature = c(agents1 = "matrix", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  definition = function(agents1, radius, agents2, world, torus) {
+
+    tCoords <- inRadius(agents1 = agents1, radius = radius, agents2 = agents2@coords, world = world, torus = torus)
+    # Merge the turtles coordinates within radius distances of the patches to their data
+    tWho <- lapply(tCoords, function(x){merge(x, cbind(agents2@coords, agents2@data), by.x = c("pxcor", "pycor"), by.y = c("xcor", "ycor"))})
+    list_agents <- lapply(tWho, function(x){turtle(turtles = agents2, who = x$who)})
+    return(list_agents)
+  }
+)
+
+#' @export
+#' @rdname inRadius
+setMethod(
+  "inRadius",
+  signature = c(agents1 = "SpatialPointsDataFrame", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
+  definition = function(agents1, radius, agents2, world, torus) {
+    inRadius(agents1 = agents1@coords, radius = radius, agents2 = agents2, world = world, torus = torus)
+  }
+)
+
+#' @export
+#' @rdname inRadius
+setMethod(
+  "inRadius",
+  signature = c(agents1 = "SpatialPointsDataFrame", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  definition = function(agents1, radius, agents2, world, torus) {
+    inRadius(agents1 = agents1@coords, radius = radius, agents2 = agents2, world = world, torus = torus)
+  }
+)

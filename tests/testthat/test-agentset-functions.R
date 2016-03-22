@@ -166,6 +166,10 @@ test_that("withMax works with patches",{
   pMaxw2 <- withMax(world = ws, agents = patches(world = ws), varName = "w2")
   expect_identical(pMaxw1, patch(ws, xcor = c(1,1), ycor = c(4,1)))
   expect_identical(pMaxw2, patch(ws, xcor = c(2,2), ycor = c(4,2)))
+
+  w1[1,1] <- 0
+  pMax <- withMax(world = w1, agents = patches(world = w1))
+  expect_identical(pMax, patch(w1, xcor = 1, ycor = 4))
 })
 
 test_that("withMax works with turtles",{
@@ -195,6 +199,10 @@ test_that("withMin works with patches",{
   pMinw2 <- withMin(world = ws, agents = patches(world = ws), varName = "w2")
   expect_identical(pMinw1, patch(ws, xcor = c(1,1), ycor = c(4,1)))
   expect_identical(pMinw2, patch(ws, xcor = c(2,2), ycor = c(4,2)))
+
+  w1[1,1] <- 0
+  pMin <- withMin(world = w1, agents = patches(world = w1))
+  expect_identical(pMin, patch(w1, xcor = 1, ycor = 4))
 })
 
 test_that("withMin works with turtles",{
@@ -409,4 +417,66 @@ test_that("minNof works",{
   t7 <- minNof(agents = t1, n = 0, varName = "heading")
   expect_identical(t7, noTurtles())
   expect_equivalent(length(t7), 0)
+})
+
+test_that("inRadius works",{
+  # Patches to patches
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  p1 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
+  expect_identical(p1[[1]], cbind(pxcor = c(0, 0, 1, 0, 1, 2), pycor = c(2, 1, 1, 0, 0, 0)))
+  p2 <- inRadius(agents1 = patches(w1), radius = 2, agents2 = patch(w1, 0, 0), world = w1)
+  expect_identical(p2[[11]], cbind(pxcor = 0, pycor = 0))
+  expect_identical(p2[[1]], noPatches())
+  expect_identical(p2[[1]], p2[[2]])
+  p3 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = patch(w1, 0, 0), world = w1)
+  expect_equivalent(p3[[1]], patch(w1, 0, 0))
+  expect_equivalent(length(p3), 1)
+  p4 <- inRadius(agents1 = patches(w1), radius = 10, agents2 = patches(w1), world = w1)
+  expect_identical(p4[[1]], patches(w1))
+  expect_equivalent(length(p4), nrow(patches(w1)))
+  expect_identical(p4[[1]], p4[[2]])
+
+  # Patches to turtles
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
+  t2 <- inRadius(agents1 = patch(w1, xcor = 0, ycor = 0), radius = 1, agents2 = t1, world = w1)
+  expect_identical(t2[[1]], turtle(t1, 0))
+  t3 <- inRadius(agents1 = patch(w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
+  expect_identical(t3[[1]], turtle(t1, c(0, 1)))
+  t4 <- inRadius(agents1 = patch(w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1, torus = TRUE)
+  expect_identical(t4[[1]], turtle(t1, c(0, 1, 4)))
+  t5 <- inRadius(agents1 = patches(w1), radius = 1, agents2 = t1, world = w1)
+  expect_equivalent(length(t5), nrow(patches(w1)))
+  expect_identical(t5[[5]], turtle(t1, 4))
+  expect_identical(t5[[9]], turtle(t1, 3))
+  t6 <- inRadius(agents1 = patches(w1), radius = 10, agents2 = t1, world = w1)
+  expect_identical(t6[[1]], t1)
+  expect_identical(t6[[25]], t1)
+  t7 <- inRadius(agents1 = patches(w1), radius = 10, agents2 = t1, world = w1, torus = TRUE)
+  expect_identical(t7[[1]], t1)
+  expect_identical(t7[[25]], t1)
+
+  # Turtles to patches
+  p5 <- inRadius(agents1 = turtle(t1, 0), radius = 2, agents2 = patches(w1), world = w1)
+  expect_identical(p5, p1)
+  p6 <- inRadius(agents1 = t1, radius = 0.5, agents2 = patches(w1), world = w1)
+  expect_equivalent(length(p6), length(t1))
+  expect_equivalent(p6[[1]], turtle(t1, 0)@coords)
+  p7 <- inRadius(agents1 = turtle(t1, 0), radius = 1, agents2 = patches(w1), world = w1, torus = TRUE)
+  expect_identical(p7[[1]], cbind(pxcor = c(0, 0, 0, 1, 4), pycor = c(4, 1, 0, 0, 0)))
+  p8 <- inRadius(agents1 = turtle(t1, c(0, 4)), radius = 1, agents2 = patches(w1), world = w1, torus = TRUE)
+  expect_identical(p8[[1]], cbind(pxcor = c(0, 0, 0, 1, 4), pycor = c(4, 1, 0, 0, 0)))
+  expect_identical(p8[[2]], cbind(pxcor = c(0, 3, 4, 4, 4), pycor = c(4, 4, 4, 3, 0)))
+  p9 <- inRadius(agents1 = turtle(t1, 0), radius = 1, agents2 = patch(w1, 4, 4), world = w1)
+  expect_identical(p9[[1]], noPatches())
+
+  # Turtles to turtles
+  t8 <- inRadius(agents1 = turtle(t1, 0), radius = 1, agents = t1, world = w1)
+  expect_identical(t8[[1]], turtle(t1, 0))
+  t9 <- inRadius(agents1 = turtle(t1, 0), radius = 2, agents = t1, world = w1)
+  expect_identical(t9[[1]], turtle(t1, c(0, 1)))
+  t10 <- inRadius(agents1 = turtle(t1, 0), radius = 2, agents = t1, world = w1, torus = TRUE)
+  expect_identical(t10[[1]], turtle(t1, c(0, 1, 4)))
+  t11 <- inRadius(agents1 = t1, radius = 10, agents2 = t1, world = w1)
+  expect_identical(length(t11), length(t1))
+  expect_identical(t11[[1]], t1)
 })
