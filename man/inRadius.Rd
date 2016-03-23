@@ -45,11 +45,11 @@ A SpatialPointsDataFrame created by \code{createTurtles()} or by
 \code{createOTurtles()} representing the turtle(s) to which the
 \code{radius} distance(s) is/are calculared from \code{agents1}.}
 
+\item{world}{A \code{NLworlds} object representing the world where the agents
+are located.}
+
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
-
-\item{wolrd}{A \code{NLworlds} object representing the world where the agents
-are located.}
 }
 \value{
 A list of length equal to \code{nrow(agents1)} if \code{agents1} are patches
@@ -76,7 +76,7 @@ w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 t2 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
 t3 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
 t4 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)

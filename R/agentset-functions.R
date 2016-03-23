@@ -1459,7 +1459,7 @@ setMethod(
 #'                \code{createOTurtles()} representing the turtle(s) to which the
 #'                \code{radius} distance(s) is/are calculared from \code{agents1}.
 #'
-#' @param wolrd   A \code{NLworlds} object representing the world where the agents
+#' @param world   A \code{NLworlds} object representing the world where the agents
 #'                are located.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
@@ -1488,13 +1488,16 @@ setMethod(
 #' p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' t2 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
-#' t3 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
-#' t4 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
+#' p2 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
+#' t3 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
 #'
 #'
 #' @export
+#' @importFrom rgeos gBuffer
+#' @importFrom sp over
+#' @importFrom SpaDES wrap
 #' @docType methods
 #' @rdname inRadius
 #'
@@ -1512,50 +1515,49 @@ setMethod(
   "inRadius",
   signature = c(agents1 = "matrix", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
   definition = function(agents1, radius, agents2, world, torus) {
+    inRadius(agents1 = SpatialPointsDataFrame(coords = agents1, data = data.frame(rep(NA, nrow(agents1)))), radius = radius, agents2 = agents2, world = world, torus = torus)
+  }
+)
 
-    # Distances from agents1 to every agents2
-    distAgents <- NLdist(from = agents1, to = agents2, world = world, torus = torus, allPairs = TRUE)
+#' @export
+#' @rdname inRadius
+setMethod(
+  "inRadius",
+  signature = c(agents1 = "matrix", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  definition = function(agents1, radius, agents2, world, torus) {
+    inRadius(agents1 = SpatialPointsDataFrame(coords = agents1, data = data.frame(rep(NA, nrow(agents1)))), radius = radius, agents2 = agents2, world = world, torus = torus)
+  }
+)
 
-    if(nrow(agents1) == 1){ # distAgents is a vector of length = nrow(agents2)
+#' @export
+#' @rdname inRadius
+setMethod(
+  "inRadius",
+  signature = c(agents1 = "SpatialPointsDataFrame", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
+  definition = function(agents1, radius, agents2, world, torus) {
 
-      withinDist <- distAgents <= radius
-      withinDist <- which(withinDist) # element position where distAgents <= radius
-      list_agents <- list()
+    # Create buffers around the locations of agents1
+    pBuffer <- gBuffer(agents1, byid = TRUE, id = 1:length(agents1), width = radius, quadsegs = 50)
 
-      if(length(withinDist) == 0){
-        list_agents[[1]] <- noPatches()
-      } else {
-        agent2Select <- cbind(pxcor = agents2[withinDist, 1], pycor = agents2[withinDist, 2])
-        list_agents[[1]] <- agent2Select # list of 1 element
-      }
-
-    } else if(nrow(agents2) == 1){
-
-      withinDist <- distAgents <= radius
-      withinDist_list <- split(withinDist, 1:length(withinDist)) # list of nrow(agents1) elements
-      list_agents <- lapply(withinDist_list, function(x){
-        if(x == TRUE){
-          agents2
-        } else {
-          noPatches()
-        }
+    if(torus == TRUE){
+      worldWrap <- createNLworld(minPxcor = minPxcor(world) - radius, maxPxcor = maxPxcor(world) + radius,
+                                 minPycor = minPycor(world) - radius, maxPycor = maxPycor(world) + radius)
+      pAllWrap <- patches(worldWrap)
+      # Extract the locations of agents2 under the buffers
+      pOver <- over(pBuffer, SpatialPoints(coords = pAllWrap), returnList = TRUE)
+      list_agentsXY <- lapply(pOver, function(z){
+        wrap(cbind(x = pAllWrap[as.numeric(z), 1], y = pAllWrap[as.numeric(z), 2]), extent(world))
+      })
+      list_agents <- lapply(list_agentsXY, function(x){
+        colnames(x) <- c("pxcor", "pycor")
+        x
       })
 
-    } else { # distAgents is a matrix of nrow = nrow(agents1) and ncol = nrow(agents2)
-
-      if(length(radius) == 1){
-        radius <- rep(radius, nrow(agents1))
-      }
-      radiusMat <- matrix(rep(radius, each = nrow(agents2)), ncol = nrow(agents2), byrow=TRUE) # radius is a matrix of nrow = nrow(agents1) and ncol = nrow(agents2)
-      withinDist <- distAgents <= radiusMat
-      withinDist_list <- split(withinDist, row(withinDist))
-      withinDist_list <- lapply(withinDist_list, function(x){which(x)}) # element position where distAgents <= radius
-      list_agents <- lapply(withinDist_list, function(x){
-        if(length(x) == 0){
-          noPatches()
-        } else {
-          cbind(pxcor = agents2[x, 1], pycor = agents2[x, 2])
-        }
+    } else {
+      # Extract the locations of agents2 under the buffers
+      pOver <- over(pBuffer, SpatialPoints(coords = agents2), returnList = TRUE)
+      list_agents <- lapply(pOver, function(x){
+        cbind(pxcor = agents2[as.numeric(x), 1], pycor = agents2[as.numeric(x), 2])
       })
     }
 
@@ -1567,33 +1569,43 @@ setMethod(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents1 = "matrix", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  signature = c(agents1 = "SpatialPointsDataFrame", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
   definition = function(agents1, radius, agents2, world, torus) {
 
-    tCoords <- inRadius(agents1 = agents1, radius = radius, agents2 = agents2@coords, world = world, torus = torus)
-    # Merge the turtles coordinates within radius distances of the patches to their data
-    tWho <- lapply(tCoords, function(x){merge(x, cbind(agents2@coords, agents2@data), by.x = c("pxcor", "pycor"), by.y = c("xcor", "ycor"))})
-    list_agents <- lapply(tWho, function(x){turtle(turtles = agents2, who = x$who)})
+    # Create buffers around the locations of agents1
+    pBuffer <- gBuffer(agents1, byid = TRUE, id = 1:length(agents1), width = radius, quadsegs = 50)
+
+    if(torus == TRUE){
+      agents2c <- agents2@coords
+      agents2c1 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
+      agents2c2 <- cbind(agents2c[,1], agents2c[,2] + (world@extent@ymax - world@extent@ymin))
+      agents2c3 <- cbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
+      agents2c4 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2])
+      agents2c5 <- cbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2])
+      agents2c6 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] - (world@extent@ymax - world@extent@ymin))
+      agents2c7 <- cbind(agents2c[,1], agents2c[,2] - (world@extent@ymax - world@extent@ymin))
+      agents2c8 <- cbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2] - (world@extent@ymax - world@extent@ymin))
+      agents2cAll <- rbind(agents2c, agents2c1, agents2c2, agents2c3, agents2c4, agents2c5, agents2c6, agents2c7, agents2c8)
+
+      # Extract the locations of agents2 under the buffers
+      pOver <- over(pBuffer, SpatialPoints(coords = agents2cAll), returnList = TRUE)
+      list_agentsXY <- lapply(pOver, function(z){
+        wrap(cbind(x = agents2cAll[as.numeric(z), 1], y = agents2cAll[as.numeric(z), 2]), extent(world))
+      })
+      list_agents <- lapply(list_agentsXY, function(x){
+        tWho <- merge(x, cbind(agents2@coords, agents2@data), by.x = c("x", "y"), by.y = c("xcor", "ycor"))
+        turtle(turtles = agents2, who = tWho[,"who"])
+      })
+
+    } else {
+      # Extract the locations of agents2 under the buffers
+      pOver <- over(pBuffer, agents2, returnList = TRUE)
+      list_agents <- lapply(pOver, function(x){
+        turtle(turtles = agents2, who = x[,"who"])
+      })
+    }
+
     return(list_agents)
   }
 )
 
-#' @export
-#' @rdname inRadius
-setMethod(
-  "inRadius",
-  signature = c(agents1 = "SpatialPointsDataFrame", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
-  definition = function(agents1, radius, agents2, world, torus) {
-    inRadius(agents1 = agents1@coords, radius = radius, agents2 = agents2, world = world, torus = torus)
-  }
-)
-
-#' @export
-#' @rdname inRadius
-setMethod(
-  "inRadius",
-  signature = c(agents1 = "SpatialPointsDataFrame", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
-  definition = function(agents1, radius, agents2, world, torus) {
-    inRadius(agents1 = agents1@coords, radius = radius, agents2 = agents2, world = world, torus = torus)
-  }
-)

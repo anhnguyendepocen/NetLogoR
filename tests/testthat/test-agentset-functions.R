@@ -425,8 +425,8 @@ test_that("inRadius works",{
   p1 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
   expect_identical(p1[[1]], cbind(pxcor = c(0, 0, 1, 0, 1, 2), pycor = c(2, 1, 1, 0, 0, 0)))
   p2 <- inRadius(agents1 = patches(w1), radius = 2, agents2 = patch(w1, 0, 0), world = w1)
-  expect_identical(p2[[11]], cbind(pxcor = 0, pycor = 0))
-  expect_identical(p2[[1]], noPatches())
+  expect_equivalent(p2[[11]], cbind(pxcor = 0, pycor = 0))
+  expect_equivalent(p2[[1]], noPatches())
   expect_identical(p2[[1]], p2[[2]])
   p3 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = patch(w1, 0, 0), world = w1)
   expect_equivalent(p3[[1]], patch(w1, 0, 0))
@@ -462,12 +462,12 @@ test_that("inRadius works",{
   expect_equivalent(length(p6), length(t1))
   expect_equivalent(p6[[1]], turtle(t1, 0)@coords)
   p7 <- inRadius(agents1 = turtle(t1, 0), radius = 1, agents2 = patches(w1), world = w1, torus = TRUE)
-  expect_identical(p7[[1]], cbind(pxcor = c(0, 0, 0, 1, 4), pycor = c(4, 1, 0, 0, 0)))
+  expect_equivalent(nrow(merge(p7[[1]], cbind(pxcor = c(0, 0, 0, 1, 4), pycor = c(4, 1, 0, 0, 0)))), nrow(p7[[1]]))
   p8 <- inRadius(agents1 = turtle(t1, c(0, 4)), radius = 1, agents2 = patches(w1), world = w1, torus = TRUE)
-  expect_identical(p8[[1]], cbind(pxcor = c(0, 0, 0, 1, 4), pycor = c(4, 1, 0, 0, 0)))
-  expect_identical(p8[[2]], cbind(pxcor = c(0, 3, 4, 4, 4), pycor = c(4, 4, 4, 3, 0)))
+  expect_equivalent(nrow(merge(p8[[1]], cbind(pxcor = c(0, 0, 0, 1, 4), pycor = c(4, 1, 0, 0, 0)))), nrow(p8[[1]]))
+  expect_equivalent(nrow(merge(p8[[2]], cbind(pxcor = c(0, 3, 4, 4, 4), pycor = c(4, 4, 4, 3, 0)))), nrow(p8[[2]]))
   p9 <- inRadius(agents1 = turtle(t1, 0), radius = 1, agents2 = patch(w1, 4, 4), world = w1)
-  expect_identical(p9[[1]], noPatches())
+  expect_equivalent(p9[[1]], noPatches())
 
   # Turtles to turtles
   t8 <- inRadius(agents1 = turtle(t1, 0), radius = 1, agents = t1, world = w1)
@@ -480,3 +480,4 @@ test_that("inRadius works",{
   expect_identical(length(t11), length(t1))
   expect_identical(t11[[1]], t1)
 })
+
