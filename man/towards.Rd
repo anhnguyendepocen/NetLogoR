@@ -41,8 +41,7 @@ A SpatialPointsDataFrame created by \code{createTurtles()} or by
 heading will be computed.
 A matrix (ncol = 2) with the first column \code{x} and the second
 column \code{y} representing the coordinates of the location(s) to
-which the heading will be computed.
-\code{to} must be of length 1 or of the same length as \code{from}.}
+which the heading will be computed.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
@@ -54,11 +53,14 @@ A vector of angles in degrees of the length of \code{from}.
 Reports the heading from agent(s) towards other agent(s) or location(s) [x,y].
 }
 \details{
-If \code{torus = TRUE} and the distance from one agent \code{from} to
+\code{from} and \code{to} must be of the same length or if different, one
+         of the two has be of length 1.
+         If \code{torus = TRUE} and the distance from one agent \code{from} to
          its corresponding agent or location \code{to} is smaller around the
          sides of the world than across it, then the heading to the agent or location
          going around the sides of the world is reported.
-         The heading from an agent to itself or its own location will return 0.
+         The heading from a patch to its location returns 0, the heading from
+         a turtle to its location returns the turtle's heading.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

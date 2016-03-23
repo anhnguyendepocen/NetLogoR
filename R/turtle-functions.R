@@ -958,18 +958,20 @@ setMethod(
 #'              A matrix (ncol = 2) with the first column \code{x} and the second
 #'              column \code{y} representing the coordinates of the location(s) to
 #'              which the heading will be computed.
-#'              \code{to} must be of length 1 or of the same length as \code{from}.
 #'
 #' @param torus  Logical to determine if the \code{NLworlds} object is wrapped.
 #'               Default is \code{torus = FALSE}.
 #'
 #' @return A vector of angles in degrees of the length of \code{from}.
 #'
-#' @details If \code{torus = TRUE} and the distance from one agent \code{from} to
+#' @details \code{from} and \code{to} must be of the same length or if different, one
+#'          of the two has be of length 1.
+#'          If \code{torus = TRUE} and the distance from one agent \code{from} to
 #'          its corresponding agent or location \code{to} is smaller around the
 #'          sides of the world than across it, then the heading to the agent or location
 #'          going around the sides of the world is reported.
-#'          The heading from an agent to itself or its own location will return 0.
+#'          The heading from a patch to its location returns 0, the heading from
+#'          a turtle to its location returns the turtle's heading.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1012,6 +1014,9 @@ setMethod(
 
       if(nrow(to) == 1 & nrow(from) != 1){
         to <- cbind(x = rep(to[,1], nrow(from)), y = rep(to[,2], nrow(from)))
+      }
+      if(nrow(from) == 1 & nrow(to) != 1){
+        from <- cbind(x = rep(from[,1], nrow(to)), y = rep(from[,2], nrow(to)))
       }
 
       toShortest <- to
@@ -1056,7 +1061,10 @@ setMethod(
   "towards",
   signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "matrix"),
   definition = function(world, from, to, torus) {
-    towards(world = world, from = from@coords, to = to, torus = torus)
+    heading <- towards(world = world, from = from@coords, to = to, torus = torus)
+    # The direction to a turtle's location return the turtle's heading
+    heading <- ifelse(from@coords[,1] == to[,1] & from@coords[,2] == to[,2], from@data$heading, heading)
+    return(heading)
   }
 )
 
@@ -1076,7 +1084,10 @@ setMethod(
   "towards",
   signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "SpatialPointsDataFrame"),
   definition = function(world, from, to, torus) {
-    towards(world = world, from = from@coords, to = to@coords, torus = torus)
+    heading <- towards(world = world, from = from@coords, to = to@coords, torus = torus)
+    # The direction to a turtle's location return the turtle's heading
+    heading <- ifelse(from@coords[,1] == to@coords[,1] & from@coords[,2] == to@coords[,2], from@data$heading, heading)
+    return(heading)
   }
 )
 

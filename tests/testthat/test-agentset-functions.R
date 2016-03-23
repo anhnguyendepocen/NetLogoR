@@ -481,3 +481,42 @@ test_that("inRadius works",{
   expect_identical(t11[[1]], t1)
 })
 
+test_that("inCone works",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
+
+  # Turtles to patches
+  t2 <- inCone(turtles = t1, radius = 1, angle = 5, agents2 = patches(w1), world = w1, torus = FALSE)
+  expect_equivalent(length(t2), 5)
+  expect_equivalent(nrow(t2[[5]]), 1)
+  t3 <- inCone(turtles = t1, radius = 1, angle = 5, agents2 = patches(w1), world = w1, torus = TRUE)
+  expect_equivalent(length(t3), 5)
+  expect_equivalent(nrow(t3[[5]]), 2)
+  t4 <- inCone(turtles = turtle(t1, who = 0), radius = 1, angle = 181, agents2 = patches(w1), world = w1, torus = FALSE)
+  expect_identical(t4[[1]], patch(w1, xcor = c(0,0,1), ycor = c(1, 0, 0)))
+  t5 <- inCone(turtles = turtle(t1, who = 0), radius = 1, angle = 181, agents2 = patches(w1), world = w1, torus = TRUE)
+  expect_equivalent(nrow(merge(t5[[1]], patch(w1, xcor = c(0,0,1, 4), ycor = c(1, 0, 0, 0)))), 4)
+  t6 <- inCone(turtles = turtle(t1, who = 1), radius = 1, angle = 181, agents2 = patch(w1, xcor = 0, ycor = 0), world = w1, torus = FALSE)
+  expect_equivalent(t6[[1]], noPatches())
+  t7 <- inCone(turtles = turtle(t1, who = c(1,2)), radius = 1, angle = 181, agents2 = patch(w1, xcor = 2, ycor = 2), world = w1, torus = FALSE)
+  expect_equivalent(length(t7),2)
+  expect_equivalent(t7[[1]], noPatches())
+  expect_equivalent(t7[[2]], patch(w1, xcor = 2, ycor = 2))
+
+  # Turtles to turtles
+  t8 <- inCone(turtles = t1, radius = 3, angle = 360, agents2 = t1, world = w1, torus = FALSE)
+  expect_identical(t8[[3]], t1)
+  expect_identical(t8[[1]], turtle(t1, who = c(0,1,2)))
+  t9 <- inCone(turtles = t1, radius = 3, angle = 360, agents2 = t1, world = w1, torus = TRUE)
+  expect_identical(t9[[3]], t1)
+  expect_identical(t9[[1]], t1)
+  t10 <- inCone(turtles = turtle(t1, 1), radius = 1, angle = 360, agents2 = turtle(t1, 4), world = w1)
+  expect_equivalent(t10[[1]], noTurtles())
+  t11 <- inCone(turtles = turtle(t1, 1), radius = 3, angle = 180, agents2 = t1, world = w1)
+  expect_identical(t11[[1]], turtle(t1, who = c(1,2,3)))
+  t12 <- inCone(turtles = turtle(t1, 4), radius = 3, angle = 180, agents2 = t1, world = w1)
+  expect_equivalent(t12[[1]], turtle(t1, 4))
+  t13 <- inCone(turtles = turtle(t1, 4), radius = 3, angle = 180, agents2 = t1, world = w1, torus = TRUE)
+  expect_equivalent(t13[[1]], turtle(t1, c(0,1,4)))
+})
+

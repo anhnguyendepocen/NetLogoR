@@ -71,15 +71,13 @@ Distances from and to patches are calculated from/to their center.
          around the sides of the world to select \code{agents2}.
 }
 \examples{
-# Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
-
-# Turtles
 t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+
+p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
 t2 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
-t3 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
-t4 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
+p2 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
+t3 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
 
 
 }

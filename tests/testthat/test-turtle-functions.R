@@ -362,7 +362,7 @@ test_that("towards works",{
 
   # Turtles to turtle
   tTOt <- towards(world = w1, from = t3, to = t3, torus = FALSE)
-  expect_equivalent(tTOt, rep(0, 4))
+  expect_equivalent(tTOt, t3@data$heading)
   tTOt <- towards(world = w1, from = t3, to = t2, torus = FALSE)
   expect_equivalent(tTOt[4], 315)
 

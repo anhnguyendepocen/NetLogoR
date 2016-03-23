@@ -1483,12 +1483,10 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
-#'
-#' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#'
+#' p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
 #' t2 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
 #' p2 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
 #' t3 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
@@ -1548,9 +1546,10 @@ setMethod(
       list_agentsXY <- lapply(pOver, function(z){
         wrap(cbind(x = pAllWrap[as.numeric(z), 1], y = pAllWrap[as.numeric(z), 2]), extent(world))
       })
+      colnames(agents2) <- c("pxcor", "pycor")
       list_agents <- lapply(list_agentsXY, function(x){
         colnames(x) <- c("pxcor", "pycor")
-        x
+        as.matrix(merge(x, agents2))
       })
 
     } else {
@@ -1609,3 +1608,152 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' In cone
+#'
+#' Reports the patch(es) or turtle(s) from \code{agents2} within the "cone of
+#' vision" in front of each turtle.
+#'
+#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtle(s) from which the
+#'                cone of vision is defined to select agent(s) from \code{agents2}.
+#'
+#' @param radius  Numeric. The distance(s) from \code{turtles} to locate agents from
+#'                \code{agents2}. Must be of length 1 or of length \code{turtles}.
+#'
+#' @param angle   Numeric. The angle(s) to define the size of the cone of vision
+#'                for the \code{turtles} as their heading minus \code{angle / 2}
+#'                to their heading plus \code{angle / 2}. Must be of length 1 or
+#'                of length \code{turtles}.
+#'
+#' @param agents2 A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                second column \code{pycor} representing the coordinates for the
+#'                patch(es) to evaluate their location(s) regarding the turtle(s)
+#'                cone of vision.
+#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtle(s) to evaluate their
+#'                location(s) regarding the turtle(s) cone of vision.
+#'
+#' @param world   A \code{NLworlds} object representing the world where the agents
+#'                are located.
+#'
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
+#'
+#' @return A list of length equal to \code{length(turtles)}.
+#'         List items are either matrices (ncol = 2) with the first column \code{pxcor}
+#'         and the second column \code{pycor} representing the coordinates of the
+#'         patch(es) within the cone of vision of each turtle if \code{agents2} are patches,
+#'         or SpatialPointsDataFrame objects representing the turtle(s) within
+#'         the cone of vision of each turtle if \code{agents2} are turtles.
+#'
+#' @details Agents from \code{agents2} are reported if there are within \code{radius}
+#'          distance of the turtle and their direction from the turtle is within
+#'          \code{[-angle, + angle]} of the turtle's heading.
+#'          Distances to patches are calculated to their center.
+#'          If \code{torus = TRUE}, the \code{radius} distance(s) are calculared
+#'          around the sides of the world to select \code{agents2}.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#'
+#' p1 <- inCone(turtles = t1, radius = 2, agents2 = patches(w1), angle = 90, world = w1)
+#' t2 <- inCone(turtles = turtle(turtles = t1, who = 0), radius = 2, angle = 90, agents2 = t1, world = w1)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname inCone
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "inCone",
+  function(turtles, radius, angle, agents2, world, torus = FALSE) {
+    standardGeneric("inCone")
+  })
+
+#' @export
+#' @rdname inCone
+setMethod(
+  "inCone",
+  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents2 = "matrix", world = "NLworlds"),
+  definition = function(turtles, radius, angle, agents2, world, torus) {
+
+    # Find the patches within distances
+    agentsInRadius <- inRadius(agents1 = turtles, radius = radius, agents2 = agents2, world = world, torus = torus)
+    emptyL <- lapply(agentsInRadius, function(x){nrow(x)})
+    emptyElem <- as.numeric(do.call(rbind,emptyL)[,1])
+    if(sum(emptyElem) == 0){ # No patches are within radius distances for any turtles
+      return(agentsInRadius)
+    } else {
+      agentsNoEmpty <- agentsInRadius[lapply(agentsInRadius,nrow) > 0]
+
+      # Calculate the direction from each turtle to each one of the patches
+      tList <- lapply(turtles@data$who, function(x){turtle(turtles, who = x)})
+      # Remove turtles which do not have patches within radius distance
+      tList <- tList[lapply(agentsInRadius,nrow) > 0]
+
+      # Direction from the turtle to each of their patches within radius distance
+      tDir <- mapply(function(x, y){
+        towards(world = world, from = x, to = y, torus = torus)
+      }, tList, agentsNoEmpty, SIMPLIFY = FALSE)
+      # Define the rotation angle between the turtle heading and the direction to each patches
+      tCone <- mapply(function(x, y){subHeadings(heading1 = x, heading2 = y, range360 = FALSE)}, tDir, tList, SIMPLIFY = FALSE)
+
+      angle <- angle / 2
+      if(length(angle) == 1){
+        angle <- rep(angle, length(turtles))
+      }
+      angleList <- split(angle, 1:length(angle))
+      # Remove the angle for the turtles which do not have patches within radius distance
+      angleList <- angleList[lapply(agentsInRadius,nrow) > 0]
+
+      # Is the rotation to face the patches smaller than the maximum rotation allowed
+      tConeTRUE <- mapply(function(x, y){abs(x) < y}, tCone, angleList, SIMPLIFY = FALSE)
+      pWithin <- lapply(tConeTRUE, function(x){which(x)})
+
+      list_agents <- mapply(function(x, y){
+        if(length(x) == 0){
+          noPatches()
+        } else {
+          cbind(pxcor = y[x, 1], pycor = y[x, 2])
+        }
+      }, pWithin, agentsNoEmpty, SIMPLIFY = FALSE)
+
+      # Reassign the results with the empty patches
+      agentsInCone <- list()
+      j <- 1
+      for(i in 1:length(turtles)){
+        if(emptyElem[i] == 0){
+          agentsInCone[[i]] <- noPatches()
+        } else {
+          agentsInCone[[i]] <- list_agents[[j]]
+          j <- j + 1
+        }
+      }
+
+      return(agentsInCone)
+    }
+  }
+)
+
+#' @export
+#' @rdname inCone
+setMethod(
+  "inCone",
+  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  definition = function(turtles, radius, angle, agents2, world, torus) {
+    pCoords <- inCone(turtles = turtles, radius = radius, angle = angle, agents2 = agents2@coords, world = world, torus = torus)
+    # Merge the coordinates within the cone to the turtles data
+    tWho <- lapply(pCoords, function(x){merge(x, cbind(agents2@coords, agents2@data), by.x = c("pxcor", "pycor"), by.y = c("xcor", "ycor"))})
+    list_agents <- lapply(tWho, function(x){turtle(turtles = agents2, who = x$who)})
+    return(list_agents)
+  }
+)
