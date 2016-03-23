@@ -914,7 +914,7 @@ setMethod(
 #'          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either
 #'          \code{"patcheset"} or \code{"turtleset"}.
 #'          This function does not test if the patch(es) exist(s) within a world
-#'          according to the coordinates. For this, use \code{isPatches()}. This
+#'          according to the coordinates. For this, use \code{pExist()}. This
 #'          function does not test if the turtle(s) exist(s) given their who
 #'          number(s) and breed(s). For this, use \code{isTurtles()}.
 #'

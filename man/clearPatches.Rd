@@ -5,7 +5,7 @@
 \alias{clearPatches}
 \alias{clearPatches,NLworld-method}
 \alias{clearPatches,NLworldStack-method}
-\title{Clear patches}
+\title{Clear world patches}
 \usage{
 clearPatches(world)
 
@@ -14,28 +14,27 @@ clearPatches(world)
 \S4method{clearPatches}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} or \code{NLworldStack} object.}
+\item{world}{\code{NLworlds} object.}
 }
 \value{
-An empty \code{NLworld} object.
+\code{NLworld} object with \code{NA} values for all patches.
 }
 \description{
 Reset all patches value to \code{NA}.
 }
 \details{
-Similar as setValues(world, NA).
-         The name of the layer is reset to "".
+The name of the layer is set to \code{""}.
 }
 \examples{
-# Create a world with the default settings.
 w1 <- createNLworld()
-w1[] <- runif(n = 1089)
-w1_val <- values(w1)
-summary(w1_val)
+w1[] <- runif(length(w1))
+w1Val <- values(w1)
+summary(w1Val)
 
-w1 <- clearPatches(world = w1)
-w1_val <- values(w1)
-summary(w1_val)
+w1 <- clearPatches(w1)
+w1Val <- values(w1)
+summary(w1Val)
+
 
 }
 \author{
@@ -45,5 +44,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-patches}
 }
 

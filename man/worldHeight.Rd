@@ -3,29 +3,26 @@
 \docType{methods}
 \name{worldHeight}
 \alias{worldHeight}
-\alias{worldHeight,NLworld-method}
-\title{NLworld height}
+\alias{worldHeight,NLworlds-method}
+\title{World height}
 \usage{
 worldHeight(world)
 
-\S4method{worldHeight}{NLworld}(world)
+\S4method{worldHeight}{NLworlds}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} object representing the world.}
+\item{world}{\code{NLworlds} object.}
 }
 \value{
-A numeric value
+Integer.
 }
 \description{
-Report the height of the \code{NLworld} in patch number.
-}
-\details{
-It equals \code{NLworld@maxPycor - NLworld@minPycor + 1}
+Report the height of a \code{NLworlds} in patch number.
 }
 \examples{
-# Create a world with the default settings.
 w1 <- createNLworld()
-worldHeight(world = w1)
+worldHeight(w1)
+
 
 }
 \author{
@@ -35,5 +32,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#world-dim}
 }
 

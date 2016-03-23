@@ -5,7 +5,7 @@
 \alias{minPycor}
 \alias{minPycor,NLworld-method}
 \alias{minPycor,NLworldStack-method}
-\title{Minimum pycor}
+\title{Minimum \code{pycor}}
 \usage{
 minPycor(world)
 
@@ -14,18 +14,18 @@ minPycor(world)
 \S4method{minPycor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object representing the world.}
+\item{world}{\code{NLworlds} object.}
 }
 \value{
-A numeric value
+Integer.
 }
 \description{
-Report the patches minimum \code{pycor} in a \code{NLworld*}.
+Report the patches minimum \code{pycor} in a \code{NLworlds}.
 }
 \examples{
-# Create a world with the default settings.
 w1 <- createNLworld()
-minPycor(world = w1)
+minPycor(w1)
+
 
 }
 \author{
@@ -35,5 +35,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-pcor}
 }
 

@@ -5,7 +5,7 @@
 \alias{maxPycor}
 \alias{maxPycor,NLworld-method}
 \alias{maxPycor,NLworldStack-method}
-\title{Maximum pycor}
+\title{Maximum \code{pycor}}
 \usage{
 maxPycor(world)
 
@@ -14,18 +14,18 @@ maxPycor(world)
 \S4method{maxPycor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object representing the world.}
+\item{world}{\code{NLworlds} object.}
 }
 \value{
-A numeric value
+Integer.
 }
 \description{
-Report the patches maximum \code{pycor} in a \code{NLworld*}.
+Report the patches maximum \code{pycor} in a \code{NLworlds}.
 }
 \examples{
-# Create a world with the default settings.
 w1 <- createNLworld()
-maxPycor(world = w1)
+maxPycor(w1)
+
 
 }
 \author{
@@ -35,5 +35,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#max-pcor}
 }
 

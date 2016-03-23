@@ -1,35 +1,34 @@
 ################################################################################
-#' Create a \code{NLworld} object.
+#' Create a \code{NLworld} world
 #'
 #' Create an empty grid of patches of class \code{NLworld}.
 #'
-#' @param minPxcor  \code{pxcor} for patches on the left border of the \code{NLworld}.
-#'                  Default value is \code{-16}, as in NetLogo.
+#' @param minPxcor  Integer. Minimum \code{pxcor} for the patches (left border).
+#'                  Default value is \code{minPxcor = -16}.
 #'
-#' @param maxPxcor  \code{pxcor} for patches on the right border of the \code{NLworld}.
-#'                  Default value is \code{16}, as in NetLogo.
+#' @param maxPxcor  Integer. Maximum \code{pxcor} for the patches (right border).
+#'                  Default value is \code{maxPxcor = 16}.
 #'
-#' @param minPycor  \code{pycor} for patches at the bottom of the \code{NLworld}.
-#'                  Default value is \code{-16}, as in NetLogo.
+#' @param minPycor  Integer. Minimum \code{pycor} for the patches (bottom).
+#'                  Default value is \code{minPycor = -16}.
 #'
-#' @param maxPycor  \code{pycor} for patches at the top of the \code{NLworld}.
-#'                  Default value is \code{16}, as in NetLogo.
+#' @param maxPycor  Integer. Maximum \code{pycor} for the patches (top).
+#'                  Default value is \code{maxPycor = 16}.
 #'
-#' @details See \code{help("NLworld*")} for more details on the \code{NLworld} class.
-#'
-#' @return A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#' @return \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches. Patches value are \code{NA}.
+#'
+#' @details See \code{help("NLworld-class")} for more details on the \code{NLworld} class.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a square world of 25 patches.
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' # Give the patches random values between 0 and 10.
-#' w1[] <- runif(n = 25, min = 0, max = 10)
+#' w1[] <- runif(length(w1))
 #' plot(w1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -83,23 +82,26 @@ setMethod(
 
 
 ################################################################################
-#' Convert to a \code{NLworld*} object.
+#' Convert a raster to a \code{NLworlds} object
 #'
 #' Convert a \code{RasterLayer} object into a \code{NLworld} object or a \code{RasterStack}
 #' into a {NLworldStack} object.
 #'
-#' @param raster A \code{RasterLayer} or a \code{RasterStack} object.
+#' @param raster \code{RasterLayer} or a \code{RasterStack} object.
 #'
-#' @return A \code{NLworld} or a \code{NLworldStack} object depending on the input.
+#' @return \code{NLworld} or a \code{NLworldStack} object depending on the input.
 #'         Patches value are retained from the \code{Raster*} object.
 #'
-#' @details See \code{help("NLworld*")} for more details on the \code{NLworld*} classes.
+#' @details See \code{help("NLworlds-class")} for more details on the \code{NLworlds}
+#'          classes.
+#'
 #'          The \code{Raster*} is resampled to match the coordinates system and
-#'          resolution of a \code{NLworld*} using a bilinear interpolation. The
+#'          resolution of a \code{NLworlds} using the nearest neighbor method. The
 #'          extent will be bigger by 1 on the width and on the height.
 #'
 #' @examples
-#' r <- raster(system.file("external/test.grd", package="raster")) # from the raster package
+#' r <- raster(nrows = 21, ncols = 21, xmn = 0, ymn = 0, res = 5)
+#' r[] <- runif(648)
 #' plot(r)
 #' extent(r)
 #' world <- convertNLworld(raster = r)
@@ -137,7 +139,7 @@ setMethod(
     maxPycor <- round(raster@extent@ymax)
     world <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor, minPycor = minPycor, maxPycor = maxPycor)
 
-    worldR <- resample(raster, world)
+    worldR <- resample(raster, world, method = "ngb")
 
     worldNL <- as(worldR, "NLworld")
     worldNL@minPxcor <- minPxcor
@@ -170,22 +172,24 @@ setMethod(
 
 
 ################################################################################
-#' Maximum pxcor
+#' Maximum \code{pxcor}
 #'
-#' Report the patches maximum \code{pxcor} in a \code{NLworld*}.
+#' Report the patches maximum \code{pxcor} in a \code{NLworlds}.
 #'
-#' @param world A \code{NLworld*} object representing the world.
+#' @param world \code{NLworlds} object.
 #'
-#' @return A numeric value
+#' @return Integer.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#max-pcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' maxPxcor(world = w1)
+#' maxPxcor(w1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -220,23 +224,26 @@ setMethod(
   }
 )
 
+
 ################################################################################
-#' Maximum pycor
+#' Maximum \code{pycor}
 #'
-#' Report the patches maximum \code{pycor} in a \code{NLworld*}.
+#' Report the patches maximum \code{pycor} in a \code{NLworlds}.
 #'
-#' @param world A \code{NLworld*} object representing the world.
+#' @param world \code{NLworlds} object.
 #'
-#' @return A numeric value
+#' @return Integer.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#max-pcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' maxPycor(world = w1)
+#' maxPycor(w1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -271,23 +278,26 @@ setMethod(
   }
 )
 
+
 ################################################################################
-#' Minimum pxcor
+#' Minimum \code{pxcor}
 #'
-#' Report the patches minimum \code{pxcor} in a \code{NLworld*}.
+#' Report the patches minimum \code{pxcor} in a \code{NLworlds}.
 #'
-#' @param world A \code{NLworld*} object representing the world.
+#' @param world \code{NLworlds} object.
 #'
-#' @return A numeric value
+#' @return Integer.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-pcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' minPxcor(world = w1)
+#' minPxcor(w1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -322,23 +332,26 @@ setMethod(
   }
 )
 
+
 ################################################################################
-#' Minimum pycor
+#' Minimum \code{pycor}
 #'
-#' Report the patches minimum \code{pycor} in a \code{NLworld*}.
+#' Report the patches minimum \code{pycor} in a \code{NLworlds}.
 #'
-#' @param world A \code{NLworld*} object representing the world.
+#' @param world \code{NLworlds} object.
 #'
-#' @return A numeric value
+#' @return Integer.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-pcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' minPycor(world = w1)
+#' minPycor(w1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -373,25 +386,26 @@ setMethod(
   }
 )
 
+
 ################################################################################
-#' NLworld width
+#' World width
 #'
-#' Report the width of the \code{NLworld} in patch number.
+#' Report the width of a \code{NLworlds} in patch number.
 #'
-#' @param world A \code{NLworld} object representing the world.
+#' @param world \code{NLworlds} object.
 #'
-#' @return A numeric value
+#' @return Integer.
 #'
-#' @details It equals \code{NLworld@maxPxcor - NLworld@minPxcor + 1}
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#world-dim}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' worldWidth(world = w1)
+#' worldWidth(w1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -409,32 +423,33 @@ setGeneric(
 #' @rdname worldWidth
 setMethod(
   "worldWidth",
-  signature = "NLworld",
+  signature = "NLworlds",
   definition = function(world) {
-    return(world@maxPxcor - world@minPxcor + 1)
+    w_width <- maxPxcor(world) - minPxcor(world) + 1
+    return(w_width)
   }
 )
 
 
 ################################################################################
-#' NLworld height
+#' World height
 #'
-#' Report the height of the \code{NLworld} in patch number.
+#' Report the height of a \code{NLworlds} in patch number.
 #'
-#' @param world A \code{NLworld} object representing the world.
+#' @param world \code{NLworlds} object.
 #'
-#' @return A numeric value
+#' @return Integer.
 #'
-#' @details It equals \code{NLworld@maxPycor - NLworld@minPycor + 1}
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#world-dim}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' worldHeight(world = w1)
+#' worldHeight(w1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -452,9 +467,10 @@ setGeneric(
 #' @rdname worldHeight
 setMethod(
   "worldHeight",
-  signature = "NLworld",
+  signature = "NLworlds",
   definition = function(world) {
-    return(world@maxPycor - world@minPycor + 1)
+    w_height <- maxPycor(world) - minPycor(world) + 1
+    return(w_height)
   }
 )
 
@@ -462,25 +478,32 @@ setMethod(
 ################################################################################
 #' Clear turtles
 #'
-#' Kill all \code{turtles}.
+#' Kill all turtles.
 #'
-#' @param turtles A \code{SpatialPointsDataFrame} object representing the turtles.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()}
+#'                or by \code{createOTurtles()} representing all the turtles to
+#'                remove.
 #'
-#' @param envir   The R environment wher the turtles are.
+#' @param envir   The R environment where \code{turtles} are.
 #'                Default value is \code{parent.frame(n = 1)}
 #'
-#' @details Remove the \code{turtles} object from the R environment.
+#' @details Removes the \code{turtles} object from the R environment. If some turtles
+#'          were present in several agentsets, it does not remove them from these
+#'          other agents. This function just remove the given \code{turtles} agentset.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-turtles}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create one turtle.
-#' t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
-#' t1
-#' clearTurtles(turtles = t1)
+#' w1 <- createNLworld()
+#' t1 <- createTurtles(n = 10, world = w1)
+#' t1 # show the object containing the turtles
+#' clearTurtles(t1)
 #' t1 # does not work
+#'
 #'
 #' @export
 #' @docType methods
@@ -507,31 +530,32 @@ setMethod(
 
 
 ################################################################################
-#' Clear patches
+#' Clear world patches
 #'
 #' Reset all patches value to \code{NA}.
 #'
-#' @param world A \code{NLworld} or \code{NLworldStack} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @return An empty \code{NLworld} object.
+#' @return \code{NLworld} object with \code{NA} values for all patches.
 #'
-#' @details Similar as setValues(world, NA).
-#'          The name of the layer is reset to "".
+#' @details The name of the layer is set to \code{""}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-patches}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' w1[] <- runif(n = 1089)
-#' w1_val <- values(w1)
-#' summary(w1_val)
+#' w1[] <- runif(length(w1))
+#' w1Val <- values(w1)
+#' summary(w1Val)
 #'
-#' w1 <- clearPatches(world = w1)
-#' w1_val <- values(w1)
-#' summary(w1_val)
+#' w1 <- clearPatches(w1)
+#' w1Val <- values(w1)
+#' summary(w1Val)
+#'
 #'
 #' @export
 #' @docType methods
@@ -571,47 +595,48 @@ setMethod(
 
 
 ################################################################################
-#' Resize NLworld
+#' Resize a world
 #'
-#' Change the size of the \code{NLworld}. Previous patches and turtles are lost.
+#' Change the size of a \code{NLworlds}. Previous patches and turtles are lost.
 #'
-#' @param world     A \code{NLworld} or \code{NLworldStack} object representing the current world.
+#' @param world     \code{NLworlds} object.
 #'
-#' @param minPxcor  \code{pxcor} for patches on the left border of the new \code{NLworld}
-#'                  Default value = \code{-16}, as in NetLogo.
+#' @param minPxcor  Integer. Minimum \code{pxcor} for the patches (left border)
+#'                  for the new world.
 #'
-#' @param maxPxcor  \code{pxcor} for patches on the right border of the new \code{NLworld}
-#'                  Default value = \code{16}, as in NetLogo.
+#' @param maxPxcor  Integer. Maximum \code{pxcor} for the patches (right border)
+#'                  for the new world.
 #'
-#' @param minPycor  \code{pycor} for patches at the bottom of the new \code{NLworld}
-#'                  Default value \code{-16}, as in NetLogo.
+#' @param minPycor  Integer. Minimum \code{pycor} for the patches (bottom) for
+#'                  the new world.
 #'
-#' @param maxPycor  \code{pycor} for patches at the top of the new \code{NLworld}
-#'                  Default value \code{16}, as in NetLogo.
+#' @param maxPycor  Integer. Maximum \code{pycor} for the patches (top) for
+#'                  the new world.
 #'
-#' @param turtles  A \code{SpatialPointsDataFrame} object representing the turtles.
+#' @param turtles  SpatialPointsDataFrame object representing all the turtles
+#'                 to remove.
 #'
-#' @return A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#' @return \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches. Patch value are \code{NA}.
 #'
-#' @details By using \code{resizeWorld}, the previous \code{NLworld}, patches and
-#'          turtles are deleted.
+#' @details The given \code{NLworlds} and \code{turtles} are deleted, as well as the
+#'          patches values contained in the \code{NLworlds}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#resize-world}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world with the default settings.
 #' w1 <- createNLworld()
-#' w1[] <- runif(n = 1089)
-#' # Create one turtle
-#' t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, world = w1)
 #' w2 <- resizeWorld(world = w1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, turtles = t1)
-
 #' w2[] <- runif(n = 100)
 #' plot(w1) # does not work, w1 does not exist anymore
 #' plot(w2)
+#'
 #'
 #' @export
 #' @importFrom sp SpatialPointsDataFrame
@@ -630,7 +655,7 @@ setGeneric(
 #' @rdname resizeWorld
 setMethod(
   "resizeWorld",
-  signature = c("NLworld", "numeric", "numeric", "numeric", "numeric", "SpatialPointsDataFrame"), # works
+  signature = c("NLworlds", "numeric", "numeric", "numeric", "numeric", "SpatialPointsDataFrame"), # works
   definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles) {
     rm(list = deparse(substitute(world)), envir = parent.frame(n = 1))
     rm(list = deparse(substitute(turtles)), envir = parent.frame(n = 1)) # I could not make clearTurles works here
@@ -643,79 +668,10 @@ setMethod(
 #' @rdname resizeWorld
 setMethod(
   "resizeWorld",
-  signature = c("NLworld", "numeric", "numeric", "numeric", "numeric", "missing"), # does not work (old world still there)
+  signature = c("NLworlds", "numeric", "numeric", "numeric", "numeric", "missing"), # does not work (old world still there)
   definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor) {
     rm(list = deparse(substitute(world)), envir = parent.frame(n = 1)) # why this doesn't work here?
     newWorld <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor,
                               minPycor = minPycor, maxPycor = maxPycor)
-  }
-)
-
-#' @export
-#' @rdname resizeWorld
-setMethod(
-  "resizeWorld",
-  signature = c("NLworld", "missing", "missing", "missing", "missing", "SpatialPointsDataFrame"), # does not work (old world and old turtles still there)
-  definition = function(world, turtles) {
-    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
-                maxPycor = 16, turtles = turtles)
-  }
-)
-
-#' @export
-#' @rdname resizeWorld
-setMethod(
-  "resizeWorld",
-  signature = c("NLworld", "missing", "missing", "missing", "missing", "missing"), # does not work (old world still there)
-  definition = function(world) {
-    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
-                maxPycor = 16)
-  }
-)
-
-#' @export
-#' @rdname resizeWorld
-setMethod(
-  "resizeWorld",
-  signature = c("NLworldStack", "numeric", "numeric", "numeric", "numeric", "SpatialPointsDataFrame"), # works
-  definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles) {
-    rm(list = deparse(substitute(world)), envir = parent.frame(n = 1))
-    rm(list = deparse(substitute(turtles)), envir = parent.frame(n = 1))
-    newWorld <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor,
-                              minPycor = minPycor, maxPycor = maxPycor)
-  }
-)
-
-#' @export
-#' @rdname resizeWorld
-setMethod(
-  "resizeWorld",
-  signature = c("NLworldStack", "numeric", "numeric", "numeric", "numeric", "missing"), # does not work (old world still there)
-  definition = function(world, minPxcor, maxPxcor, minPycor, maxPycor) {
-    rm(list = deparse(substitute(world)), envir = parent.frame(n = 1))
-    newWorld <- createNLworld(minPxcor = minPxcor, maxPxcor = maxPxcor,
-                              minPycor = minPycor, maxPycor = maxPycor)
-  }
-)
-
-#' @export
-#' @rdname resizeWorld
-setMethod(
-  "resizeWorld",
-  signature = c("NLworldStack", "missing", "missing", "missing", "missing", "SpatialPointsDataFrame"), # does not work (old world and old turtles still there)
-  definition = function(world, turtles) {
-    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
-                maxPycor = 16, turtles = turtles)
-  }
-)
-
-#' @export
-#' @rdname resizeWorld
-setMethod(
-  "resizeWorld",
-  signature = c("NLworldStack", "missing", "missing", "missing", "missing", "missing"), # does not work (old world still there)
-  definition = function(world) {
-    resizeWorld(world = world, minPxcor = -16, maxPxcor = 16, minPycor = -16,
-                maxPycor = 16)
   }
 )

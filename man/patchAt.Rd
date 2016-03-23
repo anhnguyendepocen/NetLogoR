@@ -16,34 +16,36 @@ patchAt(world, agents, dx, dy, torus = FALSE)
   agents, dx, dy, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patches from wich \code{(dx, dy)} are computed.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles from wich
-\code{(dx, dy)} are computed.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates of the
+              patches from wich \code{(dx, dy)} are computed.
 
-\item{dx}{Numeric. Distance to east from the agent. If \code{dx} is negative, the
-distance to the west is computed. \code{dx} must be a single value or
-of the length of \code{agents}.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles from wich
+              \code{(dx, dy)} are computed.}
 
-\item{dy}{Numeric. Distance to the north from the agent. If \code{dy} is negative,
-the distance to the south is computed. \code{dy} must be a single value or
-of the length of \code{agents}.}
+\item{dx}{Numeric. Distances to east from the \code{agents}. If \code{dx} is
+negative, the distance to the west is computed. \code{dx} must be
+of length 1 or of the length of as number of \code{agents}.}
+
+\item{dy}{Numeric. Distances to the north from the \code{agents}. If \code{dy}
+is negative, the distance to the south is computed. \code{dy} must
+be a single value or of the length as the number of \code{agents}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates. The order of the patches
-        follows the order of the agents.
+Matrix (ncol = 2) with the first column \code{pxcor} and the second column
+        \code{pycor} representing the coordinates of the patches at \code{(dx, dy)}
+        distances of the \cod{agents}. The order of the patches follows the order
+        of the \code{agents}.
 }
 \description{
-Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at \code{(dx, dy)}
-distance of the agent(s).
+Report the patches coordinates \code{pxcor} and \code{pycor} at \code{(dx, dy)}
+distances of the \code{agents}.
 }
 \details{
 If \code{torus = FALSE} and the patch at distance \code{(dx, dy)}
@@ -66,5 +68,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-at}
 }
 

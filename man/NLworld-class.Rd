@@ -2,6 +2,7 @@
 % Please edit documentation in R/NLworld-class.R
 \docType{class}
 \name{NLworld-class}
+\alias{NLworld}
 \alias{NLworld-class}
 \alias{[}
 \alias{[<-}
@@ -12,26 +13,26 @@
 \S4method{[}{NLworld,numeric,numeric,numeric}(x, i, j) <- value
 }
 \description{
-A \code{NLworld} object is a grid composed of squared patches that behaves
-mostly the same as a \code{RasterLayer} object.
+A \code{NLworld} object is a grid composed of squared patches (i.e., pixels)
+that behaves mostly the same as a \code{RasterLayer} object.
 Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
-coordinates of their center. \code{pxcor} and \code{pycor} are always integer
-and increment by 1. When creating a \code{NLworld}, the extent of the \code{NLworld}
-is \code{xmin = minPxcor - 0.5}, \code{xmax = maxPxcor + 0.5},
-\code{ymin = minPycor - 0.5}, and \code{ymax = maxPycor + 0.5}. The number of
-patches is equal to \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
-\code{pxcor} can be seen as column numbers, increasing as you move right and
-\code{pycor} can be seen as row numbers but increasing as you move up. However,
-\code{pxcor} and \code{pycor} can be negative if there are patches to the left
-or below the patch \code{[0,0]}.
+location of their center. \code{pxcor} and \code{pycor} are always integer
+and increment by 1. \code{pxcor} increases as you move right and \code{pycor}
+increases as you move up.  \code{pxcor} and \code{pycor} can be negative if
+there are patches to the left or below the patch \code{[pxcor = 0, pycor = 0]}.
 }
 \details{
-The use of \code{[]} to extract \code{Raster*} cell values by row and column numbers
-has been redefined to extract \code{NLworld*} patches using the patches' coordinates
-\code{[pxcor,pyxor]}. When multiple coordinates are provided, the order of the
-values returned matches the order of the cell numbers as defined for a \code{Raster*}.
-Similarly, when replacing values of several patches using \code{[]<-}, the values
-will be given in the order of the cell numbers as defined for a \code{Raster*}.
+When creating a \code{NLworld} object, its extent is equal to \code{xmin = minPxcor - 0.5},
+\code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5}, and \code{ymax = maxPycor + 0.5}.
+The number of patches created is then equal to
+\code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
+
+\code{[]} can be used to extract values from a \code{NLworld} object by using
+the patch coordinates \code{[pxcor,pyxor]}. When multiple coordinates are provided,
+the order of the values returned matches the order of the cell numbers as defined
+for a \code{RasterLayer}.  \code{[]<-} can be used to replace patch values for a
+\code{NLworld} object. Similarly, when replacing values of several patches, the
+values should be given in the order of the cell numbers as defined for a \code{RasterLayer}.
 }
 \author{
 Sarah Bauduin, Eliot McIntire, and Alex Chubaty

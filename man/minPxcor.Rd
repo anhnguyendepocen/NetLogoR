@@ -5,7 +5,7 @@
 \alias{minPxcor}
 \alias{minPxcor,NLworld-method}
 \alias{minPxcor,NLworldStack-method}
-\title{Minimum pxcor}
+\title{Minimum \code{pxcor}}
 \usage{
 minPxcor(world)
 
@@ -14,18 +14,18 @@ minPxcor(world)
 \S4method{minPxcor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object representing the world.}
+\item{world}{\code{NLworlds} object.}
 }
 \value{
-A numeric value
+Integer.
 }
 \description{
-Report the patches minimum \code{pxcor} in a \code{NLworld*}.
+Report the patches minimum \code{pxcor} in a \code{NLworlds}.
 }
 \examples{
-# Create a world with the default settings.
 w1 <- createNLworld()
-minPxcor(world = w1)
+minPxcor(w1)
+
 
 }
 \author{
@@ -35,5 +35,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-pcor}
 }
 

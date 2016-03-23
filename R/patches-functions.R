@@ -1,39 +1,44 @@
 ################################################################################
-#' Diffuse
+#' Diffuse values in a world
 #'
 #' Each patch gives an equal share to its neighbor patches of a portion of its value.
 #'
-#' @param world      A \code{NLworld} or \code{NLworldStack} object.
+#' @param world      \code{NLworlds} object.
 #'
-#' @param pVar       If the world is a \code{NLworldStack}, pVar is the name
-#'                   (characters) of the layer used for the diffusion.
+#' @param pVar       Characters. If the world is a \code{NLworldStack}, pVar is
+#'                   the name of the layer used for the diffusion. Should not
+#'                   be provided if world is a \code{NLworld}.
 #'
-#' @param share      A value between 0 and 1 representing the portion of the patch
-#'                   value to be diffused among its neighbors.
+#' @param share      Numeric. Value between 0 and 1 representing the portion of
+#'                   the patch value to be diffused among its neighbors.
 #'
-#' @param nNeighbors 4 or 8. Represent the number of neihgbor patches involved in
-#'                   the diffusion process.
+#' @param nNeighbors Integer: 4 or 8. Represent the number of neihgbor patches
+#'                   involved in the diffusion process.
+#'
+#' @return \code{NLworlds} object with updated values.
 #'
 #' @details What is given is lost for the patches.
+#'
 #'          Patches on the sides of the world have less than 4 or 8 neighbors.
 #'          Each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
 #'          patch keeps the leftover.
 #'
-#' @return A \code{NLworld} or \code{NLworldStack} object with updated values.
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#diffuse}
+#'
+#'          \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#diffuse4}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a world of 25 patches.
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' # Give the patches random values between 0 and 10.
-#' w1[] <- runif(n = 25, min = 0, max = 10)
+#' w1[] <- runif(n = legth(w1), min = 0, max = 10)
 #' plot(w1)
 #' # Diffuse 50% of each patch value to its 8 neighbors
 #' w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)
 #' plot(w2)
+#'
 #'
 #' @export
 #' @docType methods
@@ -85,29 +90,31 @@ setMethod(
 
 
 ################################################################################
-#' Distance in a \code{NLworlds} object.
+#' Distances between agents
 #'
-#' Reports the distance from agent(s) to other agent(s) or to defined location(s)
-#' (coordinates). Agents can be patches or turtles.
+#' Report the distances betwenn agents \code{from} and agents or locations \code{to}.
 #'
-#' @param world    A \code{NLworlds} object.
+#' @param world    \code{NLworlds} object.
 #'
-#' @param from     A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param from     Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                 second column \code{pycor} representing the coordinates of the
-#'                 patch(es) from which the distance(s) will be computed.
-#'                 A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the turtle(s) from which
-#'                 the distance(s) will be computed.
+#'                 patches from which the distances will be computed.
 #'
-#' @param to       A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'                 SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtles from which
+#'                 the distances will be computed.
+#'
+#' @param to       Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                 second column \code{pycor} representing the coordinates of the
-#'                 patch(es) to which the distance(s) will be computed.
-#'                 A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the turtle(s) to which
-#'                 the distance(s) will be computed.
-#'                 A matrix (ncol = 2) with the first column \code{xcor} and the
+#'                 patches to which the distances will be computed.
+#'
+#'                 SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtles to which
+#'                 the distances will be computed.
+#'
+#'                 Matrix (ncol = 2) with the first column \code{xcor} and the
 #'                 second column \code{ycor} representing the coordinates of the
-#'                 location(s) to which the distance(s) will be computed.
+#'                 locations to which the distances will be computed.
 #'
 #' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
 #'                 Default is \code{torus = FALSE}.
@@ -118,30 +125,36 @@ setMethod(
 #'                 corresponding \code{to} is returned. If \code{TRUE}, a full
 #'                 distance matrix is returned. Default is \code{allPairs = FALSE}.
 #'
-#' @details Distances from or to a patch is measured from the center of the patch.
-#'          If \code{torus = TRUE}, the distance around the sides of the world is
+#' @return Numeric. Vector of distances if \code{from} and/or \code{to} contained
+#'         one agent/location, or if \code{from} and \code{to} contained the same
+#'         number of agents/locations and \code{allPairs = FALSE}.
+#'
+#'         Matrix of distances between \code{from} (rows) and \code{to} (columns)
+#'         if \code{from} and \code{to} are of different length, or of same length
+#'         and \code{allPairs = TRUE}.
+#'
+#' @details Distances from/to a patch are measured from/to its center.
+#'
+#'          If \code{torus = TRUE}, a distances around the sides of the world is
 #'          reported only if smaller than the one across the world (i.e., as calculated
 #'          with \code{torus = FALSE}).
-#'          Coordinates (patches, turtles or locations) must be inside the world extent.
 #'
-#' @return A vector of distances if \code{from} and/or \code{to} is of length 1,
-#'         or if \code{from} and \code{to} were of same length and \code{allPairs = FALSE}.
-#'         The order of the distances follows the order of the agents.
-#'         A matrix of distances between \code{from} (rows) and \code{to} (columns)
-#'         if \code{from} and \code{to} are of different length or of same length
-#'         but \code{allPairs = TRUE}.
+#'          Coordinates of given \code{from} and \code{to} must be inside the world's extent.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#distance}
+#'
+#'          \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#distancexy}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)))
-#' NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)), torus = TRUE)
-#' t1 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2))
-#' NLdist(world = w1, from = t1, to = patch(world = w1, xcor = c(1,9), ycor = c(1,9)), allPairs = TRUE)
+#' NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)))
+#' NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)), torus = TRUE)
+#' t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
+#' NLdist(world = w1, from = t1, to = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 #'
 #'
 #' @export
@@ -231,44 +244,47 @@ setMethod(
 
 
 ################################################################################
-#' Is patch?
+#' Do the patches exist?
 #'
-#' Reports \code{TRUE} if the patch(es) exist, \code{FALSE} otherwise
+#' Report \code{TRUE} if the patches exist in the world's extent, report
+#' \code{FALSE} otherwise.
 #'
-#' @param world A \code{NLworld*} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @param pxcor A numeric value or vector of \code{pxcor} coordinate(s).
+#' @param pxcor Integers. Vector of \code{pxcor} coordinates. Must be of the same
+#'              length as \code{pycor}.
 #'
-#' @param pycor A numeric value or vector of \code{pycor} coordinate(s).
+#' @param pycor Integers. Vector of \code{pycor} coordinates. Must be of the same
+#'              length as \code{pxcor}.
 #'
-#' @return \code{TRUE} or \code{FALSE} if the patch(es) exist(s) or no, in the
-#'         order of the coordinates given.
+#' @return Logicals. \code{TRUE} or \code{FALSE} if the patches exist inside the
+#'         world's extent, in the order of the coordinates given.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' isPatch(world = w1, pxcor = -1, pycor = 2)
+#' pExists(world = w1, pxcor = -1, pycor = 2)
+#'
 #'
 #' @export
 #' @docType methods
-#' @rdname isPatch
+#' @rdname pExists
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "isPatch",
+  "pExists",
   function(world, pxcor, pycor) {
-    standardGeneric("isPatch")
+    standardGeneric("pExists")
   })
 
 #' @export
-#' @rdname isPatch
+#' @rdname pExists
 setMethod(
-  "isPatch",
+  "pExists",
   signature = c("NLworld", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
     pExist <- c()
@@ -285,56 +301,58 @@ setMethod(
 )
 
 #' @export
-#' @rdname isPatch
+#' @rdname pExists
 setMethod(
-  "isPatch",
+  "pExists",
   signature = c("NLworldStack", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
     world_l <- world[[1]]
-    isPatch(world = world_l, pxcor = pxcor, pycor = pycor)
+    pExists(world = world_l, pxcor = pxcor, pycor = pycor)
   }
 )
 
 
 ################################################################################
-#' Neighbors
+#' Find neighbors patches
 #'
-#' Reports the 4 or 8 surrounding patches (neighbors) around patch(es) or turtle(s).
+#' Report the 4 or 8 surrounding patches (neighbors) around patches or turtles.
 #'
-#' @param world      A \code{NLworlds} object.
+#' @param world      \code{NLworlds} object.
 #'
-#' @param agents     A matrix (ncol = 2) with the first column \code{pxcor} and
-#'                   the second column \code{pycor} representing the patch(es)
+#' @param agents     Matrix (ncol = 2) with the first column \code{pxcor} and
+#'                   the second column \code{pycor} representing the patches
 #'                   coordinates for which neighbors will be reported.
-#'                   A SpatialPointsDataFrame created by \code{createTurtles()} or
+#'
+#'                   SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                   by \code{createOTurtles()} representing the turtles around
 #'                   which the neighbors patches will be reported.
 #'
-#' @param nNeighbors 4 or 8 for the number of neighbor patches.
+#' @param nNeighbors Integer: 4 or 8. The number of neighbor patches to identify.
 #'
 #' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
 #'                   Default is \code{torus = FALSE}.
 #'
-#' @return A list with each item being the patches coordinates of the neighbors for
-#'         each of the agents. The list items follows the order of the agents.
+#' @return List with each item being the patches coordinates of the neighbors for
+#'         each agent. The list items follows the order of the \code{agents}.
 #'
-#' @details The patch around which the neighbors are identified if \code{agents}
-#'          are patches or the patch on which the turtle is located if \code{agents}
-#'          are turtles is not reported.
+#' @details The patch or turtle around which the neighbors are identified is not
+#'          returned.
+#'
 #'          If \code{torus = FALSE}, \code{agents} located on the edges of the world
 #'          have less than \code{nNeighbors} patches. If \code{torus = FALSE}, agents
 #'          located on the egdes of the world all have \code{nNeighbors} patches which
 #'          some may be on the other side of the world.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#neighbors}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' neighbors(world = w1, agents = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 8)
-#' t1 <- createTurtles(n = 3, coords = randomXYcor(world = w1, n = 3))
+#' neighbors(world = w1, agents = patch(w1, c(0,9), c(0,7)), nNeighbors = 8)
+#' t1 <- createTurtles(n = 3, coords = randomXYcor(w1, n = 3))
 #' neighbors(world = w1, agents = t1, nNeighbors = 4)
 #'
 #'
@@ -386,20 +404,22 @@ setMethod(
 ################################################################################
 #' Patch
 #'
-#' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
+#' Report the patches coordinates \code{pxcor} and \code{pycor} at the given
 #' \code{xcor} and \code{ycor} coordinates.
 #'
-#' @param world      A \code{NLworlds} object.
+#' @param world      \code{NLworlds} object.
 #'
-#' @param xcor       A vector of \code{xcor} coordinates.
+#' @param xcor       Numeric. Vector of \code{xcor} coordinates. Must be of same
+#'                   length as \code{ycor}.
 #'
-#' @param ycor       A vector of \code{ycor} coordinates.
+#' @param ycor       Numeric. Vector of \code{ycor} coordinates. Must be of same
+#'                   length as \code{ycor}.
 #'
 #' @param duplicate  Logical. If more than one set of coordinates \code{xcor, ycor}
 #'                   fall into the same patch and \code{duplicate == TRUE}, the
-#'                   patch coordinates are returned the number of times the coordinates.
-#'                   If \code{duplicate == FALSE}, the patch coordinates are only
-#'                   returned once.
+#'                   patch coordinates are returned the number of times the set of
+#'                   coordinates. If \code{duplicate == FALSE}, the patch coordinates
+#'                   are only returned once.
 #'                   Default is \code{duplicate == FALSE}.
 #'
 #' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
@@ -408,8 +428,8 @@ setMethod(
 #' @param out        Logical to determine if coordinates for patches outside of the
 #'                   world should be returned. Default is \code{out = FALSE}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the patch(es) coordinates at \code{xcor, ycor}.
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates at \code{xcor, ycor}.
 #'
 #' @details If \code{xcor} or \code{ycor} are outside the world's extent,
 #'          \code{torus = FALSE} and \code{out = FALSE}, no patch coordinates are returned,
@@ -417,17 +437,19 @@ setMethod(
 #'          If \code{torus = TRUE}, the patch coordinates from the wrapped world are
 #'          returned.
 #'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch}
+#'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' # Create a NLworld
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4))
 #' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
 #' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
 #' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
+#'
 #'
 #' @export
 #' @importFrom SpaDES wrap
@@ -484,10 +506,12 @@ setMethod(
 ################################################################################
 #' No patches
 #'
-#' Reports an empty patch agentset.
+#' Report an empty patch agentset.
 #'
-#' @return An empty matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @return Matrix (ncol = 2, nrow = 0) with the first column \code{pxcor} and the
 #'         second column \code{pycor}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#no-patches}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -496,6 +520,7 @@ setMethod(
 #' @examples
 #' p1 <- noPatches()
 #' nrow(p1)
+#'
 #'
 #' @export
 #' @docType methods
@@ -523,37 +548,41 @@ setMethod(
 ################################################################################
 #' Patch at
 #'
-#' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at \code{(dx, dy)}
-#' distance of the agent(s).
+#' Report the patches coordinates \code{pxcor} and \code{pycor} at \code{(dx, dy)}
+#' distances of the \code{agents}.
 #'
-#' @param world  A \code{NLworlds} object.
+#' @param world  \code{NLworlds} object.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
 #'               patches from wich \code{(dx, dy)} are computed.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles from wich
 #'               \code{(dx, dy)} are computed.
 #'
-#' @param dx     Numeric. Distance to east from the agent. If \code{dx} is negative, the
-#'               distance to the west is computed. \code{dx} must be a single value or
-#'               of the length of \code{agents}.
+#' @param dx     Numeric. Distances to east from the \code{agents}. If \code{dx} is
+#'               negative, the distance to the west is computed. \code{dx} must be
+#'               of length 1 or of the length of as number of \code{agents}.
 #'
-#' @param dy     Numeric. Distance to the north from the agent. If \code{dy} is negative,
-#'               the distance to the south is computed. \code{dy} must be a single value or
-#'               of the length of \code{agents}.
+#' @param dy     Numeric. Distances to the north from the \code{agents}. If \code{dy}
+#'               is negative, the distance to the south is computed. \code{dy} must
+#'               be a single value or of the length as the number of \code{agents}.
 #'
 #' @param torus  Logical to determine if the \code{NLworlds} object is wrapped.
 #'               Default is \code{torus = FALSE}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the patches coordinates. The order of the patches
-#'         follows the order of the agents.
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the coordinates of the patches at \code{(dx, dy)}
+#'         distances of the \cod{agents}. The order of the patches follows the order
+#'         of the \code{agents}.
 #'
 #' @details If \code{torus = FALSE} and the patch at distance \code{(dx, dy)}
 #'          of the agent is outside of the world's extent, \code{NA} is returned.
 #'          If \code{torus = TRUE}, the patch coordinates from the wrapped world are
 #'          returned.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-at}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -607,42 +636,46 @@ setMethod(
 
 
 ################################################################################
-#' Patch at some distance and heading.
+#' Patches at certain distances and certain directions
 #'
-#' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at certain
-#' distance and heading of the agent(s).
+#' Report the patches coordinates \code{pxcor} and \code{pycor} at certain
+#' distances and certain headings from the \code{agents}.
 #'
-#' @param world  A \code{NLworlds} object.
+#' @param world  \code{NLworlds} object.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates for the
-#'               patches from wich \code{dist} is computed.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'               \code{createOTurtles()} representing the turtles from wich
-#'               \code{dist} is computed.
+#'               patches from which \code{dist} are computed.
 #'
-#' @param dist   Numeric. Distance from the agent. \code{dist} must be a single
-#'               value or of the length of \code{agents}.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles from which
+#'               \code{dist} are computed.
 #'
-#' @param head   Numeric. Absolute angle from the agent. \code{head} must be a
-#'               single value or of the length of \code{agents}. Angle(s) are in
-#'               degrees with 0 being North.
+#' @param dist   Numeric. Distances from the \code{agents}. \code{dist} must be
+#'               a single value or of the length as the number of \code{agents}.
+#'
+#' @param head   Numeric. Absolute angles from the \code{agents}. \code{head}
+#'               must be a single value or of the length as the number of
+#'               \code{agents}. Angles must be in degrees with 0 being North.
 #'
 #' @param torus  Logical to determine if the \code{NLworlds} object is wrapped.
 #'               Default is \code{torus = FALSE}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the patches coordinates. The order of the patches
-#'         followa the order of the agents.
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#'         \code{pycor} representing the patches coordinates at \code{dist} and \code{head}
+#'         of \code{agents}. The order of the patches followa the order of the \code{agents}.
 #'
 #' @details If \code{torus = FALSE} and the patch at distance \code{dist} and
-#'          heading \code{head} of the agent is outside the world's extent, \code{NA}
-#'          is returned. If \code{torus = TRUE}, the patch coordinates from the
+#'          heading \code{head} of an agent is outside the world's extent, \code{NA}
+#'          are returned. If \code{torus = TRUE}, the patch coordinates from the
 #'          wrapped world are returned.
+#'
 #'          If \code{agents} are turtles, their heading is not taken into account; the
 #'          given absolute heading \code{head} is used. To find a patch at certain
 #'          distance from a turtle with the turtle's heading, look at \code{pacthAhead()},
 #'          \code{pacthLeft()} or \code{pacthRight()}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-at-heading-and-distance}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -650,9 +683,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' patchCorner <- patchDistHead(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
+#' p1 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, head = 45)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
-#' patchCorner <- patchDistHead(world = w1, agents = t1, dist = 1, head = 45)
+#' p2 <- patchDistHead(world = w1, agents = t1, dist = 1, head = 45)
 #'
 #'
 #' @export
@@ -697,16 +730,18 @@ setMethod(
 
 
 ################################################################################
-#' Patches of the world
+#' All the patches in a world
 #'
-#' Reports the coordinates \code{pxcor} and \code{pycor} of all patches in the
-#' \code{NLworld*}
+#' Report the coordinates \code{pxcor} and \code{pycor} for all patches in a
+#' \code{NLworlds}.
 #'
-#' @param world A \code{NLworld*} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the patches coordinates. The order of the patches
 #'         follows the order of the cellnumbers as defined for a \code{Raster*}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patches}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -714,7 +749,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
-#' allPatches <- patches(world = w1)
+#' allPatches <- patches(w1)
 #' nrow(allPatches)
 #'
 #'
@@ -755,16 +790,18 @@ setMethod(
 ################################################################################
 #' Patch set
 #'
-#' Reports a patch agentset as the coordinates \code{pxcor} and \code{pycor}
-#' of all patches in the inputs.
+#' Report a patch agentset as the coordinates \code{pxcor} and \code{pycor}
+#' of all patches contained in the inputs.
 #'
-#' @param ... Matrices (ncol = 2) of patch(es) coordinates with the first column
+#' @param ... Matrices (ncol = 2) of patches coordinates with the first column
 #'            \code{pxcor} and the second column \code{pycor}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the patches coordinates.
 #'
 #' @details Duplicate patches among the inputs are removed in the returned matrix.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-set}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -772,8 +809,8 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0,1,2), pycor = c(0,0,0)), dx = 1, dy = 1)
-#' p2 <- patchDistHead(world = w1, agents = cbind(pxcor = 0, pycor = 0), dist = 1, head = 45)
+#' p1 <- patchAt(world = w1, agents = patch(w1, c(0,1,2), c(0,0,0)), dx = 1, dy = 1)
+#' p2 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, head = 45)
 #' p3 <- patch(world = w1, xcor = 4.3, ycor = 8)
 #' set1 <- patchSet(p1, p2, p3)
 #'
@@ -805,15 +842,17 @@ setMethod(
 
 
 ################################################################################
-#' Random pxcor
+#' Random \code{pxcor}
 #'
-#' Reports random pxcor coordinate(s) between minPxcor and maxPxcor.
+#' Report random \code{pxcor} coordinates between a world's minPxcor and maxPxcor.
 #'
-#' @param world A \code{NLworld*} object.
+#' @param world \code{NLworld} object.
 #'
-#' @param n     Integer. Represent how many random pxcor needs to be generated.
+#' @param n     Integer. The number of random \code{pxcor} to generate.
 #'
-#' @return A vector of integer.
+#' @return Integers.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#random-pcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -821,56 +860,47 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' pxcor10 <- randPxcor(world = w1, n = 10)
+#' pxcor10 <- randomPxcor(world = w1, n = 10)
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname randPxcor
+#' @rdname randomPxcor
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "randPxcor",
+  "randomPxcor",
   function(world, n) {
-    standardGeneric("randPxcor")
+    standardGeneric("randomPxcor")
   })
 
 #' @export
-#' @rdname randPxcor
+#' @rdname randomPxcor
 setMethod(
-  "randPxcor",
-  signature = c("NLworld", "numeric"),
+  "randomPxcor",
+  signature = c("NLworlds", "numeric"),
   definition = function(world, n) {
-    minPxcor <- world@minPxcor
-    maxPxcor <- world@maxPxcor
+    minPxcor <- minPxcor(world)
+    maxPxcor <- maxPxcor(world)
     pxcor <- sample(minPxcor:maxPxcor, size = n, replace = TRUE)
     return(pxcor)
   }
 )
 
-#' @export
-#' @rdname randPxcor
-setMethod(
-  "randPxcor",
-  signature = c("NLworldStack", "numeric"),
-  definition = function(world, n) {
-    world_l <- world[[1]]
-    randPxcor(world = world_l, n = n)
-  }
-)
-
 
 ################################################################################
-#' Random pycor
+#' Random \code{pycor}
 #'
-#' Reports random pycor coordinate(s) between minPycor and maxPycor.
+#' Report random \code{pycor} coordinates between minPycor and maxPycor.
 #'
-#' @param world A \code{NLworld*} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @param n     Integer. Represent how many random pycor needs to be generated.
+#' @param n     Integer. The number of random \code{pycor} to generate.
 #'
-#' @return A vector of integer.
+#' @return Integers.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#random-pcor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -878,41 +908,30 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' pycor10 <- randPycor(world = w1, n = 10)
+#' pycor10 <- randomPycor(world = w1, n = 10)
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname randPycor
+#' @rdname randomPycor
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "randPycor",
+  "randomPycor",
   function(world, n) {
-    standardGeneric("randPycor")
+    standardGeneric("randomPycor")
   })
 
 #' @export
-#' @rdname randPycor
+#' @rdname randomPycor
 setMethod(
-  "randPycor",
-  signature = c("NLworld", "numeric"),
+  "randomPycor",
+  signature = c("NLworlds", "numeric"),
   definition = function(world, n) {
-    minPycor <- world@minPycor
-    maxPycor <- world@maxPycor
+    minPycor <- minPycor(world)
+    maxPycor <- maxPycor(world)
     pycor <- sample(minPycor:maxPycor, size = n, replace = TRUE)
     return(pycor)
-  }
-)
-
-#' @export
-#' @rdname randPycor
-setMethod(
-  "randPycor",
-  signature = c("NLworldStack", "numeric"),
-  definition = function(world, n) {
-    world_l <- world[[1]]
-    randPycor(world = world_l, n = n)
   }
 )

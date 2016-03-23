@@ -5,7 +5,7 @@
 \alias{convertNLworld}
 \alias{convertNLworld,RasterLayer-method}
 \alias{convertNLworld,RasterStack-method}
-\title{Convert to a \code{NLworld*} object.}
+\title{Convert a raster to a \code{NLworlds} object}
 \usage{
 convertNLworld(raster)
 
@@ -14,10 +14,10 @@ convertNLworld(raster)
 \S4method{convertNLworld}{RasterStack}(raster)
 }
 \arguments{
-\item{raster}{A \code{RasterLayer} or a \code{RasterStack} object.}
+\item{raster}{\code{RasterLayer} or a \code{RasterStack} object.}
 }
 \value{
-A \code{NLworld} or a \code{NLworldStack} object depending on the input.
+\code{NLworld} or a \code{NLworldStack} object depending on the input.
         Patches value are retained from the \code{Raster*} object.
 }
 \description{
@@ -25,13 +25,16 @@ Convert a \code{RasterLayer} object into a \code{NLworld} object or a \code{Rast
 into a {NLworldStack} object.
 }
 \details{
-See \code{help("NLworld*")} for more details on the \code{NLworld*} classes.
+See \code{help("NLworlds-class")} for more details on the \code{NLworlds}
+         classes.
+
          The \code{Raster*} is resampled to match the coordinates system and
-         resolution of a \code{NLworld*} using a bilinear interpolation. The
+         resolution of a \code{NLworlds} using the nearest neighbor method. The
          extent will be bigger by 1 on the width and on the height.
 }
 \examples{
-r <- raster(system.file("external/test.grd", package="raster")) # from the raster package
+r <- raster(nrows = 21, ncols = 21, xmn = 0, ymn = 0, res = 5)
+r[] <- runif(648)
 plot(r)
 extent(r)
 world <- convertNLworld(raster = r)

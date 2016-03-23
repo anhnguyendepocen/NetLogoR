@@ -1,25 +1,26 @@
 ################################################################################
 #' The \code{NLworld} class
 #'
-#' A \code{NLworld} object is a grid composed of squared patches that behaves
-#' mostly the same as a \code{RasterLayer} object.
-#' Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
-#' coordinates of their center. \code{pxcor} and \code{pycor} are always integer
-#' and increment by 1. When creating a \code{NLworld}, the extent of the \code{NLworld}
-#' is \code{xmin = minPxcor - 0.5}, \code{xmax = maxPxcor + 0.5},
-#' \code{ymin = minPycor - 0.5}, and \code{ymax = maxPycor + 0.5}. The number of
-#' patches is equal to \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
-#' \code{pxcor} can be seen as column numbers, increasing as you move right and
-#' \code{pycor} can be seen as row numbers but increasing as you move up. However,
-#' \code{pxcor} and \code{pycor} can be negative if there are patches to the left
-#' or below the patch \code{[0,0]}.
 #'
-#' The use of \code{[]} to extract \code{Raster*} cell values by row and column numbers
-#' has been redefined to extract \code{NLworld*} patches using the patches' coordinates
-#' \code{[pxcor,pyxor]}. When multiple coordinates are provided, the order of the
-#' values returned matches the order of the cell numbers as defined for a \code{Raster*}.
-#' Similarly, when replacing values of several patches using \code{[]<-}, the values
-#' will be given in the order of the cell numbers as defined for a \code{Raster*}.
+#' A \code{NLworld} object is a grid composed of squared patches (i.e., pixels)
+#' that behaves mostly the same as a \code{RasterLayer} object.
+#' Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
+#' location of their center. \code{pxcor} and \code{pycor} are always integer
+#' and increment by 1. \code{pxcor} increases as you move right and \code{pycor}
+#' increases as you move up.  \code{pxcor} and \code{pycor} can be negative if
+#' there are patches to the left or below the patch \code{[pxcor = 0, pycor = 0]}.
+#'
+#' When creating a \code{NLworld} object, its extent is equal to \code{xmin = minPxcor - 0.5},
+#' \code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5}, and \code{ymax = maxPycor + 0.5}.
+#' The number of patches created is then equal to
+#' \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
+#'
+#' \code{[]} can be used to extract values from a \code{NLworld} object by using
+#' the patch coordinates \code{[pxcor,pyxor]}. When multiple coordinates are provided,
+#' the order of the values returned matches the order of the cell numbers as defined
+#' for a \code{RasterLayer}.  \code{[]<-} can be used to replace patch values for a
+#' \code{NLworld} object. Similarly, when replacing values of several patches, the
+#' values should be given in the order of the cell numbers as defined for a \code{RasterLayer}.
 #'
 #' @inheritParams RasterLayer
 #'
@@ -27,6 +28,9 @@
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
+#' @aliases NLworld
+#' @name NLworld-class
+#' @rdname NLworld-class
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
 #' @exportClass NLworld
 #'
@@ -80,11 +84,15 @@ setReplaceMethod(
 ################################################################################
 #' The \code{NLworldStack} class
 #'
-#' A \code{NLworldStack} object is similar to a \code{RasterStack} object as it is
-#' a collection of \code{NLworld} objects.
+#'
+#' A \code{NLworldStack} object is similar to a \code{RasterStack} object, it is
+#' a collection of \code{NLworld} objects with the same extent.
 #'
 #' @inheritParams RasterStack
 #'
+#' @aliases NLworldStack
+#' @name NLworldStack-class
+#' @rdname NLworldStack-class
 #' @author Sarah Bauduin
 #' @exportClass NLworldStack
 #'
@@ -170,6 +178,25 @@ setReplaceMethod(
 
 
 ################################################################################
+#' The \code{NLworlds} class
+#'
+#'
+#' The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
+#' classes. Mostly used for building function purposes.
+#'
+#' @slot members  NLworld, NLworldStack
+#'
+#' @aliases NLworlds
+#' @name NLworlds-class
+#' @rdname NLworlds-class
+#' @author Sarah Bauduin
+#' @exportClass NLworlds
+setClassUnion(name="NLworlds",
+              members=c("NLworld", "NLworldStack")
+)
+
+
+################################################################################
 #' Creating a \code{NLworldStack}
 #'
 #' Stacking several \code{NLworld} together to obtain a single \code{NlworldStack}
@@ -177,17 +204,18 @@ setReplaceMethod(
 #'
 #' @param ... \code{NLworld} objects.
 #'
-#' @return A \code{NLworldStack} object with the \code{NLworld} stacked as layers.
+#' @return \code{NLworldStack} object with the \code{NLworld} stacked as layers.
 #'
 #' @examples
-#' # Create 2 worlds with the default settings but different values.
+#' # Create 2 NLworld with the default settings (same extent) but different values.
 #' w1 <- createNLworld()
-#' w2 <- createNLworld()
 #' w1[] <- runif(n = 1089)
+#' w2 <- createNLworld()
 #' w2[] <- runif(n = 1089)
-#' # Stack the 2 world together.
+#' # Stack them together.
 #' w3 <- NLstack(w1, w2)
 #' plot(w3)
+#'
 #'
 #' @export
 #' @importFrom raster addLayer
@@ -234,40 +262,23 @@ setMethod(
 
 
 ################################################################################
-#' The \code{NLworlds} class
-#'
-#' This class is the union of the \code{NLworld} and \code{NLworldStack} classes.
-#'
-#' @slot members  NLworld, NLworldStack
-#'
-#' @aliases NLworlds
-#' @name NLworlds-class
-#' @rdname NLworlds-class
-#' @author Sarah Bauduin
-#' @exportClass NLworlds
-setClassUnion(name="NLworlds",
-              members=c("NLworld", "NLworldStack")
-)
-
-
-################################################################################
 #' Cells number from patches coordinates
 #'
-#' Report the cells number as defined for a \code{Raster*} object with the patches
+#' Report the cells number as defined for a \code{Raster*} object given the patches
 #' coordinates \code{pxcor} and \code{pycor}.
 #'
-#' @param world A \code{NLworld*} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @param pxcor A vector of \code{pxcor} coordinates.
+#' @param pxcor Vector of \code{pxcor} coordinates.
 #'
-#' @param pycor A vector of \code{pycor} coordinates.
+#' @param pycor Vector of \code{pycor} coordinates.
 #'
-#' @return A vector of cells number.
+#' @return Numeric. Vector of cells number.
 #'
 #' @examples
-#' # Create a world.
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
+#'
 #'
 #' @export
 #' @docType methods
@@ -318,21 +329,21 @@ setMethod(
 ################################################################################
 #' Patches coordinates from cells number
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} from the cells
+#' Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
 #' number as defined for a \code{Raster*} object.
 #'
-#' @param world   A \code{NLworld*} object.
+#' @param world   \code{NLworlds} object.
 #'
-#' @param cellNum A vector of cells number.
+#' @param cellNum Vector of cells number.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second
 #'         column \code{pycor} in the order of the cells number given.
 #'
 #' @examples
-#' # Create a world.
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' cellNum <- cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
-#' PxcorPycorFromCell( world = w1, cellNum = cellNum)
+#' PxcorPycorFromCell(world = w1, cellNum = cellNum)
+#'
 #'
 #' @export
 #' @docType methods

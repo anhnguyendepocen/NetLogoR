@@ -7,7 +7,7 @@
 \alias{NLdist,NLworlds,SpatialPointsDataFrame,matrix-method}
 \alias{NLdist,NLworlds,matrix,SpatialPointsDataFrame-method}
 \alias{NLdist,NLworlds,matrix,matrix-method}
-\title{Distance in a \code{NLworlds} object.}
+\title{Distances between agents}
 \usage{
 NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
 
@@ -25,24 +25,27 @@ NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
   from, to, torus = FALSE, allPairs = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{from}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) from which the distance(s) will be computed.
-A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtle(s) from which
-the distance(s) will be computed.}
+\item{from}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+                second column \code{pycor} representing the coordinates of the
+                patches from which the distances will be computed.
 
-\item{to}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) to which the distance(s) will be computed.
-A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtle(s) to which
-the distance(s) will be computed.
-A matrix (ncol = 2) with the first column \code{xcor} and the
-second column \code{ycor} representing the coordinates of the
-location(s) to which the distance(s) will be computed.}
+                SpatialPointsDataFrame created by \code{createTurtles()} or
+                by \code{createOTurtles()} representing the turtles from which
+                the distances will be computed.}
+
+\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+                second column \code{pycor} representing the coordinates of the
+                patches to which the distances will be computed.
+
+                SpatialPointsDataFrame created by \code{createTurtles()} or
+                by \code{createOTurtles()} representing the turtles to which
+                the distances will be computed.
+
+                Matrix (ncol = 2) with the first column \code{xcor} and the
+                second column \code{ycor} representing the coordinates of the
+                locations to which the distances will be computed.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
@@ -54,31 +57,32 @@ corresponding \code{to} is returned. If \code{TRUE}, a full
 distance matrix is returned. Default is \code{allPairs = FALSE}.}
 }
 \value{
-A vector of distances if \code{from} and/or \code{to} is of length 1,
-        or if \code{from} and \code{to} were of same length and \code{allPairs = FALSE}.
-        The order of the distances follows the order of the agents.
-        A matrix of distances between \code{from} (rows) and \code{to} (columns)
-        if \code{from} and \code{to} are of different length or of same length
-        but \code{allPairs = TRUE}.
+Numeric. Vector of distances if \code{from} and/or \code{to} contained
+        one agent/location, or if \code{from} and \code{to} contained the same
+        number of agents/locations and \code{allPairs = FALSE}.
+
+        Matrix of distances between \code{from} (rows) and \code{to} (columns)
+        if \code{from} and \code{to} are of different length, or of same length
+        and \code{allPairs = TRUE}.
 }
 \description{
-Reports the distance from agent(s) to other agent(s) or to defined location(s)
-(coordinates). Agents can be patches or turtles.
+Report the distances betwenn agents \code{from} and agents or locations \code{to}.
 }
 \details{
-Distances from or to a patch is measured from the center of the patch.
-         If \code{torus = TRUE}, the distance around the sides of the world is
+Distances from/to a patch are measured from/to its center.
+
+         If \code{torus = TRUE}, a distances around the sides of the world is
          reported only if smaller than the one across the world (i.e., as calculated
          with \code{torus = FALSE}).
-         Coordinates (patches, turtles or locations) must be inside the world extent.
+
+         Coordinates of given \code{from} and \code{to} must be inside the world's extent.
 }
 \examples{
-# Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)))
-NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = c(1,9), pycor = c(1,9)), torus = TRUE)
-t1 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2))
-NLdist(world = w1, from = t1, to = patch(world = w1, xcor = c(1,9), ycor = c(1,9)), allPairs = TRUE)
+NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)))
+NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)), torus = TRUE)
+t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
+NLdist(world = w1, from = t1, to = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 
 
 }
@@ -89,5 +93,10 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#distance}
+
+         \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#distancexy}
 }
 

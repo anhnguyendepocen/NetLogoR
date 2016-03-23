@@ -12,23 +12,28 @@ clearTurtles(turtles, envir = parent.frame(n = 1))
   envir = parent.frame(n = 1))
 }
 \arguments{
-\item{turtles}{A \code{SpatialPointsDataFrame} object representing the turtles.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()}
+or by \code{createOTurtles()} representing all the turtles to
+remove.}
 
-\item{envir}{The R environment wher the turtles are.
+\item{envir}{The R environment where \code{turtles} are.
 Default value is \code{parent.frame(n = 1)}}
 }
 \description{
-Kill all \code{turtles}.
+Kill all turtles.
 }
 \details{
-Remove the \code{turtles} object from the R environment.
+Removes the \code{turtles} object from the R environment. If some turtles
+         were present in several agentsets, it does not remove them from these
+         other agents. This function just remove the given \code{turtles} agentset.
 }
 \examples{
-# Create one turtle.
-t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
-t1
-clearTurtles(turtles = t1)
+w1 <- createNLworld()
+t1 <- createTurtles(n = 10, world = w1)
+t1 # show the object containing the turtles
+clearTurtles(t1)
 t1 # does not work
+
 
 }
 \author{
@@ -38,5 +43,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-turtles}
 }
 

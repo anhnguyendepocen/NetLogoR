@@ -14,23 +14,23 @@ PxcorPycorFromCell(world, cellNum)
 \S4method{PxcorPycorFromCell}{NLworldStack,numeric}(world, cellNum)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{cellNum}{A vector of cells number.}
+\item{cellNum}{Vector of cells number.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second
+Matrix (ncol = 2) with the first column \code{pxcor} and the second
         column \code{pycor} in the order of the cells number given.
 }
 \description{
-Report the patches coordinates \code{pxcor} and \code{pycor} from the cells
+Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
 number as defined for a \code{Raster*} object.
 }
 \examples{
-# Create a world.
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 cellNum <- cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
-PxcorPycorFromCell( world = w1, cellNum = cellNum)
+PxcorPycorFromCell(world = w1, cellNum = cellNum)
+
 
 }
 \author{

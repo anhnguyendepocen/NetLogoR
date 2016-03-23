@@ -3,84 +3,57 @@
 \docType{methods}
 \name{resizeWorld}
 \alias{resizeWorld}
-\alias{resizeWorld,NLworld,missing,missing,missing,missing,SpatialPointsDataFrame-method}
-\alias{resizeWorld,NLworld,missing,missing,missing,missing,missing-method}
-\alias{resizeWorld,NLworld,numeric,numeric,numeric,numeric,SpatialPointsDataFrame-method}
-\alias{resizeWorld,NLworld,numeric,numeric,numeric,numeric,missing-method}
-\alias{resizeWorld,NLworldStack,missing,missing,missing,missing,SpatialPointsDataFrame-method}
-\alias{resizeWorld,NLworldStack,missing,missing,missing,missing,missing-method}
-\alias{resizeWorld,NLworldStack,numeric,numeric,numeric,numeric,SpatialPointsDataFrame-method}
-\alias{resizeWorld,NLworldStack,numeric,numeric,numeric,numeric,missing-method}
-\title{Resize NLworld}
+\alias{resizeWorld,NLworlds,numeric,numeric,numeric,numeric,SpatialPointsDataFrame-method}
+\alias{resizeWorld,NLworlds,numeric,numeric,numeric,numeric,missing-method}
+\title{Resize a world}
 \usage{
 resizeWorld(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles)
 
 
-  \S4method{resizeWorld}{NLworld,numeric,numeric,numeric,numeric,SpatialPointsDataFrame}(world,
+  \S4method{resizeWorld}{NLworlds,numeric,numeric,numeric,numeric,SpatialPointsDataFrame}(world,
   minPxcor, maxPxcor, minPycor, maxPycor, turtles)
 
-\S4method{resizeWorld}{NLworld,numeric,numeric,numeric,numeric,missing}(world,
+\S4method{resizeWorld}{NLworlds,numeric,numeric,numeric,numeric,missing}(world,
   minPxcor, maxPxcor, minPycor, maxPycor)
-
-
-  \S4method{resizeWorld}{NLworld,missing,missing,missing,missing,SpatialPointsDataFrame}(world,
-  turtles)
-
-\S4method{resizeWorld}{NLworld,missing,missing,missing,missing,missing}(world)
-
-
-  \S4method{resizeWorld}{NLworldStack,numeric,numeric,numeric,numeric,SpatialPointsDataFrame}(world,
-  minPxcor, maxPxcor, minPycor, maxPycor, turtles)
-
-
-  \S4method{resizeWorld}{NLworldStack,numeric,numeric,numeric,numeric,missing}(world,
-  minPxcor, maxPxcor, minPycor, maxPycor)
-
-
-  \S4method{resizeWorld}{NLworldStack,missing,missing,missing,missing,SpatialPointsDataFrame}(world,
-  turtles)
-
-
-  \S4method{resizeWorld}{NLworldStack,missing,missing,missing,missing,missing}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} or \code{NLworldStack} object representing the current world.}
+\item{world}{\code{NLworlds} object.}
 
-\item{minPxcor}{\code{pxcor} for patches on the left border of the new \code{NLworld}
-Default value = \code{-16}, as in NetLogo.}
+\item{minPxcor}{Integer. Minimum \code{pxcor} for the patches (left border)
+for the new world.}
 
-\item{maxPxcor}{\code{pxcor} for patches on the right border of the new \code{NLworld}
-Default value = \code{16}, as in NetLogo.}
+\item{maxPxcor}{Integer. Maximum \code{pxcor} for the patches (right border)
+for the new world.}
 
-\item{minPycor}{\code{pycor} for patches at the bottom of the new \code{NLworld}
-Default value \code{-16}, as in NetLogo.}
+\item{minPycor}{Integer. Minimum \code{pycor} for the patches (bottom) for
+the new world.}
 
-\item{maxPycor}{\code{pycor} for patches at the top of the new \code{NLworld}
-Default value \code{16}, as in NetLogo.}
+\item{maxPycor}{Integer. Maximum \code{pycor} for the patches (top) for
+the new world.}
 
-\item{turtles}{A \code{SpatialPointsDataFrame} object representing the turtles.}
+\item{turtles}{SpatialPointsDataFrame object representing all the turtles
+to remove.}
 }
 \value{
-A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+\code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
         patches. Patch value are \code{NA}.
 }
 \description{
-Change the size of the \code{NLworld}. Previous patches and turtles are lost.
+Change the size of a \code{NLworlds}. Previous patches and turtles are lost.
 }
 \details{
-By using \code{resizeWorld}, the previous \code{NLworld}, patches and
-         turtles are deleted.
+The given \code{NLworlds} and \code{turtles} are deleted, as well as the
+         patches values contained in the \code{NLworlds}.
 }
 \examples{
-# Create a world with the default settings.
 w1 <- createNLworld()
-w1[] <- runif(n = 1089)
-# Create one turtle
-t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
+w1[] <- runif(length(w1))
+t1 <- createTurtles(n = 10, world = w1)
 w2 <- resizeWorld(world = w1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, turtles = t1)
 w2[] <- runif(n = 100)
 plot(w1) # does not work, w1 does not exist anymore
 plot(w2)
+
 
 }
 \author{
@@ -90,5 +63,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#resize-world}
 }
 

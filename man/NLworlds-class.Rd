@@ -5,7 +5,8 @@
 \alias{NLworlds-class}
 \title{The \code{NLworlds} class}
 \description{
-This class is the union of the \code{NLworld} and \code{NLworldStack} classes.
+The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
+classes. Mostly used for building function purposes.
 }
 \section{Slots}{
 

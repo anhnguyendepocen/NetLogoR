@@ -5,7 +5,7 @@
 \alias{neighbors}
 \alias{neighbors,NLworlds,SpatialPointsDataFrame,numeric-method}
 \alias{neighbors,NLworlds,matrix,numeric-method}
-\title{Neighbors}
+\title{Find neighbors patches}
 \usage{
 neighbors(world, agents, nNeighbors, torus = FALSE)
 
@@ -16,41 +16,41 @@ neighbors(world, agents, nNeighbors, torus = FALSE)
   nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and
-the second column \code{pycor} representing the patch(es)
-coordinates for which neighbors will be reported.
-A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtles around
-which the neighbors patches will be reported.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and
+                  the second column \code{pycor} representing the patches
+                  coordinates for which neighbors will be reported.
 
-\item{nNeighbors}{4 or 8 for the number of neighbor patches.}
+                  SpatialPointsDataFrame created by \code{createTurtles()} or
+                  by \code{createOTurtles()} representing the turtles around
+                  which the neighbors patches will be reported.}
+
+\item{nNeighbors}{Integer: 4 or 8. The number of neighbor patches to identify.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A list with each item being the patches coordinates of the neighbors for
-        each of the agents. The list items follows the order of the agents.
+List with each item being the patches coordinates of the neighbors for
+        each agent. The list items follows the order of the \code{agents}.
 }
 \description{
-Reports the 4 or 8 surrounding patches (neighbors) around patch(es) or turtle(s).
+Report the 4 or 8 surrounding patches (neighbors) around patches or turtles.
 }
 \details{
-The patch around which the neighbors are identified if \code{agents}
-         are patches or the patch on which the turtle is located if \code{agents}
-         are turtles is not reported.
+The patch or turtle around which the neighbors are identified is not
+         returned.
+
          If \code{torus = FALSE}, \code{agents} located on the edges of the world
          have less than \code{nNeighbors} patches. If \code{torus = FALSE}, agents
          located on the egdes of the world all have \code{nNeighbors} patches which
          some may be on the other side of the world.
 }
 \examples{
-# Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-neighbors(world = w1, agents = cbind(pxcor = c(0, 4), pycor = c(0, 6)), nNeighbors = 8)
-t1 <- createTurtles(n = 3, coords = randomXYcor(world = w1, n = 3))
+neighbors(world = w1, agents = patch(w1, c(0,9), c(0,7)), nNeighbors = 8)
+t1 <- createTurtles(n = 3, coords = randomXYcor(w1, n = 3))
 neighbors(world = w1, agents = t1, nNeighbors = 4)
 
 
@@ -62,5 +62,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#neighbors}
 }
 

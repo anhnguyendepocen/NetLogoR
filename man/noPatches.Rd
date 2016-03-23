@@ -11,15 +11,16 @@ noPatches(x)
 \S4method{noPatches}{missing}()
 }
 \value{
-An empty matrix (ncol = 2) with the first column \code{pxcor} and the
+Matrix (ncol = 2, nrow = 0) with the first column \code{pxcor} and the
         second column \code{pycor}.
 }
 \description{
-Reports an empty patch agentset.
+Report an empty patch agentset.
 }
 \examples{
 p1 <- noPatches()
 nrow(p1)
+
 
 }
 \author{
@@ -29,5 +30,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#no-patches}
 }
 

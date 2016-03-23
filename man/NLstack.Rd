@@ -14,21 +14,22 @@ NLstack(...)
 \item{...}{\code{NLworld} objects.}
 }
 \value{
-A \code{NLworldStack} object with the \code{NLworld} stacked as layers.
+\code{NLworldStack} object with the \code{NLworld} stacked as layers.
 }
 \description{
 Stacking several \code{NLworld} together to obtain a single \code{NlworldStack}
 which contains different layers for the different \code{NLworld} values.
 }
 \examples{
-# Create 2 worlds with the default settings but different values.
+# Create 2 NLworld with the default settings (same extent) but different values.
 w1 <- createNLworld()
-w2 <- createNLworld()
 w1[] <- runif(n = 1089)
+w2 <- createNLworld()
 w2[] <- runif(n = 1089)
-# Stack the 2 world together.
+# Stack them together.
 w3 <- NLstack(w1, w2)
 plot(w3)
+
 
 }
 \author{

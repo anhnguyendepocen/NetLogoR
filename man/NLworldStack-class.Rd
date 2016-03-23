@@ -2,6 +2,7 @@
 % Please edit documentation in R/NLworld-class.R
 \docType{class}
 \name{NLworldStack-class}
+\alias{NLworldStack}
 \alias{NLworldStack-class}
 \alias{[}
 \alias{[<-}
@@ -14,8 +15,8 @@
 \S4method{[}{NLworldStack,numeric,numeric,numeric}(x, i, j) <- value
 }
 \description{
-A \code{NLworldStack} object is similar to a \code{RasterStack} object as it is
-a collection of \code{NLworld} objects.
+A \code{NLworldStack} object is similar to a \code{RasterStack} object, it is
+a collection of \code{NLworld} objects with the same extent.
 }
 \author{
 Sarah Bauduin

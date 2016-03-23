@@ -5,7 +5,7 @@
 \alias{patches}
 \alias{patches,NLworld-method}
 \alias{patches,NLworldStack-method}
-\title{Patches of the world}
+\title{All the patches in a world}
 \usage{
 patches(world)
 
@@ -14,20 +14,20 @@ patches(world)
 \S4method{patches}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object.}
+\item{world}{\code{NLworlds} object.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the patches coordinates. The order of the patches
         follows the order of the cellnumbers as defined for a \code{Raster*}.
 }
 \description{
-Reports the coordinates \code{pxcor} and \code{pycor} of all patches in the
-\code{NLworld*}
+Report the coordinates \code{pxcor} and \code{pycor} for all patches in a
+\code{NLworlds}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
-allPatches <- patches(world = w1)
+allPatches <- patches(w1)
 nrow(allPatches)
 
 
@@ -39,5 +39,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patches}
 }
 

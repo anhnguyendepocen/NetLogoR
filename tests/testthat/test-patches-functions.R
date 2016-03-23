@@ -144,22 +144,22 @@ test_that("distance works with turtles", {
   expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
 })
 
-test_that("isPatch works", {
+test_that("pExists works", {
   w1 <- createNLworld(0, 2, 0, 2)
-  expect_false(isPatch(w1, 1, 3))
-  expect_true(isPatch(w1, 1, 1))
+  expect_false(pExists(w1, 1, 3))
+  expect_true(pExists(w1, 1, 1))
 
   w1[] <- c(1,3,6,2,8,10,3,8,2)
-  expect_identical(isPatch(w1, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+  expect_identical(pExists(w1, c(0, 1), c(3, 1)), c(FALSE, TRUE))
 
   w2 <- createNLworld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- NLstack(w1, w2)
 
   # Same as for w1
-  expect_false(isPatch(ws, 1, 3))
-  expect_true(isPatch(ws, 1, 1))
-  expect_identical(isPatch(ws, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+  expect_false(pExists(ws, 1, 3))
+  expect_true(pExists(ws, 1, 1))
+  expect_identical(pExists(ws, c(0, 1), c(3, 1)), c(FALSE, TRUE))
 })
 
 test_that("neighbors works with patches", {
@@ -377,9 +377,9 @@ test_that("patchDistHead works with turtles", {
   expect_identical(p1, patch(w1, c(4, 2, 7), c(0, 1, 5), duplicate = TRUE, out = TRUE))
 })
 
-test_that("randPxcor and randPycor works", {
+test_that("randomPxcor and randomPycor works", {
   w1 <- createNLworld(0, 9, -10, -5)
-  pxcor100 <- randPxcor(world = w1, n = 100)
+  pxcor100 <- randomPxcor(world = w1, n = 100)
   expect_equivalent(min(pxcor100), minPxcor(w1))
   expect_equivalent(max(pxcor100), maxPxcor(w1))
 
@@ -387,14 +387,14 @@ test_that("randPxcor and randPycor works", {
   w2 <- w1
   w2[] <- runif(60)
   ws <- NLstack(w1, w2)
-  pxcor100 <- randPxcor(world = ws, n = 100)
+  pxcor100 <- randomPxcor(world = ws, n = 100)
   expect_equivalent(min(pxcor100), minPxcor(ws))
   expect_equivalent(max(pxcor100), maxPxcor(ws))
 
-  pycor100 <- randPycor(world = w1, n = 100)
+  pycor100 <- randomPycor(world = w1, n = 100)
   expect_equivalent(min(pycor100), minPycor(w1))
   expect_equivalent(max(pycor100), maxPycor(w1))
-  pycor100 <- randPycor(world = ws, n = 100)
+  pycor100 <- randomPycor(world = ws, n = 100)
   expect_equivalent(min(pycor100), minPycor(ws))
   expect_equivalent(max(pycor100), maxPycor(ws))
 })

@@ -5,7 +5,7 @@
 \alias{createNLworld}
 \alias{createNLworld,missing,missing,missing,missing-method}
 \alias{createNLworld,numeric,numeric,numeric,numeric-method}
-\title{Create a \code{NLworld} object.}
+\title{Create a \code{NLworld} world}
 \usage{
 createNLworld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
   maxPycor = 16)
@@ -16,34 +16,33 @@ createNLworld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
 \S4method{createNLworld}{missing,missing,missing,missing}()
 }
 \arguments{
-\item{minPxcor}{\code{pxcor} for patches on the left border of the \code{NLworld}.
-Default value is \code{-16}, as in NetLogo.}
+\item{minPxcor}{Integer. Minimum \code{pxcor} for the patches (left border).
+Default value is \code{minPxcor = -16}.}
 
-\item{maxPxcor}{\code{pxcor} for patches on the right border of the \code{NLworld}.
-Default value is \code{16}, as in NetLogo.}
+\item{maxPxcor}{Integer. Maximum \code{pxcor} for the patches (right border).
+Default value is \code{maxPxcor = 16}.}
 
-\item{minPycor}{\code{pycor} for patches at the bottom of the \code{NLworld}.
-Default value is \code{-16}, as in NetLogo.}
+\item{minPycor}{Integer. Minimum \code{pycor} for the patches (bottom).
+Default value is \code{minPycor = -16}.}
 
-\item{maxPycor}{\code{pycor} for patches at the top of the \code{NLworld}.
-Default value is \code{16}, as in NetLogo.}
+\item{maxPycor}{Integer. Maximum \code{pycor} for the patches (top).
+Default value is \code{maxPycor = 16}.}
 }
 \value{
-A \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+\code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
         patches. Patches value are \code{NA}.
 }
 \description{
 Create an empty grid of patches of class \code{NLworld}.
 }
 \details{
-See \code{help("NLworld*")} for more details on the \code{NLworld} class.
+See \code{help("NLworld-class")} for more details on the \code{NLworld} class.
 }
 \examples{
-# Create a square world of 25 patches.
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-# Give the patches random values between 0 and 10.
-w1[] <- runif(n = 25, min = 0, max = 10)
+w1[] <- runif(length(w1))
 plot(w1)
+
 
 }
 \author{

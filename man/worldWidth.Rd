@@ -3,29 +3,26 @@
 \docType{methods}
 \name{worldWidth}
 \alias{worldWidth}
-\alias{worldWidth,NLworld-method}
-\title{NLworld width}
+\alias{worldWidth,NLworlds-method}
+\title{World width}
 \usage{
 worldWidth(world)
 
-\S4method{worldWidth}{NLworld}(world)
+\S4method{worldWidth}{NLworlds}(world)
 }
 \arguments{
-\item{world}{A \code{NLworld} object representing the world.}
+\item{world}{\code{NLworlds} object.}
 }
 \value{
-A numeric value
+Integer.
 }
 \description{
-Report the width of the \code{NLworld} in patch number.
-}
-\details{
-It equals \code{NLworld@maxPxcor - NLworld@minPxcor + 1}
+Report the width of a \code{NLworlds} in patch number.
 }
 \examples{
-# Create a world with the default settings.
 w1 <- createNLworld()
-worldWidth(world = w1)
+worldWidth(w1)
+
 
 }
 \author{
@@ -35,5 +32,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#world-dim}
 }
 

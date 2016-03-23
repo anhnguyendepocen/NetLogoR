@@ -12,17 +12,19 @@ patch(world, xcor, ycor, duplicate = FALSE, torus = FALSE, out = FALSE)
   duplicate = FALSE, torus = FALSE, out = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{xcor}{A vector of \code{xcor} coordinates.}
+\item{xcor}{Numeric. Vector of \code{xcor} coordinates. Must be of same
+length as \code{ycor}.}
 
-\item{ycor}{A vector of \code{ycor} coordinates.}
+\item{ycor}{Numeric. Vector of \code{ycor} coordinates. Must be of same
+length as \code{ycor}.}
 
 \item{duplicate}{Logical. If more than one set of coordinates \code{xcor, ycor}
 fall into the same patch and \code{duplicate == TRUE}, the
-patch coordinates are returned the number of times the coordinates.
-If \code{duplicate == FALSE}, the patch coordinates are only
-returned once.
+patch coordinates are returned the number of times the set of
+coordinates. If \code{duplicate == FALSE}, the patch coordinates
+are only returned once.
 Default is \code{duplicate == FALSE}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
@@ -32,11 +34,11 @@ Default is \code{torus = FALSE}.}
 world should be returned. Default is \code{out = FALSE}.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patch(es) coordinates at \code{xcor, ycor}.
+Matrix (ncol = 2) with the first column \code{pxcor} and the second column
+        \code{pycor} representing the patches coordinates at \code{xcor, ycor}.
 }
 \description{
-Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
+Report the patches coordinates \code{pxcor} and \code{pycor} at the given
 \code{xcor} and \code{ycor} coordinates.
 }
 \details{
@@ -47,12 +49,12 @@ If \code{xcor} or \code{ycor} are outside the world's extent,
          returned.
 }
 \examples{
-# Create a NLworld
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4))
 patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
 patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
 patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
+
 
 }
 \author{
@@ -62,5 +64,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch}
 }
 
