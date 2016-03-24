@@ -5,7 +5,7 @@
 \alias{inCone}
 \alias{inCone,SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame,NLworlds-method}
 \alias{inCone,SpatialPointsDataFrame,numeric,numeric,matrix,NLworlds-method}
-\title{In cone}
+\title{Agents in cone}
 \usage{
 inCone(turtles, radius, angle, agents2, world, torus = FALSE)
 
@@ -18,49 +18,51 @@ inCone(turtles, radius, angle, agents2, world, torus = FALSE)
   radius, angle, agents2, world, torus = FALSE)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) from which the
-cone of vision is defined to select agent(s) from \code{agents2}.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
+\code{createOTurtles()} representing the turtles from which the
+cone of vision is defined to select agents from \code{agents2}.}
 
-\item{radius}{Numeric. The distance(s) from \code{turtles} to locate agents from
+\item{radius}{Numeric. The distances from \code{turtles} to locate agents from
 \code{agents2}. Must be of length 1 or of length \code{turtles}.}
 
-\item{angle}{Numeric. The angle(s) to define the size of the cone of vision
+\item{angle}{Numeric. The angles to define the size of the cone of vision
 for the \code{turtles} as their heading minus \code{angle / 2}
 to their heading plus \code{angle / 2}. Must be of length 1 or
 of length \code{turtles}.}
 
-\item{agents2}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patch(es) to evaluate their location(s) regarding the turtle(s)
-cone of vision.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) to evaluate their
-location(s) regarding the turtle(s) cone of vision.}
+\item{agents2}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates for the
+               patches to evaluate their locations regarding the turtles
+               cone of vision.
 
-\item{world}{A \code{NLworlds} object representing the world where the agents
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtle(s) to evaluate their
+               locations regarding the turtles cone of vision.}
+
+\item{world}{\code{NLworlds} object representing the world where the agents
 are located.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A list of length equal to \code{length(turtles)}.
+List of length equal to \code{length(turtles)}.
         List items are either matrices (ncol = 2) with the first column \code{pxcor}
         and the second column \code{pycor} representing the coordinates of the
-        patch(es) within the cone of vision of each turtle if \code{agents2} are patches,
-        or SpatialPointsDataFrame objects representing the turtle(s) within
+        patches within the cone of vision of each turtle if \code{agents2} are patches,
+        or SpatialPointsDataFrame objects representing the turtles within
         the cone of vision of each turtle if \code{agents2} are turtles.
 }
 \description{
-Reports the patch(es) or turtle(s) from \code{agents2} within the "cone of
-vision" in front of each turtle.
+Report the \code{agents2} within the "cone of vision" in front of each turtle.
 }
 \details{
 Agents from \code{agents2} are reported if there are within \code{radius}
          distance of the turtle and their direction from the turtle is within
          \code{[-angle, + angle]} of the turtle's heading.
+
          Distances to patches are calculated to their center.
+
          If \code{torus = TRUE}, the \code{radius} distance(s) are calculared
          around the sides of the world to select \code{agents2}.
 }
@@ -80,5 +82,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#in-cone}
 }
 

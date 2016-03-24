@@ -1,16 +1,17 @@
 ################################################################################
-#' All
+#' All agents?
 #'
-#' Reports \code{TRUE} if all the agents have their variable equal to a given value,
+#' Report \code{TRUE} if all \code{agents} have their variable equal to a given value,
 #' or \code{FALSE} otherwise.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
 #'               patches to evaluate.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate for the \code{agents}
@@ -29,6 +30,8 @@
 #' @return Logical. \code{TRUE} if all the \code{agents} have their variable equal to
 #'         \code{val}, return \code{FALSE} otherwise.
 #'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#all}
+#'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
@@ -37,10 +40,10 @@
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- sample(1:5, size = 25, replace = TRUE)
-#' NLall(agents = patches(world = w1), world = w1, val = 5)
+#' NLall(agents = patches(w1), world = w1, val = 5)
 #' w2 <- w1
 #' w2[] <- 5
-#' NLall(agents = patches(world = w2), world = w2, val = 5)
+#' NLall(agents = patches(w2), world = w2, val = 5)
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
@@ -99,19 +102,21 @@ setMethod(
 
 
 ################################################################################
-#' Any
+#' Any agents?
 #'
-#' Reports \code{TRUE} if the given agentset \code{agents} is non empty, or
-#' \code{FALSE} otherwise.
+#' Report \code{TRUE} if \code{agents} is non empty, or \code{FALSE} otherwise.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
 #'               patches to evaluate.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
 #' @return Logical. \code{TRUE} if there is at least one patch or one turtle in the
-#'         \code{agents}, return \code{FALSE} otherwise.
+#'         \code{agents}, \code{FALSE} otherwise.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#any}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -121,12 +126,12 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' p1 <- noPatches()
-#' p2 <- patch(world = w1, xcor = 0, ycor = 0)
+#' p2 <- patch(w1, xcor = 0, ycor = 0)
 #' NLany(p1)
 #' NLany(p2)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' t2 <- noTurtles()
 #' NLany(t1)
 #' NLany(t2)
@@ -176,17 +181,20 @@ setMethod(
 
 
 ################################################################################
-#' Count
+#' Count agents
 #'
-#' Reports the number of agents.
+#' Report the number of agents.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
 #'               patches to count.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles to count.
 #'
 #' @return Integer.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#count}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -195,11 +203,11 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4) # 25 patches
-#' p1 <- patches(world = w1)
+#' p1 <- patches(w1)
 #' count(p1) # 25
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' count(t1) # 10
 #'
 #'
@@ -237,19 +245,20 @@ setMethod(
 
 
 ################################################################################
-#' Sort on
+#' Sort agents
 #'
-#' Reports the coordinates \code{pxcor} and \code{pycor} of the patches sorted
+#' Report the coordinates \code{pxcor} and \code{pycor} of the patches sorted
 #' according to their value.
-#' Reports the who numbers of the turtles sorted according to their value.
+#' Report the who numbers of the turtles sorted according to their value.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
 #'                patches to sort.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to sort.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable on which the sorting is based.
@@ -262,13 +271,16 @@ setMethod(
 #'                when turtles were created, as well as any variable created using
 #'                \code{turtlesOwn()}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the coordinates of the sorted patches if \code{agents}
 #'         are patches.
-#'         A vector of who numbers representing the sorted turtles if \code{agents} are
+#'
+#'         Integers. Vector of who numbers representing the sorted turtles if \code{agents} are
 #'         turtles.
 #'
-#' @details The sorting of the agents based on their value is done in a increasing order.
+#' @details The sorting of \code{agents} is done in a increasing order.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#sort-on}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -279,10 +291,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- sample(1:5, size = 25, replace = TRUE)
 #' plot(w1)
-#' p1 <- sortOn(agents = patches(world = w1), world = w1)
+#' p1 <- sortOn(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' sortdHeadingst1 <- sortOn(agents = t1, varName = "heading")
 #'
 #'
@@ -340,19 +352,20 @@ setMethod(
 
 
 ################################################################################
-#' NLwith
+#' Agents with
 #'
-#' Reports the coordinates \code{pxcor} and \code{pycor} of the patches with their
+#' Report the coordinates \code{pxcor} and \code{pycor} of the patches with their
 #' variable equals to a specific value.
-#' Reports the turtles which have their variable equals to a specific value.
+#' Report the turtles which have their variable equals to a specific value.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
 #'                patches to evaluate.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate.
@@ -369,11 +382,14 @@ setMethod(
 #'                any length. Any \code{agents} with their variable equals to any
 #'                \code{val} is returned.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the coordinates of the patches with their value
 #'         equal to \code{val}.
-#'         A SpatialPointsDataFrame representing the turtles which have their
+#'
+#'         SpatialPointsDataFrame representing the turtles which have their
 #'         \code{varName == val}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -384,10 +400,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- sample(1:5, size = 25, replace = TRUE)
 #' plot(w1)
-#' p2 <- NLwith(agents = patches(world = w1), world = w1, val = 2)
+#' p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 #' t2 <- NLwith(agents = t1, varName = "breed", val = "sheep")
 #' t3 <- NLwith(agents = t1, varName = "breed", val = c("sheep", "wolf"))
 #'
@@ -453,19 +469,20 @@ setMethod(
 
 
 ################################################################################
-#' With maximum
+#' Agents with maximum
 #'
-#' Reports the coordinates \code{pxcor} and \code{pycor} of the patches which
+#' Report the coordinates \code{pxcor} and \code{pycor} of the patches which
 #' have their variable equals to the maximum value.
-#' Reports the turtles which have their variable equals to the maximum values.
+#' Report the turtles which have their variable equals to the maximum values.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
 #'                patches to evaluate.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate for the maximum value.
@@ -478,11 +495,14 @@ setMethod(
 #'                \code{"ycor"}, any of the variables created when turtles were created,
 #'                as well as any variable created using \code{turtlesOwn()}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the coordinates for the patches with the maximum
 #'         value among the \code{agents}.
-#'         A SpatialPointsDataFrame representing the turtles which have their
+#'
+#'         SpatialPointsDataFrame representing the turtles which have their
 #'         \code{varName} equals to the maximum values among the \code{agents}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with-max}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -562,19 +582,20 @@ setMethod(
 
 
 ################################################################################
-#' With minimum
+#' Agents with minimum
 #'
-#' Reports the coordinates \code{pxcor} and \code{pycor} of the patches which
+#' Report the coordinates \code{pxcor} and \code{pycor} of the patches which
 #' have their variable equals to the minimum value.
-#' Reports the turtles which have their variable equals to the minimum values.
+#' Report the turtles which have their variable equals to the minimum values.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
 #'                patches to evaluate.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate for the minimum value.
@@ -587,11 +608,14 @@ setMethod(
 #'                \code{"ycor"}, any of the variables created when turtles were created,
 #'                as well as any variable created using \code{turtlesOwn()}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the coordinates for the patches with the minimum
 #'         value among the \code{agents}.
-#'         A SpatialPointsDataFrame representing the turtles which have their
+#'
+#'         SpatialPointsDataFrame representing the turtles which have their
 #'         \code{varName} equals to the minimum values among the \code{agents}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with-min}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -602,10 +626,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- sample(1:5, size = 25, replace = TRUE)
 #' plot(w1)
-#' pMin <- withMin(agents = patches(world = w1), world = w1)
+#' pMin <- withMin(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- withMin(agents = t1, varName = "heading")
 #'
 #'
@@ -671,19 +695,20 @@ setMethod(
 
 
 ################################################################################
-#' One with maximum
+#' One agent with maximum
 #'
-#' Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
+#' Report one patch coordinates \code{pxcor} and \code{pycor} which has its
 #' variable equals to the maximum value.
-#' Reports one turtle which has its variable equals to the maximum value.
+#' Report one turtle which has its variable equals to the maximum value.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
 #'                patches to evaluate.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate for the maximum value.
@@ -696,16 +721,19 @@ setMethod(
 #'                \code{"ycor"}, any of the variables created when turtles were created,
 #'                as well as any variable created using \code{turtlesOwn()}.
 #'
-#' @return A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+#' @return Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the patch
 #'         (or one of the patches) with the maximum value among the \code{agents}.
-#'         A SpatialPointsDataFrame of length 1 representing the turtle (or one of
+#'
+#'         SpatialPointsDataFrame of length 1 representing the turtle (or one of
 #'         the turtles) which has its \code{varName} equals to the maximum value
 #'         among the \code{agents}.
 #'
 #' @details If there are several \code{agents}. with the maximum value, one is chosen
 #'          randomly. To access to all agents with their variable equal to the maximum
 #'          value, use \code{withMax()}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#max-one-of}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -716,10 +744,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- sample(1:5, size = 25, replace = TRUE)
 #' plot(w1)
-#' pMax <- maxOneOf(agents = patches(world = w1), world = w1)
+#' pMax <- maxOneOf(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- maxOneOf(agents = t1, varName = "heading")
 #'
 #'
@@ -778,19 +806,20 @@ setMethod(
 
 
 ################################################################################
-#' One with minimum
+#' One agent with minimum
 #'
-#' Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
+#' Report one patch coordinates \code{pxcor} and \code{pycor} which has its
 #' variable equals to the minimum value.
-#' Reports one turtle which has its variable equals to the minimum value.
+#' Report one turtle which has its variable equals to the minimum value.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
 #'                patches to evaluate.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate for the minimum value.
@@ -803,16 +832,19 @@ setMethod(
 #'                \code{"ycor"}, any of the variables created when turtles were created,
 #'                as well as any variable created using \code{turtlesOwn()}.
 #'
-#' @return A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+#' @return Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the patch
 #'         (or one of the patches) with the minimum value among the \code{agents}.
-#'         A SpatialPointsDataFrame of length 1 representing the turtle (or one of
+#'
+#'         SpatialPointsDataFrame of length 1 representing the turtle (or one of
 #'         the turtles) which has its \code{varName} equals to the minimum value
 #'         among the \code{agents}.
 #'
 #' @details If there are several \code{agents}. with the minimum value, one is chosen
 #'          randomly. To access to all agents with their variable equal to the minimum
 #'          value, use \code{withMin()}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-one-of}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -885,15 +917,16 @@ setMethod(
 
 
 ################################################################################
-#' Test class
+#' Type of object
 #'
-#' Reports \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
+#' Report \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
 #' \code{class} tested.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates for the
 #'               patches to evaluate.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
 #' @param class  Characters. Must be equal to \code{"agent"}, \code{"agentset"},
@@ -902,21 +935,27 @@ setMethod(
 #' @return Logical. \code{TRUE} if \code{agents} is of the \code{class} tested.
 #'
 #' @details Careful! The class tested do not correspond to actual R classes.
+#'
 #'          \code{agents} is \code{"patch"} if it is a matrix (ncol = 2) with the
 #'          first column \code{pxcor} and the second column \code{pycor} and only
 #'          one row. \code{agents} is \code{"patcheset"} if the matrix has more than
 #'          one row.
+#'
 #'          \code{agents} is \code{"turtle"} if it is a SpatialPointsDataFrame
 #'          of length 1 with the variables created when using \code{createTurtles()}
 #'          or \code{createOTurtles()}. \code{agents} is \code{"turtleset"} if the
 #'          SpatialPointsDataFrame is of length larger than 1.
+#'
 #'          \code{agents} is \code{"agent"} if it is either \code{"patch"} or
 #'          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either
 #'          \code{"patcheset"} or \code{"turtleset"}.
-#'          This function does not test if the patch(es) exist(s) within a world
-#'          according to the coordinates. For this, use \code{pExist()}. This
-#'          function does not test if the turtle(s) exist(s) given their who
-#'          number(s) and breed(s). For this, use \code{isTurtles()}.
+#'
+#'          This function does not test if the patches exist within a world
+#'          according to the coordinates. For this, use \code{pExists()}. This
+#'          function does not test if the turtles exist given their who
+#'          numbers and breeds. For this, use \code{tExists()}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#is-of-type}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1003,24 +1042,28 @@ setMethod(
 
 
 ################################################################################
-#' N- of
+#' N random agents
 #'
 #' Reports an agentset composed of n agents chosen randomly.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates for the
 #'               patches to choose from.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles to choose from.
 #'
 #' @param n      Integer. The number of patches or turtles to select from \code{agents}
 #'               to return. \code{n} must be less or equal to the number of \code{agents}.
 #'
-#' @return A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor}
+#' @return Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor}
 #'         and the second  column \code{pycor} representing the coordinates of the
-#'         chosen patch(es) from \code{agents}.
-#'         A SpatialPointsDataFrame of length \code{n} representing the turtle(s)
+#'         chosen patches from \code{agents}.
+#'
+#'         SpatialPointsDataFrame of length \code{n} representing the turtles
 #'         chosen from \code{agents}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#n-of}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1029,10 +1072,10 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' pSelect <- nOf(agents = patches(world = w1), n = 5)
+#' pSelect <- nOf(agents = patches(w1), n = 5)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' tSelect <- nOf(agents = t1, n = 2)
 #'
 #'
@@ -1088,23 +1131,27 @@ setMethod(
 
 
 ################################################################################
-#' One of
+#' One random agent
 #'
-#' Reports one agent randomly chosen from \code{agents}.
+#' Report one agent randomly chosen from \code{agents}.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates for the
 #'               patches to choose from.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles to choose from.
 #'
-#' @return A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+#' @return Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
 #'         the second  column \code{pycor} representing the coordinates of the
 #'         chosen patch from \code{agents}.
-#'         A SpatialPointsDataFrame of length 1 representing the turtle chosen
+#'
+#'         SpatialPointsDataFrame of length 1 representing the turtle chosen
 #'         from \code{agents}.
 #'
 #' @details This function is similar as using \code{nOf(agents, n = 1)}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#one-of}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1113,10 +1160,10 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' pSelect <- oneOf(agents = patches(world = w1))
+#' pSelect <- oneOf(agents = patches(w1))
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' tSelect <- oneOf(agents = t1)
 #'
 #'
@@ -1154,22 +1201,23 @@ setMethod(
 
 
 ################################################################################
-#' N- with maximum
+#' N agents with maximum
 #'
-#' Reports the n patches coordinates \code{pxcor} and \code{pycor} which have
+#' Report the n patches coordinates \code{pxcor} and \code{pycor} which have
 #' their variable among the maximum values.
-#' Reports the n turtles which have their variable amog the maximum values.
+#' Report the n turtles which have their variable amog the maximum values.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
 #'                patches to evaluate.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to evaluate.
 #'
 #' @param n      Integer. The number of patches or turtles to select from \code{agents}
 #'               to return. \code{n} must be less or equal to the number of \code{agents}.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate for their values.
@@ -1182,15 +1230,18 @@ setMethod(
 #'                \code{"ycor"}, any of the variables created when turtles were created,
 #'                as well as any variable created using \code{turtlesOwn()}.
 #'
-#' @return A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
+#' @return Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the \code{n}
 #'         patches which have their variable value among the maximum values among the
 #'         \code{agents}.
-#'         A SpatialPointsDataFrame of length \code{n} representing the turtles which
+#'
+#'         SpatialPointsDataFrame of length \code{n} representing the turtles which
 #'         have their \code{varName} value among the maximum values among the \code{agents}.
 #'
 #' @details If there is a tie that would make the number of returned patches or turtles larger
 #'          than \code{n}, the tie is broken randomly.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#max-n-of}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1201,10 +1252,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- sample(1:10, size = 25, replace = TRUE)
 #' plot(w1)
-#' p1 <- maxNof(agents = patches(world = w1), n = 6, world = w1)
+#' p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
 #' t2 <- maxNof(agents = t1, n = 5, varName = "heading")
 #'
 #'
@@ -1312,22 +1363,23 @@ setMethod(
 
 
 ################################################################################
-#' N- with minimum
+#' N agents with minimum
 #'
-#' Reports the n patches coordinates \code{pxcor} and \code{pycor} which have
+#' Report the n patches coordinates \code{pxcor} and \code{pycor} which have
 #' their variable among the minimum values.
-#' Reports the n turtles which have their variable amog the minimum values.
+#' Report the n turtles which have their variable amog the minimum values.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
 #'                patches to evaluate.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles to evaluate.
 #'
 #' @param n      Integer. The number of patches or turtles to select from \code{agents}
 #'               to return. \code{n} must be less or equal to the number of \code{agents}.
 #'
-#' @param world   A \code{NLworlds} object. Only needed if \code{agents} are patches.
+#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
 #'                Must not be provided if \code{agents} are turtles.
 #'
 #' @param varName Characters. The name of the variable to evaluate for their values.
@@ -1340,15 +1392,18 @@ setMethod(
 #'                \code{"ycor"}, any of the variables created when turtles were created,
 #'                as well as any variable created using \code{turtlesOwn()}.
 #'
-#' @return A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
+#' @return Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the \code{n}
 #'         patches which have their variable value among the minimum values among the
 #'         \code{agents}.
-#'         A SpatialPointsDataFrame of length \code{n} representing the turtles which
+#'
+#'         SpatialPointsDataFrame of length \code{n} representing the turtles which
 #'         have their \code{varName} value among the minimum values among the \code{agents}.
 #'
 #' @details If there is a tie that would make the number of returned patches or turtles larger
 #'          than \code{n}, the tie is broken randomly.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-n-of}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1359,10 +1414,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- sample(1:10, size = 25, replace = TRUE)
 #' plot(w1)
-#' p1 <- minNof(agents = patches(world = w1), n = 6, world = w1)
+#' p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
 #' t2 <- minNof(agents = t1, n = 5, varName = "heading")
 #'
 #'
@@ -1434,49 +1489,53 @@ setMethod(
 
 
 ################################################################################
-#' In radius
+#' Agents in radius
 #'
-#' Reports the patch(es) or turtle(s) from \code{agents2} within given distance(s)
-#' of each patch or turtle from \code{agents1}.
+#' Report the \code{agents2} within given distances of each  of the \code{agents1}.
 #'
-#' @param agents1 A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents1 Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
-#'                patch(es) from which the \code{radius} distance(s) is/are calculared
-#'                to select agent(s) from \code{agents2}.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtle(s) from which the
-#'                \code{radius} distance(s) is/are calculared to select agent(s) from
+#'                patches from which the \code{radius} distances are calculated
+#'                to select agents from \code{agents2}.
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles from which the
+#'                \code{radius} distances iare calculared to select agents from
 #'                \code{agents2}.
 #'
-#' @param radius  Numeric. The distance(s) from \code{agents1} to locate agents from
+#' @param radius  Numeric. The distances from \code{agents1} to locate agents from
 #'                \code{agents2}. Must be of length 1 or of length \code{agent1}.
 #'
-#' @param agents2 A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents2 Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
-#'                patch(es) to which the \code{radius} distance(s) is/are calculared
+#'                patches to which the \code{radius} distances are calculared
 #'                from \code{agents1}.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtle(s) to which the
-#'                \code{radius} distance(s) is/are calculared from \code{agents1}.
 #'
-#' @param world   A \code{NLworlds} object representing the world where the agents
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles to which the
+#'                \code{radius} distances are calculared from \code{agents1}.
+#'
+#' @param world   \code{NLworlds} object,  representing the world where the agents
 #'                are located.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
-#' @return A list of length equal to \code{nrow(agents1)} if \code{agents1} are patches
+#' @return List of length equal to \code{nrow(agents1)} if \code{agents1} are patches
 #'         or equal to \code{length(agents1)} if \code{agents1} are turtles.
 #'         List items are either matrices (ncol = 2) with the first column \code{pxcor}
 #'         and the second column \code{pycor} representing the coordinates of the
-#'         patch(es) within \code{radius} distance(s) for each \code{agents1} if
+#'         patches within \code{radius} distances for each \code{agents1} if
 #'         \code{agents2} are patches, or SpatialPointsDataFrame objects representing
-#'         the turtle(s) within \code{radius} distance(s) for each \code{agents1} if
+#'         the turtles within \code{radius} distances for each \code{agents1} if
 #'         \code{agents2} are turtles.
 #'
 #' @details Distances from and to patches are calculated from/to their center.
-#'          If \code{torus = TRUE}, the \code{radius} distance(s) are calculared
+#'
+#'          If \code{torus = TRUE}, the \code{radius} distances are calculared
 #'          around the sides of the world to select \code{agents2}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#in-radius}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1610,50 +1669,54 @@ setMethod(
 
 
 ################################################################################
-#' In cone
+#' Agents in cone
 #'
-#' Reports the patch(es) or turtle(s) from \code{agents2} within the "cone of
-#' vision" in front of each turtle.
+#' Report the \code{agents2} within the "cone of vision" in front of each turtle.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtle(s) from which the
-#'                cone of vision is defined to select agent(s) from \code{agents2}.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles from which the
+#'                cone of vision is defined to select agents from \code{agents2}.
 #'
-#' @param radius  Numeric. The distance(s) from \code{turtles} to locate agents from
+#' @param radius  Numeric. The distances from \code{turtles} to locate agents from
 #'                \code{agents2}. Must be of length 1 or of length \code{turtles}.
 #'
-#' @param angle   Numeric. The angle(s) to define the size of the cone of vision
+#' @param angle   Numeric. The angles to define the size of the cone of vision
 #'                for the \code{turtles} as their heading minus \code{angle / 2}
 #'                to their heading plus \code{angle / 2}. Must be of length 1 or
 #'                of length \code{turtles}.
 #'
-#' @param agents2 A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents2 Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates for the
-#'                patch(es) to evaluate their location(s) regarding the turtle(s)
+#'                patches to evaluate their locations regarding the turtles
 #'                cone of vision.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtle(s) to evaluate their
-#'                location(s) regarding the turtle(s) cone of vision.
 #'
-#' @param world   A \code{NLworlds} object representing the world where the agents
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtle(s) to evaluate their
+#'                locations regarding the turtles cone of vision.
+#'
+#' @param world   \code{NLworlds} object representing the world where the agents
 #'                are located.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
-#' @return A list of length equal to \code{length(turtles)}.
+#' @return List of length equal to \code{length(turtles)}.
 #'         List items are either matrices (ncol = 2) with the first column \code{pxcor}
 #'         and the second column \code{pycor} representing the coordinates of the
-#'         patch(es) within the cone of vision of each turtle if \code{agents2} are patches,
-#'         or SpatialPointsDataFrame objects representing the turtle(s) within
+#'         patches within the cone of vision of each turtle if \code{agents2} are patches,
+#'         or SpatialPointsDataFrame objects representing the turtles within
 #'         the cone of vision of each turtle if \code{agents2} are turtles.
 #'
 #' @details Agents from \code{agents2} are reported if there are within \code{radius}
 #'          distance of the turtle and their direction from the turtle is within
 #'          \code{[-angle, + angle]} of the turtle's heading.
+#'
 #'          Distances to patches are calculated to their center.
+#'
 #'          If \code{torus = TRUE}, the \code{radius} distance(s) are calculared
 #'          around the sides of the world to select \code{agents2}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#in-cone}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,

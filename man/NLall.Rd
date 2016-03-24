@@ -6,7 +6,7 @@
 \alias{NLall,SpatialPointsDataFrame,missing,character-method}
 \alias{NLall,matrix,NLworld,missing-method}
 \alias{NLall,matrix,NLworldStack,character-method}
-\title{All}
+\title{All agents?}
 \usage{
 NLall(agents, world, varName, val)
 
@@ -17,13 +17,14 @@ NLall(agents, world, varName, val)
 \S4method{NLall}{SpatialPointsDataFrame,missing,character}(agents, varName, val)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patches to evaluate.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to evaluate.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates of the
+              patches to evaluate.
 
-\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to evaluate.}
+
+\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
 \item{varName}{Characters. The name of the variable to evaluate for the \code{agents}
@@ -44,17 +45,17 @@ Logical. \code{TRUE} if all the \code{agents} have their variable equal to
         \code{val}, return \code{FALSE} otherwise.
 }
 \description{
-Reports \code{TRUE} if all the agents have their variable equal to a given value,
+Report \code{TRUE} if all \code{agents} have their variable equal to a given value,
 or \code{FALSE} otherwise.
 }
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
-NLall(agents = patches(world = w1), world = w1, val = 5)
+NLall(agents = patches(w1), world = w1, val = 5)
 w2 <- w1
 w2[] <- 5
-NLall(agents = patches(world = w2), world = w2, val = 5)
+NLall(agents = patches(w2), world = w2, val = 5)
 
 # Turtles
 t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
@@ -70,5 +71,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#all}
 }
 

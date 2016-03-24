@@ -6,7 +6,7 @@
 \alias{maxNof,SpatialPointsDataFrame,numeric,missing,character-method}
 \alias{maxNof,matrix,numeric,NLworld,missing-method}
 \alias{maxNof,matrix,numeric,NLworldStack,character-method}
-\title{N- with maximum}
+\title{N agents with maximum}
 \usage{
 maxNof(agents, n, world, varName)
 
@@ -19,16 +19,17 @@ maxNof(agents, n, world, varName)
   varName)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patches to evaluate.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to evaluate.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates for the
+               patches to evaluate.
+
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtles to evaluate.}
 
 \item{n}{Integer. The number of patches or turtles to select from \code{agents}
 to return. \code{n} must be less or equal to the number of \code{agents}.}
 
-\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
 \item{varName}{Characters. The name of the variable to evaluate for their values.
@@ -42,17 +43,18 @@ the turtles' variable. \code{varName} can be equal to \code{"xcor"},
 as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
-A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
+Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
         the second column \code{pycor} representing the coordinates for the \code{n}
         patches which have their variable value among the maximum values among the
         \code{agents}.
-        A SpatialPointsDataFrame of length \code{n} representing the turtles which
+
+        SpatialPointsDataFrame of length \code{n} representing the turtles which
         have their \code{varName} value among the maximum values among the \code{agents}.
 }
 \description{
-Reports the n patches coordinates \code{pxcor} and \code{pycor} which have
+Report the n patches coordinates \code{pxcor} and \code{pycor} which have
 their variable among the maximum values.
-Reports the n turtles which have their variable amog the maximum values.
+Report the n turtles which have their variable amog the maximum values.
 }
 \details{
 If there is a tie that would make the number of returned patches or turtles larger
@@ -63,10 +65,10 @@ If there is a tie that would make the number of returned patches or turtles larg
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:10, size = 25, replace = TRUE)
 plot(w1)
-p1 <- maxNof(agents = patches(world = w1), n = 6, world = w1)
+p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
 t2 <- maxNof(agents = t1, n = 5, varName = "heading")
 
 
@@ -78,5 +80,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#max-n-of}
 }
 

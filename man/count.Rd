@@ -5,7 +5,7 @@
 \alias{count}
 \alias{count,SpatialPointsDataFrame-method}
 \alias{count,matrix-method}
-\title{Count}
+\title{Count agents}
 \usage{
 count(agents)
 
@@ -14,26 +14,27 @@ count(agents)
 \S4method{count}{SpatialPointsDataFrame}(agents)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patches to count.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to count.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates of the
+              patches to count.
+
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to count.}
 }
 \value{
 Integer.
 }
 \description{
-Reports the number of agents.
+Report the number of agents.
 }
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4) # 25 patches
-p1 <- patches(world = w1)
+p1 <- patches(w1)
 count(p1) # 25
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 count(t1) # 10
 
 
@@ -45,5 +46,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#count}
 }
 

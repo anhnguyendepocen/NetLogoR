@@ -5,7 +5,7 @@
 \alias{nOf}
 \alias{nOf,SpatialPointsDataFrame,numeric-method}
 \alias{nOf,matrix,numeric-method}
-\title{N- of}
+\title{N random agents}
 \usage{
 nOf(agents, n)
 
@@ -14,20 +14,22 @@ nOf(agents, n)
 \S4method{nOf}{SpatialPointsDataFrame,numeric}(agents, n)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patches to choose from.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to choose from.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates for the
+              patches to choose from.
+
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to choose from.}
 
 \item{n}{Integer. The number of patches or turtles to select from \code{agents}
 to return. \code{n} must be less or equal to the number of \code{agents}.}
 }
 \value{
-A matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor}
+Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor}
         and the second  column \code{pycor} representing the coordinates of the
-        chosen patch(es) from \code{agents}.
-        A SpatialPointsDataFrame of length \code{n} representing the turtle(s)
+        chosen patches from \code{agents}.
+
+        SpatialPointsDataFrame of length \code{n} representing the turtles
         chosen from \code{agents}.
 }
 \description{
@@ -36,10 +38,10 @@ Reports an agentset composed of n agents chosen randomly.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-pSelect <- nOf(agents = patches(world = w1), n = 5)
+pSelect <- nOf(agents = patches(w1), n = 5)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 tSelect <- nOf(agents = t1, n = 2)
 
 
@@ -51,5 +53,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#n-of}
 }
 

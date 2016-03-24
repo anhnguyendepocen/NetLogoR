@@ -6,7 +6,7 @@
 \alias{withMax,SpatialPointsDataFrame,missing,character-method}
 \alias{withMax,matrix,NLworld,missing-method}
 \alias{withMax,matrix,NLworldStack,character-method}
-\title{With maximum}
+\title{Agents with maximum}
 \usage{
 withMax(agents, world, varName)
 
@@ -17,13 +17,14 @@ withMax(agents, world, varName)
 \S4method{withMax}{SpatialPointsDataFrame,missing,character}(agents, varName)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patches to evaluate.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to evaluate.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates for the
+               patches to evaluate.
 
-\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtles to evaluate.}
+
+\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
 \item{varName}{Characters. The name of the variable to evaluate for the maximum value.
@@ -37,16 +38,17 @@ the turtles' variable. \code{varName} can be equal to \code{"xcor"},
 as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the coordinates for the patches with the maximum
         value among the \code{agents}.
-        A SpatialPointsDataFrame representing the turtles which have their
+
+        SpatialPointsDataFrame representing the turtles which have their
         \code{varName} equals to the maximum values among the \code{agents}.
 }
 \description{
-Reports the coordinates \code{pxcor} and \code{pycor} of the patches which
+Report the coordinates \code{pxcor} and \code{pycor} of the patches which
 have their variable equals to the maximum value.
-Reports the turtles which have their variable equals to the maximum values.
+Report the turtles which have their variable equals to the maximum values.
 }
 \examples{
 # Patches
@@ -68,5 +70,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with-max}
 }
 

@@ -7,7 +7,7 @@
 \alias{inRadius,SpatialPointsDataFrame,numeric,matrix,NLworlds-method}
 \alias{inRadius,matrix,numeric,SpatialPointsDataFrame,NLworlds-method}
 \alias{inRadius,matrix,numeric,matrix,NLworlds-method}
-\title{In radius}
+\title{Agents in radius}
 \usage{
 inRadius(agents1, radius, agents2, world, torus = FALSE)
 
@@ -25,49 +25,51 @@ inRadius(agents1, radius, agents2, world, torus = FALSE)
   radius, agents2, world, torus = FALSE)
 }
 \arguments{
-\item{agents1}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patch(es) from which the \code{radius} distance(s) is/are calculared
-to select agent(s) from \code{agents2}.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) from which the
-\code{radius} distance(s) is/are calculared to select agent(s) from
-\code{agents2}.}
+\item{agents1}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates for the
+               patches from which the \code{radius} distances are calculated
+               to select agents from \code{agents2}.
 
-\item{radius}{Numeric. The distance(s) from \code{agents1} to locate agents from
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtles from which the
+               \code{radius} distances iare calculared to select agents from
+               \code{agents2}.}
+
+\item{radius}{Numeric. The distances from \code{agents1} to locate agents from
 \code{agents2}. Must be of length 1 or of length \code{agent1}.}
 
-\item{agents2}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patch(es) to which the \code{radius} distance(s) is/are calculared
-from \code{agents1}.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) to which the
-\code{radius} distance(s) is/are calculared from \code{agents1}.}
+\item{agents2}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates for the
+               patches to which the \code{radius} distances are calculared
+               from \code{agents1}.
 
-\item{world}{A \code{NLworlds} object representing the world where the agents
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtles to which the
+               \code{radius} distances are calculared from \code{agents1}.}
+
+\item{world}{\code{NLworlds} object,  representing the world where the agents
 are located.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A list of length equal to \code{nrow(agents1)} if \code{agents1} are patches
+List of length equal to \code{nrow(agents1)} if \code{agents1} are patches
         or equal to \code{length(agents1)} if \code{agents1} are turtles.
         List items are either matrices (ncol = 2) with the first column \code{pxcor}
         and the second column \code{pycor} representing the coordinates of the
-        patch(es) within \code{radius} distance(s) for each \code{agents1} if
+        patches within \code{radius} distances for each \code{agents1} if
         \code{agents2} are patches, or SpatialPointsDataFrame objects representing
-        the turtle(s) within \code{radius} distance(s) for each \code{agents1} if
+        the turtles within \code{radius} distances for each \code{agents1} if
         \code{agents2} are turtles.
 }
 \description{
-Reports the patch(es) or turtle(s) from \code{agents2} within given distance(s)
-of each patch or turtle from \code{agents1}.
+Report the \code{agents2} within given distances of each  of the \code{agents1}.
 }
 \details{
 Distances from and to patches are calculated from/to their center.
-         If \code{torus = TRUE}, the \code{radius} distance(s) are calculared
+
+         If \code{torus = TRUE}, the \code{radius} distances are calculared
          around the sides of the world to select \code{agents2}.
 }
 \examples{
@@ -88,5 +90,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#in-radius}
 }
 

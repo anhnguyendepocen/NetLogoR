@@ -5,7 +5,7 @@
 \alias{isNLclass}
 \alias{isNLclass,SpatialPointsDataFrame,character-method}
 \alias{isNLclass,matrix,character-method}
-\title{Test class}
+\title{Type of object}
 \usage{
 isNLclass(agents, class)
 
@@ -14,11 +14,12 @@ isNLclass(agents, class)
 \S4method{isNLclass}{SpatialPointsDataFrame,character}(agents, class)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patches to evaluate.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to evaluate.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates for the
+              patches to evaluate.
+
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to evaluate.}
 
 \item{class}{Characters. Must be equal to \code{"agent"}, \code{"agentset"},
 \code{"patch"}, \code{"patchset"}. \code{"turtle"} or \code{"turtleset"}.}
@@ -27,26 +28,30 @@ A SpatialPointsDataFrame created by \code{createTurtles()} or by
 Logical. \code{TRUE} if \code{agents} is of the \code{class} tested.
 }
 \description{
-Reports \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
+Report \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
 \code{class} tested.
 }
 \details{
 Careful! The class tested do not correspond to actual R classes.
+
          \code{agents} is \code{"patch"} if it is a matrix (ncol = 2) with the
          first column \code{pxcor} and the second column \code{pycor} and only
          one row. \code{agents} is \code{"patcheset"} if the matrix has more than
          one row.
+
          \code{agents} is \code{"turtle"} if it is a SpatialPointsDataFrame
          of length 1 with the variables created when using \code{createTurtles()}
          or \code{createOTurtles()}. \code{agents} is \code{"turtleset"} if the
          SpatialPointsDataFrame is of length larger than 1.
+
          \code{agents} is \code{"agent"} if it is either \code{"patch"} or
          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either
          \code{"patcheset"} or \code{"turtleset"}.
-         This function does not test if the patch(es) exist(s) within a world
-         according to the coordinates. For this, use \code{pExist()}. This
-         function does not test if the turtle(s) exist(s) given their who
-         number(s) and breed(s). For this, use \code{isTurtles()}.
+
+         This function does not test if the patches exist within a world
+         according to the coordinates. For this, use \code{pExists()}. This
+         function does not test if the turtles exist given their who
+         numbers and breeds. For this, use \code{tExists()}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
@@ -65,5 +70,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#is-of-type}
 }
 

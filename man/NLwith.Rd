@@ -6,7 +6,7 @@
 \alias{NLwith,SpatialPointsDataFrame,missing,character-method}
 \alias{NLwith,matrix,NLworld,missing-method}
 \alias{NLwith,matrix,NLworldStack,character-method}
-\title{NLwith}
+\title{Agents with}
 \usage{
 NLwith(agents, world, varName, val)
 
@@ -18,13 +18,14 @@ NLwith(agents, world, varName, val)
   val)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patches to evaluate.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to evaluate.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates of the
+               patches to evaluate.
 
-\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtles to evaluate.}
+
+\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
 \item{varName}{Characters. The name of the variable to evaluate.
@@ -42,26 +43,27 @@ any length. Any \code{agents} with their variable equals to any
 \code{val} is returned.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the coordinates of the patches with their value
         equal to \code{val}.
-        A SpatialPointsDataFrame representing the turtles which have their
+
+        SpatialPointsDataFrame representing the turtles which have their
         \code{varName == val}.
 }
 \description{
-Reports the coordinates \code{pxcor} and \code{pycor} of the patches with their
+Report the coordinates \code{pxcor} and \code{pycor} of the patches with their
 variable equals to a specific value.
-Reports the turtles which have their variable equals to a specific value.
+Report the turtles which have their variable equals to a specific value.
 }
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- sample(1:5, size = 25, replace = TRUE)
 plot(w1)
-p2 <- NLwith(agents = patches(world = w1), world = w1, val = 2)
+p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 
 # Turtles
-t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 t2 <- NLwith(agents = t1, varName = "breed", val = "sheep")
 t3 <- NLwith(agents = t1, varName = "breed", val = c("sheep", "wolf"))
 
@@ -74,5 +76,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with}
 }
 

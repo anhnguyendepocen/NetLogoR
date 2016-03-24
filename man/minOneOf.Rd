@@ -6,7 +6,7 @@
 \alias{minOneOf,SpatialPointsDataFrame,missing,character-method}
 \alias{minOneOf,matrix,NLworld,missing-method}
 \alias{minOneOf,matrix,NLworldStack,character-method}
-\title{One with minimum}
+\title{One agent with minimum}
 \usage{
 minOneOf(agents, world, varName)
 
@@ -17,13 +17,14 @@ minOneOf(agents, world, varName)
 \S4method{minOneOf}{SpatialPointsDataFrame,missing,character}(agents, varName)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patches to evaluate.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to evaluate.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates for the
+               patches to evaluate.
 
-\item{world}{A \code{NLworlds} object. Only needed if \code{agents} are patches.
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtles to evaluate.}
+
+\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
 \item{varName}{Characters. The name of the variable to evaluate for the minimum value.
@@ -37,17 +38,18 @@ the turtles' variable. \code{varName} can be equal to \code{"xcor"},
 as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
-A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
         the second column \code{pycor} representing the coordinates for the patch
         (or one of the patches) with the minimum value among the \code{agents}.
-        A SpatialPointsDataFrame of length 1 representing the turtle (or one of
+
+        SpatialPointsDataFrame of length 1 representing the turtle (or one of
         the turtles) which has its \code{varName} equals to the minimum value
         among the \code{agents}.
 }
 \description{
-Reports one patch coordinates \code{pxcor} and \code{pycor} which has its
+Report one patch coordinates \code{pxcor} and \code{pycor} which has its
 variable equals to the minimum value.
-Reports one turtle which has its variable equals to the minimum value.
+Report one turtle which has its variable equals to the minimum value.
 }
 \details{
 If there are several \code{agents}. with the minimum value, one is chosen
@@ -74,5 +76,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-one-of}
 }
 

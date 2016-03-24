@@ -5,7 +5,7 @@
 \alias{oneOf}
 \alias{oneOf,SpatialPointsDataFrame-method}
 \alias{oneOf,matrix-method}
-\title{One of}
+\title{One random agent}
 \usage{
 oneOf(agents)
 
@@ -14,21 +14,23 @@ oneOf(agents)
 \S4method{oneOf}{SpatialPointsDataFrame}(agents)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates for the
-patches to choose from.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to choose from.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates for the
+              patches to choose from.
+
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to choose from.}
 }
 \value{
-A matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
+Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
         the second  column \code{pycor} representing the coordinates of the
         chosen patch from \code{agents}.
-        A SpatialPointsDataFrame of length 1 representing the turtle chosen
+
+        SpatialPointsDataFrame of length 1 representing the turtle chosen
         from \code{agents}.
 }
 \description{
-Reports one agent randomly chosen from \code{agents}.
+Report one agent randomly chosen from \code{agents}.
 }
 \details{
 This function is similar as using \code{nOf(agents, n = 1)}.
@@ -36,10 +38,10 @@ This function is similar as using \code{nOf(agents, n = 1)}.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-pSelect <- oneOf(agents = patches(world = w1))
+pSelect <- oneOf(agents = patches(w1))
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 tSelect <- oneOf(agents = t1)
 
 
@@ -51,5 +53,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#one-of}
 }
 
