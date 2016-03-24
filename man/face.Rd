@@ -5,7 +5,7 @@
 \alias{face}
 \alias{face,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
 \alias{face,NLworlds,SpatialPointsDataFrame,matrix-method}
-\title{Face}
+\title{Face directions}
 \usage{
 face(world, turtles, to, torus = FALSE)
 
@@ -16,50 +16,59 @@ face(world, turtles, to, torus = FALSE)
   turtles, to, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtle(s) from which
-the heading will be modified.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the turtles to modify
+their heading.}
 
-\item{to}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) towards which the turtles' heading will be set
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) towards which
-the turtles' heading will be set
-A matrix (ncol = 2) with the first column \code{x} and the second
-column \code{y} representing the coordinates of the location(s)
-towards which the heading will be set
-\code{to} must be of length 1 or of the same length as \code{from}.}
+\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates of the
+               patches towards which the turtles' heading is set
+
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing the turtles towards which
+               the turtles' heading is set.
+
+               Matrix (ncol = 2) with the first column \code{x} and the second
+               column \code{y} representing the coordinates of the locations
+               towards which the heading is set.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A SpatialPointsDataFrame representing the turtles with updated headings.
+SpatialPointsDataFrame representing the \code{turtles} with updated headings.
 }
 \description{
-Set the turtles' heading towards some agent(s) or location(s) [x,y].
+Set the turtles' heading towards some agents or locations.
 }
 \details{
-If \code{torus = TRUE} and the distance from one turtle \code{from} to
-         its corresponding agent or location \code{to} is smaller around the
-         sides of the world than across it, then the heading to the agent or location
+\code{to} must be of length 1 or of length \code{turtles}.
+
+         If \code{torus = TRUE} and the distance from one turtle to
+         its corresponding agent/location \code{to} is smaller around the
+         sides of the world than across it, then the heading to the agent/location
          going around the sides of the world is given to the turtle.
-         There is no change in heading for a turtle towards itself or its own location.
+
+         There is no change in the heading when the turtle faces itself or its own location.
+
          This function is similar to setting the agents' heading to the results of
-         the \code{towards()} function.
+         \code{towards()}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- runif(25)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-plot(w1)
-points(t1, pch = 16, col = t1@data$color)
+w1[] <- runif(length(w1))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+
+library(SpaDES)
+clearplot()
+Plot(w1)
+Plot(t1, addTo = "w1")
+
 t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
 t1 <- fd(world = w1, turtles = t1, step = 0.5)
-points(t1, pch = 16, col = t1@data$color)
+Plot(t1, addTo = "w1")
 
 
 }
@@ -70,5 +79,10 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#face}
+
+         \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#facexy}
 }
 

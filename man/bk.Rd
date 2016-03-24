@@ -4,7 +4,7 @@
 \name{bk}
 \alias{bk}
 \alias{bk,NLworlds,SpatialPointsDataFrame,numeric-method}
-\title{Backward}
+\title{Move backward}
 \usage{
 bk(world, turtles, step, torus = FALSE, out = TRUE)
 
@@ -12,15 +12,14 @@ bk(world, turtles, step, torus = FALSE, out = TRUE)
   torus = FALSE, out = TRUE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object, representing the world which the
+\item{world}{\code{NLworlds} object, representing the world which the
 turtles move onto.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
-\item{step}{Numeric. Distance(s) by which the turtles will move backward.
-Must be of length 1 if all turtles move the same distance or
-of length \code{turtles} if each turtle moves a different distance.}
+\item{step}{Numeric. Distances by which the turtles will move backward.
+Must be of length 1 or of length \code{turtles}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
@@ -30,33 +29,35 @@ Default is \code{torus = FALSE}.}
 the world's extent. Default is \code{out = TRUE}.}
 }
 \value{
-A SpatialPointsDataFrame representing the moving turtles with updated
-        coordinates and updated data for their previous coordinates (i.e.,
-        \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+SpatialPointsDataFrame representing the \code{turtles} with updated
+        coordinates and updated data for their previous coordinates "prevX" and
+        "prevY".
 }
 \description{
-Move the turtles backward of \code{step} distance(s) with the turtles' heading
-direction.
+Move the turtles backward of the turtles' heading direction.
 }
 \details{
 If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
-         distance to move lead a turtle outside of the world's extent, it is
+         distance to move leads a turtle outside of the world's extent, it is
          relocated on the other side of the world, inside the world's extent. If
          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
          world's extent. If \code{torus = FALSE} and \code{out = FALSE}, the
          turtle does not move at all. In the event that a turtle does not move,
          its previous coordinates are still updated with its position before
          running \code{bk()} (i.e., its current position).
+
          If a given \code{step} value is negative, then the turtle moves
          forward.
-         This function is equivalent to the forward function with the distance(s)
+
+         This function is equivalent to the forward function with the distances
          to move equal to \code{step * -1}.
-         The turtles' heading is not affected by the function (i.e., the turtles
+
+         The turtles' heading are not affected by the function (i.e., the turtles
          do not head backward).
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- runif(25)
+w1[] <- runif(length(w1))
 t1 <- createOTurtles(world = w1, n = 10)
 
 library(SpaDES)
@@ -80,5 +81,10 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#back}
+
+         \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#jump}
 }
 

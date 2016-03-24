@@ -26,43 +26,48 @@ turtlesOn(world, turtles, agents, breed)
   turtles, agents, breed)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object where the turtles evolve onto.}
+\item{world}{\code{NLworlds} object, representing the world which the turtles
+move onto.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
 \code{createOTurtles()} representing the turtles among which the
-one(s) on the same patch(es) as the \code{agents} is/are going to
-be reported.}
+ones on the same patches as \code{agents} are going to
+be returned.}
 
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) where to look for turtles.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing turtles whose patch location
-is/are the patch(es) where to look for turtles.
-Patch(es) or turtle(s) location must be inside the world's extent.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates of the
+               patches where to look for turtles.
 
-\item{breed}{String of characters. To specify the breed(s) of turtles to report.
-If missing, there is no distinction based upon breed to report turtle(s).}
+               SpatialPointsDataFrame created by \code{createTurtles()} or by
+               \code{createOTurtles()} representing turtles whose patches locations
+               are the patches where to look for turtles.}
+
+\item{breed}{Characters. To specify the breeds of turtles to report.
+If missing, there is no distinction based upon breed to report turtles.}
 }
 \value{
-A SpatialPointsDataFrame representing the turtle(s) among \code{turtles}
-        which are located on the \code{agent} patch(es) and of the given \code{breed}
+SpatialPointsDataFrame representing the turtles among \code{turtles}
+        which are located on the \code{agent} patches and of the given \code{breed}
         if specified.
 }
 \description{
-Reports the turtle(s) at some patch(es) or on the same patch(es) as some turtle(s).
+Report the turtles at some patches locations or on the same patches as some turtles.
+}
+\details{
+Patches or turtles given as \code{agents} must be located inside the
+         world's extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1[] <- runif(100)
-t1 <- createTurtles(n = 500, coords = randomXYcor(world = w1, n = 500))
+w1[] <- runif(length(w1))
+t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
 
 library(SpaDES)
 clearPlot()
 Plot(w1)
 Plot(t1, addTo = "w1")
 
-t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = 2, ycor = 2))
+t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, xcor = 2, ycor = 2))
 
 
 }
@@ -73,5 +78,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtles-on}
 }
 

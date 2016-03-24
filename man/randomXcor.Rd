@@ -4,30 +4,32 @@
 \name{randomXcor}
 \alias{randomXcor}
 \alias{randomXcor,NLworlds,numeric-method}
-\title{Random xcor}
+\title{Generate random xcor}
 \usage{
 randomXcor(world, n)
 
 \S4method{randomXcor}{NLworlds,numeric}(world, n)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{n}{Numeric. The number of xcor coordinates to generate.}
+\item{n}{Integer. The number of xcor coordinates to generate.}
 }
 \value{
-A vector of xcor coordinate values of length \code{n}.
+Numeric. Vector of xcor coordinate values of length \code{n}.
 }
 \description{
-Reports random xcor coordinate(s) inside the world's extent.
+Report random xcor coordinates inside the world's extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
-                                          ycor = randomYcor(world = w1, n = 10)))
-w1[] <- runif(25)
-plot(w1)
-points(t1, pch = 16, col = t1@data$color)
+w1[] <- runif(length(w1))
+t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(w1, n = 10),
+                                          ycor = randomYcor(w1, n = 10)))
+library(SpaDES)
+clearPlot()
+Plot(w1)
+Plot(t1, addTo = "w1")
 
 
 }
@@ -38,5 +40,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#random-cor}
 }
 

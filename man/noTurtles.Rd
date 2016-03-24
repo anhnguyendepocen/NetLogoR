@@ -11,11 +11,12 @@ noTurtles(x)
 \S4method{noTurtles}{missing}()
 }
 \value{
-An empty SpatialPointsDataFrame but with the turtle variables defined
-        as when using \code{createTurtles()} or \code{createOTurtles()}.
+SpatialPointsDataFrame with the turtle variables defined
+        as when using \code{createTurtles()} or \code{createOTurtles()} but
+        of length equals to 0.
 }
 \description{
-Reports an empty turtle agentset.
+Report an empty turtle agentset.
 }
 \examples{
 t1 <- noTurtles()
@@ -29,5 +30,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#no-turtles}
 }
 

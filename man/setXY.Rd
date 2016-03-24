@@ -5,7 +5,7 @@
 \alias{setXY}
 \alias{setXY,SpatialPointsDataFrame,numeric,numeric,NLworlds,logical-method}
 \alias{setXY,SpatialPointsDataFrame,numeric,numeric,missing,ANY-method}
-\title{Set xcor and ycor}
+\title{Set turtles locations}
 \usage{
 setXY(turtles, xcor, ycor, world, torus = FALSE)
 
@@ -17,26 +17,25 @@ setXY(turtles, xcor, ycor, world, torus = FALSE)
   xcor, ycor, world, torus = FALSE)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
 \item{xcor}{Numeric. X coordinates for the turles. Must be of length 1 or
-of the same length as the \code{turtles}.}
+of length \code{turtles}.}
 
 \item{ycor}{Numeric. X coordinates for the turles. Must be of length 1 or
-of the same length as the \code{turtles}}
+of length \code{turtles}.}
 
-\item{world}{A \code{NLworlds} object where the turtles evolve onto. Only
-needed if \code{torus = TRUE}. Should not be provided if
-\code{torus = FALSE}.}
+\item{world}{\code{NLworlds} object, representing the world which the
+turtles move onto. Should be provided only if \code{torus = TRUE}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A SpatialPointsDataFrame representing the moving turtles with updated
-        coordinates and updated data for their previous coordinates (i.e.,
-        \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+SpatialPointsDataFrame representing the moving turtles with updated
+        coordinates and updated data for their previous coordinates "prevX"
+        and "prevY".
 }
 \description{
 Set the turtles \code{xcor} and \code{ycor} coordinates.
@@ -49,8 +48,10 @@ If \code{torus = TRUE} and the given coordinates \code{xcor} or \code{ycor}
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1[] <- runif(100)
-t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5))
+w1[] <- runif(length(w1))
+
+t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
+
 library(SpaDES)
 clearPlot()
 Plot(w1)
@@ -68,5 +69,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#setxy}
 }
 

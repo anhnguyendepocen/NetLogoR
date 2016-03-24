@@ -12,37 +12,36 @@ patchAhead(world, turtles, dist, torus = FALSE)
   dist, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object where the turtles evolve onto.}
+\item{world}{\code{NLworlds} object, representing the world which the
+turtles move onto.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
 \code{createOTurtles()} representing the moving turtles.}
 
-\item{dist}{Numeric. Distance(s) from the turtle(s) to identify the patch.
-Must be of length 1 if the same distance is applied to all turtles
-or of length \code{turtles} if each turtle has a different distance.}
+\item{dist}{Numeric. Distances from the turtles to identify the patches ahead.
+Must be of length 1 or of length \code{turtles}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the patches coordinates at \code{dist} of the
         \code{turtles}. The order of the patches follows the order of the \code{turtles}.
 }
 \description{
-Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
-distance ahead of the turtle(s).
+Report the patches coordinates \code{pxcor} and \code{pycor} at the given
+distance in the direction of the turtles' headings.
 }
 \details{
 If \code{torus = FALSE} and the patch at distance \code{dist} of the turtle
-         is outside the world, \code{NA} is returned for the patch coordinates. Otherwise,
+         is outside the world, \code{NA} are returned for the patch coordinates. Otherwise,
          if \code{torus = TRUE}, the patch coordinates from the wrapped world are
          returned.
-         The distances from the turtles are computed with their current heading.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 patchAhead(world = w1, turtles = t1, dist = 1)
 
 
@@ -54,5 +53,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-ahead}
 }
 

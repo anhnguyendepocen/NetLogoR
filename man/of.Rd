@@ -4,29 +4,29 @@
 \name{of}
 \alias{of}
 \alias{of,SpatialPointsDataFrame,character-method}
-\title{Of}
+\title{Values of turtles variables}
 \usage{
 of(turtles, tVarName)
 
 \S4method{of}{SpatialPointsDataFrame,character}(turtles, tVarName)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the turtles.}
 
-\item{tVarName}{Characters. The name of the turtle's variable. \code{tVarName}
-can be equal to \code{"coords"}, \code{"xcor"}, \code{"ycor"},
-\code{"who"}, \code{"heading"}, \code{"prevCoords"}, \code{"prevX"},
-\code{"prevY"}, \code{"breed"}, \code{"color"} or any of the
-variables created with \code{turtlesOwn()}.}
+\item{tVarName}{Characters. The name of the turtle's variable whose values to
+report. \code{tVarName} can be equal to \code{"coords"}, \code{"xcor"},
+\code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
+\code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
+any of the variables created with \code{turtlesOwn()}.}
 }
 \value{
-The \code{tVarName} value(s) for the \code{turtles}. The class depends
+\code{tVarName} values for the \code{turtles}. The class depends
         on the class of the variable. The order of the values follows the order
         of the \code{turtles}.
 }
 \description{
-Reports the value of the turtle(s)' variable(s).
+Report the value of the turtles variables.
 }
 \examples{
 t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
@@ -41,5 +41,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#of}
 }
 

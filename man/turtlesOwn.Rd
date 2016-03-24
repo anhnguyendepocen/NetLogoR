@@ -5,7 +5,7 @@
 \alias{turtlesOwn}
 \alias{turtlesOwn,SpatialPointsDataFrame,character,ANY-method}
 \alias{turtlesOwn,SpatialPointsDataFrame,character,missing-method}
-\title{Turtles own variable}
+\title{Turtles variable}
 \usage{
 turtlesOwn(turtles, tVarName, tVar)
 
@@ -16,21 +16,21 @@ turtlesOwn(turtles, tVarName, tVar)
   tVar)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
 \code{createOTurtles()} representing turtles.}
 
 \item{tVarName}{Characters. Name of the new variable to create.}
 
 \item{tVar}{Any type of vector representing the value of \code{tVarName}.
-\code{length(tVar)} must be equal to 1 or to \code{length(turtles)}.
+Must be of length 1 or of length \code{turtles}.
 If missing, \code{NA} is given.}
 }
 \value{
-A SpatialPointsDataFrame representing the \code{turtles} with the new
+SpatialPointsDataFrame representing the \code{turtles} with the new
         variable \code{tVarName} added.
 }
 \description{
-Create a new variable for the turtle(s) provided.
+Create a new variable for the turtles provided.
 }
 \examples{
 t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
@@ -45,5 +45,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtles-own}
 }
 

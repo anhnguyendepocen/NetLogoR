@@ -5,7 +5,7 @@
 \alias{downhill}
 \alias{downhill,NLworld,missing,SpatialPointsDataFrame,numeric-method}
 \alias{downhill,NLworldStack,character,SpatialPointsDataFrame,numeric-method}
-\title{Downhill}
+\title{Move downhill}
 \usage{
 downhill(world, pVar, turtles, nNeighbors, torus = FALSE)
 
@@ -17,38 +17,40 @@ downhill(world, pVar, turtles, nNeighbors, torus = FALSE)
   pVar, turtles, nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object, representing the world in which the
+\item{world}{\code{NLworlds} object, representing the world which the
 turtles move onto.}
 
-\item{pVar}{If the world is a \code{NLworldStack}, pVar is the name
-(characters) of the layer used to define the patches's variable
-used to move downihll.}
+\item{pVar}{Characters. If the world is a \code{NLworldStack}, \code{pVar}
+is the name of the layer used to define the patches's variable
+used to move downihll. Should not be provided if the world is
+\code{NLworld}.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
-\item{nNeighbors}{4 or 8 for the number of neighbor patches considered to move
+\item{nNeighbors}{Integer: 4 or 8. The number of neighbor patches considered to move
 downhill.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A SpatialPointsDataFrame representing the turtles with updated locations
-        and headings.
+SpatialPointsDataFrame representing the \code{turtles} with updated
+        coordinates and updated data for their headings and previous coordinates
+        "prevX" and "prevY".
 }
 \description{
-Move the turtles to their neighboring patch with the lowest value for the pacthes'
+Move the turtles to their neighboring patch with the lowest value for the patches'
 variable.
 }
 \details{
-The turtles face the chosen patches and then move to their center. Both
-         headings and locations are updated with \code{downhill}.
-         If no neighboring patch has a smaller value than the patch where the
-         turtle is currently located, the turtle stays on this patch. It still
+If no neighboring patch has a smaller value than the patch where the
+         turtle is currently located on, the turtle stays on this patch. It still
          moves to the patch center if it was not already on it.
+
          If there are multiple neighboring patches with the same lowest value,
          the turtle chooses one patch at random.
+
          If \code{torus = FALSE}, turtles cannot move on the other side of the world.
          If a turtle is located on a patch on the edge of the world, it has fewer
          neighborhing patches for option to move than \code{nNeighbors}. If
@@ -58,12 +60,16 @@ The turtles face the chosen patches and then move to their center. Both
 }
 \examples{
 w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-w1[] <- runif(100)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-plot(w1)
-points(t1, pch = 16, col = t1@data$color)
+w1[] <- runif(length(w1))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+
+library(SpaDES)
+clearPlot()
+Plot(w1)
+Plot(t1, addTo = "w1")
+
 t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
-points(t1, pch = 16, col = t1@data$color)
+Plot(t1, addTo = "w1")
 
 
 }
@@ -74,5 +80,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#downhill}
 }
 

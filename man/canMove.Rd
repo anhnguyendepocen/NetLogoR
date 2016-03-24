@@ -4,7 +4,7 @@
 \name{canMove}
 \alias{canMove}
 \alias{canMove,NLworlds,SpatialPointsDataFrame,numeric-method}
-\title{Can move}
+\title{Can the turtle move?}
 \usage{
 canMove(world, turtles, step)
 
@@ -12,22 +12,21 @@ canMove(world, turtles, step)
   step)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object, representing the world in which the
-turtles would move onto.}
+\item{world}{\code{NLworlds} object, representing the world which the
+turtles move onto.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtle(s) to be
-evaluated.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the turtles to
+evaluate.}
 
-\item{step}{Numeric. The distance(s) the turtles would move. Must be of
-length 1 if all the turtles would move the same distance or
-of the same length as the turtles object.}
+\item{step}{Numeric. The distances the turtles would move. Must be of
+length 1 or of length \code{turtles}.}
 }
 \value{
-A vector of logical of length equal to \code{length(turtles)}.
+Logicals. Vector of length \code{turtles}.
 }
 \description{
-Reports \code{TRUE} or \code{FALSE} if the turtle(s) can move the given distance(s)
+Report \code{TRUE} or \code{FALSE} if the turtles can move the given distances
 without leaving the world's extent.
 }
 \examples{
@@ -44,5 +43,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#can-move}
 }
 

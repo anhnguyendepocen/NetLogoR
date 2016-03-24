@@ -4,26 +4,28 @@
 \name{die}
 \alias{die}
 \alias{die,SpatialPointsDataFrame,numeric-method}
-\title{Die}
+\title{Kill turtles}
 \usage{
 die(turtles, who)
 
 \S4method{die}{SpatialPointsDataFrame,numeric}(turtles, who)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()}.}
 
-\item{who}{Numeric. The who number(s) of the turtle(s) that die(s).}
+\item{who}{Integers. The who numbers of the turtles to kill.}
 }
 \value{
-A SpatialPointsDataFrame of length equal to \code{length(turtles) - length(who)}.
+SpatialPointsDataFrame of length equal to \code{length(turtles) - length(who)}.
 }
 \description{
-Kill the turtle(s).
+Kill specific turtles.
 }
 \details{
 The who numbers of the other turtles are maintained.
+
+         To remove all the turtles, you can use \code{clearTurtles()}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
@@ -41,5 +43,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#die}
 }
 

@@ -4,36 +4,37 @@
 \name{sprout}
 \alias{sprout}
 \alias{sprout,numeric,matrix-method}
-\title{Sprout}
+\title{Sprout new turtles}
 \usage{
 sprout(n, patches, turtles, breed, heading, color)
 
 \S4method{sprout}{numeric,matrix}(n, patches, turtles, breed, heading, color)
 }
 \arguments{
-\item{n}{Integer. Number of new turtle(s) to create.}
+\item{n}{Integer. The number of new turtles to create.}
 
-\item{patches}{A matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{patches}{Matrix (ncol = 2) with the first column \code{pxcor} and the
 second column \code{pycor} representing the coordinates of the
-patch(es) on which the new turtles are created. \code{nrow(patches)}
+patches on which the new turtles are created. \code{nrow(patches)}
 must be equal to 1 or to \code{n}.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing existing turtles.}
 
 \item{...}{Additional arguments (see details).}
 }
 \value{
-A SpatialPointsDataFrame with the new created turtles.
+SpatialPointsDataFrame with the new created turtles.
 }
 \description{
-Create new turtles on specific patch(es).
+Create new turtles on specific patches.
 }
 \details{
 The additional arguments to be passed on are some of the function
-         \code{createTurtles()} which are: heading, breed and color. If not
+         \code{createTurtles()}: heading, breed and color. If not
          provided, these arguments take the default value as defined in
          \code{createTurtles()}.
+
          If \code{turtles} is provided, the new created turtles are added to
          the \code{turtles} when returned. The who number of the created turtles
          therefore follow the ones from the \code{turtles}. If no \code{turtles}
@@ -53,5 +54,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#sprout}
 }
 

@@ -5,7 +5,7 @@
 \alias{hatch}
 \alias{hatch,SpatialPointsDataFrame,numeric,numeric,character-method}
 \alias{hatch,SpatialPointsDataFrame,numeric,numeric,missing-method}
-\title{Hatch}
+\title{Hatch new turtles}
 \usage{
 hatch(turtles, who, n, breed)
 
@@ -16,27 +16,27 @@ hatch(turtles, who, n, breed)
   n)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} containing the parent turtle.}
 
-\item{who}{Numeric. The who number of the parent turtle.}
+\item{who}{Integer. The who number of the parent turtle.}
 
-\item{n}{Numeric. The number of new turtle(s) to create.}
+\item{n}{Integer. The number of new turtles to create.}
 
-\item{breed}{Character. The breed for the turtle(s) to be created. If missing,
-the created turtle(s) is/are of the same breed as the parent turtle.}
+\item{breed}{Character. The breed for the turtles to create. If missing,
+the created turtles are of the same breed as the parent turtle.}
 }
 \value{
-A SpatialPointsDataFrame of length equal to \code{length(turtles) + n}.
+SpatialPointsDataFrame of length equal to \code{length(turtles) + n}.
 }
 \description{
-Create new turtle(s) from a parent turtle.
+Create new turtles from a parent turtle.
 }
 \details{
-The created turtle(s) inherit(s) of all the data from the parent turtle,
-         except for the breed if specified otherwise, and for the who number.
+The created turtles inherit of all the data from the parent turtle,
+         except for the breed, if specified otherwise, and for the who number.
          The who numbers of the turtles created take on following the highest
-         who number among the turtles.
+         who number among the \code{turtles}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
@@ -54,5 +54,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#hatch}
 }
 

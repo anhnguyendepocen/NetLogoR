@@ -4,7 +4,7 @@
 \name{turtleSet}
 \alias{turtleSet}
 \alias{turtleSet,SpatialPointsDataFrame-method}
-\title{Turtle set}
+\title{Create a turtle agenset}
 \usage{
 turtleSet(...)
 
@@ -15,24 +15,22 @@ turtleSet(...)
 by \code{createOTurtles()} representing turtles.}
 }
 \value{
-A SpatialPointsDataFrame object with all the turtles provided in the
-        inputs.
+SpatialPointsDataFrame with all the turtles provided in the inputs.
 }
 \description{
-Reports a turtle agentset as a SpatialPointsDataFrame objects containing all
-turtles provided in the inputs.
+Report a turtle agentset containing all turtles provided in the inputs.
 }
 \details{
 This functions does not affect turtles coordinates and variables.
          Therefore there may be multiple turtles with the same variable (e.g.,
          who number, color, ...) . This must be taken care of prior or later
-         using \code{turtleSet()}.
+         using this function.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = "sheep")
-t2 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2), breed = "wolf")
-t3 <- createTurtles(n = 1, coords = randomXYcor(world = w1, n = 1), breed = "sheperd")
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
+t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
 tAll <- turtleSet(t1, t2, t3)
 
 
@@ -44,5 +42,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle-set}
 }
 

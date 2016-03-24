@@ -14,44 +14,47 @@ moveTo(turtles, to)
 \S4method{moveTo}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles, to)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
-\item{to}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) where the \code{turtles} move to.
-A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtle(s) whose
-location(s) the \code{turtles} move to.
-\code{nrow(to)} (if matrix) or \code{length(to)} (if SpatialPointsDataFrame)
-must be equal to 1 or to \code{length(turtles)}.}
+\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+               second column \code{pycor} representing the coordinates of the
+               patches where the \code{turtles} move to.
+
+               SpatialPointsDataFrame created by \code{createTurtles()} or
+               by \code{createOTurtles()} representing the turtles whose
+               locations the \code{turtles} move to.}
 }
 \value{
-A SpatialPointsDataFrame representing the moving turtles with updated
-        coordinates and updated data for their previous coordinates (i.e.,
-        \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+SpatialPointsDataFrame representing the moving turtles with updated
+        coordinates and updated data for their previous coordinates "prevX"
+        and "prevY".
 }
 \description{
-Move the turtle(s) to the same location as the given agent(s).
+Move the turtles to the same location as the agents \code{to}.
 }
 \details{
-The turtle's heading is not changed.
+The number of agents \code{to} (if matrix) must be equal to 1 or of
+         length \code{turtles}.
+
+         The turtle's headings are not affected with this function.
+
          If a turtle is moving to a patch location, it will be located at
          the patch center.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 w1[] <- runif(100)
-t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5))
+t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 
 library(SpaDES)
 clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1")
 
-t1 <- moveTo(turtles = t1, to = t1[t1$who == 0,]) # move to the location of turtle 0
+t1 <- moveTo(turtles = t1, to = turtle(t1, who = 0))
 Plot(t1, addTo ="w1")
-t1 <- moveTo(turtles = t1, to = patch(world = w1, xcor = 9, ycor = 9))
+t1 <- moveTo(turtles = t1, to = patch(w1, xcor = 9, ycor = 9))
 Plot(t1, addTo ="w1")
 
 
@@ -63,5 +66,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#move-to}
 }
 

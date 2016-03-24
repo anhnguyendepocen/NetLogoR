@@ -4,22 +4,21 @@
 \name{left}
 \alias{left}
 \alias{left,SpatialPointsDataFrame,numeric-method}
-\title{Left}
+\title{Rotate to the left}
 \usage{
 left(turtles, nDegrees)
 
 \S4method{left}{SpatialPointsDataFrame,numeric}(turtles, nDegrees)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtle(s) to rotate.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the turtles to rotate.}
 
 \item{nDegrees}{Numeric. The number of degrees by which to rotate the turtles'
-heading to the left. Must be of length 1 or of the same length
-as the \code{turtles}.}
+heading to the left. Must be of length 1 or of length \code{turtles}.}
 }
 \value{
-A SpatialPointsDataFrame representing the turtles with updated headings.
+SpatialPointsDataFrame representing the turtles with updated headings.
 }
 \description{
 Rotate the turtles's heading to the left.
@@ -29,9 +28,9 @@ If \code{nDegrees} is negative, the turtle rotate to the right.
 }
 \examples{
 t1 <- createTurtles(n = 10, world = w1)
-t1@data$heading
+of(t1, tVarName = "heading")
 t1 <- left(turtles = t1, nDegrees = 180)
-t1@data$heading
+of(t1, tVarName = "heading")
 
 
 }
@@ -42,5 +41,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#left}
 }
 

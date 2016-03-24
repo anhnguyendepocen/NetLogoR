@@ -4,24 +4,23 @@
 \name{inspect}
 \alias{inspect}
 \alias{inspect,SpatialPointsDataFrame,numeric-method}
-\title{Inspect}
+\title{Inspect turtles}
 \usage{
 inspect(turtles, who)
 
 \S4method{inspect}{SpatialPointsDataFrame,numeric}(turtles, who)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the existing turtles
-in the world.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving turtles.}
 
-\item{who}{Integer. Id (who number(s)) for the turte(s) to inspect.}
+\item{who}{Integers. Identity (i.e., "who" numbers) for the turtes to inspect.}
 }
 \value{
-A dataframe with the variables for the inspected turtle(s).
+Dataframe (nrow = \code{length(who)}) with the variables for the inspected turtles.
 }
 \description{
-Display the variables value for the requested turtle(s).
+Display the variables values for the requested turtles.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
@@ -37,5 +36,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#inspect}
 }
 

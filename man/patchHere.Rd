@@ -11,26 +11,28 @@ patchHere(world, turtles)
 \S4method{patchHere}{NLworlds,SpatialPointsDataFrame}(world, turtles)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object where the turtles evolve onto.}
+\item{world}{\code{NLworlds} object, representing the world which the turtles
+move onto.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
 \code{createOTurtles()} representing the moving turtles.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the patches coordinates at the \code{turtles}
         location. The order of the patches follows the order of the \code{turtles}.
 }
 \description{
-Reports the patch(es) coordinates under the turtle(s).
+Report the patches coordinates \code{pxcor} and \code{pycor} under the turtles
+locations.
 }
 \details{
-If a turtle is located outside of the world's extent, \code{NA} is returned
-         for its patch coordinates.
+If a turtle is located outside of the world's extent, \code{NA} are returned
+         for the patch coordinates.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 patchHere(world = w1, turtles = t1)
 
 
@@ -42,5 +44,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-here}
 }
 

@@ -5,38 +5,34 @@
 #'
 #' @param n       Integer. The number of new turtles to create.
 #'
-#' @param coords  A matrix (ncol = 2, nrow = n) with the first column \code{xcor}
-#'                and the second column \code{ycor} representing the coordinates
-#'                for the turtles to be created. \code{nrow(coords)} must be either
-#'                equal to 1 if all turtles have the same initial position or equal
-#'                to \code{n} if different turtles have different initial position.
+#' @param coords  Matrix (ncol = 2) with the first column \code{xcor} and the second
+#'                column \code{ycor} representing the turtles inital location.
+#'                \code{nrow(coords)} must be equal to 1 or to \code{n}.
 #'                Given coordinates must be inside the world's extent. If missing,
 #'                turtles are put in the center of the \code{world}.
 #'
-#' @param world   A \code{NLworlds} object, representing the world in which the turtles
-#'                will evolve. If \code{coords} are provided, \code{world} should
-#'                not be provided.
+#' @param world   \code{NLworlds} object to place the turtles created at the center.
+#'                If \code{coords} is provided, \code{world} should not be provided.
 #'
-#' @param heading Numeric value(s) between 0 and 360. Either of length 1 representing
-#'                the heading for all turtles or of length \code{n} if different
-#'                turtles have different headings. If missing, a random heading is
-#'                assigned to each turtle.
+#' @param heading Numeric. Vector or values between 0 and 360. Must be of length 1 or
+#'                \code{n}. If missing, a random heading is assigned to each turtle.
 #'
-#' @param breed   String of characters. Either of length 1 representing the breed
-#'                for all turtles or of length \code{n} if the different turtles have
-#'                different breeds. If missing, \code{breed = "turtle"} for all turtles.
+#' @param breed   Characters. Either of length 1 or \code{n}. If missing,
+#'                \code{breed = "turtle"} for all turtles.
 #'
-#' @param color   String of characters of length \code{n} representing the color
-#'                of each turtle when plotted. If missing, colors are assigned using
-#'                the function \code{rainbow(n)}.
+#' @param color   Characters. Vector of length \code{n}. If missing, colors are
+#'                assigned using the function \code{rainbow(n)}.
 #'
-#' @return A SpatialPointsDataFrame object of length \code{n} with the columns for
-#'         the dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
+#' @return SpatialPointsDataFrame of length \code{n} with the columns for the
+#'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
 #'
 #' @details The identity of the turtles is defined by their "who" number. This
 #'          numbering starts at 0 and increments by 1.
+#'
 #'          The coordinates from the previous time step are stored in "prevX" and
 #'          "prevY". The initial values are \code{NA}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#create-turtles}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -44,8 +40,8 @@
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(25)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
 #' clearPlot()
@@ -151,25 +147,26 @@ setMethod(
 #'
 #' @param n       Integer. The number of new turtles to create.
 #'
-#' @param world   A \code{NLworlds} object, representing the world in which the turtles
-#'                will evolve.
+#' @param world   \code{NLworlds} object.
 #'
-#' @param breed   String of characters. Either of length 1 representing the breed
-#'                for all turtles or of length \code{n} if the different turtles have
-#'                different breeds. If missing, \code{breed = "turtle"} for all turtles.
+#' @param breed   Characters. Either of length 1 or \code{n}. If missing,
+#'                \code{breed = "turtle"} for all turtles.
 #'
-#' @param color   String of characters of length \code{n} representing the color
-#'                of each turtle when plotted. If missing, colors are assigned using
-#'                the function \code{rainbow(n)}.
+#' @param color   Characters. Vector of length \code{n}. If missing, colors are
+#'                assigned using the function \code{rainbow(n)}.
 #'
-#' @return A SpatialPointsDataFrame object of length \code{n} with the columns for
-#'         the dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
+#' @return SpatialPointsDataFrame of length \code{n} with the columns for the
+#'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
 #'
-#' @details The identity of the turtles is defined by their "who" number. This
+#' @details The first turtle \code{who = 0} has its heading set to 0.
+#'
+#'          The identity of the turtles is defined by their "who" number. This
 #'          numbering starts at 0 and increments by 1.
-#'          The first turtle \code{who = 0} has its heading set to 0.
+#'
 #'          The coordinates from the previous time step are stored in "prevX" and
 #'          "prevY". The initial values are \code{NA}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#create-ordered-turtles}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -177,20 +174,13 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(25)
+#' w1[] <- runif(length(w1))
 #' t1 <- createOTurtles(n = 10, world = w1)
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
-#' t1 <- fd(world = w1, turtles = t1, step = 1)
-#' points(t1, pch = 16, col = t1@data$color)
 #'
-#' \dontrun{
-#' # Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
-#'   library(SpaDES)
-#'   clearPlot()
-#'   Plot(w1)
-#'   Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
-#' }
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 #'
 #'
 #' @export
@@ -237,20 +227,18 @@ setMethod(
 
 
 ################################################################################
-#' Forward
+#' Move forward
 #'
-#' Move the turtles forward of \code{step} distance(s) with the turtles' heading
-#' direction.
+#' Move the turtles forward with the turtles' heading direction.
 #'
-#' @param world   A \code{NLworlds} object, representing the world which the
+#' @param world   \code{NLworlds} object, representing the world which the
 #'                turtles move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. Distance(s) by which the turtles will move forward. Must
-#'                be of length 1 if all turtles move the same distance or of length
-#'                \code{turtles} if each turtle moves a different distance.
+#' @param step    Numeric. Distances by which the turtles will move forward. Must
+#'                be of length 1 or of length \code{turtles}.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
@@ -259,20 +247,25 @@ setMethod(
 #'                \code{torus = FALSE} and their ending position will be outside of
 #'                the world's extent. Default is \code{out = TRUE}.
 #'
-#' @return A SpatialPointsDataFrame representing the moving turtles with updated
-#'         coordinates and updated data for their previous coordinates (i.e.,
-#'         \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#'         coordinates and updated data for their previous coordinates "prevX"
+#'         and "prevY".
 #'
 #' @details If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
-#'          distance to move lead a turtle outside of the world's extent, it is
+#'          distance to move leads a turtle outside of the world's extent, it is
 #'          relocated on the other side of the world, inside the world's extent. If
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
 #'          world's extent. If \code{torus = FALSE} and \code{out = FALSE}, the
 #'          turtle does not move at all. In the event that a turtle does not move,
 #'          its previous coordinates are still updated with its position before
 #'          running \code{fd()} (i.e., its current position).
+#'
 #'          If a given \code{step} value is negative, then the turtle moves
 #'          backward.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#forward}
+#'
+#'          \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#jump}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -280,7 +273,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(25)
+#' w1[] <- runif(length(w1))
 #' t1 <- createOTurtles(world = w1, n = 10)
 #'
 #' library(SpaDES)
@@ -340,20 +333,18 @@ setMethod(
 
 
 ################################################################################
-#' Backward
+#' Move backward
 #'
-#' Move the turtles backward of \code{step} distance(s) with the turtles' heading
-#' direction.
+#' Move the turtles backward of the turtles' heading direction.
 #'
-#' @param world   A \code{NLworlds} object, representing the world which the
+#' @param world   \code{NLworlds} object, representing the world which the
 #'                turtles move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. Distance(s) by which the turtles will move backward.
-#'                Must be of length 1 if all turtles move the same distance or
-#'                of length \code{turtles} if each turtle moves a different distance.
+#' @param step    Numeric. Distances by which the turtles will move backward.
+#'                Must be of length 1 or of length \code{turtles}.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
@@ -362,24 +353,31 @@ setMethod(
 #'                \code{torus = FALSE} and their ending position will be outside of
 #'                the world's extent. Default is \code{out = TRUE}.
 #'
-#' @return A SpatialPointsDataFrame representing the moving turtles with updated
-#'         coordinates and updated data for their previous coordinates (i.e.,
-#'         \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#'         coordinates and updated data for their previous coordinates "prevX" and
+#'         "prevY".
 #'
 #' @details If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
-#'          distance to move lead a turtle outside of the world's extent, it is
+#'          distance to move leads a turtle outside of the world's extent, it is
 #'          relocated on the other side of the world, inside the world's extent. If
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
 #'          world's extent. If \code{torus = FALSE} and \code{out = FALSE}, the
 #'          turtle does not move at all. In the event that a turtle does not move,
 #'          its previous coordinates are still updated with its position before
 #'          running \code{bk()} (i.e., its current position).
+#'
 #'          If a given \code{step} value is negative, then the turtle moves
 #'          forward.
-#'          This function is equivalent to the forward function with the distance(s)
+#'
+#'          This function is equivalent to the forward function with the distances
 #'          to move equal to \code{step * -1}.
-#'          The turtles' heading is not affected by the function (i.e., the turtles
+#'
+#'          The turtles' heading are not affected by the function (i.e., the turtles
 #'          do not head backward).
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#back}
+#'
+#'          \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#jump}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -387,7 +385,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(25)
+#' w1[] <- runif(length(w1))
 #' t1 <- createOTurtles(world = w1, n = 10)
 #'
 #' library(SpaDES)
@@ -429,28 +427,36 @@ setMethod(
 
 
 ################################################################################
-#' Home
+#' Return home
 #'
 #' Move the turtles back "home".
 #'
-#' @param world   A \code{NLworld*} object, representing the world in which the
+#' @param world   \code{NLworlds} object, representing the world in which the
 #'                turtles move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the agents to move.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param home    Character. Can take one of the following options to define where
-#'                is home for the turtles.
+#' @param home    Characters. Can take one of the following options to define where
+#'                to relocate the \code{turtles}:
+#'
 #'                \code{home = "home0"} will place the turtles at the location
 #'                \code{xcor = 0, ycor = 0}.
+#'
 #'                \code{home = "center"} will place the turtles at the center of
 #'                the world.
+#'
 #'                \code{home = "pCorner"} will place the turtles at the center of
 #'                the patch located in the left bottom corner of the world.
+#'
 #'                \code{home = "corner"} will place the turtles at the left bottom
 #'                corner of the world.
 #'
-#' @return A SpatialPointsDataFrame with updated coordinates.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#'         coordinates and updated data for their previous coordinates "prevX" and
+#'         "prevY".
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#home}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -458,12 +464,17 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(25)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo ="w1")
+#'
+#'
 #' t1 <- home(world = w1, turtles = t1, home = "pCorner")
-#' points(t1, pch = 16, col = t1@data$color)
+#' Plot(t1, addTo ="w1")
 #'
 #'
 #' @export
@@ -513,26 +524,25 @@ setMethod(
 
 
 ################################################################################
-#' dx
+#' x-increment
 #'
-#' Reports the x-increment (i.e., the amount by which the turtles' xcor would change)
-#' if the turtles were to move forward of \code{step} distance(s) with their current
-#' heading.
+#' Report the amount by which the turtles' xcor would change if the turtles were
+#' to move forward of \code{step} distances with their current heading.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the agents that were to
-#'                move forward.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. The distance(s) the turtles would have to move forward to
-#'                compute the x-increment value. Must be of length 1 if all the
-#'                turtles would have to move the same distance or of the same length
-#'                as the turtles object. The default value is \code{step = 1}.
+#' @param step    Numeric. The distances the turtles would have to move forward to
+#'                compute the x-increment value. Must be of length 1 or length
+#'                \code{turtles}. The default value is \code{step = 1}.
 #'
-#' @return A vector of the length of the turtles object.
+#' @return Numeric. Vector of length \code{turtles}.
 #'
-#' @details Reports the sine of the turtles' heading multiplied by the \code{step}
-#'          value(s). Heading 0 is north and angles are calculated in degrees in a
+#' @details Report the sine of the turtles' heading multiplied by the \code{step}
+#'          values. Heading 0 is north and angles are calculated in degrees in a
 #'          clockwise manner.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#dxy}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -580,26 +590,25 @@ setMethod(
 
 
 ################################################################################
-#' dy
+#' y-increment
 #'
-#' Reports the y-increment (i.e., the amount by which the turtles' ycor would change)
-#' if the turtles were to move forward of \code{step} distance(s) with their current
-#' heading.
+#' Reports the amount by which the turtles' ycor would change if the turtles were
+#' to move forward of \code{step} distance(s) with their current heading.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the agents that were to
-#'                move forward.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. The distance(s) the turtles would have to move forward to
-#'                compute the y-increment value. Must be of length 1 if all the
-#'                turtles would have to move the same distance or of the same length
-#'                as the turtles object. The default value is \code{step = 1}.
+#' @param step    Numeric. The distances the turtles would have to move forward to
+#'                compute the y-increment value. Must be of length 1 or length
+#'                \code{turtles}. The default value is \code{step = 1}.
 #'
-#' @return A vector of the length of the turtles object.
+#' @return Numeric. Vector of length \code{turtles}.
 #'
-#' @details Reports the cosine of the turtles' heading multiplied by the \code{step}
-#'          value(s). Heading 0 is north and angles are calculated in degrees in a
+#' @details Report the cosine of the turtles' heading multiplied by the \code{step}
+#'          values. Heading 0 is north and angles are calculated in degrees in a
 #'          clockwise manner.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#dxy}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -647,18 +656,22 @@ setMethod(
 
 
 ################################################################################
-#' Die
+#' Kill turtles
 #'
-#' Kill the turtle(s).
+#' Kill specific turtles.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()}.
 #'
-#' @param who     Numeric. The who number(s) of the turtle(s) that die(s).
+#' @param who     Integers. The who numbers of the turtles to kill.
 #'
-#' @return A SpatialPointsDataFrame of length equal to \code{length(turtles) - length(who)}.
+#' @return SpatialPointsDataFrame of length equal to \code{length(turtles) - length(who)}.
 #'
 #' @details The who numbers of the other turtles are maintained.
+#'
+#'          To remove all the turtles, you can use \code{clearTurtles()}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#die}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -700,26 +713,28 @@ setMethod(
 
 
 ################################################################################
-#' Hatch
+#' Hatch new turtles
 #'
-#' Create new turtle(s) from a parent turtle.
+#' Create new turtles from a parent turtle.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} containing the parent turtle.
 #'
-#' @param who     Numeric. The who number of the parent turtle.
+#' @param who     Integer. The who number of the parent turtle.
 #'
-#' @param n       Numeric. The number of new turtle(s) to create.
+#' @param n       Integer. The number of new turtles to create.
 #'
-#' @param breed   Character. The breed for the turtle(s) to be created. If missing,
-#'                the created turtle(s) is/are of the same breed as the parent turtle.
+#' @param breed   Character. The breed for the turtles to create. If missing,
+#'                the created turtles are of the same breed as the parent turtle.
 #'
-#' @return A SpatialPointsDataFrame of length equal to \code{length(turtles) + n}.
+#' @return SpatialPointsDataFrame of length equal to \code{length(turtles) + n}.
 #'
-#' @details The created turtle(s) inherit(s) of all the data from the parent turtle,
-#'          except for the breed if specified otherwise, and for the who number.
+#' @details The created turtles inherit of all the data from the parent turtle,
+#'          except for the breed, if specified otherwise, and for the who number.
 #'          The who numbers of the turtles created take on following the highest
-#'          who number among the turtles.
+#'          who number among the \code{turtles}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#hatch}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -781,23 +796,24 @@ setMethod(
 
 
 ################################################################################
-#' Can move
+#' Can the turtle move?
 #'
-#' Reports \code{TRUE} or \code{FALSE} if the turtle(s) can move the given distance(s)
+#' Report \code{TRUE} or \code{FALSE} if the turtles can move the given distances
 #' without leaving the world's extent.
 #'
-#' @param world   A \code{NLworlds} object, representing the world in which the
-#'                turtles would move onto.
+#' @param world   \code{NLworlds} object, representing the world which the
+#'                turtles move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the turtle(s) to be
-#'                evaluated.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtles to
+#'                evaluate.
 #'
-#' @param step    Numeric. The distance(s) the turtles would move. Must be of
-#'                length 1 if all the turtles would move the same distance or
-#'                of the same length as the turtles object.
+#' @param step    Numeric. The distances the turtles would move. Must be of
+#'                length 1 or of length \code{turtles}.
 #'
-#' @return A vector of logical of length equal to \code{length(turtles)}.
+#' @return Logicals. Vector of length \code{turtles}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#can-move}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -836,15 +852,17 @@ setMethod(
 
 
 ################################################################################
-#' Random xcor
+#' Generate random xcor
 #'
-#' Reports random xcor coordinate(s) inside the world's extent.
+#' Report random xcor coordinates inside the world's extent.
 #'
-#' @param world A \code{NLworlds} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @param n     Numeric. The number of xcor coordinates to generate.
+#' @param n     Integer. The number of xcor coordinates to generate.
 #'
-#' @return A vector of xcor coordinate values of length \code{n}.
+#' @return Numeric. Vector of xcor coordinate values of length \code{n}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#random-cor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -852,11 +870,13 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                           ycor = randomYcor(world = w1, n = 10)))
-#' w1[] <- runif(25)
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(w1, n = 10),
+#'                                           ycor = randomYcor(w1, n = 10)))
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
 #'
 #'
 #' @export
@@ -886,15 +906,17 @@ setMethod(
 
 
 ################################################################################
-#' Random ycor
+#' Generate random ycor
 #'
-#' Reports random ycor coordinate(s) inside the world's extent.
+#' Report random ycor coordinates inside the world's extent.
 #'
-#' @param world A \code{NLworlds} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @param n     Numeric. The number of ycor coordinates to generate.
+#' @param n     Integer. The number of ycor coordinates to generate.
 #'
-#' @return A vector of ycor coordinate values of length \code{n}.
+#' @return Numeric. Vector of ycor coordinate values of length \code{n}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#random-cor}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -902,11 +924,13 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
-#'                                            ycor = randomYcor(world = w1, n = 10)))
-#' w1[] <- runif(25)
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(w1, n = 10),
+#'                                            ycor = randomYcor(w1, n = 10)))
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
 #'
 #'
 #' @export
@@ -936,42 +960,53 @@ setMethod(
 
 
 ################################################################################
-#' Towards
+#' Direction towards
 #'
-#' Reports the heading from agent(s) towards other agent(s) or location(s) [x,y].
+#' Report the headings of agents \code{from} towards agents or locations \code{to}.
 #'
-#' @param world A \code{NLworlds} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @param from  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param from  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'              second column \code{pycor} representing the coordinates of the
-#'              patch(es) from which the heading will be computed.
-#'              A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'              \code{createOTurtles()} representing the turtle(s) from which the
-#'              heading will be computed.
+#'              patches from which the headings are computed.
 #'
-#' @param to    A matrix (ncol = 2) with the first column \code{pxcor} and the
+#'              SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'              \code{createOTurtles()} representing the turtles from which the
+#'              headings are computed.
+#'
+#' @param to    Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'              second column \code{pycor} representing the coordinates of the
-#'              patch(es) to which the heading will be computed.
-#'              A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'              \code{createOTurtles()} representing the turtle(s) to which the
-#'              heading will be computed.
-#'              A matrix (ncol = 2) with the first column \code{x} and the second
-#'              column \code{y} representing the coordinates of the location(s) to
-#'              which the heading will be computed.
+#'              patches towards which the heading are computed.
+#'
+#'              SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'              \code{createOTurtles()} representing the turtles towards which the
+#'              headings are be computed.
+#'
+#'              Matrix (ncol = 2) with the first column \code{x} and the second
+#'              column \code{y} representing the coordinates of the locations
+#'              towards which the headings are computed.
 #'
 #' @param torus  Logical to determine if the \code{NLworlds} object is wrapped.
 #'               Default is \code{torus = FALSE}.
 #'
-#' @return A vector of angles in degrees of the length of \code{from}.
+#' @return Numeric. Vector of angles in degrees of length equal to the largest
+#'         number of agents/locations between the ones contained in\code{from} or
+#'         in \code{to}.
 #'
 #' @details \code{from} and \code{to} must be of the same length or if different, one
 #'          of the two has be of length 1.
+#'
 #'          If \code{torus = TRUE} and the distance from one agent \code{from} to
-#'          its corresponding agent or location \code{to} is smaller around the
-#'          sides of the world than across it, then the heading to the agent or location
+#'          its corresponding agent/location \code{to} is smaller around the
+#'          sides of the world than across it, then the heading to the agent/location
 #'          going around the sides of the world is reported.
+#'
 #'          The heading from a patch to its location returns 0, the heading from
 #'          a turtle to its location returns the turtle's heading.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#towards}
+#'
+#'          \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#towardsxy}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -979,7 +1014,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' towards(world = w1, from = patches(world = w1), to = cbind(x = 0, y = 0))
+#' towards(world = w1, from = patches(w1), to = cbind(x = 0, y = 0))
 #' t1 <- createTurtles(n = 10, world = w1)
 #' towards(world = w1, from = t1, to = cbind(x = 0, y = 0))
 #'
@@ -1093,39 +1128,48 @@ setMethod(
 
 
 ################################################################################
-#' Face
+#' Face directions
 #'
-#' Set the turtles' heading towards some agent(s) or location(s) [x,y].
+#' Set the turtles' heading towards some agents or locations.
 #'
-#' @param world   A \code{NLworlds} object.
+#' @param world   \code{NLworlds} object.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the turtle(s) from which
-#'                the heading will be modified.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtles to modify
+#'                their heading.
 #'
-#' @param to      A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param to      Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
-#'                patch(es) towards which the turtles' heading will be set
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtle(s) towards which
-#'                the turtles' heading will be set
-#'                A matrix (ncol = 2) with the first column \code{x} and the second
-#'                column \code{y} representing the coordinates of the location(s)
-#'                towards which the heading will be set
-#'                \code{to} must be of length 1 or of the same length as \code{from}.
+#'                patches towards which the turtles' heading is set
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles towards which
+#'                the turtles' heading is set.
+#'
+#'                Matrix (ncol = 2) with the first column \code{x} and the second
+#'                column \code{y} representing the coordinates of the locations
+#'                towards which the heading is set.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
-#' @return A SpatialPointsDataFrame representing the turtles with updated headings.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated headings.
 #'
-#' @details If \code{torus = TRUE} and the distance from one turtle \code{from} to
-#'          its corresponding agent or location \code{to} is smaller around the
-#'          sides of the world than across it, then the heading to the agent or location
+#' @details \code{to} must be of length 1 or of length \code{turtles}.
+#'
+#'          If \code{torus = TRUE} and the distance from one turtle to
+#'          its corresponding agent/location \code{to} is smaller around the
+#'          sides of the world than across it, then the heading to the agent/location
 #'          going around the sides of the world is given to the turtle.
-#'          There is no change in heading for a turtle towards itself or its own location.
+#'
+#'          There is no change in the heading when the turtle faces itself or its own location.
+#'
 #'          This function is similar to setting the agents' heading to the results of
-#'          the \code{towards()} function.
+#'          \code{towards()}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#face}
+#'
+#'          \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#facexy}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1133,13 +1177,17 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(25)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#'
+#' library(SpaDES)
+#' clearplot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
+#'
 #' t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
 #' t1 <- fd(world = w1, turtles = t1, step = 0.5)
-#' points(t1, pch = 16, col = t1@data$color)
+#' Plot(t1, addTo = "w1")
 #'
 #'
 #' @export
@@ -1191,20 +1239,21 @@ setMethod(
 
 
 ################################################################################
-#' Left
+#' Rotate to the left
 #'
 #' Rotate the turtles's heading to the left.
 #'
-#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the turtle(s) to rotate.
+#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtles to rotate.
 #'
 #' @param nDegrees Numeric. The number of degrees by which to rotate the turtles'
-#'                 heading to the left. Must be of length 1 or of the same length
-#'                 as the \code{turtles}.
+#'                 heading to the left. Must be of length 1 or of length \code{turtles}.
 #'
-#' @return A SpatialPointsDataFrame representing the turtles with updated headings.
+#' @return SpatialPointsDataFrame representing the turtles with updated headings.
 #'
 #' @details If \code{nDegrees} is negative, the turtle rotate to the right.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#left}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1212,9 +1261,9 @@ setMethod(
 #'
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
-#' t1@data$heading
+#' of(t1, tVarName = "heading")
 #' t1 <- left(turtles = t1, nDegrees = 180)
-#' t1@data$heading
+#' of(t1, tVarName = "heading")
 #'
 #'
 #' @export
@@ -1248,18 +1297,19 @@ setMethod(
 
 
 ################################################################################
-#' Right
+#' Rotate to the right
 #'
 #' Rotate the turtles's heading to the right.
 #'
-#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the turtle(s) to rotate.
+#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                 by \code{createOTurtles()} representing the turtles to rotate.
 #'
 #' @param nDegrees Numeric. The number of degrees by which to rotate the turtles'
-#'                 heading to the right Must be of length 1 or of the same length
-#'                 as the \code{turtles}.
+#'                 heading to the right Must be of length 1 or of length \code{turtles}.
 #'
-#' @return A SpatialPointsDataFrame representing the turtles with updated headings.
+#' @return SpatialPointsDataFrame representing the turtles with updated headings.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#right}
 #'
 #' @details If \code{nDegrees} is negative, the turtle rotate to the left.
 #'
@@ -1269,9 +1319,9 @@ setMethod(
 #'
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
-#' t1@data$heading
+#' of(t1, tVarName = "heading")
 #' t1 <- right(turtles = t1, nDegrees = 180)
-#' t1@data$heading
+#' of(t1, tVarName = "heading")
 #'
 #'
 #' @export
@@ -1298,37 +1348,39 @@ setMethod(
 
 
 ################################################################################
-#' Downhill
+#' Move downhill
 #'
-#' Move the turtles to their neighboring patch with the lowest value for the pacthes'
+#' Move the turtles to their neighboring patch with the lowest value for the patches'
 #' variable.
 #'
-#' @param world      A \code{NLworlds} object, representing the world in which the
+#' @param world      \code{NLworlds} object, representing the world which the
 #'                   turtles move onto.
 #'
-#' @param pVar       If the world is a \code{NLworldStack}, pVar is the name
-#'                   (characters) of the layer used to define the patches's variable
-#'                   used to move downihll.
+#' @param pVar       Characters. If the world is a \code{NLworldStack}, \code{pVar}
+#'                   is the name of the layer used to define the patches's variable
+#'                   used to move downihll. Should not be provided if the world is
+#'                   \code{NLworld}.
 #'
-#' @param turtles    A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles    SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                   by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param nNeighbors 4 or 8 for the number of neighbor patches considered to move
+#' @param nNeighbors Integer: 4 or 8. The number of neighbor patches considered to move
 #'                   downhill.
 #'
 #' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
 #'                   Default is \code{torus = FALSE}.
 #'
-#' @return A SpatialPointsDataFrame representing the turtles with updated locations
-#'         and headings.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#'         coordinates and updated data for their headings and previous coordinates
+#'         "prevX" and "prevY".
 #'
-#' @details The turtles face the chosen patches and then move to their center. Both
-#'          headings and locations are updated with \code{downhill}.
-#'          If no neighboring patch has a smaller value than the patch where the
-#'          turtle is currently located, the turtle stays on this patch. It still
+#' @details If no neighboring patch has a smaller value than the patch where the
+#'          turtle is currently located on, the turtle stays on this patch. It still
 #'          moves to the patch center if it was not already on it.
+#'
 #'          If there are multiple neighboring patches with the same lowest value,
 #'          the turtle chooses one patch at random.
+#'
 #'          If \code{torus = FALSE}, turtles cannot move on the other side of the world.
 #'          If a turtle is located on a patch on the edge of the world, it has fewer
 #'          neighborhing patches for option to move than \code{nNeighbors}. If
@@ -1336,18 +1388,24 @@ setMethod(
 #'          go downhill and their choice of neighborhing patches is always among
 #'          \code{nNeighbors} patches.
 #'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#downhill}
+#'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
+#'
 #' t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
-#' points(t1, pch = 16, col = t1@data$color)
+#' Plot(t1, addTo = "w1")
 #'
 #'
 #' @export
@@ -1407,37 +1465,39 @@ setMethod(
 
 
 ################################################################################
-#' Uphill
+#' Move uphill
 #'
 #' Move the turtles to their neighboring patch with the highest value for the pacthes'
 #' variable.
 #'
-#' @param world      A \code{NLworlds} object, representing the world in which the
+#' @param world      \code{NLworlds} object, representing the world which the
 #'                   turtles move onto.
 #'
-#' @param pVar       If the world is a \code{NLworldStack}, pVar is the name
-#'                   (characters) of the layer used to define the patches's variable
-#'                   used to move uphill.
+#' @param pVar       Characters. If the world is a \code{NLworldStack}, \code{pVar}
+#'                   is the name of the layer used to define the patches's variable
+#'                   used to move uphill. Should not be provided if the world is
+#'                   \code{NLworld}
 #'
-#' @param turtles    A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles    SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                   by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param nNeighbors 4 or 8 for the number of neighbor patches considered to move
+#' @param nNeighbors Integer: 4 or 8. The number of neighbor patches considered to move
 #'                   uphill.
 #'
 #' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
 #'                   Default is \code{torus = FALSE}.
 #'
-#' @return A SpatialPointsDataFrame representing the turtles with updated locations
-#'         and headings.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#'         coordinates and updated data for their headings and previous coordinates
+#'         "prevX" and "prevY".
 #'
-#' @details The turtles face the chosen patches and then move to their center. Both
-#'          headings and locations are updated with \code{uphill}.
-#'          If no neighboring patch has a larger value than the patch where the
-#'          turtle is currently located, the turtle stays on this patch. It still
+#' @details If no neighboring patch has a larger value than the patch where the
+#'          turtle is currently located on, the turtle stays on this patch. It still
 #'          moves to the patch center if it was not already on it.
+#'
 #'          If there are multiple neighboring patches with the same highest value,
 #'          the turtle chooses one patch at random.
+#'
 #'          If \code{torus = FALSE}, turtles cannot move on the other side of the world.
 #'          If a turtle is located on a patch on the edge of the world, it has fewer
 #'          neighborhing patches for option to move than \code{nNeighbors}. If
@@ -1445,18 +1505,24 @@ setMethod(
 #'          go uphill and their choice of neighborhing patches is always among
 #'          \code{nNeighbors} patches.
 #'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#uphill}
+#'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-#' plot(w1)
-#' points(t1, pch = 16, col = t1@data$color)
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo = "w1")
+#'
 #' t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
-#' points(t1, pch = 16, col = t1@data$color)
+#' Plot(t1, addTo = "w1")
 #'
 #'
 #' @export
@@ -1500,30 +1566,31 @@ setMethod(
 ################################################################################
 #' Patch ahead
 #'
-#' Reports the patch(es) coordinates \code{pxcor} and \code{pycor} at the given
-#' distance ahead of the turtle(s).
+#' Report the patches coordinates \code{pxcor} and \code{pycor} at the given
+#' distance in the direction of the turtles' headings.
 #'
-#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#' @param world   \code{NLworlds} object, representing the world which the
+#'                turtles move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param dist    Numeric. Distance(s) from the turtle(s) to identify the patch.
-#'                Must be of length 1 if the same distance is applied to all turtles
-#'                or of length \code{turtles} if each turtle has a different distance.
+#' @param dist    Numeric. Distances from the turtles to identify the patches ahead.
+#'                Must be of length 1 or of length \code{turtles}.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the patches coordinates at \code{dist} of the
 #'         \code{turtles}. The order of the patches follows the order of the \code{turtles}.
 #'
 #' @details If \code{torus = FALSE} and the patch at distance \code{dist} of the turtle
-#'          is outside the world, \code{NA} is returned for the patch coordinates. Otherwise,
+#'          is outside the world, \code{NA} are returned for the patch coordinates. Otherwise,
 #'          if \code{torus = TRUE}, the patch coordinates from the wrapped world are
 #'          returned.
-#'          The distances from the turtles are computed with their current heading.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-ahead}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1531,7 +1598,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchAhead(world = w1, turtles = t1, dist = 1)
 #'
 #'
@@ -1567,19 +1634,23 @@ setMethod(
 ################################################################################
 #' Patch here
 #'
-#' Reports the patch(es) coordinates under the turtle(s).
+#' Report the patches coordinates \code{pxcor} and \code{pycor} under the turtles
+#' locations.
 #'
-#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#' @param world   \code{NLworlds} object, representing the world which the turtles
+#'                move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the moving turtles.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second column
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the patches coordinates at the \code{turtles}
 #'         location. The order of the patches follows the order of the \code{turtles}.
 #'
-#' @details If a turtle is located outside of the world's extent, \code{NA} is returned
-#'          for its patch coordinates.
+#' @details If a turtle is located outside of the world's extent, \code{NA} are returned
+#'          for the patch coordinates.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-here}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1587,7 +1658,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchHere(world = w1, turtles = t1)
 #'
 #'
@@ -1618,38 +1689,42 @@ setMethod(
 
 
 ################################################################################
-#' Patch left
+#' Patch on the left
 #'
-#' Reports the patch(es) coordinates at a given distance to the left of the turtle(s).
+#' Report the patches coordinates \code{pxcor} and \code{pycor} at given distances
+#' to the left of the turtles.
 #'
-#' @param world    A \code{NLworlds} object where the turtles evolve onto.
+#' @param world    \code{NLworlds} object, representing the world which the turtles
+#'                 move onto.
 #'
-#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                 by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param dist     Numeric. Distance from the turtles. \code{dist} must be a single
-#'                 value or of the length of \code{turtles}.
+#' @param dist     Numeric. Distances from the \code{turtles} locations. Must be of
+#'                 length 1 or of length \code{turtles}.
 #'
 #' @param nDegrees Numeric. The number of degrees the turtle's heading should rotate
-#'                 to the left to locate the patch. Must be of length 1 or of the
-#'                 same length as the \code{turtles}.
+#'                 to the left to locate the patches. Must be of length 1 or of
+#'                 length \code{turtles}.
 #'
 #' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
 #'                 Default is \code{torus = FALSE}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second
 #'         column \code{pycor} representing the patches coordinates at \code{dist}
-#'         of the turtles location and \code{nDegrees} to the left of their heading.
+#'         of the turtles locations and \code{nDegrees} to the left of their headings.
 #'         The order of the patches follows the order of the \code{turtles}.
 #'
 #' @details If \code{nDegrees} is negative, the turtle would rotate to the right.
 #'          If \code{dist} is negative, the turtle would move backward.
-#'          If a turtle is located outside of the world's extent, \code{NA} is
-#'          returned for its patch coordinates.
+#'
 #'          If \code{torus = FALSE} and the patch at distance \code{dist} and
-#'          heading \code{nDregrees} to the left of the turtles is outside the
-#'          world's extent, \code{NA} is returned. If \code{torus = TRUE}, the
-#'          patch coordinates from the wrapped world are returned.
+#'          heading \code{nDregrees} to the left of the turtle is outside the
+#'          world's extent, \code{NA} are returned for the patch coordinates.
+#'          If \code{torus = TRUE}, the patch coordinates from the wrapped world
+#'          are returned.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-lr-and-ahead}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1690,38 +1765,42 @@ setMethod(
 
 
 ################################################################################
-#' Patch right
+#' Patch on the right
 #'
-#' Reports the patch(es) coordinates at a given distance to the right of the turtle(s).
+#' Report the patches coordinates \code{pxcor} and \code{pycor} at a given distances
+#' to the right of the turtles.
 #'
-#' @param world    A \code{NLworlds} object where the turtles evolve onto.
+#' @param world    \code{NLworlds} object, representing the world which the turtles
+#'                 move onto.
 #'
-#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                 by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param dist     Numeric. Distance from the turtles. \code{dist} must be a single
-#'                 value or of the length of \code{turtles}.
+#' @param dist     Numeric. Distances from the \code{turtles} locations. Must be of
+#'                 length 1 or of length \code{turtles}.
 #'
 #' @param nDegrees Numeric. The number of degrees the turtle's heading should rotate
-#'                 to the right to locate the patch. Must be of length 1 or of the
-#'                 same length as the \code{turtles}.
+#'                 to the right to locate the patches. Must be of length 1 or of
+#'                 length \code{turtles}.
 #'
 #' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
 #'                 Default is \code{torus = FALSE}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second
 #'         column \code{pycor} representing the patches coordinates at \code{dist}
-#'         of the turtles location and \code{nDegrees} to the right of their heading.
+#'         of the turtles locations and \code{nDegrees} to the right of their headings.
 #'         The order of the patches follows the order of the \code{turtles}.
 #'
 #' @details If \code{nDegrees} is negative, the turtle would rotate to the left.
 #'          If \code{dist} is negative, the turtle would move backward.
-#'          If a turtle is located outside of the world's extent, \code{NA} is
-#'          returned for its patch coordinates.
+#'
 #'          If \code{torus = FALSE} and the patch at distance \code{dist} and
 #'          heading \code{nDregrees} to the right of the turtles is outside the
-#'          world's extent, \code{NA} is returned. If \code{torus = TRUE}, the
-#'          patch coordinates from the wrapped world are returned.
+#'          world's extent, \code{NA} are returned for the patch coordinate.
+#'          If \code{torus = TRUE}, the patch coordinates from the wrapped world
+#'          are returned.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-lr-and-ahead}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1757,34 +1836,35 @@ setMethod(
 
 
 ################################################################################
-#' Set xcor and ycor
+#' Set turtles locations
 #'
 #' Set the turtles \code{xcor} and \code{ycor} coordinates.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
 #' @param xcor    Numeric. X coordinates for the turles. Must be of length 1 or
-#'                of the same length as the \code{turtles}.
+#'                of length \code{turtles}.
 #'
 #' @param ycor    Numeric. X coordinates for the turles. Must be of length 1 or
-#'                of the same length as the \code{turtles}
+#'                of length \code{turtles}.
 #'
-#' @param world   A \code{NLworlds} object where the turtles evolve onto. Only
-#'                needed if \code{torus = TRUE}. Should not be provided if
-#'                \code{torus = FALSE}.
+#' @param world   \code{NLworlds} object, representing the world which the
+#'                turtles move onto. Should be provided only if \code{torus = TRUE}.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
-#' @return A SpatialPointsDataFrame representing the moving turtles with updated
-#'         coordinates and updated data for their previous coordinates (i.e.,
-#'         \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+#' @return SpatialPointsDataFrame representing the moving turtles with updated
+#'         coordinates and updated data for their previous coordinates "prevX"
+#'         and "prevY".
 #'
 #' @details If \code{torus = TRUE} and the given coordinates \code{xcor} or \code{ycor}
 #'          are located outside of the world's extent, then the coordinates assigned
 #'          are the ones from a wrapped word. If \code{torus = FALSE}, the turtle
 #'          is then located outside of the world's extent with the given coordinates.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#setxy}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1792,8 +1872,10 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5))
+#' w1[] <- runif(length(w1))
+#'
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
+#'
 #' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
@@ -1854,33 +1936,36 @@ setMethod(
 
 
 ################################################################################
-#' Sprout
+#' Sprout new turtles
 #'
-#' Create new turtles on specific patch(es).
+#' Create new turtles on specific patches.
 #'
-#' @param n       Integer. Number of new turtle(s) to create.
+#' @param n       Integer. The number of new turtles to create.
 #'
-#' @param patches A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param patches Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
-#'                patch(es) on which the new turtles are created. \code{nrow(patches)}
+#'                patches on which the new turtles are created. \code{nrow(patches)}
 #'                must be equal to 1 or to \code{n}.
 #'
 #' @param ...     Additional arguments (see details).
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing existing turtles.
 #'
-#' @return A SpatialPointsDataFrame with the new created turtles.
+#' @return SpatialPointsDataFrame with the new created turtles.
 #'
 #' @details The additional arguments to be passed on are some of the function
-#'          \code{createTurtles()} which are: heading, breed and color. If not
+#'          \code{createTurtles()}: heading, breed and color. If not
 #'          provided, these arguments take the default value as defined in
 #'          \code{createTurtles()}.
+#'
 #'          If \code{turtles} is provided, the new created turtles are added to
 #'          the \code{turtles} when returned. The who number of the created turtles
 #'          therefore follow the ones from the \code{turtles}. If no \code{turtles}
 #'          is provided, a new SpatialPointsDataFrame is created and the who number
 #'          starts at 0.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#sprout}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1953,17 +2038,18 @@ setMethod(
 
 
 ################################################################################
-#' Inspect
+#' Inspect turtles
 #'
-#' Display the variables value for the requested turtle(s).
+#' Display the variables values for the requested turtles.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the existing turtles
-#'                in the world.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param who     Integer. Id (who number(s)) for the turte(s) to inspect.
+#' @param who     Integers. Identity (i.e., "who" numbers) for the turtes to inspect.
 #'
-#' @return A dataframe with the variables for the inspected turtle(s).
+#' @return Dataframe (nrow = \code{length(who)}) with the variables for the inspected turtles.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#inspect}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2002,27 +2088,32 @@ setMethod(
 ################################################################################
 #' Move to
 #'
-#' Move the turtle(s) to the same location as the given agent(s).
+#' Move the turtles to the same location as the agents \code{to}.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param to      A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param to      Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
-#'                patch(es) where the \code{turtles} move to.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the turtle(s) whose
-#'                location(s) the \code{turtles} move to.
-#'                \code{nrow(to)} (if matrix) or \code{length(to)} (if SpatialPointsDataFrame)
-#'                must be equal to 1 or to \code{length(turtles)}.
+#'                patches where the \code{turtles} move to.
 #'
-#' @return A SpatialPointsDataFrame representing the moving turtles with updated
-#'         coordinates and updated data for their previous coordinates (i.e.,
-#'         \code{turtles@data$prevX} and \code{turtles@data$prevY}).
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtles whose
+#'                locations the \code{turtles} move to.
 #'
-#' @details The turtle's heading is not changed.
+#' @return SpatialPointsDataFrame representing the moving turtles with updated
+#'         coordinates and updated data for their previous coordinates "prevX"
+#'         and "prevY".
+#'
+#' @details The number of agents \code{to} (if matrix) must be equal to 1 or of
+#'          length \code{turtles}.
+#'
+#'          The turtle's headings are not affected with this function.
+#'
 #'          If a turtle is moving to a patch location, it will be located at
 #'          the patch center.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#move-to}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2031,16 +2122,16 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 5, coords = randomXYcor(world = w1, n = 5))
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #'
 #' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- moveTo(turtles = t1, to = t1[t1$who == 0,]) # move to the location of turtle 0
+#' t1 <- moveTo(turtles = t1, to = turtle(t1, who = 0))
 #' Plot(t1, addTo ="w1")
-#' t1 <- moveTo(turtles = t1, to = patch(world = w1, xcor = 9, ycor = 9))
+#' t1 <- moveTo(turtles = t1, to = patch(w1, xcor = 9, ycor = 9))
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -2078,21 +2169,21 @@ setMethod(
 
 
 ################################################################################
-#' Random XY cor
+#' Generante random turtles coordinates
 #'
-#' Reports random xcor and ycor coordinates inside the world's extent.
+#' Report random xcor and ycor coordinates inside the world's extent.
 #'
-#' @param world A \code{NLworlds} object.
+#' @param world \code{NLworlds} object.
 #'
-#' @param n     Numeric. The number of set of coordinates to generate.
+#' @param n     Integer. The number of set of coordinates to generate.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{xcor} and the second
-#'         column \code{ycor} with nrow = \code{n}.
+#' @return Matrix (ncol = 2, nrow = n) with the first column \code{xcor} and the second
+#'         column \code{ycor}.
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-#' w1[] <- runif(25)
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
 #' clearPlot()
@@ -2125,23 +2216,25 @@ setMethod(
 
 
 ################################################################################
-#' Is turtle?
+#' Do the turtles exist?
 #'
-#' Reports \code{TRUE} if the turtle(s) exist(s), \code{FALSE} otherwise.
+#' Report \code{TRUE} if the turtles exist inside the turtle agenset, report
+#' \code{FALSE} otherwise.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing turtles.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtle agentset.
 #'
-#' @param who     Numeric. The who number(s) of the turtle(s) to check.
+#' @param who     Integers. The who numbers of the turtles to check.
 #'
-#' @param breed   String of characters. To specify the breed of turtles to check
+#' @param breed   Characters. To specify the breed of turtles to check
 #'                for existence. Must be of length 1 or of length \code{n}. If
 #'                \code{breed} is of length \code{n} then the order of breeds
 #'                should follow the order of \code{who}. If missing, there is
 #'                no distinction based upon breed to check existence.
 #'
-#' @return \code{TRUE} or \code{FALSE} if the turtle(s) with the given who number(s)
-#'         and potentially given \code{breed} exist(s) or no, in the given \code{turtles}.
+#' @return Logicals. Vector of \code{TRUE} or \code{FALSE} if the turtles with
+#'         the given who numbers and potentially given \code{breed} exists or not
+#'         in the given \code{turtles}.
 #'
 #' @details If \code{breed} is provided, the turtle with the given \code{who} number
 #'          AND given \code{breed} must exists inside \code{turtles} for \code{TRUE}
@@ -2153,28 +2246,28 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
-#' isTurtle(turtles = t1, who = 3, breed = "sheep")
-#' isTurtle(turtles = t1, who = 9, breed = "sheep")
-#' isTurtle(turtles = t1, who = c(3, 9))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
+#' tExists(turtles = t1, who = 3, breed = "sheep")
+#' tExists(turtles = t1, who = 9, breed = "sheep")
+#' tExists(turtles = t1, who = c(3, 9))
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname isTurtle
+#' @rdname tExists
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "isTurtle",
+  "tExists",
   function(turtles, who, breed) {
-    standardGeneric("isTurtle")
+    standardGeneric("tExists")
   })
 
 #' @export
-#' @rdname isTurtle
+#' @rdname tExists
 setMethod(
-  "isTurtle",
+  "tExists",
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
 
@@ -2185,13 +2278,13 @@ setMethod(
 )
 
 #' @export
-#' @rdname isTurtle
+#' @rdname tExists
 setMethod(
-  "isTurtle",
+  "tExists",
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
 
-    whoExist <- isTurtle(turtles = turtles, who = who)
+    whoExist <- tExists(turtles = turtles, who = who)
 
     if(length(breed) == 1 & length(who) != 1){
       breed <- rep(breed, length(who))
@@ -2209,23 +2302,25 @@ setMethod(
 ################################################################################
 #' Turtle
 #'
-#' Reports the turtle(s) according to its/their who number(s) and breed(s).
+#' Report the turtles according to their who numbers and breeds.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing turtles.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtles.
 #'
-#' @param who     Numeric. The who number(s) of the turtle(s) to report.
+#' @param who     Integers. The who numbers of the turtles to report.
 #'
-#' @param breed   String of characters. To specify the breed of turtles to report.
+#' @param breed   Characters. To specify the breed of turtles to report.
 #'                Must be of length 1 or of length \code{n}. If \code{breed} is
 #'                of length \code{n} then the order of breeds should follow the
 #'                order of \code{who}. If missing, there is no distinction based
-#'                upon breed to report turtle(s).
+#'                upon breed to report the turtles.
 #'
-#' @return A SpatialPointsDataFrame of the selected turtle(s).
+#' @return SpatialPointsDataFrame of the selected turtles.
 #'
-#' @details If no turtle match the given who number(s) with potentially the given
+#' @details If no turtle matches the given who numbers with potentially the given
 #'          \code{breed}, then an empty SpatialPointsDataFrame is returned.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2233,8 +2328,8 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-#' t2 <- turtle(turtles = t1, who = 2)
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' t2 <- turtle(t1, who = 2)
 #'
 #'
 #' @export
@@ -2284,29 +2379,35 @@ setMethod(
 ################################################################################
 #' Turtles on
 #'
-#' Reports the turtle(s) at some patch(es) or on the same patch(es) as some turtle(s).
+#' Report the turtles at some patches locations or on the same patches as some turtles.
 #'
-#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#' @param world   \code{NLworlds} object, representing the world which the turtles
+#'                move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles among which the
-#'                one(s) on the same patch(es) as the \code{agents} is/are going to
-#'                be reported.
+#'                ones on the same patches as \code{agents} are going to
+#'                be returned.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
-#'                patch(es) where to look for turtles.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing turtles whose patch location
-#'                is/are the patch(es) where to look for turtles.
-#'                Patch(es) or turtle(s) location must be inside the world's extent.
+#'                patches where to look for turtles.
 #'
-#' @param breed   String of characters. To specify the breed(s) of turtles to report.
-#'                If missing, there is no distinction based upon breed to report turtle(s).
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing turtles whose patches locations
+#'                are the patches where to look for turtles.
 #'
-#' @return A SpatialPointsDataFrame representing the turtle(s) among \code{turtles}
-#'         which are located on the \code{agent} patch(es) and of the given \code{breed}
+#' @param breed   Characters. To specify the breeds of turtles to report.
+#'                If missing, there is no distinction based upon breed to report turtles.
+#'
+#' @return SpatialPointsDataFrame representing the turtles among \code{turtles}
+#'         which are located on the \code{agent} patches and of the given \code{breed}
 #'         if specified.
+#'
+#' @details Patches or turtles given as \code{agents} must be located inside the
+#'          world's extent.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtles-on}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2314,15 +2415,15 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 500, coords = randomXYcor(world = w1, n = 500))
+#' w1[] <- runif(length(w1))
+#' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
 #'
 #' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
 #' Plot(t1, addTo = "w1")
 #'
-#' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, xcor = 2, ycor = 2))
+#' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, xcor = 2, ycor = 2))
 #'
 #'
 #' @export
@@ -2391,10 +2492,13 @@ setMethod(
 ################################################################################
 #' No turtles
 #'
-#' Reports an empty turtle agentset.
+#' Report an empty turtle agentset.
 #'
-#' @return An empty SpatialPointsDataFrame but with the turtle variables defined
-#'         as when using \code{createTurtles()} or \code{createOTurtles()}.
+#' @return SpatialPointsDataFrame with the turtle variables defined
+#'         as when using \code{createTurtles()} or \code{createOTurtles()} but
+#'         of length equals to 0.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#no-turtles}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2422,9 +2526,7 @@ setMethod(
   "noTurtles",
   signature = "missing",
   definition = function() {
-    t0 <- SpatialPointsDataFrame(coords = cbind(xcor = 0, ycor = 0), data = data.frame(who = 0, heading = 0,prevX = 0,
-                                                                                       prevY = 0, breed = "turtle",
-                                                                                       color = "white",stringsAsFactors=FALSE))
+    t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
     return(t0[t0$who == 1,])
   }
 )
@@ -2433,44 +2535,43 @@ setMethod(
 ################################################################################
 #' Turtles at
 #'
-#' Reports the turtle(s) on the patch(es) at \code{(dx, dy)} distance of the agent(s).
+#' Report the turtles on the patches at \code{(dx, dy)} distances of the
+#' \code{agents}.
 #'
-#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#' @param world   \code{NLworlds} object, representing the world which the turtles
+#'                move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles among which the
-#'                one(s) at \code{(dx, dy)} distance of the \code{agents} is/are
-#'                going to be reported.
+#'                ones at \code{(dx, dy)} distance of the \code{agents} are
+#'                returned.
 #'
-#' @param agents  A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
-#'                patches from wich \code{(dx, dy)} are computed.
-#'                A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles from wich
+#'                patches from which \code{(dx, dy)} are computed.
+#'
+#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing the turtles from which
 #'                \code{(dx, dy)} are computed.
 #'
-#' @param dx      Numeric. Distance to east from the agent. If \code{dx} is negative, the
-#'                distance to the west is computed. \code{dx} must be a single value or
-#'                of the length of \code{agents}.
+#' @inheritParams patchAt
 #'
-#' @param dy      Numeric. Distance to the north from the agent. If \code{dy} is negative,
-#'                the distance to the south is computed. \code{dy} must be a single value or
-#'                of the length of \code{agents}.
-#'
-#' @param breed   String of characters. To specify the breed of turtles to report.
-#'                If missing, there is no distinction based upon breed to report turtle(s).
+#' @param breed   Characters. To specify the breed of turtles to report.
+#'                If missing, there is no distinction based upon breed to report turtles.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
-#' @return A SpatialPointsDataFrame representing the turtle(s) among \code{turtles}
-#'         which are located on the patch(es) at \code{(dx, dy)} distance of the
+#' @return SpatialPointsDataFrame representing the turtles among \code{turtles}
+#'         which are located on the patches at \code{(dx, dy)} distance of the
 #'         \code{agents}.
 #'
-#' @details If \code{torus = FALSE} and the pacth at distance \code{(dx, dy)}
+#' @details If \code{torus = FALSE} and the patch at distance \code{(dx, dy)}
 #'          of the agent is outside of the world's extent, no turtle is returned.
 #'          If \code{torus = TRUE}, the turtle located on the patch whose coordinates
 #'          are defined from the wrapped world is returned.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtles-at}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2542,21 +2643,21 @@ setMethod(
 
 
 ################################################################################
-#' Turtle set
+#' Create a turtle agenset
 #'
-#' Reports a turtle agentset as a SpatialPointsDataFrame objects containing all
-#' turtles provided in the inputs.
+#' Report a turtle agentset containing all turtles provided in the inputs.
 #'
 #' @param ... SpatialPointsDataFrame objects created by \code{createTurtles()} or
 #'            by \code{createOTurtles()} representing turtles.
 #'
-#' @return A SpatialPointsDataFrame object with all the turtles provided in the
-#'         inputs.
+#' @return SpatialPointsDataFrame with all the turtles provided in the inputs.
 #'
 #' @details This functions does not affect turtles coordinates and variables.
 #'          Therefore there may be multiple turtles with the same variable (e.g.,
 #'          who number, color, ...) . This must be taken care of prior or later
-#'          using \code{turtleSet()}.
+#'          using this function.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle-set}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2564,9 +2665,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = "sheep")
-#' t2 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2), breed = "wolf")
-#' t3 <- createTurtles(n = 1, coords = randomXYcor(world = w1, n = 1), breed = "sheperd")
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
+#' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+#' t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
 #' tAll <- turtleSet(t1, t2, t3)
 #'
 #'
@@ -2605,21 +2706,23 @@ setMethod(
 
 
 ################################################################################
-#' Turtles own variable
+#' Turtles variable
 #'
-#' Create a new variable for the turtle(s) provided.
+#' Create a new variable for the turtles provided.
 #'
-#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                 \code{createOTurtles()} representing turtles.
 #'
 #' @param tVarName Characters. Name of the new variable to create.
 #'
 #' @param tVar     Any type of vector representing the value of \code{tVarName}.
-#'                 \code{length(tVar)} must be equal to 1 or to \code{length(turtles)}.
+#'                 Must be of length 1 or of length \code{turtles}.
 #'                 If missing, \code{NA} is given.
 #'
-#' @return A SpatialPointsDataFrame representing the \code{turtles} with the new
+#' @return SpatialPointsDataFrame representing the \code{turtles} with the new
 #'         variable \code{tVarName} added.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtles-own}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2671,29 +2774,34 @@ setMethod(
 ################################################################################
 #' Substract headings
 #'
-#' Compute the difference between \code{heading1} and \code{heading2}.
+#' Compute the difference between headings.
 #'
-#' @param heading1 A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                 \code{createOTurtles()} representing turtle(s) with its/their
-#'                 heading(s).
-#'                 A numeric vector.
+#' @param heading1 SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                 \code{createOTurtles()} representing the turtles with their
+#'                 headings.
 #'
-#' @param heading2 A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                 \code{createOTurtles()} representing turtle(s) with its/their
-#'                 heading(s).
-#'                 A numeric vector.
+#'                 Numeric.
+#'
+#' @param heading2 SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                 \code{createOTurtles()} representing turtles with their
+#'                 headings.
+#'
+#'                 Numeric.
+#'
 #'                 \code{heading2} must be of length 1 or of length \code{heading1}.
 #'
-#' @param range360 Logical. Determine if the returned value(s) are between 0° and
+#' @param range360 Logical. Determine if the returned values are between 0° and
 #'                 360° (\code{range360 = TRUE}) or between -180° and 180°
 #'                 (\code{range360 = FALSE}). Default is \code{range360 = FALSE}.
 #'
-#' @return A numeric vector of values representing the smallest angle in degrees
+#' @return Numeric. Vector of values representing the smallest angle in degrees
 #'         by which \code{heading1} could be rotated to produce \code{heading2}
 #'         (i.e., the target heading). Note: this is the opposite as in NetLogo where
 #'         heading1 is the target.
 #'
 #' @details Positive values mean clockwise rotation, negative value mean counterclockwise.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#subtract-headings}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2776,31 +2884,37 @@ setMethod(
 ################################################################################
 #' Other
 #'
-#' Reports all \code{agents} except specific one(s).
+#' Report an agentset of all \code{agents} except specific ones.
 #'
-#' @param agents A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
 #'               patches to evaluate.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param except A matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param except Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
-#'               patch(es) to remove from the \code{agents}.
-#'               A SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'               \code{createOTurtles()} representing the turtle(s) to remove from
+#'               patches to remove from the \code{agents}.
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to remove from
 #'               the \code{agents}.
 #'
-#' @return A matrix (ncol = 2) with the first column \code{pxcor} and the second
+#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second
 #'         column \code{pycor} representing the patches in \code{agents} with
-#'         the patch(es) in \code{except} removed.
-#'         A SpatialPointsDataFrame representing the turtles in \code{agents} with
-#'         the turtle(s) in \code{except} removed.
+#'         the patches in \code{except} removed.
+#'
+#'         SpatialPointsDataFrame representing the turtles in \code{agents} with
+#'         the turtles in \code{except} removed.
 #'
 #' @details Both \code{agents} and \code{except} must be of the same class (e.g., both
 #'          patches or both turtles).
+#'
 #'          Carefull: this function removes turtles only based on similar who numbers
 #'          and breeds.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#other}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2875,30 +2989,33 @@ setMethod(
 
 
 ################################################################################
-#' Layout on a circle
+#' Layout turtles on a circle
 #'
-#' Arranges the turtles in a circle centered on the world with the given radius.
+#' Arrange the turtles in a circle centered on the world with the given radius.
 #'
-#' @param world   A \code{NLworlds} object where the turtles evolve onto.
+#' @param world   \code{NLworlds} object, representing the world which the
+#'                turtles move onto.
 #'
-#' @param turtles A SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles.
 #'
-#' @param radius  Numeric. One value representing the radius of the cercle.
+#' @param radius  Numeric. Radius of the cercle.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
-#' @return A SpatialPointsDataFrame representing the turtles with updated coordinates
-#'         and updated data for their previous coordinates (i.e., \code{turtles@data$prevX}
-#'         and \code{turtles@data$prevY}).
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+#'         and updated data for their previous coordinates "prevX" and "prevY".
 #'
 #' @details The turtles point outwards.
+#'
 #'          If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
 #'          \code{radius} values lead a turtle outside of the world's extent, it is
 #'          relocated on the other side of the world, inside the world's extent. If
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle are located past
 #'          the world's extent.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#layout-circle}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -2907,7 +3024,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' w1[] <- runif(100)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
 #' clearPlot()
@@ -2945,22 +3062,24 @@ setMethod(
 
 
 ################################################################################
-#' Of
+#' Values of turtles variables
 #'
-#' Reports the value of the turtle(s)' variable(s).
+#' Report the value of the turtles variables.
 #'
-#' @param turtles  A SpatialPointsDataFrame created by \code{createTurtles()} or
+#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                 by \code{createOTurtles()} representing the turtles.
 #'
-#' @param tVarName Characters. The name of the turtle's variable. \code{tVarName}
-#'                 can be equal to \code{"coords"}, \code{"xcor"}, \code{"ycor"},
-#'                 \code{"who"}, \code{"heading"}, \code{"prevCoords"}, \code{"prevX"},
-#'                 \code{"prevY"}, \code{"breed"}, \code{"color"} or any of the
-#'                 variables created with \code{turtlesOwn()}.
+#' @param tVarName Characters. The name of the turtle's variable whose values to
+#'                 report. \code{tVarName} can be equal to \code{"coords"}, \code{"xcor"},
+#'                 \code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
+#'                 \code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
+#'                 any of the variables created with \code{turtlesOwn()}.
 #'
-#' @return The \code{tVarName} value(s) for the \code{turtles}. The class depends
+#' @return \code{tVarName} values for the \code{turtles}. The class depends
 #'         on the class of the variable. The order of the values follows the order
 #'         of the \code{turtles}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#of}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,

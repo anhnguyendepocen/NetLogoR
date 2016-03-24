@@ -23,29 +23,32 @@ subHeadings(heading1, heading2, range360 = FALSE)
   heading2, range360 = FALSE)
 }
 \arguments{
-\item{heading1}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing turtle(s) with its/their
-heading(s).
-A numeric vector.}
+\item{heading1}{SpatialPointsDataFrame created by \code{createTurtles()} or by
+                \code{createOTurtles()} representing the turtles with their
+                headings.
 
-\item{heading2}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing turtle(s) with its/their
-heading(s).
-A numeric vector.
-\code{heading2} must be of length 1 or of length \code{heading1}.}
+                Numeric.}
 
-\item{range360}{Logical. Determine if the returned value(s) are between 0° and
+\item{heading2}{SpatialPointsDataFrame created by \code{createTurtles()} or by
+                \code{createOTurtles()} representing turtles with their
+                headings.
+
+                Numeric.
+
+                \code{heading2} must be of length 1 or of length \code{heading1}.}
+
+\item{range360}{Logical. Determine if the returned values are between 0° and
 360° (\code{range360 = TRUE}) or between -180° and 180°
 (\code{range360 = FALSE}). Default is \code{range360 = FALSE}.}
 }
 \value{
-A numeric vector of values representing the smallest angle in degrees
+Numeric. Vector of values representing the smallest angle in degrees
         by which \code{heading1} could be rotated to produce \code{heading2}
         (i.e., the target heading). Note: this is the opposite as in NetLogo where
         heading1 is the target.
 }
 \description{
-Compute the difference between \code{heading1} and \code{heading2}.
+Compute the difference between headings.
 }
 \details{
 Positive values mean clockwise rotation, negative value mean counterclockwise.
@@ -64,5 +67,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#subtract-headings}
 }
 

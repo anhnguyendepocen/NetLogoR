@@ -14,31 +14,31 @@ turtle(turtles, who, breed)
 \S4method{turtle}{SpatialPointsDataFrame,numeric,character}(turtles, who, breed)
 }
 \arguments{
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing turtles.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the turtles.}
 
-\item{who}{Numeric. The who number(s) of the turtle(s) to report.}
+\item{who}{Integers. The who numbers of the turtles to report.}
 
-\item{breed}{String of characters. To specify the breed of turtles to report.
+\item{breed}{Characters. To specify the breed of turtles to report.
 Must be of length 1 or of length \code{n}. If \code{breed} is
 of length \code{n} then the order of breeds should follow the
 order of \code{who}. If missing, there is no distinction based
-upon breed to report turtle(s).}
+upon breed to report the turtles.}
 }
 \value{
-A SpatialPointsDataFrame of the selected turtle(s).
+SpatialPointsDataFrame of the selected turtles.
 }
 \description{
-Reports the turtle(s) according to its/their who number(s) and breed(s).
+Report the turtles according to their who numbers and breeds.
 }
 \details{
-If no turtle match the given who number(s) with potentially the given
+If no turtle matches the given who numbers with potentially the given
          \code{breed}, then an empty SpatialPointsDataFrame is returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-t2 <- turtle(turtles = t1, who = 2)
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+t2 <- turtle(t1, who = 2)
 
 
 }
@@ -49,5 +49,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle}
 }
 

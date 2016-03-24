@@ -13,48 +13,40 @@ createOTurtles(n, world, breed, color)
 \arguments{
 \item{n}{Integer. The number of new turtles to create.}
 
-\item{world}{A \code{NLworlds} object, representing the world in which the turtles
-will evolve.}
+\item{world}{\code{NLworlds} object.}
 
-\item{breed}{String of characters. Either of length 1 representing the breed
-for all turtles or of length \code{n} if the different turtles have
-different breeds. If missing, \code{breed = "turtle"} for all turtles.}
+\item{breed}{Characters. Either of length 1 or \code{n}. If missing,
+\code{breed = "turtle"} for all turtles.}
 
-\item{color}{String of characters of length \code{n} representing the color
-of each turtle when plotted. If missing, colors are assigned using
-the function \code{rainbow(n)}.}
+\item{color}{Characters. Vector of length \code{n}. If missing, colors are
+assigned using the function \code{rainbow(n)}.}
 }
 \value{
-A SpatialPointsDataFrame object of length \code{n} with the columns for
-        the dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
+SpatialPointsDataFrame of length \code{n} with the columns for the
+        dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
 }
 \description{
 Create \code{n} new turtles at the center of the world with their headings evenly
 distributed.
 }
 \details{
-The identity of the turtles is defined by their "who" number. This
+The first turtle \code{who = 0} has its heading set to 0.
+
+         The identity of the turtles is defined by their "who" number. This
          numbering starts at 0 and increments by 1.
-         The first turtle \code{who = 0} has its heading set to 0.
+
          The coordinates from the previous time step are stored in "prevX" and
          "prevY". The initial values are \code{NA}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- runif(25)
+w1[] <- runif(length(w1))
 t1 <- createOTurtles(n = 10, world = w1)
-plot(w1)
-points(t1, pch = 16, col = t1@data$color)
-t1 <- fd(world = w1, turtles = t1, step = 1)
-points(t1, pch = 16, col = t1@data$color)
 
-\dontrun{
-# Can be used with Plot in package SpaDES for modular plotting that is faster with large datasets
-  library(SpaDES)
-  clearPlot()
-  Plot(w1)
-  Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
-}
+library(SpaDES)
+clearPlot()
+Plot(w1)
+Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 
 
 }
@@ -65,5 +57,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#create-ordered-turtles}
 }
 

@@ -14,32 +14,36 @@ other(agents, except)
 \S4method{other}{SpatialPointsDataFrame,SpatialPointsDataFrame}(agents, except)
 }
 \arguments{
-\item{agents}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patches to evaluate.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles to evaluate.}
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates of the
+              patches to evaluate.
 
-\item{except}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) to remove from the \code{agents}.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) to remove from
-the \code{agents}.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to evaluate.}
+
+\item{except}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+              second column \code{pycor} representing the coordinates of the
+              patches to remove from the \code{agents}.
+
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to remove from
+              the \code{agents}.}
 }
 \value{
-A matrix (ncol = 2) with the first column \code{pxcor} and the second
+Matrix (ncol = 2) with the first column \code{pxcor} and the second
         column \code{pycor} representing the patches in \code{agents} with
-        the patch(es) in \code{except} removed.
-        A SpatialPointsDataFrame representing the turtles in \code{agents} with
-        the turtle(s) in \code{except} removed.
+        the patches in \code{except} removed.
+
+        SpatialPointsDataFrame representing the turtles in \code{agents} with
+        the turtles in \code{except} removed.
 }
 \description{
-Reports all \code{agents} except specific one(s).
+Report an agentset of all \code{agents} except specific ones.
 }
 \details{
 Both \code{agents} and \code{except} must be of the same class (e.g., both
          patches or both turtles).
+
          Carefull: this function removes turtles only based on similar who numbers
          and breeds.
 }
@@ -63,5 +67,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#other}
 }
 

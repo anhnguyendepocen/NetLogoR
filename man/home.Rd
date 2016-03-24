@@ -4,44 +4,55 @@
 \name{home}
 \alias{home}
 \alias{home,NLworlds,SpatialPointsDataFrame,character-method}
-\title{Home}
+\title{Return home}
 \usage{
 home(world, turtles, home)
 
 \S4method{home}{NLworlds,SpatialPointsDataFrame,character}(world, turtles, home)
 }
 \arguments{
-\item{world}{A \code{NLworld*} object, representing the world in which the
+\item{world}{\code{NLworlds} object, representing the world in which the
 turtles move onto.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the agents to move.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving turtles.}
 
-\item{home}{Character. Can take one of the following options to define where
-is home for the turtles.
-\code{home = "home0"} will place the turtles at the location
-\code{xcor = 0, ycor = 0}.
-\code{home = "center"} will place the turtles at the center of
-the world.
-\code{home = "pCorner"} will place the turtles at the center of
-the patch located in the left bottom corner of the world.
-\code{home = "corner"} will place the turtles at the left bottom
-corner of the world.}
+\item{home}{Characters. Can take one of the following options to define where
+               to relocate the \code{turtles}:
+
+               \code{home = "home0"} will place the turtles at the location
+               \code{xcor = 0, ycor = 0}.
+
+               \code{home = "center"} will place the turtles at the center of
+               the world.
+
+               \code{home = "pCorner"} will place the turtles at the center of
+               the patch located in the left bottom corner of the world.
+
+               \code{home = "corner"} will place the turtles at the left bottom
+               corner of the world.}
 }
 \value{
-A SpatialPointsDataFrame with updated coordinates.
+SpatialPointsDataFrame representing the \code{turtles} with updated
+        coordinates and updated data for their previous coordinates "prevX" and
+        "prevY".
 }
 \description{
 Move the turtles back "home".
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- runif(25)
-t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
-plot(w1)
-points(t1, pch = 16, col = t1@data$color)
+w1[] <- runif(length(w1))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+
+library(SpaDES)
+clearPlot()
+Plot(w1)
+Plot(t1, addTo ="w1")
+
+
 t1 <- home(world = w1, turtles = t1, home = "pCorner")
-points(t1, pch = 16, col = t1@data$color)
+Plot(t1, addTo ="w1")
 
 
 }
@@ -52,5 +63,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#home}
 }
 

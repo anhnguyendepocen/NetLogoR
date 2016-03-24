@@ -7,7 +7,7 @@
 \alias{towards,NLworlds,SpatialPointsDataFrame,matrix-method}
 \alias{towards,NLworlds,matrix,SpatialPointsDataFrame-method}
 \alias{towards,NLworlds,matrix,matrix-method}
-\title{Towards}
+\title{Direction towards}
 \usage{
 towards(world, from, to, torus = FALSE)
 
@@ -24,47 +24,54 @@ towards(world, from, to, torus = FALSE)
   from, to, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object.}
+\item{world}{\code{NLworlds} object.}
 
-\item{from}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) from which the heading will be computed.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) from which the
-heading will be computed.}
+\item{from}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+             second column \code{pycor} representing the coordinates of the
+             patches from which the headings are computed.
 
-\item{to}{A matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patch(es) to which the heading will be computed.
-A SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtle(s) to which the
-heading will be computed.
-A matrix (ncol = 2) with the first column \code{x} and the second
-column \code{y} representing the coordinates of the location(s) to
-which the heading will be computed.}
+             SpatialPointsDataFrame created by \code{createTurtles()} or by
+             \code{createOTurtles()} representing the turtles from which the
+             headings are computed.}
+
+\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+             second column \code{pycor} representing the coordinates of the
+             patches towards which the heading are computed.
+
+             SpatialPointsDataFrame created by \code{createTurtles()} or by
+             \code{createOTurtles()} representing the turtles towards which the
+             headings are be computed.
+
+             Matrix (ncol = 2) with the first column \code{x} and the second
+             column \code{y} representing the coordinates of the locations
+             towards which the headings are computed.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A vector of angles in degrees of the length of \code{from}.
+Numeric. Vector of angles in degrees of length equal to the largest
+        number of agents/locations between the ones contained in\code{from} or
+        in \code{to}.
 }
 \description{
-Reports the heading from agent(s) towards other agent(s) or location(s) [x,y].
+Report the headings of agents \code{from} towards agents or locations \code{to}.
 }
 \details{
 \code{from} and \code{to} must be of the same length or if different, one
          of the two has be of length 1.
+
          If \code{torus = TRUE} and the distance from one agent \code{from} to
-         its corresponding agent or location \code{to} is smaller around the
-         sides of the world than across it, then the heading to the agent or location
+         its corresponding agent/location \code{to} is smaller around the
+         sides of the world than across it, then the heading to the agent/location
          going around the sides of the world is reported.
+
          The heading from a patch to its location returns 0, the heading from
          a turtle to its location returns the turtle's heading.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-towards(world = w1, from = patches(world = w1), to = cbind(x = 0, y = 0))
+towards(world = w1, from = patches(w1), to = cbind(x = 0, y = 0))
 t1 <- createTurtles(n = 10, world = w1)
 towards(world = w1, from = t1, to = cbind(x = 0, y = 0))
 
@@ -77,5 +84,10 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#towards}
+
+         \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#towardsxy}
 }
 

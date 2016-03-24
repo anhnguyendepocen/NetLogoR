@@ -22,7 +22,7 @@
 #' \code{NLworld} object. Similarly, when replacing values of several patches, the
 #' values should be given in the order of the cell numbers as defined for a \code{RasterLayer}.
 #'
-#' @inheritParams RasterLayer
+#' @inheritParams raster::RasterLayer
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -88,7 +88,7 @@ setReplaceMethod(
 #' A \code{NLworldStack} object is similar to a \code{RasterStack} object, it is
 #' a collection of \code{NLworld} objects with the same extent.
 #'
-#' @inheritParams RasterStack
+#' @inheritParams raster::RasterStack
 #'
 #' @aliases NLworldStack
 #' @name NLworldStack-class

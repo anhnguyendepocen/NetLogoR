@@ -4,7 +4,7 @@
 \name{layoutCircle}
 \alias{layoutCircle}
 \alias{layoutCircle,NLworld,SpatialPointsDataFrame,numeric-method}
-\title{Layout on a circle}
+\title{Layout turtles on a circle}
 \usage{
 layoutCircle(world, turtles, radius, torus = FALSE)
 
@@ -12,26 +12,27 @@ layoutCircle(world, turtles, radius, torus = FALSE)
   radius, torus = FALSE)
 }
 \arguments{
-\item{world}{A \code{NLworlds} object where the turtles evolve onto.}
+\item{world}{\code{NLworlds} object, representing the world which the
+turtles move onto.}
 
-\item{turtles}{A SpatialPointsDataFrame created by \code{createTurtles()} or by
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
 \code{createOTurtles()} representing the turtles.}
 
-\item{radius}{Numeric. One value representing the radius of the cercle.}
+\item{radius}{Numeric. Radius of the cercle.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
-A SpatialPointsDataFrame representing the turtles with updated coordinates
-        and updated data for their previous coordinates (i.e., \code{turtles@data$prevX}
-        and \code{turtles@data$prevY}).
+SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+        and updated data for their previous coordinates "prevX" and "prevY".
 }
 \description{
-Arranges the turtles in a circle centered on the world with the given radius.
+Arrange the turtles in a circle centered on the world with the given radius.
 }
 \details{
 The turtles point outwards.
+
          If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
          \code{radius} values lead a turtle outside of the world's extent, it is
          relocated on the other side of the world, inside the world's extent. If
@@ -41,7 +42,7 @@ The turtles point outwards.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 w1[] <- runif(100)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
 library(SpaDES)
 clearPlot()
@@ -60,5 +61,8 @@ Sarah Bauduin
 Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Center for Connected Learning and Computer-Based Modeling,
             Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#layout-circle}
 }
 
