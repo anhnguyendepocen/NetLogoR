@@ -40,7 +40,7 @@ Default is \code{torus = FALSE}.}
 \value{
 Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the coordinates of the patches at \code{(dx, dy)}
-        distances of the \cod{agents}. The order of the patches follows the order
+        distances of the \code{agents}. The order of the patches follows the order
         of the \code{agents}.
 }
 \description{
