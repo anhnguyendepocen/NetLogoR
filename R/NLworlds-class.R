@@ -209,12 +209,15 @@ setClassUnion(name="NLworlds",
 #' @examples
 #' # Create 2 NLworld with the default settings (same extent) but different values.
 #' w1 <- createNLworld()
-#' w1[] <- runif(n = 1089)
+#' w1[] <- runif(length(w1))
 #' w2 <- createNLworld()
-#' w2[] <- runif(n = 1089)
+#' w2[] <- runif(length(w2))
 #' # Stack them together.
 #' w3 <- NLstack(w1, w2)
-#' plot(w3)
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w3)
 #'
 #'
 #' @export

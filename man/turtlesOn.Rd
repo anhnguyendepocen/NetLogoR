@@ -67,7 +67,7 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo = "w1")
 
-t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, xcor = 2, ycor = 2))
+t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, 2, 2))
 
 
 }

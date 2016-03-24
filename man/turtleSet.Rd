@@ -31,7 +31,7 @@ w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
-tAll <- turtleSet(t1, t2, t3)
+t4 <- turtleSet(t1, t2, t3)
 
 
 }

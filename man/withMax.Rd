@@ -53,12 +53,12 @@ Report the turtles which have their variable equals to the maximum values.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- sample(1:5, size = 25, replace = TRUE)
+w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 plot(w1)
-pMax <- withMax(agents = patches(world = w1), world = w1)
+p1 <- withMax(agents = patches(w1), world = w1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
 t2 <- withMax(agents = t1, varName = "heading")
 
 

@@ -22,6 +22,7 @@ Report an empty turtle agentset.
 t1 <- noTurtles()
 length(t1)
 
+
 }
 \author{
 Sarah Bauduin

@@ -29,7 +29,7 @@ any of the variables created with \code{turtlesOwn()}.}
 Report the value of the turtles variables.
 }
 \examples{
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 of(turtles = t1, tVarName = "heading")
 
 

@@ -50,7 +50,6 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1")
 
-
 t1 <- home(world = w1, turtles = t1, home = "pCorner")
 Plot(t1, addTo ="w1")
 

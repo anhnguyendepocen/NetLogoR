@@ -63,7 +63,7 @@ If there is a tie that would make the number of returned patches or turtles larg
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- sample(1:10, size = 25, replace = TRUE)
+w1[] <- sample(1:10, size = length(w1), replace = TRUE)
 plot(w1)
 p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 

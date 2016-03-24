@@ -50,13 +50,13 @@ Both \code{agents} and \code{except} must be of the same class (e.g., both
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
-p1 <- other(agents = patches(world = w1), except = cbind(pxcor = 0, pycor = 0))
-nrow(p1)
+p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
+nrow(p1) # 99 patches
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
-t2 <- other(agents = t1, except = turtle(turtles = t1, who = 0))
-length(t2)
+t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
+t2 <- other(agents = t1, except = turtle(t1, who = 0))
+length(t2) # 9 turtles
 
 
 }

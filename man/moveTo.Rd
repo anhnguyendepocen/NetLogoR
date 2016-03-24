@@ -44,7 +44,7 @@ The number of agents \code{to} (if matrix) must be equal to 1 or of
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1[] <- runif(100)
+w1[] <- runif(length(w1))
 t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 
 library(SpaDES)
@@ -54,7 +54,7 @@ Plot(t1, addTo ="w1")
 
 t1 <- moveTo(turtles = t1, to = turtle(t1, who = 0))
 Plot(t1, addTo ="w1")
-t1 <- moveTo(turtles = t1, to = patch(w1, xcor = 9, ycor = 9))
+t1 <- moveTo(turtles = t1, to = patch(w1, 9, 9))
 Plot(t1, addTo ="w1")
 
 

@@ -50,8 +50,8 @@ w1 <- createNLworld()
 w1[] <- runif(length(w1))
 t1 <- createTurtles(n = 10, world = w1)
 w2 <- resizeWorld(world = w1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, turtles = t1)
-w2[] <- runif(n = 100)
-plot(w1) # does not work, w1 does not exist anymore
+w2[] <- runif(length(w2))
+plot(w1) # does not work, 'w1' does not exist anymore
 plot(w2)
 
 

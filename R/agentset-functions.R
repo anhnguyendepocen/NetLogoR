@@ -39,7 +39,7 @@
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 #' NLall(agents = patches(w1), world = w1, val = 5)
 #' w2 <- w1
 #' w2[] <- 5
@@ -126,7 +126,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' p1 <- noPatches()
-#' p2 <- patch(w1, xcor = 0, ycor = 0)
+#' p2 <- patch(w1, 0, 0)
 #' NLany(p1)
 #' NLany(p2)
 #'
@@ -289,7 +289,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 #' plot(w1)
 #' p1 <- sortOn(agents = patches(w1), world = w1)
 #'
@@ -398,7 +398,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 #' plot(w1)
 #' p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 #'
@@ -511,12 +511,12 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 #' plot(w1)
-#' pMax <- withMax(agents = patches(world = w1), world = w1)
+#' p1 <- withMax(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- withMax(agents = t1, varName = "heading")
 #'
 #'
@@ -624,9 +624,9 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 #' plot(w1)
-#' pMin <- withMin(agents = patches(w1), world = w1)
+#' p1 <- withMin(agents = patches(w1), world = w1)
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
@@ -742,9 +742,9 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 #' plot(w1)
-#' pMax <- maxOneOf(agents = patches(w1), world = w1)
+#' p1 <- maxOneOf(agents = patches(w1), world = w1)
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
@@ -853,12 +853,12 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = 25, replace = TRUE)
+#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 #' plot(w1)
-#' pMin <- minOneOf(agents = patches(world = w1), world = w1)
+#' p1 <- minOneOf(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- minOneOf(agents = t1, varName = "heading")
 #'
 #'
@@ -963,9 +963,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-#' isNLclass(agents = patches(world = w1), class = "patch")
-#' isNLclass(agents = patches(world = w1), class = "patcheset")
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+#' isNLclass(agents = patches(w1), class = "patch")
+#' isNLclass(agents = patches(w1), class = "patcheset")
 #' isNLclass(agents = t1, class = "agentset")
 #' isNLclass(agents = t1, class = "turtleset")
 #'
@@ -1250,7 +1250,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:10, size = 25, replace = TRUE)
+#' w1[] <- sample(1:10, size = length(w1), replace = TRUE)
 #' plot(w1)
 #' p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1412,7 +1412,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:10, size = 25, replace = TRUE)
+#' w1[] <- sample(1:10, size = length(w1), replace = TRUE)
 #' plot(w1)
 #' p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1543,12 +1543,12 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
-#' p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
-#' t2 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
+#' p1 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
+#' t2 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = t1, world = w1)
 #' p2 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
-#' t3 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
+#' t3 <- inRadius(agents1 = turtle(t1, who = 0), radius = 2, agents2 = t1, world = w1)
 #'
 #'
 #' @export
@@ -1724,10 +1724,10 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' p1 <- inCone(turtles = t1, radius = 2, agents2 = patches(w1), angle = 90, world = w1)
-#' t2 <- inCone(turtles = turtle(turtles = t1, who = 0), radius = 2, angle = 90, agents2 = t1, world = w1)
+#' t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents2 = t1, world = w1)
 #'
 #'
 #' @export

@@ -33,7 +33,7 @@
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(n = legth(w1), min = 0, max = 10)
+#' w1[] <- runif(length(w1))
 #' plot(w1)
 #' # Diffuse 50% of each patch value to its 8 neighbors
 #' w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)
@@ -590,7 +590,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' patchCorner <- patchAt(world = w1, agents = cbind(pxcor = 0, pycor = 0), dx = 1, dy = 1)
+#' patchCorner <- patchAt(world = w1, agents = patch(w1, 0, 0), dx = 1, dy = 1)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
 #' patchCorner <- patchAt(world = w1, agents = t1, dx = 1, dy = 1)
 #'
@@ -749,7 +749,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
-#' allPatches <- patches(w1)
+#' allPatches <- patches(world = w1)
 #' nrow(allPatches)
 #'
 #'
@@ -812,7 +812,7 @@ setMethod(
 #' p1 <- patchAt(world = w1, agents = patch(w1, c(0,1,2), c(0,0,0)), dx = 1, dy = 1)
 #' p2 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, head = 45)
 #' p3 <- patch(world = w1, xcor = 4.3, ycor = 8)
-#' set1 <- patchSet(p1, p2, p3)
+#' p4 <- patchSet(p1, p2, p3)
 #'
 #'
 #' @export
@@ -860,7 +860,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' pxcor10 <- randomPxcor(world = w1, n = 10)
+#' pxcor_ <- randomPxcor(world = w1, n = 10)
 #'
 #'
 #' @export
@@ -908,7 +908,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' pycor10 <- randomPycor(world = w1, n = 10)
+#' pycor_ <- randomPycor(world = w1, n = 10)
 #'
 #'
 #' @export

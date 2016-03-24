@@ -59,9 +59,9 @@ If there are several \code{agents}. with the maximum value, one is chosen
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- sample(1:5, size = 25, replace = TRUE)
+w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 plot(w1)
-pMax <- maxOneOf(agents = patches(w1), world = w1)
+p1 <- maxOneOf(agents = patches(w1), world = w1)
 
 # Turtles
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))

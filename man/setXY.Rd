@@ -49,7 +49,6 @@ If \code{torus = TRUE} and the given coordinates \code{xcor} or \code{ycor}
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 w1[] <- runif(length(w1))
-
 t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 
 library(SpaDES)

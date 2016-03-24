@@ -74,12 +74,12 @@ Distances from and to patches are calculated from/to their center.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-p1 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = patches(world = w1), world = w1)
-t2 <- inRadius(agents1 = patch(world = w1, xcor = 0, ycor = 0), radius = 2, agents2 = t1, world = w1)
+p1 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
+t2 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = t1, world = w1)
 p2 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
-t3 <- inRadius(agents1 = turtle(turtles = t1, who = 0), radius = 2, agents2 = t1, world = w1)
+t3 <- inRadius(agents1 = turtle(t1, who = 0), radius = 2, agents2 = t1, world = w1)
 
 
 }

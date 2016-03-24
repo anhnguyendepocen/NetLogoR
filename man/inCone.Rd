@@ -68,10 +68,10 @@ Agents from \code{agents2} are reported if there are within \code{radius}
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
 p1 <- inCone(turtles = t1, radius = 2, agents2 = patches(w1), angle = 90, world = w1)
-t2 <- inCone(turtles = turtle(turtles = t1, who = 0), radius = 2, angle = 90, agents2 = t1, world = w1)
+t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents2 = t1, world = w1)
 
 
 }

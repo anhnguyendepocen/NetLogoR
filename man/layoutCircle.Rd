@@ -41,7 +41,7 @@ The turtles point outwards.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1[] <- runif(100)
+w1[] <- runif(length(w1))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
 library(SpaDES)

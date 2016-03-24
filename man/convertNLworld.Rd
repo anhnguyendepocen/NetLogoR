@@ -34,9 +34,10 @@ See \code{help("NLworlds-class")} for more details on the \code{NLworlds}
 }
 \examples{
 r <- raster(nrows = 21, ncols = 21, xmn = 0, ymn = 0, res = 5)
-r[] <- runif(648)
+r[] <- runif(length(r))
 plot(r)
 extent(r)
+
 world <- convertNLworld(raster = r)
 plot(world)
 extent(world)

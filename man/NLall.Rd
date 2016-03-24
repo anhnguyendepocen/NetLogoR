@@ -51,7 +51,7 @@ or \code{FALSE} otherwise.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- sample(1:5, size = 25, replace = TRUE)
+w1[] <- sample(1:5, size = length(w1), replace = TRUE)
 NLall(agents = patches(w1), world = w1, val = 5)
 w2 <- w1
 w2[] <- 5

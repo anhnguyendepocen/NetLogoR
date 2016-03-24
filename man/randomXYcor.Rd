@@ -25,7 +25,7 @@ Report random xcor and ycor coordinates inside the world's extent.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1[] <- runif(length(w1))
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 
 library(SpaDES)
 clearPlot()

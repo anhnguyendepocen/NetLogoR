@@ -182,6 +182,9 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 #'
+#' t1 <- fd(world = w1, turtles = t1, step = 1)
+#' Plot(t1, addTo ="w1")
+#'
 #'
 #' @export
 #' @docType methods
@@ -471,7 +474,6 @@ setMethod(
 #' clearPlot()
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
-#'
 #'
 #' t1 <- home(world = w1, turtles = t1, home = "pCorner")
 #' Plot(t1, addTo ="w1")
@@ -871,8 +873,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(length(w1))
-#' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(w1, n = 10),
-#'                                           ycor = randomYcor(w1, n = 10)))
+#' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                           ycor = randomYcor(world = w1, n = 10)))
 #' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
@@ -925,8 +927,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(length(w1))
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(w1, n = 10),
-#'                                            ycor = randomYcor(w1, n = 10)))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#'                                            ycor = randomYcor(world = w1, n = 10)))
 #' library(SpaDES)
 #' clearPlot()
 #' Plot(w1)
@@ -1873,7 +1875,6 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' w1[] <- runif(length(w1))
-#'
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #'
 #' library(SpaDES)
@@ -2121,7 +2122,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(100)
+#' w1[] <- runif(length(w1))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #'
 #' library(SpaDES)
@@ -2131,7 +2132,7 @@ setMethod(
 #'
 #' t1 <- moveTo(turtles = t1, to = turtle(t1, who = 0))
 #' Plot(t1, addTo ="w1")
-#' t1 <- moveTo(turtles = t1, to = patch(w1, xcor = 9, ycor = 9))
+#' t1 <- moveTo(turtles = t1, to = patch(w1, 9, 9))
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -2183,7 +2184,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- runif(length(w1))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #'
 #' library(SpaDES)
 #' clearPlot()
@@ -2423,7 +2424,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo = "w1")
 #'
-#' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, xcor = 2, ycor = 2))
+#' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, 2, 2))
 #'
 #'
 #' @export
@@ -2508,6 +2509,7 @@ setMethod(
 #' t1 <- noTurtles()
 #' length(t1)
 #'
+#'
 #' @export
 #' @docType methods
 #' @rdname noTurtles
@@ -2580,9 +2582,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9), breed = c(rep("sheep", 5), rep("wolf", 5)))
-#' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(turtles = t1, who = 0), dx = 1, dy = 1)
-#' t3 <- turtlesAt(world = w1, turtles = t1, agents = patch(world = w1, xcor = c(3,4,5), ycor = c(3,4,5)),
-#'                 dx = 1, dy = 1, breed = "sheep")
+#' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0), dx = 1, dy = 1)
+#' t3 <- turtlesAt(world = w1, turtles = t1, agents = patch(w1, c(3,4,5), c(3,4,5)), dx = 1, dy = 1, breed = "sheep")
 #'
 #'
 #' @export
@@ -2668,7 +2669,7 @@ setMethod(
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 #' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 #' t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
-#' tAll <- turtleSet(t1, t2, t3)
+#' t4 <- turtleSet(t1, t2, t3)
 #'
 #'
 #' @export
@@ -2923,13 +2924,13 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
-#' p1 <- other(agents = patches(world = w1), except = cbind(pxcor = 0, pycor = 0))
-#' nrow(p1)
+#' p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
+#' nrow(p1) # 99 patches
 #'
 #'# Turtles
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
-#' t2 <- other(agents = t1, except = turtle(turtles = t1, who = 0))
-#' length(t2)
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
+#' t2 <- other(agents = t1, except = turtle(t1, who = 0))
+#' length(t2) # 9 turtles
 #'
 #'
 #' @export
@@ -3023,7 +3024,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(100)
+#' w1[] <- runif(length(w1))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
@@ -3086,7 +3087,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' of(turtles = t1, tVarName = "heading")
 #'
 #'

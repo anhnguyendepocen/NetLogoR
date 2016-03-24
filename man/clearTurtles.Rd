@@ -32,7 +32,7 @@ w1 <- createNLworld()
 t1 <- createTurtles(n = 10, world = w1)
 t1 # show the object containing the turtles
 clearTurtles(t1)
-t1 # does not work
+t1 # 't1' not found
 
 
 }

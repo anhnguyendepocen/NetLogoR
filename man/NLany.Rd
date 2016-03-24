@@ -32,7 +32,7 @@ Report \code{TRUE} if \code{agents} is non empty, or \code{FALSE} otherwise.
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 p1 <- noPatches()
-p2 <- patch(w1, xcor = 0, ycor = 0)
+p2 <- patch(w1, 0, 0)
 NLany(p1)
 NLany(p2)
 

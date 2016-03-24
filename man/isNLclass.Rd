@@ -55,9 +55,9 @@ Careful! The class tested do not correspond to actual R classes.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-isNLclass(agents = patches(world = w1), class = "patch")
-isNLclass(agents = patches(world = w1), class = "patcheset")
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+isNLclass(agents = patches(w1), class = "patch")
+isNLclass(agents = patches(w1), class = "patcheset")
 isNLclass(agents = t1, class = "agentset")
 isNLclass(agents = t1, class = "turtleset")
 
