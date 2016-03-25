@@ -4,33 +4,34 @@
 \name{of}
 \alias{of}
 \alias{of,SpatialPointsDataFrame,character-method}
-\title{Values of turtles variables}
+\title{Values of a turtles variable}
 \usage{
-of(turtles, tVarName)
+of(turtles, tVar)
 
-\S4method{of}{SpatialPointsDataFrame,character}(turtles, tVarName)
+\S4method{of}{SpatialPointsDataFrame,character}(turtles, tVar)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the turtles.}
 
-\item{tVarName}{Characters. The name of the turtle's variable whose values to
-report. \code{tVarName} can be equal to \code{"coords"}, \code{"xcor"},
+\item{tVar}{Characters. The name of one turtles' variable. Can be equal to
+\code{"coords"}, \code{"xcor"},
 \code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
 \code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
 any of the variables created with \code{turtlesOwn()}.}
 }
 \value{
-\code{tVarName} values for the \code{turtles}. The class depends
-        on the class of the variable. The order of the values follows the order
+Vector or \code{tVar} values for the \code{turtles}. The class depends
+        of the variable class. The order of the vector follows the order
         of the \code{turtles}.
 }
 \description{
-Report the value of the turtles variables.
+Report the values of the turtles for the requested variable.
 }
 \examples{
+w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-of(turtles = t1, tVarName = "heading")
+of(turtles = t1, tVar = "heading")
 
 
 }

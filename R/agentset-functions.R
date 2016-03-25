@@ -570,7 +570,7 @@ setMethod(
   "withMax",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, varName) {
-    val_varName <- of(turtles = agents, tVarName = varName)
+    val_varName <- of(turtles = agents, tVar = varName)
     if(length(val_varName[is.na(val_varName)] == length(val_varName))){
       stop("varName equals to NA")
     } else {
@@ -683,7 +683,7 @@ setMethod(
   "withMin",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, varName) {
-    val_varName <- of(turtles = agents, tVarName = varName)
+    val_varName <- of(turtles = agents, tVar = varName)
     if(length(val_varName[is.na(val_varName)] == length(val_varName))){
       stop("varName equals to NA")
     } else {

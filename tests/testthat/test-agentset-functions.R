@@ -303,7 +303,7 @@ test_that("isNLclass works",{
   expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "agentset"), FALSE)
   expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "agentset"), FALSE)
 
-  t2 <- turtlesOwn(turtles = t1, tVarName = "age")
+  t2 <- turtlesOwn(turtles = t1, tVar = "age")
   expect_identical(isNLclass(agents = t2, class = "agentset"), TRUE)
   expect_identical(isNLclass(agents = t2, class = "turtleset"), TRUE)
 })

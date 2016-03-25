@@ -1263,9 +1263,9 @@ setMethod(
 #'
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
-#' of(t1, tVarName = "heading")
+#' of(t1, tVar = "heading")
 #' t1 <- left(turtles = t1, nDegrees = 180)
-#' of(t1, tVarName = "heading")
+#' of(t1, tVar = "heading")
 #'
 #'
 #' @export
@@ -1321,9 +1321,9 @@ setMethod(
 #'
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
-#' of(t1, tVarName = "heading")
+#' of(t1, tVar = "heading")
 #' t1 <- right(turtles = t1, nDegrees = 180)
-#' of(t1, tVarName = "heading")
+#' of(t1, tVar = "heading")
 #'
 #'
 #' @export
@@ -2707,21 +2707,21 @@ setMethod(
 
 
 ################################################################################
-#' Turtles variable
+#' New turtles variable
 #'
-#' Create a new variable for the turtles provided.
+#' Create a new variable for the turtles.
 #'
-#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                 \code{createOTurtles()} representing turtles.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'                \code{createOTurtles()} representing turtles.
 #'
-#' @param tVarName Characters. Name of the new variable to create.
+#' @param tVar    Characters. Name of the new variable to create.
 #'
-#' @param tVar     Any type of vector representing the value of \code{tVarName}.
-#'                 Must be of length 1 or of length \code{turtles}.
-#'                 If missing, \code{NA} is given.
+#' @param tVal    Vector representing the values of \code{tVar}.
+#'                Must be of length 1 or of length \code{turtles}.
+#'                If missing, \code{NA} is given.
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with the new
-#'         variable \code{tVarName} added.
+#'         variable \code{tVar} added.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtles-own}
 #'
@@ -2731,7 +2731,7 @@ setMethod(
 #'
 #' @examples
 #' t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
-#' t1 <- turtlesOwn(turtles = t1, tVarName = "sex", tVar = c("F", "F", "F", "M", "M"))
+#' t1 <- turtlesOwn(turtles = t1, tVar = "sex", tVal = c("F", "F", "F", "M", "M"))
 #'
 #'
 #' @export
@@ -2742,7 +2742,7 @@ setMethod(
 #'
 setGeneric(
   "turtlesOwn",
-  function(turtles, tVarName, tVar) {
+  function(turtles, tVar, tVal) {
     standardGeneric("turtlesOwn")
   })
 
@@ -2751,9 +2751,9 @@ setGeneric(
 setMethod(
   "turtlesOwn",
   signature = c("SpatialPointsDataFrame", "character", "missing"),
-  definition = function(turtles, tVarName) {
+  definition = function(turtles, tVar) {
     newData <- cbind(turtles@data, rep(NA, length(turtles)))
-    colnames(newData)[ncol(turtles@data) + 1] <- tVarName
+    colnames(newData)[ncol(turtles@data) + 1] <- tVar
     turtles@data <- newData
     return(turtles)
   }
@@ -2764,9 +2764,9 @@ setMethod(
 setMethod(
   "turtlesOwn",
   signature = c("SpatialPointsDataFrame", "character", "ANY"),
-  definition = function(turtles, tVarName, tVar) {
-    newTurtles <- turtlesOwn(turtles = turtles, tVarName = tVarName)
-    turtles@data[,tVarName] <- tVar
+  definition = function(turtles, tVar, tVal) {
+    newTurtles <- turtlesOwn(turtles = turtles, tVar = tVar)
+    turtles@data[,tVar] <- tVal
     return(turtles)
   }
 )
@@ -3063,21 +3063,21 @@ setMethod(
 
 
 ################################################################################
-#' Values of turtles variables
+#' Values of a turtles variable
 #'
-#' Report the value of the turtles variables.
+#' Report the values of the turtles for the requested variable.
 #'
-#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the turtles.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtles.
 #'
-#' @param tVarName Characters. The name of the turtle's variable whose values to
-#'                 report. \code{tVarName} can be equal to \code{"coords"}, \code{"xcor"},
-#'                 \code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
-#'                 \code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
-#'                 any of the variables created with \code{turtlesOwn()}.
+#' @param tVar    Characters. The name of one turtles' variable. Can be equal to
+#'                \code{"coords"}, \code{"xcor"},
+#'                \code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
+#'                \code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
+#'                any of the variables created with \code{turtlesOwn()}.
 #'
-#' @return \code{tVarName} values for the \code{turtles}. The class depends
-#'         on the class of the variable. The order of the values follows the order
+#' @return Vector or \code{tVar} values for the \code{turtles}. The class depends
+#'         of the variable class. The order of the vector follows the order
 #'         of the \code{turtles}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#of}
@@ -3087,8 +3087,9 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' of(turtles = t1, tVarName = "heading")
+#' of(turtles = t1, tVar = "heading")
 #'
 #'
 #' @export
@@ -3099,7 +3100,7 @@ setMethod(
 #'
 setGeneric(
   "of",
-  function(turtles, tVarName) {
+  function(turtles, tVar) {
     standardGeneric("of")
   })
 
@@ -3108,17 +3109,17 @@ setGeneric(
 setMethod(
   "of",
   signature = c("SpatialPointsDataFrame", "character"),
-  definition = function(turtles, tVarName) {
-    if(tVarName == "coords"){
+  definition = function(turtles, tVar) {
+    if(tVar == "coords"){
       return(turtles@coords)
-    } else if(tVarName == "xcor"){
+    } else if(tVar == "xcor"){
       return(turtles@coords[,1])
-    } else if(tVarName == "ycor"){
+    } else if(tVar == "ycor"){
       return(turtles@coords[,2])
-    } else if(tVarName == "prevCoords"){
+    } else if(tVar == "prevCoords"){
       return(cbind(turtles@data$prevX, turtles@data$prevY))
     } else {
-      return(turtles@data[,tVarName])
+      return(turtles@data[,tVar])
     }
   }
 )
