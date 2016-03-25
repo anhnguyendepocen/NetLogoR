@@ -322,48 +322,48 @@ test_that("towards works",{
   w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 
   # Patches to patch
-  pTOp <- towards(world = w1, from = patches(world = w1), to = patches(world = w1))
+  pTOp <- towards(world = w1, agents1 = patches(world = w1), agents2 = patches(world = w1))
   expect_equivalent(pTOp, rep(0, 100))
-  pTOp <- towards(world = w1, from = patches(world = w1), to = patch(world = w1, x = 1, y = 1), torus = FALSE)
+  pTOp <- towards(world = w1, agents1 = patches(world = w1), agents2 = patch(world = w1, x = 1, y = 1), torus = FALSE)
   expect_equivalent(pTOp[1], 180)
-  pTOp <- towards(world = w1, from = patches(world = w1), to = patch(world = w1, x = 1, y = 1), torus = TRUE)
+  pTOp <- towards(world = w1, agents1 = patches(world = w1), agents2 = patch(world = w1, x = 1, y = 1), torus = TRUE)
   expect_equivalent(pTOp[1], 0)
 
   # Patches to location
-  pTOl <- towards(world = w1, from = patches(world = w1), to = cbind(x = 4, y = 8), torus = FALSE)
+  pTOl <- towards(world = w1, agents1 = patches(world = w1), agents2 = cbind(x = 4, y = 8), torus = FALSE)
   expect_equivalent(pTOl[21], 90)
-  pTOl <- towards(world = w1, from = patches(world = w1), to = cbind(x = 4, y = 8), torus = FALSE)
+  pTOl <- towards(world = w1, agents1 = patches(world = w1), agents2 = cbind(x = 4, y = 8), torus = FALSE)
   expect_equivalent(pTOl[30], 270)
-  pTOl <- towards(world = w1, from = patches(world = w1), to = cbind(x = 4, y = 8), torus = TRUE)
+  pTOl <- towards(world = w1, agents1 = patches(world = w1), agents2 = cbind(x = 4, y = 8), torus = TRUE)
   expect_equivalent(pTOl[30], 90)
 
   # Patches to turtle
   t1 <- createTurtles(world = w1, n = 1)
-  pTOt <- towards(world = w1, from = patches(world = w1), to = t1, torus = FALSE)
+  pTOt <- towards(world = w1, agents1 = patches(world = w1), agents2 = t1, torus = FALSE)
   expect_equivalent(pTOt[100], 315)
   t2 <- createTurtles(n = 1, coord = cbind(xcor = 5.5, ycor = 10.5))
-  pTOt <- towards(world = w1, from = patches(world = w1), to = t2, torus = TRUE)
+  pTOt <- towards(world = w1, agents1 = patches(world = w1), agents2 = t2, torus = TRUE)
   expect_equivalent(pTOt[95], 135)
 
   # Turtles to patch
   t3 <- createTurtles(n = 4, coords = cbind(xcor = c(2,5,6,7), ycor = c(4,6,2,9)))
-  tTOp <- towards(world = w1, from = t3, to = patch(world = w1, x = 5, y = 4), torus = FALSE)
+  tTOp <- towards(world = w1, agents1 = t3, agents2 = patch(world = w1, x = 5, y = 4), torus = FALSE)
   expect_equivalent(tTOp[1], 90)
-  tTOp <- towards(world = w1, from = t3, to = patch(world = w1, x = 7, y = 2), torus = TRUE)
+  tTOp <- towards(world = w1, agents1 = t3, agents2 = patch(world = w1, x = 7, y = 2), torus = TRUE)
   expect_equivalent(tTOp[4], 0)
 
   # Turtles to location
-  tTOl <- towards(world = w1, from = t3, to = cbind(x = 8, y = 4), torus = FALSE)
+  tTOl <- towards(world = w1, agents1 = t3, agents2 = cbind(x = 8, y = 4), torus = FALSE)
   expect_equivalent(tTOl[1], 90)
-  tTOl <- towards(world = w1, from = t3, to = cbind(x = 8, y = 4), torus = FALSE)
+  tTOl <- towards(world = w1, agents1 = t3, agents2 = cbind(x = 8, y = 4), torus = FALSE)
   expect_equivalent(tTOl[3], 45)
-  tTOl <- towards(world = w1, from = t3, to = cbind(x = 8, y = 4), torus = TRUE)
+  tTOl <- towards(world = w1, agents1 = t3, agents2 = cbind(x = 8, y = 4), torus = TRUE)
   expect_equivalent(tTOl[1], 270)
 
   # Turtles to turtle
-  tTOt <- towards(world = w1, from = t3, to = t3, torus = FALSE)
+  tTOt <- towards(world = w1, agents1 = t3, agents2 = t3, torus = FALSE)
   expect_equivalent(tTOt, t3@data$heading)
-  tTOt <- towards(world = w1, from = t3, to = t2, torus = FALSE)
+  tTOt <- towards(world = w1, agents1 = t3, agents2 = t2, torus = FALSE)
   expect_equivalent(tTOt[4], 315)
 
   w2 <- w1
@@ -371,40 +371,40 @@ test_that("towards works",{
   w2[] <- runif(100)
   ws <-NLstack(w1, w2)
   # Patches to patch
-  pTOp <- towards(world = ws, from = patches(world = ws), to = patch(world = ws, x = 1, y = 1), torus = TRUE)
+  pTOp <- towards(world = ws, agents1 = patches(world = ws), agents2 = patch(world = ws, x = 1, y = 1), torus = TRUE)
   expect_equivalent(pTOp[1], 0)
   # Patches to location
-  pTOl <- towards(world = ws, from = patches(world = ws), to = cbind(x = 4, y = 8), torus = TRUE)
+  pTOl <- towards(world = ws, agents1 = patches(world = ws), agents2 = cbind(x = 4, y = 8), torus = TRUE)
   expect_equivalent(pTOl[30], 90)
   # Patches to turtle
-  pTOt <- towards(world = ws, from = patches(world = ws), to = t2, torus = TRUE)
+  pTOt <- towards(world = ws, agents1 = patches(world = ws), agents2 = t2, torus = TRUE)
   expect_equivalent(pTOt[95], 135)
   # Turtles to patch
-  tTOp <- towards(world = ws, from = t3, to = patch(world = ws, x = 7, y = 2), torus = TRUE)
+  tTOp <- towards(world = ws, agents1 = t3, agents2 = patch(world = ws, x = 7, y = 2), torus = TRUE)
   expect_equivalent(tTOp[4], 0)
   # Turtles to location
-  tTOl <- towards(world = ws, from = t3, to = cbind(x = 8, y = 4), torus = TRUE)
+  tTOl <- towards(world = ws, agents1 = t3, agents2 = cbind(x = 8, y = 4), torus = TRUE)
   expect_equivalent(tTOl[1], 270)
   # Turtles to turtle
-  tTOt <- towards(world = ws, from = t3, to = t2, torus = FALSE)
+  tTOt <- towards(world = ws, agents1 = t3, agents2 = t2, torus = FALSE)
   expect_equivalent(tTOt[4], 315)
 })
 
 test_that("face works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(world = w1, n = 5)
-  t2 <- face(world = w1, turtles = t1, to = cbind(x = 2, y = 0))
+  t2 <- face(world = w1, turtles = t1, agents = cbind(x = 2, y = 0))
   expect_identical(t2@data$heading, rep(180, 5))
-  t3 <- face(world = w1, turtles = t1, to = patch(world = w1, x = 0, y = 2))
+  t3 <- face(world = w1, turtles = t1, agents = patch(world = w1, x = 0, y = 2))
   expect_identical(t3@data$heading, rep(270, 5))
   t4 <-createTurtles(n = 1, coords = cbind(xcor = 1, ycor = 3))
-  t5 <- face(world = w1, turtles = t1, to = t4)
+  t5 <- face(world = w1, turtles = t1, agents = t4)
   expect_identical(t5@data$heading, rep(315, 5))
-  t6 <- face(world = w1, turtles = t4, to = cbind(x = 1, y = 0), torus = FALSE)
-  t7 <- face(world = w1, turtles = t4, to = cbind(x = 1, y = 0), torus = TRUE)
+  t6 <- face(world = w1, turtles = t4, agents = cbind(x = 1, y = 0), torus = FALSE)
+  t7 <- face(world = w1, turtles = t4, agents = cbind(x = 1, y = 0), torus = TRUE)
   expect_identical(t6@data$heading, 180)
   expect_identical(t7@data$heading, 0)
-  t8 <- face(world = w1, turtles = t1, to = t1)
+  t8 <- face(world = w1, turtles = t1, agents = t1)
   expect_identical(t8@data$heading, t1@data$heading)
 })
 
@@ -601,11 +601,11 @@ test_that("inspect works",{
 
 test_that("moveTo works to move to turtles location",{
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
-  t2 <- moveTo(turtles = t1, to = t1[t1$who == 3,])
+  t2 <- moveTo(turtles = t1, agents = t1[t1$who == 3,])
   expect_identical(t2@coords, cbind(xcor = c(4, 4, 4, 4), ycor = c(4, 4, 4, 4)))
   expect_identical(cbind(xcor = t2@data$prevX, ycor = t2@data$prevY), t1@coords)
   expect_identical(t2@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
-  t3 <- moveTo(turtles = t1, to = t1)
+  t3 <- moveTo(turtles = t1, agents = t1)
   expect_identical(t1@coords, t3@coords)
   expect_identical(cbind(xcor = t3@data$prevX, ycor = t3@data$prevY), t1@coords)
   expect_identical(t3@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
@@ -614,11 +614,11 @@ test_that("moveTo works to move to turtles location",{
 test_that("moveTo works to move to patches location",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
-  t2 <- moveTo(turtles = t1, to = patch(world = w1, x = 4, y = 4))
+  t2 <- moveTo(turtles = t1, agents = patch(world = w1, x = 4, y = 4))
   expect_identical(t2@coords, cbind(xcor = c(4, 4, 4, 4), ycor = c(4, 4, 4, 4)))
   expect_identical(cbind(xcor = t2@data$prevX, ycor = t2@data$prevY), t1@coords)
   expect_identical(t2@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
-  t3 <- moveTo(turtles = t1, to = patch(world = w1, x = c(1, 2, 3, 4), y = c(1, 2, 3, 4)))
+  t3 <- moveTo(turtles = t1, agents = patch(world = w1, x = c(1, 2, 3, 4), y = c(1, 2, 3, 4)))
   expect_identical(t1@coords, t3@coords)
   expect_identical(cbind(xcor = t3@data$prevX, ycor = t3@data$prevY), t1@coords)
   expect_identical(t3@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])

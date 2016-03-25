@@ -964,46 +964,45 @@ setMethod(
 ################################################################################
 #' Direction towards
 #'
-#' Report the headings of agents \code{from} towards agents or locations \code{to}.
+#' Report the directions of \code{agents1} towards agents or locations \code{agents2}.
 #'
 #' @param world \code{NLworlds} object.
 #'
-#' @param from  Matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents1  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'              second column \code{pycor} representing the coordinates of the
-#'              patches from which the headings are computed.
+#'              patches from which the directions are computed.
 #'
 #'              SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'              \code{createOTurtles()} representing the turtles from which the
-#'              headings are computed.
+#'              directions are computed.
 #'
-#' @param to    Matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents2    Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'              second column \code{pycor} representing the coordinates of the
-#'              patches towards which the heading are computed.
+#'              patches towards which the directions are computed.
 #'
 #'              SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'              \code{createOTurtles()} representing the turtles towards which the
-#'              headings are be computed.
+#'              directions are be computed.
 #'
 #'              Matrix (ncol = 2) with the first column \code{x} and the second
 #'              column \code{y} representing the coordinates of the locations
-#'              towards which the headings are computed.
+#'              towards which the directions are computed.
 #'
 #' @param torus  Logical to determine if the \code{NLworlds} object is wrapped.
 #'               Default is \code{torus = FALSE}.
 #'
 #' @return Numeric. Vector of angles in degrees of length equal to the largest
-#'         number of agents/locations between the ones contained in\code{from} or
-#'         in \code{to}.
+#'         number of agents/locations between \code{agents1} and \code{agents2}.
 #'
-#' @details \code{from} and \code{to} must be of the same length or if different, one
+#' @details \code{agents1} and \code{agents2} must be of the same length or if different, one
 #'          of the two has be of length 1.
 #'
-#'          If \code{torus = TRUE} and the distance from one agent \code{from} to
-#'          its corresponding agent/location \code{to} is smaller around the
-#'          sides of the world than across it, then the heading to the agent/location
+#'          If \code{torus = TRUE} and the distance from one \code{agents1} to
+#'          its corresponding agent/location \code{agents2} is smaller around the
+#'          sides of the world than across it, then the direction to the agent/location
 #'          going around the sides of the world is reported.
 #'
-#'          The heading from a patch to its location returns 0, the heading from
+#'          The direction from a patch to its location returns 0, the direction from
 #'          a turtle to its location returns the turtle's heading.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#towards}
@@ -1016,9 +1015,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' towards(world = w1, from = patches(w1), to = cbind(x = 0, y = 0))
+#' towards(world = w1, agents1 = patches(w1), agents2 = cbind(x = 0, y = 0))
 #' t1 <- createTurtles(n = 10, world = w1)
-#' towards(world = w1, from = t1, to = cbind(x = 0, y = 0))
+#' towards(world = w1, agents1 = t1, agents2 = cbind(x = 0, y = 0))
 #'
 #'
 #' @export
@@ -1030,7 +1029,7 @@ setMethod(
 #'
 setGeneric(
   "towards",
-  function(world, from, to, torus = FALSE) {
+  function(world, agents1, agents2, torus = FALSE) {
     standardGeneric("towards")
   })
 
@@ -1038,54 +1037,54 @@ setGeneric(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", from = "matrix", to = "matrix"),
-  definition = function(world, from, to, torus) {
+  signature = c(world = "NLworlds", agents1 = "matrix", agents2 = "matrix"),
+  definition = function(world, agents1, agents2, torus) {
 
-    heading <- deg(atan2(to[,1] - from[,1], to[,2] - from[,2])) # angles between -180 and 180
+    heading <- deg(atan2(agents2[,1] - agents1[,1], agents2[,2] - agents1[,2])) # angles between -180 and 180
     heading[heading < 0] <- heading[heading < 0] + 360
 
     if(torus == TRUE){
-      # Need to create coordinates for "to" in a wrapped world
+      # Need to create coordinates for "agents2" in a wrapped world
       # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
       # Find the smallest distances across or around the world
 
-      if(nrow(to) == 1 & nrow(from) != 1){
-        to <- cbind(x = rep(to[,1], nrow(from)), y = rep(to[,2], nrow(from)))
+      if(nrow(agents2) == 1 & nrow(agents1) != 1){
+        agents2 <- cbind(x = rep(agents2[,1], nrow(agents1)), y = rep(agents2[,2], nrow(agents1)))
       }
-      if(nrow(from) == 1 & nrow(to) != 1){
-        from <- cbind(x = rep(from[,1], nrow(to)), y = rep(from[,2], nrow(to)))
+      if(nrow(agents1) == 1 & nrow(agents2) != 1){
+        agents1 <- cbind(x = rep(agents1[,1], nrow(agents2)), y = rep(agents1[,2], nrow(agents2)))
       }
 
-      toShortest <- to
+      toShortest <- agents2
 
-      for(i in 1:nrow(from)){
-        to1 <- cbind(to[i,1] - (world@extent@xmax - world@extent@xmin), to[i,2] + (world@extent@ymax - world@extent@ymin))
-        to2 <- cbind(to[i,1], to[i,2] + (world@extent@ymax - world@extent@ymin))
-        to3 <- cbind(to[i,1] + (world@extent@xmax - world@extent@xmin), to[i,2] + (world@extent@ymax - world@extent@ymin))
-        to4 <- cbind(to[i,1] - (world@extent@xmax - world@extent@xmin), to[i,2])
-        to5 <- cbind(to[i,1] + (world@extent@xmax - world@extent@xmin), to[i,2])
-        to6 <- cbind(to[i,1] - (world@extent@xmax - world@extent@xmin), to[i,2] - (world@extent@ymax - world@extent@ymin))
-        to7 <- cbind(to[i,1], to[i,2] - (world@extent@ymax - world@extent@ymin))
-        to8 <- cbind(to[i,1] + (world@extent@xmax - world@extent@xmin), to[i,2] - (world@extent@ymax - world@extent@ymin))
+      for(i in 1:nrow(agents1)){
+        to1 <- cbind(agents2[i,1] - (world@extent@xmax - world@extent@xmin), agents2[i,2] + (world@extent@ymax - world@extent@ymin))
+        to2 <- cbind(agents2[i,1], agents2[i,2] + (world@extent@ymax - world@extent@ymin))
+        to3 <- cbind(agents2[i,1] + (world@extent@xmax - world@extent@xmin), agents2[i,2] + (world@extent@ymax - world@extent@ymin))
+        to4 <- cbind(agents2[i,1] - (world@extent@xmax - world@extent@xmin), agents2[i,2])
+        to5 <- cbind(agents2[i,1] + (world@extent@xmax - world@extent@xmin), agents2[i,2])
+        to6 <- cbind(agents2[i,1] - (world@extent@xmax - world@extent@xmin), agents2[i,2] - (world@extent@ymax - world@extent@ymin))
+        to7 <- cbind(agents2[i,1], agents2[i,2] - (world@extent@ymax - world@extent@ymin))
+        to8 <- cbind(agents2[i,1] + (world@extent@xmax - world@extent@xmin), agents2[i,2] - (world@extent@ymax - world@extent@ymin))
 
 
-        dist <- pointDistance(p1 = from[i,], p2 = to[i,], lonlat = FALSE, allpairs = FALSE)
-        dist1 <- pointDistance(p1 = from[i,], p2 = to1, lonlat = FALSE, allpairs = FALSE)
-        dist2 <- pointDistance(p1 = from[i,], p2 = to2, lonlat = FALSE, allpairs = FALSE)
-        dist3 <- pointDistance(p1 = from[i,], p2 = to3, lonlat = FALSE, allpairs = FALSE)
-        dist4 <- pointDistance(p1 = from[i,], p2 = to4, lonlat = FALSE, allpairs = FALSE)
-        dist5 <- pointDistance(p1 = from[i,], p2 = to5, lonlat = FALSE, allpairs = FALSE)
-        dist6 <- pointDistance(p1 = from[i,], p2 = to6, lonlat = FALSE, allpairs = FALSE)
-        dist7 <- pointDistance(p1 = from[i,], p2 = to7, lonlat = FALSE, allpairs = FALSE)
-        dist8 <- pointDistance(p1 = from[i,], p2 = to8, lonlat = FALSE, allpairs = FALSE)
+        dist <- pointDistance(p1 = agents1[i,], p2 = agents2[i,], lonlat = FALSE, allpairs = FALSE)
+        dist1 <- pointDistance(p1 = agents1[i,], p2 = to1, lonlat = FALSE, allpairs = FALSE)
+        dist2 <- pointDistance(p1 = agents1[i,], p2 = to2, lonlat = FALSE, allpairs = FALSE)
+        dist3 <- pointDistance(p1 = agents1[i,], p2 = to3, lonlat = FALSE, allpairs = FALSE)
+        dist4 <- pointDistance(p1 = agents1[i,], p2 = to4, lonlat = FALSE, allpairs = FALSE)
+        dist5 <- pointDistance(p1 = agents1[i,], p2 = to5, lonlat = FALSE, allpairs = FALSE)
+        dist6 <- pointDistance(p1 = agents1[i,], p2 = to6, lonlat = FALSE, allpairs = FALSE)
+        dist7 <- pointDistance(p1 = agents1[i,], p2 = to7, lonlat = FALSE, allpairs = FALSE)
+        dist8 <- pointDistance(p1 = agents1[i,], p2 = to8, lonlat = FALSE, allpairs = FALSE)
 
         allDist <- c(dist, dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8)
         distMin <- min(allDist)
-        allToCoords <- rbind(to[i,], to1, to2, to3, to4, to5, to6, to7, to8)
+        allToCoords <- rbind(agents2[i,], to1, to2, to3, to4, to5, to6, to7, to8)
         toShortest[i,] <- allToCoords[match(distMin, allDist),]
       }
 
-      heading <- deg(atan2(toShortest[,1] - from[,1], toShortest[,2] - from[,2])) # angles between -180 and 180
+      heading <- deg(atan2(toShortest[,1] - agents1[,1], toShortest[,2] - agents1[,2])) # angles between -180 and 180
       heading[heading < 0] <- heading[heading < 0] + 360
     }
     return(heading)
@@ -1096,11 +1095,11 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "matrix"),
-  definition = function(world, from, to, torus) {
-    heading <- towards(world = world, from = from@coords, to = to, torus = torus)
+  signature = c(world = "NLworlds", agents1 = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(world, agents1, agents2, torus) {
+    heading <- towards(world = world, agents1 = agents1@coords, agents2 = agents2, torus = torus)
     # The direction to a turtle's location return the turtle's heading
-    heading <- ifelse(from@coords[,1] == to[,1] & from@coords[,2] == to[,2], from@data$heading, heading)
+    heading <- ifelse(agents1@coords[,1] == agents2[,1] & agents1@coords[,2] == agents2[,2], agents1@data$heading, heading)
     return(heading)
   }
 )
@@ -1109,9 +1108,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", from = "matrix", to = "SpatialPointsDataFrame"),
-  definition = function(world, from, to, torus) {
-    towards(world = world, from = from, to = to@coords, torus = torus)
+  signature = c(world = "NLworlds", agents1 = "matrix", agents2 = "SpatialPointsDataFrame"),
+  definition = function(world, agents1, agents2, torus) {
+    towards(world = world, agents1 = agents1, agents2 = agents2@coords, torus = torus)
   }
 )
 
@@ -1119,20 +1118,20 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "SpatialPointsDataFrame"),
-  definition = function(world, from, to, torus) {
-    heading <- towards(world = world, from = from@coords, to = to@coords, torus = torus)
+  signature = c(world = "NLworlds", agents1 = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(world, agents1, agents2, torus) {
+    heading <- towards(world = world, agents1 = agents1@coords, agents2 = agents2@coords, torus = torus)
     # The direction to a turtle's location return the turtle's heading
-    heading <- ifelse(from@coords[,1] == to@coords[,1] & from@coords[,2] == to@coords[,2], from@data$heading, heading)
+    heading <- ifelse(agents1@coords[,1] == agents2@coords[,1] & agents1@coords[,2] == agents2@coords[,2], agents1@data$heading, heading)
     return(heading)
   }
 )
 
 
 ################################################################################
-#' Face directions
+#' Face something
 #'
-#' Set the turtles' heading towards some agents or locations.
+#' Set the turtles' heading towards \code{agents}.
 #'
 #' @param world   \code{NLworlds} object.
 #'
@@ -1140,9 +1139,9 @@ setMethod(
 #'                by \code{createOTurtles()} representing the turtles to modify
 #'                their heading.
 #'
-#' @param to      Matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
-#'                patches towards which the turtles' heading is set
+#'                patches towards which the turtles' heading is set.
 #'
 #'                SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                \code{createOTurtles()} representing the turtles towards which
@@ -1150,17 +1149,17 @@ setMethod(
 #'
 #'                Matrix (ncol = 2) with the first column \code{x} and the second
 #'                column \code{y} representing the coordinates of the locations
-#'                towards which the heading is set.
+#'                towards which the turtles' heading is set.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
 #'                Default is \code{torus = FALSE}.
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with updated headings.
 #'
-#' @details \code{to} must be of length 1 or of length \code{turtles}.
+#' @details \code{agents} must be of length 1 or of length \code{turtles}.
 #'
 #'          If \code{torus = TRUE} and the distance from one turtle to
-#'          its corresponding agent/location \code{to} is smaller around the
+#'          its corresponding agent/location \code{agents} is smaller around the
 #'          sides of the world than across it, then the heading to the agent/location
 #'          going around the sides of the world is given to the turtle.
 #'
@@ -1187,7 +1186,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo = "w1")
 #'
-#' t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
+#' t1 <- face(world = w1, turtles = t1, agents = cbind(x = 0, y = 0))
 #' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 #' Plot(t1, addTo = "w1")
 #'
@@ -1200,7 +1199,7 @@ setMethod(
 #'
 setGeneric(
   "face",
-  function(world, turtles, to, torus = FALSE) {
+  function(world, turtles, agents, torus = FALSE) {
     standardGeneric("face")
   })
 
@@ -1208,17 +1207,17 @@ setGeneric(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", to = "matrix"),
-  definition = function(world, turtles, to, torus) {
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix"),
+  definition = function(world, turtles, agents, torus) {
 
-    newHeading <- towards(world = world, from = turtles, to = to, torus = torus)
+    newHeading <- towards(world = world, agents1 = turtles, agents2 = agents, torus = torus)
 
-    if(nrow(to) == 1 & nrow(turtles) != 1){
-      to <- cbind(x = rep(to[,1], nrow(turtles)), y = rep(to[,2], nrow(turtles)))
+    if(nrow(agents) == 1 & nrow(turtles) != 1){
+      agents <- cbind(x = rep(agents[,1], nrow(turtles)), y = rep(agents[,2], nrow(turtles)))
     }
     # Do not change the heading if the turtles is facing its position
     for(i in 1:nrow(turtles@coords)){
-      if(turtles@coords[i,1] == to[i,1] & turtles@coords[i,2] == to[i,2]){
+      if(turtles@coords[i,1] == agents[i,1] & turtles@coords[i,2] == agents[i,2]){
         newHeading[i] <- turtles@data$heading[i]
       }
     }
@@ -1233,9 +1232,9 @@ setMethod(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", to = "SpatialPointsDataFrame"),
-  definition = function(world, turtles, to, torus) {
-    face(world = world, turtles = turtles, to = to@coords, torus = torus)
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame"),
+  definition = function(world, turtles, agents, torus) {
+    face(world = world, turtles = turtles, agents = agents@coords, torus = torus)
   }
 )
 
@@ -1444,11 +1443,8 @@ setMethod(
     }
 
     pMinNeighbors <- do.call(rbind, pMinNeighbors)
-    newTurtles <- face(world = world, turtles = turtles, to = pMinNeighbors, torus = torus)
-    # MoveTo function?
-    newTurtles@coords <- cbind(xcor = pMinNeighbors[,1], ycor = pMinNeighbors[,2]) # pxcor and pycor otherwise for the names
-    newTurtles@data$prevX <- turtles@coords[,1]
-    newTurtles@data$prevY <- turtles@coords[,2]
+    newTurtles <- face(world = world, turtles = turtles, agents = pMinNeighbors, torus = torus)
+    newTurtles <- moveTo(turtles = newTurtles, agents = pMinNeighbors)
     return(newTurtles)
   }
 )
@@ -2089,12 +2085,12 @@ setMethod(
 ################################################################################
 #' Move to
 #'
-#' Move the turtles to the same location as the agents \code{to}.
+#' Move the turtles to the \code{agents} locations.
 #'
 #' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param to      Matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                second column \code{pycor} representing the coordinates of the
 #'                patches where the \code{turtles} move to.
 #'
@@ -2106,7 +2102,7 @@ setMethod(
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
-#' @details The number of agents \code{to} (if matrix) must be equal to 1 or of
+#' @details The number of \code{agents} must be equal to 1 or of
 #'          length \code{turtles}.
 #'
 #'          The turtle's headings are not affected with this function.
@@ -2130,9 +2126,9 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- moveTo(turtles = t1, to = turtle(t1, who = 0))
+#' t1 <- moveTo(turtles = t1, agents = turtle(t1, who = 0))
 #' Plot(t1, addTo ="w1")
-#' t1 <- moveTo(turtles = t1, to = patch(w1, 9, 9))
+#' t1 <- moveTo(turtles = t1, agents = patch(w1, 9, 9))
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -2144,7 +2140,7 @@ setMethod(
 #'
 setGeneric(
   "moveTo",
-  function(turtles, to) {
+  function(turtles, agents) {
     standardGeneric("moveTo")
   })
 
@@ -2153,8 +2149,8 @@ setGeneric(
 setMethod(
   "moveTo",
   signature = c("SpatialPointsDataFrame", "matrix"),
-  definition = function(turtles, to) {
-    setXY(turtles = turtles, xcor = as.numeric(to[,1]), ycor = as.numeric(to[,2]), torus = FALSE)
+  definition = function(turtles, agents) {
+    setXY(turtles = turtles, xcor = as.numeric(agents[,1]), ycor = as.numeric(agents[,2]), torus = FALSE)
   }
 )
 
@@ -2163,8 +2159,8 @@ setMethod(
 setMethod(
   "moveTo",
   signature = c("SpatialPointsDataFrame", "SpatialPointsDataFrame"),
-  definition = function(turtles, to) {
-    moveTo(turtles = turtles, to = to@coords)
+  definition = function(turtles, agents) {
+    moveTo(turtles = turtles, agents = agents@coords)
   }
 )
 

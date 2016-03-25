@@ -92,11 +92,11 @@ setMethod(
 ################################################################################
 #' Distances between agents
 #'
-#' Report the distances betwenn agents \code{from} and agents or locations \code{to}.
+#' Report the distances between \code{agents1} and \code{agents2}.
 #'
 #' @param world    \code{NLworlds} object.
 #'
-#' @param from     Matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents1  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                 second column \code{pycor} representing the coordinates of the
 #'                 patches from which the distances will be computed.
 #'
@@ -104,7 +104,7 @@ setMethod(
 #'                 by \code{createOTurtles()} representing the turtles from which
 #'                 the distances will be computed.
 #'
-#' @param to       Matrix (ncol = 2) with the first column \code{pxcor} and the
+#' @param agents2  Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'                 second column \code{pycor} representing the coordinates of the
 #'                 patches to which the distances will be computed.
 #'
@@ -120,17 +120,17 @@ setMethod(
 #'                 Default is \code{torus = FALSE}.
 #'
 #' @param allPairs Logical. Only relevant if the number of agents/locations in
-#'                 \code{from} and \code{to} is the same. If \code{FALSE}, the
-#'                 distance between each agent/location in \code{from} with the
-#'                 corresponding \code{to} is returned. If \code{TRUE}, a full
+#'                 \code{agents1} and \code{agents2} is the same. If \code{FALSE}, the
+#'                 distance between each agent/location in \code{agents1} with the
+#'                 corresponding \code{agents2} is returned. If \code{TRUE}, a full
 #'                 distance matrix is returned. Default is \code{allPairs = FALSE}.
 #'
-#' @return Numeric. Vector of distances if \code{from} and/or \code{to} contained
-#'         one agent/location, or if \code{from} and \code{to} contained the same
+#' @return Numeric. Vector of distances if \code{agents1} and/or \code{agents2} contained
+#'         one agent/location, or if \code{agents1} and \code{agents2} contained the same
 #'         number of agents/locations and \code{allPairs = FALSE}.
 #'
-#'         Matrix of distances between \code{from} (rows) and \code{to} (columns)
-#'         if \code{from} and \code{to} are of different length, or of same length
+#'         Matrix of distances between \code{agents1} (rows) and \code{agents2} (columns)
+#'         if \code{agents1} and \code{agents2} are of different length, or of same length
 #'         and \code{allPairs = TRUE}.
 #'
 #' @details Distances from/to a patch are measured from/to its center.
@@ -139,7 +139,7 @@ setMethod(
 #'          reported only if smaller than the one across the world (i.e., as calculated
 #'          with \code{torus = FALSE}).
 #'
-#'          Coordinates of given \code{from} and \code{to} must be inside the world's extent.
+#'          Coordinates of given \code{agents1} and \code{agents2} must be inside the world's extent.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#distance}
 #'
@@ -151,10 +151,10 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)))
-#' NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)), torus = TRUE)
+#' NLdist(world = w1, agents1 = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
+#' NLdist(world = w1, agents1 = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)), torus = TRUE)
 #' t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
-#' NLdist(world = w1, from = t1, to = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
+#' NLdist(world = w1, agents1 = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 #'
 #'
 #' @export
@@ -165,7 +165,7 @@ setMethod(
 #'
 setGeneric(
   "NLdist",
-  function(world, from, to, torus = FALSE, allPairs = FALSE) {
+  function(world, agents1, agents2, torus = FALSE, allPairs = FALSE) {
     standardGeneric("NLdist")
   })
 
@@ -173,38 +173,38 @@ setGeneric(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", from = "matrix", to = "matrix"),
-  definition = function(world, from, to, torus, allPairs) {
+  signature = c(world = "NLworlds", agents1 = "matrix", agents2 = "matrix"),
+  definition = function(world, agents1, agents2, torus, allPairs) {
 
-    if(min(from[,1]) < world@extent@xmin | max(from[,1]) > world@extent@xmax |
-       min(from[,2]) < world@extent@ymin | max(from[,2]) > world@extent@ymax |
-       min(to[,1]) < world@extent@xmin | max(to[,1]) > world@extent@xmax |
-       min(to[,2]) < world@extent@ymin | max(to[,2]) > world@extent@ymax){
+    if(min(agents1[,1]) < world@extent@xmin | max(agents1[,1]) > world@extent@xmax |
+       min(agents1[,2]) < world@extent@ymin | max(agents1[,2]) > world@extent@ymax |
+       min(agents2[,1]) < world@extent@xmin | max(agents2[,1]) > world@extent@xmax |
+       min(agents2[,2]) < world@extent@ymin | max(agents2[,2]) > world@extent@ymax){
       stop("Given coordinates are outside the world extent.")
     }
 
-    dist <- pointDistance(p1 = from, p2 = to, lonlat = FALSE, allpairs = allPairs)
+    dist <- pointDistance(p1 = agents1, p2 = agents2, lonlat = FALSE, allpairs = allPairs)
 
     if(torus == TRUE){
-      # Need to create coordinates for "to" in a wrapped world
+      # Need to create coordinates for "agents2" in a wrapped world
       # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
-      to1 <- cbind(pxcor = to[,1] - (world@extent@xmax - world@extent@xmin), pycor = to[,2] + (world@extent@ymax - world@extent@ymin))
-      to2 <- cbind(pxcor = to[,1], pycor = to[,2] + (world@extent@ymax - world@extent@ymin))
-      to3 <- cbind(pxcor = to[,1] + (world@extent@xmax - world@extent@xmin), pycor = to[,2] + (world@extent@ymax - world@extent@ymin))
-      to4 <- cbind(pxcor = to[,1] - (world@extent@xmax - world@extent@xmin), pycor = to[,2])
-      to5 <- cbind(pxcor = to[,1] + (world@extent@xmax - world@extent@xmin), pycor = to[,2])
-      to6 <- cbind(pxcor = to[,1] - (world@extent@xmax - world@extent@xmin), pycor = to[,2] - (world@extent@ymax - world@extent@ymin))
-      to7 <- cbind(pxcor = to[,1], pycor = to[,2] - (world@extent@ymax - world@extent@ymin))
-      to8 <- cbind(pxcor = to[,1] + (world@extent@xmax - world@extent@xmin), pycor = to[,2] - (world@extent@ymax - world@extent@ymin))
+      to1 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to2 <- cbind(pxcor = agents2[,1], pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to3 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to4 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
+      to5 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
+      to6 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
+      to7 <- cbind(pxcor = agents2[,1], pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
+      to8 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
 
-      dist1 <- pointDistance(p1 = from, p2 = to1, lonlat = FALSE, allpairs = allPairs)
-      dist2 <- pointDistance(p1 = from, p2 = to2, lonlat = FALSE, allpairs = allPairs)
-      dist3 <- pointDistance(p1 = from, p2 = to3, lonlat = FALSE, allpairs = allPairs)
-      dist4 <- pointDistance(p1 = from, p2 = to4, lonlat = FALSE, allpairs = allPairs)
-      dist5 <- pointDistance(p1 = from, p2 = to5, lonlat = FALSE, allpairs = allPairs)
-      dist6 <- pointDistance(p1 = from, p2 = to6, lonlat = FALSE, allpairs = allPairs)
-      dist7 <- pointDistance(p1 = from, p2 = to7, lonlat = FALSE, allpairs = allPairs)
-      dist8 <- pointDistance(p1 = from, p2 = to8, lonlat = FALSE, allpairs = allPairs)
+      dist1 <- pointDistance(p1 = agents1, p2 = to1, lonlat = FALSE, allpairs = allPairs)
+      dist2 <- pointDistance(p1 = agents1, p2 = to2, lonlat = FALSE, allpairs = allPairs)
+      dist3 <- pointDistance(p1 = agents1, p2 = to3, lonlat = FALSE, allpairs = allPairs)
+      dist4 <- pointDistance(p1 = agents1, p2 = to4, lonlat = FALSE, allpairs = allPairs)
+      dist5 <- pointDistance(p1 = agents1, p2 = to5, lonlat = FALSE, allpairs = allPairs)
+      dist6 <- pointDistance(p1 = agents1, p2 = to6, lonlat = FALSE, allpairs = allPairs)
+      dist7 <- pointDistance(p1 = agents1, p2 = to7, lonlat = FALSE, allpairs = allPairs)
+      dist8 <- pointDistance(p1 = agents1, p2 = to8, lonlat = FALSE, allpairs = allPairs)
 
       dist <- pmin(dist, dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8)
     }
@@ -216,9 +216,9 @@ setMethod(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", from = "matrix", to = "SpatialPointsDataFrame"),
-  definition = function(world, from, to, torus, allPairs) {
-    NLdist(world = world, from = from, to = to@coords, torus = torus, allPairs = allPairs)
+  signature = c(world = "NLworlds", agents1 = "matrix", agents2 = "SpatialPointsDataFrame"),
+  definition = function(world, agents1, agents2, torus, allPairs) {
+    NLdist(world = world, agents1 = agents1, agents2 = agents2@coords, torus = torus, allPairs = allPairs)
   }
 )
 
@@ -226,9 +226,9 @@ setMethod(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "matrix"),
-  definition = function(world, from, to, torus, allPairs) {
-    NLdist(world = world, from = from@coords, to = to, torus = torus, allPairs = allPairs)
+  signature = c(world = "NLworlds", agents1 = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(world, agents1, agents2, torus, allPairs) {
+    NLdist(world = world, agents1 = agents1@coords, agents2 = agents2, torus = torus, allPairs = allPairs)
   }
 )
 
@@ -236,9 +236,9 @@ setMethod(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", from = "SpatialPointsDataFrame", to = "SpatialPointsDataFrame"),
-  definition = function(world, from, to, torus, allPairs) {
-    NLdist(world = world, from = from@coords, to = to@coords, torus = torus, allPairs = allPairs)
+  signature = c(world = "NLworlds", agents1 = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(world, agents1, agents2, torus, allPairs) {
+    NLdist(world = world, agents1 = agents1@coords, agents2 = agents2@coords, torus = torus, allPairs = allPairs)
   }
 )
 

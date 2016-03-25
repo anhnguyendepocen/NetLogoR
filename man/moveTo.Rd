@@ -7,17 +7,18 @@
 \alias{moveTo,SpatialPointsDataFrame,matrix-method}
 \title{Move to}
 \usage{
-moveTo(turtles, to)
+moveTo(turtles, agents)
 
-\S4method{moveTo}{SpatialPointsDataFrame,matrix}(turtles, to)
+\S4method{moveTo}{SpatialPointsDataFrame,matrix}(turtles, agents)
 
-\S4method{moveTo}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles, to)
+\S4method{moveTo}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles,
+  agents)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
-\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
                second column \code{pycor} representing the coordinates of the
                patches where the \code{turtles} move to.
 
@@ -31,10 +32,10 @@ SpatialPointsDataFrame representing the moving turtles with updated
         and "prevY".
 }
 \description{
-Move the turtles to the same location as the agents \code{to}.
+Move the turtles to the \code{agents} locations.
 }
 \details{
-The number of agents \code{to} (if matrix) must be equal to 1 or of
+The number of \code{agents} must be equal to 1 or of
          length \code{turtles}.
 
          The turtle's headings are not affected with this function.
@@ -52,9 +53,9 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1")
 
-t1 <- moveTo(turtles = t1, to = turtle(t1, who = 0))
+t1 <- moveTo(turtles = t1, agents = turtle(t1, who = 0))
 Plot(t1, addTo ="w1")
-t1 <- moveTo(turtles = t1, to = patch(w1, 9, 9))
+t1 <- moveTo(turtles = t1, agents = patch(w1, 9, 9))
 Plot(t1, addTo ="w1")
 
 

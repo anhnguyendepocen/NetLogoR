@@ -9,71 +9,71 @@
 \alias{towards,NLworlds,matrix,matrix-method}
 \title{Direction towards}
 \usage{
-towards(world, from, to, torus = FALSE)
+towards(world, agents1, agents2, torus = FALSE)
 
-\S4method{towards}{NLworlds,matrix,matrix}(world, from, to, torus = FALSE)
-
-\S4method{towards}{NLworlds,SpatialPointsDataFrame,matrix}(world, from, to,
+\S4method{towards}{NLworlds,matrix,matrix}(world, agents1, agents2,
   torus = FALSE)
 
-\S4method{towards}{NLworlds,matrix,SpatialPointsDataFrame}(world, from, to,
-  torus = FALSE)
+\S4method{towards}{NLworlds,SpatialPointsDataFrame,matrix}(world, agents1,
+  agents2, torus = FALSE)
+
+\S4method{towards}{NLworlds,matrix,SpatialPointsDataFrame}(world, agents1,
+  agents2, torus = FALSE)
 
 
   \S4method{towards}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
-  from, to, torus = FALSE)
+  agents1, agents2, torus = FALSE)
 }
 \arguments{
 \item{world}{\code{NLworlds} object.}
 
-\item{from}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{agents1}{Matrix (ncol = 2) with the first column \code{pxcor} and the
              second column \code{pycor} representing the coordinates of the
-             patches from which the headings are computed.
+             patches from which the directions are computed.
 
              SpatialPointsDataFrame created by \code{createTurtles()} or by
              \code{createOTurtles()} representing the turtles from which the
-             headings are computed.}
+             directions are computed.}
 
-\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{agents2}{Matrix (ncol = 2) with the first column \code{pxcor} and the
              second column \code{pycor} representing the coordinates of the
-             patches towards which the heading are computed.
+             patches towards which the directions are computed.
 
              SpatialPointsDataFrame created by \code{createTurtles()} or by
              \code{createOTurtles()} representing the turtles towards which the
-             headings are be computed.
+             directions are be computed.
 
              Matrix (ncol = 2) with the first column \code{x} and the second
              column \code{y} representing the coordinates of the locations
-             towards which the headings are computed.}
+             towards which the directions are computed.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 }
 \value{
 Numeric. Vector of angles in degrees of length equal to the largest
-        number of agents/locations between the ones contained in\code{from} or
-        in \code{to}.
+        number of agents/locations between \code{agents1} and \code{agents2}.
 }
 \description{
-Report the headings of agents \code{from} towards agents or locations \code{to}.
+Report the directions of \code{agents1} towards agents or locations \code{agents2}.
 }
 \details{
-\code{from} and \code{to} must be of the same length or if different, one
+\code{agents1} and \code{agents2} must be of the same length or if different, one
          of the two has be of length 1.
 
-         If \code{torus = TRUE} and the distance from one agent \code{from} to
-         its corresponding agent/location \code{to} is smaller around the
-         sides of the world than across it, then the heading to the agent/location
+         If \code{torus = TRUE} and the distance from one \code{agents1} to
+         its corresponding agent/location \code{agents2} is smaller around the
+         sides of the world than across it, then the direction to the agent/location
          going around the sides of the world is reported.
 
-         The heading from a patch to its location returns 0, the heading from
+         The direction from a patch to its location returns 0, the direction from
          a turtle to its location returns the turtle's heading.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-towards(world = w1, from = patches(w1), to = cbind(x = 0, y = 0))
+towards(world = w1, agents1 = patches(w1), agents2 = cbind(x = 0, y = 0))
 t1 <- createTurtles(n = 10, world = w1)
-towards(world = w1, from = t1, to = cbind(x = 0, y = 0))
+towards(world = w1, agents1 = t1, agents2 = cbind(x = 0, y = 0))
 
 
 }

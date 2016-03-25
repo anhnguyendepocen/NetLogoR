@@ -9,25 +9,25 @@
 \alias{NLdist,NLworlds,matrix,matrix-method}
 \title{Distances between agents}
 \usage{
-NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
+NLdist(world, agents1, agents2, torus = FALSE, allPairs = FALSE)
 
-\S4method{NLdist}{NLworlds,matrix,matrix}(world, from, to, torus = FALSE,
-  allPairs = FALSE)
-
-\S4method{NLdist}{NLworlds,matrix,SpatialPointsDataFrame}(world, from, to,
+\S4method{NLdist}{NLworlds,matrix,matrix}(world, agents1, agents2,
   torus = FALSE, allPairs = FALSE)
 
-\S4method{NLdist}{NLworlds,SpatialPointsDataFrame,matrix}(world, from, to,
-  torus = FALSE, allPairs = FALSE)
+\S4method{NLdist}{NLworlds,matrix,SpatialPointsDataFrame}(world, agents1,
+  agents2, torus = FALSE, allPairs = FALSE)
+
+\S4method{NLdist}{NLworlds,SpatialPointsDataFrame,matrix}(world, agents1,
+  agents2, torus = FALSE, allPairs = FALSE)
 
 
   \S4method{NLdist}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
-  from, to, torus = FALSE, allPairs = FALSE)
+  agents1, agents2, torus = FALSE, allPairs = FALSE)
 }
 \arguments{
 \item{world}{\code{NLworlds} object.}
 
-\item{from}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{agents1}{Matrix (ncol = 2) with the first column \code{pxcor} and the
                 second column \code{pycor} representing the coordinates of the
                 patches from which the distances will be computed.
 
@@ -35,7 +35,7 @@ NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
                 by \code{createOTurtles()} representing the turtles from which
                 the distances will be computed.}
 
-\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{agents2}{Matrix (ncol = 2) with the first column \code{pxcor} and the
                 second column \code{pycor} representing the coordinates of the
                 patches to which the distances will be computed.
 
@@ -51,22 +51,22 @@ NLdist(world, from, to, torus = FALSE, allPairs = FALSE)
 Default is \code{torus = FALSE}.}
 
 \item{allPairs}{Logical. Only relevant if the number of agents/locations in
-\code{from} and \code{to} is the same. If \code{FALSE}, the
-distance between each agent/location in \code{from} with the
-corresponding \code{to} is returned. If \code{TRUE}, a full
+\code{agents1} and \code{agents2} is the same. If \code{FALSE}, the
+distance between each agent/location in \code{agents1} with the
+corresponding \code{agents2} is returned. If \code{TRUE}, a full
 distance matrix is returned. Default is \code{allPairs = FALSE}.}
 }
 \value{
-Numeric. Vector of distances if \code{from} and/or \code{to} contained
-        one agent/location, or if \code{from} and \code{to} contained the same
+Numeric. Vector of distances if \code{agents1} and/or \code{agents2} contained
+        one agent/location, or if \code{agents1} and \code{agents2} contained the same
         number of agents/locations and \code{allPairs = FALSE}.
 
-        Matrix of distances between \code{from} (rows) and \code{to} (columns)
-        if \code{from} and \code{to} are of different length, or of same length
+        Matrix of distances between \code{agents1} (rows) and \code{agents2} (columns)
+        if \code{agents1} and \code{agents2} are of different length, or of same length
         and \code{allPairs = TRUE}.
 }
 \description{
-Report the distances betwenn agents \code{from} and agents or locations \code{to}.
+Report the distances between \code{agents1} and \code{agents2}.
 }
 \details{
 Distances from/to a patch are measured from/to its center.
@@ -75,14 +75,14 @@ Distances from/to a patch are measured from/to its center.
          reported only if smaller than the one across the world (i.e., as calculated
          with \code{torus = FALSE}).
 
-         Coordinates of given \code{from} and \code{to} must be inside the world's extent.
+         Coordinates of given \code{agents1} and \code{agents2} must be inside the world's extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)))
-NLdist(world = w1, from = patch(w1, 0, 0), to = patch(w1, c(1, 9), c(1, 9)), torus = TRUE)
+NLdist(world = w1, agents1 = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
+NLdist(world = w1, agents1 = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)), torus = TRUE)
 t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
-NLdist(world = w1, from = t1, to = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
+NLdist(world = w1, agents1 = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 
 
 }

@@ -5,15 +5,15 @@
 \alias{face}
 \alias{face,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
 \alias{face,NLworlds,SpatialPointsDataFrame,matrix-method}
-\title{Face directions}
+\title{Face something}
 \usage{
-face(world, turtles, to, torus = FALSE)
+face(world, turtles, agents, torus = FALSE)
 
-\S4method{face}{NLworlds,SpatialPointsDataFrame,matrix}(world, turtles, to,
+\S4method{face}{NLworlds,SpatialPointsDataFrame,matrix}(world, turtles, agents,
   torus = FALSE)
 
 \S4method{face}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
-  turtles, to, torus = FALSE)
+  turtles, agents, torus = FALSE)
 }
 \arguments{
 \item{world}{\code{NLworlds} object.}
@@ -22,9 +22,9 @@ face(world, turtles, to, torus = FALSE)
 by \code{createOTurtles()} representing the turtles to modify
 their heading.}
 
-\item{to}{Matrix (ncol = 2) with the first column \code{pxcor} and the
+\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
                second column \code{pycor} representing the coordinates of the
-               patches towards which the turtles' heading is set
+               patches towards which the turtles' heading is set.
 
                SpatialPointsDataFrame created by \code{createTurtles()} or by
                \code{createOTurtles()} representing the turtles towards which
@@ -32,7 +32,7 @@ their heading.}
 
                Matrix (ncol = 2) with the first column \code{x} and the second
                column \code{y} representing the coordinates of the locations
-               towards which the heading is set.}
+               towards which the turtles' heading is set.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
@@ -41,13 +41,13 @@ Default is \code{torus = FALSE}.}
 SpatialPointsDataFrame representing the \code{turtles} with updated headings.
 }
 \description{
-Set the turtles' heading towards some agents or locations.
+Set the turtles' heading towards \code{agents}.
 }
 \details{
-\code{to} must be of length 1 or of length \code{turtles}.
+\code{agents} must be of length 1 or of length \code{turtles}.
 
          If \code{torus = TRUE} and the distance from one turtle to
-         its corresponding agent/location \code{to} is smaller around the
+         its corresponding agent/location \code{agents} is smaller around the
          sides of the world than across it, then the heading to the agent/location
          going around the sides of the world is given to the turtle.
 
@@ -66,7 +66,7 @@ clearplot()
 Plot(w1)
 Plot(t1, addTo = "w1")
 
-t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
+t1 <- face(world = w1, turtles = t1, agents = cbind(x = 0, y = 0))
 t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 Plot(t1, addTo = "w1")
 
