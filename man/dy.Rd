@@ -7,9 +7,9 @@
 \alias{dy,SpatialPointsDataFrame,numeric-method}
 \title{y-increment}
 \usage{
-dy(turtles, step = 1)
+dy(turtles, dist = 1)
 
-\S4method{dy}{SpatialPointsDataFrame,numeric}(turtles, step = 1)
+\S4method{dy}{SpatialPointsDataFrame,numeric}(turtles, dist = 1)
 
 \S4method{dy}{SpatialPointsDataFrame,missing}(turtles)
 }
@@ -17,19 +17,19 @@ dy(turtles, step = 1)
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
-\item{step}{Numeric. The distances the turtles would have to move forward to
+\item{dist}{Numeric. The distances the turtles would have to move forward to
 compute the y-increment value. Must be of length 1 or length
-\code{turtles}. The default value is \code{step = 1}.}
+\code{turtles}. The default value is \code{dist = 1}.}
 }
 \value{
 Numeric. Vector of length \code{turtles}.
 }
 \description{
 Reports the amount by which the turtles' ycor would change if the turtles were
-to move forward of \code{step} distance(s) with their current heading.
+to move forward of \code{dist} distances with their current heading.
 }
 \details{
-Report the cosine of the turtles' heading multiplied by the \code{step}
+Report the cosine of the turtles' heading multiplied by the \code{dist}
          values. Heading 0 is north and angles are calculated in degrees in a
          clockwise manner.
 }

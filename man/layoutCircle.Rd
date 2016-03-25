@@ -28,7 +28,7 @@ SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
         and updated data for their previous coordinates "prevX" and "prevY".
 }
 \description{
-Arrange the turtles in a circle centered on the world with the given radius.
+Relocate the turtles on a circle centered on the world.
 }
 \details{
 The turtles point outwards.

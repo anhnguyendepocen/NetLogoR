@@ -48,7 +48,7 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 
-t1 <- fd(world = w1, turtles = t1, step = 1)
+t1 <- fd(world = w1, turtles = t1, dist = 1)
 Plot(t1, addTo ="w1")
 
 

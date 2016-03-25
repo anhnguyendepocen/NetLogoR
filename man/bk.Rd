@@ -6,9 +6,9 @@
 \alias{bk,NLworlds,SpatialPointsDataFrame,numeric-method}
 \title{Move backward}
 \usage{
-bk(world, turtles, step, torus = FALSE, out = TRUE)
+bk(world, turtles, dist, torus = FALSE, out = TRUE)
 
-\S4method{bk}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles, step,
+\S4method{bk}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles, dist,
   torus = FALSE, out = TRUE)
 }
 \arguments{
@@ -18,7 +18,7 @@ turtles move onto.}
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
-\item{step}{Numeric. Distances by which the turtles will move backward.
+\item{dist}{Numeric. Distances by which the turtles will move backward.
 Must be of length 1 or of length \code{turtles}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
@@ -46,11 +46,11 @@ If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
          its previous coordinates are still updated with its position before
          running \code{bk()} (i.e., its current position).
 
-         If a given \code{step} value is negative, then the turtle moves
+         If a given \code{dist} value is negative, then the turtle moves
          forward.
 
          This function is equivalent to the forward function with the distances
-         to move equal to \code{step * -1}.
+         to move equal to \code{dist * -1}.
 
          The turtles' heading are not affected by the function (i.e., the turtles
          do not head backward).
@@ -65,11 +65,11 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1")
 
-t1 <- fd(world = w1, turtles = t1, step = 2)
+t1 <- fd(world = w1, turtles = t1, dist = 2)
 Plot(t1, addTo ="w1")
-t1 <- bk(world = w1, turtles = t1, step = 1)
+t1 <- bk(world = w1, turtles = t1, dist = 1)
 Plot(t1, addTo ="w1")
-t1 <- fd(world = w1, turtles = t1, step = 0.5)
+t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 Plot(t1, addTo ="w1")
 
 

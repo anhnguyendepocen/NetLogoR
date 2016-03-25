@@ -4,12 +4,12 @@
 \name{canMove}
 \alias{canMove}
 \alias{canMove,NLworlds,SpatialPointsDataFrame,numeric-method}
-\title{Can the turtle move?}
+\title{Can the turtles move?}
 \usage{
-canMove(world, turtles, step)
+canMove(world, turtles, dist)
 
 \S4method{canMove}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles,
-  step)
+  dist)
 }
 \arguments{
 \item{world}{\code{NLworlds} object, representing the world which the
@@ -19,20 +19,20 @@ turtles move onto.}
 by \code{createOTurtles()} representing the turtles to
 evaluate.}
 
-\item{step}{Numeric. The distances the turtles would move. Must be of
+\item{dist}{Numeric. The distances the turtles would move. Must be of
 length 1 or of length \code{turtles}.}
 }
 \value{
 Logicals. Vector of length \code{turtles}.
 }
 \description{
-Report \code{TRUE} or \code{FALSE} if the turtles can move the given distances
-without leaving the world's extent.
+Report \code{TRUE} if the turtles can move the given distances without leaving
+the world's extent, report \code{FALSE} otherwise.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, world = w1)
-canMove(world = w1, turtles = t1, step = 1:10)
+canMove(world = w1, turtles = t1, dist = 1:10)
 
 
 }

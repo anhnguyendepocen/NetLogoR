@@ -6,9 +6,9 @@
 \alias{fd,NLworlds,SpatialPointsDataFrame,numeric-method}
 \title{Move forward}
 \usage{
-fd(world, turtles, step, torus = FALSE, out = TRUE)
+fd(world, turtles, dist, torus = FALSE, out = TRUE)
 
-\S4method{fd}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles, step,
+\S4method{fd}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles, dist,
   torus = FALSE, out = TRUE)
 }
 \arguments{
@@ -18,7 +18,7 @@ turtles move onto.}
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving turtles.}
 
-\item{step}{Numeric. Distances by which the turtles will move forward. Must
+\item{dist}{Numeric. Distances by which the turtles will move forward. Must
 be of length 1 or of length \code{turtles}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
@@ -46,7 +46,7 @@ If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
          its previous coordinates are still updated with its position before
          running \code{fd()} (i.e., its current position).
 
-         If a given \code{step} value is negative, then the turtle moves
+         If a given \code{dist} value is negative, then the turtle moves
          backward.
 }
 \examples{
@@ -59,7 +59,7 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1")
 
-t1 <- fd(world = w1, turtles = t1, step = 1)
+t1 <- fd(world = w1, turtles = t1, dist = 1)
 Plot(t1, addTo ="w1")
 
 

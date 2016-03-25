@@ -182,7 +182,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 #'
-#' t1 <- fd(world = w1, turtles = t1, step = 1)
+#' t1 <- fd(world = w1, turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -240,7 +240,7 @@ setMethod(
 #' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. Distances by which the turtles will move forward. Must
+#' @param dist    Numeric. Distances by which the turtles will move forward. Must
 #'                be of length 1 or of length \code{turtles}.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
@@ -263,7 +263,7 @@ setMethod(
 #'          its previous coordinates are still updated with its position before
 #'          running \code{fd()} (i.e., its current position).
 #'
-#'          If a given \code{step} value is negative, then the turtle moves
+#'          If a given \code{dist} value is negative, then the turtle moves
 #'          backward.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#forward}
@@ -284,7 +284,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- fd(world = w1, turtles = t1, step = 1)
+#' t1 <- fd(world = w1, turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -298,7 +298,7 @@ setMethod(
 #'
 setGeneric(
   "fd",
-  function(world, turtles, step, torus = FALSE, out = TRUE) {
+  function(world, turtles, dist, torus = FALSE, out = TRUE) {
     standardGeneric("fd")
   })
 
@@ -306,14 +306,14 @@ setGeneric(
 #' @rdname fd
 setMethod(
   "fd",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", step = "numeric"),
-  definition = function(world, turtles, step, torus, out) {
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
+  definition = function(world, turtles, dist, torus, out) {
 
     turtles@data$prevX <- turtles@coords[,1]
     turtles@data$prevY <- turtles@coords[,2]
 
-    fdXcor <- round(turtles@coords[,1] + sin(rad(turtles@data$heading)) * step, digits = 5)
-    fdYcor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * step, digits = 5)
+    fdXcor <- round(turtles@coords[,1] + sin(rad(turtles@data$heading)) * dist, digits = 5)
+    fdYcor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * dist, digits = 5)
 
     if(torus == TRUE){
       tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
@@ -346,7 +346,7 @@ setMethod(
 #' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. Distances by which the turtles will move backward.
+#' @param dist    Numeric. Distances by which the turtles will move backward.
 #'                Must be of length 1 or of length \code{turtles}.
 #'
 #' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
@@ -369,11 +369,11 @@ setMethod(
 #'          its previous coordinates are still updated with its position before
 #'          running \code{bk()} (i.e., its current position).
 #'
-#'          If a given \code{step} value is negative, then the turtle moves
+#'          If a given \code{dist} value is negative, then the turtle moves
 #'          forward.
 #'
 #'          This function is equivalent to the forward function with the distances
-#'          to move equal to \code{step * -1}.
+#'          to move equal to \code{dist * -1}.
 #'
 #'          The turtles' heading are not affected by the function (i.e., the turtles
 #'          do not head backward).
@@ -396,11 +396,11 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- fd(world = w1, turtles = t1, step = 2)
+#' t1 <- fd(world = w1, turtles = t1, dist = 2)
 #' Plot(t1, addTo ="w1")
-#' t1 <- bk(world = w1, turtles = t1, step = 1)
+#' t1 <- bk(world = w1, turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
-#' t1 <- fd(world = w1, turtles = t1, step = 0.5)
+#' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -412,7 +412,7 @@ setMethod(
 #'
 setGeneric(
   "bk",
-  function(world, turtles, step, torus = FALSE, out = TRUE) {
+  function(world, turtles, dist, torus = FALSE, out = TRUE) {
     standardGeneric("bk")
   })
 
@@ -420,10 +420,10 @@ setGeneric(
 #' @rdname bk
 setMethod(
   "bk",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", step = "numeric"),
-  definition = function(world, turtles, step, torus, out) {
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
+  definition = function(world, turtles, dist, torus, out) {
 
-    fd(world = world, turtles = turtles, step = -step, torus = torus, out = out)
+    fd(world = world, turtles = turtles, dist = -dist, torus = torus, out = out)
 
   }
 )
@@ -529,18 +529,18 @@ setMethod(
 #' x-increment
 #'
 #' Report the amount by which the turtles' xcor would change if the turtles were
-#' to move forward of \code{step} distances with their current heading.
+#' to move forward of \code{dist} distances with their current heading.
 #'
 #' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. The distances the turtles would have to move forward to
+#' @param dist    Numeric. The distances the turtles would have to move forward to
 #'                compute the x-increment value. Must be of length 1 or length
-#'                \code{turtles}. The default value is \code{step = 1}.
+#'                \code{turtles}. The default value is \code{dist = 1}.
 #'
 #' @return Numeric. Vector of length \code{turtles}.
 #'
-#' @details Report the sine of the turtles' heading multiplied by the \code{step}
+#' @details Report the sine of the turtles' heading multiplied by the \code{dist}
 #'          values. Heading 0 is north and angles are calculated in degrees in a
 #'          clockwise manner.
 #'
@@ -565,7 +565,7 @@ setMethod(
 #'
 setGeneric(
   "dx",
-  function(turtles, step = 1) {
+  function(turtles, dist = 1) {
     standardGeneric("dx")
   })
 
@@ -574,8 +574,8 @@ setGeneric(
 setMethod(
   "dx",
   signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, step) {
-    xIncr <- round(sin(rad(turtles@data$heading)) * step, digits = 5)
+  definition = function(turtles, dist) {
+    xIncr <- round(sin(rad(turtles@data$heading)) * dist, digits = 5)
     return(xIncr)
   }
 )
@@ -586,7 +586,7 @@ setMethod(
   "dx",
   signature = c("SpatialPointsDataFrame", "missing"),
   definition = function(turtles) {
-    dx(turtles = turtles, step = 1)
+    dx(turtles = turtles, dist = 1)
   }
 )
 
@@ -595,18 +595,18 @@ setMethod(
 #' y-increment
 #'
 #' Reports the amount by which the turtles' ycor would change if the turtles were
-#' to move forward of \code{step} distance(s) with their current heading.
+#' to move forward of \code{dist} distances with their current heading.
 #'
 #' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
 #'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param step    Numeric. The distances the turtles would have to move forward to
+#' @param dist    Numeric. The distances the turtles would have to move forward to
 #'                compute the y-increment value. Must be of length 1 or length
-#'                \code{turtles}. The default value is \code{step = 1}.
+#'                \code{turtles}. The default value is \code{dist = 1}.
 #'
 #' @return Numeric. Vector of length \code{turtles}.
 #'
-#' @details Report the cosine of the turtles' heading multiplied by the \code{step}
+#' @details Report the cosine of the turtles' heading multiplied by the \code{dist}
 #'          values. Heading 0 is north and angles are calculated in degrees in a
 #'          clockwise manner.
 #'
@@ -631,7 +631,7 @@ setMethod(
 #'
 setGeneric(
   "dy",
-  function(turtles, step = 1) {
+  function(turtles, dist = 1) {
     standardGeneric("dy")
   })
 
@@ -640,8 +640,8 @@ setGeneric(
 setMethod(
   "dy",
   signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, step) {
-    yIncr <- round(cos(rad(turtles@data$heading)) * step, digits = 5)
+  definition = function(turtles, dist) {
+    yIncr <- round(cos(rad(turtles@data$heading)) * dist, digits = 5)
     return(yIncr)
   }
 )
@@ -652,7 +652,7 @@ setMethod(
   "dy",
   signature = c("SpatialPointsDataFrame", "missing"),
   definition = function(turtles) {
-    dy(turtles = turtles, step = 1)
+    dy(turtles = turtles, dist = 1)
   }
 )
 
@@ -798,10 +798,10 @@ setMethod(
 
 
 ################################################################################
-#' Can the turtle move?
+#' Can the turtles move?
 #'
-#' Report \code{TRUE} or \code{FALSE} if the turtles can move the given distances
-#' without leaving the world's extent.
+#' Report \code{TRUE} if the turtles can move the given distances without leaving
+#' the world's extent, report \code{FALSE} otherwise.
 #'
 #' @param world   \code{NLworlds} object, representing the world which the
 #'                turtles move onto.
@@ -810,7 +810,7 @@ setMethod(
 #'                by \code{createOTurtles()} representing the turtles to
 #'                evaluate.
 #'
-#' @param step    Numeric. The distances the turtles would move. Must be of
+#' @param dist    Numeric. The distances the turtles would move. Must be of
 #'                length 1 or of length \code{turtles}.
 #'
 #' @return Logicals. Vector of length \code{turtles}.
@@ -824,7 +824,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
-#' canMove(world = w1, turtles = t1, step = 1:10)
+#' canMove(world = w1, turtles = t1, dist = 1:10)
 #'
 #'
 #' @export
@@ -835,7 +835,7 @@ setMethod(
 #'
 setGeneric(
   "canMove",
-  function(world, turtles, step) {
+  function(world, turtles, dist) {
     standardGeneric("canMove")
   })
 
@@ -844,9 +844,9 @@ setGeneric(
 setMethod(
   "canMove",
   signature = c("NLworlds", "SpatialPointsDataFrame", "numeric"),
-  definition = function(world, turtles, step) {
-    wrapFalse <- fd(world = world, turtles = turtles, step = step, torus = FALSE)
-    wrapTrue <- fd(world = world, turtles = turtles, step = step, torus = TRUE)
+  definition = function(world, turtles, dist) {
+    wrapFalse <- fd(world = world, turtles = turtles, dist = dist, torus = FALSE)
+    wrapTrue <- fd(world = world, turtles = turtles, dist = dist, torus = TRUE)
     test <- wrapFalse@coords == wrapTrue@coords
     return(test[,1] & test[,2])
   }
@@ -1188,7 +1188,7 @@ setMethod(
 #' Plot(t1, addTo = "w1")
 #'
 #' t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
-#' t1 <- fd(world = w1, turtles = t1, step = 0.5)
+#' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 #' Plot(t1, addTo = "w1")
 #'
 #'
@@ -1758,7 +1758,7 @@ setMethod(
   definition = function(world, turtles, dist, nDegrees, torus) {
 
     tLeft <- left(turtles = turtles, nDegrees = nDegrees)
-    tFd <- fd(world = world, turtles = tLeft, step = dist, torus = torus)
+    tFd <- fd(world = world, turtles = tLeft, dist = dist, torus = torus)
     pLeftFd <- patchHere(world = world, turtles = tFd)
 
     return(pLeftFd)
@@ -2992,7 +2992,7 @@ setMethod(
 ################################################################################
 #' Layout turtles on a circle
 #'
-#' Arrange the turtles in a circle centered on the world with the given radius.
+#' Relocate the turtles on a circle centered on the world.
 #'
 #' @param world   \code{NLworlds} object, representing the world which the
 #'                turtles move onto.
@@ -3057,7 +3057,7 @@ setMethod(
     tSurrogates <- createOTurtles(n = length(turtles), world = world)
     turtles@coords <- tSurrogates@coords
     turtles@data$heading <- tSurrogates@data$heading
-    fd(world = world, turtles = turtles, step = radius, torus = torus, out = TRUE)
+    fd(world = world, turtles = turtles, dist = radius, torus = torus, out = TRUE)
   }
 )
 

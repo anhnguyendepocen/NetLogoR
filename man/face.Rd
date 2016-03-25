@@ -67,7 +67,7 @@ Plot(w1)
 Plot(t1, addTo = "w1")
 
 t1 <- face(world = w1, turtles = t1, to = cbind(x = 0, y = 0))
-t1 <- fd(world = w1, turtles = t1, step = 0.5)
+t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 Plot(t1, addTo = "w1")
 
 
