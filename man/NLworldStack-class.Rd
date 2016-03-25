@@ -8,7 +8,7 @@
 \alias{[<-}
 \title{The \code{NLworldStack} class}
 \usage{
-\S4method{[}{NLworldStack,numeric,numeric}(x, i, j, drop)
+\S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, drop)
 
 \S4method{[}{NLworldStack,numeric,numeric,matrix}(x, i, j) <- value
 

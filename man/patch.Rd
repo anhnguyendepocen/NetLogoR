@@ -6,54 +6,54 @@
 \alias{patch,NLworlds,numeric,numeric-method}
 \title{Patch}
 \usage{
-patch(world, xcor, ycor, duplicate = FALSE, torus = FALSE, out = FALSE)
+patch(world, x, y, duplicate = FALSE, torus = FALSE, out = FALSE)
 
-\S4method{patch}{NLworlds,numeric,numeric}(world, xcor, ycor,
-  duplicate = FALSE, torus = FALSE, out = FALSE)
+\S4method{patch}{NLworlds,numeric,numeric}(world, x, y, duplicate = FALSE,
+  torus = FALSE, out = FALSE)
 }
 \arguments{
 \item{world}{\code{NLworlds} object.}
 
-\item{xcor}{Numeric. Vector of \code{xcor} coordinates. Must be of same
-length as \code{ycor}.}
+\item{x}{Numeric. Vector of \code{x} coordinates. Must be of same
+length as \code{y}.}
 
-\item{ycor}{Numeric. Vector of \code{ycor} coordinates. Must be of same
-length as \code{ycor}.}
+\item{y}{Numeric. Vector of \code{y} coordinates. Must be of same
+length as \code{x}.}
 
-\item{duplicate}{Logical. If more than one set of coordinates \code{xcor, ycor}
+\item{duplicate}{Logical. If more than one location \code{[x, y]}
 fall into the same patch and \code{duplicate == TRUE}, the
-patch coordinates are returned the number of times the set of
-coordinates. If \code{duplicate == FALSE}, the patch coordinates
+patch coordinates are returned the number of times the locations.
+If \code{duplicate == FALSE}, the patch coordinates
 are only returned once.
 Default is \code{duplicate == FALSE}.}
 
 \item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
 Default is \code{torus = FALSE}.}
 
-\item{out}{Logical to determine if coordinates for patches outside of the
+\item{out}{Logical to determine if the coordinates for the patches outside of the
 world should be returned. Default is \code{out = FALSE}.}
 }
 \value{
 Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates at \code{xcor, ycor}.
+        \code{pycor} representing the patches coordinates at \code{[x, y]}.
 }
 \description{
-Report the patches coordinates \code{pxcor} and \code{pycor} at the given
-\code{xcor} and \code{ycor} coordinates.
+Report the patches coordinates \code{[pxcor, pycor]} at the given
+\code{[x, y]} locations.
 }
 \details{
-If \code{xcor} or \code{ycor} are outside the world's extent,
-         \code{torus = FALSE} and \code{out = FALSE}, no patch coordinates are returned,
-         if \code{out = TRUE} \code{NA} is returned for both patch coordinates.
-         If \code{torus = TRUE}, the patch coordinates from the wrapped world are
+If a location \code{[x, y]} is outside of the world's extent and
+         \code{torus = FALSE} and \code{out = FALSE}, no patch coordinates are returned;
+         if \code{torus = FALSE} and \code{out = TRUE}, \code{NA} are returned;
+         if \code{torus = TRUE}, the patch coordinates from a wrapped world are
          returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4))
-patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
-patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
-patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
+patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4))
+patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
+patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
+patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
 
 
 }

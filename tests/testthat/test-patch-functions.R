@@ -144,22 +144,22 @@ test_that("distance works with turtles", {
   expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
 })
 
-test_that("pExists works", {
+test_that("pExist works", {
   w1 <- createNLworld(0, 2, 0, 2)
-  expect_false(pExists(w1, 1, 3))
-  expect_true(pExists(w1, 1, 1))
+  expect_false(pExist(w1, 1, 3))
+  expect_true(pExist(w1, 1, 1))
 
   w1[] <- c(1,3,6,2,8,10,3,8,2)
-  expect_identical(pExists(w1, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+  expect_identical(pExist(w1, c(0, 1), c(3, 1)), c(FALSE, TRUE))
 
   w2 <- createNLworld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- NLstack(w1, w2)
 
   # Same as for w1
-  expect_false(pExists(ws, 1, 3))
-  expect_true(pExists(ws, 1, 1))
-  expect_identical(pExists(ws, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+  expect_false(pExist(ws, 1, 3))
+  expect_true(pExist(ws, 1, 1))
+  expect_identical(pExist(ws, c(0, 1), c(3, 1)), c(FALSE, TRUE))
 })
 
 test_that("neighbors works with patches", {
@@ -233,26 +233,26 @@ test_that("neighbors works with turtles", {
 test_that("patch works", {
   w1 <- createNLworld(0, 9, 0, 9)
   w1[] <- 1:100
-  expect_identical(patch(world = w1, xcor = 0.1, ycor = -0.4), cbind(pxcor = 0, pycor = 0))
-  expect_identical(patch(world = w1, xcor = c(1, 0), ycor = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
-  expect_identical(patch(world = w1, xcor = c(0,-1), ycor = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
-  expect_identical(patch(world = w1, xcor = c(0,-1), ycor = c(0,0), out = TRUE), cbind(pxcor = c(0,NA), pycor = c(0,NA)))
-  expect_identical(patch(world = w1, xcor = c(0,-1), ycor = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
-  expect_identical(patch(world = w1, xcor = c(0,-1), ycor = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
-  expect_identical(patch(world = w1, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
-  expect_identical(patch(world = w1, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
+  expect_identical(patch(world = w1, x = 0.1, y = -0.4), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, x = c(1, 0), y = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), out = TRUE), cbind(pxcor = c(0,NA), pycor = c(0,NA)))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
 
   w2 <- w1
   w2[] <- 100:1
   ws <- NLstack(w1, w2)
-  expect_identical(patch(world = ws, xcor = 0.1, ycor = -0.4), cbind(pxcor = 0, pycor = 0))
-  expect_identical(patch(world = ws, xcor = c(1, 0), ycor = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
-  expect_identical(patch(world = ws, xcor = c(0,-1), ycor = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
-  expect_identical(patch(world = ws, xcor = c(0,-1), ycor = c(0,0), out = TRUE), cbind(pxcor = c(0,NA), pycor = c(0,NA)))
-  expect_identical(patch(world = ws, xcor = c(0,-1), ycor = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
-  expect_identical(patch(world = ws, xcor = c(0,-1), ycor = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
-  expect_identical(patch(world = ws, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
-  expect_identical(patch(world = ws, xcor = c(0, 0.1, 0.4), ycor = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
+  expect_identical(patch(world = ws, x = 0.1, y = -0.4), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, x = c(1, 0), y = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), out = TRUE), cbind(pxcor = c(0,NA), pycor = c(0,NA)))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = ws, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
 })
 
 test_that("noPatches works", {

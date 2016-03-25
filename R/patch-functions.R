@@ -266,25 +266,25 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' pExists(world = w1, pxcor = -1, pycor = 2)
+#' pExist(world = w1, pxcor = -1, pycor = 2)
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname pExists
+#' @rdname pExist
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "pExists",
+  "pExist",
   function(world, pxcor, pycor) {
-    standardGeneric("pExists")
+    standardGeneric("pExist")
   })
 
 #' @export
-#' @rdname pExists
+#' @rdname pExist
 setMethod(
-  "pExists",
+  "pExist",
   signature = c("NLworld", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
     pExist <- c()
@@ -301,13 +301,13 @@ setMethod(
 )
 
 #' @export
-#' @rdname pExists
+#' @rdname pExist
 setMethod(
-  "pExists",
+  "pExist",
   signature = c("NLworldStack", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
     world_l <- world[[1]]
-    pExists(world = world_l, pxcor = pxcor, pycor = pycor)
+    pExist(world = world_l, pxcor = pxcor, pycor = pycor)
   }
 )
 
@@ -395,7 +395,7 @@ setMethod(
   "neighbors",
   signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
-    pTurtles <- patch(world = world, xcor = agents@coords[,1], ycor = agents@coords[,2], duplicate = TRUE)
+    pTurtles <- patch(world = world, x = agents@coords[,1], y = agents@coords[,2], duplicate = TRUE)
     neighbors(world = world, agents = pTurtles, nNeighbors = nNeighbors, torus = torus)
   }
 )
@@ -404,37 +404,37 @@ setMethod(
 ################################################################################
 #' Patch
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} at the given
-#' \code{xcor} and \code{ycor} coordinates.
+#' Report the patches coordinates \code{[pxcor, pycor]} at the given
+#' \code{[x, y]} locations.
 #'
 #' @param world      \code{NLworlds} object.
 #'
-#' @param xcor       Numeric. Vector of \code{xcor} coordinates. Must be of same
-#'                   length as \code{ycor}.
+#' @param x          Numeric. Vector of \code{x} coordinates. Must be of same
+#'                   length as \code{y}.
 #'
-#' @param ycor       Numeric. Vector of \code{ycor} coordinates. Must be of same
-#'                   length as \code{ycor}.
+#' @param y          Numeric. Vector of \code{y} coordinates. Must be of same
+#'                   length as \code{x}.
 #'
-#' @param duplicate  Logical. If more than one set of coordinates \code{xcor, ycor}
+#' @param duplicate  Logical. If more than one location \code{[x, y]}
 #'                   fall into the same patch and \code{duplicate == TRUE}, the
-#'                   patch coordinates are returned the number of times the set of
-#'                   coordinates. If \code{duplicate == FALSE}, the patch coordinates
+#'                   patch coordinates are returned the number of times the locations.
+#'                   If \code{duplicate == FALSE}, the patch coordinates
 #'                   are only returned once.
 #'                   Default is \code{duplicate == FALSE}.
 #'
 #' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
 #'                   Default is \code{torus = FALSE}.
 #'
-#' @param out        Logical to determine if coordinates for patches outside of the
+#' @param out        Logical to determine if the coordinates for the patches outside of the
 #'                   world should be returned. Default is \code{out = FALSE}.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the patches coordinates at \code{xcor, ycor}.
+#'         \code{pycor} representing the patches coordinates at \code{[x, y]}.
 #'
-#' @details If \code{xcor} or \code{ycor} are outside the world's extent,
-#'          \code{torus = FALSE} and \code{out = FALSE}, no patch coordinates are returned,
-#'          if \code{out = TRUE} \code{NA} is returned for both patch coordinates.
-#'          If \code{torus = TRUE}, the patch coordinates from the wrapped world are
+#' @details If a location \code{[x, y]} is outside of the world's extent and
+#'          \code{torus = FALSE} and \code{out = FALSE}, no patch coordinates are returned;
+#'          if \code{torus = FALSE} and \code{out = TRUE}, \code{NA} are returned;
+#'          if \code{torus = TRUE}, the patch coordinates from a wrapped world are
 #'          returned.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch}
@@ -445,10 +445,10 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4))
-#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
-#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
-#' patch(world = w1, xcor = c(0, 9.1, 8.9, 5, 5.3), ycor = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
+#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4))
+#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
+#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
+#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
 #'
 #'
 #' @export
@@ -460,7 +460,7 @@ setMethod(
 #'
 setGeneric(
   "patch",
-  function(world, xcor, ycor, duplicate = FALSE, torus = FALSE, out = FALSE) {
+  function(world, x, y, duplicate = FALSE, torus = FALSE, out = FALSE) {
     standardGeneric("patch")
   })
 
@@ -468,11 +468,11 @@ setGeneric(
 #' @rdname patch
 setMethod(
   "patch",
-  signature = c(world = "NLworlds", xcor = "numeric", ycor = "numeric"),
-  definition = function(world, xcor, ycor, duplicate, torus, out) {
+  signature = c(world = "NLworlds", x = "numeric", y = "numeric"),
+  definition = function(world, x, y, duplicate, torus, out) {
 
-    pxcor_ <- round(xcor)
-    pycor_ <- round(ycor)
+    pxcor_ <- round(x)
+    pycor_ <- round(y)
 
     if(torus == TRUE){
       pCoords <- wrap(cbind(x = pxcor_, y = pycor_), extent(world))
@@ -616,7 +616,7 @@ setMethod(
 
     pxcor <- agents[,1] + dx
     pycor <- agents[,2] + dy
-    pAt <- patch(world = world, xcor = pxcor, ycor = pycor, duplicate = TRUE, torus = torus, out = TRUE)
+    pAt <- patch(world = world, x = pxcor, y = pycor, duplicate = TRUE, torus = torus, out = TRUE)
 
     return(pAt)
   }
@@ -710,7 +710,7 @@ setMethod(
 
     pxcor <- agents[,1] + sin(rad(head)) * dist
     pycor <- agents[,2] + cos(rad(head)) * dist
-    pDistHead <- patch(world = world, xcor = pxcor, ycor = pycor, torus = torus, duplicate = TRUE, out = TRUE)
+    pDistHead <- patch(world = world, x = pxcor, y = pycor, torus = torus, duplicate = TRUE, out = TRUE)
 
     return(pDistHead)
   }
@@ -811,7 +811,7 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' p1 <- patchAt(world = w1, agents = patch(w1, c(0,1,2), c(0,0,0)), dx = 1, dy = 1)
 #' p2 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, head = 45)
-#' p3 <- patch(world = w1, xcor = 4.3, ycor = 8)
+#' p3 <- patch(world = w1, x = 4.3, y = 8)
 #' p4 <- patchSet(p1, p2, p3)
 #'
 #'

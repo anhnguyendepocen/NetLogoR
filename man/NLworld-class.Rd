@@ -8,7 +8,7 @@
 \alias{[<-}
 \title{The \code{NLworld} class}
 \usage{
-\S4method{[}{NLworld,numeric,numeric}(x, i, j, drop)
+\S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, drop)
 
 \S4method{[}{NLworld,numeric,numeric,numeric}(x, i, j) <- value
 }

@@ -1433,7 +1433,7 @@ setMethod(
 
     pMinNeighbors <- list()
     for(i in 1:length(pNeighbors)){
-      pNeighbors[[i]] <- rbind(pNeighbors[[i]], patch(world = world, xcor = turtles@coords[i,1], ycor = turtles@coords[i,2])) # add the patch the turtle is located on
+      pNeighbors[[i]] <- rbind(pNeighbors[[i]], patch(world = world, x = turtles@coords[i,1], y = turtles@coords[i,2])) # add the patch the turtle is located on
       pNeighbors[[i]] <- cbind(pNeighbors[[i]], cellNum = cellFromPxcorPycor(world = world, pxcor = pNeighbors[[i]][,"pxcor"], pycor = pNeighbors[[i]][,"pycor"]))
       pNeighbors[[i]] <- cbind(pNeighbors[[i]], pVal = pValues[pNeighbors[[i]][,"cellNum"]])
       pMinNeighbors[[i]] <- pNeighbors[[i]][pNeighbors[[i]][,"pVal"] == min(pNeighbors[[i]][,"pVal"]), c("pxcor", "pycor")]
@@ -1626,7 +1626,7 @@ setMethod(
 
     xcor <- round(turtles@coords[,1] + sin(rad(turtles@data$heading)) * dist, digits = 5)
     ycor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * dist, digits = 5)
-    pAhead <- patch(world = world, xcor = xcor, ycor = ycor, duplicate = TRUE, torus = torus, out = TRUE)
+    pAhead <- patch(world = world, x = xcor, y = ycor, duplicate = TRUE, torus = torus, out = TRUE)
     return(pAhead)
 
   }
@@ -1683,7 +1683,7 @@ setMethod(
   signature = c("NLworlds", "SpatialPointsDataFrame"),
   definition = function(world, turtles) {
 
-    pTurtles <- patch(world = world, xcor = turtles@coords[,1], ycor = turtles@coords[,2], duplicate = TRUE, out = TRUE)
+    pTurtles <- patch(world = world, x = turtles@coords[,1], y = turtles@coords[,2], duplicate = TRUE, out = TRUE)
     return(pTurtles)
 
   }
@@ -2248,27 +2248,27 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
-#' tExists(turtles = t1, who = 3, breed = "sheep")
-#' tExists(turtles = t1, who = 9, breed = "sheep")
-#' tExists(turtles = t1, who = c(3, 9))
+#' tExist(turtles = t1, who = 3, breed = "sheep")
+#' tExist(turtles = t1, who = 9, breed = "sheep")
+#' tExist(turtles = t1, who = c(3, 9))
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname tExists
+#' @rdname tExist
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "tExists",
+  "tExist",
   function(turtles, who, breed) {
-    standardGeneric("tExists")
+    standardGeneric("tExist")
   })
 
 #' @export
-#' @rdname tExists
+#' @rdname tExist
 setMethod(
-  "tExists",
+  "tExist",
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
 
@@ -2279,13 +2279,13 @@ setMethod(
 )
 
 #' @export
-#' @rdname tExists
+#' @rdname tExist
 setMethod(
-  "tExists",
+  "tExist",
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
 
-    whoExist <- tExists(turtles = turtles, who = who)
+    whoExist <- tExist(turtles = turtles, who = who)
 
     if(length(breed) == 1 & length(who) != 1){
       breed <- rep(breed, length(who))
