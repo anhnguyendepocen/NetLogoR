@@ -43,7 +43,7 @@ Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         of \code{agents}. The order of the patches followa the order of the \code{agents}.
 }
 \description{
-Report the patches coordinates \code{pxcor} and \code{pycor} at certain
+Report the patches coordinates \code{[pxcor, pycor]} at certain
 distances and certain headings from the \code{agents}.
 }
 \details{

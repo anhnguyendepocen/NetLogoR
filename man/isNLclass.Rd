@@ -28,11 +28,11 @@ isNLclass(agents, class)
 Logical. \code{TRUE} if \code{agents} is of the \code{class} tested.
 }
 \description{
-Report \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
-\code{class} tested.
+Report \code{TRUE} if the \code{agents} is of the \code{class} tested,
+report \code{FALSE} otherwise.
 }
 \details{
-Careful! The class tested do not correspond to actual R classes.
+Careful! The classes tested do not correspond to actual R classes.
 
          \code{agents} is \code{"patch"} if it is a matrix (ncol = 2) with the
          first column \code{pxcor} and the second column \code{pycor} and only

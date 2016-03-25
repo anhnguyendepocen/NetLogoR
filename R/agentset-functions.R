@@ -2,7 +2,7 @@
 #' All agents?
 #'
 #' Report \code{TRUE} if all \code{agents} have their variable equal to a given value,
-#' or \code{FALSE} otherwise.
+#' report \code{FALSE} otherwise.
 #'
 #' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
@@ -12,23 +12,23 @@
 #'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
 #' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate for the \code{agents}
-#'                value. If \code{agents} are patches and the \code{world} is a
-#'                \code{NLworld} object, \code{varName} must not be provided. If
-#'                \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-#'                object, \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate for the \code{agents}
+#'               value. If \code{agents} are patches and the \code{world} is a
+#'               \code{NLworld} object, \code{var} must not be provided. If
+#'               \code{agents} are patches and the \code{world} is a \code{NLworldStack}
+#'               object, \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
 #' @param val     Numeric or characters depending on the variable class. Can be of
 #'                any length.
 #'
 #' @return Logical. \code{TRUE} if all the \code{agents} have their variable equal to
-#'         \code{val}, return \code{FALSE} otherwise.
+#'         \code{val}, \code{FALSE} otherwise.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#all}
 #'
@@ -47,8 +47,8 @@
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
-#' NLall(agents = t1, varName = "xcor", val = 1)
-#' NLall(agents = t1, varName = "heading", val = 2)
+#' NLall(agents = t1, var = "xcor", val = 1)
+#' NLall(agents = t1, var = "heading", val = 2)
 #'
 #'
 #' @export
@@ -59,7 +59,7 @@
 #'
 setGeneric(
   "NLall",
-  function(agents, world, varName, val) {
+  function(agents, world, var, val) {
     standardGeneric("NLall")
   })
 
@@ -80,9 +80,9 @@ setMethod(
 setMethod(
   "NLall",
   signature = c("matrix", "NLworldStack", "character", "ANY"),
-  definition = function(agents, world, varName, val) {
+  definition = function(agents, world, var, val) {
     names_l <- names(world)
-    l <- match(varName, names_l)
+    l <- match(var, names_l)
     world_l <- world[[l]]
     NLall(world = world_l, agents = agents, val = val)
   }
@@ -93,8 +93,8 @@ setMethod(
 setMethod(
   "NLall",
   signature = c("SpatialPointsDataFrame", "missing", "character", "ANY"),
-  definition = function(agents, varName, val) {
-    withVal <- NLwith(agents = agents, varName = varName, val = val)
+  definition = function(agents, var, val) {
+    withVal <- NLwith(agents = agents, var = var, val = val)
     allTrue <- ifelse(length(agents) == length(withVal), TRUE, FALSE)
     return(allTrue)
   }
@@ -104,7 +104,7 @@ setMethod(
 ################################################################################
 #' Any agents?
 #'
-#' Report \code{TRUE} if \code{agents} is non empty, or \code{FALSE} otherwise.
+#' Report \code{TRUE} if \code{agents} is non empty, report \code{FALSE} otherwise.
 #'
 #' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates of the
@@ -247,29 +247,29 @@ setMethod(
 ################################################################################
 #' Sort agents
 #'
-#' Report the coordinates \code{pxcor} and \code{pycor} of the patches sorted
+#' Report the coordinates \code{[pxcor, pycor]} of the patches sorted
 #' according to their value.
 #' Report the who numbers of the turtles sorted according to their value.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates of the
-#'                patches to sort.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates of the
+#'               patches to sort.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to sort.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to sort.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable on which the sorting is based.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object, \code{varName}
-#'                refers to the layer used for sorting the patches. If \code{agents}
-#'                are turtles, \code{varName} is one of the turtles' variable. \code{varName}
-#'                can be equal to \code{"xcor"}, \code{"ycor"}, any of the variables created
-#'                when turtles were created, as well as any variable created using
-#'                \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable on which the sorting is based.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object, \code{var}
+#'               refers to the layer used for sorting the patches. If \code{agents}
+#'               are turtles, \code{var} is one of the turtles' variable. \code{var}
+#'               can be equal to \code{"xcor"}, \code{"ycor"}, any of the variables created
+#'               when turtles were created, as well as any variable created using
+#'               \code{turtlesOwn()}.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
 #'         \code{pycor} representing the coordinates of the sorted patches if \code{agents}
@@ -295,7 +295,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' sortdHeadingst1 <- sortOn(agents = t1, varName = "heading")
+#' sortdHeadingst1 <- sortOn(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -306,7 +306,7 @@ setMethod(
 #'
 setGeneric(
   "sortOn",
-  function(agents, world, varName) {
+  function(agents, world, var) {
     standardGeneric("sortOn")
   })
 
@@ -330,9 +330,9 @@ setMethod(
 setMethod(
   "sortOn",
   signature = c("matrix", "NLworldStack", "character"),
-  definition = function(agents, world, varName) {
+  definition = function(agents, world, var) {
     names_l <- names(world)
-    l <- match(varName, names_l)
+    l <- match(var, names_l)
     world_l <- world[[l]]
     sortOn(world = world_l, agents = agents)
   }
@@ -343,9 +343,9 @@ setMethod(
 setMethod(
   "sortOn",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
-  definition = function(agents, varName) {
+  definition = function(agents, var) {
     turtles <- cbind(agents@coords, agents@data)
-    sortTurtles <- turtles[order(turtles[,varName]),]
+    sortTurtles <- turtles[order(turtles[,var]),]
     return(sortTurtles$who)
   }
 )
@@ -354,40 +354,40 @@ setMethod(
 ################################################################################
 #' Agents with
 #'
-#' Report the coordinates \code{pxcor} and \code{pycor} of the patches with their
+#' Report the coordinates \code{[pxcor, pycor]} of the patches which have their
 #' variable equals to a specific value.
 #' Report the turtles which have their variable equals to a specific value.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates of the
-#'                patches to evaluate.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates of the
+#'               patches to evaluate.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object,
-#'                \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object,
+#'               \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
-#' @param val     Numeric or characters depending on the variable class. Can be of
-#'                any length. Any \code{agents} with their variable equals to any
-#'                \code{val} is returned.
+#' @param val    Numeric or characters depending on the class of \code{var}. Can be of
+#'               any length. Any \code{agents} with their variable equals to any
+#'               \code{val} is returned.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the coordinates of the patches with their value
-#'         equal to \code{val}.
+#'         \code{pycor} representing the coordinates of the patches which have their variable
+#'         equals to \code{val}.
 #'
 #'         SpatialPointsDataFrame representing the turtles which have their
-#'         \code{varName == val}.
+#'         \code{var == val}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with}
 #'
@@ -404,8 +404,8 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
-#' t2 <- NLwith(agents = t1, varName = "breed", val = "sheep")
-#' t3 <- NLwith(agents = t1, varName = "breed", val = c("sheep", "wolf"))
+#' t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
+#' t3 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
 #'
 #'
 #' @export
@@ -416,7 +416,7 @@ setMethod(
 #'
 setGeneric(
   "NLwith",
-  function(agents, world, varName, val) {
+  function(agents, world, var, val) {
     standardGeneric("NLwith")
   })
 
@@ -441,9 +441,9 @@ setMethod(
 setMethod(
   "NLwith",
   signature = c("matrix", "NLworldStack", "character", "ANY"),
-  definition = function(agents, world, varName, val) {
+  definition = function(agents, world, var, val) {
     names_l <- names(world)
-    l <- match(varName, names_l)
+    l <- match(var, names_l)
     world_l <- world[[l]]
     NLwith(world = world_l, agents = agents, val = val)
   }
@@ -454,9 +454,9 @@ setMethod(
 setMethod(
   "NLwith",
   signature = c("SpatialPointsDataFrame", "missing", "character", "ANY"),
-  definition = function(agents, varName, val) {
+  definition = function(agents, var, val) {
     turtles <- cbind(agents@coords, agents@data)
-    turtlesWith <- turtles[turtles[,varName] %in% val, ]
+    turtlesWith <- turtles[turtles[,var] %in% val, ]
     if(nrow(turtlesWith) == 0){
       noTurtles()
     } else {
@@ -471,36 +471,36 @@ setMethod(
 ################################################################################
 #' Agents with maximum
 #'
-#' Report the coordinates \code{pxcor} and \code{pycor} of the patches which
+#' Report the coordinates \code{[pxcor, pycor]} of the patches which
 #' have their variable equals to the maximum value.
 #' Report the turtles which have their variable equals to the maximum values.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates for the
-#'                patches to evaluate.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to evaluate.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate for the maximum value.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object,
-#'                \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate for the maximum value.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object,
+#'               \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the coordinates for the patches with the maximum
-#'         value among the \code{agents}.
+#'         \code{pycor} representing the coordinates for the patches which have their
+#'         variable equals to the maximum value among the \code{agents}.
 #'
 #'         SpatialPointsDataFrame representing the turtles which have their
-#'         \code{varName} equals to the maximum values among the \code{agents}.
+#'         \code{var} equals to the maximum values among the \code{agents}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with-max}
 #'
@@ -517,7 +517,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-#' t2 <- withMax(agents = t1, varName = "heading")
+#' t2 <- withMax(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -528,7 +528,7 @@ setMethod(
 #'
 setGeneric(
   "withMax",
-  function(agents, world, varName) {
+  function(agents, world, var) {
     standardGeneric("withMax")
   })
 
@@ -556,9 +556,9 @@ setMethod(
 setMethod(
   "withMax",
   signature = c("matrix", "NLworldStack", "character"),
-  definition = function(agents, world, varName) {
+  definition = function(agents, world, var) {
     names_l <- names(world)
-    l <- match(varName, names_l)
+    l <- match(var, names_l)
     world_l <- world[[l]]
     withMax(world = world_l, agents = agents)
   }
@@ -569,13 +569,13 @@ setMethod(
 setMethod(
   "withMax",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
-  definition = function(agents, varName) {
-    val_varName <- of(turtles = agents, tVar = varName)
-    if(length(val_varName[is.na(val_varName)] == length(val_varName))){
-      stop("varName equals to NA")
+  definition = function(agents, var) {
+    val_var <- of(turtles = agents, tVar = var)
+    if(length(val_var[is.na(val_var)] == length(val_var))){
+      stop("var equals to NA")
     } else {
-      maxVal = max(val_varName, na.rm = TRUE)
-      NLwith(agents = agents, varName = varName, val = maxVal)
+      maxVal = max(val_var, na.rm = TRUE)
+      NLwith(agents = agents, var = var, val = maxVal)
     }
   }
 )
@@ -584,36 +584,36 @@ setMethod(
 ################################################################################
 #' Agents with minimum
 #'
-#' Report the coordinates \code{pxcor} and \code{pycor} of the patches which
+#' Report the coordinates \code{[pxcor, pycor]} of the patches which
 #' have their variable equals to the minimum value.
-#' Report the turtles which have their variable equals to the minimum values.
+#' Report the turtles which have their variable equals to the minimum value.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates for the
-#'                patches to evaluate.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to evaluate.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate for the minimum value.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object,
-#'                \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate for the minimum value.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object,
+#'               \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the coordinates for the patches with the minimum
-#'         value among the \code{agents}.
+#'         \code{pycor} representing the coordinates for the patches which have their
+#'         variable equals to the minimum value among the \code{agents}.
 #'
 #'         SpatialPointsDataFrame representing the turtles which have their
-#'         \code{varName} equals to the minimum values among the \code{agents}.
+#'         \code{var} equals to the minimum values among the \code{agents}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#with-min}
 #'
@@ -630,7 +630,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-#' t2 <- withMin(agents = t1, varName = "heading")
+#' t2 <- withMin(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -641,7 +641,7 @@ setMethod(
 #'
 setGeneric(
   "withMin",
-  function(agents, world, varName) {
+  function(agents, world, var) {
     standardGeneric("withMin")
   })
 
@@ -669,9 +669,9 @@ setMethod(
 setMethod(
   "withMin",
   signature = c("matrix", "NLworldStack", "character"),
-  definition = function(agents, world, varName) {
+  definition = function(agents, world, var) {
     names_l <- names(world)
-    l <- match(varName, names_l)
+    l <- match(var, names_l)
     world_l <- world[[l]]
     withMin(world = world_l, agents = agents)
   }
@@ -682,13 +682,13 @@ setMethod(
 setMethod(
   "withMin",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
-  definition = function(agents, varName) {
-    val_varName <- of(turtles = agents, tVar = varName)
-    if(length(val_varName[is.na(val_varName)] == length(val_varName))){
-      stop("varName equals to NA")
+  definition = function(agents, var) {
+    val_var <- of(turtles = agents, tVar = var)
+    if(length(val_var[is.na(val_var)] == length(val_var))){
+      stop("var equals to NA")
     } else {
-      minVal = min(val_varName, na.rm = TRUE)
-      NLwith(agents = agents, varName = varName, val = minVal)
+      minVal = min(val_var, na.rm = TRUE)
+      NLwith(agents = agents, var = var, val = minVal)
     }
   }
 )
@@ -697,41 +697,42 @@ setMethod(
 ################################################################################
 #' One agent with maximum
 #'
-#' Report one patch coordinates \code{pxcor} and \code{pycor} which has its
+#' Report one patch coordinates \code{[pxcor, pycor]} which has its
 #' variable equals to the maximum value.
 #' Report one turtle which has its variable equals to the maximum value.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates for the
-#'                patches to evaluate.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to evaluate.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate for the maximum value.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object,
-#'                \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate for the maximum value.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object,
+#'               \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
 #' @return Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the patch
-#'         (or one of the patches) with the maximum value among the \code{agents}.
-#'
-#'         SpatialPointsDataFrame of length 1 representing the turtle (or one of
-#'         the turtles) which has its \code{varName} equals to the maximum value
+#'         (or one of the patches) which has its variable equals to the maximum value
 #'         among the \code{agents}.
 #'
-#' @details If there are several \code{agents}. with the maximum value, one is chosen
-#'          randomly. To access to all agents with their variable equal to the maximum
-#'          value, use \code{withMax()}.
+#'         SpatialPointsDataFrame of length 1 representing the turtle (or one of
+#'         the turtles) which has its \code{var} equals to the maximum value
+#'         among the \code{agents}.
+#'
+#' @details If there are several \code{agents} with thier variables equals to the maximum
+#'          value, one is chosen randomly. To access to all agents which have their variable equals
+#'          to the maximum value, use \code{withMax()}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#max-one-of}
 #'
@@ -748,7 +749,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-#' t2 <- maxOneOf(agents = t1, varName = "heading")
+#' t2 <- maxOneOf(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -759,7 +760,7 @@ setMethod(
 #'
 setGeneric(
   "maxOneOf",
-  function(agents, world, varName) {
+  function(agents, world, var) {
     standardGeneric("maxOneOf")
   })
 
@@ -781,8 +782,8 @@ setMethod(
 setMethod(
   "maxOneOf",
   signature = c("matrix", "NLworldStack", "character"),
-  definition = function(agents, world, varName) {
-    pos_l <- which(names(world) == varName, TRUE) # find the layer
+  definition = function(agents, world, var) {
+    pos_l <- which(names(world) == var, TRUE) # find the layer
     world_l <- world[[pos_l]]
     maxOneOf(agents = agents, world = world_l)
   }
@@ -793,8 +794,8 @@ setMethod(
 setMethod(
   "maxOneOf",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
-  definition = function(agents, varName) {
-    maxAgents <- withMax(agents = agents, varName = varName)
+  definition = function(agents, var) {
+    maxAgents <- withMax(agents = agents, var = var)
     if(length(maxAgents) == 1){
       return(maxAgents)
     } else {
@@ -808,41 +809,42 @@ setMethod(
 ################################################################################
 #' One agent with minimum
 #'
-#' Report one patch coordinates \code{pxcor} and \code{pycor} which has its
+#' Report one patch coordinates \code{[pxcor, pycor]} which has its
 #' variable equals to the minimum value.
 #' Report one turtle which has its variable equals to the minimum value.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates for the
-#'                patches to evaluate.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to evaluate.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate for the minimum value.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object,
-#'                \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate for the minimum value.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object,
+#'               \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
 #' @return Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the patch
-#'         (or one of the patches) with the minimum value among the \code{agents}.
+#'         (or one of the patches) which has its variables equals to the minimum
+#'         value among the \code{agents}.
 #'
 #'         SpatialPointsDataFrame of length 1 representing the turtle (or one of
-#'         the turtles) which has its \code{varName} equals to the minimum value
+#'         the turtles) which has its \code{var} equals to the minimum value
 #'         among the \code{agents}.
 #'
-#' @details If there are several \code{agents}. with the minimum value, one is chosen
-#'          randomly. To access to all agents with their variable equal to the minimum
-#'          value, use \code{withMin()}.
+#' @details If there are several \code{agents} which have their variable equals to
+#'          the minimum value, one is chosen randomly. To access to all agents which
+#'          have their variable equals to the minimum value, use \code{withMin()}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#min-one-of}
 #'
@@ -859,7 +861,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-#' t2 <- minOneOf(agents = t1, varName = "heading")
+#' t2 <- minOneOf(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -870,7 +872,7 @@ setMethod(
 #'
 setGeneric(
   "minOneOf",
-  function(agents, world, varName) {
+  function(agents, world, var) {
     standardGeneric("minOneOf")
   })
 
@@ -892,8 +894,8 @@ setMethod(
 setMethod(
   "minOneOf",
   signature = c("matrix", "NLworldStack", "character"),
-  definition = function(agents, world, varName) {
-    pos_l <- which(names(world) == varName, TRUE) # find the layer
+  definition = function(agents, world, var) {
+    pos_l <- which(names(world) == var, TRUE) # find the layer
     world_l <- world[[pos_l]]
     minOneOf(agents = agents, world = world_l)
   }
@@ -904,8 +906,8 @@ setMethod(
 setMethod(
   "minOneOf",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
-  definition = function(agents, varName) {
-    minAgents <- withMin(agents = agents, varName = varName)
+  definition = function(agents, var) {
+    minAgents <- withMin(agents = agents, var = var)
     if(length(minAgents) == 1){
       return(minAgents)
     } else {
@@ -919,8 +921,8 @@ setMethod(
 ################################################################################
 #' Type of object
 #'
-#' Report \code{TRUE} or \code{FALSE} depending if the \code{agents} is of the
-#' \code{class} tested.
+#' Report \code{TRUE} if the \code{agents} is of the \code{class} tested,
+#' report \code{FALSE} otherwise.
 #'
 #' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
 #'               second column \code{pycor} representing the coordinates for the
@@ -934,7 +936,7 @@ setMethod(
 #'
 #' @return Logical. \code{TRUE} if \code{agents} is of the \code{class} tested.
 #'
-#' @details Careful! The class tested do not correspond to actual R classes.
+#' @details Careful! The classes tested do not correspond to actual R classes.
 #'
 #'          \code{agents} is \code{"patch"} if it is a matrix (ncol = 2) with the
 #'          first column \code{pxcor} and the second column \code{pycor} and only
@@ -1203,32 +1205,32 @@ setMethod(
 ################################################################################
 #' N agents with maximum
 #'
-#' Report the n patches coordinates \code{pxcor} and \code{pycor} which have
-#' their variable among the maximum values.
-#' Report the n turtles which have their variable amog the maximum values.
+#' Report the n patches coordinates \code{[pxcor, pycor]} which have
+#' their variable values among the maximum values.
+#' Report the n turtles which have their variable values among the maximum values.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates for the
-#'                patches to evaluate.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to evaluate.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
 #' @param n      Integer. The number of patches or turtles to select from \code{agents}
 #'               to return. \code{n} must be less or equal to the number of \code{agents}.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate for their values.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object,
-#'                \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate for their values.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object,
+#'               \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
 #' @return Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the \code{n}
@@ -1236,7 +1238,7 @@ setMethod(
 #'         \code{agents}.
 #'
 #'         SpatialPointsDataFrame of length \code{n} representing the turtles which
-#'         have their \code{varName} value among the maximum values among the \code{agents}.
+#'         have their \code{var} value among the maximum values among the \code{agents}.
 #'
 #' @details If there is a tie that would make the number of returned patches or turtles larger
 #'          than \code{n}, the tie is broken randomly.
@@ -1256,7 +1258,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
-#' t2 <- maxNof(agents = t1, n = 5, varName = "heading")
+#' t2 <- maxNof(agents = t1, n = 5, var = "heading")
 #'
 #'
 #' @export
@@ -1267,7 +1269,7 @@ setMethod(
 #'
 setGeneric(
   "maxNof",
-  function(agents, n, world, varName) {
+  function(agents, n, world, var) {
     standardGeneric("maxNof")
   })
 
@@ -1313,8 +1315,8 @@ setMethod(
 setMethod(
   "maxNof",
   signature = c("matrix", "numeric", "NLworldStack", "character"),
-  definition = function(agents, n, world, varName) {
-    pos_l <- which(names(world) == varName, TRUE) # find the layer
+  definition = function(agents, n, world, var) {
+    pos_l <- which(names(world) == var, TRUE) # find the layer
     world_l <- world[[pos_l]]
     maxNof(agents = agents, n = n, world = world_l)
   }
@@ -1325,10 +1327,10 @@ setMethod(
 setMethod(
   "maxNof",
   signature = c("SpatialPointsDataFrame", "numeric", "missing", "character"),
-  definition = function(agents, n, varName) {
+  definition = function(agents, n, var) {
 
     if(n == 1){
-      maxOneOf(agents = agents, varName = varName)
+      maxOneOf(agents = agents, var = var)
     } else if(n == 0){
       noTurtles()
     } else if(n == length(agents)){
@@ -1337,17 +1339,17 @@ setMethod(
 
       tData <- agents@data
       rownames(tData) <- 1:nrow(tData)
-      tData <- tData[order(-tData[,varName]),] # decreasing order
+      tData <- tData[order(-tData[,var]),] # decreasing order
 
-      minVal <- min(tData[1:n, varName], na.rm = TRUE)
-      maxAgents <- tData[tData[,varName] >= minVal,]
+      minVal <- min(tData[1:n, var], na.rm = TRUE)
+      maxAgents <- tData[tData[,var] >= minVal,]
 
       # To break ties randomly
       if(nrow(maxAgents) != n){
         nToRemove <- nrow(maxAgents) - n # how many ties to remove
-        toKeep <- sample(1:nrow(maxAgents[maxAgents[,varName] == minVal,]),
-                         size = nrow(maxAgents[maxAgents[,varName] == minVal,]) -nToRemove) # rows to keep
-        maxAgents <- rbind(maxAgents[maxAgents[,varName] > minVal,], maxAgents[maxAgents[,varName] == minVal,][toKeep,])
+        toKeep <- sample(1:nrow(maxAgents[maxAgents[,var] == minVal,]),
+                         size = nrow(maxAgents[maxAgents[,var] == minVal,]) -nToRemove) # rows to keep
+        maxAgents <- rbind(maxAgents[maxAgents[,var] > minVal,], maxAgents[maxAgents[,var] == minVal,][toKeep,])
       }
 
       tSelect <- as.numeric(rownames(maxAgents))
@@ -1365,32 +1367,32 @@ setMethod(
 ################################################################################
 #' N agents with minimum
 #'
-#' Report the n patches coordinates \code{pxcor} and \code{pycor} which have
-#' their variable among the minimum values.
-#' Report the n turtles which have their variable amog the minimum values.
+#' Report the n patches coordinates \code{[pxcor, pycor]} which have
+#' their variable values among the minimum values.
+#' Report the n turtles which have their variable values among the minimum values.
 #'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates for the
-#'                patches to evaluate.
+#' @param agents Matrix (ncol = 2) with the first column \code{pxcor} and the
+#'               second column \code{pycor} representing the coordinates for the
+#'               patches to evaluate.
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles to evaluate.
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or by
+#'               \code{createOTurtles()} representing the turtles to evaluate.
 #'
 #' @param n      Integer. The number of patches or turtles to select from \code{agents}
 #'               to return. \code{n} must be less or equal to the number of \code{agents}.
 #'
-#' @param world   \code{NLworlds} object. Only needed if \code{agents} are patches.
-#'                Must not be provided if \code{agents} are turtles.
+#' @param world  \code{NLworlds} object. Only needed if \code{agents} are patches.
+#'               Must not be provided if \code{agents} are turtles.
 #'
-#' @param varName Characters. The name of the variable to evaluate for their values.
-#'                If \code{agents} are patches and the \code{world} is a \code{NLworld}
-#'                object, \code{varName} must not be provided. If \code{agents} are
-#'                patches and the \code{world} is a \code{NLworldStack} object,
-#'                \code{varName} refers to the layer used for evaluating patches
-#'                values. If \code{agents} are turtles, \code{varName} is one of
-#'                the turtles' variable. \code{varName} can be equal to \code{"xcor"},
-#'                \code{"ycor"}, any of the variables created when turtles were created,
-#'                as well as any variable created using \code{turtlesOwn()}.
+#' @param var    Characters. The name of the variable to evaluate for their values.
+#'               If \code{agents} are patches and the \code{world} is a \code{NLworld}
+#'               object, \code{var} must not be provided. If \code{agents} are
+#'               patches and the \code{world} is a \code{NLworldStack} object,
+#'               \code{var} refers to the layer used for evaluating patches
+#'               values. If \code{agents} are turtles, \code{var} is one of
+#'               the turtles' variable. \code{var} can be equal to \code{"xcor"},
+#'               \code{"ycor"}, any of the variables created when turtles were created,
+#'               as well as any variable created using \code{turtlesOwn()}.
 #'
 #' @return Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
 #'         the second column \code{pycor} representing the coordinates for the \code{n}
@@ -1398,7 +1400,7 @@ setMethod(
 #'         \code{agents}.
 #'
 #'         SpatialPointsDataFrame of length \code{n} representing the turtles which
-#'         have their \code{varName} value among the minimum values among the \code{agents}.
+#'         have their \code{var} value among the minimum values among the \code{agents}.
 #'
 #' @details If there is a tie that would make the number of returned patches or turtles larger
 #'          than \code{n}, the tie is broken randomly.
@@ -1418,7 +1420,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
-#' t2 <- minNof(agents = t1, n = 5, varName = "heading")
+#' t2 <- minNof(agents = t1, n = 5, var = "heading")
 #'
 #'
 #' @export
@@ -1429,7 +1431,7 @@ setMethod(
 #'
 setGeneric(
   "minNof",
-  function(agents, n, world, varName) {
+  function(agents, n, world, var) {
     standardGeneric("minNof")
   })
 
@@ -1459,8 +1461,8 @@ setMethod(
 setMethod(
   "minNof",
   signature = c("matrix", "numeric", "NLworldStack", "character"),
-  definition = function(agents, n, world, varName) {
-    pos_l <- which(names(world) == varName, TRUE) # find the layer
+  definition = function(agents, n, world, var) {
+    pos_l <- which(names(world) == var, TRUE) # find the layer
     world_l <- world[[pos_l]]
     minNof(agents = agents, n = n, world = world_l)
   }
@@ -1471,17 +1473,17 @@ setMethod(
 setMethod(
   "minNof",
   signature = c("SpatialPointsDataFrame", "numeric", "missing", "character"),
-  definition = function(agents, n, varName) {
+  definition = function(agents, n, var) {
 
     if(n == 1){
-      minOneOf(agents = agents, varName = varName)
+      minOneOf(agents = agents, var = var)
     } else if(n == 0){
       noTurtles()
     } else if(n == length(agents)){
       return(agents)
     } else {
 
-      maxTurtles <- maxNof(agents = agents, n = length(agents) - n, varName = varName)
+      maxTurtles <- maxNof(agents = agents, n = length(agents) - n, var = var)
       other(agents = agents, except = maxTurtles)
     }
   }

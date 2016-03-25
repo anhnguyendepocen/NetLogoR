@@ -10,17 +10,17 @@ test_that("NLall works with patches",{
   expect_identical(NLall(world = w2, agents = patch(world = w2, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), val = 5), TRUE)
 
   ws <- NLstack(w1, w2, w3)
-  expect_identical(NLall(world = ws, agents = patches(world = ws), varName = "w1", val = 5), FALSE)
-  expect_identical(NLall(world = ws, agents = patches(world = ws), varName = "w2", val = 5), TRUE)
-  expect_identical(NLall(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), varName = "w3", val = 5), TRUE)
+  expect_identical(NLall(world = ws, agents = patches(world = ws), var = "w1", val = 5), FALSE)
+  expect_identical(NLall(world = ws, agents = patches(world = ws), var = "w2", val = 5), TRUE)
+  expect_identical(NLall(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w3", val = 5), TRUE)
 })
 
 test_that("NLall works with turtles",{
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
-  expect_identical(NLall(agents = t1, varName = "xcor", val = 1), TRUE)
-  expect_identical(NLall(agents = t1, varName = "heading", val = 2), FALSE)
-  expect_identical(NLall(agents = turtle(t1, who = c(1, 2, 4)), varName = "heading", val = 2), TRUE)
-  expect_identical(NLall(agents = t1, varName = "xcor", val = 2), FALSE)
+  expect_identical(NLall(agents = t1, var = "xcor", val = 1), TRUE)
+  expect_identical(NLall(agents = t1, var = "heading", val = 2), FALSE)
+  expect_identical(NLall(agents = turtle(t1, who = c(1, 2, 4)), var = "heading", val = 2), TRUE)
+  expect_identical(NLall(agents = t1, var = "xcor", val = 2), FALSE)
 })
 
 test_that("NLany works with patches",{
@@ -41,7 +41,7 @@ test_that("NLany works with turtles",{
   w1 <- createNLworld(0, 4, 0, 4)
   t1 <- createTurtles(n = 10, coords = randomXYcor(world= w1, n = 10))
   t2 <- noTurtles()
-  t3 <- NLwith(agents = t1, varName = "xcor", val = 10)
+  t3 <- NLwith(agents = t1, var = "xcor", val = 10)
   t4 <- turtle(t1, who = 0)
   expect_identical(NLany(t1), TRUE)
   expect_identical(NLany(t2), FALSE)
@@ -85,25 +85,25 @@ test_that("sortOn works with patches",{
   w2 <- w1
   w2[] <- 1:25
   ws <- NLstack(w1, w2)
-  p1 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), varName = "w1")
-  p2 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), varName = "w2")
+  p1 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w1")
+  p2 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w2")
   expect_equivalent(p1, cbind(pxcor = c(4,3,2,1,0), pycor = c(4,4,4,4,4)))
   expect_equivalent(p2, cbind(pxcor = c(0,1,2,3,4), pycor = c(4,4,4,4,4)))
 })
 
 test_that("sortOn works with turtles",{
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 1:5, ycor = 5:1), heading = c(4,5,1,3,2))
-  t2 <- sortOn(agents = t1, varName = "xcor")
-  t3 <- sortOn(agents = t1, varName = "ycor")
-  t4 <- sortOn(agents = t1, varName = "heading")
+  t2 <- sortOn(agents = t1, var = "xcor")
+  t3 <- sortOn(agents = t1, var = "ycor")
+  t4 <- sortOn(agents = t1, var = "heading")
   expect_equivalent(t2, c(0,1,2,3,4))
   expect_equivalent(t3, c(4,3,2,1,0))
   expect_equivalent(t4, c(2, 4, 3, 0, 1))
 
-  t5 <- sortOn(agents = turtle(turtles = t1, who = 0), varName = "heading")
+  t5 <- sortOn(agents = turtle(turtles = t1, who = 0), var = "heading")
   expect_equivalent(t5, 0)
   t6 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = 1)
-  t7 <- sortOn(agents = t6, varName = "xcor")
+  t7 <- sortOn(agents = t6, var = "xcor")
 })
 
 test_that("NLwith works with patches",{
@@ -123,28 +123,28 @@ test_that("NLwith works with patches",{
   w2[] <- 0
   w2[2,c(2,4)] <- c(1,1)
   ws <- NLstack(w1, w2)
-  p1w1 <- NLwith(world = ws, agents = patches(world = ws), varName = "w1", val = 1)
-  p1w2 <- NLwith(world = ws, agents = patches(world = ws), varName = "w2", val = 1)
+  p1w1 <- NLwith(world = ws, agents = patches(world = ws), var = "w1", val = 1)
+  p1w2 <- NLwith(world = ws, agents = patches(world = ws), var = "w2", val = 1)
   expect_identical(p1w1, patch(ws, x = c(1,1), y = c(4,1)))
   expect_identical(p1w2, patch(ws, x = c(2,2), y = c(4,2)))
-  p5 <- NLwith(agents = patches(world = ws), world = ws, varName = "w1", val = 10)
+  p5 <- NLwith(agents = patches(world = ws), world = ws, var = "w1", val = 10)
   expect_equivalent(p5, noPatches())
 })
 
 test_that("NLwith works with turtles",{
   t1 <- createTurtles(n = 5, coords = cbind(xcor = c(1,1,1,2,3), ycor = c(2,3,4,4,5)), heading = 0,
                       breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
-  t2 <- NLwith(agents = t1, varName = "xcor", val = 1)
+  t2 <- NLwith(agents = t1, var = "xcor", val = 1)
   expect_identical(t2, turtle(turtles = t1, who = c(0, 1, 2)))
-  t3 <- NLwith(agents = t1, varName = "ycor", val = c(2, 3))
+  t3 <- NLwith(agents = t1, var = "ycor", val = c(2, 3))
   expect_identical(t3, turtle(turtles = t1, who = c(0, 1)))
-  t4 <- NLwith(agents = t1, varName = "heading", val = 0)
+  t4 <- NLwith(agents = t1, var = "heading", val = 0)
   expect_identical(t4, t1)
-  t5 <- NLwith(agents = t1, varName = "breed", val = "sheep")
+  t5 <- NLwith(agents = t1, var = "breed", val = "sheep")
   expect_identical(t5, turtle(turtles = t1, who = c(0, 1, 3)))
-  t6 <- NLwith(agents = t1, varName = "breed", val = c("sheep", "wolf"))
+  t6 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
   expect_identical(t6, turtle(turtles = t1, who = c(0, 1, 2, 3)))
-  t7 <- NLwith(agents = t1, varName = "breed", val = "moose")
+  t7 <- NLwith(agents = t1, var = "breed", val = "moose")
   expect_identical(t7, noTurtles())
 })
 
@@ -162,8 +162,8 @@ test_that("withMax works with patches",{
   w2[] <- runif(25)
   w2[2,c(2,4)] <- c(2,2)
   ws <- NLstack(w1, w2)
-  pMaxw1 <- withMax(world = ws, agents = patches(world = ws), varName = "w1")
-  pMaxw2 <- withMax(world = ws, agents = patches(world = ws), varName = "w2")
+  pMaxw1 <- withMax(world = ws, agents = patches(world = ws), var = "w1")
+  pMaxw2 <- withMax(world = ws, agents = patches(world = ws), var = "w2")
   expect_identical(pMaxw1, patch(ws, x = c(1,1), y = c(4,1)))
   expect_identical(pMaxw2, patch(ws, x = c(2,2), y = c(4,2)))
 
@@ -174,11 +174,11 @@ test_that("withMax works with patches",{
 
 test_that("withMax works with turtles",{
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
-  maxXcor <- withMax(agents = t1, varName = "xcor")
+  maxXcor <- withMax(agents = t1, var = "xcor")
   expect_identical(maxXcor, turtle(t1, who = 9))
-  maxHeading <- withMax(agents = t1, varName = "heading")
+  maxHeading <- withMax(agents = t1, var = "heading")
   expect_identical(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
-  expect_error(withMax(agents = t1, varName = "prevX"))
+  expect_error(withMax(agents = t1, var = "prevX"))
 })
 
 test_that("withMin works with patches",{
@@ -195,8 +195,8 @@ test_that("withMin works with patches",{
   w2[] <- runif(25)
   w2[2,c(2,4)] <- c(-1,-1)
   ws <- NLstack(w1, w2)
-  pMinw1 <- withMin(world = ws, agents = patches(world = ws), varName = "w1")
-  pMinw2 <- withMin(world = ws, agents = patches(world = ws), varName = "w2")
+  pMinw1 <- withMin(world = ws, agents = patches(world = ws), var = "w1")
+  pMinw2 <- withMin(world = ws, agents = patches(world = ws), var = "w2")
   expect_identical(pMinw1, patch(ws, x = c(1,1), y = c(4,1)))
   expect_identical(pMinw2, patch(ws, x = c(2,2), y = c(4,2)))
 
@@ -207,11 +207,11 @@ test_that("withMin works with patches",{
 
 test_that("withMin works with turtles",{
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 10:1, ycor = 10:1), heading = c(1,2,3,0,0,2,3,0,0,3))
-  maxXcor <- withMin(agents = t1, varName = "xcor")
+  maxXcor <- withMin(agents = t1, var = "xcor")
   expect_identical(maxXcor, turtle(t1, who = 9))
-  maxHeading <- withMin(agents = t1, varName = "heading")
+  maxHeading <- withMin(agents = t1, var = "heading")
   expect_identical(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
-  expect_error(withMin(agents = t1, varName = "prevX"))
+  expect_error(withMin(agents = t1, var = "prevX"))
 })
 
 test_that("maxOneOf works with patches",{
@@ -226,8 +226,8 @@ test_that("maxOneOf works with patches",{
   w2 <- w1
   w2[] <- 1 / values(w1)
   ws <- NLstack(w1, w2)
-  onepMax1 <- maxOneOf(world = ws, agents = patches(world = w1), varName = "w1")
-  onepMax2 <- maxOneOf(world = ws, agents = patches(world = w1), varName = "w2")
+  onepMax1 <- maxOneOf(world = ws, agents = patches(world = w1), var = "w1")
+  onepMax2 <- maxOneOf(world = ws, agents = patches(world = w1), var = "w2")
   compare1 <- cbind(a = as.numeric(allpMax[,1])==as.numeric(onepMax1[1]),b = as.numeric(allpMax[,2])==as.numeric(onepMax1[2]))
   rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
   expect_equivalent(nrow(rowTRUE),1)
@@ -237,15 +237,15 @@ test_that("maxOneOf works with patches",{
 
 test_that("maxOneOf works with turtles",{
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
-  maxXcor1 <- withMax(agents = t1, varName = "xcor")
-  maxXcor2 <- maxOneOf(agents = t1, varName = "xcor")
+  maxXcor1 <- withMax(agents = t1, var = "xcor")
+  maxXcor2 <- maxOneOf(agents = t1, var = "xcor")
   expect_identical(maxXcor1, maxXcor2)
-  maxHeading1 <- withMax(agents = t1, varName = "heading")
-  maxHeading2 <- maxOneOf(agents = t1, varName = "heading")
+  maxHeading1 <- withMax(agents = t1, var = "heading")
+  maxHeading2 <- maxOneOf(agents = t1, var = "heading")
   expect_equivalent(length(maxHeading2), 1)
   maxH12 <- merge(maxHeading1@data, maxHeading2@data)
   expect_equivalent(nrow(maxH12), 1)
-  expect_error(maxOneOf(agents = t1, varName = "prevX"))
+  expect_error(maxOneOf(agents = t1, var = "prevX"))
 })
 
 test_that("minOneOf works with patches",{
@@ -260,8 +260,8 @@ test_that("minOneOf works with patches",{
   w2 <- w1
   w2[] <- 1 / values(w1)
   ws <- NLstack(w1, w2)
-  onepMin1 <- minOneOf(world = ws, agents = patches(world = w1), varName = "w1")
-  onepMin2 <- minOneOf(world = ws, agents = patches(world = w1), varName = "w2")
+  onepMin1 <- minOneOf(world = ws, agents = patches(world = w1), var = "w1")
+  onepMin2 <- minOneOf(world = ws, agents = patches(world = w1), var = "w2")
   compare1 <- cbind(a = as.numeric(allpMin[,1])==as.numeric(onepMin1[1]),b = as.numeric(allpMin[,2])==as.numeric(onepMin1[2]))
   rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
   expect_equivalent(nrow(rowTRUE),1)
@@ -271,15 +271,15 @@ test_that("minOneOf works with patches",{
 
 test_that("minOneOf works with turtles",{
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
-  minXcor1 <- withMin(agents = t1, varName = "xcor")
-  minXcor2 <- minOneOf(agents = t1, varName = "xcor")
+  minXcor1 <- withMin(agents = t1, var = "xcor")
+  minXcor2 <- minOneOf(agents = t1, var = "xcor")
   expect_identical(minXcor1, minXcor2)
-  minHeading1 <- withMin(agents = t1, varName = "heading")
-  minHeading2 <- minOneOf(agents = t1, varName = "heading")
+  minHeading1 <- withMin(agents = t1, var = "heading")
+  minHeading2 <- minOneOf(agents = t1, var = "heading")
   expect_equivalent(length(minHeading2), 1)
   minH12 <- merge(minHeading1@data, minHeading2@data)
   expect_equivalent(nrow(minH12), 1)
-  expect_error(minOneOf(agents = t1, varName = "prevX"))
+  expect_error(minOneOf(agents = t1, var = "prevX"))
 })
 
 test_that("isNLclass works",{
@@ -373,16 +373,16 @@ test_that("maxNof works",{
   expect_identical(p5, noPatches())
 
   t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 1:10)
-  t2 <- maxNof(agents = t1, n = 5, varName = "heading")
+  t2 <- maxNof(agents = t1, n = 5, var = "heading")
   expect_identical(t2, turtle(t1, who = c(5,6,7,8,9)))
-  t3 <- maxNof(agents = t1, n = 1, varName = "heading")
+  t3 <- maxNof(agents = t1, n = 1, var = "heading")
   expect_identical(t3, turtle(t1, who = 9))
-  t4 <- maxNof(agents = t1, n = 10, varName = "heading")
+  t4 <- maxNof(agents = t1, n = 10, var = "heading")
   expect_identical(t4, t1)
   t5 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
-  t6 <- maxNof(agents = t5, n = 5, varName = "heading")
+  t6 <- maxNof(agents = t5, n = 5, var = "heading")
   expect_equivalent(length(t6), 5)
-  t7 <- minNof(agents = t1, n = 0, varName = "heading")
+  t7 <- minNof(agents = t1, n = 0, var = "heading")
   expect_identical(t7, noTurtles())
   expect_equivalent(length(t7), 0)
 })
@@ -405,16 +405,16 @@ test_that("minNof works",{
   expect_identical(p5, noPatches())
 
   t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10:1)
-  t2 <- minNof(agents = t1, n = 5, varName = "heading")
+  t2 <- minNof(agents = t1, n = 5, var = "heading")
   expect_identical(t2, turtle(t1, who = c(5,6,7,8,9)))
-  t3 <- minNof(agents = t1, n = 1, varName = "heading")
+  t3 <- minNof(agents = t1, n = 1, var = "heading")
   expect_identical(t3, turtle(t1, who = 9))
-  t4 <- minNof(agents = t1, n = 10, varName = "heading")
+  t4 <- minNof(agents = t1, n = 10, var = "heading")
   expect_identical(t4, t1)
   t5 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
-  t6 <- minNof(agents = t5, n = 5, varName = "heading")
+  t6 <- minNof(agents = t5, n = 5, var = "heading")
   expect_equivalent(length(t6), 5)
-  t7 <- minNof(agents = t1, n = 0, varName = "heading")
+  t7 <- minNof(agents = t1, n = 0, var = "heading")
   expect_identical(t7, noTurtles())
   expect_equivalent(length(t7), 0)
 })

@@ -548,7 +548,7 @@ setMethod(
 ################################################################################
 #' Patch at
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} at \code{(dx, dy)}
+#' Report the patches coordinates \code{[pxcor, pycor]} at \code{(dx, dy)}
 #' distances of the \code{agents}.
 #'
 #' @param world  \code{NLworlds} object.
@@ -638,7 +638,7 @@ setMethod(
 ################################################################################
 #' Patches at certain distances and certain directions
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} at certain
+#' Report the patches coordinates \code{[pxcor, pycor]} at certain
 #' distances and certain headings from the \code{agents}.
 #'
 #' @param world  \code{NLworlds} object.
@@ -732,7 +732,7 @@ setMethod(
 ################################################################################
 #' All the patches in a world
 #'
-#' Report the coordinates \code{pxcor} and \code{pycor} for all patches in a
+#' Report the coordinates \code{[pxcor, pycor]} for all patches in a
 #' \code{NLworlds}.
 #'
 #' @param world \code{NLworlds} object.
@@ -790,7 +790,7 @@ setMethod(
 ################################################################################
 #' Patch set
 #'
-#' Report a patch agentset as the coordinates \code{pxcor} and \code{pycor}
+#' Report a patch agentset as the coordinates \code{[pxcor, pycor]}
 #' of all patches contained in the inputs.
 #'
 #' @param ... Matrices (ncol = 2) of patches coordinates with the first column

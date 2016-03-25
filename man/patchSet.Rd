@@ -19,7 +19,7 @@ Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         \code{pycor} representing the patches coordinates.
 }
 \description{
-Report a patch agentset as the coordinates \code{pxcor} and \code{pycor}
+Report a patch agentset as the coordinates \code{[pxcor, pycor]}
 of all patches contained in the inputs.
 }
 \details{

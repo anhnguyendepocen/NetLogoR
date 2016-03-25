@@ -22,7 +22,7 @@ Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         follows the order of the cellnumbers as defined for a \code{Raster*}.
 }
 \description{
-Report the coordinates \code{pxcor} and \code{pycor} for all patches in a
+Report the coordinates \code{[pxcor, pycor]} for all patches in a
 \code{NLworlds}.
 }
 \examples{

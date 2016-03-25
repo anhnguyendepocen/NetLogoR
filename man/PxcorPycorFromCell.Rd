@@ -23,7 +23,7 @@ Matrix (ncol = 2) with the first column \code{pxcor} and the second
         column \code{pycor} in the order of the cells number given.
 }
 \description{
-Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
+Report the patches coordinates \code{[pxcor, pycor]} given the cells
 number as defined for a \code{Raster*} object.
 }
 \examples{

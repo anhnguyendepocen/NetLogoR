@@ -8,23 +8,22 @@
 \alias{minNof,matrix,numeric,NLworldStack,character-method}
 \title{N agents with minimum}
 \usage{
-minNof(agents, n, world, varName)
+minNof(agents, n, world, var)
 
 \S4method{minNof}{matrix,numeric,NLworld,missing}(agents, n, world)
 
-\S4method{minNof}{matrix,numeric,NLworldStack,character}(agents, n, world,
-  varName)
+\S4method{minNof}{matrix,numeric,NLworldStack,character}(agents, n, world, var)
 
 \S4method{minNof}{SpatialPointsDataFrame,numeric,missing,character}(agents, n,
-  varName)
+  var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates for the
-               patches to evaluate.
+              second column \code{pycor} representing the coordinates for the
+              patches to evaluate.
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing the turtles to evaluate.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to evaluate.}
 
 \item{n}{Integer. The number of patches or turtles to select from \code{agents}
 to return. \code{n} must be less or equal to the number of \code{agents}.}
@@ -32,13 +31,13 @@ to return. \code{n} must be less or equal to the number of \code{agents}.}
 \item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
-\item{varName}{Characters. The name of the variable to evaluate for their values.
+\item{var}{Characters. The name of the variable to evaluate for their values.
 If \code{agents} are patches and the \code{world} is a \code{NLworld}
-object, \code{varName} must not be provided. If \code{agents} are
+object, \code{var} must not be provided. If \code{agents} are
 patches and the \code{world} is a \code{NLworldStack} object,
-\code{varName} refers to the layer used for evaluating patches
-values. If \code{agents} are turtles, \code{varName} is one of
-the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+\code{var} refers to the layer used for evaluating patches
+values. If \code{agents} are turtles, \code{var} is one of
+the turtles' variable. \code{var} can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,
 as well as any variable created using \code{turtlesOwn()}.}
 }
@@ -49,12 +48,12 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
         \code{agents}.
 
         SpatialPointsDataFrame of length \code{n} representing the turtles which
-        have their \code{varName} value among the minimum values among the \code{agents}.
+        have their \code{var} value among the minimum values among the \code{agents}.
 }
 \description{
-Report the n patches coordinates \code{pxcor} and \code{pycor} which have
-their variable among the minimum values.
-Report the n turtles which have their variable amog the minimum values.
+Report the n patches coordinates \code{[pxcor, pycor]} which have
+their variable values among the minimum values.
+Report the n turtles which have their variable values among the minimum values.
 }
 \details{
 If there is a tie that would make the number of returned patches or turtles larger
@@ -69,7 +68,7 @@ p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 
 # Turtles
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:5, size = 10, replace= TRUE))
-t2 <- minNof(agents = t1, n = 5, varName = "heading")
+t2 <- minNof(agents = t1, n = 5, var = "heading")
 
 
 }

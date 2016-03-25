@@ -44,7 +44,7 @@ Matrix (ncol = 2) with the first column \code{pxcor} and the second column
         of the \code{agents}.
 }
 \description{
-Report the patches coordinates \code{pxcor} and \code{pycor} at \code{(dx, dy)}
+Report the patches coordinates \code{[pxcor, pycor]} at \code{(dx, dy)}
 distances of the \code{agents}.
 }
 \details{

@@ -8,13 +8,13 @@
 \alias{NLall,matrix,NLworldStack,character-method}
 \title{All agents?}
 \usage{
-NLall(agents, world, varName, val)
+NLall(agents, world, var, val)
 
 \S4method{NLall}{matrix,NLworld,missing}(agents, world, val)
 
-\S4method{NLall}{matrix,NLworldStack,character}(agents, world, varName, val)
+\S4method{NLall}{matrix,NLworldStack,character}(agents, world, var, val)
 
-\S4method{NLall}{SpatialPointsDataFrame,missing,character}(agents, varName, val)
+\S4method{NLall}{SpatialPointsDataFrame,missing,character}(agents, var, val)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
@@ -27,13 +27,13 @@ NLall(agents, world, varName, val)
 \item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
-\item{varName}{Characters. The name of the variable to evaluate for the \code{agents}
+\item{var}{Characters. The name of the variable to evaluate for the \code{agents}
 value. If \code{agents} are patches and the \code{world} is a
-\code{NLworld} object, \code{varName} must not be provided. If
+\code{NLworld} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-object, \code{varName} refers to the layer used for evaluating patches
-values. If \code{agents} are turtles, \code{varName} is one of
-the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+object, \code{var} refers to the layer used for evaluating patches
+values. If \code{agents} are turtles, \code{var} is one of
+the turtles' variable. \code{var} can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,
 as well as any variable created using \code{turtlesOwn()}.}
 
@@ -42,11 +42,11 @@ any length.}
 }
 \value{
 Logical. \code{TRUE} if all the \code{agents} have their variable equal to
-        \code{val}, return \code{FALSE} otherwise.
+        \code{val}, \code{FALSE} otherwise.
 }
 \description{
 Report \code{TRUE} if all \code{agents} have their variable equal to a given value,
-or \code{FALSE} otherwise.
+report \code{FALSE} otherwise.
 }
 \examples{
 # Patches
@@ -59,8 +59,8 @@ NLall(agents = patches(w2), world = w2, val = 5)
 
 # Turtles
 t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
-NLall(agents = t1, varName = "xcor", val = 1)
-NLall(agents = t1, varName = "heading", val = 2)
+NLall(agents = t1, var = "xcor", val = 1)
+NLall(agents = t1, var = "heading", val = 2)
 
 
 }

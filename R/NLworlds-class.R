@@ -332,7 +332,7 @@ setMethod(
 ################################################################################
 #' Patches coordinates from cells number
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
+#' Report the patches coordinates \code{[pxcor, pycor]} given the cells
 #' number as defined for a \code{Raster*} object.
 #'
 #' @param world   \code{NLworlds} object.

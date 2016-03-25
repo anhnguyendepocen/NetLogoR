@@ -26,7 +26,7 @@ Logical. \code{TRUE} if there is at least one patch or one turtle in the
         \code{agents}, \code{FALSE} otherwise.
 }
 \description{
-Report \code{TRUE} if \code{agents} is non empty, or \code{FALSE} otherwise.
+Report \code{TRUE} if \code{agents} is non empty, report \code{FALSE} otherwise.
 }
 \examples{
 # Patches

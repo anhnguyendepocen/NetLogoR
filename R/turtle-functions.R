@@ -1568,7 +1568,7 @@ setMethod(
 ################################################################################
 #' Patch ahead
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} at the given
+#' Report the patches coordinates \code{[pxcor, pycor]} at the given
 #' distance in the direction of the turtles' headings.
 #'
 #' @param world   \code{NLworlds} object, representing the world which the
@@ -1636,7 +1636,7 @@ setMethod(
 ################################################################################
 #' Patch here
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} under the turtles
+#' Report the patches coordinates \code{[pxcor, pycor]} under the turtles
 #' locations.
 #'
 #' @param world   \code{NLworlds} object, representing the world which the turtles
@@ -1693,7 +1693,7 @@ setMethod(
 ################################################################################
 #' Patch on the left
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} at given distances
+#' Report the patches coordinates \code{[pxcor, pycor]} at given distances
 #' to the left of the turtles.
 #'
 #' @param world    \code{NLworlds} object, representing the world which the turtles
@@ -1769,7 +1769,7 @@ setMethod(
 ################################################################################
 #' Patch on the right
 #'
-#' Report the patches coordinates \code{pxcor} and \code{pycor} at a given distances
+#' Report the patches coordinates \code{[pxcor, pycor]} at a given distances
 #' to the right of the turtles.
 #'
 #' @param world    \code{NLworlds} object, representing the world which the turtles

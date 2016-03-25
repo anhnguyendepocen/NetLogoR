@@ -35,7 +35,7 @@ Matrix (ncol = 2) with the first column \code{pxcor} and the second
         The order of the patches follows the order of the \code{turtles}.
 }
 \description{
-Report the patches coordinates \code{pxcor} and \code{pycor} at a given distances
+Report the patches coordinates \code{[pxcor, pycor]} at a given distances
 to the right of the turtles.
 }
 \details{

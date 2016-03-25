@@ -8,53 +8,54 @@
 \alias{maxOneOf,matrix,NLworldStack,character-method}
 \title{One agent with maximum}
 \usage{
-maxOneOf(agents, world, varName)
+maxOneOf(agents, world, var)
 
 \S4method{maxOneOf}{matrix,NLworld,missing}(agents, world)
 
-\S4method{maxOneOf}{matrix,NLworldStack,character}(agents, world, varName)
+\S4method{maxOneOf}{matrix,NLworldStack,character}(agents, world, var)
 
-\S4method{maxOneOf}{SpatialPointsDataFrame,missing,character}(agents, varName)
+\S4method{maxOneOf}{SpatialPointsDataFrame,missing,character}(agents, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates for the
-               patches to evaluate.
+              second column \code{pycor} representing the coordinates for the
+              patches to evaluate.
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing the turtles to evaluate.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or by
+              \code{createOTurtles()} representing the turtles to evaluate.}
 
 \item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
 Must not be provided if \code{agents} are turtles.}
 
-\item{varName}{Characters. The name of the variable to evaluate for the maximum value.
+\item{var}{Characters. The name of the variable to evaluate for the maximum value.
 If \code{agents} are patches and the \code{world} is a \code{NLworld}
-object, \code{varName} must not be provided. If \code{agents} are
+object, \code{var} must not be provided. If \code{agents} are
 patches and the \code{world} is a \code{NLworldStack} object,
-\code{varName} refers to the layer used for evaluating patches
-values. If \code{agents} are turtles, \code{varName} is one of
-the turtles' variable. \code{varName} can be equal to \code{"xcor"},
+\code{var} refers to the layer used for evaluating patches
+values. If \code{agents} are turtles, \code{var} is one of
+the turtles' variable. \code{var} can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,
 as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
 Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
         the second column \code{pycor} representing the coordinates for the patch
-        (or one of the patches) with the maximum value among the \code{agents}.
+        (or one of the patches) which has its variable equals to the maximum value
+        among the \code{agents}.
 
         SpatialPointsDataFrame of length 1 representing the turtle (or one of
-        the turtles) which has its \code{varName} equals to the maximum value
+        the turtles) which has its \code{var} equals to the maximum value
         among the \code{agents}.
 }
 \description{
-Report one patch coordinates \code{pxcor} and \code{pycor} which has its
+Report one patch coordinates \code{[pxcor, pycor]} which has its
 variable equals to the maximum value.
 Report one turtle which has its variable equals to the maximum value.
 }
 \details{
-If there are several \code{agents}. with the maximum value, one is chosen
-         randomly. To access to all agents with their variable equal to the maximum
-         value, use \code{withMax()}.
+If there are several \code{agents} with thier variables equals to the maximum
+         value, one is chosen randomly. To access to all agents which have their variable equals
+         to the maximum value, use \code{withMax()}.
 }
 \examples{
 # Patches
@@ -65,7 +66,7 @@ p1 <- maxOneOf(agents = patches(w1), world = w1)
 
 # Turtles
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
-t2 <- maxOneOf(agents = t1, varName = "heading")
+t2 <- maxOneOf(agents = t1, var = "heading")
 
 
 }
