@@ -1770,7 +1770,7 @@ setMethod(
         towards(world = world, from = x, to = y, torus = torus)
       }, tList, agentsNoEmpty, SIMPLIFY = FALSE)
       # Define the rotation angle between the turtle heading and the direction to each patches
-      tCone <- mapply(function(x, y){subHeadings(heading1 = x, heading2 = y, range360 = FALSE)}, tDir, tList, SIMPLIFY = FALSE)
+      tCone <- mapply(function(x, y){subHeadings(angle1 = x, angle2 = y, range360 = FALSE)}, tDir, tList, SIMPLIFY = FALSE)
 
       angle <- angle / 2
       if(length(angle) == 1){

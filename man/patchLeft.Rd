@@ -6,10 +6,10 @@
 \alias{patchLeft,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
 \title{Patch on the left}
 \usage{
-patchLeft(world, turtles, dist, nDegrees, torus = FALSE)
+patchLeft(world, turtles, dist, angle, torus = FALSE)
 
 \S4method{patchLeft}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
-  turtles, dist, nDegrees, torus = FALSE)
+  turtles, dist, angle, torus = FALSE)
 }
 \arguments{
 \item{world}{\code{NLworlds} object, representing the world which the turtles
@@ -21,7 +21,7 @@ by \code{createOTurtles()} representing the moving turtles.}
 \item{dist}{Numeric. Distances from the \code{turtles} locations. Must be of
 length 1 or of length \code{turtles}.}
 
-\item{nDegrees}{Numeric. The number of degrees the turtle's heading should rotate
+\item{angle}{Numeric. Angles in degrees the turtle's heading should rotate
 to the left to locate the patches. Must be of length 1 or of
 length \code{turtles}.}
 
@@ -31,7 +31,7 @@ Default is \code{torus = FALSE}.}
 \value{
 Matrix (ncol = 2) with the first column \code{pxcor} and the second
         column \code{pycor} representing the patches coordinates at \code{dist}
-        of the turtles locations and \code{nDegrees} to the left of their headings.
+        of the turtles locations and \code{angle} to the left of their headings.
         The order of the patches follows the order of the \code{turtles}.
 }
 \description{
@@ -39,7 +39,7 @@ Report the patches coordinates \code{[pxcor, pycor]} at given distances
 to the left of the turtles.
 }
 \details{
-If \code{nDegrees} is negative, the turtle would rotate to the right.
+If \code{angle} is negative, the turtle would rotate to the right.
          If \code{dist} is negative, the turtle would move backward.
 
          If \code{torus = FALSE} and the patch at distance \code{dist} and
@@ -51,7 +51,7 @@ If \code{nDegrees} is negative, the turtle would rotate to the right.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
-patchLeft(world = w1, turtles = t1, dist = 2, nDegrees = 90)
+patchLeft(world = w1, turtles = t1, dist = 2, angle = 90)
 
 
 }

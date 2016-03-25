@@ -1245,15 +1245,15 @@ setMethod(
 #'
 #' Rotate the turtles's heading to the left.
 #'
-#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the turtles to rotate.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtles to rotate.
 #'
-#' @param nDegrees Numeric. The number of degrees by which to rotate the turtles'
-#'                 heading to the left. Must be of length 1 or of length \code{turtles}.
+#' @param angle   Numeric. Angles in degrees by which to rotate the turtles'
+#'                heading to the left. Must be of length 1 or of length \code{turtles}.
 #'
 #' @return SpatialPointsDataFrame representing the turtles with updated headings.
 #'
-#' @details If \code{nDegrees} is negative, the turtle rotate to the right.
+#' @details If \code{angle} is negative, the turtle rotates to the right.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#left}
 #'
@@ -1264,7 +1264,7 @@ setMethod(
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
 #' of(t1, tVar = "heading")
-#' t1 <- left(turtles = t1, nDegrees = 180)
+#' t1 <- left(turtles = t1, angle = 180)
 #' of(t1, tVar = "heading")
 #'
 #'
@@ -1276,7 +1276,7 @@ setMethod(
 #'
 setGeneric(
   "left",
-  function(turtles, nDegrees) {
+  function(turtles, angle) {
     standardGeneric("left")
   })
 
@@ -1285,8 +1285,8 @@ setGeneric(
 setMethod(
   "left",
   signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, nDegrees) {
-    newHeading <- turtles@data$heading - nDegrees
+  definition = function(turtles, angle) {
+    newHeading <- turtles@data$heading - angle
     newHeading[newHeading < 0] <- newHeading[newHeading < 0] + 360
     newHeading[newHeading >= 360] <- newHeading[newHeading >= 360] - 360
 
@@ -1303,17 +1303,17 @@ setMethod(
 #'
 #' Rotate the turtles's heading to the right.
 #'
-#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the turtles to rotate.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the turtles to rotate.
 #'
-#' @param nDegrees Numeric. The number of degrees by which to rotate the turtles'
-#'                 heading to the right Must be of length 1 or of length \code{turtles}.
+#' @param angle   Numeric. Angles in degrees by which to rotate the turtles'
+#'                heading to the right Must be of length 1 or of length \code{turtles}.
 #'
 #' @return SpatialPointsDataFrame representing the turtles with updated headings.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#right}
 #'
-#' @details If \code{nDegrees} is negative, the turtle rotate to the left.
+#' @details If \code{angle} is negative, the turtle rotates to the left.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1322,7 +1322,7 @@ setMethod(
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
 #' of(t1, tVar = "heading")
-#' t1 <- right(turtles = t1, nDegrees = 180)
+#' t1 <- right(turtles = t1, angle = 180)
 #' of(t1, tVar = "heading")
 #'
 #'
@@ -1334,7 +1334,7 @@ setMethod(
 #'
 setGeneric(
   "right",
-  function(turtles, nDegrees) {
+  function(turtles, angle) {
     standardGeneric("right")
   })
 
@@ -1343,8 +1343,8 @@ setGeneric(
 setMethod(
   "right",
   signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, nDegrees) {
-    left(turtles = turtles, nDegrees = -nDegrees)
+  definition = function(turtles, angle) {
+    left(turtles = turtles, angle = -angle)
   }
 )
 
@@ -1696,28 +1696,28 @@ setMethod(
 #' Report the patches coordinates \code{[pxcor, pycor]} at given distances
 #' to the left of the turtles.
 #'
-#' @param world    \code{NLworlds} object, representing the world which the turtles
-#'                 move onto.
+#' @param world   \code{NLworlds} object, representing the world which the turtles
+#'                move onto.
 #'
-#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the moving turtles.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param dist     Numeric. Distances from the \code{turtles} locations. Must be of
-#'                 length 1 or of length \code{turtles}.
+#' @param dist    Numeric. Distances from the \code{turtles} locations. Must be of
+#'                length 1 or of length \code{turtles}.
 #'
-#' @param nDegrees Numeric. The number of degrees the turtle's heading should rotate
-#'                 to the left to locate the patches. Must be of length 1 or of
-#'                 length \code{turtles}.
+#' @param angle   Numeric. Angles in degrees the turtle's heading should rotate
+#'                to the left to locate the patches. Must be of length 1 or of
+#'                length \code{turtles}.
 #'
-#' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
-#'                 Default is \code{torus = FALSE}.
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second
 #'         column \code{pycor} representing the patches coordinates at \code{dist}
-#'         of the turtles locations and \code{nDegrees} to the left of their headings.
+#'         of the turtles locations and \code{angle} to the left of their headings.
 #'         The order of the patches follows the order of the \code{turtles}.
 #'
-#' @details If \code{nDegrees} is negative, the turtle would rotate to the right.
+#' @details If \code{angle} is negative, the turtle would rotate to the right.
 #'          If \code{dist} is negative, the turtle would move backward.
 #'
 #'          If \code{torus = FALSE} and the patch at distance \code{dist} and
@@ -1735,7 +1735,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
-#' patchLeft(world = w1, turtles = t1, dist = 2, nDegrees = 90)
+#' patchLeft(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
 #'
 #' @export
@@ -1746,7 +1746,7 @@ setMethod(
 #'
 setGeneric(
   "patchLeft",
-  function(world, turtles, dist, nDegrees, torus = FALSE) {
+  function(world, turtles, dist, angle, torus = FALSE) {
     standardGeneric("patchLeft")
   })
 
@@ -1754,10 +1754,10 @@ setGeneric(
 #' @rdname patchLeft
 setMethod(
   "patchLeft",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", nDegrees = "numeric"),
-  definition = function(world, turtles, dist, nDegrees, torus) {
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", angle = "numeric"),
+  definition = function(world, turtles, dist, angle, torus) {
 
-    tLeft <- left(turtles = turtles, nDegrees = nDegrees)
+    tLeft <- left(turtles = turtles, angle = angle)
     tFd <- fd(world = world, turtles = tLeft, dist = dist, torus = torus)
     pLeftFd <- patchHere(world = world, turtles = tFd)
 
@@ -1772,28 +1772,28 @@ setMethod(
 #' Report the patches coordinates \code{[pxcor, pycor]} at a given distances
 #' to the right of the turtles.
 #'
-#' @param world    \code{NLworlds} object, representing the world which the turtles
-#'                 move onto.
+#' @param world   \code{NLworlds} object, representing the world which the turtles
+#'                move onto.
 #'
-#' @param turtles  SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                 by \code{createOTurtles()} representing the moving turtles.
+#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
+#'                by \code{createOTurtles()} representing the moving turtles.
 #'
-#' @param dist     Numeric. Distances from the \code{turtles} locations. Must be of
-#'                 length 1 or of length \code{turtles}.
+#' @param dist    Numeric. Distances from the \code{turtles} locations. Must be of
+#'                length 1 or of length \code{turtles}.
 #'
-#' @param nDegrees Numeric. The number of degrees the turtle's heading should rotate
-#'                 to the right to locate the patches. Must be of length 1 or of
-#'                 length \code{turtles}.
+#' @param angle   Numeric. Angles in degrees the turtle's heading should rotate
+#'                to the right to locate the patches. Must be of length 1 or of
+#'                length \code{turtles}.
 #'
-#' @param torus    Logical to determine if the \code{NLworlds} object is wrapped.
-#'                 Default is \code{torus = FALSE}.
+#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
+#'                Default is \code{torus = FALSE}.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second
 #'         column \code{pycor} representing the patches coordinates at \code{dist}
-#'         of the turtles locations and \code{nDegrees} to the right of their headings.
+#'         of the turtles locations and \code{angle} to the right of their headings.
 #'         The order of the patches follows the order of the \code{turtles}.
 #'
-#' @details If \code{nDegrees} is negative, the turtle would rotate to the left.
+#' @details If \code{angle} is negative, the turtle would rotate to the left.
 #'          If \code{dist} is negative, the turtle would move backward.
 #'
 #'          If \code{torus = FALSE} and the patch at distance \code{dist} and
@@ -1811,7 +1811,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
-#' patchRight(world = w1, turtles = t1, dist = 2, nDegrees = 90)
+#' patchRight(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
 #'
 #' @export
@@ -1822,7 +1822,7 @@ setMethod(
 #'
 setGeneric(
   "patchRight",
-  function(world, turtles, dist, nDegrees, torus = FALSE) {
+  function(world, turtles, dist, angle, torus = FALSE) {
     standardGeneric("patchRight")
   })
 
@@ -1830,9 +1830,9 @@ setGeneric(
 #' @rdname patchRight
 setMethod(
   "patchRight",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", nDegrees = "numeric"),
-  definition = function(world, turtles, dist, nDegrees, torus) {
-    patchLeft(world = world, turtles = turtles, dist = dist, nDegrees = -nDegrees, torus = torus)
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", angle = "numeric"),
+  definition = function(world, turtles, dist, angle, torus) {
+    patchLeft(world = world, turtles = turtles, dist = dist, angle = -angle, torus = torus)
   }
 )
 
@@ -2777,28 +2777,28 @@ setMethod(
 #'
 #' Compute the difference between headings.
 #'
-#' @param heading1 SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param angle1 SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                 \code{createOTurtles()} representing the turtles with their
 #'                 headings.
 #'
 #'                 Numeric.
 #'
-#' @param heading2 SpatialPointsDataFrame created by \code{createTurtles()} or by
+#' @param angle2 SpatialPointsDataFrame created by \code{createTurtles()} or by
 #'                 \code{createOTurtles()} representing turtles with their
 #'                 headings.
 #'
 #'                 Numeric.
 #'
-#'                 \code{heading2} must be of length 1 or of length \code{heading1}.
+#'                 \code{angle2} must be of length 1 or of length \code{angle1}.
 #'
 #' @param range360 Logical. Determine if the returned values are between 0° and
 #'                 360° (\code{range360 = TRUE}) or between -180° and 180°
 #'                 (\code{range360 = FALSE}). Default is \code{range360 = FALSE}.
 #'
-#' @return Numeric. Vector of values representing the smallest angle in degrees
-#'         by which \code{heading1} could be rotated to produce \code{heading2}
+#' @return Numeric. Vector of values representing the smallest angles in degrees
+#'         by which \code{angle1} could be rotated to produce \code{angle2}
 #'         (i.e., the target heading). Note: this is the opposite as in NetLogo where
-#'         heading1 is the target.
+#'         angle1 is the target.
 #'
 #' @details Positive values mean clockwise rotation, negative value mean counterclockwise.
 #'
@@ -2811,7 +2811,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createOTurtles(n = 10, world = w1)
-#' subHeadings(heading1 = t1, heading2 = 0)
+#' subHeadings(angle1 = t1, angle2 = 0)
 #'
 #'
 #' @export
@@ -2824,7 +2824,7 @@ setMethod(
 #'
 setGeneric(
   "subHeadings",
-  function(heading1, heading2, range360 = FALSE) {
+  function(angle1, angle2, range360 = FALSE) {
     standardGeneric("subHeadings")
   })
 
@@ -2832,18 +2832,18 @@ setGeneric(
 #' @rdname subHeadings
 setMethod(
   "subHeadings",
-  signature = c(heading1 = "numeric", heading2 = "numeric"),
-  definition = function(heading1, heading2, range360) {
+  signature = c(angle1 = "numeric", angle2 = "numeric"),
+  definition = function(angle1, angle2, range360) {
 
-    if(length(heading2) != length(heading1)){
-      if(length(heading2) == 1){
-        heading2 <- rep(heading2, length(heading1))
+    if(length(angle2) != length(angle1)){
+      if(length(angle2) == 1){
+        angle2 <- rep(angle2, length(angle1))
       } else {
-        stop("heading2 must be of length 1 or length(heading1)")
+        stop("angle2 must be of length 1 or length(angle1)")
       }
     }
 
-    angles <- deg(atan2(sin(rad(heading2) - rad(heading1)), cos(rad(heading2) - rad(heading1))))
+    angles <- deg(atan2(sin(rad(angle2) - rad(angle1)), cos(rad(angle2) - rad(angle1))))
 
     if(range360 == TRUE){
       angles[angles < 0] <- angles[angles < 0] + 360
@@ -2857,27 +2857,27 @@ setMethod(
 #' @rdname subHeadings
 setMethod(
   "subHeadings",
-  signature = c(heading1 = "SpatialPointsDataFrame", heading2 = "numeric"),
-  definition = function(heading1, heading2, range360) {
-    subHeadings(heading1 = heading1@data$heading, heading2 = heading2, range360 = range360)
+  signature = c(angle1 = "SpatialPointsDataFrame", angle2 = "numeric"),
+  definition = function(angle1, angle2, range360) {
+    subHeadings(angle1 = angle1@data$heading, angle2 = angle2, range360 = range360)
   }
 )
 #' @export
 #' @rdname subHeadings
 setMethod(
   "subHeadings",
-  signature = c(heading1 = "numeric", heading2 = "SpatialPointsDataFrame"),
-  definition = function(heading1, heading2, range360) {
-    subHeadings(heading1 = heading1, heading2 = heading2@data$heading, range360 = range360)
+  signature = c(angle1 = "numeric", angle2 = "SpatialPointsDataFrame"),
+  definition = function(angle1, angle2, range360) {
+    subHeadings(angle1 = angle1, angle2 = angle2@data$heading, range360 = range360)
   }
 )
 #' @export
 #' @rdname subHeadings
 setMethod(
   "subHeadings",
-  signature = c(heading1 = "SpatialPointsDataFrame", heading2 = "SpatialPointsDataFrame"),
-  definition = function(heading1, heading2, range360) {
-    subHeadings(heading1 = heading1@data$heading, heading2 = heading2@data$heading, range360 = range360)
+  signature = c(angle1 = "SpatialPointsDataFrame", angle2 = "SpatialPointsDataFrame"),
+  definition = function(angle1, angle2, range360) {
+    subHeadings(angle1 = angle1@data$heading, angle2 = angle2@data$heading, range360 = range360)
   }
 )
 

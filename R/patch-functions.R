@@ -654,7 +654,7 @@ setMethod(
 #' @param dist   Numeric. Distances from the \code{agents}. \code{dist} must be
 #'               a single value or of the length as the number of \code{agents}.
 #'
-#' @param head   Numeric. Absolute angles from the \code{agents}. \code{head}
+#' @param angle  Numeric. Absolute directions from the \code{agents}. \code{angle}
 #'               must be a single value or of the length as the number of
 #'               \code{agents}. Angles must be in degrees with 0 being North.
 #'
@@ -662,18 +662,19 @@ setMethod(
 #'               Default is \code{torus = FALSE}.
 #'
 #' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-#'         \code{pycor} representing the patches coordinates at \code{dist} and \code{head}
-#'         of \code{agents}. The order of the patches followa the order of the \code{agents}.
+#'         \code{pycor} representing the patches coordinates at the distances \code{dist}
+#'         and directions \code{angle}
+#'         of \code{agents}. The order of the patches follows the order of the \code{agents}.
 #'
 #' @details If \code{torus = FALSE} and the patch at distance \code{dist} and
-#'          heading \code{head} of an agent is outside the world's extent, \code{NA}
+#'          direction \code{angle} of an agent is outside the world's extent, \code{NA}
 #'          are returned. If \code{torus = TRUE}, the patch coordinates from the
 #'          wrapped world are returned.
 #'
-#'          If \code{agents} are turtles, their heading is not taken into account; the
-#'          given absolute heading \code{head} is used. To find a patch at certain
+#'          If \code{agents} are turtles, their headings are not taken into account; the
+#'          given absolute directions \code{angle} are used. To find a patch at certain
 #'          distance from a turtle with the turtle's heading, look at \code{pacthAhead()},
-#'          \code{pacthLeft()} or \code{pacthRight()}.
+#'          \code{patchLeft()} or \code{patchRight()}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-at-heading-and-distance}
 #'
@@ -683,9 +684,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' p1 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, head = 45)
+#' p1 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
-#' p2 <- patchDistHead(world = w1, agents = t1, dist = 1, head = 45)
+#' p2 <- patchDistHead(world = w1, agents = t1, dist = 1, angle = 45)
 #'
 #'
 #' @export
@@ -697,7 +698,7 @@ setMethod(
 #'
 setGeneric(
   "patchDistHead",
-  function(world, agents, dist, head, torus = FALSE) {
+  function(world, agents, dist, angle, torus = FALSE) {
     standardGeneric("patchDistHead")
   })
 
@@ -705,11 +706,11 @@ setGeneric(
 #' @rdname patchDistHead
 setMethod(
   "patchDistHead",
-  signature = c(world = "NLworlds", agents = "matrix", dist = "numeric", head = "numeric"),
-  definition = function(world, agents, dist, head, torus) {
+  signature = c(world = "NLworlds", agents = "matrix", dist = "numeric", angle = "numeric"),
+  definition = function(world, agents, dist, angle, torus) {
 
-    pxcor <- agents[,1] + sin(rad(head)) * dist
-    pycor <- agents[,2] + cos(rad(head)) * dist
+    pxcor <- agents[,1] + sin(rad(angle)) * dist
+    pycor <- agents[,2] + cos(rad(angle)) * dist
     pDistHead <- patch(world = world, x = pxcor, y = pycor, torus = torus, duplicate = TRUE, out = TRUE)
 
     return(pDistHead)
@@ -720,10 +721,10 @@ setMethod(
 #' @rdname patchDistHead
 setMethod(
   "patchDistHead",
-  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", dist = "numeric", head = "numeric"),
-  definition = function(world, agents, dist, head, torus) {
+  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", dist = "numeric", angle = "numeric"),
+  definition = function(world, agents, dist, angle, torus) {
 
-    patchDistHead(world = world, agents = agents@coords, dist = dist, head = head, torus = torus)
+    patchDistHead(world = world, agents = agents@coords, dist = dist, angle = angle, torus = torus)
 
     }
 )
@@ -810,7 +811,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' p1 <- patchAt(world = w1, agents = patch(w1, c(0,1,2), c(0,0,0)), dx = 1, dy = 1)
-#' p2 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, head = 45)
+#' p2 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
 #' p3 <- patch(world = w1, x = 4.3, y = 8)
 #' p4 <- patchSet(p1, p2, p3)
 #'

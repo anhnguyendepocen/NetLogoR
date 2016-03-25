@@ -411,9 +411,9 @@ test_that("face works",{
 test_that("left and right work",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createOTurtles(world = w1, n = 4)
-  t2 <- left(turtles = t1, nDegrees = 45)
+  t2 <- left(turtles = t1, angle = 45)
   expect_identical(t2@data$heading, c(315, 45, 135, 225))
-  t3 <- right(turtles = t2, nDegrees = 45)
+  t3 <- right(turtles = t2, angle = 45)
   expect_identical(t3@data$heading, t1@data$heading)
 })
 
@@ -535,23 +535,23 @@ test_that("patchHere works",{
 test_that("patchLeft and patchRight work",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = 0)
-  pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = FALSE)
+  pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, angle = 45, torus = FALSE)
   expect_identical(pLeft, cbind(pxcor = c(NA, 0, 1, 2, NA), pycor = c(NA, 2, 3, 4, NA)))
-  pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = TRUE)
+  pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, angle = 45, torus = TRUE)
   expect_identical(pLeft, cbind(pxcor = c(4, 0, 1, 2, 3), pycor = c(1, 2, 3, 4, 0)))
 
-  pRight <- patchRight(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = FALSE)
+  pRight <- patchRight(world = w1, turtles = t1, dist = 1, angle = 45, torus = FALSE)
   expect_identical(pRight, cbind(pxcor = c(1, 2, 3, 4, NA), pycor = c(1, 2, 3, 4, NA)))
-  pRight <- patchRight(world = w1, turtles = t1, dist = 1, nDegrees = 45, torus = TRUE)
+  pRight <- patchRight(world = w1, turtles = t1, dist = 1, angle = 45, torus = TRUE)
   expect_identical(pRight, cbind(pxcor = c(1, 2, 3, 4, 0), pycor = c(1, 2, 3, 4, 0)))
 
-  pRight <- patchRight(world = w1, turtles = t1, dist = 1, nDegrees = -45, torus = TRUE)
+  pRight <- patchRight(world = w1, turtles = t1, dist = 1, angle = -45, torus = TRUE)
   expect_identical(pLeft, pRight)
 
   t2 <- createTurtles(n = 2, coords = cbind(xcor = 2, ycor = 2), heading = 180)
-  pLeft <- patchLeft(world = w1, turtles = t2, dist = c(2, 0.8), nDegrees = c(90, -90))
+  pLeft <- patchLeft(world = w1, turtles = t2, dist = c(2, 0.8), angle = c(90, -90))
   expect_identical(pLeft, cbind(pxcor = c(4, 1), pycor = c(2, 2)))
-  pRight <- patchRight(world = w1, turtles = t2, dist = c(2, 0.8), nDegrees = c(90, -90))
+  pRight <- patchRight(world = w1, turtles = t2, dist = c(2, 0.8), angle = c(90, -90))
   expect_identical(pRight, cbind(pxcor = c(0, 3), pycor = c(2, 2)))
 })
 
@@ -796,27 +796,27 @@ test_that("turtlesOwn works",{
 test_that("subHeadings works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   t1 <- createOTurtles(n = 4, world = w1)
-  angles1 <- subHeadings(heading1 = t1, heading2 = 0)
+  angles1 <- subHeadings(angle1 = t1, angle2 = 0)
   expect_equivalent(angles1, c(0, -90, -180, 90))
-  angles2 <- subHeadings(heading1 = t1, heading2 = 0, range360 = TRUE)
+  angles2 <- subHeadings(angle1 = t1, angle2 = 0, range360 = TRUE)
   expect_equivalent(angles2, c(0, 270, 180, 90))
 
-  angles3 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = 0)
+  angles3 <- subHeadings(angle1 = c(0, 90, 180, 270), angle2 = 0)
   expect_equivalent(angles3, c(0, -90, -180, 90))
-  angles4 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = 0, range360 = TRUE)
+  angles4 <- subHeadings(angle1 = c(0, 90, 180, 270), angle2 = 0, range360 = TRUE)
   expect_equivalent(angles4, c(0, 270, 180, 90))
 
-  angles5 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = turtle(turtles = t1, who = 0))
+  angles5 <- subHeadings(angle1 = c(0, 90, 180, 270), angle2 = turtle(turtles = t1, who = 0))
   expect_equivalent(angles5, c(0, -90, -180, 90))
-  angles6 <- subHeadings(heading1 = c(0, 90, 180, 270), heading2 = turtle(turtles = t1, who = 0), range360 = TRUE)
+  angles6 <- subHeadings(angle1 = c(0, 90, 180, 270), angle2 = turtle(turtles = t1, who = 0), range360 = TRUE)
   expect_equivalent(angles6, c(0, 270, 180, 90))
 
-  angles7 <- subHeadings(heading1 = t1, heading2 = turtle(turtles = t1, who = 0))
+  angles7 <- subHeadings(angle1 = t1, angle2 = turtle(turtles = t1, who = 0))
   expect_equivalent(angles7, c(0, -90, -180, 90))
-  angles8 <- subHeadings(heading1 = t1, heading2 = turtle(turtles = t1, who = 0), range360 = TRUE)
+  angles8 <- subHeadings(angle1 = t1, angle2 = turtle(turtles = t1, who = 0), range360 = TRUE)
   expect_equivalent(angles8, c(0, 270, 180, 90))
 
-  angles9 <- subHeadings(heading1 = t1, heading2 = t1)
+  angles9 <- subHeadings(angle1 = t1, angle2 = t1)
   expect_equivalent(angles9, rep(0, 4))
 })
 

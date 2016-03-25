@@ -6,15 +6,15 @@
 \alias{left,SpatialPointsDataFrame,numeric-method}
 \title{Rotate to the left}
 \usage{
-left(turtles, nDegrees)
+left(turtles, angle)
 
-\S4method{left}{SpatialPointsDataFrame,numeric}(turtles, nDegrees)
+\S4method{left}{SpatialPointsDataFrame,numeric}(turtles, angle)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the turtles to rotate.}
 
-\item{nDegrees}{Numeric. The number of degrees by which to rotate the turtles'
+\item{angle}{Numeric. Angles in degrees by which to rotate the turtles'
 heading to the left. Must be of length 1 or of length \code{turtles}.}
 }
 \value{
@@ -24,12 +24,12 @@ SpatialPointsDataFrame representing the turtles with updated headings.
 Rotate the turtles's heading to the left.
 }
 \details{
-If \code{nDegrees} is negative, the turtle rotate to the right.
+If \code{angle} is negative, the turtle rotates to the right.
 }
 \examples{
 t1 <- createTurtles(n = 10, world = w1)
 of(t1, tVar = "heading")
-t1 <- left(turtles = t1, nDegrees = 180)
+t1 <- left(turtles = t1, angle = 180)
 of(t1, tVar = "heading")
 
 

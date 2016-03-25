@@ -7,14 +7,14 @@
 \alias{patchDistHead,NLworlds,matrix,numeric,numeric-method}
 \title{Patches at certain distances and certain directions}
 \usage{
-patchDistHead(world, agents, dist, head, torus = FALSE)
+patchDistHead(world, agents, dist, angle, torus = FALSE)
 
 \S4method{patchDistHead}{NLworlds,matrix,numeric,numeric}(world, agents, dist,
-  head, torus = FALSE)
+  angle, torus = FALSE)
 
 
   \S4method{patchDistHead}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
-  agents, dist, head, torus = FALSE)
+  agents, dist, angle, torus = FALSE)
 }
 \arguments{
 \item{world}{\code{NLworlds} object.}
@@ -30,7 +30,7 @@ patchDistHead(world, agents, dist, head, torus = FALSE)
 \item{dist}{Numeric. Distances from the \code{agents}. \code{dist} must be
 a single value or of the length as the number of \code{agents}.}
 
-\item{head}{Numeric. Absolute angles from the \code{agents}. \code{head}
+\item{angle}{Numeric. Absolute directions from the \code{agents}. \code{angle}
 must be a single value or of the length as the number of
 \code{agents}. Angles must be in degrees with 0 being North.}
 
@@ -39,8 +39,9 @@ Default is \code{torus = FALSE}.}
 }
 \value{
 Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates at \code{dist} and \code{head}
-        of \code{agents}. The order of the patches followa the order of the \code{agents}.
+        \code{pycor} representing the patches coordinates at the distances \code{dist}
+        and directions \code{angle}
+        of \code{agents}. The order of the patches follows the order of the \code{agents}.
 }
 \description{
 Report the patches coordinates \code{[pxcor, pycor]} at certain
@@ -48,20 +49,20 @@ distances and certain headings from the \code{agents}.
 }
 \details{
 If \code{torus = FALSE} and the patch at distance \code{dist} and
-         heading \code{head} of an agent is outside the world's extent, \code{NA}
+         direction \code{angle} of an agent is outside the world's extent, \code{NA}
          are returned. If \code{torus = TRUE}, the patch coordinates from the
          wrapped world are returned.
 
-         If \code{agents} are turtles, their heading is not taken into account; the
-         given absolute heading \code{head} is used. To find a patch at certain
+         If \code{agents} are turtles, their headings are not taken into account; the
+         given absolute directions \code{angle} are used. To find a patch at certain
          distance from a turtle with the turtle's heading, look at \code{pacthAhead()},
-         \code{pacthLeft()} or \code{pacthRight()}.
+         \code{patchLeft()} or \code{patchRight()}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-p1 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, head = 45)
+p1 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
 t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
-p2 <- patchDistHead(world = w1, agents = t1, dist = 1, head = 45)
+p2 <- patchDistHead(world = w1, agents = t1, dist = 1, angle = 45)
 
 
 }

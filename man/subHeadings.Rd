@@ -9,43 +9,43 @@
 \alias{subHeadings,numeric,numeric-method}
 \title{Substract headings}
 \usage{
-subHeadings(heading1, heading2, range360 = FALSE)
+subHeadings(angle1, angle2, range360 = FALSE)
 
-\S4method{subHeadings}{numeric,numeric}(heading1, heading2, range360 = FALSE)
+\S4method{subHeadings}{numeric,numeric}(angle1, angle2, range360 = FALSE)
 
-\S4method{subHeadings}{SpatialPointsDataFrame,numeric}(heading1, heading2,
+\S4method{subHeadings}{SpatialPointsDataFrame,numeric}(angle1, angle2,
   range360 = FALSE)
 
-\S4method{subHeadings}{numeric,SpatialPointsDataFrame}(heading1, heading2,
+\S4method{subHeadings}{numeric,SpatialPointsDataFrame}(angle1, angle2,
   range360 = FALSE)
 
-\S4method{subHeadings}{SpatialPointsDataFrame,SpatialPointsDataFrame}(heading1,
-  heading2, range360 = FALSE)
+\S4method{subHeadings}{SpatialPointsDataFrame,SpatialPointsDataFrame}(angle1,
+  angle2, range360 = FALSE)
 }
 \arguments{
-\item{heading1}{SpatialPointsDataFrame created by \code{createTurtles()} or by
+\item{angle1}{SpatialPointsDataFrame created by \code{createTurtles()} or by
                 \code{createOTurtles()} representing the turtles with their
                 headings.
 
                 Numeric.}
 
-\item{heading2}{SpatialPointsDataFrame created by \code{createTurtles()} or by
+\item{angle2}{SpatialPointsDataFrame created by \code{createTurtles()} or by
                 \code{createOTurtles()} representing turtles with their
                 headings.
 
                 Numeric.
 
-                \code{heading2} must be of length 1 or of length \code{heading1}.}
+                \code{angle2} must be of length 1 or of length \code{angle1}.}
 
 \item{range360}{Logical. Determine if the returned values are between 0° and
 360° (\code{range360 = TRUE}) or between -180° and 180°
 (\code{range360 = FALSE}). Default is \code{range360 = FALSE}.}
 }
 \value{
-Numeric. Vector of values representing the smallest angle in degrees
-        by which \code{heading1} could be rotated to produce \code{heading2}
+Numeric. Vector of values representing the smallest angles in degrees
+        by which \code{angle1} could be rotated to produce \code{angle2}
         (i.e., the target heading). Note: this is the opposite as in NetLogo where
-        heading1 is the target.
+        angle1 is the target.
 }
 \description{
 Compute the difference between headings.
@@ -56,7 +56,7 @@ Positive values mean clockwise rotation, negative value mean counterclockwise.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createOTurtles(n = 10, world = w1)
-subHeadings(heading1 = t1, heading2 = 0)
+subHeadings(angle1 = t1, angle2 = 0)
 
 
 }
