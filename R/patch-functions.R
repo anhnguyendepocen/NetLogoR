@@ -260,6 +260,8 @@ setMethod(
 #' @return Logicals. \code{TRUE} or \code{FALSE} if the patches exist inside the
 #'         world's extent, in the order of the coordinates given.
 #'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#is-of-type}
+#'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
@@ -639,7 +641,7 @@ setMethod(
 #' Patches at certain distances and certain directions
 #'
 #' Report the patches coordinates \code{[pxcor, pycor]} at certain
-#' distances and certain headings from the \code{agents}.
+#' distances and certain directions from the \code{agents}.
 #'
 #' @param world  \code{NLworlds} object.
 #'
@@ -684,28 +686,28 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' p1 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
+#' p1 <- patchDistDir(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
-#' p2 <- patchDistHead(world = w1, agents = t1, dist = 1, angle = 45)
+#' p2 <- patchDistDir(world = w1, agents = t1, dist = 1, angle = 45)
 #'
 #'
 #' @export
 #' @importFrom CircStats rad
 #' @docType methods
-#' @rdname patchDistHead
+#' @rdname patchDistDir
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "patchDistHead",
+  "patchDistDir",
   function(world, agents, dist, angle, torus = FALSE) {
-    standardGeneric("patchDistHead")
+    standardGeneric("patchDistDir")
   })
 
 #' @export
-#' @rdname patchDistHead
+#' @rdname patchDistDir
 setMethod(
-  "patchDistHead",
+  "patchDistDir",
   signature = c(world = "NLworlds", agents = "matrix", dist = "numeric", angle = "numeric"),
   definition = function(world, agents, dist, angle, torus) {
 
@@ -718,13 +720,13 @@ setMethod(
 )
 
 #' @export
-#' @rdname patchDistHead
+#' @rdname patchDistDir
 setMethod(
-  "patchDistHead",
+  "patchDistDir",
   signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", dist = "numeric", angle = "numeric"),
   definition = function(world, agents, dist, angle, torus) {
 
-    patchDistHead(world = world, agents = agents@coords, dist = dist, angle = angle, torus = torus)
+    patchDistDir(world = world, agents = agents@coords, dist = dist, angle = angle, torus = torus)
 
     }
 )
@@ -811,7 +813,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' p1 <- patchAt(world = w1, agents = patch(w1, c(0,1,2), c(0,0,0)), dx = 1, dy = 1)
-#' p2 <- patchDistHead(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
+#' p2 <- patchDistDir(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
 #' p3 <- patch(world = w1, x = 4.3, y = 8)
 #' p4 <- patchSet(p1, p2, p3)
 #'

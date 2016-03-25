@@ -67,10 +67,10 @@ For the inverse dictionary, to find the NetLogo equivalents of the NetLogoR func
 
 * is-agent?: isNLclass() in NetLogoR
 * is-agentset?: isNLclass() in NetLogoR
-* is-patch?: isNLclass() in NetLogoR
-* s-patch-set?: isNLclass() in NetLogoR
-* is-turtle?: isNLclass() in NetLogoR
-* is-turtle-set?: isNLclass() in NetLogoR
+* is-patch?: isNLclass() in NetLogoR. See also pExist() in NetLogoR.
+* is-patch-set?: isNLclass() in NetLogoR. See also pExist() in NetLogoR.
+* is-turtle?: isNLclass() in NetLogoR. See also tExist() in NetLogoR.
+* is-turtle-set?: isNLclass() in NetLogoR. See also tExist() in NetLogoR.
 
 * jump: fd() or bk() in NetLogoR (depending if jumping forward or backward)
 
@@ -115,7 +115,7 @@ For the inverse dictionary, to find the NetLogo equivalents of the NetLogoR func
 
 * patch-at: patchAt() in NetLogoR
 
-* patch-at-heading-and-distance: patchDistHead() in NetLogoR
+* patch-at-heading-and-distance: patchDistDir() in NetLogoR
 
 * patch-here: patchHere() in NetLogoR
 
