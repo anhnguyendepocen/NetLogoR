@@ -15,7 +15,7 @@ Here are the remaining tasks to do in the remaining 5 to 6 weeks.
 
 * B) Add a torus option to a few functions missing it (e.g., diffuse() but maybe others).
 
-* c) Rename some of the parameters for consistency across NLR functions (e.g., step and distance, nDegrees and angle). Need to change it in all dependent functions and tests associated.
+* C) (Done) Rename some of the parameters for consistency across NLR functions (e.g., step and distance, nDegrees and angle). Need to change it in all dependent functions and tests associated.
 
 * D) Re-write properly the functions' documentation by using @inheritParams.
 
