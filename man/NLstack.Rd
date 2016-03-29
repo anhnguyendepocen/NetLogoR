@@ -4,29 +4,30 @@
 \name{NLstack}
 \alias{NLstack}
 \alias{NLstack,NLworld-method}
-\title{Creating a \code{NLworldStack}}
+\title{Create a NLworldStack}
 \usage{
 NLstack(...)
 
 \S4method{NLstack}{NLworld}(...)
 }
 \arguments{
-\item{...}{\code{NLworld} objects.}
+\item{...}{NLworld objects.}
 }
 \value{
-\code{NLworldStack} object with the \code{NLworld} stacked as layers.
+NLworldStack object with the NLworld stacked as layers.
 }
 \description{
-Stacking several \code{NLworld} together to obtain a single \code{NlworldStack}
-which contains different layers for the different \code{NLworld} values.
+Stack multiple NLworld objects.
+}
+\details{
+The NLworld objects must have the same extents and cannot be empty
+         (i.e., the patches values must be different than \code{NA}).
 }
 \examples{
-# Create 2 NLworld with the default settings (same extent) but different values.
 w1 <- createNLworld()
 w1[] <- runif(length(w1))
 w2 <- createNLworld()
 w2[] <- runif(length(w2))
-# Stack them together.
 w3 <- NLstack(w1, w2)
 
 library(SpaDES)

@@ -16,25 +16,25 @@ createTurtles(n, coords, world, heading, breed, color)
   breed, color)
 }
 \arguments{
-\item{n}{Integer. The number of new turtles to create.}
+\item{n}{Integer.}
 
-\item{coords}{Matrix (ncol = 2) with the first column \code{xcor} and the second
-column \code{ycor} representing the turtles inital location.
+\item{coords}{Matrix (ncol = 2) with the first column "xcor" and the second
+column "ycor" representing the turtles inital locations.
 \code{nrow(coords)} must be equal to 1 or to \code{n}.
 Given coordinates must be inside the world's extent. If missing,
 turtles are put in the center of the \code{world}.}
 
-\item{world}{\code{NLworlds} object to place the turtles created at the center.
-If \code{coords} is provided, \code{world} should not be provided.}
+\item{world}{NLworlds object.}
 
-\item{heading}{Numeric. Vector or values between 0 and 360. Must be of length 1 or
-\code{n}. If missing, a random heading is assigned to each turtle.}
+\item{heading}{Numeric. Vector of values between 0 and 360. Must be of length 1 or
+of length \code{n}. If missing, a random heading is assigned to
+each turtle.}
 
-\item{breed}{Characters. Either of length 1 or \code{n}. If missing,
-\code{breed = "turtle"} for all turtles.}
+\item{breed}{Character. Vector of breed names. Must be of length 1 or of length
+\code{n}. If missing, \code{breed = "turtle"} for all turtles.}
 
-\item{color}{Characters. Vector of length \code{n}. If missing, colors are
-assigned using the function \code{rainbow(n)}.}
+\item{color}{Character. Vector of color names. Must be of length \code{n}.
+If missing, colors are assigned using the function \code{rainbow(n)}.}
 }
 \value{
 SpatialPointsDataFrame of length \code{n} with the columns for the
@@ -44,7 +44,9 @@ SpatialPointsDataFrame of length \code{n} with the columns for the
 Create \code{n} new turtles with a set of defined variables.
 }
 \details{
-The identity of the turtles is defined by their "who" number. This
+If \code{coords} is provided, \code{world} must not be provided.
+
+         The identity of the turtles is defined by their "who" number. This
          numbering starts at 0 and increments by 1.
 
          The coordinates from the previous time step are stored in "prevX" and

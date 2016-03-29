@@ -11,15 +11,15 @@ createOTurtles(n, world, breed, color)
 \S4method{createOTurtles}{numeric,NLworlds}(n, world, breed, color)
 }
 \arguments{
-\item{n}{Integer. The number of new turtles to create.}
+\item{n}{Integer.}
 
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{breed}{Characters. Either of length 1 or \code{n}. If missing,
-\code{breed = "turtle"} for all turtles.}
+\item{breed}{Character. Vector of breed names. Must be of length 1 or of length
+\code{n}. If missing, \code{breed = "turtle"} for all turtles.}
 
-\item{color}{Characters. Vector of length \code{n}. If missing, colors are
-assigned using the function \code{rainbow(n)}.}
+\item{color}{Character. Vector of color names. Must be of length \code{n}.
+If missing, colors are assigned using the function \code{rainbow(n)}.}
 }
 \value{
 SpatialPointsDataFrame of length \code{n} with the columns for the

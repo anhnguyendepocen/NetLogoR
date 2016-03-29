@@ -6,7 +6,7 @@
 \alias{NLworldStack-class}
 \alias{[}
 \alias{[<-}
-\title{The \code{NLworldStack} class}
+\title{The NLworldStack class}
 \usage{
 \S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, drop)
 

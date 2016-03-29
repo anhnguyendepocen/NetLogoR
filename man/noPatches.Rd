@@ -11,8 +11,8 @@ noPatches(x)
 \S4method{noPatches}{missing}()
 }
 \value{
-Matrix (ncol = 2, nrow = 0) with the first column \code{pxcor} and the
-        second column \code{pycor}.
+Matrix (ncol = 2, nrow = 0) with the first column "pxcor" and the
+        second column "pycor".
 }
 \description{
 Report an empty patch agentset.

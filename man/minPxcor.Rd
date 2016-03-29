@@ -5,7 +5,7 @@
 \alias{minPxcor}
 \alias{minPxcor,NLworld-method}
 \alias{minPxcor,NLworldStack-method}
-\title{Minimum \code{pxcor}}
+\title{Minimum pxcor}
 \usage{
 minPxcor(world)
 
@@ -14,13 +14,13 @@ minPxcor(world)
 \S4method{minPxcor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 }
 \value{
 Integer.
 }
 \description{
-Report the patches minimum \code{pxcor} in a \code{NLworlds}.
+Report the patches minimum pxcor in the \code{world}.
 }
 \examples{
 w1 <- createNLworld()

@@ -11,13 +11,13 @@ worldWidth(world)
 \S4method{worldWidth}{NLworlds}(world)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 }
 \value{
 Integer.
 }
 \description{
-Report the width of a \code{NLworlds} in patch number.
+Report the width of the \code{world} in patch number.
 }
 \examples{
 w1 <- createNLworld()

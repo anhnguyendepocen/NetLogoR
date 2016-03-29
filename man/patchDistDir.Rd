@@ -16,45 +16,43 @@ patchDistDir(world, agents, dist, angle, torus = FALSE)
   agents, dist, angle, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates for the
-              patches from which \code{dist} are computed.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles from which
-              \code{dist} are computed.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
 \item{dist}{Numeric. Distances from the \code{agents}. \code{dist} must be
-a single value or of the length as the number of \code{agents}.}
+of length 1 or of the same length as the number of \code{agents}.}
 
 \item{angle}{Numeric. Absolute directions from the \code{agents}. \code{angle}
-must be a single value or of the length as the number of
-\code{agents}. Angles must be in degrees with 0 being North.}
+must be of length 1 or of the same length as the number of
+\code{agents}. Angles are in degrees with 0 being North.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates at the distances \code{dist}
+Matrix (ncol = 2) with the first column "pxcor" and the second column
+        "pycor" representing the coordinates of the patches at the distances \code{dist}
         and directions \code{angle}
         of \code{agents}. The order of the patches follows the order of the \code{agents}.
 }
 \description{
-Report the patches coordinates \code{[pxcor, pycor]} at certain
+Report the coordinates of the patches which are at certain
 distances and certain directions from the \code{agents}.
 }
 \details{
 If \code{torus = FALSE} and the patch at distance \code{dist} and
-         direction \code{angle} of an agent is outside the world's extent, \code{NA}
-         are returned. If \code{torus = TRUE}, the patch coordinates from the
-         wrapped world are returned.
+         direction \code{angle} of an agent is outside the \code{world}'s extent, \code{NA}
+         are returned for the patch coordinates. If \code{torus = TRUE}, the patch
+         coordinates from a wrapped \code{world} are returned.
 
          If \code{agents} are turtles, their headings are not taken into account; the
-         given absolute directions \code{angle} are used. To find a patch at certain
-         distance from a turtle with the turtle's heading, look at \code{pacthAhead()},
+         given directions \code{angle} are used. To find a patch at certain
+         distance from a turtle using the turtle's heading, look at \code{pacthAhead()},
          \code{patchLeft()} or \code{patchRight()}.
 }
 \examples{

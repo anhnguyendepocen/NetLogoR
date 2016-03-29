@@ -5,7 +5,7 @@
 \alias{maxPxcor}
 \alias{maxPxcor,NLworld-method}
 \alias{maxPxcor,NLworldStack-method}
-\title{Maximum \code{pxcor}}
+\title{Maximum pxcor}
 \usage{
 maxPxcor(world)
 
@@ -14,13 +14,13 @@ maxPxcor(world)
 \S4method{maxPxcor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 }
 \value{
 Integer.
 }
 \description{
-Report the patches maximum \code{pxcor} in a \code{NLworlds}.
+Report the patches maximum pxcor in the \code{world}.
 }
 \examples{
 w1 <- createNLworld()

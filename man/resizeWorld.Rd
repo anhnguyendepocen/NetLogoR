@@ -17,33 +17,29 @@ resizeWorld(world, minPxcor, maxPxcor, minPycor, maxPycor, turtles)
   minPxcor, maxPxcor, minPycor, maxPycor)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{minPxcor}{Integer. Minimum \code{pxcor} for the patches (left border)
-for the new world.}
+\item{minPxcor}{Integer. Minimum pxcor for the patches (world's left border).}
 
-\item{maxPxcor}{Integer. Maximum \code{pxcor} for the patches (right border)
-for the new world.}
+\item{maxPxcor}{Integer. Maximum pxcor for the patches (world's right border).}
 
-\item{minPycor}{Integer. Minimum \code{pycor} for the patches (bottom) for
-the new world.}
+\item{minPycor}{Integer. Minimum pycor for the patches (world's bottom border).}
 
-\item{maxPycor}{Integer. Maximum \code{pycor} for the patches (top) for
-the new world.}
+\item{maxPycor}{Integer. Maximum pycor for the patches (world's top border).}
 
-\item{turtles}{SpatialPointsDataFrame object representing all the turtles
-to remove.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
-\code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
         patches. Patch value are \code{NA}.
 }
 \description{
-Change the size of a \code{NLworlds}. Previous patches and turtles are lost.
+Change the size of the \code{world} and cleat the patches and given \code{turtles}.
 }
 \details{
-The given \code{NLworlds} and \code{turtles} are deleted, as well as the
-         patches values contained in the \code{NLworlds}.
+The given \code{world} and \code{turtles} are deleted, as well as the
+         patches values contained in the \code{world}.
 }
 \examples{
 w1 <- createNLworld()

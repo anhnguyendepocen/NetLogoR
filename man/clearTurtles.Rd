@@ -12,20 +12,20 @@ clearTurtles(turtles, envir = parent.frame(n = 1))
   envir = parent.frame(n = 1))
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()}
-or by \code{createOTurtles()} representing all the turtles to
-remove.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{envir}{The R environment where \code{turtles} are.
-Default value is \code{parent.frame(n = 1)}}
+\item{envir}{The R environment where \code{turtles} are located.
+Default value is \code{envir = parent.frame(n = 1)}.}
 }
 \description{
-Kill all turtles.
+Kill all the turtles.
 }
 \details{
-Removes the \code{turtles} object from the R environment. If some turtles
-         were present in several agentsets, it does not remove them from these
-         other agents. This function just remove the given \code{turtles} agentset.
+Removes the \code{turtles} object from the R environment. If some of
+         the agents in \code{turtles} are present in other agentsets, it does
+         not remove them from these other agentsets. This function just remove
+         the given \code{turtles} agentset.
 }
 \examples{
 w1 <- createNLworld()

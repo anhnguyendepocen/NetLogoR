@@ -6,7 +6,7 @@
 \alias{NLworld-class}
 \alias{[}
 \alias{[<-}
-\title{The \code{NLworld} class}
+\title{The NLworld class}
 \usage{
 \S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, drop)
 
@@ -28,11 +28,11 @@ The number of patches created is then equal to
 \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
 
 \code{[]} can be used to extract values from a \code{NLworld} object by using
-the patch coordinates \code{[pxcor,pyxor]}. When multiple coordinates are provided,
+the patch coordinates \code{[pxcor, pyxor]}. When multiple coordinates are provided,
 the order of the values returned matches the order of the cell numbers as defined
-for a \code{RasterLayer}.  \code{[]<-} can be used to replace patch values for a
+for a \code{RasterLayer}. \code{[] <-} can be used to replace patch values in a
 \code{NLworld} object. Similarly, when replacing values of several patches, the
-values should be given in the order of the cell numbers as defined for a \code{RasterLayer}.
+values should be given in the order of the cells numbers as defined for a \code{RasterLayer}.
 }
 \author{
 Sarah Bauduin, Eliot McIntire, and Alex Chubaty

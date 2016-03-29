@@ -4,22 +4,22 @@
 \name{randomPycor}
 \alias{randomPycor}
 \alias{randomPycor,NLworlds,numeric-method}
-\title{Random \code{pycor}}
+\title{Random pycor}
 \usage{
 randomPycor(world, n)
 
 \S4method{randomPycor}{NLworlds,numeric}(world, n)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{n}{Integer. The number of random \code{pycor} to generate.}
+\item{n}{Integer.}
 }
 \value{
-Integers.
+Integer. Vector of length \code{n} of pycor coordinates.
 }
 \description{
-Report random \code{pycor} coordinates between minPycor and maxPycor.
+Report \code{n} random pycor coordinates within the \code{world}'s extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

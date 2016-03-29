@@ -5,7 +5,7 @@
 \alias{createNLworld}
 \alias{createNLworld,missing,missing,missing,missing-method}
 \alias{createNLworld,numeric,numeric,numeric,numeric-method}
-\title{Create a \code{NLworld} world}
+\title{Create a world}
 \usage{
 createNLworld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
   maxPycor = 16)
@@ -16,27 +16,26 @@ createNLworld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
 \S4method{createNLworld}{missing,missing,missing,missing}()
 }
 \arguments{
-\item{minPxcor}{Integer. Minimum \code{pxcor} for the patches (left border).
-Default value is \code{minPxcor = -16}.}
+\item{minPxcor}{Integer. Minimum pxcor for the patches (world's left border).}
 
-\item{maxPxcor}{Integer. Maximum \code{pxcor} for the patches (right border).
-Default value is \code{maxPxcor = 16}.}
+\item{maxPxcor}{Integer. Maximum pxcor for the patches (world's right border).}
 
-\item{minPycor}{Integer. Minimum \code{pycor} for the patches (bottom).
-Default value is \code{minPycor = -16}.}
+\item{minPycor}{Integer. Minimum pycor for the patches (world's bottom border).}
 
-\item{maxPycor}{Integer. Maximum \code{pycor} for the patches (top).
-Default value is \code{maxPycor = 16}.}
+\item{maxPycor}{Integer. Maximum pycor for the patches (world's top border).}
 }
 \value{
-\code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
         patches. Patches value are \code{NA}.
 }
 \description{
-Create an empty grid of patches of class \code{NLworld}.
+Create an empty grid of patches of class NLworld.
 }
 \details{
-See \code{help("NLworld-class")} for more details on the \code{NLworld} class.
+If no parameters value are provided, default values are: \code{minPxcor = -16},
+         \code{maxPxcor = 16}, \code{minPycor = -16}, and \code{maxPycor = 16}.
+
+         See \code{help("NLworld-class")} for more details on the NLworld class.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

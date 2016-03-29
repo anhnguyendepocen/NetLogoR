@@ -12,15 +12,14 @@ patchSet(...)
 }
 \arguments{
 \item{...}{Matrices (ncol = 2) of patches coordinates with the first column
-\code{pxcor} and the second column \code{pycor}.}
+"pxcor" and the second column "pycor".}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates.
+Matrix (ncol = 2) with the first column "pxcor" and the second column
+        "pycor" representing the patches coordinates.
 }
 \description{
-Report a patch agentset as the coordinates \code{[pxcor, pycor]}
-of all patches contained in the inputs.
+Report a patch agentset as the coordinates of all patches contained in the inputs.
 }
 \details{
 Duplicate patches among the inputs are removed in the returned matrix.

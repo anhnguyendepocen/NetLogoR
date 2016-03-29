@@ -5,7 +5,7 @@
 \alias{convertNLworld}
 \alias{convertNLworld,RasterLayer-method}
 \alias{convertNLworld,RasterStack-method}
-\title{Convert a raster to a \code{NLworlds} object}
+\title{Convert a Raster* object into a NLworlds object}
 \usage{
 convertNLworld(raster)
 
@@ -14,22 +14,22 @@ convertNLworld(raster)
 \S4method{convertNLworld}{RasterStack}(raster)
 }
 \arguments{
-\item{raster}{\code{RasterLayer} or a \code{RasterStack} object.}
+\item{raster}{RasterLayer or RasterStack object.}
 }
 \value{
-\code{NLworld} or a \code{NLworldStack} object depending on the input.
-        Patches value are retained from the \code{Raster*} object.
+NLworld or NLworldStack object depending on the input.
+        Patches value are retained from the Raster* object.
 }
 \description{
-Convert a \code{RasterLayer} object into a \code{NLworld} object or a \code{RasterStack}
-into a {NLworldStack} object.
+Convert a RasterLayer object into a NLworld object or a RasterStack object
+into a NLworldStack object.
 }
 \details{
-See \code{help("NLworlds-class")} for more details on the \code{NLworlds}
+See \code{help("NLworlds-class")} for more details on the NLworlds
          classes.
 
-         The \code{Raster*} is resampled to match the coordinates system and
-         resolution of a \code{NLworlds} using the nearest neighbor method. The
+         The \code{raster} is resampled to match the coordinates system and
+         resolution of a NLworlds using the nearest neighbor method. The
          extent will be bigger by 1 on the width and on the height.
 }
 \examples{

@@ -5,7 +5,7 @@
 \alias{clearPatches}
 \alias{clearPatches,NLworld-method}
 \alias{clearPatches,NLworldStack-method}
-\title{Clear world patches}
+\title{Clear world's patches}
 \usage{
 clearPatches(world)
 
@@ -14,13 +14,13 @@ clearPatches(world)
 \S4method{clearPatches}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 }
 \value{
-\code{NLworld} object with \code{NA} values for all patches.
+NLworld object with \code{NA} values for all patches.
 }
 \description{
-Reset all patches value to \code{NA}.
+Reset all patches values to \code{NA}.
 }
 \details{
 The name of the layer is set to \code{""}.

@@ -14,20 +14,19 @@ pExist(world, pxcor, pycor)
 \S4method{pExist}{NLworldStack,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{pxcor}{Integers. Vector of \code{pxcor} coordinates. Must be of the same
-length as \code{pycor}.}
+\item{pxcor}{Integer. Vector of patches pxcor coordinates. Must be of length 1
+or of the same length as \code{pycor}.}
 
-\item{pycor}{Integers. Vector of \code{pycor} coordinates. Must be of the same
-length as \code{pxcor}.}
+\item{pycor}{Integer. Vector of patches pycor coordinates. Must be of length 1
+or of the same length as \code{pxcor}.}
 }
 \value{
-Logicals. \code{TRUE} or \code{FALSE} if the patches exist inside the
-        world's extent, in the order of the coordinates given.
+Logical.
 }
 \description{
-Report \code{TRUE} if the patches exist in the world's extent, report
+Report \code{TRUE} if a patch exists in the \code{world}'s extent, report
 \code{FALSE} otherwise.
 }
 \examples{

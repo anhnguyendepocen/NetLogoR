@@ -5,7 +5,7 @@
 \alias{cellFromPxcorPycor}
 \alias{cellFromPxcorPycor,NLworld,numeric,numeric-method}
 \alias{cellFromPxcorPycor,NLworldStack,numeric,numeric-method}
-\title{Cells number from patches coordinates}
+\title{Cells numbers from patches coordinates}
 \usage{
 cellFromPxcorPycor(world, pxcor, pycor)
 
@@ -14,17 +14,19 @@ cellFromPxcorPycor(world, pxcor, pycor)
 \S4method{cellFromPxcorPycor}{NLworldStack,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{pxcor}{Vector of \code{pxcor} coordinates.}
+\item{pxcor}{Integer. Vector of patches pxcor coordinates. Must be of length 1
+or of the same length as \code{pycor}.}
 
-\item{pycor}{Vector of \code{pycor} coordinates.}
+\item{pycor}{Integer. Vector of patches pycor coordinates. Must be of length 1
+or of the same length as \code{pxcor}.}
 }
 \value{
 Numeric. Vector of cells number.
 }
 \description{
-Report the cells number as defined for a \code{Raster*} object given the patches
+Report the cells numbers as defined for a Raster* object given the patches
 coordinates \code{pxcor} and \code{pycor}.
 }
 \examples{

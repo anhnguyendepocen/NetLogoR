@@ -14,16 +14,15 @@ patches(world)
 \S4method{patches}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates. The order of the patches
-        follows the order of the cellnumbers as defined for a \code{Raster*}.
+Matrix (ncol = 2) with the first column "pxcor" and the second column
+        "pycor" representing the patches coordinates. The order of the patches
+        follows the order of the cells numbers as defined for a \code{Raster*}.
 }
 \description{
-Report the coordinates \code{[pxcor, pycor]} for all patches in a
-\code{NLworlds}.
+Report the pacthes coordinates for all the patches in the \code{world}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches

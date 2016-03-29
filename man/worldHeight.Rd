@@ -11,13 +11,13 @@ worldHeight(world)
 \S4method{worldHeight}{NLworlds}(world)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 }
 \value{
 Integer.
 }
 \description{
-Report the height of a \code{NLworlds} in patch number.
+Report the height of the \code{world} in patch number.
 }
 \examples{
 w1 <- createNLworld()

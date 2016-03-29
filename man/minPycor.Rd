@@ -5,7 +5,7 @@
 \alias{minPycor}
 \alias{minPycor,NLworld-method}
 \alias{minPycor,NLworldStack-method}
-\title{Minimum \code{pycor}}
+\title{Minimum pycor}
 \usage{
 minPycor(world)
 
@@ -14,13 +14,13 @@ minPycor(world)
 \S4method{minPycor}{NLworldStack}(world)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 }
 \value{
 Integer.
 }
 \description{
-Report the patches minimum \code{pycor} in a \code{NLworlds}.
+Report the patches minimum pycor in the \code{world}.
 }
 \examples{
 w1 <- createNLworld()

@@ -15,28 +15,28 @@ diffuse(world, pVar, share, nNeighbors)
   nNeighbors)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{pVar}{Characters. If the world is a \code{NLworldStack}, pVar is
-the name of the layer used for the diffusion. Should not
-be provided if world is a \code{NLworld}.}
+\item{pVar}{Character. If the \code{world} is a NLworldStack object, \code{pVar}
+is the name of the layer to use to define the patches values.
+\code{pVar} must not be provided if the \code{world} is a NLworld object.}
 
 \item{share}{Numeric. Value between 0 and 1 representing the portion of
-the patch value to be diffused among its neighbors.}
+the patches values to be diffused among the neighbors.}
 
-\item{nNeighbors}{Integer: 4 or 8. Represent the number of neihgbor patches
-involved in the diffusion process.}
+\item{nNeighbors}{Integer: 4 or 8. Represents the number of neihgbor patches
+considered.}
 }
 \value{
-\code{NLworlds} object with updated values.
+NLworlds object with patches values updated.
 }
 \description{
-Each patch gives an equal share to its neighbor patches of a portion of its value.
+Each patch gives an equal share of a portion of its value to its neighbor patches.
 }
 \details{
 What is given is lost for the patches.
 
-         Patches on the sides of the world have less than 4 or 8 neighbors.
+         Patches on the sides of the \code{world} have less than 4 or 8 neighbors.
          Each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
          patch keeps the leftover.
 }

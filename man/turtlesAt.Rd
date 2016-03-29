@@ -44,13 +44,15 @@ returned.}
                \code{createOTurtles()} representing the turtles from which
                \code{(dx, dy)} are computed.}
 
-\item{dx}{Numeric. Distances to east from the \code{agents}. If \code{dx} is
-negative, the distance to the west is computed. \code{dx} must be
-of length 1 or of the length of as number of \code{agents}.}
+\item{dx}{Numeric. Vector of distances to the east (right) from the \code{agents}.
+If \code{dx} is negative, the distance to the west (left) is computed.
+\code{dx} must be of length 1 or of the same length as number of patches
+or turtles in \code{agents}.}
 
-\item{dy}{Numeric. Distances to the north from the \code{agents}. If \code{dy}
-is negative, the distance to the south is computed. \code{dy} must
-be a single value or of the length as the number of \code{agents}.}
+\item{dy}{Numeric. Vector of distances to the north (up) from the \code{agents}.
+If \code{dy} is negative, the distance to the south is computed (down).
+\code{dy} must be of length 1 or of the same length as number of patches
+or turtles in \code{agents}.}
 
 \item{breed}{Characters. To specify the breed of turtles to report.
 If missing, there is no distinction based upon breed to report turtles.}
