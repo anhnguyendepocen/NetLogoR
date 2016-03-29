@@ -1,5 +1,5 @@
 ################################################################################
-#' The \code{NLworld} class
+#' The NLworld class
 #'
 #'
 #' A \code{NLworld} object is a grid composed of squared patches (i.e., pixels)
@@ -16,11 +16,11 @@
 #' \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
 #'
 #' \code{[]} can be used to extract values from a \code{NLworld} object by using
-#' the patch coordinates \code{[pxcor,pyxor]}. When multiple coordinates are provided,
+#' the patch coordinates \code{[pxcor, pyxor]}. When multiple coordinates are provided,
 #' the order of the values returned matches the order of the cell numbers as defined
-#' for a \code{RasterLayer}.  \code{[]<-} can be used to replace patch values for a
+#' for a \code{RasterLayer}. \code{[] <-} can be used to replace patch values in a
 #' \code{NLworld} object. Similarly, when replacing values of several patches, the
-#' values should be given in the order of the cell numbers as defined for a \code{RasterLayer}.
+#' values should be given in the order of the cells numbers as defined for a \code{RasterLayer}.
 #'
 #' @inheritParams raster::RasterLayer
 #'
@@ -82,7 +82,7 @@ setReplaceMethod(
 
 
 ################################################################################
-#' The \code{NLworldStack} class
+#' The NLworldStack class
 #'
 #'
 #' A \code{NLworldStack} object is similar to a \code{RasterStack} object, it is
@@ -197,22 +197,22 @@ setClassUnion(name="NLworlds",
 
 
 ################################################################################
-#' Creating a \code{NLworldStack}
+#' Create a NLworldStack
 #'
-#' Stacking several \code{NLworld} together to obtain a single \code{NlworldStack}
-#' which contains different layers for the different \code{NLworld} values.
+#' Stack multiple NLworld objects.
 #'
-#' @param ... \code{NLworld} objects.
+#' @param ... NLworld objects.
 #'
-#' @return \code{NLworldStack} object with the \code{NLworld} stacked as layers.
+#' @return NLworldStack object with the NLworld stacked as layers.
+#'
+#' @details The NLworld objects must have the same extents and cannot be empty
+#'          (i.e., the patches values must be different than \code{NA}).
 #'
 #' @examples
-#' # Create 2 NLworld with the default settings (same extent) but different values.
 #' w1 <- createNLworld()
 #' w1[] <- runif(length(w1))
 #' w2 <- createNLworld()
 #' w2[] <- runif(length(w2))
-#' # Stack them together.
 #' w3 <- NLstack(w1, w2)
 #'
 #' library(SpaDES)
@@ -265,16 +265,12 @@ setMethod(
 
 
 ################################################################################
-#' Cells number from patches coordinates
+#' Cells numbers from patches coordinates
 #'
-#' Report the cells number as defined for a \code{Raster*} object given the patches
+#' Report the cells numbers as defined for a Raster* object given the patches
 #' coordinates \code{pxcor} and \code{pycor}.
 #'
-#' @param world \code{NLworlds} object.
-#'
-#' @param pxcor Vector of \code{pxcor} coordinates.
-#'
-#' @param pycor Vector of \code{pycor} coordinates.
+#' @inheritParams fargs
 #'
 #' @return Numeric. Vector of cells number.
 #'
@@ -330,17 +326,16 @@ setMethod(
 
 
 ################################################################################
-#' Patches coordinates from cells number
+#' Patches coordinates from cells numbers
 #'
-#' Report the patches coordinates \code{[pxcor, pycor]} given the cells
-#' number as defined for a \code{Raster*} object.
+#' Report the patches coordinates given the cells numbers as defined for a Raster* object.
 #'
-#' @param world   \code{NLworlds} object.
+#' @inheritParams fargs
 #'
-#' @param cellNum Vector of cells number.
+#' @param cellNum Integer. Vector of cells number.
 #'
-#' @return Matrix (ncol = 2) with the first column \code{pxcor} and the second
-#'         column \code{pycor} in the order of the cells number given.
+#' @return Matrix (ncol = 2) with the first column "pxcor" and the second
+#'         column "pycor" in the order of the given \code{cellNum}.
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

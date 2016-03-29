@@ -1,24 +1,17 @@
 ################################################################################
-#' Create a \code{NLworld} world
+#' Create a world
 #'
-#' Create an empty grid of patches of class \code{NLworld}.
+#' Create an empty grid of patches of class NLworld.
 #'
-#' @param minPxcor  Integer. Minimum \code{pxcor} for the patches (left border).
-#'                  Default value is \code{minPxcor = -16}.
+#' @inheritParams fargs
 #'
-#' @param maxPxcor  Integer. Maximum \code{pxcor} for the patches (right border).
-#'                  Default value is \code{maxPxcor = 16}.
-#'
-#' @param minPycor  Integer. Minimum \code{pycor} for the patches (bottom).
-#'                  Default value is \code{minPycor = -16}.
-#'
-#' @param maxPycor  Integer. Maximum \code{pycor} for the patches (top).
-#'                  Default value is \code{maxPycor = 16}.
-#'
-#' @return \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#' @return NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches. Patches value are \code{NA}.
 #'
-#' @details See \code{help("NLworld-class")} for more details on the \code{NLworld} class.
+#' @details If no parameters value are provided, default values are: \code{minPxcor = -16},
+#'          \code{maxPxcor = 16}, \code{minPycor = -16}, and \code{maxPycor = 16}.
+#'
+#'          See \code{help("NLworld-class")} for more details on the NLworld class.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -82,21 +75,21 @@ setMethod(
 
 
 ################################################################################
-#' Convert a raster to a \code{NLworlds} object
+#' Convert a Raster* object into a NLworlds object
 #'
-#' Convert a \code{RasterLayer} object into a \code{NLworld} object or a \code{RasterStack}
-#' into a {NLworldStack} object.
+#' Convert a RasterLayer object into a NLworld object or a RasterStack object
+#' into a NLworldStack object.
 #'
-#' @param raster \code{RasterLayer} or a \code{RasterStack} object.
+#' @param raster RasterLayer or RasterStack object.
 #'
-#' @return \code{NLworld} or a \code{NLworldStack} object depending on the input.
-#'         Patches value are retained from the \code{Raster*} object.
+#' @return NLworld or NLworldStack object depending on the input.
+#'         Patches value are retained from the Raster* object.
 #'
-#' @details See \code{help("NLworlds-class")} for more details on the \code{NLworlds}
+#' @details See \code{help("NLworlds-class")} for more details on the NLworlds
 #'          classes.
 #'
-#'          The \code{Raster*} is resampled to match the coordinates system and
-#'          resolution of a \code{NLworlds} using the nearest neighbor method. The
+#'          The \code{raster} is resampled to match the coordinates system and
+#'          resolution of a NLworlds using the nearest neighbor method. The
 #'          extent will be bigger by 1 on the width and on the height.
 #'
 #' @examples
@@ -173,11 +166,11 @@ setMethod(
 
 
 ################################################################################
-#' Maximum \code{pxcor}
+#' Maximum pxcor
 #'
-#' Report the patches maximum \code{pxcor} in a \code{NLworlds}.
+#' Report the patches maximum pxcor in the \code{world}.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
 #' @return Integer.
 #'
@@ -227,11 +220,11 @@ setMethod(
 
 
 ################################################################################
-#' Maximum \code{pycor}
+#' Maximum pycor
 #'
-#' Report the patches maximum \code{pycor} in a \code{NLworlds}.
+#' Report the patches maximum pycor in the \code{world}.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
 #' @return Integer.
 #'
@@ -281,11 +274,11 @@ setMethod(
 
 
 ################################################################################
-#' Minimum \code{pxcor}
+#' Minimum pxcor
 #'
-#' Report the patches minimum \code{pxcor} in a \code{NLworlds}.
+#' Report the patches minimum pxcor in the \code{world}.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
 #' @return Integer.
 #'
@@ -335,11 +328,11 @@ setMethod(
 
 
 ################################################################################
-#' Minimum \code{pycor}
+#' Minimum pycor
 #'
-#' Report the patches minimum \code{pycor} in a \code{NLworlds}.
+#' Report the patches minimum pycor in the \code{world}.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
 #' @return Integer.
 #'
@@ -391,9 +384,9 @@ setMethod(
 ################################################################################
 #' World width
 #'
-#' Report the width of a \code{NLworlds} in patch number.
+#' Report the width of the \code{world} in patch number.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
 #' @return Integer.
 #'
@@ -435,9 +428,9 @@ setMethod(
 ################################################################################
 #' World height
 #'
-#' Report the height of a \code{NLworlds} in patch number.
+#' Report the height of the \code{world} in patch number.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
 #' @return Integer.
 #'
@@ -479,18 +472,17 @@ setMethod(
 ################################################################################
 #' Clear turtles
 #'
-#' Kill all turtles.
+#' Kill all the turtles.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()}
-#'                or by \code{createOTurtles()} representing all the turtles to
-#'                remove.
+#' @inheritParams fargs
 #'
-#' @param envir   The R environment where \code{turtles} are.
-#'                Default value is \code{parent.frame(n = 1)}
+#' @param envir   The R environment where \code{turtles} are located.
+#'                Default value is \code{envir = parent.frame(n = 1)}.
 #'
-#' @details Removes the \code{turtles} object from the R environment. If some turtles
-#'          were present in several agentsets, it does not remove them from these
-#'          other agents. This function just remove the given \code{turtles} agentset.
+#' @details Removes the \code{turtles} object from the R environment. If some of
+#'          the agents in \code{turtles} are present in other agentsets, it does
+#'          not remove them from these other agentsets. This function just remove
+#'          the given \code{turtles} agentset.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-turtles}
 #'
@@ -531,13 +523,13 @@ setMethod(
 
 
 ################################################################################
-#' Clear world patches
+#' Clear world's patches
 #'
-#' Reset all patches value to \code{NA}.
+#' Reset all patches values to \code{NA}.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
-#' @return \code{NLworld} object with \code{NA} values for all patches.
+#' @return NLworld object with \code{NA} values for all patches.
 #'
 #' @details The name of the layer is set to \code{""}.
 #'
@@ -598,30 +590,15 @@ setMethod(
 ################################################################################
 #' Resize a world
 #'
-#' Change the size of a \code{NLworlds}. Previous patches and turtles are lost.
+#' Change the size of the \code{world} and cleat the patches and given \code{turtles}.
 #'
-#' @param world     \code{NLworlds} object.
+#' @inheritParams fargs
 #'
-#' @param minPxcor  Integer. Minimum \code{pxcor} for the patches (left border)
-#'                  for the new world.
-#'
-#' @param maxPxcor  Integer. Maximum \code{pxcor} for the patches (right border)
-#'                  for the new world.
-#'
-#' @param minPycor  Integer. Minimum \code{pycor} for the patches (bottom) for
-#'                  the new world.
-#'
-#' @param maxPycor  Integer. Maximum \code{pycor} for the patches (top) for
-#'                  the new world.
-#'
-#' @param turtles  SpatialPointsDataFrame object representing all the turtles
-#'                 to remove.
-#'
-#' @return \code{NLworld} object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#' @return NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches. Patch value are \code{NA}.
 #'
-#' @details The given \code{NLworlds} and \code{turtles} are deleted, as well as the
-#'          patches values contained in the \code{NLworlds}.
+#' @details The given \code{world} and \code{turtles} are deleted, as well as the
+#'          patches values contained in the \code{world}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#resize-world}
 #'
