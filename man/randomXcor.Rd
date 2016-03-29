@@ -4,22 +4,22 @@
 \name{randomXcor}
 \alias{randomXcor}
 \alias{randomXcor,NLworlds,numeric-method}
-\title{Generate random xcor}
+\title{Random xcor}
 \usage{
 randomXcor(world, n)
 
 \S4method{randomXcor}{NLworlds,numeric}(world, n)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{n}{Integer. The number of xcor coordinates to generate.}
+\item{n}{Integer.}
 }
 \value{
-Numeric. Vector of xcor coordinate values of length \code{n}.
+Numeric. Vector of length \code{n} of xcor coordinates.
 }
 \description{
-Report random xcor coordinates inside the world's extent.
+Report \code{n} random xcor coordinates within the \code{world}'s extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

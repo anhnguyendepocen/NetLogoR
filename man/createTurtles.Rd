@@ -21,7 +21,7 @@ createTurtles(n, coords, world, heading, breed, color)
 \item{coords}{Matrix (ncol = 2) with the first column "xcor" and the second
 column "ycor" representing the turtles inital locations.
 \code{nrow(coords)} must be equal to 1 or to \code{n}.
-Given coordinates must be inside the world's extent. If missing,
+Given coordinates must be inside the \code{world}'s extent. If missing,
 turtles are put in the center of the \code{world}.}
 
 \item{world}{NLworlds object.}
@@ -30,7 +30,7 @@ turtles are put in the center of the \code{world}.}
 of length \code{n}. If missing, a random heading is assigned to
 each turtle.}
 
-\item{breed}{Character. Vector of breed names. Must be of length 1 or of length
+\item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
 \code{n}. If missing, \code{breed = "turtle"} for all turtles.}
 
 \item{color}{Character. Vector of color names. Must be of length \code{n}.
@@ -41,7 +41,7 @@ SpatialPointsDataFrame of length \code{n} with the columns for the
         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
 }
 \description{
-Create \code{n} new turtles with a set of defined variables.
+Create \code{n} turtles with a set of defined variables.
 }
 \details{
 If \code{coords} is provided, \code{world} must not be provided.

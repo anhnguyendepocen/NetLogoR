@@ -15,7 +15,7 @@ createOTurtles(n, world, breed, color)
 
 \item{world}{NLworlds object.}
 
-\item{breed}{Character. Vector of breed names. Must be of length 1 or of length
+\item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
 \code{n}. If missing, \code{breed = "turtle"} for all turtles.}
 
 \item{color}{Character. Vector of color names. Must be of length \code{n}.
@@ -26,13 +26,11 @@ SpatialPointsDataFrame of length \code{n} with the columns for the
         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
 }
 \description{
-Create \code{n} new turtles at the center of the world with their headings evenly
+Create \code{n} turtles at the center of the \code{world} with their headings evenly
 distributed.
 }
 \details{
-The first turtle \code{who = 0} has its heading set to 0.
-
-         The identity of the turtles is defined by their "who" number. This
+The identity of the turtles is defined by their "who" number. This
          numbering starts at 0 and increments by 1.
 
          The coordinates from the previous time step are stored in "prevX" and

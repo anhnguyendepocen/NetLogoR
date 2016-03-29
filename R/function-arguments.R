@@ -49,7 +49,7 @@
 #'                Matrix (ncol = 2) with the first column "x and the second column
 #'                "y" representing locations coordinates.
 #'
-#' @param nNeighbors Integer: 4 or 8. Represents the number of neihgbor patches
+#' @param nNeighbors Integer: 4 or 8. Represents the number of neighbor patches
 #'                   considered.
 #'
 #' @param dx Numeric. Vector of distances to the east (right) from the \code{agents}.
@@ -61,6 +61,11 @@
 #'           If \code{dy} is negative, the distance to the south is computed (down).
 #'           \code{dy} must be of length 1 or of the same length as number of patches
 #'           or turtles in \code{agents}.
+#'
+#' @param color Character. Vector of color names. Must be of length \code{n}.
+#'              If missing, colors are assigned using the function \code{rainbow(n)}.
+#'
+#' @param who Integer. Vector of the "who" numbers of the selected turtles.
 #'
 #'
 NULL

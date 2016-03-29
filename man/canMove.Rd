@@ -12,22 +12,20 @@ canMove(world, turtles, dist)
   dist)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the
-turtles move onto.}
+\item{world}{NLworlds object.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtles to
-evaluate.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{dist}{Numeric. The distances the turtles would move. Must be of
-length 1 or of length \code{turtles}.}
+\item{dist}{Numeric. Vector of distances to move. Must
+be of length 1 or of length \code{turtles}.}
 }
 \value{
-Logicals. Vector of length \code{turtles}.
+Logical. Vector of length \code{turtles}.
 }
 \description{
-Report \code{TRUE} if the turtles can move the given distances without leaving
-the world's extent, report \code{FALSE} otherwise.
+Report \code{TRUE} if the turtle can move the given distance without leaving
+the \code{world}'s extent, report \code{FALSE} otherwise.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

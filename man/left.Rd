@@ -12,19 +12,19 @@ left(turtles, angle)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtles to rotate.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{angle}{Numeric. Angles in degrees by which to rotate the turtles'
-heading to the left. Must be of length 1 or of length \code{turtles}.}
+\item{angle}{Numeric. Vector of angles in degrees by which to rotate the \code{turtles}'
+headings. Must be of length 1 or of length \code{turtles}.}
 }
 \value{
-SpatialPointsDataFrame representing the turtles with updated headings.
+SpatialPointsDataFrame representing the \code{turtles} with updated "heading" values.
 }
 \description{
-Rotate the turtles's heading to the left.
+Rotate the \code{turtles}'s headings to the left of \code{angle} degrees.
 }
 \details{
-If \code{angle} is negative, the turtle rotates to the right.
+If a given \code{angle} value is negative, then the turtle rotates to the right.
 }
 \examples{
 t1 <- createTurtles(n = 10, world = w1)

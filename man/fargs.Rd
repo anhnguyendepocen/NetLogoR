@@ -47,7 +47,7 @@ by \code{createOTurtles()} representing the moving agents.}
                Matrix (ncol = 2) with the first column "x and the second column
                "y" representing locations coordinates.}
 
-\item{nNeighbors}{Integer: 4 or 8. Represents the number of neihgbor patches
+\item{nNeighbors}{Integer: 4 or 8. Represents the number of neighbor patches
 considered.}
 
 \item{dx}{Numeric. Vector of distances to the east (right) from the \code{agents}.
@@ -59,6 +59,11 @@ or turtles in \code{agents}.}
 If \code{dy} is negative, the distance to the south is computed (down).
 \code{dy} must be of length 1 or of the same length as number of patches
 or turtles in \code{agents}.}
+
+\item{color}{Character. Vector of color names. Must be of length \code{n}.
+If missing, colors are assigned using the function \code{rainbow(n)}.}
+
+\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
 }
 \description{
 Function arguments

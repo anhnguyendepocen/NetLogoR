@@ -12,20 +12,21 @@ die(turtles, who)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()}.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integers. The who numbers of the turtles to kill.}
+\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
 }
 \value{
-SpatialPointsDataFrame of length equal to \code{length(turtles) - length(who)}.
+SpatialPointsDataFrame representing the \code{turtles} with the selected
+        ones removed.
 }
 \description{
-Kill specific turtles.
+Kill selected turtles.
 }
 \details{
-The who numbers of the other turtles are maintained.
+The "who" numbers of the remaining \code{turtles} are unchanged.
 
-         To remove all the turtles, you can use \code{clearTurtles()}.
+         To remove all the \code{turtles}, you can use \code{clearTurtles()}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

@@ -16,31 +16,29 @@ uphill(world, pVar, turtles, nNeighbors, torus = FALSE)
   pVar, turtles, nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the
-turtles move onto.}
+\item{world}{NLworlds object.}
 
-\item{pVar}{Characters. If the world is a \code{NLworldStack}, \code{pVar}
-is the name of the layer used to define the patches's variable
-used to move uphill. Should not be provided if the world is
-\code{NLworld}}
+\item{pVar}{Character. If the \code{world} is a NLworldStack object, \code{pVar}
+is the name of the layer to use to define the patches values.
+\code{pVar} must not be provided if the \code{world} is a NLworld object.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{nNeighbors}{Integer: 4 or 8. The number of neighbor patches considered to move
-uphill.}
+\item{nNeighbors}{Integer: 4 or 8. Represents the number of neighbor patches
+considered.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
 SpatialPointsDataFrame representing the \code{turtles} with updated
-        coordinates and updated data for their headings and previous coordinates
-        "prevX" and "prevY".
+        coordinates and updated data for their "heading" values and
+        previous coordinates "prevX"
+        and "prevY".
 }
 \description{
-Move the turtles to their neighboring patch with the highest value for the pacthes'
-variable.
+Move the \code{turtles} to their neighboring patch with the highest value.
 }
 \details{
 If no neighboring patch has a larger value than the patch where the
@@ -48,14 +46,14 @@ If no neighboring patch has a larger value than the patch where the
          moves to the patch center if it was not already on it.
 
          If there are multiple neighboring patches with the same highest value,
-         the turtle chooses one patch at random.
+         the turtle chooses one patch randomly.
 
-         If \code{torus = FALSE}, turtles cannot move on the other side of the world.
-         If a turtle is located on a patch on the edge of the world, it has fewer
-         neighborhing patches for option to move than \code{nNeighbors}. If
-         \code{torus = TRUE}, turtles can move on the other side of the world to
-         go uphill and their choice of neighborhing patches is always among
-         \code{nNeighbors} patches.
+         If a turtle is located on a patch on the edge
+         of the \code{world} and \code{torus = FALSE}, it has fewer
+         neighborhing patches as options to move than \code{nNeighbors}; if
+         \code{torus = TRUE}, the turtle can move on the other side of the \code{world} to
+         move uphill and its choice of neighborhing patches is always equals to
+         \code{nNeighbors}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)

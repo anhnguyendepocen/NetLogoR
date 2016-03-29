@@ -17,26 +17,30 @@ hatch(turtles, who, n, breed)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} containing the parent turtle.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integer. The who number of the parent turtle.}
+\item{who}{Integer. The "who" number of the parent turtle.}
 
-\item{n}{Integer. The number of new turtles to create.}
+\item{n}{Integer.}
 
-\item{breed}{Character. The breed for the turtles to create. If missing,
-the created turtles are of the same breed as the parent turtle.}
+\item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
+\code{n}. If missing,
+the created turtles are of the same "breed" as the parent turtle.}
 }
 \value{
-SpatialPointsDataFrame of length equal to \code{length(turtles) + n}.
+SpatialPointsDataFrame representing the \code{turtles} with the new
+        hatched ones.
 }
 \description{
-Create new turtles from a parent turtle.
+Create \code{n} new turtles from a parent turtle.
 }
 \details{
-The created turtles inherit of all the data from the parent turtle,
-         except for the breed, if specified otherwise, and for the who number.
-         The who numbers of the turtles created take on following the highest
-         who number among the \code{turtles}.
+The parent turtle must be contained in the \code{turtles}.
+
+         The created turtles inherit of all the data from the parent turtle,
+         except for the "breed", if specified otherwise, and for the "who" numbers.
+         The "who" numbers of the turtles created take on following the highest
+         "who" number among the \code{turtles}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

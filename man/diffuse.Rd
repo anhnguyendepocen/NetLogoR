@@ -24,7 +24,7 @@ is the name of the layer to use to define the patches values.
 \item{share}{Numeric. Value between 0 and 1 representing the portion of
 the patches values to be diffused among the neighbors.}
 
-\item{nNeighbors}{Integer: 4 or 8. Represents the number of neihgbor patches
+\item{nNeighbors}{Integer: 4 or 8. Represents the number of neighbor patches
 considered.}
 }
 \value{

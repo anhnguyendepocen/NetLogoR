@@ -1,25 +1,22 @@
 ################################################################################
 #' Create turtles
 #'
-#' Create \code{n} new turtles with a set of defined variables.
+#' Create \code{n} turtles with a set of defined variables.
 #'
 #' @inheritParams fargs
 #'
 #' @param coords  Matrix (ncol = 2) with the first column "xcor" and the second
 #'                column "ycor" representing the turtles inital locations.
 #'                \code{nrow(coords)} must be equal to 1 or to \code{n}.
-#'                Given coordinates must be inside the world's extent. If missing,
+#'                Given coordinates must be inside the \code{world}'s extent. If missing,
 #'                turtles are put in the center of the \code{world}.
 #'
 #' @param heading Numeric. Vector of values between 0 and 360. Must be of length 1 or
 #'                of length \code{n}. If missing, a random heading is assigned to
 #'                each turtle.
 #'
-#' @param breed   Character. Vector of breed names. Must be of length 1 or of length
+#' @param breed   Character. Vector of "breed" names. Must be of length 1 or of length
 #'                \code{n}. If missing, \code{breed = "turtle"} for all turtles.
-#'
-#' @param color   Character. Vector of color names. Must be of length \code{n}.
-#'                If missing, colors are assigned using the function \code{rainbow(n)}.
 #'
 #' @return SpatialPointsDataFrame of length \code{n} with the columns for the
 #'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
@@ -142,19 +139,17 @@ setMethod(
 ################################################################################
 #' Create ordered turtles
 #'
-#' Create \code{n} new turtles at the center of the world with their headings evenly
+#' Create \code{n} turtles at the center of the \code{world} with their headings evenly
 #' distributed.
 #'
-#' @inheritParams createTurtles
+#' @inheritParams fargs
 #'
-#' @inheritParams patch
+#' @inheritParams createTurtles
 #'
 #' @return SpatialPointsDataFrame of length \code{n} with the columns for the
 #'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
 #'
-#' @details The first turtle \code{who = 0} has its heading set to 0.
-#'
-#'          The identity of the turtles is defined by their "who" number. This
+#' @details The identity of the turtles is defined by their "who" number. This
 #'          numbering starts at 0 and increments by 1.
 #'
 #'          The coordinates from the previous time step are stored in "prevX" and
@@ -226,33 +221,26 @@ setMethod(
 ################################################################################
 #' Move forward
 #'
-#' Move the turtles forward with the turtles' heading direction.
+#' Move the \code{turtles} forward with their headings as directions.
 #'
-#' @param world   \code{NLworlds} object, representing the world which the
-#'                turtles move onto.
+#' @inheritParams fargs
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the moving turtles.
-#'
-#' @param dist    Numeric. Distances by which the turtles will move forward. Must
+#' @param dist    Numeric. Vector of distances to move. Must
 #'                be of length 1 or of length \code{turtles}.
 #'
-#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
-#'                Default is \code{torus = FALSE}.
-#'
-#' @param out     Logical. Determine if turtles should move at all when
-#'                \code{torus = FALSE} and their ending position will be outside of
-#'                the world's extent. Default is \code{out = TRUE}.
+#' @param out     Logical. Determine if a turtle should move when
+#'                \code{torus = FALSE} and its ending position will be outside of
+#'                the \code{world}'s extent. Default is \code{out = TRUE}.
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with updated
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
-#' @details If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
-#'          distance to move leads a turtle outside of the world's extent, it is
-#'          relocated on the other side of the world, inside the world's extent. If
+#' @details If a distance to move leads a turtle outside of the \code{world}'s extent
+#'          and \code{torus = TRUE}, the turtle is
+#'          relocated on the other side of the \code{world}, inside its extent; if
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
-#'          world's extent. If \code{torus = FALSE} and \code{out = FALSE}, the
+#'          \code{world}'s extent; if \code{torus = FALSE} and \code{out = FALSE}, the
 #'          turtle does not move at all. In the event that a turtle does not move,
 #'          its previous coordinates are still updated with its position before
 #'          running \code{fd()} (i.e., its current position).
@@ -332,33 +320,21 @@ setMethod(
 ################################################################################
 #' Move backward
 #'
-#' Move the turtles backward of the turtles' heading direction.
+#' Move the \code{turtles} backward of their headings' directions.
 #'
-#' @param world   \code{NLworlds} object, representing the world which the
-#'                turtles move onto.
+#' @inheritParams fargs
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the moving turtles.
-#'
-#' @param dist    Numeric. Distances by which the turtles will move backward.
-#'                Must be of length 1 or of length \code{turtles}.
-#'
-#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
-#'                Default is \code{torus = FALSE}.
-#'
-#' @param out     Logical. Determine if turtles should move at all when
-#'                \code{torus = FALSE} and their ending position will be outside of
-#'                the world's extent. Default is \code{out = TRUE}.
+#' @inheritParams fd
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with updated
-#'         coordinates and updated data for their previous coordinates "prevX" and
-#'         "prevY".
+#'         coordinates and updated data for their previous coordinates "prevX"
+#'         and "prevY".
 #'
-#' @details If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
-#'          distance to move leads a turtle outside of the world's extent, it is
-#'          relocated on the other side of the world, inside the world's extent. If
+#' @details If a distance to move leads a turtle outside of the \code{world}'s extent
+#'          and \code{torus = TRUE}, the turtle is
+#'          relocated on the other side of the \code{world}, inside its extent; if
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
-#'          world's extent. If \code{torus = FALSE} and \code{out = FALSE}, the
+#'          \code{world}'s extent; if \code{torus = FALSE} and \code{out = FALSE}, the
 #'          turtle does not move at all. In the event that a turtle does not move,
 #'          its previous coordinates are still updated with its position before
 #'          running \code{bk()} (i.e., its current position).
@@ -366,11 +342,8 @@ setMethod(
 #'          If a given \code{dist} value is negative, then the turtle moves
 #'          forward.
 #'
-#'          This function is equivalent to the forward function with the distances
-#'          to move equal to \code{dist * -1}.
-#'
-#'          The turtles' heading are not affected by the function (i.e., the turtles
-#'          do not head backward).
+#'          The \code{turtles}' headings are not affected by the function (i.e., the
+#'          \code{turtles} do not face backward).
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#back}
 #'
@@ -426,32 +399,28 @@ setMethod(
 ################################################################################
 #' Return home
 #'
-#' Move the turtles back "home".
+#' Move the \code{turtles} back \code{home}.
 #'
-#' @param world   \code{NLworlds} object, representing the world in which the
-#'                turtles move onto.
+#' @inheritParams fargs
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the moving turtles.
-#'
-#' @param home    Characters. Can take one of the following options to define where
+#' @param home    Character. Can take one of the following options to define where
 #'                to relocate the \code{turtles}:
 #'
-#'                \code{home = "home0"} will place the turtles at the location
-#'                \code{xcor = 0, ycor = 0}.
+#'                \code{home = "home0"} will place the \code{turtles} at the location
+#'                \code{x = 0, y = 0}.
 #'
-#'                \code{home = "center"} will place the turtles at the center of
-#'                the world.
+#'                \code{home = "center"} will place the \code{turtles} at the center of
+#'                the \code{world}.
 #'
-#'                \code{home = "pCorner"} will place the turtles at the center of
-#'                the patch located in the left bottom corner of the world.
+#'                \code{home = "pCorner"} will place the \code{turtles} at the center of
+#'                the patch located in the left bottom corner of the \code{world}.
 #'
-#'                \code{home = "corner"} will place the turtles at the left bottom
-#'                corner of the world.
+#'                \code{home = "corner"} will place the \code{turtles} at the left bottom
+#'                corner of the \code{world}.
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with updated
-#'         coordinates and updated data for their previous coordinates "prevX" and
-#'         "prevY".
+#'         coordinates and updated data for their previous coordinates "prevX"
+#'         and "prevY".
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#home}
 #'
@@ -522,19 +491,20 @@ setMethod(
 ################################################################################
 #' x-increment
 #'
-#' Report the amount by which the turtles' xcor would change if the turtles were
+#' Report the amount by which the \code{turtles}' coordinates xcor would change
+#' if the \code{turtles} were
 #' to move forward of \code{dist} distances with their current heading.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the moving turtles.
+#' @inheritParams fargs
 #'
-#' @param dist    Numeric. The distances the turtles would have to move forward to
-#'                compute the x-increment value. Must be of length 1 or length
+#' @param dist    Numeric. Vector of distances the \code{turtles} would have to
+#'                move forward to
+#'                compute the increment values. Must be of length 1 or of length
 #'                \code{turtles}. The default value is \code{dist = 1}.
 #'
 #' @return Numeric. Vector of length \code{turtles}.
 #'
-#' @details Report the sine of the turtles' heading multiplied by the \code{dist}
+#' @details Report the sine of the \code{turtles}' heading multiplied by the \code{dist}
 #'          values. Heading 0 is north and angles are calculated in degrees in a
 #'          clockwise manner.
 #'
@@ -588,19 +558,17 @@ setMethod(
 ################################################################################
 #' y-increment
 #'
-#' Reports the amount by which the turtles' ycor would change if the turtles were
+#' Report the amount by which the \code{turtles}' coordinates ycor would change
+#' if the \code{turtles} were
 #' to move forward of \code{dist} distances with their current heading.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the moving turtles.
+#' @inheritParams fargs
 #'
-#' @param dist    Numeric. The distances the turtles would have to move forward to
-#'                compute the y-increment value. Must be of length 1 or length
-#'                \code{turtles}. The default value is \code{dist = 1}.
+#' @inheritParams dx
 #'
 #' @return Numeric. Vector of length \code{turtles}.
 #'
-#' @details Report the cosine of the turtles' heading multiplied by the \code{dist}
+#' @details Report the cosine of the \code{turtles}' heading multiplied by the \code{dist}
 #'          values. Heading 0 is north and angles are calculated in degrees in a
 #'          clockwise manner.
 #'
@@ -654,18 +622,16 @@ setMethod(
 ################################################################################
 #' Kill turtles
 #'
-#' Kill specific turtles.
+#' Kill selected turtles.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()}.
+#' @inheritParams fargs
 #'
-#' @param who     Integers. The who numbers of the turtles to kill.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with the selected
+#'         ones removed.
 #'
-#' @return SpatialPointsDataFrame of length equal to \code{length(turtles) - length(who)}.
+#' @details The "who" numbers of the remaining \code{turtles} are unchanged.
 #'
-#' @details The who numbers of the other turtles are maintained.
-#'
-#'          To remove all the turtles, you can use \code{clearTurtles()}.
+#'          To remove all the \code{turtles}, you can use \code{clearTurtles()}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#die}
 #'
@@ -711,24 +677,25 @@ setMethod(
 ################################################################################
 #' Hatch new turtles
 #'
-#' Create new turtles from a parent turtle.
+#' Create \code{n} new turtles from a parent turtle.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} containing the parent turtle.
+#' @inheritParams fargs
 #'
-#' @param who     Integer. The who number of the parent turtle.
+#' @param who     Integer. The "who" number of the parent turtle.
 #'
-#' @param n       Integer. The number of new turtles to create.
+#' @param breed   Character. Vector of "breed" names. Must be of length 1 or of length
+#'                \code{n}. If missing,
+#'                the created turtles are of the same "breed" as the parent turtle.
 #'
-#' @param breed   Character. The breed for the turtles to create. If missing,
-#'                the created turtles are of the same breed as the parent turtle.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with the new
+#'         hatched ones.
 #'
-#' @return SpatialPointsDataFrame of length equal to \code{length(turtles) + n}.
+#' @details The parent turtle must be contained in the \code{turtles}.
 #'
-#' @details The created turtles inherit of all the data from the parent turtle,
-#'          except for the breed, if specified otherwise, and for the who number.
-#'          The who numbers of the turtles created take on following the highest
-#'          who number among the \code{turtles}.
+#'          The created turtles inherit of all the data from the parent turtle,
+#'          except for the "breed", if specified otherwise, and for the "who" numbers.
+#'          The "who" numbers of the turtles created take on following the highest
+#'          "who" number among the \code{turtles}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#hatch}
 #'
@@ -772,7 +739,10 @@ setMethod(
 
     # Update the who numbers and breed
     newData[(nrow(turtles) + 1):nrow(newData), "who"] <- (max(turtles@data$who) + 1):(max(turtles@data$who) + n)
-    newData[(nrow(turtles) + 1):nrow(newData), "breed"] <- rep(breed, n)
+    if(length(breed) == 1){
+      breed <- rep(breed, n)
+    }
+    newData[(nrow(turtles) + 1):nrow(newData), "breed"] <- breed
 
     newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
     return(newTurtles)
@@ -794,20 +764,14 @@ setMethod(
 ################################################################################
 #' Can the turtles move?
 #'
-#' Report \code{TRUE} if the turtles can move the given distances without leaving
-#' the world's extent, report \code{FALSE} otherwise.
+#' Report \code{TRUE} if the turtle can move the given distance without leaving
+#' the \code{world}'s extent, report \code{FALSE} otherwise.
 #'
-#' @param world   \code{NLworlds} object, representing the world which the
-#'                turtles move onto.
+#' @inheritParams fargs
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the turtles to
-#'                evaluate.
+#' @inheritParams fd
 #'
-#' @param dist    Numeric. The distances the turtles would move. Must be of
-#'                length 1 or of length \code{turtles}.
-#'
-#' @return Logicals. Vector of length \code{turtles}.
+#' @return Logical. Vector of length \code{turtles}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#can-move}
 #'
@@ -848,15 +812,13 @@ setMethod(
 
 
 ################################################################################
-#' Generate random xcor
+#' Random xcor
 #'
-#' Report random xcor coordinates inside the world's extent.
+#' Report \code{n} random xcor coordinates within the \code{world}'s extent.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
-#' @param n     Integer. The number of xcor coordinates to generate.
-#'
-#' @return Numeric. Vector of xcor coordinate values of length \code{n}.
+#' @return Numeric. Vector of length \code{n} of xcor coordinates.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#random-cor}
 #'
@@ -902,15 +864,13 @@ setMethod(
 
 
 ################################################################################
-#' Generate random ycor
+#' Random ycor
 #'
-#' Report random ycor coordinates inside the world's extent.
+#' Report \code{n} random ycor coordinates within the \code{world}'s extent.
 #'
-#' @param world \code{NLworlds} object.
+#' @inheritParams fargs
 #'
-#' @param n     Integer. The number of ycor coordinates to generate.
-#'
-#' @return Numeric. Vector of ycor coordinate values of length \code{n}.
+#' @return Numeric. Vector of length \code{n} of ycor coordinates.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#random-cor}
 #'
@@ -956,47 +916,24 @@ setMethod(
 
 
 ################################################################################
-#' Direction towards
+#' Directions towards
 #'
-#' Report the directions of \code{agents1} towards agents or locations \code{agents2}.
+#' Report the directions of \code{agents} towards \code{agents2}.
 #'
-#' @param world \code{NLworlds} object.
-#'
-#' @param agents1  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'              second column \code{pycor} representing the coordinates of the
-#'              patches from which the directions are computed.
-#'
-#'              SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'              \code{createOTurtles()} representing the turtles from which the
-#'              directions are computed.
-#'
-#' @param agents2    Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'              second column \code{pycor} representing the coordinates of the
-#'              patches towards which the directions are computed.
-#'
-#'              SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'              \code{createOTurtles()} representing the turtles towards which the
-#'              directions are be computed.
-#'
-#'              Matrix (ncol = 2) with the first column \code{x} and the second
-#'              column \code{y} representing the coordinates of the locations
-#'              towards which the directions are computed.
-#'
-#' @param torus  Logical to determine if the \code{NLworlds} object is wrapped.
-#'               Default is \code{torus = FALSE}.
+#' @inheritParams fargs
 #'
 #' @return Numeric. Vector of angles in degrees of length equal to the largest
-#'         number of agents/locations between \code{agents1} and \code{agents2}.
+#'         number of agents/locations between \code{agents} and \code{agents2}.
 #'
-#' @details \code{agents1} and \code{agents2} must be of the same length or if different, one
-#'          of the two has be of length 1.
+#' @details \code{agents} and \code{agents2} must have the same number of agents/locations
+#'          or if different, one of them must have only one agent/location.
 #'
-#'          If \code{torus = TRUE} and the distance from one \code{agents1} to
-#'          its corresponding agent/location \code{agents2} is smaller around the
-#'          sides of the world than across it, then the direction to the agent/location
-#'          going around the sides of the world is reported.
+#'          If \code{torus = TRUE} and the distance from one \code{agents} to
+#'          its corresponding \code{agents2} is smaller around the
+#'          sides of the \code{world} than across it, then the direction to \code{agents2}
+#'          going around the sides of the \code{world} is returned.
 #'
-#'          The direction from a patch to its location returns 0, the direction from
+#'          The direction from a patch to its location returns 0; the direction from
 #'          a turtle to its location returns the turtle's heading.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#towards}
@@ -1009,9 +946,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' towards(world = w1, agents1 = patches(w1), agents2 = cbind(x = 0, y = 0))
+#' towards(world = w1, agents = patches(w1), agents2 = cbind(x = 0, y = 0))
 #' t1 <- createTurtles(n = 10, world = w1)
-#' towards(world = w1, agents1 = t1, agents2 = cbind(x = 0, y = 0))
+#' towards(world = w1, agents = t1, agents2 = cbind(x = 0, y = 0))
 #'
 #'
 #' @export
@@ -1023,7 +960,7 @@ setMethod(
 #'
 setGeneric(
   "towards",
-  function(world, agents1, agents2, torus = FALSE) {
+  function(world, agents, agents2, torus = FALSE) {
     standardGeneric("towards")
   })
 
@@ -1031,10 +968,10 @@ setGeneric(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents1 = "matrix", agents2 = "matrix"),
-  definition = function(world, agents1, agents2, torus) {
+  signature = c(world = "NLworlds", agents = "matrix", agents2 = "matrix"),
+  definition = function(world, agents, agents2, torus) {
 
-    heading <- deg(atan2(agents2[,1] - agents1[,1], agents2[,2] - agents1[,2])) # angles between -180 and 180
+    heading <- deg(atan2(agents2[,1] - agents[,1], agents2[,2] - agents[,2])) # angles between -180 and 180
     heading[heading < 0] <- heading[heading < 0] + 360
 
     if(torus == TRUE){
@@ -1042,16 +979,16 @@ setMethod(
       # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
       # Find the smallest distances across or around the world
 
-      if(nrow(agents2) == 1 & nrow(agents1) != 1){
-        agents2 <- cbind(x = rep(agents2[,1], nrow(agents1)), y = rep(agents2[,2], nrow(agents1)))
+      if(nrow(agents2) == 1 & nrow(agents) != 1){
+        agents2 <- cbind(x = rep(agents2[,1], nrow(agents)), y = rep(agents2[,2], nrow(agents)))
       }
-      if(nrow(agents1) == 1 & nrow(agents2) != 1){
-        agents1 <- cbind(x = rep(agents1[,1], nrow(agents2)), y = rep(agents1[,2], nrow(agents2)))
+      if(nrow(agents) == 1 & nrow(agents2) != 1){
+        agents <- cbind(x = rep(agents[,1], nrow(agents2)), y = rep(agents[,2], nrow(agents2)))
       }
 
       toShortest <- agents2
 
-      for(i in 1:nrow(agents1)){
+      for(i in 1:nrow(agents)){
         to1 <- cbind(agents2[i,1] - (world@extent@xmax - world@extent@xmin), agents2[i,2] + (world@extent@ymax - world@extent@ymin))
         to2 <- cbind(agents2[i,1], agents2[i,2] + (world@extent@ymax - world@extent@ymin))
         to3 <- cbind(agents2[i,1] + (world@extent@xmax - world@extent@xmin), agents2[i,2] + (world@extent@ymax - world@extent@ymin))
@@ -1062,15 +999,15 @@ setMethod(
         to8 <- cbind(agents2[i,1] + (world@extent@xmax - world@extent@xmin), agents2[i,2] - (world@extent@ymax - world@extent@ymin))
 
 
-        dist <- pointDistance(p1 = agents1[i,], p2 = agents2[i,], lonlat = FALSE, allpairs = FALSE)
-        dist1 <- pointDistance(p1 = agents1[i,], p2 = to1, lonlat = FALSE, allpairs = FALSE)
-        dist2 <- pointDistance(p1 = agents1[i,], p2 = to2, lonlat = FALSE, allpairs = FALSE)
-        dist3 <- pointDistance(p1 = agents1[i,], p2 = to3, lonlat = FALSE, allpairs = FALSE)
-        dist4 <- pointDistance(p1 = agents1[i,], p2 = to4, lonlat = FALSE, allpairs = FALSE)
-        dist5 <- pointDistance(p1 = agents1[i,], p2 = to5, lonlat = FALSE, allpairs = FALSE)
-        dist6 <- pointDistance(p1 = agents1[i,], p2 = to6, lonlat = FALSE, allpairs = FALSE)
-        dist7 <- pointDistance(p1 = agents1[i,], p2 = to7, lonlat = FALSE, allpairs = FALSE)
-        dist8 <- pointDistance(p1 = agents1[i,], p2 = to8, lonlat = FALSE, allpairs = FALSE)
+        dist <- pointDistance(p1 = agents[i,], p2 = agents2[i,], lonlat = FALSE, allpairs = FALSE)
+        dist1 <- pointDistance(p1 = agents[i,], p2 = to1, lonlat = FALSE, allpairs = FALSE)
+        dist2 <- pointDistance(p1 = agents[i,], p2 = to2, lonlat = FALSE, allpairs = FALSE)
+        dist3 <- pointDistance(p1 = agents[i,], p2 = to3, lonlat = FALSE, allpairs = FALSE)
+        dist4 <- pointDistance(p1 = agents[i,], p2 = to4, lonlat = FALSE, allpairs = FALSE)
+        dist5 <- pointDistance(p1 = agents[i,], p2 = to5, lonlat = FALSE, allpairs = FALSE)
+        dist6 <- pointDistance(p1 = agents[i,], p2 = to6, lonlat = FALSE, allpairs = FALSE)
+        dist7 <- pointDistance(p1 = agents[i,], p2 = to7, lonlat = FALSE, allpairs = FALSE)
+        dist8 <- pointDistance(p1 = agents[i,], p2 = to8, lonlat = FALSE, allpairs = FALSE)
 
         allDist <- c(dist, dist1, dist2, dist3, dist4, dist5, dist6, dist7, dist8)
         distMin <- min(allDist)
@@ -1078,7 +1015,7 @@ setMethod(
         toShortest[i,] <- allToCoords[match(distMin, allDist),]
       }
 
-      heading <- deg(atan2(toShortest[,1] - agents1[,1], toShortest[,2] - agents1[,2])) # angles between -180 and 180
+      heading <- deg(atan2(toShortest[,1] - agents[,1], toShortest[,2] - agents[,2])) # angles between -180 and 180
       heading[heading < 0] <- heading[heading < 0] + 360
     }
     return(heading)
@@ -1089,11 +1026,11 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents1 = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(world, agents1, agents2, torus) {
-    heading <- towards(world = world, agents1 = agents1@coords, agents2 = agents2, torus = torus)
+  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(world, agents, agents2, torus) {
+    heading <- towards(world = world, agents = agents@coords, agents2 = agents2, torus = torus)
     # The direction to a turtle's location return the turtle's heading
-    heading <- ifelse(agents1@coords[,1] == agents2[,1] & agents1@coords[,2] == agents2[,2], agents1@data$heading, heading)
+    heading <- ifelse(agents@coords[,1] == agents2[,1] & agents@coords[,2] == agents2[,2], agents@data$heading, heading)
     return(heading)
   }
 )
@@ -1102,9 +1039,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents1 = "matrix", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents1, agents2, torus) {
-    towards(world = world, agents1 = agents1, agents2 = agents2@coords, torus = torus)
+  signature = c(world = "NLworlds", agents = "matrix", agents2 = "SpatialPointsDataFrame"),
+  definition = function(world, agents, agents2, torus) {
+    towards(world = world, agents = agents, agents2 = agents2@coords, torus = torus)
   }
 )
 
@@ -1112,11 +1049,11 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents1 = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents1, agents2, torus) {
-    heading <- towards(world = world, agents1 = agents1@coords, agents2 = agents2@coords, torus = torus)
+  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(world, agents, agents2, torus) {
+    heading <- towards(world = world, agents = agents@coords, agents2 = agents2@coords, torus = torus)
     # The direction to a turtle's location return the turtle's heading
-    heading <- ifelse(agents1@coords[,1] == agents2@coords[,1] & agents1@coords[,2] == agents2@coords[,2], agents1@data$heading, heading)
+    heading <- ifelse(agents@coords[,1] == agents2@coords[,1] & agents@coords[,2] == agents2@coords[,2], agents@data$heading, heading)
     return(heading)
   }
 )
@@ -1125,42 +1062,19 @@ setMethod(
 ################################################################################
 #' Face something
 #'
-#' Set the turtles' heading towards \code{agents}.
+#' Set the \code{turtles}' heading towards \code{agents2}.
 #'
-#' @param world   \code{NLworlds} object.
-#'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the turtles to modify
-#'                their heading.
-#'
-#' @param agents  Matrix (ncol = 2) with the first column \code{pxcor} and the
-#'                second column \code{pycor} representing the coordinates of the
-#'                patches towards which the turtles' heading is set.
-#'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or by
-#'                \code{createOTurtles()} representing the turtles towards which
-#'                the turtles' heading is set.
-#'
-#'                Matrix (ncol = 2) with the first column \code{x} and the second
-#'                column \code{y} representing the coordinates of the locations
-#'                towards which the turtles' heading is set.
-#'
-#' @param torus   Logical to determine if the \code{NLworlds} object is wrapped.
-#'                Default is \code{torus = FALSE}.
+#' @inheritParams fargs
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with updated headings.
 #'
-#' @details \code{agents} must be of length 1 or of length \code{turtles}.
+#' @details The number of agents/locations in \code{agents2} must be equal to 1 or
+#'          to the length of \code{turtles}.
 #'
-#'          If \code{torus = TRUE} and the distance from one turtle to
-#'          its corresponding agent/location \code{agents} is smaller around the
-#'          sides of the world than across it, then the heading to the agent/location
-#'          going around the sides of the world is given to the turtle.
-#'
-#'          There is no change in the heading when the turtle faces itself or its own location.
-#'
-#'          This function is similar to setting the agents' heading to the results of
-#'          \code{towards()}.
+#'          If \code{torus = TRUE} and the distance from one \code{turtles} to
+#'          its corresponding agent/location \code{agents2} is smaller around the
+#'          sides of the \code{world} than across it, then the direction to the agent/location
+#'          \code{agents2} going around the sides of the \code{world} is given to the turtle.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#face}
 #'
@@ -1180,7 +1094,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo = "w1")
 #'
-#' t1 <- face(world = w1, turtles = t1, agents = cbind(x = 0, y = 0))
+#' t1 <- face(world = w1, turtles = t1, agents2 = cbind(x = 0, y = 0))
 #' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 #' Plot(t1, addTo = "w1")
 #'
@@ -1193,7 +1107,7 @@ setMethod(
 #'
 setGeneric(
   "face",
-  function(world, turtles, agents, torus = FALSE) {
+  function(world, turtles, agents2, torus = FALSE) {
     standardGeneric("face")
   })
 
@@ -1201,17 +1115,17 @@ setGeneric(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix"),
-  definition = function(world, turtles, agents, torus) {
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(world, turtles, agents2, torus) {
 
-    newHeading <- towards(world = world, agents1 = turtles, agents2 = agents, torus = torus)
+    newHeading <- towards(world = world, agents = turtles, agents2 = agents2, torus = torus)
 
-    if(nrow(agents) == 1 & nrow(turtles) != 1){
-      agents <- cbind(x = rep(agents[,1], nrow(turtles)), y = rep(agents[,2], nrow(turtles)))
+    if(nrow(agents2) == 1 & nrow(turtles) != 1){
+      agents2 <- cbind(x = rep(agents2[,1], nrow(turtles)), y = rep(agents2[,2], nrow(turtles)))
     }
     # Do not change the heading if the turtles is facing its position
     for(i in 1:nrow(turtles@coords)){
-      if(turtles@coords[i,1] == agents[i,1] & turtles@coords[i,2] == agents[i,2]){
+      if(turtles@coords[i,1] == agents2[i,1] & turtles@coords[i,2] == agents2[i,2]){
         newHeading[i] <- turtles@data$heading[i]
       }
     }
@@ -1226,9 +1140,9 @@ setMethod(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame"),
-  definition = function(world, turtles, agents, torus) {
-    face(world = world, turtles = turtles, agents = agents@coords, torus = torus)
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(world, turtles, agents2, torus) {
+    face(world = world, turtles = turtles, agents2 = agents2@coords, torus = torus)
   }
 )
 
@@ -1236,17 +1150,16 @@ setMethod(
 ################################################################################
 #' Rotate to the left
 #'
-#' Rotate the turtles's heading to the left.
+#' Rotate the \code{turtles}'s headings to the left of \code{angle} degrees.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the turtles to rotate.
+#' @inheritParams fargs
 #'
-#' @param angle   Numeric. Angles in degrees by which to rotate the turtles'
-#'                heading to the left. Must be of length 1 or of length \code{turtles}.
+#' @param angle   Numeric. Vector of angles in degrees by which to rotate the \code{turtles}'
+#'                headings. Must be of length 1 or of length \code{turtles}.
 #'
-#' @return SpatialPointsDataFrame representing the turtles with updated headings.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated "heading" values.
 #'
-#' @details If \code{angle} is negative, the turtle rotates to the right.
+#' @details If a given \code{angle} value is negative, then the turtle rotates to the right.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#left}
 #'
@@ -1294,19 +1207,17 @@ setMethod(
 ################################################################################
 #' Rotate to the right
 #'
-#' Rotate the turtles's heading to the right.
+#' Rotate the \code{turtles}'s headings to the right of \code{angle} degrees.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the turtles to rotate.
+#' @inheritParams fargs
 #'
-#' @param angle   Numeric. Angles in degrees by which to rotate the turtles'
-#'                heading to the right Must be of length 1 or of length \code{turtles}.
+#' @inheritParams left
 #'
-#' @return SpatialPointsDataFrame representing the turtles with updated headings.
+#' @return SpatialPointsDataFrame representing the \code{turtles} with updated "heading" values.
+#'
+#' @details If a given \code{angle} value is negative, then the turtle rotates to the left.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#right}
-#'
-#' @details If \code{angle} is negative, the turtle rotates to the left.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -1345,43 +1256,28 @@ setMethod(
 ################################################################################
 #' Move downhill
 #'
-#' Move the turtles to their neighboring patch with the lowest value for the patches'
-#' variable.
+#' Move the \code{turtles} to their neighboring patch with the lowest value.
 #'
-#' @param world      \code{NLworlds} object, representing the world which the
-#'                   turtles move onto.
-#'
-#' @param pVar       Characters. If the world is a \code{NLworldStack}, \code{pVar}
-#'                   is the name of the layer used to define the patches's variable
-#'                   used to move downihll. Should not be provided if the world is
-#'                   \code{NLworld}.
-#'
-#' @param turtles    SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                   by \code{createOTurtles()} representing the moving turtles.
-#'
-#' @param nNeighbors Integer: 4 or 8. The number of neighbor patches considered to move
-#'                   downhill.
-#'
-#' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
-#'                   Default is \code{torus = FALSE}.
+#' @inheritParams fargs
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with updated
-#'         coordinates and updated data for their headings and previous coordinates
-#'         "prevX" and "prevY".
+#'         coordinates and updated data for their "heading" values and
+#'         previous coordinates "prevX"
+#'         and "prevY".
 #'
 #' @details If no neighboring patch has a smaller value than the patch where the
 #'          turtle is currently located on, the turtle stays on this patch. It still
 #'          moves to the patch center if it was not already on it.
 #'
 #'          If there are multiple neighboring patches with the same lowest value,
-#'          the turtle chooses one patch at random.
+#'          the turtle chooses one patch randomly.
 #'
-#'          If \code{torus = FALSE}, turtles cannot move on the other side of the world.
-#'          If a turtle is located on a patch on the edge of the world, it has fewer
-#'          neighborhing patches for option to move than \code{nNeighbors}. If
-#'          \code{torus = TRUE}, turtles can move on the other side of the world to
-#'          go downhill and their choice of neighborhing patches is always among
-#'          \code{nNeighbors} patches.
+#'          If a turtle is located on a patch on the edge
+#'          of the \code{world} and \code{torus = FALSE}, it has fewer
+#'          neighborhing patches as options to move than \code{nNeighbors}; if
+#'          \code{torus = TRUE}, the turtle can move on the other side of the \code{world} to
+#'          move downhill and its choice of neighborhing patches is always equals to
+#'          \code{nNeighbors}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#downhill}
 #'
@@ -1437,7 +1333,7 @@ setMethod(
     }
 
     pMinNeighbors <- do.call(rbind, pMinNeighbors)
-    newTurtles <- face(world = world, turtles = turtles, agents = pMinNeighbors, torus = torus)
+    newTurtles <- face(world = world, turtles = turtles, agents2 = pMinNeighbors, torus = torus)
     newTurtles <- moveTo(turtles = newTurtles, agents = pMinNeighbors)
     return(newTurtles)
   }
@@ -1459,43 +1355,28 @@ setMethod(
 ################################################################################
 #' Move uphill
 #'
-#' Move the turtles to their neighboring patch with the highest value for the pacthes'
-#' variable.
+#' Move the \code{turtles} to their neighboring patch with the highest value.
 #'
-#' @param world      \code{NLworlds} object, representing the world which the
-#'                   turtles move onto.
-#'
-#' @param pVar       Characters. If the world is a \code{NLworldStack}, \code{pVar}
-#'                   is the name of the layer used to define the patches's variable
-#'                   used to move uphill. Should not be provided if the world is
-#'                   \code{NLworld}
-#'
-#' @param turtles    SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                   by \code{createOTurtles()} representing the moving turtles.
-#'
-#' @param nNeighbors Integer: 4 or 8. The number of neighbor patches considered to move
-#'                   uphill.
-#'
-#' @param torus      Logical to determine if the \code{NLworlds} object is wrapped.
-#'                   Default is \code{torus = FALSE}.
+#' @inheritParams fargs
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with updated
-#'         coordinates and updated data for their headings and previous coordinates
-#'         "prevX" and "prevY".
+#'         coordinates and updated data for their "heading" values and
+#'         previous coordinates "prevX"
+#'         and "prevY".
 #'
 #' @details If no neighboring patch has a larger value than the patch where the
 #'          turtle is currently located on, the turtle stays on this patch. It still
 #'          moves to the patch center if it was not already on it.
 #'
 #'          If there are multiple neighboring patches with the same highest value,
-#'          the turtle chooses one patch at random.
+#'          the turtle chooses one patch randomly.
 #'
-#'          If \code{torus = FALSE}, turtles cannot move on the other side of the world.
-#'          If a turtle is located on a patch on the edge of the world, it has fewer
-#'          neighborhing patches for option to move than \code{nNeighbors}. If
-#'          \code{torus = TRUE}, turtles can move on the other side of the world to
-#'          go uphill and their choice of neighborhing patches is always among
-#'          \code{nNeighbors} patches.
+#'          If a turtle is located on a patch on the edge
+#'          of the \code{world} and \code{torus = FALSE}, it has fewer
+#'          neighborhing patches as options to move than \code{nNeighbors}; if
+#'          \code{torus = TRUE}, the turtle can move on the other side of the \code{world} to
+#'          move uphill and its choice of neighborhing patches is always equals to
+#'          \code{nNeighbors}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#uphill}
 #'

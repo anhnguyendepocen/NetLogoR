@@ -24,7 +24,7 @@ neighbors(world, agents, nNeighbors, torus = FALSE)
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
 
-\item{nNeighbors}{Integer: 4 or 8. Represents the number of neihgbor patches
+\item{nNeighbors}{Integer: 4 or 8. Represents the number of neighbor patches
 considered.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is

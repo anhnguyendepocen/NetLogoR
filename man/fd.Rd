@@ -12,21 +12,20 @@ fd(world, turtles, dist, torus = FALSE, out = TRUE)
   torus = FALSE, out = TRUE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the
-turtles move onto.}
+\item{world}{NLworlds object.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{dist}{Numeric. Distances by which the turtles will move forward. Must
+\item{dist}{Numeric. Vector of distances to move. Must
 be of length 1 or of length \code{turtles}.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 
-\item{out}{Logical. Determine if turtles should move at all when
-\code{torus = FALSE} and their ending position will be outside of
-the world's extent. Default is \code{out = TRUE}.}
+\item{out}{Logical. Determine if a turtle should move when
+\code{torus = FALSE} and its ending position will be outside of
+the \code{world}'s extent. Default is \code{out = TRUE}.}
 }
 \value{
 SpatialPointsDataFrame representing the \code{turtles} with updated
@@ -34,14 +33,14 @@ SpatialPointsDataFrame representing the \code{turtles} with updated
         and "prevY".
 }
 \description{
-Move the turtles forward with the turtles' heading direction.
+Move the \code{turtles} forward with their headings as directions.
 }
 \details{
-If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
-         distance to move leads a turtle outside of the world's extent, it is
-         relocated on the other side of the world, inside the world's extent. If
+If a distance to move leads a turtle outside of the \code{world}'s extent
+         and \code{torus = TRUE}, the turtle is
+         relocated on the other side of the \code{world}, inside its extent; if
          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
-         world's extent. If \code{torus = FALSE} and \code{out = FALSE}, the
+         \code{world}'s extent; if \code{torus = FALSE} and \code{out = FALSE}, the
          turtle does not move at all. In the event that a turtle does not move,
          its previous coordinates are still updated with its position before
          running \code{fd()} (i.e., its current position).

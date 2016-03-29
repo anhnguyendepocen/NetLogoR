@@ -7,54 +7,46 @@
 \alias{face,NLworlds,SpatialPointsDataFrame,matrix-method}
 \title{Face something}
 \usage{
-face(world, turtles, agents, torus = FALSE)
+face(world, turtles, agents2, torus = FALSE)
 
-\S4method{face}{NLworlds,SpatialPointsDataFrame,matrix}(world, turtles, agents,
+\S4method{face}{NLworlds,SpatialPointsDataFrame,matrix}(world, turtles, agents2,
   torus = FALSE)
 
 \S4method{face}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
-  turtles, agents, torus = FALSE)
+  turtles, agents2, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtles to modify
-their heading.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates of the
-               patches towards which the turtles' heading is set.
+\item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
+               column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing the turtles towards which
-               the turtles' heading is set.
+               SpatialPointsDataFrame created by \code{createTurtles()} or
+               by \code{createOTurtles()} representing the moving agents, or
 
-               Matrix (ncol = 2) with the first column \code{x} and the second
-               column \code{y} representing the coordinates of the locations
-               towards which the turtles' heading is set.}
+               Matrix (ncol = 2) with the first column "x and the second column
+               "y" representing locations coordinates.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
 SpatialPointsDataFrame representing the \code{turtles} with updated headings.
 }
 \description{
-Set the turtles' heading towards \code{agents}.
+Set the \code{turtles}' heading towards \code{agents2}.
 }
 \details{
-\code{agents} must be of length 1 or of length \code{turtles}.
+The number of agents/locations in \code{agents2} must be equal to 1 or
+         to the length of \code{turtles}.
 
-         If \code{torus = TRUE} and the distance from one turtle to
-         its corresponding agent/location \code{agents} is smaller around the
-         sides of the world than across it, then the heading to the agent/location
-         going around the sides of the world is given to the turtle.
-
-         There is no change in the heading when the turtle faces itself or its own location.
-
-         This function is similar to setting the agents' heading to the results of
-         \code{towards()}.
+         If \code{torus = TRUE} and the distance from one \code{turtles} to
+         its corresponding agent/location \code{agents2} is smaller around the
+         sides of the \code{world} than across it, then the direction to the agent/location
+         \code{agents2} going around the sides of the \code{world} is given to the turtle.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
@@ -66,7 +58,7 @@ clearplot()
 Plot(w1)
 Plot(t1, addTo = "w1")
 
-t1 <- face(world = w1, turtles = t1, agents = cbind(x = 0, y = 0))
+t1 <- face(world = w1, turtles = t1, agents2 = cbind(x = 0, y = 0))
 t1 <- fd(world = w1, turtles = t1, dist = 0.5)
 Plot(t1, addTo = "w1")
 

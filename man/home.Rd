@@ -11,34 +11,33 @@ home(world, turtles, home)
 \S4method{home}{NLworlds,SpatialPointsDataFrame,character}(world, turtles, home)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world in which the
-turtles move onto.}
+\item{world}{NLworlds object.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{home}{Characters. Can take one of the following options to define where
+\item{home}{Character. Can take one of the following options to define where
                to relocate the \code{turtles}:
 
-               \code{home = "home0"} will place the turtles at the location
-               \code{xcor = 0, ycor = 0}.
+               \code{home = "home0"} will place the \code{turtles} at the location
+               \code{x = 0, y = 0}.
 
-               \code{home = "center"} will place the turtles at the center of
-               the world.
+               \code{home = "center"} will place the \code{turtles} at the center of
+               the \code{world}.
 
-               \code{home = "pCorner"} will place the turtles at the center of
-               the patch located in the left bottom corner of the world.
+               \code{home = "pCorner"} will place the \code{turtles} at the center of
+               the patch located in the left bottom corner of the \code{world}.
 
-               \code{home = "corner"} will place the turtles at the left bottom
-               corner of the world.}
+               \code{home = "corner"} will place the \code{turtles} at the left bottom
+               corner of the \code{world}.}
 }
 \value{
 SpatialPointsDataFrame representing the \code{turtles} with updated
-        coordinates and updated data for their previous coordinates "prevX" and
-        "prevY".
+        coordinates and updated data for their previous coordinates "prevX"
+        and "prevY".
 }
 \description{
-Move the turtles back "home".
+Move the \code{turtles} back \code{home}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

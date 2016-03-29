@@ -7,73 +7,68 @@
 \alias{towards,NLworlds,SpatialPointsDataFrame,matrix-method}
 \alias{towards,NLworlds,matrix,SpatialPointsDataFrame-method}
 \alias{towards,NLworlds,matrix,matrix-method}
-\title{Direction towards}
+\title{Directions towards}
 \usage{
-towards(world, agents1, agents2, torus = FALSE)
+towards(world, agents, agents2, torus = FALSE)
 
-\S4method{towards}{NLworlds,matrix,matrix}(world, agents1, agents2,
+\S4method{towards}{NLworlds,matrix,matrix}(world, agents, agents2,
   torus = FALSE)
 
-\S4method{towards}{NLworlds,SpatialPointsDataFrame,matrix}(world, agents1,
+\S4method{towards}{NLworlds,SpatialPointsDataFrame,matrix}(world, agents,
   agents2, torus = FALSE)
 
-\S4method{towards}{NLworlds,matrix,SpatialPointsDataFrame}(world, agents1,
+\S4method{towards}{NLworlds,matrix,SpatialPointsDataFrame}(world, agents,
   agents2, torus = FALSE)
 
 
   \S4method{towards}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
-  agents1, agents2, torus = FALSE)
+  agents, agents2, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{agents1}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-             second column \code{pycor} representing the coordinates of the
-             patches from which the directions are computed.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-             SpatialPointsDataFrame created by \code{createTurtles()} or by
-             \code{createOTurtles()} representing the turtles from which the
-             directions are computed.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{agents2}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-             second column \code{pycor} representing the coordinates of the
-             patches towards which the directions are computed.
+\item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
+               column "pycor" representing the patches coordinates, or
 
-             SpatialPointsDataFrame created by \code{createTurtles()} or by
-             \code{createOTurtles()} representing the turtles towards which the
-             directions are be computed.
+               SpatialPointsDataFrame created by \code{createTurtles()} or
+               by \code{createOTurtles()} representing the moving agents, or
 
-             Matrix (ncol = 2) with the first column \code{x} and the second
-             column \code{y} representing the coordinates of the locations
-             towards which the directions are computed.}
+               Matrix (ncol = 2) with the first column "x and the second column
+               "y" representing locations coordinates.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
 Numeric. Vector of angles in degrees of length equal to the largest
-        number of agents/locations between \code{agents1} and \code{agents2}.
+        number of agents/locations between \code{agents} and \code{agents2}.
 }
 \description{
-Report the directions of \code{agents1} towards agents or locations \code{agents2}.
+Report the directions of \code{agents} towards \code{agents2}.
 }
 \details{
-\code{agents1} and \code{agents2} must be of the same length or if different, one
-         of the two has be of length 1.
+\code{agents} and \code{agents2} must have the same number of agents/locations
+         or if different, one of them must have only one agent/location.
 
-         If \code{torus = TRUE} and the distance from one \code{agents1} to
-         its corresponding agent/location \code{agents2} is smaller around the
-         sides of the world than across it, then the direction to the agent/location
-         going around the sides of the world is reported.
+         If \code{torus = TRUE} and the distance from one \code{agents} to
+         its corresponding \code{agents2} is smaller around the
+         sides of the \code{world} than across it, then the direction to \code{agents2}
+         going around the sides of the \code{world} is returned.
 
-         The direction from a patch to its location returns 0, the direction from
+         The direction from a patch to its location returns 0; the direction from
          a turtle to its location returns the turtle's heading.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-towards(world = w1, agents1 = patches(w1), agents2 = cbind(x = 0, y = 0))
+towards(world = w1, agents = patches(w1), agents2 = cbind(x = 0, y = 0))
 t1 <- createTurtles(n = 10, world = w1)
-towards(world = w1, agents1 = t1, agents2 = cbind(x = 0, y = 0))
+towards(world = w1, agents = t1, agents2 = cbind(x = 0, y = 0))
 
 
 }

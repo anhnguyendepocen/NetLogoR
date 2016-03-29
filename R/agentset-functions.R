@@ -1767,7 +1767,7 @@ setMethod(
 
       # Direction from the turtle to each of their patches within radius distance
       tDir <- mapply(function(x, y){
-        towards(world = world, agents1 = x, agents2 = y, torus = torus)
+        towards(world = world, agents = x, agents2 = y, torus = torus)
       }, tList, agentsNoEmpty, SIMPLIFY = FALSE)
       # Define the rotation angle between the turtle heading and the direction to each patches
       tCone <- mapply(function(x, y){subHeadings(angle1 = x, angle2 = y, range360 = FALSE)}, tDir, tList, SIMPLIFY = FALSE)
