@@ -17,7 +17,8 @@ Here are the remaining tasks to do in the remaining 5 to 6 weeks.
 
 * C) (Done) Rename some of the parameters for consistency across NLR functions (e.g., step and distance, nDegrees and angle). Need to change it in all dependent functions and tests associated.
 
-* D) Re-write properly the functions' documentation by using @inheritParams.
+* D) (Done) Re-write properly the functions' documentation by using @inheritParams.
+*Done for most of the parameters/functions. Creation of function-arguments.R to store the parameters and use of "@inheritParams fargs" to reuse them. Parameters used only in one function are not stored in function-arguments.R, they are directly in the function description. Some parameters used in different functions but with slight different meanings some times are either: in function-arguments.R but over-written in some functions (e.g., "who"), described in some functions and reused in others using "@inheritsParam function_name"" (e.g., "dist"), or described each time in each function using it (e.g., "out")*
 
 * E) Remove "useless" parameters in signature functions (e.g., each time "world" is asked, it is to be used with the wrap function. "world" is not needed when torus = FALSE). Need to be changed in all dependent functions and tests associated. E.g., fd(), bk() and NLdist() but maybe others.
 
