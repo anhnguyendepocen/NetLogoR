@@ -222,6 +222,7 @@ setClassUnion(name="NLworlds",
 #'
 #' @export
 #' @importFrom raster addLayer
+#' @importFrom SpaDES objectNames
 #' @docType methods
 #' @rdname NLstack
 #'
@@ -235,30 +236,19 @@ setGeneric(
   })
 
 #' @export
-#' @importFrom SpaDES objectNames
 #' @rdname NLstack
 setMethod(
   "NLstack",
   signature = "NLworld",
   definition = function(...) {
 
-    dots <- list(...)
+    rasterS <- stack(...)
 
-    # Get object names:
-    layerNames <- objectNames("NLstack")
-    if(any(duplicated(sapply(layerNames, function(x) x$objs)))) {
-      stop("Please use unique layer names")
-    }
+    layerNames <- objectNames("NLstack") # get object names
+    names(rasterS) <- sapply(layerNames, function(x) x$objs)
 
-    worldStack <- new("NLworldStack")
+    worldStack <- as(rasterS, "NLworldStack")
 
-    for (i in seq_along(dots)) {
-      world <- dots[[i]]
-      if(world@data@names == ""){
-        world@data@names <- list(as.name(layerNames[[i]]$objs))  # name the layer with the object name
-      }
-      worldStack <- addLayer(worldStack, world)
-    }
     return(worldStack)
   }
 )
