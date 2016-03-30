@@ -31,7 +31,7 @@
 #'
 setGeneric(
   "createNLworld",
-  function(minPxcor = -16, maxPxcor = 16, minPycor = -16, maxPycor = 16) {
+  function(minPxcor, maxPxcor, minPycor, maxPycor) {
   standardGeneric("createNLworld")
 })
 
@@ -40,8 +40,7 @@ setGeneric(
 setMethod(
   "createNLworld",
   signature = c("numeric", "numeric", "numeric", "numeric"),
-  definition = function(minPxcor = -16, maxPxcor = 16, minPycor = -16,
-                        maxPycor = 16) {
+  definition = function(minPxcor, maxPxcor, minPycor, maxPycor) {
 
     world <- new("NLworld",
                  minPxcor = minPxcor, maxPxcor = maxPxcor,

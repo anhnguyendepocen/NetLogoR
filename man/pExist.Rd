@@ -3,15 +3,12 @@
 \docType{methods}
 \name{pExist}
 \alias{pExist}
-\alias{pExist,NLworld,numeric,numeric-method}
-\alias{pExist,NLworldStack,numeric,numeric-method}
+\alias{pExist,NLworlds,numeric,numeric-method}
 \title{Do the patches exist?}
 \usage{
 pExist(world, pxcor, pycor)
 
-\S4method{pExist}{NLworld,numeric,numeric}(world, pxcor, pycor)
-
-\S4method{pExist}{NLworldStack,numeric,numeric}(world, pxcor, pycor)
+\S4method{pExist}{NLworlds,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
 \item{world}{NLworlds object.}

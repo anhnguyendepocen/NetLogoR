@@ -251,7 +251,7 @@ setGeneric(
 #' @rdname pExist
 setMethod(
   "pExist",
-  signature = c("NLworld", "numeric", "numeric"),
+  signature = c("NLworlds", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
 
     if(length(pxcor) == 1 & length(pycor) != 1){
@@ -261,27 +261,16 @@ setMethod(
       pycor <- rep(pycor, length(pxcor))
     }
 
-    pExist <- c()
-    for(i in 1:length(pxcor)){
-      pVal <- world[pxcor[i], pycor[i]]
-      if(length(pVal) == 0){
-        pExist[i] <- FALSE
-      } else {
-        pExist[i] <- TRUE
-      }
-    }
-    return(pExist)
-  }
-)
+    pxmin <- minPxcor(world)
+    pxmax <- maxPxcor(world)
+    pymin <- minPycor(world)
+    pymax <- maxPycor(world)
 
-#' @export
-#' @rdname pExist
-setMethod(
-  "pExist",
-  signature = c("NLworldStack", "numeric", "numeric"),
-  definition = function(world, pxcor, pycor) {
-    world_l <- world[[1]]
-    pExist(world = world_l, pxcor = pxcor, pycor = pycor)
+    pxcorIn <- pxcor >= pxmin & pxcor <= pxmax
+    pycorIn <- pycor >= pymin & pycor <= pymax
+    pExist <- pxcorIn & pycorIn
+
+    return(pExist)
   }
 )
 

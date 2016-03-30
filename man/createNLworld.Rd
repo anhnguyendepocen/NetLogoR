@@ -7,11 +7,10 @@
 \alias{createNLworld,numeric,numeric,numeric,numeric-method}
 \title{Create a world}
 \usage{
-createNLworld(minPxcor = -16, maxPxcor = 16, minPycor = -16,
-  maxPycor = 16)
+createNLworld(minPxcor, maxPxcor, minPycor, maxPycor)
 
-\S4method{createNLworld}{numeric,numeric,numeric,numeric}(minPxcor = -16,
-  maxPxcor = 16, minPycor = -16, maxPycor = 16)
+\S4method{createNLworld}{numeric,numeric,numeric,numeric}(minPxcor, maxPxcor,
+  minPycor, maxPycor)
 
 \S4method{createNLworld}{missing,missing,missing,missing}()
 }
