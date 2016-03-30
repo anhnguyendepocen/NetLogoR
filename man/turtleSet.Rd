@@ -12,7 +12,7 @@ turtleSet(...)
 }
 \arguments{
 \item{...}{SpatialPointsDataFrame objects created by \code{createTurtles()} or
-by \code{createOTurtles()} representing turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
 SpatialPointsDataFrame with all the turtles provided in the inputs.
@@ -21,10 +21,10 @@ SpatialPointsDataFrame with all the turtles provided in the inputs.
 Report a turtle agentset containing all turtles provided in the inputs.
 }
 \details{
-This functions does not affect turtles coordinates and variables.
-         Therefore there may be multiple turtles with the same variable (e.g.,
-         who number, color, ...) . This must be taken care of prior or later
-         using this function.
+This functions does not affect the turtles coordinates and variables.
+         Therefore there may be multiple turtles with the same variable value (e.g.,
+         "who" number, and color). This must be taken care of prior or later
+         using this function to avoid further confusions.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

@@ -23,35 +23,35 @@ subHeadings(angle1, angle2, range360 = FALSE)
   angle2, range360 = FALSE)
 }
 \arguments{
-\item{angle1}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-                \code{createOTurtles()} representing the turtles with their
-                headings.
+\item{angle1}{SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents, or
 
-                Numeric.}
+              Numeric. Vector of angles.}
 
-\item{angle2}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-                \code{createOTurtles()} representing turtles with their
-                headings.
+\item{angle2}{SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents, or
 
-                Numeric.
+              Numeric. Vector of angles.}
 
-                \code{angle2} must be of length 1 or of length \code{angle1}.}
-
-\item{range360}{Logical. Determine if the returned values are between 0° and
-360° (\code{range360 = TRUE}) or between -180° and 180°
-(\code{range360 = FALSE}). Default is \code{range360 = FALSE}.}
+\item{range360}{Logical. If \code{range360 = TRUE}, returned values are between 0° and
+360°; if \code{range360 = FALSE}, returned values are between -180° and 180°.
+Default is \code{range360 = FALSE}.}
 }
 \value{
-Numeric. Vector of values representing the smallest angles in degrees
+Numeric. Vector of the smallest angles in degrees
         by which \code{angle1} could be rotated to produce \code{angle2}
-        (i.e., the target heading). Note: this is the opposite as in NetLogo where
-        angle1 is the target.
+        (i.e., the target heading).
 }
 \description{
 Compute the difference between headings.
 }
 \details{
-Positive values mean clockwise rotation, negative value mean counterclockwise.
+This function does the opposite as the one in NetLogo where
+         \code{angle1} is the target heading.
+
+        \code{angle2} must be of length 1 or of length \code{angle1}.
+
+         Positive values mean clockwise rotations, negative value mean counterclockwise rotations.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

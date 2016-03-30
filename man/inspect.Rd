@@ -12,15 +12,16 @@ inspect(turtles, who)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integers. Identity (i.e., "who" numbers) for the turtes to inspect.}
+\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
 }
 \value{
-Dataframe (nrow = \code{length(who)}) with the variables for the inspected turtles.
+Dataframe (nrow = \code{length(who)}) with the variables for the selected
+        individuals among the \code{turtles}.
 }
 \description{
-Display the variables values for the requested turtles.
+Display the variables values for the selected individuals among the \code{turtles}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

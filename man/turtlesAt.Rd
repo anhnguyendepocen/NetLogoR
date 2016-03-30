@@ -28,21 +28,16 @@ turtlesAt(world, turtles, agents, dx, dy, breed, torus = FALSE)
   turtles, agents, dx, dy, breed, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the turtles
-move onto.}
+\item{world}{NLworlds object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles among which the
-ones at \code{(dx, dy)} distance of the \code{agents} are
-returned.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates of the
-               patches from which \code{(dx, dy)} are computed.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing the turtles from which
-               \code{(dx, dy)} are computed.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
 \item{dx}{Numeric. Vector of distances to the east (right) from the \code{agents}.
 If \code{dx} is negative, the distance to the west (left) is computed.
@@ -54,26 +49,30 @@ If \code{dy} is negative, the distance to the south is computed (down).
 \code{dy} must be of length 1 or of the same length as number of patches
 or turtles in \code{agents}.}
 
-\item{breed}{Characters. To specify the breed of turtles to report.
-If missing, there is no distinction based upon breed to report turtles.}
+\item{breed}{Characters. Vector of "breed" names to select the \code{turtles}.
+Must be of length 1 or of length \code{turtles}.
+If missing, there is
+no distinction based upon "breed".}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the turtles among \code{turtles}
-        which are located on the patches at \code{(dx, dy)} distance of the
+SpatialPointsDataFrame representing the individuals among \code{turtles}
+        of the given \code{breed}, if specified,
+        which are located on the patches at \code{(dx, dy)} distances of the
         \code{agents}.
 }
 \description{
-Report the turtles on the patches at \code{(dx, dy)} distances of the
+Report the indviduals among \code{turtles} that are located on the patches at
+\code{(dx, dy)} distances of the
 \code{agents}.
 }
 \details{
-If \code{torus = FALSE} and the patch at distance \code{(dx, dy)}
-         of the agent is outside of the world's extent, no turtle is returned.
-         If \code{torus = TRUE}, the turtle located on the patch whose coordinates
-         are defined from the wrapped world is returned.
+If the patch at distance \code{(dx, dy)}
+         of an agent is outside of the \code{world}'s extent and \code{torus = FALSE}, no turtle is returned;
+         if \code{torus = TRUE}, the turtle located on the patch whose coordinates
+         are defined from the wrapped \code{world} is returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

@@ -32,6 +32,9 @@ is the name of the layer to use to define the patches values.
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
+\item{patches}{Matrix (ncol = 2) with the first column "pxcor" and the second
+column "pycor" representing the patches coordinates.}
+
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 

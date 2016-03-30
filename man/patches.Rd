@@ -22,7 +22,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         follows the order of the cells numbers as defined for a \code{Raster*}.
 }
 \description{
-Report the pacthes coordinates for all the patches in the \code{world}.
+Report the coordinates of all the patches in the \code{world}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches

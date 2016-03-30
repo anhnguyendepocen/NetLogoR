@@ -24,7 +24,7 @@ be of length 1 or of length \code{turtles}.}
 Logical. Vector of length \code{turtles}.
 }
 \description{
-Report \code{TRUE} if the turtle can move the given distance without leaving
+Report \code{TRUE} if a turtle can move the given distance without leaving
 the \code{world}'s extent, report \code{FALSE} otherwise.
 }
 \examples{

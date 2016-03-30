@@ -4,7 +4,7 @@
 \name{patchLeft}
 \alias{patchLeft}
 \alias{patchLeft,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
-\title{Patch on the left}
+\title{Patches on the left}
 \usage{
 patchLeft(world, turtles, dist, angle, torus = FALSE)
 
@@ -12,41 +12,39 @@ patchLeft(world, turtles, dist, angle, torus = FALSE)
   turtles, dist, angle, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the turtles
-move onto.}
+\item{world}{NLworlds object.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{dist}{Numeric. Distances from the \code{turtles} locations. Must be of
-length 1 or of length \code{turtles}.}
+\item{dist}{Numeric. Vector of distances from the \code{turtles}. \code{dist} must be
+of length 1 or of length \code{turtles}.}
 
-\item{angle}{Numeric. Angles in degrees the turtle's heading should rotate
-to the left to locate the patches. Must be of length 1 or of
+\item{angle}{Numeric. Vector of angles in degrees by which the \code{turtle}'s
+headings should rotate to locate the patches. Must be of length 1 or of
 length \code{turtles}.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second
-        column \code{pycor} representing the patches coordinates at \code{dist}
-        of the turtles locations and \code{angle} to the left of their headings.
+Matrix (ncol = 2) with the first column "pxcor" and the second
+        column "pycor" representing the coordinates of the patches at \code{dist}
+        distances of the \code{turtles} and \code{angle} to the left of their headings.
         The order of the patches follows the order of the \code{turtles}.
 }
 \description{
-Report the patches coordinates \code{[pxcor, pycor]} at given distances
-to the left of the turtles.
+Report the coordinates of the patches at the given distances of the \code{turtles}
+on the left of their headings.
 }
 \details{
-If \code{angle} is negative, the turtle would rotate to the right.
-         If \code{dist} is negative, the turtle would move backward.
+If a given \code{dist} value is negative, then the turtle would move backward.
+         If a given \code{angle} value is negative, then the turtle would rotate to the right.
 
-         If \code{torus = FALSE} and the patch at distance \code{dist} and
-         heading \code{nDregrees} to the left of the turtle is outside the
-         world's extent, \code{NA} are returned for the patch coordinates.
-         If \code{torus = TRUE}, the patch coordinates from the wrapped world
-         are returned.
+         If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
+         and \code{angle} degrees to the left of its heading is outside the \code{world}'s extent, \code{NA}
+         are returned for the patch coordinates. If \code{torus = TRUE}, the patch
+         coordinates from a wrapped \code{world} are returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

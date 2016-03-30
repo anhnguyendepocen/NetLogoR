@@ -28,7 +28,7 @@ Numeric. Vector of length \code{turtles}.
 \description{
 Report the amount by which the \code{turtles}' coordinates xcor would change
 if the \code{turtles} were
-to move forward of \code{dist} distances with their current heading.
+to move forward the given distances with their current headings.
 }
 \details{
 Report the sine of the \code{turtles}' heading multiplied by the \code{dist}

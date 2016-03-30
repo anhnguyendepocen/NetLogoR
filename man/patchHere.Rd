@@ -4,30 +4,29 @@
 \name{patchHere}
 \alias{patchHere}
 \alias{patchHere,NLworlds,SpatialPointsDataFrame-method}
-\title{Patch here}
+\title{Patches here}
 \usage{
 patchHere(world, turtles)
 
 \S4method{patchHere}{NLworlds,SpatialPointsDataFrame}(world, turtles)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the turtles
-move onto.}
+\item{world}{NLworlds object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the moving turtles.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates at the \code{turtles}
+Matrix (ncol = 2) with the first column "pxcor" and the second column
+        "pycor" representing the coordinates of the patches at the \code{turtles}
         location. The order of the patches follows the order of the \code{turtles}.
 }
 \description{
-Report the patches coordinates \code{[pxcor, pycor]} under the turtles
+Report the coordinates of the patches under the \code{turtles}
 locations.
 }
 \details{
-If a turtle is located outside of the world's extent, \code{NA} are returned
+If a turtle is located outside of the \code{world}'s extent, \code{NA} are returned
          for the patch coordinates.
 }
 \examples{

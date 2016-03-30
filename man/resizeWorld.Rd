@@ -35,7 +35,7 @@ NLworld object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPyco
         patches. Patch value are \code{NA}.
 }
 \description{
-Change the size of the \code{world} and cleat the patches and given \code{turtles}.
+Change the size of the \code{world} and clear the patches and given \code{turtles}.
 }
 \details{
 The given \code{world} and \code{turtles} are deleted, as well as the

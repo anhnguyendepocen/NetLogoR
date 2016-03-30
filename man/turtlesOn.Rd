@@ -26,36 +26,33 @@ turtlesOn(world, turtles, agents, breed)
   turtles, agents, breed)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the turtles
-move onto.}
+\item{world}{NLworlds object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles among which the
-ones on the same patches as \code{agents} are going to
-be returned.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates of the
-               patches where to look for turtles.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing turtles whose patches locations
-               are the patches where to look for turtles.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{breed}{Characters. To specify the breeds of turtles to report.
-If missing, there is no distinction based upon breed to report turtles.}
+\item{breed}{Characters. Vector of "breed" names to select the \code{turtles}.
+Must be of length 1 or of length \code{turtles}.
+If missing, there is
+no distinction based upon "breed".}
 }
 \value{
-SpatialPointsDataFrame representing the turtles among \code{turtles}
-        which are located on the \code{agent} patches and of the given \code{breed}
-        if specified.
+SpatialPointsDataFrame representing any individuals from \code{turtles} of the given
+       \code{breed}, if speficied,
+        located at the same locations as any \code{agents}.
 }
 \description{
-Report the turtles at some patches locations or on the same patches as some turtles.
+Report the individuals among \code{turtles} that are at the same locations as the \code{agents}.
 }
 \details{
-Patches or turtles given as \code{agents} must be located inside the
-         world's extent.
+The \code{agents} must be located inside the
+         \code{world}'s extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

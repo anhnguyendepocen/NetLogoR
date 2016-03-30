@@ -4,23 +4,23 @@
 \name{randomXYcor}
 \alias{randomXYcor}
 \alias{randomXYcor,NLworlds,numeric-method}
-\title{Generante random turtles coordinates}
+\title{Random turtles coordinates}
 \usage{
 randomXYcor(world, n)
 
 \S4method{randomXYcor}{NLworlds,numeric}(world, n)
 }
 \arguments{
-\item{world}{\code{NLworlds} object.}
+\item{world}{NLworlds object.}
 
-\item{n}{Integer. The number of set of coordinates to generate.}
+\item{n}{Integer.}
 }
 \value{
-Matrix (ncol = 2, nrow = n) with the first column \code{xcor} and the second
-        column \code{ycor}.
+Matrix (ncol = 2, nrow = \code{n}) with the first column "xcor" and the second
+        column "ycor".
 }
 \description{
-Report random xcor and ycor coordinates inside the world's extent.
+Report \code{n} random xcor and ycor coordinates within the \code{world}'s extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

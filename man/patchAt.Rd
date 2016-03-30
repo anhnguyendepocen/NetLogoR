@@ -44,13 +44,13 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         of the \code{agents}.
 }
 \description{
-Report the patches coordinates at \code{(dx, dy)} distances of the \code{agents}.
+Report the coordinates of the patches at \code{(dx, dy)} distances of the \code{agents}.
 }
 \details{
-If \code{torus = FALSE} and the patch at distance \code{(dx, dy)}
-         of an agent is outside of the \code{world}'s extent, \code{NA} are returned
-         for the patc coordinates.
-         If \code{torus = TRUE}, the patch coordinates from a wrapped \code{world} are
+If the patch at distance \code{(dx, dy)}
+         of an agent is outside of the \code{world}'s extent and \code{torus = FALSE}, #code{NA} are returned
+         for the patch coordinates;
+         if \code{torus = TRUE}, the patch coordinates from a wrapped \code{world} are
          returned.
 }
 \examples{

@@ -217,7 +217,7 @@ setMethod(
 ################################################################################
 #' Do the patches exist?
 #'
-#' Report \code{TRUE} if a patch exists in the \code{world}'s extent, report
+#' Report \code{TRUE} if a patch exists inside the \code{world}'s extent, report
 #' \code{FALSE} otherwise.
 #'
 #' @inheritParams fargs
@@ -289,7 +289,7 @@ setMethod(
 ################################################################################
 #' Neighbors patches
 #'
-#' Report the 4 or 8 surrounding patches around the \code{agents}.
+#' Report the coordinates of the neighbors patches around the \code{agents}.
 #'
 #' @inheritParams fargs
 #'
@@ -368,7 +368,7 @@ setMethod(
 ################################################################################
 #' Patches coordinates
 #'
-#' Report the patches coordinates at the given \code{[x, y]} locations.
+#' Report the coordinates of the patches at the given \code{[x, y]} locations.
 #'
 #' @inheritParams fargs
 #'
@@ -510,7 +510,7 @@ setMethod(
 ################################################################################
 #' Patches at
 #'
-#' Report the patches coordinates at \code{(dx, dy)} distances of the \code{agents}.
+#' Report the coordinates of the patches at \code{(dx, dy)} distances of the \code{agents}.
 #'
 #' @inheritParams fargs
 #'
@@ -519,10 +519,10 @@ setMethod(
 #'         distances of the \code{agents}. The order of the patches follows the order
 #'         of the \code{agents}.
 #'
-#' @details If \code{torus = FALSE} and the patch at distance \code{(dx, dy)}
-#'          of an agent is outside of the \code{world}'s extent, \code{NA} are returned
-#'          for the patc coordinates.
-#'          If \code{torus = TRUE}, the patch coordinates from a wrapped \code{world} are
+#' @details If the patch at distance \code{(dx, dy)}
+#'          of an agent is outside of the \code{world}'s extent and \code{torus = FALSE}, #code{NA} are returned
+#'          for the patch coordinates;
+#'          if \code{torus = TRUE}, the patch coordinates from a wrapped \code{world} are
 #'          returned.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-at}
@@ -581,12 +581,12 @@ setMethod(
 ################################################################################
 #' Patches at certain distances and certain directions
 #'
-#' Report the coordinates of the patches which are at certain
-#' distances and certain directions from the \code{agents}.
+#' Report the coordinates of the patches at the given
+#' distances and directions from the \code{agents}.
 #'
 #' @inheritParams fargs
 #'
-#' @param dist   Numeric. Distances from the \code{agents}. \code{dist} must be
+#' @param dist   Numeric. Vector of distances from the \code{agents}. Must be
 #'               of length 1 or of the same length as the number of \code{agents}.
 #'
 #' @param angle  Numeric. Absolute directions from the \code{agents}. \code{angle}
@@ -665,7 +665,7 @@ setMethod(
 ################################################################################
 #' All the patches in a world
 #'
-#' Report the pacthes coordinates for all the patches in the \code{world}.
+#' Report the coordinates of all the patches in the \code{world}.
 #'
 #' @inheritParams fargs
 #'
@@ -722,7 +722,7 @@ setMethod(
 ################################################################################
 #' Patch set
 #'
-#' Report a patch agentset as the coordinates of all patches contained in the inputs.
+#' Report a patch agentset as the coordinates of all the patches contained in the inputs.
 #'
 #' @param ... Matrices (ncol = 2) of patches coordinates with the first column
 #'            "pxcor" and the second column "pycor".

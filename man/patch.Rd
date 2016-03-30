@@ -40,7 +40,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         "pycor" representing the patches coordinates at \code{[x, y]}.
 }
 \description{
-Report the patches coordinates at the given \code{[x, y]} locations.
+Report the coordinates of the patches at the given \code{[x, y]} locations.
 }
 \details{
 If a location \code{[x, y]} is outside the \code{world}'s extent and

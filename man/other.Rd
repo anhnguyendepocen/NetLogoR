@@ -5,7 +5,7 @@
 \alias{other}
 \alias{other,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
 \alias{other,matrix,matrix-method}
-\title{Other}
+\title{Others}
 \usage{
 other(agents, except)
 
@@ -14,28 +14,25 @@ other(agents, except)
 \S4method{other}{SpatialPointsDataFrame,SpatialPointsDataFrame}(agents, except)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates of the
-              patches to evaluate.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to evaluate.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{except}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates of the
-              patches to remove from the \code{agents}.
+\item{except}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to remove from
-              the \code{agents}.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second
-        column \code{pycor} representing the patches in \code{agents} with
-        the patches in \code{except} removed.
+Matrix (ncol = 2) with the first column "pxcor" and the second
+        column "pycor" representing the patches in \code{agents} without
+        the ones in \code{except}, or
 
-        SpatialPointsDataFrame representing the turtles in \code{agents} with
-        the turtles in \code{except} removed.
+        SpatialPointsDataFrame representing the turtles in \code{agents} without
+        the ones in \code{except}.
 }
 \description{
 Report an agentset of all \code{agents} except specific ones.
@@ -44,8 +41,8 @@ Report an agentset of all \code{agents} except specific ones.
 Both \code{agents} and \code{except} must be of the same class (e.g., both
          patches or both turtles).
 
-         Carefull: this function removes turtles only based on similar who numbers
-         and breeds.
+         Carefull: this function removes turtles only based on similar "who" numbers
+         and "breed" names.
 }
 \examples{
 # Patches

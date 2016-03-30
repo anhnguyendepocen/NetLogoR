@@ -19,7 +19,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         "pycor" representing the patches coordinates.
 }
 \description{
-Report a patch agentset as the coordinates of all patches contained in the inputs.
+Report a patch agentset as the coordinates of all the patches contained in the inputs.
 }
 \details{
 Duplicate patches among the inputs are removed in the returned matrix.

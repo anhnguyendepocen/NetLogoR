@@ -24,7 +24,7 @@ patchDistDir(world, agents, dist, angle, torus = FALSE)
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
 
-\item{dist}{Numeric. Distances from the \code{agents}. \code{dist} must be
+\item{dist}{Numeric. Vector of distances from the \code{agents}. Must be
 of length 1 or of the same length as the number of \code{agents}.}
 
 \item{angle}{Numeric. Absolute directions from the \code{agents}. \code{angle}
@@ -41,8 +41,8 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         of \code{agents}. The order of the patches follows the order of the \code{agents}.
 }
 \description{
-Report the coordinates of the patches which are at certain
-distances and certain directions from the \code{agents}.
+Report the coordinates of the patches at the given
+distances and directions from the \code{agents}.
 }
 \details{
 If \code{torus = FALSE} and the patch at distance \code{dist} and

@@ -37,7 +37,7 @@ List. Each item is a matrix (ncol = 2) with the first column "pxcor"
         \code{agents}.
 }
 \description{
-Report the 4 or 8 surrounding patches around the \code{agents}.
+Report the coordinates of the neighbors patches around the \code{agents}.
 }
 \details{
 The patch around which the neighbors are identified, or the patch where

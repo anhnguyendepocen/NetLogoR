@@ -4,7 +4,7 @@
 \name{patchAhead}
 \alias{patchAhead}
 \alias{patchAhead,NLworlds,SpatialPointsDataFrame,numeric-method}
-\title{Patch ahead}
+\title{Patches ahead}
 \usage{
 patchAhead(world, turtles, dist, torus = FALSE)
 
@@ -12,32 +12,32 @@ patchAhead(world, turtles, dist, torus = FALSE)
   dist, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the
-turtles move onto.}
+\item{world}{NLworlds object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the moving turtles.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{dist}{Numeric. Distances from the turtles to identify the patches ahead.
-Must be of length 1 or of length \code{turtles}.}
+\item{dist}{Numeric. Vector of distances from the \code{turtles}. \code{dist} must be
+of length 1 or of length \code{turtles}.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the patches coordinates at \code{dist} of the
-        \code{turtles}. The order of the patches follows the order of the \code{turtles}.
+Matrix (ncol = 2) with the first column "pxcor" and the second column
+        "pycor" representing the coordinates of the patches at the distances \code{dist}
+        and \code{turtles}'s headings directions
+        of \code{turtles}. The order of the patches follows the order of the \code{turtles}.
 }
 \description{
-Report the patches coordinates \code{[pxcor, pycor]} at the given
-distance in the direction of the turtles' headings.
+Report the coordinates of the patches at the given
+distances of the \code{turtles} in the direction of their headings.
 }
 \details{
-If \code{torus = FALSE} and the patch at distance \code{dist} of the turtle
-         is outside the world, \code{NA} are returned for the patch coordinates. Otherwise,
-         if \code{torus = TRUE}, the patch coordinates from the wrapped world are
-         returned.
+If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
+         is outside the \code{world}'s extent, \code{NA}
+         are returned for the patch coordinates. If \code{torus = TRUE}, the patch
+         coordinates from a wrapped \code{world} are returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

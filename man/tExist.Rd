@@ -15,23 +15,22 @@ tExist(turtles, who, breed)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtle agentset.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integers. The who numbers of the turtles to check.}
+\item{who}{Integer. Vector of the "who" numbers of the turtles to check for existence.}
 
-\item{breed}{Characters. To specify the breed of turtles to check
-for existence. Must be of length 1 or of length \code{n}. If
-\code{breed} is of length \code{n} then the order of breeds
-should follow the order of \code{who}. If missing, there is
-no distinction based upon breed to check existence.}
+\item{breed}{Characters. Vector of "breed" names for the turtles to check
+for existence. Must be of length 1 or of length \code{n}.
+If missing, there is
+no distinction based upon "breed".}
 }
 \value{
-Logicals. Vector of \code{TRUE} or \code{FALSE} if the turtles with
-        the given who numbers and potentially given \code{breed} exists or not
-        in the given \code{turtles}.
+Logical. Vector of \code{TRUE} or \code{FALSE} if the turtles with
+        the given \code{who} numbers and potentially given \code{breed} exist or not
+        in the given \code{turtles} agentset.
 }
 \description{
-Report \code{TRUE} if the turtles exist inside the turtle agenset, report
+Report \code{TRUE} if a turtle exists inside the \code{turtles} agentset, report
 \code{FALSE} otherwise.
 }
 \details{

@@ -16,29 +16,26 @@ moveTo(turtles, agents)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates of the
-               patches where the \code{turtles} move to.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or
-               by \code{createOTurtles()} representing the turtles whose
-               locations the \code{turtles} move to.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
-SpatialPointsDataFrame representing the moving turtles with updated
-        coordinates and updated data for their previous coordinates "prevX"
-        and "prevY".
+SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+        and updated data for their previous coordinates "prevX" and "prevY".
 }
 \description{
-Move the turtles to the \code{agents} locations.
+Move the \code{turtles} to the \code{agents}' locations.
 }
 \details{
-The number of \code{agents} must be equal to 1 or of
+The number of \code{agents} must be equal to 1 or to
          length \code{turtles}.
 
-         The turtle's headings are not affected with this function.
+         The \code{turtle}'s headings are not affected with this function.
 
          If a turtle is moving to a patch location, it will be located at
          the patch center.

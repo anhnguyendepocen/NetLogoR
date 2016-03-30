@@ -590,7 +590,7 @@ setMethod(
 ################################################################################
 #' Resize a world
 #'
-#' Change the size of the \code{world} and cleat the patches and given \code{turtles}.
+#' Change the size of the \code{world} and clear the patches and given \code{turtles}.
 #'
 #' @inheritParams fargs
 #'

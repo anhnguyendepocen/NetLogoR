@@ -26,7 +26,7 @@ or of the same length as \code{pxcor}.}
 Logical.
 }
 \description{
-Report \code{TRUE} if a patch exists in the \code{world}'s extent, report
+Report \code{TRUE} if a patch exists inside the \code{world}'s extent, report
 \code{FALSE} otherwise.
 }
 \examples{

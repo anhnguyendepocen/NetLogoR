@@ -6,40 +6,44 @@
 \alias{sprout,numeric,matrix-method}
 \title{Sprout new turtles}
 \usage{
-sprout(n, patches, turtles, breed, heading, color)
+sprout(n, patches, breed, heading, color, turtles)
 
-\S4method{sprout}{numeric,matrix}(n, patches, turtles, breed, heading, color)
+\S4method{sprout}{numeric,matrix}(n, patches, breed, heading, color, turtles)
 }
 \arguments{
-\item{n}{Integer. The number of new turtles to create.}
+\item{n}{Integer.}
 
-\item{patches}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-second column \code{pycor} representing the coordinates of the
-patches on which the new turtles are created. \code{nrow(patches)}
-must be equal to 1 or to \code{n}.}
+\item{patches}{Matrix (ncol = 2) with the first column "pxcor" and the second
+column "pycor" representing the patches coordinates.}
+
+\item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
+\code{n}. If missing, \code{breed = "turtle"} for all turtles.}
+
+\item{heading}{Numeric. Vector of values between 0 and 360. Must be of length 1 or
+of length \code{n}. If missing, a random heading is assigned to
+each turtle.}
+
+\item{color}{Character. Vector of color names. Must be of length \code{n}.
+If missing, colors are assigned using the function \code{rainbow(n)}.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing existing turtles.}
-
-\item{...}{Additional arguments (see details).}
+by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
-SpatialPointsDataFrame with the new created turtles.
+SpatialPointsDataFrame including the new
+        sprouted turtles.
 }
 \description{
-Create new turtles on specific patches.
+Create \code{n} new turtles on specific \code{patches}.
 }
 \details{
-The additional arguments to be passed on are some of the function
-         \code{createTurtles()}: heading, breed and color. If not
-         provided, these arguments take the default value as defined in
-         \code{createTurtles()}.
+\code{nrow(patches)} must be equal to 1 or to \code{n}.
 
-         If \code{turtles} is provided, the new created turtles are added to
-         the \code{turtles} when returned. The who number of the created turtles
+         If \code{turtles} is provided, the new turtles are added to
+         the \code{turtles} when returned. The who numbers of the sprouted turtles
          therefore follow the ones from the \code{turtles}. If no \code{turtles}
-         is provided, a new SpatialPointsDataFrame is created and the who number
-         starts at 0.
+         is provided, a new SpatialPointsDataFrame is created and the who numbers
+         start at 0.
 }
 \examples{
 t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)

@@ -12,21 +12,21 @@ of(turtles, tVar)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{tVar}{Characters. The name of one turtles' variable. Can be equal to
+\item{tVar}{Character. The name of one turtles' variable to report. Can be equal to
 \code{"coords"}, \code{"xcor"},
 \code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
 \code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
 any of the variables created with \code{turtlesOwn()}.}
 }
 \value{
-Vector or \code{tVar} values for the \code{turtles}. The class depends
+Vector of \code{tVar} values for the \code{turtles}. The class depends
         of the variable class. The order of the vector follows the order
         of the \code{turtles}.
 }
 \description{
-Report the values of the turtles for the requested variable.
+Report the \code{turtles} values for the requested variable.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

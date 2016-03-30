@@ -5,7 +5,7 @@
 \alias{turtle}
 \alias{turtle,SpatialPointsDataFrame,numeric,character-method}
 \alias{turtle,SpatialPointsDataFrame,numeric,missing-method}
-\title{Turtle}
+\title{Select turtles}
 \usage{
 turtle(turtles, who, breed)
 
@@ -15,25 +15,25 @@ turtle(turtles, who, breed)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integers. The who numbers of the turtles to report.}
+\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
 
-\item{breed}{Characters. To specify the breed of turtles to report.
-Must be of length 1 or of length \code{n}. If \code{breed} is
-of length \code{n} then the order of breeds should follow the
-order of \code{who}. If missing, there is no distinction based
-upon breed to report the turtles.}
+\item{breed}{Characters. Vector of "breed" names to select the \code{turtles}.
+Must be of length 1 or of length \code{turtles}.
+If missing, there is
+no distinction based upon "breed".}
 }
 \value{
 SpatialPointsDataFrame of the selected turtles.
 }
 \description{
-Report the turtles according to their who numbers and breeds.
+Report the individuals among \code{turtles} based on their \code{who} numbers
+and \code{breed}.
 }
 \details{
-If no turtle matches the given who numbers with potentially the given
-         \code{breed}, then an empty SpatialPointsDataFrame is returned.
+If no turtle matches the given \code{who} numbers, with potentially the given
+         \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

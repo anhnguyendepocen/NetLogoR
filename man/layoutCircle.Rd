@@ -12,31 +12,33 @@ layoutCircle(world, turtles, radius, torus = FALSE)
   radius, torus = FALSE)
 }
 \arguments{
-\item{world}{\code{NLworlds} object, representing the world which the
-turtles move onto.}
+\item{world}{NLworlds object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{radius}{Numeric. Radius of the cercle.}
+\item{radius}{Numeric. Radius of the circle.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
-        and updated data for their previous coordinates "prevX" and "prevY".
+SpatialPointsDataFrame representing the \code{turtles} with updated
+        coordinates and updated data for their "heading" values and
+        previous coordinates "prevX"
+        and "prevY".
 }
 \description{
-Relocate the turtles on a circle centered on the world.
+Relocate the \code{turtles} on a circle centered on the \code{world}.
 }
 \details{
-The turtles point outwards.
+The \code{turtles} point outwards.
 
-         If the \code{NLworlds} object is wrapped (\code{torus = TRUE}) and the
-         \code{radius} values lead a turtle outside of the world's extent, it is
-         relocated on the other side of the world, inside the world's extent. If
-         \code{torus = FALSE} and \code{out = TRUE}, the turtle are located past
+         If the
+         \code{radius} value leads turtles outside of the \code{world}'s extent
+         and \code{torus = TRUE}, they are
+         relocated on the other sides of the \code{world}, inside its extent; if
+         \code{torus = FALSE}, the turtles are located past
          the world's extent.
 }
 \examples{

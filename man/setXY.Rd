@@ -5,7 +5,7 @@
 \alias{setXY}
 \alias{setXY,SpatialPointsDataFrame,numeric,numeric,NLworlds,logical-method}
 \alias{setXY,SpatialPointsDataFrame,numeric,numeric,missing,ANY-method}
-\title{Set turtles locations}
+\title{Set turtles' locations}
 \usage{
 setXY(turtles, xcor, ycor, world, torus = FALSE)
 
@@ -18,33 +18,34 @@ setXY(turtles, xcor, ycor, world, torus = FALSE)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving turtles.}
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{xcor}{Numeric. X coordinates for the turles. Must be of length 1 or
+\item{xcor}{Numeric. Vector of x coordinates. Must be of length 1 or
 of length \code{turtles}.}
 
-\item{ycor}{Numeric. X coordinates for the turles. Must be of length 1 or
+\item{ycor}{Numeric. Vector of y coordinates. Must be of length 1 or
 of length \code{turtles}.}
 
-\item{world}{\code{NLworlds} object, representing the world which the
-turtles move onto. Should be provided only if \code{torus = TRUE}.}
+\item{world}{NLworlds object.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the moving turtles with updated
-        coordinates and updated data for their previous coordinates "prevX"
-        and "prevY".
+SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+        and updated data for their previous coordinates "prevX" and "prevY"
 }
 \description{
 Set the turtles \code{xcor} and \code{ycor} coordinates.
 }
 \details{
-If \code{torus = TRUE} and the given coordinates \code{xcor} or \code{ycor}
-         are located outside of the world's extent, then the coordinates assigned
-         are the ones from a wrapped word. If \code{torus = FALSE}, the turtle
-         is then located outside of the world's extent with the given coordinates.
+\code{world} must be provided if only if \code{torus = TRUE}.
+
+         If the given coordinates \code{[xcor, ycor]}
+         are located outside of the \code{world}'s extent and \code{torus = TRUE},
+         then the coordinates assigned to the turtle
+         are the ones from a wrapped \code{word}; if \code{torus = FALSE}, the turtle
+         is located outside of the \code{world}'s extent with the given coordinates.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

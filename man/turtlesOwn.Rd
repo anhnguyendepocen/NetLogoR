@@ -14,10 +14,10 @@ turtlesOwn(turtles, tVar, tVal)
 \S4method{turtlesOwn}{SpatialPointsDataFrame,character,ANY}(turtles, tVar, tVal)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing turtles.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{tVar}{Characters. Name of the new variable to create.}
+\item{tVar}{Character. Name of the turtles variable to create.}
 
 \item{tVal}{Vector representing the values of \code{tVar}.
 Must be of length 1 or of length \code{turtles}.
