@@ -14,26 +14,22 @@ oneOf(agents)
 \S4method{oneOf}{SpatialPointsDataFrame}(agents)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates for the
-              patches to choose from.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to choose from.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
-Matrix (ncol = 2, nrow = 1) with the first column \code{pxcor} and
-        the second  column \code{pycor} representing the coordinates of the
-        chosen patch from \code{agents}.
+Matrix (ncol = 2, nrow = 1) with the first column "pxcor"
+        and the second  column "pycor" representing the coordinates of the
+        selected patch from \code{agents}, or
 
-        SpatialPointsDataFrame of length 1 representing the turtle chosen
-        from \code{agents}.
+        SpatialPointsDataFrame of length 1 representing the turtle
+        selected from \code{agents}.
 }
 \description{
-Report one agent randomly chosen from \code{agents}.
-}
-\details{
-This function is similar as using \code{nOf(agents, n = 1)}.
+Report one patch or turtle randomly selected among \code{agents}.
 }
 \examples{
 # Patches

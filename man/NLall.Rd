@@ -17,28 +17,25 @@ NLall(agents, world, var, val)
 \S4method{NLall}{SpatialPointsDataFrame,missing,character}(agents, var, val)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates of the
-              patches to evaluate.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to evaluate.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
-Must not be provided if \code{agents} are turtles.}
+\item{world}{NLworlds object.}
 
-\item{var}{Characters. The name of the variable to evaluate for the \code{agents}
-value. If \code{agents} are patches and the \code{world} is a
+\item{var}{Character. The name of the \code{agents} variable to evaluate.
+If \code{agents} are patches and the \code{world} is a
 \code{NLworld} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-object, \code{var} refers to the layer used for evaluating patches
+object, \code{var} is the name of the layer to use to define the patches
 values. If \code{agents} are turtles, \code{var} is one of
-the turtles' variable. \code{var} can be equal to \code{"xcor"},
+the turtles' variable and can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,
 as well as any variable created using \code{turtlesOwn()}.}
 
-\item{val}{Numeric or characters depending on the variable class. Can be of
-any length.}
+\item{val}{Numeric or character. Vector of any length.}
 }
 \value{
 Logical. \code{TRUE} if all the \code{agents} have their variable equal to
@@ -47,6 +44,9 @@ Logical. \code{TRUE} if all the \code{agents} have their variable equal to
 \description{
 Report \code{TRUE} if all \code{agents} have their variable equal to a given value,
 report \code{FALSE} otherwise.
+}
+\details{
+\code{world} must not be provided if \code{agents} are turtles.
 }
 \examples{
 # Patches

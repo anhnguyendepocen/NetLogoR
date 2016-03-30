@@ -9,77 +9,69 @@
 \alias{inRadius,matrix,numeric,matrix,NLworlds-method}
 \title{Agents in radius}
 \usage{
-inRadius(agents1, radius, agents2, world, torus = FALSE)
+inRadius(agents, radius, agents2, world, torus = FALSE)
 
-\S4method{inRadius}{matrix,numeric,matrix,NLworlds}(agents1, radius, agents2,
+\S4method{inRadius}{matrix,numeric,matrix,NLworlds}(agents, radius, agents2,
   world, torus = FALSE)
 
-\S4method{inRadius}{matrix,numeric,SpatialPointsDataFrame,NLworlds}(agents1,
+\S4method{inRadius}{matrix,numeric,SpatialPointsDataFrame,NLworlds}(agents,
   radius, agents2, world, torus = FALSE)
 
-\S4method{inRadius}{SpatialPointsDataFrame,numeric,matrix,NLworlds}(agents1,
+\S4method{inRadius}{SpatialPointsDataFrame,numeric,matrix,NLworlds}(agents,
   radius, agents2, world, torus = FALSE)
 
 
-  \S4method{inRadius}{SpatialPointsDataFrame,numeric,SpatialPointsDataFrame,NLworlds}(agents1,
+  \S4method{inRadius}{SpatialPointsDataFrame,numeric,SpatialPointsDataFrame,NLworlds}(agents,
   radius, agents2, world, torus = FALSE)
 }
 \arguments{
-\item{agents1}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates for the
-               patches from which the \code{radius} distances are calculated
-               to select agents from \code{agents2}.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing the turtles from which the
-               \code{radius} distances iare calculared to select agents from
-               \code{agents2}.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{radius}{Numeric. The distances from \code{agents1} to locate agents from
-\code{agents2}. Must be of length 1 or of length \code{agent1}.}
+\item{radius}{Numeric. Vector of distances from \code{agents} to locate
+\code{agents2}. Must be of length 1 or of length \code{agents}.}
 
-\item{agents2}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates for the
-               patches to which the \code{radius} distances are calculared
-               from \code{agents1}.
+\item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing the turtles to which the
-               \code{radius} distances are calculared from \code{agents1}.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{world}{\code{NLworlds} object,  representing the world where the agents
-are located.}
+\item{world}{NLworlds object.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
-List of length equal to \code{nrow(agents1)} if \code{agents1} are patches
-        or equal to \code{length(agents1)} if \code{agents1} are turtles.
-        List items are either matrices (ncol = 2) with the first column \code{pxcor}
-        and the second column \code{pycor} representing the coordinates of the
-        patches within \code{radius} distances for each \code{agents1} if
+List of length equal to \code{count(agents)}.
+        List items are matrices (ncol = 2) with the first column "pxcor"
+        and the second column "pycor" representing the coordinates of the
+        patches among \code{agents2} within \code{radius} distances for each \code{agents}, if
         \code{agents2} are patches, or SpatialPointsDataFrame objects representing
-        the turtles within \code{radius} distances for each \code{agents1} if
+        the turtles among \code{agents2} within \code{radius} distances for each \code{agents} if
         \code{agents2} are turtles.
 }
 \description{
-Report the \code{agents2} within given distances of each  of the \code{agents1}.
+Report the patches or turtles among \code{agents2} within given distances of
+each of the \code{agents}.
 }
 \details{
-Distances from and to patches are calculated from/to their center.
+Distances from/to patches are calculated from/to their center.
 
          If \code{torus = TRUE}, the \code{radius} distances are calculared
-         around the sides of the world to select \code{agents2}.
+         around the sides of the \code{world} to select \code{agents2}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-p1 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
-t2 <- inRadius(agents1 = patch(w1, 0, 0), radius = 2, agents2 = t1, world = w1)
-p2 <- inRadius(agents1 = t1, radius = 2, agents2 = patches(w1), world = w1)
-t3 <- inRadius(agents1 = turtle(t1, who = 0), radius = 2, agents2 = t1, world = w1)
+p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
+t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1, world = w1)
+p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1), world = w1)
+t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1, world = w1)
 
 
 }

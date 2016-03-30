@@ -14,12 +14,11 @@ NLany(agents)
 \S4method{NLany}{SpatialPointsDataFrame}(agents)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates of the
-              patches to evaluate.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to evaluate.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
 Logical. \code{TRUE} if there is at least one patch or one turtle in the

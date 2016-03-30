@@ -14,14 +14,14 @@ isNLclass(agents, class)
 \S4method{isNLclass}{SpatialPointsDataFrame,character}(agents, class)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates for the
-              patches to evaluate.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to evaluate.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{class}{Characters. Must be equal to \code{"agent"}, \code{"agentset"},
+\item{class}{Character. Can take one of the following options to define
+the \code{class}: \code{"agent"}, \code{"agentset"},
 \code{"patch"}, \code{"patchset"}. \code{"turtle"} or \code{"turtleset"}.}
 }
 \value{
@@ -32,10 +32,10 @@ Report \code{TRUE} if the \code{agents} is of the \code{class} tested,
 report \code{FALSE} otherwise.
 }
 \details{
-Careful! The classes tested do not correspond to actual R classes.
+Careful! The \code{class} tested does not correspond to actual R classes.
 
          \code{agents} is \code{"patch"} if it is a matrix (ncol = 2) with the
-         first column \code{pxcor} and the second column \code{pycor} and only
+         first column "pxcor" and the second column "pycor" with only
          one row. \code{agents} is \code{"patcheset"} if the matrix has more than
          one row.
 
@@ -47,11 +47,6 @@ Careful! The classes tested do not correspond to actual R classes.
          \code{agents} is \code{"agent"} if it is either \code{"patch"} or
          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either
          \code{"patcheset"} or \code{"turtleset"}.
-
-         This function does not test if the patches exist within a world
-         according to the coordinates. For this, use \code{pExists()}. This
-         function does not test if the turtles exist given their who
-         numbers and breeds. For this, use \code{tExists()}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

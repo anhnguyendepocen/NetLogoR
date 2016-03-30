@@ -18,43 +18,42 @@ inCone(turtles, radius, angle, agents, world, torus = FALSE)
   radius, angle, agents, world, torus = FALSE)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or by
-\code{createOTurtles()} representing the turtles from which the
-cone of vision is defined to select \code{agents}.}
+\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
+by \code{createOTurtles()} representing the moving agents.}
 
-\item{radius}{Numeric. The distances from \code{turtles} to locate
+\item{radius}{Numeric. Vector of distances from \code{turtles} to locate
 \code{agents}. Must be of length 1 or of length \code{turtles}.}
 
-\item{angle}{Numeric. The angles to define the size of the cone of vision
-for the \code{turtles} as their heading minus \code{angle / 2}
-to their heading plus \code{angle / 2}. Must be of length 1 or
+\item{angle}{Numeric. Vector of angles to define the size of the cone of vision
+for the \code{turtles}. The cone of vision is defined between the
+direction of their headings minus \code{angle / 2}
+to the direction of their headings plus \code{angle / 2}. Must be of length 1 or
 of length \code{turtles}.}
 
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-               second column \code{pycor} representing the coordinates for the
-               patches to evaluate their locations regarding the turtles
-               cone of vision.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or by
-               \code{createOTurtles()} representing the turtle(s) to evaluate their
-               locations regarding the turtles cone of vision.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{world}{\code{NLworlds} object representing the world where the agents
-are located.}
+\item{world}{NLworlds object.}
 
-\item{torus}{Logical to determine if the \code{NLworlds} object is wrapped.
-Default is \code{torus = FALSE}.}
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
 List of length equal to \code{length(turtles)}.
-        List items are either matrices (ncol = 2) with the first column \code{pxcor}
-        and the second column \code{pycor} representing the coordinates of the
-        patches within the cone of vision of each turtle if \code{agents} are patches,
-        or SpatialPointsDataFrame objects representing the turtles within
-        the cone of vision of each turtle if \code{agents} are turtles.
+        List items are either matrices (ncol = 2) with the first column "pxcor"
+        and the second column "pycor" representing the coordinates of the
+        patches among \code{agents} within the cone of vision of each of  the
+        \code{turtles}, if \code{agents} are patches,
+        or SpatialPointsDataFrame objects representing the turtles among \code{agents}
+        within
+        the cone of vision of each of the \code{turtles} if \code{agents} are turtles.
 }
 \description{
-Report the \code{agents} within the "cone of vision" in front of each turtle.
+Report the \code{agents} within the "cone of vision" in front of each one of the
+\code{turtles}.
 }
 \details{
 \code{agents} are reported if there are within \code{radius}
@@ -63,8 +62,8 @@ Report the \code{agents} within the "cone of vision" in front of each turtle.
 
          Distances to patches are calculated to their center.
 
-         If \code{torus = TRUE}, the \code{radius} distance(s) are calculated
-         around the sides of the world to select \code{agents}.
+         If \code{torus = TRUE}, the \code{radius} distances are calculated
+         around the sides of the \code{world} to select \code{agents}.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

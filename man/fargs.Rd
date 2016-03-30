@@ -67,6 +67,18 @@ or turtles in \code{agents}.}
 If missing, colors are assigned using the function \code{rainbow(n)}.}
 
 \item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
+
+\item{var}{Character. The name of the \code{agents} variable to evaluate.
+If \code{agents} are patches and the \code{world} is a
+\code{NLworld} object, \code{var} must not be provided. If
+\code{agents} are patches and the \code{world} is a \code{NLworldStack}
+object, \code{var} is the name of the layer to use to define the patches
+values. If \code{agents} are turtles, \code{var} is one of
+the turtles' variable and can be equal to \code{"xcor"},
+\code{"ycor"}, any of the variables created when turtles were created,
+as well as any variable created using \code{turtlesOwn()}.}
+
+\item{val}{Numeric or character. Vector of any length.}
 }
 \description{
 Function arguments

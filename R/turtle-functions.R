@@ -2486,7 +2486,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param tVar    Character. Name of the turtles variable to create.
+#' @param tVar    Character. the name of the \code{turtles} variable to create.
 #'
 #' @param tVal    Vector representing the values of \code{tVar}.
 #'                Must be of length 1 or of length \code{turtles}.

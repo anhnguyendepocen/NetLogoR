@@ -18,46 +18,46 @@ minNof(agents, n, world, var)
   var)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates for the
-              patches to evaluate.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to evaluate.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{n}{Integer. The number of patches or turtles to select from \code{agents}
-to return. \code{n} must be less or equal to the number of \code{agents}.}
+\item{n}{Integer.}
 
-\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
-Must not be provided if \code{agents} are turtles.}
+\item{world}{NLworlds object.}
 
-\item{var}{Characters. The name of the variable to evaluate for their values.
-If \code{agents} are patches and the \code{world} is a \code{NLworld}
-object, \code{var} must not be provided. If \code{agents} are
-patches and the \code{world} is a \code{NLworldStack} object,
-\code{var} refers to the layer used for evaluating patches
+\item{var}{Character. The name of the \code{agents} variable to evaluate.
+If \code{agents} are patches and the \code{world} is a
+\code{NLworld} object, \code{var} must not be provided. If
+\code{agents} are patches and the \code{world} is a \code{NLworldStack}
+object, \code{var} is the name of the layer to use to define the patches
 values. If \code{agents} are turtles, \code{var} is one of
-the turtles' variable. \code{var} can be equal to \code{"xcor"},
+the turtles' variable and can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,
 as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
-Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor} and
-        the second column \code{pycor} representing the coordinates for the \code{n}
-        patches which have their variable value among the minimum values among the
-        \code{agents}.
+Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor" and
+        the second column "pycor" representing the coordinates of the \code{n}
+        patches among the \code{agents} which have their variable values among
+        the minimum values among the
+        \code{agents}, or
 
-        SpatialPointsDataFrame of length \code{n} representing the turtles which
-        have their \code{var} value among the minimum values among the \code{agents}.
+        SpatialPointsDataFrame of length \code{n} representing the turtles among the
+        \code{agents} which
+        have their \code{var} values among the minimum values among the \code{agents}.
 }
 \description{
-Report the n patches coordinates \code{[pxcor, pycor]} which have
-their variable values among the minimum values.
-Report the n turtles which have their variable values among the minimum values.
+Report the \code{n} patches or turtles among \code{agents} which have their variable
+among the minimum values.
 }
 \details{
-If there is a tie that would make the number of returned patches or turtles larger
-         than \code{n}, the tie is broken randomly.
+\code{world} must not be provided if \code{agents} are turtles.
+
+         If there is a tie that would make the number of returned patches or turtles larger
+         than \code{n}, it is broken randomly.
 }
 \examples{
 # Patches

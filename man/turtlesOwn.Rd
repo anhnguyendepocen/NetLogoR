@@ -17,7 +17,7 @@ turtlesOwn(turtles, tVar, tVal)
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
-\item{tVar}{Character. Name of the turtles variable to create.}
+\item{tVar}{Character. the name of the \code{turtles} variable to create.}
 
 \item{tVal}{Vector representing the values of \code{tVar}.
 Must be of length 1 or of length \code{turtles}.

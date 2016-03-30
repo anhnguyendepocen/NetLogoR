@@ -14,26 +14,27 @@ nOf(agents, n)
 \S4method{nOf}{SpatialPointsDataFrame,numeric}(agents, n)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates for the
-              patches to choose from.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to choose from.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{n}{Integer. The number of patches or turtles to select from \code{agents}
-to return. \code{n} must be less or equal to the number of \code{agents}.}
+\item{n}{Integer.}
 }
 \value{
-Matrix (ncol = 2, nrow = \code{n}) with the first column \code{pxcor}
-        and the second  column \code{pycor} representing the coordinates of the
-        chosen patches from \code{agents}.
+Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
+        and the second  column "pycor" representing the coordinates of the
+        selected patches from \code{agents}, or
 
         SpatialPointsDataFrame of length \code{n} representing the turtles
-        chosen from \code{agents}.
+        selected from \code{agents}.
 }
 \description{
-Reports an agentset composed of n agents chosen randomly.
+Report \code{n} patches or turtles randomly selected among \code{agents}.
+}
+\details{
+\code{n} must be less or equal the number of patches or turtles in \code{agents}.
 }
 \examples{
 # Patches

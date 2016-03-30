@@ -17,41 +17,41 @@ sortOn(agents, world, var)
 \S4method{sortOn}{SpatialPointsDataFrame,missing,character}(agents, var)
 }
 \arguments{
-\item{agents}{Matrix (ncol = 2) with the first column \code{pxcor} and the
-              second column \code{pycor} representing the coordinates of the
-              patches to sort.
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or by
-              \code{createOTurtles()} representing the turtles to sort.}
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
 
-\item{world}{\code{NLworlds} object. Only needed if \code{agents} are patches.
-Must not be provided if \code{agents} are turtles.}
+\item{world}{NLworlds object.}
 
-\item{var}{Characters. The name of the variable on which the sorting is based.
-If \code{agents} are patches and the \code{world} is a \code{NLworld}
-object, \code{var} must not be provided. If \code{agents} are
-patches and the \code{world} is a \code{NLworldStack} object, \code{var}
-refers to the layer used for sorting the patches. If \code{agents}
-are turtles, \code{var} is one of the turtles' variable. \code{var}
-can be equal to \code{"xcor"}, \code{"ycor"}, any of the variables created
-when turtles were created, as well as any variable created using
-\code{turtlesOwn()}.}
+\item{var}{Character. The name of the \code{agents} variable to evaluate.
+If \code{agents} are patches and the \code{world} is a
+\code{NLworld} object, \code{var} must not be provided. If
+\code{agents} are patches and the \code{world} is a \code{NLworldStack}
+object, \code{var} is the name of the layer to use to define the patches
+values. If \code{agents} are turtles, \code{var} is one of
+the turtles' variable and can be equal to \code{"xcor"},
+\code{"ycor"}, any of the variables created when turtles were created,
+as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
-Matrix (ncol = 2) with the first column \code{pxcor} and the second column
-        \code{pycor} representing the coordinates of the sorted patches if \code{agents}
-        are patches.
+Matrix (ncol = 2) with the first column "pxcor" and the second column
+        "pycor" representing the coordinates of the patches, sorted according to
+        their values, if \code{agents}
+        are patches, or
 
-        Integers. Vector of who numbers representing the sorted turtles if \code{agents} are
+        Integer. Vector of "who" numbers representing the turtles, sorted according
+        to their \code{var} values, if \code{agents} are
         turtles.
 }
 \description{
-Report the coordinates \code{[pxcor, pycor]} of the patches sorted
-according to their value.
-Report the who numbers of the turtles sorted according to their value.
+Report the \code{agents} sorted according to their value.
 }
 \details{
-The sorting of \code{agents} is done in a increasing order.
+\code{world} must not be provided if \code{agents} are turtles.
+
+         The sorting of the \code{agents} is done in a increasing order.
 }
 \examples{
 # Patches
