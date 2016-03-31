@@ -50,11 +50,14 @@ Numeric. Vector of angles in degrees of length equal to the largest
         number of agents/locations between \code{agents} and \code{agents2}.
 }
 \description{
-Report the directions of \code{agents} towards \code{agents2}.
+Report the directions of each \code{agents} towards each corresponding \code{agents2}.
 }
 \details{
 \code{agents} and \code{agents2} must have the same number of agents/locations
-         or if different, one of them must have only one agent/location.
+         or if different, one of them must have only one agent/location. If
+         \code{agents} and \code{agents2} have the same number of agents/locations,
+         the directions are calculated for each pair \code{agents[i]} and \code{agents2[i]}
+         and not for each \code{agents} towards all the \code{agents2}.
 
          If \code{torus = TRUE} and the distance from one \code{agents} to
          its corresponding \code{agents2} is smaller around the
