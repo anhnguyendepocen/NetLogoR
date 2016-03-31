@@ -1085,6 +1085,8 @@ setMethod(
 #'          sides of the \code{world} than across it, then the direction to the agent/location
 #'          \code{agents2} going around the sides of the \code{world} is given to the turtle.
 #'
+#'          If a turtle is facing its own location, its heading does not change.
+#'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#face}
 #'
 #'          \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#facexy}
@@ -1128,20 +1130,11 @@ setMethod(
   definition = function(world, turtles, agents2, torus) {
 
     newHeading <- towards(world = world, agents = turtles, agents2 = agents2, torus = torus)
-
-    if(nrow(agents2) == 1 & nrow(turtles) != 1){
-      agents2 <- cbind(x = rep(agents2[,1], nrow(turtles)), y = rep(agents2[,2], nrow(turtles)))
-    }
-    # Do not change the heading if the turtles is facing its position
-    for(i in 1:nrow(turtles@coords)){
-      if(turtles@coords[i,1] == agents2[i,1] & turtles@coords[i,2] == agents2[i,2]){
-        newHeading[i] <- turtles@data$heading[i]
-      }
-    }
     newData <- turtles@data
     newData[, "heading"] <- newHeading
     newTurtles <- SpatialPointsDataFrame(coords = turtles@coords, data = newData)
     return(newTurtles)
+
   }
 )
 

@@ -47,6 +47,8 @@ The number of agents/locations in \code{agents2} must be equal to 1 or
          its corresponding agent/location \code{agents2} is smaller around the
          sides of the \code{world} than across it, then the direction to the agent/location
          \code{agents2} going around the sides of the \code{world} is given to the turtle.
+
+         If a turtle is facing its own location, its heading does not change.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
