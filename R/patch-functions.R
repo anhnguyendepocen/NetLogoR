@@ -338,24 +338,22 @@ setMethod(
 
     pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
 
-    ## Faster for small world (~100 patches)
-    # listAgents <- list()
-    # for(i in 1:length(cellNum)) {
-    #   listAgents[[i]] <- pCoords[neighbors[,1] == cellNum[i],]
-    # }
-    ##
+    if(length(cellNum) < 1000){
 
-    ## Faster for larger world
-    neighborsCoords <- cbind(neighbors, pCoords)
-    # Split by the provided "agents" (i.e., cellNum = neighborsCoords[,1])
-    listAgents <- lapply(by(neighborsCoords[,c(3,4)], neighborsCoords[,1], identity), as.matrix)
-    listAgents <- listAgents[order(cellNum)]
-    ##
+      ## Faster for small number of cellnum
+      listAgents <- list()
+      for(i in 1:length(cellNum)) {
+        listAgents[[i]] <- pCoords[neighbors[,1] == cellNum[i],]
+      }
 
-    # Slight faster, but uses and returns data.frame(s), which may not be appropriate
-    neighborsCoordsdf <- data.frame(neighbors, pCoords)
-    listAgents2 <- split(neighborsCoordsdf[,c(3,4)], neighborsCoordsdf[,1])
-    listAgents2 <- listAgents2[order(cellNum)]
+    } else {
+
+      ## Faster for larger numbers of cellnum
+      neighbors_df <- data.frame(neighbors, pCoords)
+      listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,1]), as.matrix)
+      listAgents <- listAgents[order(cellNum)]
+
+    }
 
     return(listAgents)
   }

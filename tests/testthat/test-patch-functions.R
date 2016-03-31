@@ -224,6 +224,14 @@ test_that("neighbors works with patches", {
   nCorner <- neighbors(world = ws, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = TRUE)
   expect_equivalent(nrow(nCorner[[1]]), 4)
   expect_equivalent(nCorner[[1]], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
+
+  # Large number of agents
+  w1 <- createNLworld(0, 50, 0, 50)
+  n4 <- neighbors(world = w1, agents = patches(w1), nNeighbors = 4)
+  n4_1 <- cbind(pxcor = c(1, 0), pycor = c(50, 49))
+  n4_2601 <- cbind(pxcor = c(50, 49), pycor = c(1, 0))
+  expect_equivalent(n4[[1]], n4_1)
+  expect_equivalent(n4[[2601]], n4_2601)
 })
 
 test_that("neighbors works with turtles", {
