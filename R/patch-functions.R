@@ -352,6 +352,11 @@ setMethod(
     listAgents <- listAgents[order(cellNum)]
     ##
 
+    # Slight faster, but uses and returns data.frame(s), which may not be appropriate
+    neighborsCoordsdf <- data.frame(neighbors, pCoords)
+    listAgents2 <- split(neighborsCoordsdf[,c(3,4)], neighborsCoordsdf[,1])
+    listAgents2 <- listAgents2[order(cellNum)]
+
     return(listAgents)
   }
 )
