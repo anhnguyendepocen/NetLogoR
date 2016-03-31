@@ -7,12 +7,13 @@
 \alias{diffuse,NLworldStack,character,numeric,numeric-method}
 \title{Diffuse values in a world}
 \usage{
-diffuse(world, pVar, share, nNeighbors)
+diffuse(world, pVar, share, nNeighbors, torus = FALSE)
 
-\S4method{diffuse}{NLworld,missing,numeric,numeric}(world, share, nNeighbors)
+\S4method{diffuse}{NLworld,missing,numeric,numeric}(world, share, nNeighbors,
+  torus)
 
 \S4method{diffuse}{NLworldStack,character,numeric,numeric}(world, pVar, share,
-  nNeighbors)
+  nNeighbors, torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}
@@ -26,6 +27,9 @@ the patches values to be diffused among the neighbors.}
 
 \item{nNeighbors}{Integer: 4 or 8. Represents the number of neighbor patches
 considered.}
+
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
 }
 \value{
 NLworlds object with patches values updated.
@@ -36,8 +40,10 @@ Each patch gives an equal share of a portion of its value to its neighbor patche
 \details{
 What is given is lost for the patches.
 
-         Patches on the sides of the \code{world} have less than 4 or 8 neighbors.
-         Each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
+         If \code{torus = TRUE}, all patches have \code{nNeighbors} patches around them, which
+         some may be on the other sides of the \code{world}. If \code{torus = FALSE},
+         patches located on the edges of the \code{world} have less than \code{nNeighbors} patches around them.
+         However, each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
          patch keeps the leftover.
 }
 \examples{

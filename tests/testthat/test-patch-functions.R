@@ -14,6 +14,12 @@ test_that("diffuse works for NLworld with 4 neighbors", {
 
   val11 <- 8 - (4 * (8 * 0.6 / 4)) + (3 * 0.6 / 4) + (2 * 0.6 / 4) + (10 * 0.6 / 4) + (8 * 0.6 / 4)
   expect_identical(as.numeric(w2[1,1]),val11)
+
+  # With torus = TRUE
+  w3 <- diffuse(world = w1, share = 0.5, nNeighbors = 4, torus = TRUE)
+  expect_identical(sum(values(w1)), sum(values(w3)))
+  val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 4) + (6 * 0.5 / 4) + (3 * 0.5 / 4) + (2 * 0.5 / 4)
+  expect_identical(as.numeric(w3[0,2]),val03)
 })
 
 test_that("diffuse works for NLworldStack with 4 neighbors", {
@@ -35,6 +41,12 @@ test_that("diffuse works for NLworldStack with 4 neighbors", {
 
   val11 <- 8 - (4 * (8 * 0.6 / 4)) + (3 * 0.6 / 4) + (2 * 0.6 / 4) + (10 * 0.6 / 4) + (8 * 0.6 / 4)
   expect_identical(as.numeric(ws2$w1[1,1]),val11)
+
+  # With torus = TRUE
+  w3 <- diffuse(world = ws, pVar = "w1", share = 0.5, nNeighbors = 4, torus = TRUE)
+  expect_identical(sum(values(w1)), sum(values(w3$w1)))
+  val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 4) + (6 * 0.5 / 4) + (3 * 0.5 / 4) + (2 * 0.5 / 4)
+  expect_identical(as.numeric(w3[0,2][1]),val03)
 })
 
 test_that("diffuse works for NLworld with 8 neighbors", {
@@ -53,6 +65,13 @@ test_that("diffuse works for NLworld with 8 neighbors", {
 
   val11 <- 8 - (8 * (8 * 0.6 / 8)) + (3 * 0.6 / 8) + (2 * 0.6 / 8) + (10 * 0.6 / 8) + (8 * 0.6 / 8) + (1 * 0.6 / 8) + (6 * 0.6 / 8) + (3 * 0.6 / 8) + (2 * 0.6 / 8)
   expect_identical(as.numeric(w2[1,1]),val11)
+
+  # With torus = TRUE
+  w3 <- diffuse(world = w1, share = 0.5, nNeighbors = 8, torus = TRUE)
+  expect_identical(sum(values(w1)), sum(values(w3)))
+  val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 8) + (6 * 0.5 / 8) + (3 * 0.5 / 8) + (2 * 0.5 / 8) + (2 * 0.5 / 8) + (8 * 0.5 / 8) + (10 * 0.5 / 8) + (8 * 0.5 / 8)
+  expect_identical(as.numeric(w3[0,2]),val03)
+
 })
 
 test_that("diffuse works for NLworldStack with 8 neighbors", {
@@ -74,6 +93,12 @@ test_that("diffuse works for NLworldStack with 8 neighbors", {
 
   val11 <- 8 - (8 * (8 * 0.6 / 8)) + (3 * 0.6 / 8) + (2 * 0.6 / 8) + (10 * 0.6 / 8) + (8 * 0.6 / 8) + (1 * 0.6 / 8) + (6 * 0.6 / 8) + (3 * 0.6 / 8) + (2 * 0.6 / 8)
   expect_identical(as.numeric(ws2$w1[1,1]),val11)
+
+  # With torus = TRUE
+  w3 <- diffuse(world = ws, pVar = "w1", share = 0.5, nNeighbors = 8, torus = TRUE)
+  expect_identical(sum(values(w1)), sum(values(w3$w1)))
+  val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 8) + (6 * 0.5 / 8) + (3 * 0.5 / 8) + (2 * 0.5 / 8) + (2 * 0.5 / 8) + (8 * 0.5 / 8) + (10 * 0.5 / 8) + (8 * 0.5 / 8)
+  expect_identical(as.numeric(w3[0,2][1]),val03)
 })
 
 test_that("distance works for patches", {

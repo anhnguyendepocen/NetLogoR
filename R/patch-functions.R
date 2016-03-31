@@ -12,8 +12,10 @@
 #'
 #' @details What is given is lost for the patches.
 #'
-#'          Patches on the sides of the \code{world} have less than 4 or 8 neighbors.
-#'          Each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
+#'          If \code{torus = TRUE}, all patches have \code{nNeighbors} patches around them, which
+#'          some may be on the other sides of the \code{world}. If \code{torus = FALSE},
+#'          patches located on the edges of the \code{world} have less than \code{nNeighbors} patches around them.
+#'          However, each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
 #'          patch keeps the leftover.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#diffuse}
@@ -34,6 +36,7 @@
 #'
 #'
 #' @export
+#' @importFrom SpaDES adj
 #' @docType methods
 #' @rdname diffuse
 #'
@@ -41,7 +44,7 @@
 #'
 setGeneric(
   "diffuse",
-  function(world, pVar, share, nNeighbors) {
+  function(world, pVar, share, nNeighbors, torus = FALSE) {
     standardGeneric("diffuse")
   })
 
@@ -49,20 +52,21 @@ setGeneric(
 #' @rdname diffuse
 setMethod(
   "diffuse",
-  signature = c("NLworld", "missing", "numeric", "numeric"),
-  definition = function(world, share, nNeighbors) {
+  signature = c(world = "NLworld", pVar = "missing", share = "numeric", nNeighbors = "numeric"),
+  definition = function(world, share, nNeighbors, torus) {
 
-    worldVal_from <- values(world)
-    cellNum <- 1:length(worldVal_from)
-    toGive <- (worldVal_from * share) / nNeighbors
+    val <- values(world)
+    cellNum <- 1:length(val)
+    toGive <- (val * share) / nNeighbors
     df1 <- cbind.data.frame(cellNum, toGive)
-    df2 <- as.data.frame(adjacent(world, cells = cellNum, directions = nNeighbors))
+    df2 <- as.data.frame(adj(world, cells = cellNum, directions = nNeighbors, torus = torus))
     df3 <- merge(df2, df1, by.x = "from", by.y = "cellNum", all = TRUE)
+
     loose <- tapply(df3$toGive, FUN = sum, INDEX = df3$from) # how much each patch give
     win <- tapply(df3$toGive, FUN = sum, INDEX = df3$to) # how much each patch receive
-    new_worldVal <- worldVal_from - loose + win
+    newVal <- val - loose + win
 
-    newWorld <- setValues(world, as.numeric(new_worldVal))
+    newWorld <- setValues(world, as.numeric(newVal))
     return(newWorld)
   }
 )
@@ -71,11 +75,11 @@ setMethod(
 #' @rdname diffuse
 setMethod(
   "diffuse",
-  signature = c("NLworldStack", "character", "numeric", "numeric"),
-  definition = function(world, pVar, share, nNeighbors) {
+  signature = c(world = "NLworldStack", pVar = "character", share = "numeric", nNeighbors = "numeric"),
+  definition = function(world, pVar, share, nNeighbors, torus) {
     pos_l <- which(names(world) == pVar, TRUE) # find the layer
     world_l <- world[[pos_l]]
-    newWorld <- diffuse(world = world_l, share = share, nNeighbors = nNeighbors)
+    newWorld <- diffuse(world = world_l, share = share, nNeighbors = nNeighbors, torus = torus)
     world[[pos_l]]@data@values <- values(newWorld)
     return(world)
   }
@@ -292,8 +296,8 @@ setMethod(
 #'          returned.
 #'
 #'          If \code{torus = FALSE}, \code{agents} located on the edges of the \code{world}
-#'          have less than \code{nNeighbors} patches. If \code{torus = FALSE}, all agents
-#'          located on the egdes of the \code{world} have \code{nNeighbors} patches, which
+#'          have less than \code{nNeighbors} patches around them. If \code{torus = TRUE}, all \code{agents}
+#'          located on the egdes of the \code{world} have \code{nNeighbors} patches around them, which
 #'          some may be on the other sides of the \code{world}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#neighbors}
