@@ -343,7 +343,7 @@ setMethod(
     # for(i in 1:length(cellNum)) {
     #   listAgents[[i]] <- pCoords[neighbors[,1] == cellNum[i],]
     # }
-    ##
+    ###
 
     ## Faster for larger world
     neighborsCoords <- cbind(neighbors, pCoords)
