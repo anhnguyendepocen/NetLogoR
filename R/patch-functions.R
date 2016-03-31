@@ -334,13 +334,23 @@ setMethod(
   definition = function(world, agents, nNeighbors, torus) {
 
     cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    neighbors_df <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+    neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
 
-    pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors_df[,2])
-    listAgents <- list()
-    for(i in 1:length(cellNum)) {
-      listAgents[[i]] <- pCoords[neighbors_df[,1] == cellNum[i],]
-    }
+    pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
+
+    ## Faster for small world (~100 patches)
+    # listAgents <- list()
+    # for(i in 1:length(cellNum)) {
+    #   listAgents[[i]] <- pCoords[neighbors[,1] == cellNum[i],]
+    # }
+    ##
+
+    ## Faster for larger world
+    neighborsCoords <- cbind(neighbors, pCoords)
+    # Split by the provided "agents" (i.e., cellNum = neighborsCoords[,1])
+    listAgents <- lapply(by(neighborsCoords[,c(3,4)], neighborsCoords[,1], identity), as.matrix)
+    listAgents <- listAgents[order(cellNum)]
+    ##
 
     return(listAgents)
   }
