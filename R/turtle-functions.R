@@ -463,27 +463,27 @@ setMethod(
 
     if(home == "home0"){
       if(world@extent@xmin <= 0 & world@extent@xmax >= 0 & world@extent@ymin <= 0 & world@extent@ymax >= 0){
-        turtles@coords <- cbind(xcor = rep(0, length(turtles)), ycor = rep(0, length(turtles)))
+        newTurtles<- setXY(turtles = turtles, xcor = 0, ycor = 0, world = world, torus = FALSE)
       } else {
-        stop("The world provided does not contain the location [xcor = 0, ycor = 0]")
+        stop("The world provided does not contain the location [x = 0, y = 0]")
       }
     }
 
     if(home == "center"){
-      turtles@coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), length(turtles)),
-                              ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), length(turtles)))
+      newTurtles<- setXY(turtles = turtles, xcor = (((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin),
+                         ycor = (((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin),
+                         world = world, torus = FALSE)
     }
 
     if(home == "pCorner"){
-      turtles@coords <- cbind(xcor = rep(minPxcor(world = world), length(turtles)),
-                              ycor = rep(minPycor(world = world), length(turtles)))
+      newTurtles<- setXY(turtles = turtles, xcor = minPxcor(world), ycor = minPycor(world), world = world, torus = FALSE)
     }
 
     if(home == "corner"){
-      turtles@coords <- cbind(xcor = rep(world@extent@xmin, length(turtles)), ycor = rep(world@extent@ymin, length(turtles)))
+      newTurtles<- setXY(turtles = turtles, xcor = world@extent@xmin, ycor = world@extent@ymin, world = world, torus = FALSE)
     }
 
-    return(turtles)
+    return(newTurtles)
   }
 )
 
