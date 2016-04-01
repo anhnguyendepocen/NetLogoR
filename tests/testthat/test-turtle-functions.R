@@ -818,6 +818,12 @@ test_that("subHeadings works",{
 
   angles9 <- subHeadings(angle1 = t1, angle2 = t1)
   expect_equivalent(angles9, rep(0, 4))
+
+  # With different length for angle1 and angle2
+  angles1 <- subHeadings(angle1 = t1, angle2 = 0)
+  expect_equivalent(angles1, c(0, -90, -180, 90))
+  angles1 <- subHeadings(angle1 = 0, angle2 = t1)
+  expect_equivalent(angles1, c(0, 90, 180, -90))
 })
 
 test_that("other works with patches", {

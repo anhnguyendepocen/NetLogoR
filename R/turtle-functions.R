@@ -2572,7 +2572,8 @@ setMethod(
 #' @details This function does the opposite as the one in NetLogo where
 #'          \code{angle1} is the target heading.
 #'
-#'         \code{angle2} must be of length 1 or of length \code{angle1}.
+#'         \code{angle1} and \code{angle2} must be of the same length or if different,
+#'         one of them must be of length 1.
 #'
 #'          Positive values mean clockwise rotations, negative value mean counterclockwise rotations.
 #'
@@ -2612,8 +2613,10 @@ setMethod(
     if(length(angle2) != length(angle1)){
       if(length(angle2) == 1){
         angle2 <- rep(angle2, length(angle1))
+      } else if(length(angle1) == 1){
+        angle1 <- rep(angle1, length(angle2))
       } else {
-        stop("angle2 must be of length 1 or length(angle1)")
+        stop("angle1 and angle2 must be of the same length or one must be of length 1")
       }
     }
 
