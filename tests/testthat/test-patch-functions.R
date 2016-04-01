@@ -232,6 +232,18 @@ test_that("neighbors works with patches", {
   n4_2601 <- cbind(pxcor = c(50, 49), pycor = c(1, 0))
   expect_equivalent(n4[[1]], n4_1)
   expect_equivalent(n4[[2601]], n4_2601)
+
+  # With duplicate
+  w1 <- createNLworld(0, 9, 0, 9)
+  n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9, 0), pycor = c(9, 9, 0, 0, 9)), nNeighbors = 4)
+  n4_1 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
+  expect_equivalent(n4[[1]], n4_1)
+  expect_equivalent(n4[[5]], n4[[1]])
+  w1 <- createNLworld(0, 50, 0, 50)
+  n4 <- neighbors(world = w1, agents = rbind(patches(w1), patches(w1)[1,]), nNeighbors = 4)
+  n4_1 <- cbind(pxcor = c(1, 0), pycor = c(50, 49))
+  expect_equivalent(n4[[1]], n4_1)
+  expect_equivalent(n4[[2602]], n4[[1]])
 })
 
 test_that("neighbors works with turtles", {

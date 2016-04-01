@@ -343,15 +343,15 @@ setMethod(
       ## Faster for small number of cellnum
       listAgents <- list()
       for(i in 1:length(cellNum)) {
-        listAgents[[i]] <- pCoords[neighbors[,1] == cellNum[i],]
+        listAgents[[i]] <- unique(pCoords[neighbors[,1] == cellNum[i],])
       }
 
     } else {
 
       ## Faster for larger numbers of cellnum
-      neighbors_df <- data.frame(neighbors, pCoords)
-      listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,1]), as.matrix)
-      listAgents <- listAgents[order(cellNum)]
+      neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
+                            by.x = "from", by.y = "cellNum")
+      listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
 
     }
 
