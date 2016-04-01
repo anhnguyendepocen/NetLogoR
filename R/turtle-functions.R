@@ -2474,7 +2474,7 @@ setMethod(
 
     allList <- lapply(dots, function(x){cbind(x@coords, x@data)})
     allDf <- rbindlist(allList)
-    allDf <- unique(allDf)
+    allDf <- as.data.frame(unique(allDf))
 
     allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
     return(allTurtles)

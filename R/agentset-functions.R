@@ -1586,16 +1586,9 @@ setMethod(
       }, pWithin, agentsNoEmpty, SIMPLIFY = FALSE)
 
       # Reassign the results with the empty patches
-      agentsInCone <- list()
-      j <- 1
-      for(i in 1:length(turtles)){
-        if(emptyElem[i] == 0){
-          agentsInCone[[i]] <- noPatches()
-        } else {
-          agentsInCone[[i]] <- list_agents[[j]]
-          j <- j + 1
-        }
-      }
+      agentsInCone <- vector("list", length(turtles))
+      agentsInCone[which(emptyElem %in% 0)] <- list(noPatches())
+      agentsInCone[which(!emptyElem %in% 0)] <- list_agents
 
       return(agentsInCone)
     }
