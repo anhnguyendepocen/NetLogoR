@@ -13,7 +13,8 @@ Here are the remaining tasks to do in the remaining 5 to 6 weeks.
 
 * A) Make the functions clearTurtles(), clearAll() (this one is not written yet) and resizeWorld() work by figuring out the removing of R objects and environments when wrapping functions OR just explain in the dictionary or programming guide how to remove R objects and not building functions for that.
 
-* B) Add a torus option to a few functions missing it (e.g., diffuse() but maybe others).
+* B) (Done) Add a torus option to a few functions missing it (e.g., diffuse() but maybe others).
+*Only diffuse() was missing the torus option*
 
 * C) (Done) Rename some of the parameters for consistency across NLR functions (e.g., step and distance, nDegrees and angle). Need to change it in all dependent functions and tests associated.
 
