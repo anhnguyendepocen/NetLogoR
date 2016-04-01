@@ -21,7 +21,10 @@ SpatialPointsDataFrame with all the turtles provided in the inputs.
 Report a turtle agentset containing all turtles provided in the inputs.
 }
 \details{
-This functions does not affect the turtles coordinates and variables.
+Duplicated turtles are removed. Duplicates are identified based on the
+         turtles' coordinates and all their variables values.
+
+         This functions does not affect the turtles coordinates and variables.
          Therefore there may be multiple turtles with the same variable value (e.g.,
          "who" number, and color). This must be taken care of prior or later
          using this function to avoid further confusions.

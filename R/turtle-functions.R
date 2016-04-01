@@ -2428,7 +2428,10 @@ setMethod(
 #'
 #' @return SpatialPointsDataFrame with all the turtles provided in the inputs.
 #'
-#' @details This functions does not affect the turtles coordinates and variables.
+#' @details Duplicated turtles are removed. Duplicates are identified based on the
+#'          turtles' coordinates and all their variables values.
+#'
+#'          This functions does not affect the turtles coordinates and variables.
 #'          Therefore there may be multiple turtles with the same variable value (e.g.,
 #'          "who" number, and color). This must be taken care of prior or later
 #'          using this function to avoid further confusions.
@@ -2448,6 +2451,7 @@ setMethod(
 #'
 #'
 #' @export
+#' @importFrom data.table rbindlist
 #' @docType methods
 #' @rdname turtleSet
 #'
@@ -2468,14 +2472,11 @@ setMethod(
 
     dots <-list(...)
 
-    allCoords <- dots[[1]]@coords
-    allData <- dots[[1]]@data
-    for(i in 2:length(dots)){
-      allCoords <- rbind(allCoords, dots[[i]]@coords)
-      allData <- rbind(allData, dots[[i]]@data)
-    }
+    allList <- lapply(dots, function(x){cbind(x@coords, x@data)})
+    allDf <- rbindlist(allList)
+    allDf <- unique(allDf)
 
-    allTurtles <- SpatialPointsDataFrame(coords = allCoords, data = allData)
+    allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
     return(allTurtles)
   }
 )
