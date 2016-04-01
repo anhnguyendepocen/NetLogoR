@@ -41,7 +41,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         their values, if \code{agents}
         are patches, or
 
-        Integer. Vector of "who" numbers representing the turtles, sorted according
+        SpatialPointsDataFrame representing the turtles, sorted according
         to their \code{var} values, if \code{agents} are
         turtles.
 }

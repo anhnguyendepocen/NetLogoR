@@ -227,7 +227,7 @@ setMethod(
 #'         their values, if \code{agents}
 #'         are patches, or
 #'
-#'         Integer. Vector of "who" numbers representing the turtles, sorted according
+#'         SpatialPointsDataFrame representing the turtles, sorted according
 #'         to their \code{var} values, if \code{agents} are
 #'         turtles.
 #'
@@ -300,8 +300,9 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, var) {
     turtles <- cbind(agents@coords, agents@data)
-    sortTurtles <- turtles[order(turtles[,var]),]
-    return(sortTurtles$who)
+    sortData <- turtles[order(turtles[,var]),]
+    sortTurtles <- SpatialPointsDataFrame(coords = sortData[,c(1,2)], data = sortData[,3:ncol(sortData)])
+    return(sortTurtles)
   }
 )
 

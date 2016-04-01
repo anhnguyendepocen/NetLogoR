@@ -96,14 +96,15 @@ test_that("sortOn works with turtles",{
   t2 <- sortOn(agents = t1, var = "xcor")
   t3 <- sortOn(agents = t1, var = "ycor")
   t4 <- sortOn(agents = t1, var = "heading")
-  expect_equivalent(t2, c(0,1,2,3,4))
-  expect_equivalent(t3, c(4,3,2,1,0))
-  expect_equivalent(t4, c(2, 4, 3, 0, 1))
+  expect_equivalent(t2@data$who, c(0,1,2,3,4))
+  expect_equivalent(t3@data$who, c(4,3,2,1,0))
+  expect_equivalent(t4@data$who, c(2, 4, 3, 0, 1))
 
   t5 <- sortOn(agents = turtle(turtles = t1, who = 0), var = "heading")
-  expect_equivalent(t5, 0)
+  expect_equivalent(t5@data$who, 0)
   t6 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = 1)
   t7 <- sortOn(agents = t6, var = "xcor")
+  expect_equivalent(t6, t7)
 })
 
 test_that("NLwith works with patches",{
