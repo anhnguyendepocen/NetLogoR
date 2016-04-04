@@ -25,7 +25,8 @@ Here are the remaining tasks to do in the remaining 5 to 6 weeks.
 
 * F) Rename functions with shorter names.
 
-* G) Increase functions speed (e.g., removing "for loops"").
+* G) (Ongoing) Increase functions speed (e.g., removing "for loops").
+*I removed most of the for-loops where I could. For-loops are still remaining in towards() (turtle-functions.R), convertNLworld() (world-functions.R) and in the replacement method []<- for the signature NLworldStack (NLworlds-class.r). The function convertNLworld() could also be improved for speed regarding the use of resample().* 
 
 * H) Build a model with the NLR functions (e.g., take a NL example model and translate it in NLR). Document the steps of doing it in the programming guide in a "How to build a NLR model".
 
