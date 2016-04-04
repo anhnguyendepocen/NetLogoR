@@ -1302,6 +1302,8 @@ setMethod(
 #'
 #'
 #' @export
+#' @importFrom data.table rbindlist
+#' @importFrom car some
 #' @docType methods
 #' @rdname downhill
 #'
@@ -1319,24 +1321,27 @@ setMethod(
   "downhill",
   signature = c(world = "NLworld", pVar = "missing",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
   definition = function(world, turtles, nNeighbors, torus) {
+
     pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
     pValues <- values(world) # ordered by cellNumbers
 
-    pMinNeighbors <- list()
-    for(i in 1:length(pNeighbors)){
-      pNeighbors[[i]] <- rbind(pNeighbors[[i]], patch(world = world, x = turtles@coords[i,1], y = turtles@coords[i,2])) # add the patch the turtle is located on
-      pNeighbors[[i]] <- cbind(pNeighbors[[i]], cellNum = cellFromPxcorPycor(world = world, pxcor = pNeighbors[[i]][,"pxcor"], pycor = pNeighbors[[i]][,"pycor"]))
-      pNeighbors[[i]] <- cbind(pNeighbors[[i]], pVal = pValues[pNeighbors[[i]][,"cellNum"]])
-      pMinNeighbors[[i]] <- pNeighbors[[i]][pNeighbors[[i]][,"pVal"] == min(pNeighbors[[i]][,"pVal"]), c("pxcor", "pycor")]
-      # If there are more than 1 patch with a minimum value, select a random one
-      if(class(pMinNeighbors[[i]]) == "matrix"){ # otherwise it is "numeric"
-        pMinNeighbors[[i]] <- pMinNeighbors[[i]][sample(nrow(pMinNeighbors[[i]]), 1), ]
-      }
-    }
+    pListDF <- lapply(pNeighbors, as.data.frame)
+    pDF <- as.data.frame(rbindlist(pListDF)) # faster than do.call(rbind, ...)
+    pDF$id <- rep(1:length(turtles), unlist(lapply(pNeighbors, nrow)))
+    tDF <- data.frame(patchHere(world, turtles), id = 1:length(turtles))
+    allPatches <- rbind(pDF, tDF) # neighbors patches + patches under the turtles
 
-    pMinNeighbors <- do.call(rbind, pMinNeighbors)
-    newTurtles <- face(world = world, turtles = turtles, agents2 = pMinNeighbors, torus = torus)
-    newTurtles <- moveTo(turtles = newTurtles, agents = pMinNeighbors)
+    allPatches$cellNum <- cellFromPxcorPycor(world = world, pxcor = allPatches$pxcor, pycor = allPatches$pycor)
+    allPatches$pVal <- pValues[allPatches$cellNum]
+
+    pMin <- aggregate(pVal ~ id, allPatches, function(x) min(x)) # minimum patch value per id
+    pMinCoords <- merge(pMin, allPatches)
+    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
+    pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
+    pMinCoords2 <- cbind(pxcor = pMinCoords1[,3], pycor = pMinCoords1[,4])
+
+    newTurtles <- face(world = world, turtles = turtles, agents2 = pMinCoords2, torus = torus)
+    newTurtles <- moveTo(turtles = newTurtles, agents = pMinCoords2)
     return(newTurtles)
   }
 )

@@ -462,6 +462,22 @@ test_that("downhill works",{
   t10 <- downhill(world = ws, pVar = "w1",turtles = t9, nNeighbors = 8, torus = TRUE)
   expect_equivalent(t10@data$heading, c(225, 315))
   expect_equivalent(t10@coords, cbind(xcor = c(0, 0), ycor = c(4, 2)))
+
+  # The turtle on the min patch does not move
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- 10
+  w1[0,0] <- 0
+  t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
+  t2 <- downhill(world = w1, turtles = t1, nNeighbors = 4)
+  expect_identical(t1@coords, t2@coords)
+  expect_identical(t1@data$heading, t2@data$heading)
+  expect_identical(t2@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+
+  # The function handles dupliacate patch values
+  t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2))
+  t2 <- downhill(world = w1, turtles = t1, nNeighbors = 4)
+  expect_equivalent(nrow(merge(t2@coords, patch(w1, c(1, 2, 2, 2, 3), c(2, 1, 2, 3, 2)),
+                         by.x = c("xcor", "ycor"), by.y = c("pxcor", "pycor"))), 1)
 })
 
 test_that("uphill works",{
@@ -509,6 +525,22 @@ test_that("uphill works",{
   t10 <- uphill(world = ws, pVar = "w1",turtles = t9, nNeighbors = 8, torus = TRUE)
   expect_equivalent(t10@data$heading, c(90, 135))
   expect_equivalent(t10@coords, cbind(xcor = c(2, 2), ycor = c(0, 0)))
+
+  # The turtle on the max patch does not move
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- 0
+  w1[0,0] <- 10
+  t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
+  t2 <- uphill(world = w1, turtles = t1, nNeighbors = 4)
+  expect_identical(t1@coords, t2@coords)
+  expect_identical(t1@data$heading, t2@data$heading)
+  expect_identical(t2@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+
+  # The function handles dupliacate patch values
+  t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2))
+  t2 <- uphill(world = w1, turtles = t1, nNeighbors = 4)
+  expect_equivalent(nrow(merge(t2@coords, patch(w1, c(1, 2, 2, 2, 3), c(2, 1, 2, 3, 2)),
+                               by.x = c("xcor", "ycor"), by.y = c("pxcor", "pycor"))), 1)
 })
 
 test_that("patchAhead works",{
