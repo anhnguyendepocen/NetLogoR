@@ -116,67 +116,62 @@ $(document).ready(function () {
 
 
 <p>This document is based on the <a href="https://ccl.northwestern.edu/netlogo/docs/programming.html">NetLogo’s Programming Guide</a>. It describes how the NetLogo’s programming language is translated in the R language.</p>
+<div id="netlogor-features" class="section level2">
+<h2>NetLogoR features</h2>
 <div id="world-and-agents" class="section level3">
 <h3>World and agents</h3>
-<p>In NetLogoR, the world is a <code>NLworld*</code> object. It is either a <code>NLworld</code> or a <code>NLworldStack</code> object. The world is two dimensional and is divided into a grid of square patches.</p>
-<p>There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates <code>pxcor</code> and <code>pycor</code>, representing their center, in <code>matrix</code> objects. See <code>help(&quot;NLworld&quot;)</code> for more details on the patch coordinates system. Turtles are defined by their coordinates <code>xcor</code> and <code>ycor</code> in <code>SpatialPointDataFrame</code> objects. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).</p>
+<p>In NetLogoR, the world is a <code>NLworlds</code> R object (i.e., either a <code>NLworld</code> or a <code>NLworldStack</code> R object). The world is two dimensional and is divided into a grid of square patches of resolution 1.</p>
+<p>There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates <code>pxcor</code> and <code>pycor</code>, representing their center, as <code>matrix</code> objects. See <code>help(&quot;NLworld&quot;)</code> for more details on the patch coordinates system. Turtles are defined by their coordinates <code>xcor</code> and <code>ycor</code> as <code>SpatialPointDataFrame</code> objects. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).</p>
 </div>
 <div id="procedures" class="section level3">
 <h3>Procedures</h3>
-<p>In NetLogoR, R functions act on agents. Functions can either transform agents or used them to compute some value. Functions available from the R software and different packages can be used, as well as the functions from NetLogoR. The NetLogoR functions are a translation into the R language of the NetLogo’s primitives (i.e., “built-in commands and reporters”). You can create new functions or wrap several existing functions into one. The rules to do so are imposed by the R language.</p>
+<p>In NetLogoR, R functions act on agents. Functions can transform agents or used them to compute some value. Functions available from the R software and different packages can be used, as well as the functions from NetLogoR. The NetLogoR functions are a translation into the R language of the NetLogo’s primitives (i.e., “built-in commands and reporters”). You can create new functions or wrap several existing functions into one. The rules to do so are imposed by the R language.</p>
 <p>Functions take arguments which are R objects and values. Arguments are used to carry out actions and compute results.</p>
 <pre class="r"><code>w1 &lt;- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = 0, maxPycor = 10) # create a world according to the given extent
-pDist &lt;- NLdist(world = w1, from = cbind(pxcor = 0, pycor = 0), to = cbind(pxcor = 1, pycor = 1) # report the distance between the patch [pxcor = 0, pycor = 0] and the patch [pxcor = 1, pycor = 1]</code></pre>
-<p>In NetLogoR, it is one of the function argument which specify which patch(es) or turtle(s) are involved in the function. For example, in the <code>NLdist</code> function, the argument <code>from</code> takes one patch coordinates and the argument <code>to</code> takes another patch coordinates.</p>
-<p>The result of a function which acts on agents or computes a value need to be assigned to an object name to be kept and re-used later in the model. Functions create new objects, they do not directly modify the ones given as arguments. For example, when moving turtles around using the <code>fd</code> function, the result (i.e., the turtles with new coordinates) need to be re-assigned to the turtles object.</p>
-<pre class="r"><code>t1 &lt;- createTurtles(world = w1, n = 10) # create 10 turtles
-t1 &lt;- fd(world = w1, turtles = t1, step = 1) # move all the turtles by 1</code></pre>
+pDist &lt;- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1) # report the distance between the patch [pxcor = 0, pycor = 0] and the patch [pxcor = 1, pycor = 1]</code></pre>
+<p>In NetLogoR, one of the function argument indicates which agent(s) (i.e., patch(es) or turtle(s)) are involved in the function. For example, in the <code>NLdist</code> function, the argument <code>agents</code> takes one patch coordinates and the argument <code>agents2</code> takes another patch coordinates.</p>
+<p>The result/output of a function needs to be assigned to an object name to be kept and re-used later in the model. Functions in R create new objects, they do not directly modify the ones given as arguments. For example, when moving turtles around using the <code>fd</code> function, the output of the function (i.e., the turtles with new coordinates) needs to be re-assigned to the turtles object.</p>
+<pre class="r"><code>t1 &lt;- createTurtles(n = 10, world = w1) # create 10 turtles
+t1 &lt;- fd(world = w1, turtles = t1, dist = 1) # move all the turtles by a distance of 1</code></pre>
 <p>In NetLogo, pressing a button runs some code. To perform the button action in NetLogoR, the code must be sent to the R console to be executed. The code can be sent directly by the observer or by a scheduler function (e.g., see SpaDES package) which sends the code according to the schedule to the R console.</p>
-<p>The R language uses # to add comments to the script. Comments can make your code easier to read and understand, but they don’t affect its behavior.</p>
+<p>The R language uses <code>#</code> to add comments to the script. Comments can make your code easier to read and understand, but they don’t affect its behavior.</p>
 </div>
 <div id="variables" class="section level3">
 <h3>Variables</h3>
-<p>R objects which are not worlds, patches or turtles can be seen as global variables.</p>
-<p>Agent variables are places to store different values for an agent. An agent variable can be a patch or a turtle variable. Each <code>NLworld</code> object holds only one variable for the patches. A <code>NLworldStack</code> object holds several variables for the patches as the different world layers. Turtles variables are columns in the dataframe of the <code>SpatialPointsDataFrame</code> object. You can have patch and turtle variables defined by the same name as they are not stored in the same object.</p>
-<p>To create a global variable you create an R object.</p>
-<pre class="r"><code>score &lt;- 15</code></pre>
+<p>R objects which are neither worlds, patches or turtles can be seen as global variables.</p>
+<p>To create a global variable you create an R object. E.g., <code>score &lt;- 15</code>.</p>
+<p>Agent variables are places to store different values for an agent. An agent variable can be a patch or a turtle variable. Each <code>NLworld</code> object holds only one variable for the patches. A <code>NLworldStack</code> object holds several variables for the patches as the different world layers (i.e., the different <code>NLworld</code> stacked). Turtles variables are columns in the dataframe of the <code>SpatialPointsDataFrame</code> object that represent them. You can have patch and turtle variables defined by the same name as they are not stored in the same object.</p>
 <p>To create a new patch variable, you create a new <code>NLworld</code> with the same extent as the one(s) previously built and assign new values.</p>
 <pre class="r"><code>pQuality &lt;- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = 0, maxPycor = 10)
 pQuality[] &lt;- runif(n = length(w1), min = 0, max = 1) # for all patches, assign a random value between 0 and 1</code></pre>
-<p>Several turtles variables built-in into NetLogo are created as the same time when creating turtles in NetLogoR. To create a new turtle variable, … (to complete)</p>
-<pre class="r"><code>...</code></pre>
-<p>Turtle’s breed is a turtle variable and different breeds can be defined. You can have the breeds behaving differently, for example, you could have breeds called <code>sheep</code> and <code>wolf</code>, and have the wolves try to eat the sheep. You can either specify different breeds in the same turtles object or create two objects, one sheep and one wolf.</p>
+<p>Several turtles variables built-in into NetLogo are created as the same time when creating turtles in NetLogoR, besides their coordinates (i.e., “who”, “heading”, “breed”, and “color). New turtle variables can be created:</p>
+<pre class="r"><code>t1 &lt;- turtlesOwn (turtles = t1, tVar = &quot;sex&quot;, tVal = c(&quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;)) # now each turtle in t1 have a &quot;sex&quot; variable</code></pre>
+<p>Turtle’s breed is a turtle variable and you can have different breeds behaving differently. For example, you could have breeds called <code>sheep</code> and <code>wolf</code>, and have the wolves trying to eat the sheep. You can either specify different breeds in the same turtles object or create two objects, one sheep and one wolf.</p>
 <p>You define turtles’ breed by filling the breed column in the <code>SpatialPointsDataFrame</code>.</p>
-<pre class="r"><code>turtles &lt;- createTurtles(world = w1, n = 10, breed = c(rep(&quot;sheep&quot;, 5), rep(&quot;wolf&quot;, 5))) # 5 sheep and 5 wolves
+<pre class="r"><code>t2 &lt;- createTurtles(world = w1, n = 10, breed = c(rep(&quot;sheep&quot;, 5), rep(&quot;wolf&quot;, 5))) # 5 sheep and 5 wolves
 # OR
 sheep &lt;- createTurtles(world = w1, n = 5, breed = &quot;sheep&quot;) # 5 sheep
 wolves &lt;- createTurtles(world = w1, n = 5, breed = &quot;wolf&quot;) # 5 wolves</code></pre>
-<p>You can after define agentsets based on breeds.</p>
-<pre class="r"><code>sheep &lt;- turtles[turtles$breed == &quot;sheep&quot;,] # 5 sheeps
-wolves &lt;- turtles[turtles$breed == &quot;wolf&quot;,] # 5 wolves</code></pre>
 <p>One agent can change breed. If doing so, it is better to keep all the moving agents in the same object.</p>
-<pre class="r"><code>turtles[turtles$who == 0, &quot;breed&quot;] &lt;- &quot;wolf&quot; # the turtle number 0 which was &quot;sheep&quot; became &quot;wolf&quot;
-sheep[sheep$who == 0, &quot;breed&quot;] &lt;- &quot;wolf&quot; # confusing!</code></pre>
+<pre class="r"><code>...complete code &lt;- &quot;wolf&quot; # the turtle number 0 which was &quot;sheep&quot; became &quot;wolf&quot;
+...complete code &lt;- &quot;wolf&quot; # confusing!</code></pre>
 <p>Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.</p>
 <pre class="r"><code>pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents</code></pre>
 <p>Local variables may occur in NetLogoR as inherent to the R software. For example, variables only defined inside functions are local variables and therefore cannot be accessed outside of the functions.</p>
 </div>
 <div id="agentsets" class="section level3">
 <h3>Agentsets</h3>
-<p>A <code>NLworld*</code> object contains all patches and the <code>turtles</code> object contains all turtles. An agentset is a set of agents and you can construct agentsets that contain only some patches or some turtles. An agentset cannot contain the two agent types at once. A patch agentset is a matrix that contains some patches coordinates. A turtle agentset is a <code>SpatialPointDataFrame</code> object containing a subset of the turtles. Agentsets can then be passed on as an argument in functions. Agentsets can be redefined at any time.</p>
+<p>An agentset is a set of agents and you can construct agentsets that contain only some patches or some turtles. An agentset cannot contain the two agent types at once. A patch agentset is a <code>matrix</code> that contains coordinates for a subset of the world’s patches. A turtle agentset is a <code>SpatialPointDataFrame</code> object containing turtles. Agentsets can then be passed on as an argument in functions. Agentsets can be redefined at any time.</p>
 </div>
 <div id="world-topology" class="section level3">
 <h3>World topology</h3>
-<p>By default, a <code>NLworld*</code> is bounded so it does not “wrap”. Patches on the sides of the world will have fewer than 8 neighbors and turtles will not move beyond the edges of the world. What happen to the turtles when they reach the edge of the world must be defined.</p>
-<p>However you can make the world a torus (“wrap”), so that when a turtle moves past the edge of the world, it disappears and reappears on the opposite edge and every patch has the same number of neighbor patches. If you’re a patch on the edge of the world, some of your neighbors are on the opposite edge. The option for a torus world is an argument in the NetLogoR functions.</p>
+<p>By default, NetLogoR functions act as if the <code>NLworlds</code> is bounded and does not “wrap”. Patches on the sides of the world will have fewer than 8 neighbors and turtles will not move beyond the edges of the world. What happen to the turtles when they reach the edge of the world must be defined.</p>
+<p>However you can make the world a torus (“wrap”), so that every patch has the same number of neighbor patches (some are located on the other side of the world) and when a turtle moves past the edge of the world, it disappears and reappears on the opposite edge. The option for a torus world is an argument in some of the NetLogoR functions and can be set TRUE or FALSE.</p>
 </div>
 <div id="tick-counter" class="section level3">
 <h3>Tick counter</h3>
-<p>It is common that time passes in discrete steps. Time can be defined as a global variable in the model setup …</p>
-<pre class="r"><code>time &lt;- 0</code></pre>
-<p>… and then can be incremented in the model when needed (e.g., at the end of the procedure affecting all the agents).</p>
-<pre class="r"><code>time &lt;- time + 1</code></pre>
-<p>If a scheduler function is used in the model, time is handled with the scheduling of the functions.</p>
+<p>It is common that time passes in discrete steps. Time can be defined as a global variable in the model setup (e.g., <code>time &lt;- 0</code>) and then can be incremented in the model when needed (e.g., <code>time &lt;- time + 1</code>, at the end of the procedure affecting all the agents).</p>
+<p>If a for-loop or a scheduler function (e.g., see SpaDES package) is used in the model, time does not have to be explicitely defined with a global variable and can be handled internally.</p>
 </div>
 <div id="lists-and-strings" class="section level3">
 <h3>Lists and strings</h3>
@@ -184,7 +179,7 @@ sheep[sheep$who == 0, &quot;breed&quot;] &lt;- &quot;wolf&quot; # confusing!</co
 </div>
 <div id="math-and-random-numbers" class="section level3">
 <h3>Math and random numbers</h3>
-<p>R is a software dedicated for data management and statistical analyses. The notation and basic rules of math, as well as the random number generation, are inherent to the software. Please see R manuals for any related questions.</p>
+<p>R is a software dedicated for data management and statistical analyses. The notation and basic rules of math, as well as the random number generation, are inherent to the R software. Please see R manuals for any related questions.</p>
 </div>
 <div id="inputoutput" class="section level3">
 <h3>Input/output</h3>
@@ -193,7 +188,22 @@ sheep[sheep$who == 0, &quot;breed&quot;] &lt;- &quot;wolf&quot; # confusing!</co
 <div id="view-plot-screen-output" class="section level3">
 <h3>View, plot, screen output</h3>
 <p>There is no interface built-in as part of NetLogoR.</p>
-<p>However, you can still plot the agent positions in the world (i.e., “view” in NetLogo) as well as any other plots (e.g., the number of turtles through time ) on the R plot interface. You can also generate outputs on the screen using different functions. To do so, you need to specifically code for these procedures in the model using R functions and of different packages. Please refer to their manuals for any related questions.</p>
+<p>However, you can still plot the agent positions in the world (i.e., “view” in NetLogo) as well as any other plots (e.g., the number of turtles through time) on the R plot interface. You can also generate outputs on the screen using different functions. To do so, you need to specifically code for these procedures in the model using R functions and of different packages. Please refer to their manuals for any related questions.</p>
+</div>
+</div>
+<div id="how-to-build-a-model-using-netlogor" class="section level2">
+<h2>How to build a model using NetLogoR</h2>
+<p>The following steps describe how to build a general NetLogo type model in R using NetLogoR. Examples of R scripts are available in the “examples” folder.</p>
+<ul>
+<li><p>Open a new R script (using RStudio or an adapted text editor like Tinn-R) to write the code of the model in it. Save it under the name of the model in an appropriate folder.</p></li>
+<li><p>Start by naming and describing the model using the symbol <code>#</code> in front of each line to “comment” the information. This description section is not mandatory but very helpful. It can be considered like the “Info” tab in NetLogo but, in a R script, this section should be kept short and concise. Use the symbol <code>#</code> to also comment the code when building the model.</p></li>
+<li><p>Load the needed packages (e.g., NetLogoR) with the function <code>library()</code>. This can be done at any time in the code section but must appear before using any functions from a package. It is convenient to load all the packages needed at the beginning.</p></li>
+<li><p>Create a NLworld object with the function <code>createNLworld()</code> to create the world in which the agents will evolve. The name of the object to which the NLworld is assigned is treated as a patch variable. Defining the NLworld’s extent in the function <code>createNLworld()</code> is similar as going in the “Interface” tab in NetLogo and clicking on the “Settings” button to change the model settings.</p></li>
+<li><p>Define and assign values to the patches. By using <code>nameWorld[] &lt;- values</code>, you assign the values to all the patches in the world. Now you can start visualizing the world by plotting it (an empty world cannot be plot) using the function <code>Plot(nameWorld)</code> from the package SpaDES. This function is useful for plotting this type of model.</p></li>
+<li><p>Create the turtles (i.e., moving agents) with the function <code>createTurtles()</code>. You can then visualize the turtles by plotting them on the world with <code>Plot(nameTurtles, addTo = &quot;nameWorld&quot;)</code>.</p></li>
+<li><p>Define the needed global variables. Global variables can be defined at any time in the code but it must be done before they are used.</p></li>
+<li><p>Then build the main procedure for the model. A for-loop or a scheduler function (e.g., see SpaDES package) can be used to manage time. The functions placed inside will be iterated the number of time steps defined. The for-loop automatically increases the time step and the scheduler function internally manages time so no “tick” variable is necessary. Executing the for-loop of the scheduler function correponds in NetLogo as hitting the “Go” button in a forever mode. When using a for-loop, new functions created outside and called inside the for-loop must be loaded/placed before the for-loop in order to be known by R. The visualization can be updated at each time step and/or new visualizations can be plotted at the end when the iterations are over. Remember than plotting takes time to be executed and slow down the model.</p></li>
+</ul>
 </div>
 
 

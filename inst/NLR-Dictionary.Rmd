@@ -43,7 +43,7 @@ For the inverse dictionary, to find the NetLogo equivalents of the NetLogoR func
 * distancexy: NLdist() in NetLogoR
 
 * downhill: downhill() in NetLogoR
-* downhill4: downhill in NetLogoR
+* downhill4: downhill() in NetLogoR
 
 * dx: dx() in NetLogoR
 * dy: dy() in NetLogoR
