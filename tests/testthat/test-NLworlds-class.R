@@ -65,7 +65,6 @@ test_that("cellFromPxcorPycor works",{
   # Same as for w1
   cellNum <- cellFromPxcorPycor(world = ws, pxcor = c(9,0,1), pycor = c(0, 0, 9))
   expect_identical(cellNum, c(100, 91, 2))
-
 })
 
 test_that("PxcorPycorFromCell works",{
@@ -81,5 +80,4 @@ test_that("PxcorPycorFromCell works",{
   # Same as for w1
   pCoords1 <- PxcorPycorFromCell(world = ws, cellNum = c(100, 91, 2))
   expect_identical(pCoords1, pCoords2)
-
 })

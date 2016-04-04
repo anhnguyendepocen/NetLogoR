@@ -285,32 +285,10 @@ setGeneric(
 #' @rdname cellFromPxcorPycor
 setMethod(
   "cellFromPxcorPycor",
-  signature = c("NLworld", "numeric", "numeric"),
+  signature = c("NLworlds", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
-
-    pxcor_ <- world@pxcor
-    pycor_ <- world@pycor
-    cell_ <- 1:(world@nrows * world@ncols)
-
-    df1 <- data.frame(pxcor_, pycor_, cell_)
-    df2 <- data.frame(pxcor_ = pxcor, pycor_ = pycor, rank = 1:length(pxcor))
-    df3 <- merge(df1, df2, all.y = TRUE)
-    df4 <- df3[order(df3[,"rank"]),]
-
-    return(as.numeric(df4$cell_))
-  }
-)
-
-#' @export
-#' @rdname cellFromPxcorPycor
-setMethod(
-  "cellFromPxcorPycor",
-  signature = c("NLworldStack", "numeric", "numeric"),
-  definition = function(world, pxcor, pycor) {
-
-    world_l <- world[[1]]
-    cellFromPxcorPycor(world = world_l, pxcor = pxcor, pycor = pycor)
-
+    cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
+    return(cellNum)
   }
 )
 
@@ -349,32 +327,11 @@ setGeneric(
 #' @rdname PxcorPycorFromCell
 setMethod(
   "PxcorPycorFromCell",
-  signature = c("NLworld", "numeric"),
+  signature = c("NLworlds", "numeric"),
   definition = function(world, cellNum) {
-
-    pxcor_ <- world@pxcor
-    pycor_ <- world@pycor
-    cell_ <- 1:(world@nrows * world@ncols)
-
-    df1 <- data.frame(pxcor_, pycor_, cell_)
-    df2 <- data.frame(cellNum, rank = 1:length(cellNum))
-    df3 <- merge(df1, df2, by.x = "cell_", by.y = "cellNum", all.y = TRUE)
-    df4 <- df3[order(df3[,"rank"]),]
-
-    pCoords <- cbind(pxcor = df4$pxcor_, pycor = df4$pycor_)
+    XY <- xyFromCell(world, cellNum)
+    pCoords <- cbind(pxcor = XY[,1], pycor = XY[,2])
     return(pCoords)
   }
 )
 
-#' @export
-#' @rdname PxcorPycorFromCell
-setMethod(
-  "PxcorPycorFromCell",
-  signature = c("NLworldStack", "numeric"),
-  definition = function(world, cellNum) {
-
-    world_l <- world[[1]]
-    PxcorPycorFromCell(world = world_l, cellNum = cellNum)
-
-  }
-)

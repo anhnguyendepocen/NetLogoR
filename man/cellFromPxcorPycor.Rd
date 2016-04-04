@@ -3,15 +3,12 @@
 \docType{methods}
 \name{cellFromPxcorPycor}
 \alias{cellFromPxcorPycor}
-\alias{cellFromPxcorPycor,NLworld,numeric,numeric-method}
-\alias{cellFromPxcorPycor,NLworldStack,numeric,numeric-method}
+\alias{cellFromPxcorPycor,NLworlds,numeric,numeric-method}
 \title{Cells numbers from patches coordinates}
 \usage{
 cellFromPxcorPycor(world, pxcor, pycor)
 
-\S4method{cellFromPxcorPycor}{NLworld,numeric,numeric}(world, pxcor, pycor)
-
-\S4method{cellFromPxcorPycor}{NLworldStack,numeric,numeric}(world, pxcor, pycor)
+\S4method{cellFromPxcorPycor}{NLworlds,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
 \item{world}{NLworlds object.}

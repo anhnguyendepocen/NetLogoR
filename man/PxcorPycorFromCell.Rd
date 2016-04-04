@@ -3,15 +3,12 @@
 \docType{methods}
 \name{PxcorPycorFromCell}
 \alias{PxcorPycorFromCell}
-\alias{PxcorPycorFromCell,NLworld,numeric-method}
-\alias{PxcorPycorFromCell,NLworldStack,numeric-method}
+\alias{PxcorPycorFromCell,NLworlds,numeric-method}
 \title{Patches coordinates from cells numbers}
 \usage{
 PxcorPycorFromCell(world, cellNum)
 
-\S4method{PxcorPycorFromCell}{NLworld,numeric}(world, cellNum)
-
-\S4method{PxcorPycorFromCell}{NLworldStack,numeric}(world, cellNum)
+\S4method{PxcorPycorFromCell}{NLworlds,numeric}(world, cellNum)
 }
 \arguments{
 \item{world}{NLworlds object.}
