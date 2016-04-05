@@ -301,8 +301,10 @@ setMethod(
   definition = function(agents, var) {
     turtles <- cbind(agents@coords, agents@data)
     sortData <- turtles[order(turtles[,var]),]
-    sortTurtles <- SpatialPointsDataFrame(coords = sortData[,c(1,2)], data = sortData[,3:ncol(sortData)])
-    return(sortTurtles)
+
+    agents@coords <- cbind(xcor = sortData[,1], ycor = sortData[,2])
+    agents@data = sortData[,3:ncol(sortData)]
+    return(agents)
   }
 )
 

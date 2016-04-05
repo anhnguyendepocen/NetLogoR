@@ -311,7 +311,7 @@ setMethod(
       fdYcor[outXY] <- turtles@coords[,2][outXY]
     }
 
-    turtles <- SpatialPointsDataFrame(coords = cbind(xcor = fdXcor, ycor = fdYcor), data = turtles@data)
+    turtles@coords <- cbind(xcor = fdXcor, ycor = fdYcor)
     return(turtles)
   }
 )
@@ -665,10 +665,15 @@ setMethod(
   "die",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
-    iTurtles <- match(who, turtles@data$who)
-    newCoords <- cbind(xcor = turtles@coords[-iTurtles,1], ycor = turtles@coords[-iTurtles,2])
-    newData <- turtles@data[-iTurtles,]
-    newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
+
+    whoTurtles <- turtles@data$who
+    toSelect <- whoTurtles[which(!whoTurtles %in% who)]
+    if(length(toSelect) == 0){
+      newTurtles <- noTurtles()
+    } else {
+      newTurtles <- turtle(turtles, toSelect)
+    }
+
     return(newTurtles)
   }
 )
@@ -1196,10 +1201,8 @@ setMethod(
     newHeading[newHeading < 0] <- newHeading[newHeading < 0] + 360
     newHeading[newHeading >= 360] <- newHeading[newHeading >= 360] - 360
 
-    newData <- turtles@data
-    newData[, "heading"] <- newHeading
-    newTurtles <- SpatialPointsDataFrame(coords = turtles@coords, data = newData)
-    return(newTurtles)
+    turtles@data$heading <- newHeading
+    return(turtles)
   }
 )
 
@@ -1753,19 +1756,18 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "numeric", "missing", "ANY"),
   definition = function(turtles, xcor, ycor, torus) {
 
+    turtles@data$prevX <- turtles@coords[,1]
+    turtles@data$prevY <- turtles@coords[,2]
+
     if(length(xcor) == 1 & length(turtles) != 1){
       xcor <- as.numeric(rep(xcor, length(turtles)))
     }
     if(length(ycor) == 1 & length(turtles) != 1){
       ycor <- as.numeric(rep(ycor, length(turtles)))
     }
-    tCoords <- cbind(xcor, ycor)
+    turtles@coords <- cbind(xcor, ycor)
 
-    turtles@data$prevX <- turtles@coords[,1]
-    turtles@data$prevY <- turtles@coords[,2]
-
-    newTurtles <- SpatialPointsDataFrame(coords = tCoords, data = turtles@data)
-    return(newTurtles)
+    return(turtles)
   }
 )
 
