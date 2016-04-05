@@ -315,6 +315,7 @@ setMethod(
 #'
 #' @export
 #' @importFrom SpaDES adj
+#' @importFrom data.table data.table
 #' @docType methods
 #' @rdname neighbors
 #'
@@ -349,8 +350,15 @@ setMethod(
     } else {
 
       ## Faster for larger numbers of cellnum
-      neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
-                            by.x = "from", by.y = "cellNum")
+      # Slow
+      # neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
+      #                       by.x = "from", by.y = "cellNum")
+
+      # Faster
+      neighborsPCoords <- data.table(neighbors, pCoords, key = "from")
+      cells <- data.table(cellNum, id = 1:length(cellNum), key = "cellNum")
+      neighbors_df <- unique(as.data.frame(merge(neighborsPCoords, cells, by.x = "from", by.y  = "cellNum", all.x = TRUE)))
+
       listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
 
     }
