@@ -339,29 +339,15 @@ setMethod(
 
     pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
 
-    if(length(cellNum) < 1000){
+    neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
+                          by.x = "from", by.y = "cellNum")
+    listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
 
-      ## Faster for small number of cellnum
-      listAgents <- list()
-      for(i in 1:length(cellNum)) {
-        listAgents[[i]] <- unique(pCoords[neighbors[,1] == cellNum[i],])
-      }
-
-    } else {
-
-      ## Faster for larger numbers of cellnum
-      # Slow
-      # neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
-      #                       by.x = "from", by.y = "cellNum")
-
-      # Faster
-      neighborsPCoords <- data.table(neighbors, pCoords, key = "from")
-      cells <- data.table(cellNum, id = 1:length(cellNum), key = "cellNum")
-      neighbors_df <- unique(as.data.frame(merge(neighborsPCoords, cells, by.x = "from", by.y  = "cellNum", all.x = TRUE)))
-
-      listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
-
-    }
+    # listAgents <- vector("list", length(cellNum))
+    # names(listAgents) <- cellNum
+    # cellCoords <- unique(data.frame(pCoords, cellNum))
+    # listCell <- lapply(split(cellCoords[,c(1,2)], cellCoords[,3]), as.matrix)
+    # combine the two lists
 
     return(listAgents)
   }

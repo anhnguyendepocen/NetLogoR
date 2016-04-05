@@ -201,7 +201,7 @@ test_that("neighbors works with patches", {
 
   n8 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
-  expect_equivalent(n8[[2]], n82)
+  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
 
   w1[] <- runif(100)
   w2 <- w1
@@ -213,7 +213,7 @@ test_that("neighbors works with patches", {
   expect_equivalent(n4[[1]], n41)
   expect_equivalent(n4[[3]], n43)
   n8 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
-  expect_equivalent(n8[[2]], n82)
+  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
 
   # With torus = TRUE
   nCorner <- neighbors(world = w1, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = FALSE)
@@ -257,7 +257,7 @@ test_that("neighbors works with turtles", {
 
   n8 <- neighbors(world = w1, agents = t1, nNeighbors = 8)
   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
-  expect_equivalent(n8[[2]], n82)
+  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
 
   w1[] <- runif(100)
   w2 <- w1
@@ -269,7 +269,7 @@ test_that("neighbors works with turtles", {
   expect_equivalent(n4[[1]], n41)
   expect_equivalent(n4[[3]], n43)
   n8 <- neighbors(world = ws, agents = t1, nNeighbors = 8)
-  expect_equivalent(n8[[2]], n82)
+  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
 
   # With torus = TRUE
   t1 <- createTurtles(n = 1, coords = cbind(xcor = 0.2, ycor = 0.3))
