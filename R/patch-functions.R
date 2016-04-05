@@ -334,21 +334,37 @@ setMethod(
   signature = c(world = "NLworlds", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
-    cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+      if (TRUE) { # This is just to force data.frame version for now.
+       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+       neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
 
-    pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
+       pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
 
-    neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
-                          by.x = "from", by.y = "cellNum")
-    listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
+       neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
+                             by.x = "from", by.y = "cellNum")
+       listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
+
+     } else {
+      cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+      neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+      cellNum <- data.table(cellNum, id=seq_len(length(cellNum)))
+      pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
+      # there is no "unique" in the next line... not clear what it was doing in the
+      #  data.frame code above.
+      neighbors <- data.table(neighbors, pCoords, id=rep(cellNum[,id], nNeighbors))
+      setkey(cellNum, id)
+      setkey(neighbors, id)
+      neighbors_dt <- neighbors[cellNum][,cellNum:=NULL]
+      browser()
+      #setkey(neighbors_dt, from, to, id)
+      listAgents <- lapply(split(neighbors_dt[,list(pxcor,pycor)], neighbors_dt[,id]), as.matrix)
+    })
 
     # listAgents <- vector("list", length(cellNum))
     # names(listAgents) <- cellNum
     # cellCoords <- unique(data.frame(pCoords, cellNum))
     # listCell <- lapply(split(cellCoords[,c(1,2)], cellCoords[,3]), as.matrix)
     # combine the two lists
-
     return(listAgents)
   }
 )
