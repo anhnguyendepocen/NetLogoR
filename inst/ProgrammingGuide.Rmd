@@ -68,10 +68,9 @@ sheep <- createTurtles(world = w1, n = 5, breed = "sheep") # 5 sheep
 wolves <- createTurtles(world = w1, n = 5, breed = "wolf") # 5 wolves
 ```
 
-One agent can change breed. If doing so, it is better to keep all the moving agents in the same object.
+One agent can change breed.
 ```{r, eval=FALSE}
-...complete code <- "wolf" # the turtle number 0 which was "sheep" became "wolf"
-...complete code <- "wolf" # confusing!
+t2 <- set(turtles = t2, agents = turtle(t2, 0), var = "breed", val = "wolf") # the turtle number 0 which was "sheep" became "wolf"
 ```
 
 Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.
@@ -138,13 +137,13 @@ Use the symbol `#` to also comment the code when building the model.
 
 * Load the needed packages (e.g., NetLogoR) with the function `library()`. This can be done at any time in the code section but must appear before using any functions from a package. It is convenient to load all the packages needed at the beginning.
 
+* Define the global variables as R objects. Global variables can be defined at any time in the code but it must be done before they are used. Buttons in NetLogo used to set variables must be defined as global variables at the beginning of the R script.
+
 * Create a NLworld object with the function `createNLworld()` to create the world in which the agents will evolve. The name of the object to which the NLworld is assigned is treated as a patch variable. Defining the NLworld's extent in the function `createNLworld()` is similar as going in the "Interface" tab in NetLogo and clicking on the "Settings" button to change the model settings. 
 
 * Define and assign values to the patches. By using `nameWorld[] <- values`, you assign the values to all the patches in the world. Now you can start visualizing the world by plotting it (an empty world cannot be plot) using the function `Plot(nameWorld)` from the package SpaDES. This function is useful for plotting this type of model.
 
 * Create the turtles (i.e., moving agents) with the function `createTurtles()`. You can then visualize the turtles by plotting them on the world with `Plot(nameTurtles, addTo = "nameWorld")`.
-
-* Define the needed global variables. Global variables can be defined at any time in the code but it must be done before they are used.
 
 * Then build the main procedure for the model. A for-loop or a scheduler function (e.g., see SpaDES package) can be used to manage time. The functions placed inside will be iterated the number of time steps defined. The for-loop automatically increases the time step and the scheduler function internally manages time so no "tick" variable is necessary. 
 Executing the for-loop of the scheduler function correponds in NetLogo as hitting the "Go" button in a forever mode.

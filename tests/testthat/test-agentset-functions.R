@@ -521,3 +521,34 @@ test_that("inCone works",{
   expect_equivalent(t13[[1]], turtle(t1, c(0,1,4)))
 })
 
+test_that("set works",{
+  # Set work with patches
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1[] <- 1:25
+  w1 <- set(world = w1, agents = patches(w1), val = 0)
+  expect_equivalent(values(w1), rep(0, length(w1)))
+  w1 <- set(world = w1, agents = patches(w1), val = 1:25)
+  expect_equivalent(values(w1), 1:25)
+  w1 <- set(world = w1, agents = patch(w1, 0, 0), val = 100)
+  expect_equivalent(w1[0,0], 100)
+
+  w1[] <- 1:25
+  w2 <- w1
+  w2[] <- 25:1
+  w3 <- NLstack(w1, w2)
+  w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 0)
+  expect_equivalent(values(w3)[,"w1"], rep(0, length(w1)))
+  w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 1:25)
+  expect_equivalent(values(w3)[,"w1"], 1:25)
+  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = "w1", val = 100)
+  expect_equivalent(w3[0,0][1], 100)
+
+  # Set work with turtles
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
+  t2 <- set(turtles = t1, agents = t1, var = "heading", val = 0)
+  expect_equivalent(t2@data$heading, rep(0, length(t2)))
+  t3 <- set(turtles = t1,agents = turtle(t1, 0), var = "xcor", val = 3)
+  expect_equivalent(t3@coords[,1], c(3, 1, 2, 3, 4))
+  t4 <- set(turtles = t1,agents = turtle(t1, c(0,1)), var = "xcor", val = 3)
+  expect_equivalent(t4@coords[,1], c(3, 3, 2, 3, 4))
+})

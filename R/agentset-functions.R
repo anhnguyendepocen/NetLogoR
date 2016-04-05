@@ -1610,3 +1610,97 @@ setMethod(
     return(list_agents)
   }
 )
+
+
+################################################################################
+#' Set an agents variable
+#'
+#' Assign values to the \code{agents} for their selected variable.
+#'
+#' @inheritParams fargs
+#'
+#' @param val Numeric or character. Vector of length 1 or length \code{count(agents)}.
+#'
+#' @return NLworlds object with the values \code{val} assigned to the patches in
+#'         \code{agents}, or
+#'
+#'         SpatialPointsDataFrame representing the \code{turtles} with
+#'         the values \code{tVal} assigned to the variable \code{tVar} for the \code{agents}.
+#'
+#' @details If \code{agents} are patches, \code{world} must be provided and \code{turtles}
+#'          must not be provided. If \code{agents} are turtles, \code{turtles} must be
+#'          provided and \code{world} must not be provided.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#set}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#'
+#'
+#' @export
+#' @importFrom prodlim row.match
+#' @docType methods
+#' @rdname set
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "set",
+  function(world, turtles, agents, var, val) {
+    standardGeneric("set")
+  })
+
+#' @export
+#' @rdname set
+setMethod(
+  "set",
+  signature = c(world = "NLworld", turtles = "missing", agents = "matrix", var = "missing", val = "ANY"),
+  definition = function(world, agents, val) {
+
+    valuesW <- values(world)
+    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    valuesW[cells] <- val
+    world[] <- valuesW
+
+    return(world)
+})
+
+#' @export
+#' @rdname set
+setMethod(
+  "set",
+  signature = c(world = "NLworldStack", turtles = "missing", agents = "matrix", var = "character", val = "ANY"),
+  definition = function(world, agents, var, val) {
+
+    valuesW <- values(world)
+    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    valuesW[cells, var] <- val
+    colNum <- match(var, colnames(valuesW))
+    world@layers[[colNum]][] <- valuesW[,var]
+
+    return(world)
+})
+
+#' @export
+#' @rdname set
+setMethod(
+  "set",
+  signature = c(world = "missing", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame",
+                var = "character", val = "ANY"),
+  definition = function(turtles, agents, var, val) {
+
+    iAgents <- row.match(agents@data, turtles@data)
+
+    if(var == "xcor"){
+      turtles@coords[iAgents, 1] <- val
+    } else if(var == "ycor"){
+      turtles@coords[iAgents, 2] <- val
+    } else {
+      turtles@data[iAgents, var] <- val
+    }
+
+    return(turtles)
+})

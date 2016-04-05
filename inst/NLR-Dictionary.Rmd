@@ -136,6 +136,8 @@ For the inverse dictionary, to find the NetLogo equivalents of the NetLogoR func
 
 * right (rt): right() in NetLogoR
 
+* set: set() in NetLogoR
+
 * sort-on: sortOn() in NetLogoR
 
 * subtract-headings: subHeadings() in NetLogoR

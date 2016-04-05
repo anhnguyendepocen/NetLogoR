@@ -68,7 +68,7 @@ If missing, colors are assigned using the function \code{rainbow(n)}.}
 
 \item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
 
-\item{var}{Character. The name of the \code{agents} variable to evaluate.
+\item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a
 \code{NLworld} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a \code{NLworldStack}
