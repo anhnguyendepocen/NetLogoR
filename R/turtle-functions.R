@@ -1334,11 +1334,20 @@ setMethod(
     allPatches$cellNum <- cellFromPxcorPycor(world = world, pxcor = allPatches$pxcor, pycor = allPatches$pycor)
     allPatches$pVal <- pValues[allPatches$cellNum]
 
-    pMin <- aggregate(pVal ~ id, allPatches, function(x) min(x)) # minimum patch value per id
-    pMinCoords <- merge(pMin, allPatches)
-    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
+    # Slow
+    # pMin <- aggregate(pVal ~ id, allPatches, function(x) min(x)) # minimum patch value per id
+    # pMinCoords <- merge(pMin, allPatches)
+    # pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
+    # pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
+    # pMinCoords2 <- cbind(pxcor = pMinCoords1[,3], pycor = pMinCoords1[,4])
+
+    # Faster
+    rows <- split(1:nrow(allPatches), allPatches$id)
+    rowMin <- sapply(rows, function(rowi) {rowi[which.min(allPatches$pVal[rowi])]}) # minimum patch value per id
+    pMinCoords <- allPatches[rowMin,]
+    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 3),] # select randomly one row per id
     pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
-    pMinCoords2 <- cbind(pxcor = pMinCoords1[,3], pycor = pMinCoords1[,4])
+    pMinCoords2 <- cbind(pxcor = pMinCoords1[,1], pycor = pMinCoords1[,2])
 
     newTurtles <- face(world = world, turtles = turtles, agents2 = pMinCoords2, torus = torus)
     newTurtles <- moveTo(turtles = newTurtles, agents = pMinCoords2)
