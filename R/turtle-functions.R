@@ -1130,10 +1130,8 @@ setMethod(
   definition = function(world, turtles, agents2, torus) {
 
     newHeading <- towards(world = world, agents = turtles, agents2 = agents2, torus = torus)
-    newData <- turtles@data
-    newData[, "heading"] <- newHeading
-    newTurtles <- SpatialPointsDataFrame(coords = turtles@coords, data = newData)
-    return(newTurtles)
+    turtles@data$heading <- newHeading
+    return(turtles)
 
   }
 )
