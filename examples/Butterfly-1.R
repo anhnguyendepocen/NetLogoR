@@ -24,17 +24,20 @@ pElevation <- ifelse(elev1 > elev2, elev1, elev2)
 elevation[] <- pElevation
 
 # Visualize the world
-Plot(elevation) # Plot function from SpaDES
+# Plot(elevation) # Plot function from SpaDES
+plot(elevation)
 
 # Some of the patches have a negative elevation value
 pElevation[pElevation < 0] <- 0 # all negative values are set to 0
 elevation[] <- pElevation # reassign the patches values
-Plot(elevation) # better!
+# Plot(elevation) # better!
+plot(elevation)
 
 # Create turtles (one butterfly in this model)
 t1 <- createTurtles(n = 1, coords = cbind(xcor = 85, ycor = 95)) # the butterfly's initial location is [85, 95]
 # Visualize the turtle
-Plot(t1, addTo = "elevation") # need to add the turtle on the plotted world
+# Plot(t1, addTo = "elevation") # need to add the turtle on the plotted world
+points(t1, pch = 16, col = t1@data$color)
 
 # Define the global variable needed
 q <- 0.4 # q is the probability to move directly to the highest surrounding patch
@@ -64,6 +67,7 @@ for(time in 1:1000){ # what is inside this loop will be iterated 1000 times
   }
 
   # Visualize each new position for t1
-  Plot(t1, addTo = "elevation") # plot the new position of the turtle instead of its track
+  # Plot(t1, addTo = "elevation") # plot the new position of the turtle instead of its track
+  points(t1, pch = 16, col = t1@data$color)
 }
 
