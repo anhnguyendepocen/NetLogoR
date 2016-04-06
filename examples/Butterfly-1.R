@@ -9,6 +9,7 @@
 
 library(NetLogoR)
 library(SpaDES) # useful for plotting
+library(Hmisc) # mApply
 
 # Create a world with the desired extent
 elevation <- createNLworld(minPxcor = 0, maxPxcor = 149, minPycor = 0, maxPycor = 149)
@@ -21,20 +22,15 @@ elev1 <- 100 - NLdist(world = elevation, agents = patches(elevation), agents2 = 
 elev2 <- 50 - NLdist(world = elevation, agents = patches(elevation), agents2 = cbind(x = 120, y = 100))
 pElevation <- ifelse(elev1 > elev2, elev1, elev2)
 # Assign the elevation values to the patches
-elevation[] <- pElevation
+elevation[] <- pElevation # when assigning values to all patches, this is faster than using set()
 
 # Visualize the world
 # Plot(elevation) # Plot function from SpaDES
 plot(elevation)
 
-# Some of the patches have a negative elevation value
-pElevation[pElevation < 0] <- 0 # all negative values are set to 0
-elevation[] <- pElevation # reassign the patches values
-# Plot(elevation) # better!
-plot(elevation)
-
 # Create turtles (one butterfly in this model)
 t1 <- createTurtles(n = 1, coords = cbind(xcor = 85, ycor = 95)) # the butterfly's initial location is [85, 95]
+# t1 <- createTurtles(n = 100, coords = cbind(xcor = 85, ycor = 95)) # cteate 100 butterflies
 # Visualize the turtle
 # Plot(t1, addTo = "elevation") # need to add the turtle on the plotted world
 points(t1, pch = 16, col = t1@data$color)
@@ -59,15 +55,15 @@ for(time in 1:1000){ # what is inside this loop will be iterated 1000 times
     # Or move the turtle t1 to one of its neighbor patches at random in the elevation world
     # Creating local variables instead of putting everything in the same one line code helps to understand
     # It is also useful for debugging
-    allNeighbors <- neighbors(world = elevation, agents = t1, nNeighbors = 8)[[1]]
-    # [[1]] is needed to access to the neighbors of t1 because neighbors() returns a list of length t1
-    oneNeighbor <- oneOf(allNeighbors)
+    allNeighbors <- neighbors(world = elevation, agents = t1, nNeighbors = 8)
+    oneNeighbor <- mApply(X = allNeighbors[, c("pxcor", "pycor")], INDEX = as.factor(allNeighbors[, "id"]), FUN = oneOf, keepmatrix = TRUE)
     t1 <- moveTo(turtles = t1, agents = oneNeighbor)
 
   }
 
   # Visualize each new position for t1
   # Plot(t1, addTo = "elevation") # plot the new position of the turtle instead of its track
-  points(t1, pch = 16, col = t1@data$color)
+  # points(t1, pch = 16, col = t1@data$color)
+
 }
 
