@@ -462,9 +462,8 @@ setMethod(
   "withMax",
   signature = c("matrix", "NLworld", "missing"),
   definition = function(agents, world) {
-    pxcor <- agents[,1]
-    pycor <- agents[,2]
-    val <- world[pxcor,pycor]
+
+    val <- of(world = world, agents = agents)
 
     if(length(val[is.na(val)]) == length(val)){
       stop("patches' values are all NAs")
@@ -494,7 +493,9 @@ setMethod(
   "withMax",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, var) {
-    val_var <- of(turtles = agents, tVar = var)
+
+    val_var <- of(agents = agents, var = var)
+
     if(length(val_var[is.na(val_var)] == length(val_var))){
       stop("var equals to NA")
     } else {
@@ -560,9 +561,8 @@ setMethod(
   "withMin",
   signature = c("matrix", "NLworld", "missing"),
   definition = function(agents, world) {
-    pxcor <- agents[,1]
-    pycor <- agents[,2]
-    val <- world[pxcor,pycor]
+
+    val <- of(world = world, agents = agents)
 
     if(length(val[is.na(val)]) == length(val)){
       stop("patches' values are all NAs")
@@ -592,7 +592,8 @@ setMethod(
   "withMin",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, var) {
-    val_var <- of(turtles = agents, tVar = var)
+
+    val_var <- of(agents = agents, var = var)
     if(length(val_var[is.na(val_var)] == length(val_var))){
       stop("var equals to NA")
     } else {
@@ -1131,9 +1132,7 @@ setMethod(
       return(agents)
     } else {
 
-      pxcor <- agents[,1]
-      pycor <- agents[,2]
-      val <- world[pxcor, pycor]
+      val <- of(world = world, agents = agents)
       agentsVal <- cbind(val, agents)
       agentsVal <- agentsVal[order(-agentsVal[,"val"]),] # decreasing order
 

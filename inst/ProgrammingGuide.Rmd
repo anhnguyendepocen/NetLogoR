@@ -50,6 +50,7 @@ Agent variables are places to store different values for an agent. An agent vari
 To create a new patch variable, you create a new `NLworld` with the same extent as the one(s) previously built and assign new values. 
 ```{r, eval=FALSE}
 pQuality <- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = 0, maxPycor = 10)
+# When assigning values to all the pacthes in the world, "world[] <- values" is faster than using set().
 pQuality[] <- runif(n = length(w1), min = 0, max = 1) # for all patches, assign a random value between 0 and 1
 ```
 
@@ -75,7 +76,10 @@ t2 <- set(turtles = t2, agents = turtle(t2, 0), var = "breed", val = "wolf") # t
 
 Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.
 ```{r, eval=FALSE}
-pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents
+# When returning the value for a single patch, "world[pxcor,pycor]" is faster than using of().
+pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents.
+# For multiple patches
+of(world = pQuality, agents = patch(w1, c(0,0,0), c(0,1,2))) # reports the value of the patches [pxcor = 0, pycor = 0], [pxcor = 0, pycor = 1] and [pxcor = 0, pycor = 2]
 ```
 
 Local variables may occur in NetLogoR as inherent to the R software. For example, variables only defined inside functions are local variables and therefore cannot be accessed outside of the functions.

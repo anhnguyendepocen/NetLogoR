@@ -1174,9 +1174,9 @@ setMethod(
 #'
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
-#' of(t1, tVar = "heading")
+#' of(agents = t1, var = "heading")
 #' t1 <- left(turtles = t1, angle = 180)
-#' of(t1, tVar = "heading")
+#' of(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -1228,9 +1228,9 @@ setMethod(
 #'
 #' @examples
 #' t1 <- createTurtles(n = 10, world = w1)
-#' of(t1, tVar = "heading")
+#' of(agents = t1, var = "heading")
 #' t1 <- right(turtles = t1, angle = 180)
-#' of(t1, tVar = "heading")
+#' of(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -2853,21 +2853,17 @@ setMethod(
 
 
 ################################################################################
-#' Values of a turtles variable
+#' Values of an agents variable
 #'
-#' Report the \code{turtles} values for the requested variable.
+#' Report the \code{agents} values for the requested variable.
 #'
 #' @inheritParams fargs
 #'
-#' @param tVar    Character. The name of one turtles' variable to report. Can be equal to
-#'                \code{"coords"}, \code{"xcor"},
-#'                \code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
-#'                \code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
-#'                any of the variables created with \code{turtlesOwn()}.
-#'
-#' @return Vector of \code{tVar} values for the \code{turtles}. The class depends
+#' @return Vector of values for the \code{agents}. The class depends
 #'         of the variable class. The order of the vector follows the order
-#'         of the \code{turtles}.
+#'         of the \code{agents}.
+#'
+#' @details If \code{agents} are turtles, \code{world} must not be provided.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#of}
 #'
@@ -2877,8 +2873,10 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1[] <- 1:25
+#' of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' of(turtles = t1, tVar = "heading")
+#' of(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -2889,7 +2887,7 @@ setMethod(
 #'
 setGeneric(
   "of",
-  function(turtles, tVar) {
+  function(world, agents, var) {
     standardGeneric("of")
   })
 
@@ -2897,19 +2895,38 @@ setGeneric(
 #' @rdname of
 setMethod(
   "of",
-  signature = c("SpatialPointsDataFrame", "character"),
-  definition = function(turtles, tVar) {
-    if(tVar == "coords"){
-      return(turtles@coords)
-    } else if(tVar == "xcor"){
-      return(turtles@coords[,1])
-    } else if(tVar == "ycor"){
-      return(turtles@coords[,2])
-    } else if(tVar == "prevCoords"){
-      return(cbind(turtles@data$prevX, turtles@data$prevY))
-    } else {
-      return(turtles@data[,tVar])
-    }
-  }
-)
+  signature = c("missing", "SpatialPointsDataFrame", "character"),
+  definition = function(agents, var) {
 
+    if(var == "xcor"){
+      return(agents@coords[,1])
+    } else if(var == "ycor"){
+      return(agents@coords[,2])
+    } else {
+      return(agents@data[,var])
+    }
+})
+
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("NLworld", "matrix", "missing"),
+  definition = function(world, agents) {
+
+    valuesW <- values(world)
+    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    return(valuesW[cells])
+})
+
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("NLworldStack", "matrix", "character"),
+  definition = function(world, agents, var) {
+
+    valuesW <- values(world)
+    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    return(valuesW[cells, var])
+})

@@ -143,6 +143,7 @@ t1 &lt;- fd(world = w1, turtles = t1, dist = 1) # move all the turtles by a dist
 <p>Agent variables are places to store different values for an agent. An agent variable can be a patch or a turtle variable. Each <code>NLworld</code> object holds only one variable for the patches. A <code>NLworldStack</code> object holds several variables for the patches as the different world layers (i.e., the different <code>NLworld</code> stacked). Turtles variables are columns in the dataframe of the <code>SpatialPointsDataFrame</code> object that represent them. You can have patch and turtle variables defined by the same name as they are not stored in the same object.</p>
 <p>To create a new patch variable, you create a new <code>NLworld</code> with the same extent as the one(s) previously built and assign new values.</p>
 <pre class="r"><code>pQuality &lt;- createNLworld(minPxcor = 0, maxPxcor = 10, minPycor = 0, maxPycor = 10)
+# When assigning values to all the pacthes in the world, &quot;world[] &lt;- values&quot; is faster than using set().
 pQuality[] &lt;- runif(n = length(w1), min = 0, max = 1) # for all patches, assign a random value between 0 and 1</code></pre>
 <p>Several turtles variables built-in into NetLogo are created as the same time when creating turtles in NetLogoR, besides their coordinates (i.e., “who”, “heading”, “breed”, and “color). New turtle variables can be created:</p>
 <pre class="r"><code>t1 &lt;- turtlesOwn (turtles = t1, tVar = &quot;sex&quot;, tVal = c(&quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;)) # now each turtle in t1 have a &quot;sex&quot; variable</code></pre>
@@ -155,7 +156,10 @@ wolves &lt;- createTurtles(world = w1, n = 5, breed = &quot;wolf&quot;) # 5 wolv
 <p>One agent can change breed.</p>
 <pre class="r"><code>t2 &lt;- set(turtles = t2, agents = turtle(t2, 0), var = &quot;breed&quot;, val = &quot;wolf&quot;) # the turtle number 0 which was &quot;sheep&quot; became &quot;wolf&quot;</code></pre>
 <p>Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.</p>
-<pre class="r"><code>pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents</code></pre>
+<pre class="r"><code># When returning the value for a single patch, &quot;world[pxcor,pycor]&quot; is faster than using of().
+pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents.
+# For multiple patches
+of(world = pQuality, agents = patch(w1, c(0,0,0), c(0,1,2))) # reports the value of the patches [pxcor = 0, pycor = 0], [pxcor = 0, pycor = 1] and [pxcor = 0, pycor = 2]</code></pre>
 <p>Local variables may occur in NetLogoR as inherent to the R software. For example, variables only defined inside functions are local variables and therefore cannot be accessed outside of the functions.</p>
 </div>
 <div id="agentsets" class="section level3">

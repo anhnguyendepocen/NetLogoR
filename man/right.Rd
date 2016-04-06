@@ -28,9 +28,9 @@ If a given \code{angle} value is negative, then the turtle rotates to the left.
 }
 \examples{
 t1 <- createTurtles(n = 10, world = w1)
-of(t1, tVar = "heading")
+of(agents = t1, var = "heading")
 t1 <- right(turtles = t1, angle = 180)
-of(t1, tVar = "heading")
+of(agents = t1, var = "heading")
 
 
 }

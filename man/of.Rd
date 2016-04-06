@@ -3,35 +3,55 @@
 \docType{methods}
 \name{of}
 \alias{of}
-\alias{of,SpatialPointsDataFrame,character-method}
-\title{Values of a turtles variable}
+\alias{of,NLworld,matrix,missing-method}
+\alias{of,NLworldStack,matrix,character-method}
+\alias{of,missing,SpatialPointsDataFrame,character-method}
+\title{Values of an agents variable}
 \usage{
-of(turtles, tVar)
+of(world, agents, var)
 
-\S4method{of}{SpatialPointsDataFrame,character}(turtles, tVar)
+\S4method{of}{missing,SpatialPointsDataFrame,character}(agents, var)
+
+\S4method{of}{NLworld,matrix,missing}(world, agents)
+
+\S4method{of}{NLworldStack,matrix,character}(world, agents, var)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{world}{NLworlds object.}
 
-\item{tVar}{Character. The name of one turtles' variable to report. Can be equal to
-\code{"coords"}, \code{"xcor"},
-\code{"ycor"}, \code{"who"}, \code{"heading"}, \code{"prevCoords"},
-\code{"prevX"}, \code{"prevY"}, \code{"breed"}, \code{"color"} or
-any of the variables created with \code{turtlesOwn()}.}
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
+
+              SpatialPointsDataFrame created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
+
+\item{var}{Character. The name of the selected \code{agents} variable.
+If \code{agents} are patches and the \code{world} is a
+\code{NLworld} object, \code{var} must not be provided. If
+\code{agents} are patches and the \code{world} is a \code{NLworldStack}
+object, \code{var} is the name of the layer to use to define the patches
+values. If \code{agents} are turtles, \code{var} is one of
+the turtles' variable and can be equal to \code{"xcor"},
+\code{"ycor"}, any of the variables created when turtles were created,
+as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
-Vector of \code{tVar} values for the \code{turtles}. The class depends
+Vector of values for the \code{agents}. The class depends
         of the variable class. The order of the vector follows the order
-        of the \code{turtles}.
+        of the \code{agents}.
 }
 \description{
-Report the \code{turtles} values for the requested variable.
+Report the \code{agents} values for the requested variable.
+}
+\details{
+If \code{agents} are turtles, \code{world} must not be provided.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1[] <- 1:25
+of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-of(turtles = t1, tVar = "heading")
+of(agents = t1, var = "heading")
 
 
 }

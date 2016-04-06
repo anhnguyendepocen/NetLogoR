@@ -103,7 +103,7 @@ For the inverse dictionary, to find the NetLogo equivalents of the NetLogoR func
 
 * no-turtles: noTurtles() in NetLogoR
 
-* of: of() in NetLogoR to return turtles' variables. To return patches' variables, use world[pxcor, pycor] to display patch variables values for the requested patches with coordinates [pxcor, pycor].
+* of: of() in NetLogoR. To return the variable value for one patch, world[pxcor, pycor] is faster; to return the variable value for multiple patches, use of().
 
 * one-of: oneOf() in NetLogoR
 
