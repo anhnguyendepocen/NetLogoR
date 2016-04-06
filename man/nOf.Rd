@@ -17,15 +17,21 @@ nOf(agents, n)
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
+              Matrix (ncol = 3) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates and the
+              third column "id", or
+
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
-
-\item{n}{Integer.}
 }
 \value{
 Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
         and the second  column "pycor" representing the coordinates of the
         selected patches from \code{agents}, or
+
+        Matrix (ncol = 2) with the first column "pxcor"
+        and the second  column "pycor" representing the coordinates of the
+        selected patches from \code{agents}, \code{n} per individual "id", or
 
         SpatialPointsDataFrame of length \code{n} representing the turtles
         selected from \code{agents}.
@@ -34,7 +40,12 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
 Report \code{n} patches or turtles randomly selected among \code{agents}.
 }
 \details{
-\code{n} must be less or equal the number of patches or turtles in \code{agents}.
+\code{n} must be less or equal the number of patches (per "id"
+         if provided) or turtles in \code{agents}.
+
+         If \code{agents} is a matrix with ncol = 3, the selection of one
+         random patch is done per individual "id". The order of the patches
+         coordinates returned follow the order of "id".
 }
 \examples{
 # Patches

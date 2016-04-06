@@ -332,6 +332,13 @@ test_that("nOf works",{
   expect_equivalent(nrow(unique(t2data)), 2)
   t3 <- nOf(agents = t1, n = 10)
   expect_identical(t3, t1)
+
+  # With matrix ncol = 3
+  n4 <-neighbors(world = w1, agents = t1, nNeighbors = 8)
+  p4 <- nOf(agents = n4, n = 1)
+  expect_equivalent(nrow(p4), length(t1))
+  p5 <- nOf(agents = n4, n = 2)
+  expect_equivalent(nrow(p5), length(t1) * 2)
 })
 
 test_that("oneOf works",{
@@ -354,6 +361,11 @@ test_that("oneOf works",{
   t3 <- nOf(agents = turtle(t1, who = 0), n = 1)
   t4 <- oneOf(agents = turtle(t1, who = 0))
   expect_identical(t3, t4)
+
+  # With matrix ncol = 3
+  n4 <-neighbors(world = w1, agents = t1, nNeighbors = 4)
+  p4 <- oneOf(n4)
+  expect_equivalent(nrow(p4), length(t1))
 })
 
 test_that("maxNof works",{

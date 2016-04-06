@@ -923,16 +923,25 @@ setMethod(
 #'
 #' Report \code{n} patches or turtles randomly selected among \code{agents}.
 #'
-#' @inheritParams fargs
+#' @inheritParams oneOf
 #'
 #' @return Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
 #'         and the second  column "pycor" representing the coordinates of the
 #'         selected patches from \code{agents}, or
 #'
+#'         Matrix (ncol = 2) with the first column "pxcor"
+#'         and the second  column "pycor" representing the coordinates of the
+#'         selected patches from \code{agents}, \code{n} per individual "id", or
+#'
 #'         SpatialPointsDataFrame of length \code{n} representing the turtles
 #'         selected from \code{agents}.
 #'
-#' @details \code{n} must be less or equal the number of patches or turtles in \code{agents}.
+#' @details \code{n} must be less or equal the number of patches (per "id"
+#'          if provided) or turtles in \code{agents}.
+#'
+#'          If \code{agents} is a matrix with ncol = 3, the selection of one
+#'          random patch is done per individual "id". The order of the patches
+#'          coordinates returned follow the order of "id".
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#n-of}
 #'
@@ -968,12 +977,20 @@ setMethod(
   "nOf",
   signature = c("matrix", "numeric"),
   definition = function(agents, n) {
-    row <- sample(1:nrow(agents), size = n, replace = FALSE)
-    row <- row[order(row)]
-    patches <- agents[row,]
 
-    if(length(row) == 1){ # to keep the class = matrix
-      patches <- cbind(pxcor = patches[1], pycor = patches[2])
+    if(ncol(agents) == 2){
+      row <- sample(1:nrow(agents), size = n, replace = FALSE)
+      row <- row[order(row)]
+      patches <- agents[row,]
+
+      if(length(row) == 1){ # to keep the class = matrix
+        patches <- cbind(pxcor = patches[1], pycor = patches[2])
+      }
+    } else if(ncol(agents) == 3){
+
+      row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
+                    FUN = function(x){sample(x, size = n, replace = FALSE)})
+      patches <- agents[unlist(row), c("pxcor", "pycor")]
     }
 
     return(patches)
