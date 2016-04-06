@@ -17,6 +17,10 @@ oneOf(agents)
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
+              Matrix (ncol = 3) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates and the
+              third column "id", or
+
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
 }
@@ -25,11 +29,20 @@ Matrix (ncol = 2, nrow = 1) with the first column "pxcor"
         and the second  column "pycor" representing the coordinates of the
         selected patch from \code{agents}, or
 
+        Matrix (ncol = 2) with the first column "pxcor"
+        and the second  column "pycor" representing the coordinates of the
+        selected patches from \code{agents}, one per individual "id", or
+
         SpatialPointsDataFrame of length 1 representing the turtle
         selected from \code{agents}.
 }
 \description{
 Report one patch or turtle randomly selected among \code{agents}.
+}
+\details{
+If \code{agents} is a matrix with ncol = 3, the selection of one
+         random patch is done per individual "id". The order of the patches
+         coordinates returned follow the order of "id".
 }
 \examples{
 # Patches

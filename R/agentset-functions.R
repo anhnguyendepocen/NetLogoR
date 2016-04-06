@@ -1006,14 +1006,30 @@ setMethod(
 #'
 #' Report one patch or turtle randomly selected among \code{agents}.
 #'
-#' @inheritParams fargs
+#' @param agents Matrix (ncol = 2) with the first column "pxcor" and the second
+#'               column "pycor" representing the patches coordinates, or
+#'
+#'               Matrix (ncol = 3) with the first column "pxcor" and the second
+#'               column "pycor" representing the patches coordinates and the
+#'               third column "id", or
+#'
+#'               SpatialPointsDataFrame created by \code{createTurtles()} or
+#'               by \code{createOTurtles()} representing the moving agents.
 #'
 #' @return Matrix (ncol = 2, nrow = 1) with the first column "pxcor"
 #'         and the second  column "pycor" representing the coordinates of the
 #'         selected patch from \code{agents}, or
 #'
+#'         Matrix (ncol = 2) with the first column "pxcor"
+#'         and the second  column "pycor" representing the coordinates of the
+#'         selected patches from \code{agents}, one per individual "id", or
+#'
 #'         SpatialPointsDataFrame of length 1 representing the turtle
 #'         selected from \code{agents}.
+#'
+#' @details If \code{agents} is a matrix with ncol = 3, the selection of one
+#'          random patch is done per individual "id". The order of the patches
+#'          coordinates returned follow the order of "id".
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#one-of}
 #'
@@ -1032,6 +1048,7 @@ setMethod(
 #'
 #'
 #' @export
+#' @importFrom Hmisc mApply
 #' @docType methods
 #' @rdname oneOf
 #'
@@ -1049,7 +1066,12 @@ setMethod(
   "oneOf",
   signature = c("matrix"),
   definition = function(agents) {
-    nOf(agents = agents, n = 1)
+
+    if(ncol(agents) == 2){
+      nOf(agents = agents, n = 1)
+    } else if(ncol(agents) == 3){
+      mApply(X = agents[, c("pxcor", "pycor")], INDEX = as.factor(agents[, "id"]), FUN = oneOf, keepmatrix = TRUE)
+    }
   }
 )
 
