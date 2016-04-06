@@ -191,17 +191,105 @@ test_that("pExist works", {
   expect_equivalent(c(FALSE, TRUE), pExist(w1, 1, c(3, 1)))
 })
 
-test_that("neighbors works with patches", {
+# test_that("neighbors works with patches", {
+#   w1 <- createNLworld(0, 9, 0, 9)
+#   n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
+#   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
+#   n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
+#   expect_equivalent(n4[[1]], n41)
+#   expect_equivalent(n4[[3]], n43)
+#
+#   n8 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
+#   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
+#   expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+#
+#   w1[] <- runif(100)
+#   w2 <- w1
+#   w2[] <- runif(100)
+#   ws <- NLstack(w1, w2)
+#
+#   # Same as for w1
+#   n4 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
+#   expect_equivalent(n4[[1]], n41)
+#   expect_equivalent(n4[[3]], n43)
+#   n8 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
+#   expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+#
+#   # With torus = TRUE
+#   nCorner <- neighbors(world = w1, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = FALSE)
+#   expect_equivalent(nrow(nCorner[[1]]), 2)
+#   nCorner <- neighbors(world = w1, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = TRUE)
+#   expect_equivalent(nrow(nCorner[[1]]), 4)
+#   expect_equivalent(nCorner[[1]], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
+#   nCorner <- neighbors(world = ws, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = TRUE)
+#   expect_equivalent(nrow(nCorner[[1]]), 4)
+#   expect_equivalent(nCorner[[1]], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
+#
+#   # Large number of agents
+#   w1 <- createNLworld(0, 50, 0, 50)
+#   n4 <- neighbors(world = w1, agents = patches(w1), nNeighbors = 4)
+#   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(50, 49))
+#   n4_2601 <- cbind(pxcor = c(50, 49), pycor = c(1, 0))
+#   expect_equivalent(n4[[1]], n4_1)
+#   expect_equivalent(n4[[2601]], n4_2601)
+#
+#   # With duplicate
+#   w1 <- createNLworld(0, 9, 0, 9)
+#   n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9, 0), pycor = c(9, 9, 0, 0, 9)), nNeighbors = 4)
+#   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
+#   expect_equivalent(n4[[1]], n4_1)
+#   expect_equivalent(n4[[5]], n4[[1]])
+#   w1 <- createNLworld(0, 50, 0, 50)
+#   n4 <- neighbors(world = w1, agents = rbind(patches(w1), patches(w1)[1,]), nNeighbors = 4)
+#   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(50, 49))
+#   expect_equivalent(n4[[1]], n4_1)
+#   expect_equivalent(n4[[2602]], n4[[1]])
+# })
+#
+# test_that("neighbors works with turtles", {
+#   w1 <- createNLworld(0, 9, 0, 9)
+#   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(0, 9, 0, 9), ycor = c(9, 9, 0, 0)))
+#   n4 <- neighbors(world = w1, agents = t1, nNeighbors = 4)
+#   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
+#   n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
+#   expect_equivalent(n4[[1]], n41)
+#   expect_equivalent(n4[[3]], n43)
+#
+#   n8 <- neighbors(world = w1, agents = t1, nNeighbors = 8)
+#   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
+#   expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+#
+#   w1[] <- runif(100)
+#   w2 <- w1
+#   w2[] <- runif(100)
+#   ws <- NLstack(w1, w2)
+#
+#   # Same as for w1
+#   n4 <- neighbors(world = ws, agents = t1, nNeighbors = 4)
+#   expect_equivalent(n4[[1]], n41)
+#   expect_equivalent(n4[[3]], n43)
+#   n8 <- neighbors(world = ws, agents = t1, nNeighbors = 8)
+#   expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+#
+#   # With torus = TRUE
+#   t1 <- createTurtles(n = 1, coords = cbind(xcor = 0.2, ycor = 0.3))
+#   nCorner <- neighbors(world = w1, agents = t1, nNeighbors = 8, torus = TRUE)
+#   expect_equivalent(nrow(nCorner[[1]]), 8)
+#   expect_equivalent(sum(nCorner[[1]][,"pxcor"]), 3*9+3*1+2*0)
+#   expect_equivalent(sum(nCorner[[1]][,"pycor"]), 3*9+3*1+2*0)
+# })
+
+test_that("neighbors works with output as a matrix with id", {
   w1 <- createNLworld(0, 9, 0, 9)
   n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
   n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
-  expect_equivalent(n4[[1]], n41)
-  expect_equivalent(n4[[3]], n43)
+  expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n41)
+  expect_equivalent(n4[n4[,"id"] == 3, c("pxcor", "pycor")], n43)
 
   n8 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
-  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+  expect_equivalent(nrow(merge(n8[n8[,"id"] == 2, c("pxcor", "pycor")], n82)), 3)
 
   w1[] <- runif(100)
   w2 <- w1
@@ -210,54 +298,53 @@ test_that("neighbors works with patches", {
 
   # Same as for w1
   n4 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
-  expect_equivalent(n4[[1]], n41)
-  expect_equivalent(n4[[3]], n43)
+  expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n41)
+  expect_equivalent(n4[n4[,"id"] == 3, c("pxcor", "pycor")], n43)
   n8 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 8)
-  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+  expect_equivalent(nrow(merge(n8[n8[,"id"] == 2, c("pxcor", "pycor")], n82)), 3)
 
   # With torus = TRUE
   nCorner <- neighbors(world = w1, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = FALSE)
-  expect_equivalent(nrow(nCorner[[1]]), 2)
+  expect_equivalent(nrow(nCorner[nCorner[,"id"] == 1, c("pxcor", "pycor")]), 2)
   nCorner <- neighbors(world = w1, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = TRUE)
-  expect_equivalent(nrow(nCorner[[1]]), 4)
-  expect_equivalent(nCorner[[1]], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
+  expect_equivalent(nrow(nCorner[nCorner[,"id"] == 1, c("pxcor", "pycor")]), 4)
+  expect_equivalent(nCorner[nCorner[,"id"] == 1, c("pxcor", "pycor")], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
   nCorner <- neighbors(world = ws, agents = cbind(pxcor = 9, pycor = 9), nNeighbors = 4, torus = TRUE)
-  expect_equivalent(nrow(nCorner[[1]]), 4)
-  expect_equivalent(nCorner[[1]], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
+  expect_equivalent(nrow(nCorner[nCorner[,"id"] == 1, c("pxcor", "pycor")]), 4)
+  expect_equivalent(nCorner[nCorner[,"id"] == 1, c("pxcor", "pycor")], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
 
   # Large number of agents
   w1 <- createNLworld(0, 50, 0, 50)
   n4 <- neighbors(world = w1, agents = patches(w1), nNeighbors = 4)
   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(50, 49))
   n4_2601 <- cbind(pxcor = c(50, 49), pycor = c(1, 0))
-  expect_equivalent(n4[[1]], n4_1)
-  expect_equivalent(n4[[2601]], n4_2601)
+  expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n4_1)
+  expect_equivalent(n4[n4[,"id"] == 2601, c("pxcor", "pycor")], n4_2601)
 
   # With duplicate
   w1 <- createNLworld(0, 9, 0, 9)
   n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9, 0), pycor = c(9, 9, 0, 0, 9)), nNeighbors = 4)
   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
-  expect_equivalent(n4[[1]], n4_1)
-  expect_equivalent(n4[[5]], n4[[1]])
+  expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n4_1)
+  expect_equivalent(n4[n4[,"id"] == 5, c("pxcor", "pycor")], n4[n4[,"id"] == 5, c("pxcor", "pycor")])
   w1 <- createNLworld(0, 50, 0, 50)
   n4 <- neighbors(world = w1, agents = rbind(patches(w1), patches(w1)[1,]), nNeighbors = 4)
   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(50, 49))
-  expect_equivalent(n4[[1]], n4_1)
-  expect_equivalent(n4[[2602]], n4[[1]])
-})
+  expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n4_1)
+  expect_equivalent(n4[n4[,"id"] == 2602, c("pxcor", "pycor")], n4[n4[,"id"] == 1, c("pxcor", "pycor")])
 
-test_that("neighbors works with turtles", {
+  # With turtles
   w1 <- createNLworld(0, 9, 0, 9)
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(0, 9, 0, 9), ycor = c(9, 9, 0, 0)))
   n4 <- neighbors(world = w1, agents = t1, nNeighbors = 4)
   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
   n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
-  expect_equivalent(n4[[1]], n41)
-  expect_equivalent(n4[[3]], n43)
+  expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n41)
+  expect_equivalent(n4[n4[,"id"] == 3, c("pxcor", "pycor")], n43)
 
   n8 <- neighbors(world = w1, agents = t1, nNeighbors = 8)
   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
-  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+  expect_equivalent(nrow(merge(n8[n8[,"id"] == 2, c("pxcor", "pycor")], n82)), 3)
 
   w1[] <- runif(100)
   w2 <- w1
@@ -266,17 +353,17 @@ test_that("neighbors works with turtles", {
 
   # Same as for w1
   n4 <- neighbors(world = ws, agents = t1, nNeighbors = 4)
-  expect_equivalent(n4[[1]], n41)
-  expect_equivalent(n4[[3]], n43)
+  expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n41)
+  expect_equivalent(n4[n4[,"id"] == 3, c("pxcor", "pycor")], n43)
   n8 <- neighbors(world = ws, agents = t1, nNeighbors = 8)
-  expect_equivalent(nrow(merge(n8[[2]], n82)), 3)
+  expect_equivalent(nrow(merge(n8[n8[,"id"] == 2, c("pxcor", "pycor")], n82)), 3)
 
   # With torus = TRUE
   t1 <- createTurtles(n = 1, coords = cbind(xcor = 0.2, ycor = 0.3))
   nCorner <- neighbors(world = w1, agents = t1, nNeighbors = 8, torus = TRUE)
-  expect_equivalent(nrow(nCorner[[1]]), 8)
-  expect_equivalent(sum(nCorner[[1]][,"pxcor"]), 3*9+3*1+2*0)
-  expect_equivalent(sum(nCorner[[1]][,"pycor"]), 3*9+3*1+2*0)
+  expect_equivalent(nrow(nCorner[nCorner[,"id"] == 1, c("pxcor", "pycor")]), 8)
+  expect_equivalent(sum(nCorner[nCorner[,"id"] == 1, "pxcor"]), 3*9+3*1+2*0)
+  expect_equivalent(sum(nCorner[nCorner[,"id"] == 1, "pycor"]), 3*9+3*1+2*0)
 })
 
 test_that("patch works", {

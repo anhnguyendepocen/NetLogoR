@@ -334,7 +334,7 @@ setMethod(
   signature = c(world = "NLworlds", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
-      if (TRUE) { # This is just to force data.frame version for now.
+    if (TRUE) { # This is just to force data.frame version for now.
        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
        neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
 
@@ -342,9 +342,13 @@ setMethod(
 
        neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
                              by.x = "from", by.y = "cellNum")
-       listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
 
-     } else {
+       #listAgents <- lapply(split(neighbors_df[,c(3,4)], neighbors_df[,5]), as.matrix)
+       # Output as a matrix
+       neighbors_df <- neighbors_df[order(neighbors_df$id),]
+       listAgents <- cbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
+
+    } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
       neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
       cellNum <- data.table(cellNum, id=seq_len(length(cellNum)))

@@ -1323,14 +1323,23 @@ setMethod(
   signature = c(world = "NLworld", pVar = "missing",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
   definition = function(world, turtles, nNeighbors, torus) {
 
+    # ## Output neighbors() as a list
+    # pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
+    # pValues <- values(world) # ordered by cellNumbers
+    #
+    # pListDF <- lapply(pNeighbors, as.data.frame)
+    # pDF <- as.data.frame(rbindlist(pListDF)) # faster than do.call(rbind, ...)
+    # pDF$id <- rep(1:length(turtles), unlist(lapply(pNeighbors, nrow)))
+    # tDF <- data.frame(patchHere(world, turtles), id = 1:length(turtles))
+    # allPatches <- rbind(pDF, tDF) # neighbors patches + patches under the turtles
+    # ##
+
+    ## Output neighbors() as a matrix
     pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
     pValues <- values(world) # ordered by cellNumbers
-
-    pListDF <- lapply(pNeighbors, as.data.frame)
-    pDF <- as.data.frame(rbindlist(pListDF)) # faster than do.call(rbind, ...)
-    pDF$id <- rep(1:length(turtles), unlist(lapply(pNeighbors, nrow)))
     tDF <- data.frame(patchHere(world, turtles), id = 1:length(turtles))
-    allPatches <- rbind(pDF, tDF) # neighbors patches + patches under the turtles
+    allPatches <- rbind(pNeighbors, tDF) # neighbors patches + patches under the turtles
+    ##
 
     allPatches$cellNum <- cellFromPxcorPycor(world = world, pxcor = allPatches$pxcor, pycor = allPatches$pycor)
     allPatches$pVal <- pValues[allPatches$cellNum]
