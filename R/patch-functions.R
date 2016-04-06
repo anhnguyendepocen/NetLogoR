@@ -358,7 +358,7 @@ setMethod(
       browser()
       #setkey(neighbors_dt, from, to, id)
       listAgents <- lapply(split(neighbors_dt[,list(pxcor,pycor)], neighbors_dt[,id]), as.matrix)
-    })
+    }
 
     # listAgents <- vector("list", length(cellNum))
     # names(listAgents) <- cellNum
