@@ -2147,7 +2147,8 @@ setMethod(
 #'                If missing, there is
 #'                no distinction based upon "breed".
 #'
-#' @return SpatialPointsDataFrame of the selected turtles.
+#' @return SpatialPointsDataFrame of the selected turtles sorted in the order of
+#'         the \code{who} and \code{breed} provided.
 #'
 #' @details If no turtle matches the given \code{who} numbers, with potentially the given
 #'          \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
@@ -2182,7 +2183,12 @@ setMethod(
   "turtle",
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
-    return(turtles[turtles$who %in% who, ])
+    newTurtles <- turtles[turtles$who %in% who, ]
+    iTurtles <- match(who, newTurtles@data$who)
+    iTurtles <- iTurtles[!is.na(iTurtles)]
+    newTurtles@coords <- cbind(xcor = newTurtles@coords[iTurtles,1], ycor = newTurtles@coords[iTurtles,2]) # order them by the order of given who
+    newTurtles@data <- newTurtles@data[iTurtles,]
+    return(newTurtles)
   }
 )
 

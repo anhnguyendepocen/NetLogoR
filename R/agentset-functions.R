@@ -1457,7 +1457,7 @@ setMethod(
       # Extract the locations of agents2 under the buffers
       pOver <- over(pBuffer, SpatialPoints(coords = agents2cAll), returnList = TRUE)
       list_agentsXY <- lapply(pOver, function(z){
-        wrap(cbind(x = agents2cAll[as.numeric(z), 1], y = agents2cAll[as.numeric(z), 2]), extent(world))
+        unique(wrap(cbind(x = agents2cAll[as.numeric(z), 1], y = agents2cAll[as.numeric(z), 2]), extent(world)))
       })
       list_agents <- lapply(list_agentsXY, function(x){
         tWho <- merge(x, cbind(agents2@coords, agents2@data), by.x = c("x", "y"), by.y = c("xcor", "ycor"))

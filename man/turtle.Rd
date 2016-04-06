@@ -25,7 +25,8 @@ If missing, there is
 no distinction based upon "breed".}
 }
 \value{
-SpatialPointsDataFrame of the selected turtles.
+SpatialPointsDataFrame of the selected turtles sorted in the order of
+        the \code{who} and \code{breed} provided.
 }
 \description{
 Report the individuals among \code{turtles} based on their \code{who} numbers
