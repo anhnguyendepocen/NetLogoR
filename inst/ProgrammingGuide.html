@@ -154,7 +154,7 @@ pQuality[] &lt;- runif(n = length(w1), min = 0, max = 1) # for all patches, assi
 sheep &lt;- createTurtles(world = w1, n = 5, breed = &quot;sheep&quot;) # 5 sheep
 wolves &lt;- createTurtles(world = w1, n = 5, breed = &quot;wolf&quot;) # 5 wolves</code></pre>
 <p>One agent can change breed.</p>
-<pre class="r"><code>t2 &lt;- set(turtles = t2, agents = turtle(t2, 0), var = &quot;breed&quot;, val = &quot;wolf&quot;) # the turtle number 0 which was &quot;sheep&quot; became &quot;wolf&quot;</code></pre>
+<pre class="r"><code>t2 &lt;- set(turtles = t2, agents = turtle(t2, who = 0), var = &quot;breed&quot;, val = &quot;wolf&quot;) # turtle 0 which was &quot;sheep&quot; became &quot;wolf&quot;</code></pre>
 <p>Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.</p>
 <pre class="r"><code># When returning the value for a single patch, &quot;world[pxcor,pycor]&quot; is faster than using of().
 pQuality[0,0] # reports the value of the patch [pxcor = 0, pycor = 0] for the variable held by pQuality. This value can then be used by any other agents.

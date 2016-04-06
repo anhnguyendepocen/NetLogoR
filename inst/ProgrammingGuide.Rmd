@@ -71,7 +71,7 @@ wolves <- createTurtles(world = w1, n = 5, breed = "wolf") # 5 wolves
 
 One agent can change breed.
 ```{r, eval=FALSE}
-t2 <- set(turtles = t2, agents = turtle(t2, 0), var = "breed", val = "wolf") # the turtle number 0 which was "sheep" became "wolf"
+t2 <- set(turtles = t2, agents = turtle(t2, who = 0), var = "breed", val = "wolf") # turtle 0 which was "sheep" became "wolf"
 ```
 
 Global variables are available for all agents. Patches and turtles variables are available to other agents if they can be identified by their coordinates or some other variables.

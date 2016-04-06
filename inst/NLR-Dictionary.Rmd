@@ -138,9 +138,18 @@ For the inverse dictionary, to find the NetLogo equivalents of the NetLogoR func
 
 * set: set() in NetLogoR
 
+* setxy: setXY() in NetLogoR
+
 * sort-on: sortOn() in NetLogoR
 
+* sprout: sprout() in NetLogoR
+* sprout-\<breeds>: sprout() in NetLogoR
+
 * subtract-headings: subHeadings() in NetLogoR
+
+* towards: towards() in NetLogoR
+
+* towardsxy: towards() in NetLogoR
 
 * turtle: turtle() in NetLogoR
 
@@ -153,15 +162,6 @@ For the inverse dictionary, to find the NetLogo equivalents of the NetLogoR func
 * \<breeds>-own: turtlesOwn() in NetLogoR
 
 * turtle-set: turtleSet() in NetLogoR
-
-* setxy: setXY() in NetLogoR
-
-* sprout: sprout() in NetLogoR
-* sprout-\<breeds>: sprout() in NetLogoR
-
-* towards: towards() in NetLogoR
-
-* towardsxy: towards() in NetLogoR
 
 * uphill: uphill() in NetLogoR
 * uphill4: uphill() in NetLogoR
