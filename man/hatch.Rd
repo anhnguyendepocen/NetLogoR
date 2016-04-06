@@ -3,42 +3,36 @@
 \docType{methods}
 \name{hatch}
 \alias{hatch}
-\alias{hatch,SpatialPointsDataFrame,numeric,numeric,character-method}
-\alias{hatch,SpatialPointsDataFrame,numeric,numeric,missing-method}
+\alias{hatch,SpatialPointsDataFrame,numeric,numeric-method}
 \title{Hatch new turtles}
 \usage{
 hatch(turtles, who, n, breed)
 
-\S4method{hatch}{SpatialPointsDataFrame,numeric,numeric,character}(turtles, who,
-  n, breed)
-
-\S4method{hatch}{SpatialPointsDataFrame,numeric,numeric,missing}(turtles, who,
-  n)
+\S4method{hatch}{SpatialPointsDataFrame,numeric,numeric}(turtles, who, n, breed)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integer. The "who" number of the parent turtle.}
+\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
 
 \item{n}{Integer.}
 
-\item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
-\code{n}. If missing,
-the created turtles are of the same "breed" as the parent turtle.}
+\item{breed}{Character. One "breed" name. If missing,
+the created turtles are of the same "breed" as their parent turtle.}
 }
 \value{
 SpatialPointsDataFrame representing the \code{turtles} with the new
         hatched ones.
 }
 \description{
-Create \code{n} new turtles from a parent turtle.
+Create \code{n} new turtles for each parent turtle.
 }
 \details{
 The parent turtle must be contained in the \code{turtles}.
 
          The created turtles inherit of all the data from the parent turtle,
-         except for the "breed", if specified otherwise, and for the "who" numbers.
+         except for the "breed" if specified otherwise, and for the "who" numbers.
          The "who" numbers of the turtles created take on following the highest
          "who" number among the \code{turtles}.
 }

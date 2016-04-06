@@ -278,11 +278,23 @@ test_that("hatch works",{
   expect_equivalent(t2@coords[11,], c(2, 9))
   expect_equivalent(t2@data$heading[11], t1@data$heading[2])
   expect_identical(t2@data$breed[11], "turtle")
-  t3 <- hatch(turtles = t1, who = 4, n = 2, breed = "moose")
+  t3 <- hatch(turtles = t1, who = 4, n = 2, breed = "young")
   expect_equivalent(length(t3), length(t1) + 2)
   expect_equivalent(t3@coords[11:12,], cbind(xcor = c(5, 5), ycor = c(6, 6)))
   expect_equivalent(t3@data$heading[12], t1@data$heading[5])
-  expect_identical(t3@data$breed[11], "moose")
+  expect_identical(t3@data$breed[11], "young")
+
+  # Several turtle parents
+  t4 <- hatch(turtles = t1, who = c(1,4), n = 2)
+  expect_equivalent(length(t4), 14)
+  expect_equivalent(t4@data$who, 0:13)
+  expect_equivalent(t4@coords[11:14,], cbind(xcor = c(2,2,5,5), ycor = c(9,9,6,6)))
+  expect_equivalent(t4@data$breed[11:14], rep("turtle", 4))
+  t5 <- hatch(turtles = t1, who = c(1,4), n = 2, breed = "young")
+  expect_equivalent(length(t5), 14)
+  expect_equivalent(t5@data$who, 0:13)
+  expect_equivalent(t5@coords[11:14,], cbind(xcor = c(2,2,5,5), ycor = c(9,9,6,6)))
+  expect_equivalent(t5@data$breed[11:14], rep("young", 4))
 })
 
 test_that("canMove works",{

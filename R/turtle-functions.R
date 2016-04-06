@@ -682,15 +682,12 @@ setMethod(
 ################################################################################
 #' Hatch new turtles
 #'
-#' Create \code{n} new turtles from a parent turtle.
+#' Create \code{n} new turtles for each parent turtle.
 #'
 #' @inheritParams fargs
 #'
-#' @param who     Integer. The "who" number of the parent turtle.
-#'
-#' @param breed   Character. Vector of "breed" names. Must be of length 1 or of length
-#'                \code{n}. If missing,
-#'                the created turtles are of the same "breed" as the parent turtle.
+#' @param breed   Character. One "breed" name. If missing,
+#'                the created turtles are of the same "breed" as their parent turtle.
 #'
 #' @return SpatialPointsDataFrame representing the \code{turtles} with the new
 #'         hatched ones.
@@ -698,7 +695,7 @@ setMethod(
 #' @details The parent turtle must be contained in the \code{turtles}.
 #'
 #'          The created turtles inherit of all the data from the parent turtle,
-#'          except for the "breed", if specified otherwise, and for the "who" numbers.
+#'          except for the "breed" if specified otherwise, and for the "who" numbers.
 #'          The "who" numbers of the turtles created take on following the highest
 #'          "who" number among the \code{turtles}.
 #'
@@ -732,36 +729,29 @@ setGeneric(
 #' @rdname hatch
 setMethod(
   "hatch",
-  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "character"),
+  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "ANY"),
   definition = function(turtles, who, n, breed) {
 
     iTurtle <- match(who, turtles@data$who)
     parentCoords <- turtles@coords[iTurtle,]
     parentData <- turtles@data[iTurtle,]
-    newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
+
+    if(length(iTurtle) == 1){ # parentCoords is numeric
+      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
+    } else { # parentCoords is a matrix
+      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[,1]), each = n), ycor = rep(as.numeric(parentCoords[,2]), each = n)))
+    }
     newData <- rbind(turtles@data, parentData[rep(seq_len(nrow(parentData)), each = n),])
     rownames(newData) <- seq_len(nrow(newData))
 
     # Update the who numbers and breed
-    newData[(nrow(turtles) + 1):nrow(newData), "who"] <- (max(turtles@data$who) + 1):(max(turtles@data$who) + n)
-    if(length(breed) == 1){
-      breed <- rep(breed, n)
+    newData[(nrow(turtles) + 1):nrow(newData), "who"] <- (max(turtles@data$who) + 1):(max(turtles@data$who) + (n * length(iTurtle)))
+    if(!missing(breed)){
+      newData[(nrow(turtles) + 1):nrow(newData), "breed"] <- breed
     }
-    newData[(nrow(turtles) + 1):nrow(newData), "breed"] <- breed
 
     newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
     return(newTurtles)
-  }
-)
-
-#' @export
-#' @rdname hatch
-setMethod(
-  "hatch",
-  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "missing"),
-  definition = function(turtles, who, n) {
-    breed <- turtles@data[turtles@data$who == who, "breed"]
-    hatch(turtles = turtles, who = who, n = n, breed = breed)
   }
 )
 
