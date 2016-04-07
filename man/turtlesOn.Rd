@@ -52,10 +52,10 @@ SpatialPointsDataFrame representing any individuals from \code{turtles} of the g
         \code{breed}, if speficied,
         located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
 
-        Matrix (ncol = 2) with the first column "idAgents" and the second column
-        "whoTurtles" showing which \code{turtles} are on the same
-        locations as which \code{agents}, if \code{simplify = FALSE}.
-        "idAgents" follows the order of the \code{agents}.
+        Matrix (ncol = 2) with the first column "whoTurtles" and the second column
+        "id" showing which \code{turtles} are on the same
+        locations as which \code{agents} represented by "id", if \code{simplify = FALSE}.
+        "id" follows the order of the \code{agents}.
 }
 \description{
 Report the individuals among \code{turtles} that are at the same locations as the \code{agents}.

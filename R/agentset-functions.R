@@ -934,14 +934,21 @@ setMethod(
 #'         selected patches from \code{agents}, \code{n} per individual "id", or
 #'
 #'         SpatialPointsDataFrame of length \code{n} representing the turtles
-#'         selected from \code{agents}.
+#'         selected from \code{agents},
+#'
+#'         Integer. Vector of "who" numbers for the selected turtles from
+#'         \code{agents}, \code{n} per individual "id".
 #'
 #' @details \code{n} must be less or equal the number of patches (per "id"
 #'          if provided) or turtles in \code{agents}.
 #'
-#'          If \code{agents} is a matrix with ncol = 3, the selection of one
-#'          random patch is done per individual "id". The order of the patches
+#'          If \code{agents} is a matrix with ncol = 3, the selection of \code{n}
+#'          random patches is done per individual "id". The order of the patches
 #'          coordinates returned follow the order of "id".
+#'          If \code{agents} is a matrix (ncol = 2) with columns "whoTurtles" and
+#'          "id", the selection of \code{n} random turtles (defined by their "whoTurtles")
+#'          is done per individual "id". The order of the "who" numbers returned
+#'          follow the order of "id".
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#n-of}
 #'
@@ -978,7 +985,7 @@ setMethod(
   signature = c("matrix", "numeric"),
   definition = function(agents, n) {
 
-    if(ncol(agents) == 2){
+    if(ncol(agents) == 2 & colnames(agents)[1] == "pxcor"){
       row <- sample(1:nrow(agents), size = n, replace = FALSE)
       row <- row[order(row)]
       patches <- agents[row,]
@@ -986,14 +993,30 @@ setMethod(
       if(length(row) == 1){ # to keep the class = matrix
         patches <- cbind(pxcor = patches[1], pycor = patches[2])
       }
-    } else if(ncol(agents) == 3){
+      return(patches)
 
-      row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
-                    FUN = function(x){sample(x, size = n, replace = FALSE)})
-      patches <- agents[unlist(row), c("pxcor", "pycor")]
+    } else {
+
+      if(min(table(agents[, "id"])) < n){
+        stop("n is larger than the number of agents per id")
+      } else {
+
+        if(ncol(agents) == 3){
+
+          row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
+                        FUN = function(x){sample(x, size = n, replace = FALSE)})
+          patches <- agents[unlist(row), c("pxcor", "pycor")]
+          return(patches)
+
+        } else {
+
+          row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
+                        FUN = function(x){sample(x, size = n, replace = FALSE)})
+          turtles <- agents[unlist(row), "whoTurtles"]
+          return(turtles)
+        }
+      }
     }
-
-    return(patches)
   }
 )
 
@@ -1031,7 +1054,10 @@ setMethod(
 #'               third column "id", or
 #'
 #'               SpatialPointsDataFrame created by \code{createTurtles()} or
-#'               by \code{createOTurtles()} representing the moving agents.
+#'               by \code{createOTurtles()} representing the moving agents, or
+#'
+#'               Matrix (ncol = 2) with the first column "whoTurtles" and the
+#'               second column "id".
 #'
 #' @return Matrix (ncol = 2, nrow = 1) with the first column "pxcor"
 #'         and the second  column "pycor" representing the coordinates of the
@@ -1042,11 +1068,18 @@ setMethod(
 #'         selected patches from \code{agents}, one per individual "id", or
 #'
 #'         SpatialPointsDataFrame of length 1 representing the turtle
-#'         selected from \code{agents}.
+#'         selected from \code{agents}, or
+#'
+#'         Integer. Vector of "who" numbers for the selected turtles from
+#'         \code{agents}, one per individual "id".
 #'
 #' @details If \code{agents} is a matrix with ncol = 3, the selection of one
 #'          random patch is done per individual "id". The order of the patches
 #'          coordinates returned follow the order of "id".
+#'          If \code{agents} is a matrix (ncol = 2) with columns "whoTurtles" and
+#'          "id", the selection of one random turtle (defined by their "whoTurtles")
+#'          is done per individual "id". The order of the "who" numbers returned
+#'          follow the order of "id".
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#one-of}
 #'
@@ -1084,10 +1117,13 @@ setMethod(
   signature = c("matrix"),
   definition = function(agents) {
 
-    if(ncol(agents) == 2){
+    if(ncol(agents) == 2 & colnames(agents)[1] == "pxcor"){
       nOf(agents = agents, n = 1)
     } else if(ncol(agents) == 3){
       mApply(X = agents[, c("pxcor", "pycor")], INDEX = as.factor(agents[, "id"]), FUN = oneOf, keepmatrix = TRUE)
+    } else {
+      whoTurtles <- tapply(X = agents[,"whoTurtles"], INDEX = as.factor(agents[, "id"]), FUN = function(x){sample(x, size = 1)})
+      return(as.numeric(whoTurtles))
     }
   }
 )

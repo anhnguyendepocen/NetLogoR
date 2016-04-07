@@ -2222,10 +2222,10 @@ setMethod(
 #'         \code{breed}, if speficied,
 #'         located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
 #'
-#'         Matrix (ncol = 2) with the first column "idAgents" and the second column
-#'         "whoTurtles" showing which \code{turtles} are on the same
-#'         locations as which \code{agents}, if \code{simplify = FALSE}.
-#'         "idAgents" follows the order of the \code{agents}.
+#'         Matrix (ncol = 2) with the first column "whoTurtles" and the second column
+#'         "id" showing which \code{turtles} are on the same
+#'         locations as which \code{agents} represented by "id", if \code{simplify = FALSE}.
+#'         "id" follows the order of the \code{agents}.
 #'
 #' @details The \code{agents} must be located inside the
 #'          \code{world}'s extent.
@@ -2285,7 +2285,9 @@ setMethod(
     } else {
       agents <- cbind(agents, id = 1:nrow(agents))
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-      return(cbind(idAgents = pOn[,"id"], whoTurtles = pOn[,"who"]))
+      pOn <- pOn[order(pOn[,"id"]),]
+      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
+      return(turtlesID)
     }
   }
 )

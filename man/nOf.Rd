@@ -22,7 +22,10 @@ nOf(agents, n)
               third column "id", or
 
               SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              by \code{createOTurtles()} representing the moving agents, or
+
+              Matrix (ncol = 2) with the first column "whoTurtles" and the
+              second column "id".}
 }
 \value{
 Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
@@ -34,7 +37,10 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
         selected patches from \code{agents}, \code{n} per individual "id", or
 
         SpatialPointsDataFrame of length \code{n} representing the turtles
-        selected from \code{agents}.
+        selected from \code{agents},
+
+        Integer. Vector of "who" numbers for the selected turtles from
+        \code{agents}, \code{n} per individual "id".
 }
 \description{
 Report \code{n} patches or turtles randomly selected among \code{agents}.
@@ -43,9 +49,13 @@ Report \code{n} patches or turtles randomly selected among \code{agents}.
 \code{n} must be less or equal the number of patches (per "id"
          if provided) or turtles in \code{agents}.
 
-         If \code{agents} is a matrix with ncol = 3, the selection of one
-         random patch is done per individual "id". The order of the patches
+         If \code{agents} is a matrix with ncol = 3, the selection of \code{n}
+         random patches is done per individual "id". The order of the patches
          coordinates returned follow the order of "id".
+         If \code{agents} is a matrix (ncol = 2) with columns "whoTurtles" and
+         "id", the selection of \code{n} random turtles (defined by their "whoTurtles")
+         is done per individual "id". The order of the "who" numbers returned
+         follow the order of "id".
 }
 \examples{
 # Patches

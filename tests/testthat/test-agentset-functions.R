@@ -339,6 +339,12 @@ test_that("nOf works",{
   expect_equivalent(nrow(p4), length(t1))
   p5 <- nOf(agents = n4, n = 2)
   expect_equivalent(nrow(p5), length(t1) * 2)
+
+  # With matrix ncol = 2 "whoTurtles" and "id"
+  t4 <- turtlesOn(world = w1, turtles = t1, agents = patches(w1), simplify = FALSE)
+  expect_error(nOf(agents = t4, n = 2))
+  t5 <- nOf(agents = t4, n = 1)
+  expect_equivalent(nrow(merge(as.data.frame(t5), t4, by.x = "t5", by.y = "whoTurtles")), length(unique(t4[,"id"])))
 })
 
 test_that("oneOf works",{
@@ -366,6 +372,12 @@ test_that("oneOf works",{
   n4 <-neighbors(world = w1, agents = t1, nNeighbors = 4)
   p4 <- oneOf(n4)
   expect_equivalent(nrow(p4), length(t1))
+
+  # With matrix ncol = 2 "whoTurtles" and "id"
+  t4 <- turtlesOn(world = w1, turtles = t1, agents = patches(w1), simplify = FALSE)
+  t5 <- oneOf(agents = t4)
+  expect_equivalent(length(t5), length(unique(t4[,"id"])))
+  expect_equivalent(nrow(merge(as.data.frame(t5), t4, by.x = "t5", by.y = "whoTurtles")), length(unique(t4[,"id"])))
 })
 
 test_that("maxNof works",{
