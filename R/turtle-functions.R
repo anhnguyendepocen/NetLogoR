@@ -2213,9 +2213,19 @@ setMethod(
 #'
 #' @inheritParams turtle
 #'
+#' @param simplify Logical. If \code{simplify = TRUE}, all \code{turtles} on the same
+#'                 location as any \code{agents} are returned; if \code{simplify = FALSE},
+#'                 the \code{turtles} are evaluated on each \code{agents} locations
+#'                 individually.
+#'
 #' @return SpatialPointsDataFrame representing any individuals from \code{turtles} of the given
-#'        \code{breed}, if speficied,
-#'         located at the same locations as any \code{agents}.
+#'         \code{breed}, if speficied,
+#'         located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
+#'
+#'         Matrix (ncol = 2) with the first column "idAgents" and the second column
+#'         "whoTurtles" showing which \code{turtles} are on the same
+#'         locations as which \code{agents}, if \code{simplify = FALSE}.
+#'         "idAgents" follows the order of the \code{agents}.
 #'
 #' @details The \code{agents} must be located inside the
 #'          \code{world}'s extent.
@@ -2247,7 +2257,7 @@ setMethod(
 #'
 setGeneric(
   "turtlesOn",
-  function(world, turtles, agents, breed) {
+  function(world, turtles, agents, breed, simplify = TRUE) {
     standardGeneric("turtlesOn")
   })
 
@@ -2255,17 +2265,27 @@ setGeneric(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "missing"),
-  definition = function(world, turtles, agents) {
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix", breed = "missing"),
+  definition = function(world, turtles, agents, simplify) {
+
     pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    pTurtles <- cbind(pTurtles, turtles@data$who)
+    pTurtles <- cbind(pTurtles, who = turtles@data$who)
 
-    pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
 
-    if(nrow(pOn) == 0){
-      return(noTurtles())
+    if(simplify == TRUE){
+
+      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+
+      if(nrow(pOn) == 0){
+        return(noTurtles())
+      } else {
+        turtle(turtles = turtles, who = pOn[,3])
+      }
+
     } else {
-      turtle(turtles = turtles, who = pOn[,3])
+      agents <- cbind(agents, id = 1:nrow(agents))
+      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+      return(cbind(idAgents = pOn[,"id"], whoTurtles = pOn[,"who"]))
     }
   }
 )
@@ -2274,10 +2294,10 @@ setMethod(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "character"),
-  definition = function(world, turtles, agents, breed) {
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix", breed = "character"),
+  definition = function(world, turtles, agents, breed, simplify) {
     tBreed <- turtles[turtles$breed %in% breed,]
-    turtlesOn(world = world, turtles = tBreed, agents = agents)
+    turtlesOn(world = world, turtles = tBreed, agents = agents, simplify = simplify)
   }
 )
 
@@ -2285,9 +2305,9 @@ setMethod(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "missing"),
-  definition = function(world, turtles, agents) {
-    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents))
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame", breed = "missing"),
+  definition = function(world, turtles, agents, simplify) {
+    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), simplify = simplify)
   }
 )
 
@@ -2295,9 +2315,9 @@ setMethod(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "character"),
-  definition = function(world, turtles, agents, breed) {
-    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), breed = breed)
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame", breed = "character"),
+  definition = function(world, turtles, agents, breed, simplify) {
+    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), breed = breed, simplify = simplify)
   }
 )
 

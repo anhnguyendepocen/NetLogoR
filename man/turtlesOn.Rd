@@ -9,21 +9,21 @@
 \alias{turtlesOn,NLworlds,SpatialPointsDataFrame,matrix,missing-method}
 \title{Turtles on}
 \usage{
-turtlesOn(world, turtles, agents, breed)
+turtlesOn(world, turtles, agents, breed, simplify = TRUE)
 
 \S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,matrix,missing}(world,
-  turtles, agents)
+  turtles, agents, simplify)
 
 \S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,matrix,character}(world,
-  turtles, agents, breed)
+  turtles, agents, breed, simplify = TRUE)
 
 
   \S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,missing}(world,
-  turtles, agents)
+  turtles, agents, simplify)
 
 
   \S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,character}(world,
-  turtles, agents, breed)
+  turtles, agents, breed, simplify = TRUE)
 }
 \arguments{
 \item{world}{NLworlds object.}
@@ -41,11 +41,21 @@ by \code{createOTurtles()} representing the moving agents.}
 Must be of length 1 or of length \code{turtles}.
 If missing, there is
 no distinction based upon "breed".}
+
+\item{simplify}{Logical. If \code{simplify = TRUE}, all \code{turtles} on the same
+location as any \code{agents} are returned; if \code{simplify = FALSE},
+the \code{turtles} are evaluated on each \code{agents} locations
+individually.}
 }
 \value{
 SpatialPointsDataFrame representing any individuals from \code{turtles} of the given
-       \code{breed}, if speficied,
-        located at the same locations as any \code{agents}.
+        \code{breed}, if speficied,
+        located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
+
+        Matrix (ncol = 2) with the first column "idAgents" and the second column
+        "whoTurtles" showing which \code{turtles} are on the same
+        locations as which \code{agents}, if \code{simplify = FALSE}.
+        "idAgents" follows the order of the \code{agents}.
 }
 \description{
 Report the individuals among \code{turtles} that are at the same locations as the \code{agents}.

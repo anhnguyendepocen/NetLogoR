@@ -742,6 +742,7 @@ test_that("turtle works",{
 })
 
 test_that("turtlesOn works",{
+  # Simplify = TRUE
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9), breed = c(rep("sheep", 5), rep("wolf", 5)))
   t2 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who == 0,])
@@ -769,6 +770,34 @@ test_that("turtlesOn works",{
 
   t12 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], breed = "moose")
   expect_equivalent(length(t12), 0)
+
+  # Simplify = FALSE
+  t2 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who == 0,], simplify = FALSE)
+  expect_equivalent(t2, cbind(1, 0))
+  t3 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, x = 0, y = 0), simplify = FALSE)
+  expect_equivalent(t3, t2)
+  t4 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who == 0,], breed = "sheep", simplify = FALSE)
+  expect_equivalent(t4, t2)
+  t5 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, x = 0, y = 0), breed = "sheep", simplify = FALSE)
+  expect_equivalent(t5, t2)
+
+  t6 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], simplify = FALSE)
+  expect_equivalent(t6, cbind(1:3, c(0,5,6)))
+  t7 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, x = c(0,5,6), y = c(0,5,6)), simplify = FALSE)
+  expect_equivalent(t7, t6)
+  t8 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], breed = "sheep", simplify = FALSE)
+  expect_equivalent(t8, t2)
+  t9 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, x = c(0,5,6), y = c(0,5,6)), breed = "sheep", simplify = FALSE)
+  expect_equivalent(t9, t8)
+
+  t10 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], breed = c("sheep", "wolf"), simplify = FALSE)
+  expect_equivalent(t10,t6)
+  t11 <- turtlesOn(world = w1, turtles = t1, agents = patch(world = w1, x = c(0,5,6), y = c(0,5,6)), breed = c("sheep", "wolf"), simplify = FALSE)
+  expect_equivalent(t11, t7)
+
+  t12 <- turtlesOn(world = w1, turtles = t1, agents = t1[t1$who %in% c(0,5,6),], breed = "moose", simplify = FALSE)
+  expect_equivalent(nrow(t12), 0)
+
 })
 
 test_that("noTurtles works",{
