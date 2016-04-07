@@ -24,6 +24,7 @@ pElevation <- ifelse(elev1 > elev2, elev1, elev2)
 elevation[] <- pElevation # when assigning values to ALL patches, this is faster than using set()
 
 # Visualize the world
+dev()
 clearPlot()
 Plot(elevation) # plot function from SpaDES
 

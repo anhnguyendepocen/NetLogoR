@@ -850,10 +850,15 @@ setMethod(
   "randomXcor",
   signature = c("NLworlds", "numeric"),
   definition = function(world, n) {
-    xmin <- world@extent@xmin
-    xmax <- world@extent@xmax
-    xcor <- round(runif(n = n, min = xmin, max = xmax), digits = 5)
-    return(xcor)
+
+    if(n == 0){
+      return(xcor = numeric())
+    } else {
+      xmin <- world@extent@xmin
+      xmax <- world@extent@xmax
+      xcor <- round(runif(n = n, min = xmin, max = xmax), digits = 5)
+      return(xcor)
+    }
   }
 )
 
@@ -902,10 +907,15 @@ setMethod(
   "randomYcor",
   signature = c("NLworlds", "numeric"),
   definition = function(world, n) {
-    ymin <- world@extent@ymin
-    ymax <- world@extent@ymax
-    ycor <- round(runif(n = n, min = ymin, max = ymax), digits = 5)
-    return(ycor)
+
+    if(n == 0){
+      return(ycor = numeric())
+    } else {
+      ymin <- world@extent@ymin
+      ymax <- world@extent@ymax
+      ycor <- round(runif(n = n, min = ymin, max = ymax), digits = 5)
+      return(ycor)
+    }
   }
 )
 
