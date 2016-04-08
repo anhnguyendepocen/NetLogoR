@@ -1775,7 +1775,7 @@ setMethod(
                 var = "character", val = "ANY"),
   definition = function(turtles, agents, var, val) {
 
-    iAgents <- row.match(agents@data, turtles@data)
+    iAgents <- row.match(agents@data, turtles@data) # using data.table is not faster
 
     if(var == "xcor"){
       turtles@coords[iAgents, 1] <- val
