@@ -2236,7 +2236,8 @@ setMethod(
 #'         Matrix (ncol = 2) with the first column "whoTurtles" and the second column
 #'         "id" showing which \code{turtles} are on the same
 #'         locations as which \code{agents} represented by "id", if \code{simplify = FALSE}.
-#'         "id" follows the order of the \code{agents}.
+#'         "id" represents and follows the order of the \code{agents}, not the "who" numbers
+#'         of the \code{agents} if \code{agents} are turtles.
 #'
 #' @details The \code{agents} must be located inside the
 #'          \code{world}'s extent.
