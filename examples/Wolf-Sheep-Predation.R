@@ -9,24 +9,24 @@
 #
 
 ## Packages required
-library(NetLogoR)
+# library(NetLogoR)
 library(SpaDES)
 
 
 ## Global variables (some represent the model buttons)
 # Grass settings
-grassOn <- FALSE
+grassOn <- TRUE
 grassTGrowth <- 30
 greenCount <- numeric() # keep track of how much grass there is
 
 # Sheep settings
-nSheep <- 100
+nSheep <- 154
 gainFoodSheep <- 4
 reproSheep <- 4
 
 # Wolf settings
-nWolf <- 45
-gainFoodWolf <- 29
+nWolf <- 50
+gainFoodWolf <- 20
 reproWolf <- 5
 
 # torus = TRUE # just for reminder, to be used in the movement functions (e.g., fd())
@@ -53,7 +53,7 @@ if(grassOn == TRUE){
 # When field is updated, the values on the individual NLworld grass and countdown are not updated, only the layers in field are
 
 # Create the sheep
-sheep <- createTurtles(n = nSheep, coords = randomXYcor(world = grass, n = nSheep), breed = "aSheep", color = rep("white", nSheep))
+sheep <- createTurtles(n = nSheep, coords = randomXYcor(world = grass, n = nSheep), breed = "aSheep", color = rep("red", nSheep))
 # Add the energy variable
 sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = runif(n = nSheep, min = 0, max = 2 * gainFoodSheep))
 
@@ -157,16 +157,27 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
   return(turtles)
 }
 
+# Test reproduce()
+count1 <- count(wolves)
+count2 <- count(wolves)
+for(i in 1:100){
+  count1<-c(count1,count(wolves) + count(wolves) * reproWolf / 100)
+  wolves <- reproduce(wolves, reproWolf)
+  count2<-c(count2, count(wolves))
+}
+plot(1:length(count1), count1, pch= 16)
+points(1:length(count2), count2, pch= 16, col = "red")
+#
+
 catchSheep <- function(){ # only wolves
   # "who" numbers of sheep that are on the same patches as the wolves
   sheepWolves <- turtlesOn(world = grass, turtles = sheep, agents = wolves, simplify = FALSE)
-
-  if(count(sheepWolves) != 0){
+  if(nrow(sheepWolves) != 0){
     # sheepWolves[,"whoTurtles"] are the "who" numbers of sheep and sheepWolves[,"id"] are the "who" numbers of wolves
     sheepGrabbed <- oneOf(agents = sheepWolves) # grab one random sheep
 
     sheep <- die(turtles = sheep, who = sheepGrabbed) # kill the grabbed sheep
-    grabbingWolves <- turtle(turtles = wolves, who = sheepWolves[,"id"])
+    grabbingWolves <- turtle(turtles = wolves, who = unique(sheepWolves[,"id"]))
     energyGrabbingWolves <- of(agents = grabbingWolves, var = "energy")
     # Get energy from eating for the wolves who grabbed sheep
     wolves <- set(turtles = wolves, agents = grabbingWolves, var = "energy", val = energyGrabbingWolves + gainFoodWolf)
@@ -193,39 +204,42 @@ growGrass <- function(){ # only patches
   return(field)
 }
 
+
 ## Go
+
 time <- 0
-#while(NLany(sheep) & NLany(wolves)){ # as long as there are sheep or wolves in the world
-while(NLany(sheep) & NLany(wolves) & time < 500){
+#while(NLany(sheep) | NLany(wolves)){ # as long as there are sheep or wolves in the world
+for(i in 1:200){
 
   # Ask sheep
-  sheep <- move(sheep)
-  if(grassOn == TRUE){
-    energySheep <- of(agents = sheep, var = "energy")
-    sheep <- set(turtles = sheep, agents = sheep, var = "energy", val = energySheep - 1)
-    eatGrassResults <- eatGrass() # in the results are stored both "field" and "sheep"
-    field <- eatGrassResults[[1]] # reassign the object with their updated values
-    sheep <- eatGrassResults[[2]]
+  if(count(sheep) != 0){
+    sheep <- move(sheep)
+    if(grassOn == TRUE){
+      energySheep <- of(agents = sheep, var = "energy")
+      sheep <- set(turtles = sheep, agents = sheep, var = "energy", val = energySheep - 1)
+      eatGrassResults <- eatGrass() # in the results are stored both "field" and "sheep"
+      field <- eatGrassResults[[1]] # reassign the object with their updated values
+      sheep <- eatGrassResults[[2]]
+    }
+    sheep <- death(sheep)
+    if(count(sheep) != 0){
+      sheep <- reproduce(sheep, reproSheep)
+    }
   }
-  sheep <- death(sheep)
-  if(count(sheep) == 0){
-    stop("No sheep left")
-  }
-  sheep <- reproduce(sheep, reproSheep)
-
 
   # Ask wolves
-  wolves <- move(wolves)
-  energyWolves <- of(agents = wolves, var = "energy")
-  wolves <- set(turtles = wolves, agents = wolves, var = "energy", val = energyWolves - 1)
-  catchSheepResults <- catchSheep() # in the results are stored both "sheep" and "wolves"
-  sheep <- catchSheepResults[[1]]
-  wolves <- catchSheepResults[[2]]
-  wolves <- death(wolves)
-  if(count(wolves) == 0){
-    stop("No wolves left")
+  if(count(wolves) != 0){
+    wolves <- move(wolves)
+    energyWolves <- of(agents = wolves, var = "energy")
+    wolves <- set(turtles = wolves, agents = wolves, var = "energy", val = energyWolves - 1)
+    catchSheepResults <- catchSheep() # in the results are stored both "sheep" and "wolves"
+    sheep <- catchSheepResults[[1]]
+    wolves <- catchSheepResults[[2]]
+    wolves <- death(wolves)
+    if(count(wolves) != 0){
+      wolves <- reproduce(wolves, reproWolf)
+    }
   }
-  wolves <- reproduce(wolves, reproWolf)
 
   # Ask grass
   if(grassOn == TRUE){
@@ -265,6 +279,5 @@ if(grassOn == TRUE){
 
   legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
 }
-
 
 

@@ -2217,7 +2217,8 @@ setMethod(
 ################################################################################
 #' Turtles on
 #'
-#' Report the individuals among \code{turtles} that are at the same locations as the \code{agents}.
+#' Report the individuals among \code{turtles} that are at the same locations as
+#' the \code{agents}' patches.
 #'
 #' @inheritParams fargs
 #'
