@@ -98,6 +98,14 @@ move <- function(turtles){ # sheep and wolves
   return(turtles)
 }
 
+# Test move()
+plot(wolves, col = rainbow(count(wolves)), pch = 16)
+for(i in 1:5){
+  wolves <- move(wolves)
+  points(wolves, col = rainbow(count(wolves)), pch = 16)
+}
+#
+
 eatGrass <- function(){ # only sheep
   pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches with grass equal to 1 (green)
   sheepOnGreen <- turtlesOn(world = field, turtles = sheep, agents = pGreen) # sheep on green patches
