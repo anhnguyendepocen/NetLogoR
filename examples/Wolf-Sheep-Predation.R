@@ -129,6 +129,20 @@ death <- function(turtles){ # sheep and wolves
   return(turtles)
 }
 
+# Test death()
+count1 <- count(wolves)
+count2 <- count(wolves)
+for(i in 1:100){
+  energy <- runif(count(wolves), min = -10, max = 100)
+  wolves@data$energy <- energy
+  count1 <- c(count1, count(wolves) - length(energy[energy < 0]))
+  wolves <- death(wolves)
+  count2 <- c(count2, count(wolves))
+}
+plot(1:length(count1), count1, pch= 16)
+points(1:length(count2), count2, pch= 16, col = "red")
+#
+
 reproduce <- function(turtles, reproTurtles){ # sheep and wolves
   # Throw dice to see if the turtles will reproduce
   repro <- runif(n = count(turtles), min = 0, max = 100) < reproTurtles
