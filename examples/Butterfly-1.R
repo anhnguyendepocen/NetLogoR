@@ -21,7 +21,7 @@ elev1 <- 100 - NLdist(world = elevation, agents = patches(elevation), agents2 = 
 elev2 <- 50 - NLdist(world = elevation, agents = patches(elevation), agents2 = cbind(x = 120, y = 100))
 pElevation <- ifelse(elev1 > elev2, elev1, elev2)
 # Assign the elevation values to the patches
-elevation[] <- pElevation # when assigning values to ALL patches, this is faster than using set()
+elevation <- set(world = elevation, agents = patches(elevation), val = pElevation)
 
 # Visualize the world
 dev()

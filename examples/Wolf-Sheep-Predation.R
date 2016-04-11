@@ -40,10 +40,11 @@ grass <- createNLworld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor =
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
 if(grassOn == TRUE){
   # Initialize patch values (grass and countdown) at random
-  grass[] <- sample(c(0,1), size = length(grass), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
+  grassVal <- sample(c(0,1), size = length(grass), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
+  grass <- set(world = grass, agents = patches(grass), val = grassVal)
   countdown <- grass # countdown is a new NLworld with the same extent as grass
   countdownVal <- runif(n = length(grass), min = 0, max = grassTGrowth) # grass grow clock
-  countdown[] <- countdownVal
+  countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
   field <- NLstack(grass, countdown)
 }
 # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
@@ -76,8 +77,8 @@ if(grassOn == TRUE){
 #   Plot(sheep, addTo = "field$grass")
 #   Plot(wolves, addTo = "field$grass")
 # } else {
-#   grass[] <- 1 # cannot plot an empty world
-#   Plot(grass, cols = "green")
+#   grass <- set(world = grass, agents = patches(grass), val = 0) # cannot plot an empty world
+#   Plot(grass)
 #   Plot(sheep, addTo = "grass")
 #   Plot(wolves, addTo = "grass")
 # }
@@ -126,9 +127,9 @@ eatGrass <- function(){ # only sheep
 
 # # Test eatGrass()
 # grass <- createNLworld(1, 10, 1, 10)
-# grass[] <- c(rep(1, 50), rep(0, 50))
+# grass <- set(world = grass, agents = patches(grass), val = c(rep(1, 50), rep(0, 50)))
 # countdown <- grass
-# countdown[] <- 0
+# countdown <- set(world = countdown, agents = patches(countdown), val = 0)
 # field <- NLstack(grass, countdown)
 # sheep <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
 # sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = 1:10)
@@ -138,7 +139,7 @@ eatGrass <- function(){ # only sheep
 # fieldEat <- resultsEatGrass[[1]]
 # plot(fieldEat$grass)
 # sheepEat <- resultsEatGrass[[2]]
-# sheepEat@data$energy[6:10] == (6:10 + gainFoodSheep)
+# of(agents = sheepEat, var = "energy")[6:10] == (6:10 + gainFoodSheep)
 # #
 
 death <- function(turtles){ # sheep and wolves
@@ -158,7 +159,7 @@ death <- function(turtles){ # sheep and wolves
 # count2 <- count(wolves)
 # for(i in 1:100){
 #   energy <- runif(count(wolves), min = -10, max = 100)
-#   wolves@data$energy <- energy
+#   wolves <- set(turtles = wolves, agents = wolves, var = "energy", val = energy)
 #   count1 <- c(count1, count(wolves) - length(energy[energy < 0]))
 #   wolves <- death(wolves)
 #   count2 <- c(count2, count(wolves))
@@ -228,9 +229,9 @@ catchSheep <- function(){ # only wolves
 
 # # Test catchSheep()
 # grass <- createNLworld(1, 10, 1, 10)
-# grass[] <- c(rep(1, 50), rep(0, 50))
+# grass <- set(world = grass, agents = patches(grass), val = c(rep(1, 50), rep(0, 50)))
 # countdown <- grass
-# countdown[] <- 0
+# countdown <- set(world = countdown, agents = patches(countdown), val = 0)
 # field <- NLstack(grass, countdown)
 # sheep <- createTurtles(n = 10, coords = cbind(xcor = c(1,1,2,2,3,4,5,6,7,8), ycor = c(1,1,2,2,3,4,5,6,7,8)))
 # wolves <- createTurtles(n = 5, coords = cbind(xcor = 1:5, ycor = 1:5))
@@ -240,7 +241,7 @@ catchSheep <- function(){ # only wolves
 # wolvesCatch <- catchSheepResults[[2]]
 # count(sheepCatch) == 5
 # count(wolves) == 5
-# wolvesCatch@data$energy == (1:5 + gainFoodWolf)
+# of(agents = wolvesCatch, var = "energy") == (1:5 + gainFoodWolf)
 # #
 
 growGrass <- function(){ # only patches
@@ -268,13 +269,13 @@ growGrass <- function(){ # only patches
 
 # # Test growGrass()
 # grass <- createNLworld(1, 5, 1, 5)
-# grass[] <- c(rep(1, 10), rep(0, 15))
+# grass <- set(world = grass, agents = patches(grass), val = c(rep(1, 10), rep(0, 15)))
 # countdown <- grass
-# countdown[] <- c(rep(-1, 15), rep(1, 10))
+# countdown <- set(world = countdown, agents = patches(countdown), val = c(rep(-1, 15), rep(1, 10)))
 # field <- NLstack(grass, countdown)
 # fieldGrow <- growGrass()
-# values(fieldGrow$grass) == c(rep(1, 15), rep(0, 10))
-# values(fieldGrow$countdown) == c(rep(-1, 10), rep(grassTGrowth, 5), rep(0, 10))
+# of(world = fieldGrow, agents = patches(fieldGrow), var = "grass") == c(rep(1, 15), rep(0, 10))
+# of(world = fieldGrow, agents = patches(fieldGrow), var = "countdown") == c(rep(-1, 10), rep(grassTGrowth, 5), rep(0, 10))
 # #
 
 
