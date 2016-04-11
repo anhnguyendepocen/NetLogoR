@@ -143,12 +143,11 @@ eatGrass <- function(){ # only sheep
 
 death <- function(turtles){ # sheep and wolves
   # When energy dips below 0, die
-  energyTurtles <- of(agents = turtles, var = "energy")
-  energy0 <- which(energyTurtles < 0) # which energyTurtles values is below 0
+  whoEnergy <- of(agents = turtles, var = c("who", "energy"))
+  who0 <- whoEnergy[which(whoEnergy$energy < 0), "who"] # "who" numbers of the turtles with their energy value below 0
 
-  if(length(energy0) != 0){
-    deadWho <- of(agents = turtles, var = "who")[energy0] # "who" of dead turtles
-    turtles <- die(turtles = turtles, who = deadWho)
+  if(length(who0) != 0){
+    turtles <- die(turtles = turtles, who = who0)
   }
 
   return(turtles)
@@ -188,9 +187,10 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
     offspringMoved <- right(turtles = offspring, angle = runif(n = count(offspring), min = 0, max = 360))
     offspringMoved <- fd(world = grass, turtles = offspring, dist = 1, torus = TRUE)
     # Update the headings and coordinates of the offsprings inside the turtles
-    turtles <- set(turtles = turtles, agents = offspring, var = "heading", val = of(agents = offspringMoved, var = "heading"))
-    turtles <- set(turtles = turtles, agents = offspring, var = "xcor", val = of(agents = offspringMoved, var = "xcor"))
-    turtles <- set(turtles = turtles, agents = offspring, var = "ycor", val = of(agents = offspringMoved, var = "ycor"))
+    valOffspring <- of(agents = offspringMoved, var = c("heading", "xcor", "ycor"))
+    turtles <- set(turtles = turtles, agents = offspring, var = "heading", val = valOffspring$heading)
+    turtles <- set(turtles = turtles, agents = offspring, var = "xcor", val = valOffspring$xcor)
+    turtles <- set(turtles = turtles, agents = offspring, var = "ycor", val = valOffspring$ycor)
   }
 
   return(turtles)
