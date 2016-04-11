@@ -734,11 +734,11 @@ test_that("turtle works",{
   t12 <- turtle(t1, who = c(3, 11, 9))
   expect_identical(t12, t6)
   t13 <- turtle(t1, who = c(3, 11, 9), breed = "sheep")
-  expect_identical(t13, t8)
+  expect_equivalent(t13, t8)
   t14 <- turtle(t1, who = c(3, 11, 9), breed = c("sheep", "sheep", "wolf"))
   expect_identical(t14, t12)
   t15 <- turtle(t6, 3)
-  expect_identical(t15, t13)
+  expect_equivalent(t15, t13)
 })
 
 test_that("turtlesOn works",{
