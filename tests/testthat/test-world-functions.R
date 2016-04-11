@@ -104,13 +104,7 @@ test_that("worldHeight works", {
   expect_identical(height1, 21)
 })
 
-test_that("clearTurtles works", {
-  t1 <- SpatialPointsDataFrame(coords = matrix(c(1,2), nrow = 1, ncol = 2), data = data.frame(NA))
-  clearTurtles(turtles = t1)
-  expect_false(exists("t1", inherits = FALSE)) # If you have the object in global it will find it, unless inherits FALSE
-})
-
-test_that("clearPacthes works", {
+test_that("clearPatches works", {
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 3, minPycor = 0, maxPycor = 3)
   w1 <- setValues(w1, NA)
   w2 <- setValues(w1, 1:16)
@@ -119,7 +113,7 @@ test_that("clearPacthes works", {
   expect_identical(w1, w2_NA)
 })
 
-test_that("clearPacthes handles NLworld and NLworldStack", {
+test_that("clearPatches handles NLworld and NLworldStack", {
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 3, minPycor = 0, maxPycor = 3)
   w1 <- setValues(w1, runif(16))
   w2 <- setValues(w1, 1:16)
