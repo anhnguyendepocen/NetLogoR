@@ -2953,8 +2953,12 @@ setMethod(
         return(agents@data[,var])
       }
     } else {
-      agentsData <- cbind(agents@coords, agents@data)
-      return(agentsData[,var])
+      if(any(var == "xcor" | var == "ycor")){
+        agentsData <- cbind(agents@coords, agents@data)
+        return(agentsData[,var])
+      } else {
+        agents@data[,var]
+      }
     }
 })
 
