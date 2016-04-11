@@ -991,6 +991,14 @@ test_that("of works",{
   t2age <- of(agents = turtle(turtles = t1, who = 0), var = "age")
   expect_equivalent(t2age, 2)
 
+  # With multiple var
+  t3 <- of(agents = turtle(turtles = t1, who = 0), var = c("who", "heading"))
+  expect_equivalent(cbind.data.frame(who = 0, heading = 21), t3)
+  t4 <- of(agents = turtle(turtles = t1, who = 0), var = c("who", "xcor"))
+  expect_equivalent(cbind.data.frame(who = 0, xcor = 1), t4)
+  t5 <- of(agents = t1, var = c("who", "xcor", "age"))
+  expect_equivalent(cbind.data.frame(who = 0:9, xcor = 1:10, age = c(2, 3, 4, 5, 2, 4, 6, 6, 3, 5)), t5)
+
   # Works with patches
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w1[] <- 1:25
@@ -1023,4 +1031,10 @@ test_that("of works",{
   expect_equivalent(w2_all, rep(0, 25))
   w2_31 <- of(world = w3, var = "w2", agents = patch(w1, c(2,0), c(4,4)))
   expect_equivalent(w2_31, c(0,0))
+
+  # Work with multiple var
+  p1 <- of(world = w3, var = c("w2", "w1"), agents = patch(w1, 0, 4))
+  expect_equivalent(p1, cbind(0, 1))
+  p2 <- of(world = w3, var = c("w1", "w2"), agents = patches(w3))
+  expect_equivalent(p2, cbind(1:25,rep(0, 25)))
 })

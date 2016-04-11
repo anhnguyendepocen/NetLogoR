@@ -2889,9 +2889,24 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return Vector of values for the \code{agents}. The class depends
+#' @param var Character. Vector of the name of the selected \code{agents} variables.
+#'            If \code{agents} are patches and the \code{world} is a
+#'            \code{NLworld} object, \code{var} must not be provided. If
+#'            \code{agents} are patches and the \code{world} is a \code{NLworldStack}
+#'            object, \code{var} is the name of the layers to use to define the patches
+#'            values. If \code{agents} are turtles, \code{var} is some of
+#'            the turtles' variable and can be equal to \code{"xcor"},
+#'            \code{"ycor"}, any of the variables created when turtles were created,
+#'            as well as any variable created using \code{turtlesOwn()}.
+#'
+#' @return Vector of values for the \code{agents} if one variable is requested. The class depends
 #'         of the variable class. The order of the vector follows the order
-#'         of the \code{agents}.
+#'         of the \code{agents}, or
+#'
+#'         Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{count(agents)})
+#'         if \code{agents} are patches or turtles, of the
+#'         values for the requested variables for the \code{agents}. The row order
+#'         of the returned matrix follws the order of the \code{agents}.
 #'
 #' @details If \code{agents} are turtles, \code{world} must not be provided.
 #'
@@ -2905,6 +2920,7 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1[] <- 1:25
 #' of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
+#'
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' of(agents = t1, var = "heading")
 #'
@@ -2928,12 +2944,17 @@ setMethod(
   signature = c("missing", "SpatialPointsDataFrame", "character"),
   definition = function(agents, var) {
 
-    if(var == "xcor"){
-      return(agents@coords[,1])
-    } else if(var == "ycor"){
-      return(agents@coords[,2])
+    if(length(var) == 1){
+      if(var == "xcor"){
+        return(agents@coords[,1])
+      } else if(var == "ycor"){
+        return(agents@coords[,2])
+      } else {
+        return(agents@data[,var])
+      }
     } else {
-      return(agents@data[,var])
+      agentsData <- cbind(agents@coords, agents@data)
+      return(agentsData[,var])
     }
 })
 
@@ -2945,8 +2966,13 @@ setMethod(
   definition = function(world, agents) {
 
     valuesW <- values(world)
-    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    return(valuesW[cells])
+
+    if(identical(patches(world), agents)){
+      return(valuesW)
+    } else {
+      cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+      return(valuesW[cells])
+    }
 })
 
 #' @export
@@ -2957,6 +2983,17 @@ setMethod(
   definition = function(world, agents, var) {
 
     valuesW <- values(world)
-    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    return(valuesW[cells, var])
+
+    if(identical(patches(world), agents)){
+      return(valuesW[,var])
+    } else {
+      cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+      if(length(cells) != 1 | length(var) == 1){
+        return(valuesW[cells, var])
+      } else {
+        cellVal <- valuesW[cells, var]
+        cellVatMat <- matrix(cellVal, ncol = length(var), dimnames = list(NULL, var))
+        return(cellVatMat)
+      }
+    }
 })
