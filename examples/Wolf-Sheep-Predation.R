@@ -15,7 +15,7 @@ library(SpaDES)
 
 ## Global variables (some represent the model buttons)
 # Grass settings
-grassOn <- FALSE
+grassOn <- TRUE
 grassTGrowth <- 30
 greenCount <- numeric() # keep track of how much grass there is
 
@@ -188,9 +188,7 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
     offspringMoved <- fd(world = grass, turtles = offspring, dist = 1, torus = TRUE)
     # Update the headings and coordinates of the offsprings inside the turtles
     valOffspring <- of(agents = offspringMoved, var = c("heading", "xcor", "ycor"))
-    turtles <- set(turtles = turtles, agents = offspring, var = "heading", val = valOffspring$heading)
-    turtles <- set(turtles = turtles, agents = offspring, var = "xcor", val = valOffspring$xcor)
-    turtles <- set(turtles = turtles, agents = offspring, var = "ycor", val = valOffspring$ycor)
+    turtles <- set(turtles = turtles, agents = offspring, var = c("heading", "xcor", "ycor"), val = valOffspring)
   }
 
   return(turtles)
@@ -251,14 +249,19 @@ growGrass <- function(){ # only patches
   pBrownCountdown <- of(world = field, var = "countdown", agents = pBrown) # countdown values for the patches equal to 0 (brown)
 
   pBrownCountdown0 <- which(pBrownCountdown <= 0) # patches with a countdown <= 0
-  pGrow <- pBrown[pBrownCountdown0, ] # patches with grass equal to 0 (brown) and countdown <= 0
-  field <- set(world = field, var = "grass", agents = pGrow, val = 1) # grow some grass on these patches
-  field <- set(world = field, var = "countdown", agents = pGrow, val = grassTGrowth) # and reset the countdown
+  if(length(pBrownCountdown0) != 0){
+    pGrow <- pBrown[pBrownCountdown0, ] # patches with grass equal to 0 (brown) and countdown <= 0
+    # Grow some grass on these patches and reset the countdown
+    field <- set(world = field, var = c("grass", "countdown"), agents = pGrow,
+                 val = cbind(grass = rep(1, count(pGrow)), countdown = rep(grassTGrowth, count(pGrow))))
+  }
 
   pBrownCountdown1 <- which(!pBrownCountdown <= 0) # patches with a countdown > 0
-  pWait <- pBrown[pBrownCountdown1, ] # patches with grass equal to 0 (brown) and countdown > 0
-  # Decrease the countdown for the patches which wait
-  field <- set(world = field, var = "countdown", agents = pWait, val = pBrownCountdown[pBrownCountdown1] - 1)
+  if(length(pBrownCountdown1) != 0){
+    pWait <- pBrown[pBrownCountdown1, ] # patches with grass equal to 0 (brown) and countdown > 0
+    # Decrease the countdown for the patches which wait
+    field <- set(world = field, var = "countdown", agents = pWait, val = pBrownCountdown[pBrownCountdown1] - 1)
+  }
 
   return(field)
 }
