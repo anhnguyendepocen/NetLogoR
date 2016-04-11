@@ -291,27 +291,30 @@ setMethod(
   signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
   definition = function(world, turtles, dist, torus, out) {
 
-    turtles@data$prevX <- turtles@coords[,1]
-    turtles@data$prevY <- turtles@coords[,2]
+    prevXcor <- turtles@coords[,1]
+    prevYcor <- turtles@coords[,2]
 
-    fdXcor <- round(turtles@coords[,1] + sin(rad(turtles@data$heading)) * dist, digits = 5)
-    fdYcor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * dist, digits = 5)
+    turtles@data$prevX <- prevXcor
+    turtles@data$prevY <- prevYcor
+
+    fdXcor <- prevXcor + sin(rad(turtles@data$heading)) * dist
+    fdYcor <- prevYcor + cos(rad(turtles@data$heading)) * dist
 
     if(torus == TRUE){
       tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
-      fdXcor <- round(tCoords[,1], digits = 5)
-      fdYcor <- round(tCoords[,2], digits = 5)
+      fdXcor <- tCoords[,1]
+      fdYcor <- tCoords[,2]
     }
 
     if(torus == FALSE & out == FALSE){
       outX <- fdXcor < world@extent@xmin | fdXcor > world@extent@xmax
       outY <- fdYcor < world@extent@ymin | fdYcor > world@extent@ymax
       outXY <- which(outX | outY) # position of turtles out of the world's extent
-      fdXcor[outXY] <- turtles@coords[,1][outXY]
-      fdYcor[outXY] <- turtles@coords[,2][outXY]
+      fdXcor[outXY] <- prevXcor[outXY]
+      fdYcor[outXY] <- prevYcor[outXY]
     }
 
-    turtles@coords <- cbind(xcor = fdXcor, ycor = fdYcor)
+    turtles@coords <- cbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
     return(turtles)
   }
 )
