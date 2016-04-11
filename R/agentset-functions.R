@@ -1743,10 +1743,14 @@ setMethod(
   signature = c(world = "NLworld", turtles = "missing", agents = "matrix", var = "missing", val = "ANY"),
   definition = function(world, agents, val) {
 
-    valuesW <- values(world)
-    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    valuesW[cells] <- val
-    world[] <- valuesW
+    if(identical(patches(world), agents)){
+      world[] <- val
+    } else {
+      valuesW <- values(world)
+      cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+      valuesW[cells] <- val
+      world[] <- valuesW
+    }
 
     return(world)
 })
@@ -1758,11 +1762,16 @@ setMethod(
   signature = c(world = "NLworldStack", turtles = "missing", agents = "matrix", var = "character", val = "ANY"),
   definition = function(world, agents, var, val) {
 
-    valuesW <- values(world)
-    cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    valuesW[cells, var] <- val
-    colNum <- match(var, colnames(valuesW))
-    world@layers[[colNum]][] <- valuesW[,var]
+    if(identical(patches(world), agents)){
+      colNum <- match(var, names(world))
+      world@layers[[colNum]][] <- val
+    } else {
+      valuesW <- values(world)
+      cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+      valuesW[cells, var] <- val
+      colNum <- match(var, colnames(valuesW))
+      world@layers[[colNum]][] <- valuesW[,var]
+    }
 
     return(world)
 })
@@ -1775,14 +1784,28 @@ setMethod(
                 var = "character", val = "ANY"),
   definition = function(turtles, agents, var, val) {
 
-    iAgents <- row.match(agents@data, turtles@data) # using data.table is not faster
+    if(identical(agents, turtles)){
 
-    if(var == "xcor"){
-      turtles@coords[iAgents, 1] <- val
-    } else if(var == "ycor"){
-      turtles@coords[iAgents, 2] <- val
+      if(var == "xcor"){
+        turtles@coords[, 1] <- val
+      } else if(var == "ycor"){
+        turtles@coords[, 2] <- val
+      } else {
+        turtles@data[, var] <- val
+      }
+
     } else {
-      turtles@data[iAgents, var] <- val
+
+      iAgents <- row.match(agents@data, turtles@data) # using data.table is not faster
+
+      if(var == "xcor"){
+        turtles@coords[iAgents, 1] <- val
+      } else if(var == "ycor"){
+        turtles@coords[iAgents, 2] <- val
+      } else {
+        turtles@data[iAgents, var] <- val
+      }
+
     }
 
     return(turtles)
