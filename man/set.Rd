@@ -30,27 +30,31 @@ by \code{createOTurtles()} representing the moving agents.}
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
 
-\item{var}{Character. The name of the selected \code{agents} variable.
+\item{var}{Character. Vector of the name of the selected \code{agents} variables.
 If \code{agents} are patches and the \code{world} is a
 \code{NLworld} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-object, \code{var} is the name of the layer to use to define the patches
-values. If \code{agents} are turtles, \code{var} is one of
+object, \code{var} is the name of the layers to use to define the patches
+values. If \code{agents} are turtles, \code{var} is some of
 the turtles' variable and can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,
 as well as any variable created using \code{turtlesOwn()}.}
 
-\item{val}{Numeric or character. Vector of length 1 or length \code{count(agents)}.}
+\item{val}{Numeric or character. Vector of length 1 or length \code{count(agents)}
+           if \code{length(var) == 1}, or
+
+           Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{count(agents)}).
+           Columns must be in the same order as \code{var}.}
 }
 \value{
-NLworlds object with the values \code{val} assigned to the patches in
-        \code{agents}, or
+NLworlds object with the values \code{val} assigned to the patches variables \code{var}
+        for the \code{agents}, or
 
         SpatialPointsDataFrame representing the \code{turtles} with
-        the values \code{tVal} assigned to the variable \code{tVar} for the \code{agents}.
+        the values \code{val} assigned to the variables \code{var} for the \code{agents}.
 }
 \description{
-Assign values to the \code{agents} for their selected variable.
+Assign values to the \code{agents} for their selected variables.
 }
 \details{
 If \code{agents} are patches, \code{world} must be provided and \code{turtles}

@@ -567,12 +567,29 @@ test_that("set works",{
   w3 <- set(world = w3, agents = patch(w3, 0, 0), var = "w1", val = 100)
   expect_equivalent(w3[0,0][1], 100)
 
+  # With multiple values
+  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 100))
+  expect_equivalent(w3[0,0], cbind(w1 = 0, w2 = 100))
+  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = c("w2", "w1"), val = cbind(w2 = 0, w1 = 100))
+  expect_equivalent(w3[0,0], cbind(w1 = 100, w2 = 0))
+  w3 <- set(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101:125, w2 = 125:101))
+  expect_equivalent(values(w3), cbind(w1 = 101:125, w2 = 125:101))
+  w3 <- set(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 101:125, w1 = 125:101))
+  expect_equivalent(values(w3), cbind(w1 = 125:101, w2 = 101:125))
+
   # Set work with turtles
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
   t2 <- set(turtles = t1, agents = t1, var = "heading", val = 0)
   expect_equivalent(t2@data$heading, rep(0, length(t2)))
-  t3 <- set(turtles = t1,agents = turtle(t1, 0), var = "xcor", val = 3)
+  t3 <- set(turtles = t1, agents = turtle(t1, 0), var = "xcor", val = 3)
   expect_equivalent(t3@coords[,1], c(3, 1, 2, 3, 4))
-  t4 <- set(turtles = t1,agents = turtle(t1, c(0,1)), var = "xcor", val = 3)
+  t4 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = "xcor", val = 3)
   expect_equivalent(t4@coords[,1], c(3, 3, 2, 3, 4))
+
+  # With multiple values
+  t5 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("xcor", "heading"), val = cbind(xcor = c(100,100), heading = c(33, 66)))
+  expect_equivalent(t5@coords[,1], c(100,100,2,3,4))
+  expect_equivalent(t5@data$heading, c(33,66,180,270,0))
+  t6 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
+  expect_identical(t5, t6)
 })

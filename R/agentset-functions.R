@@ -1690,17 +1690,23 @@ setMethod(
 ################################################################################
 #' Set an agents variable
 #'
-#' Assign values to the \code{agents} for their selected variable.
+#' Assign values to the \code{agents} for their selected variables.
+#'
+#' @inheritParams of
 #'
 #' @inheritParams fargs
 #'
-#' @param val Numeric or character. Vector of length 1 or length \code{count(agents)}.
+#' @param val Numeric or character. Vector of length 1 or length \code{count(agents)}
+#'            if \code{length(var) == 1}, or
 #'
-#' @return NLworlds object with the values \code{val} assigned to the patches in
-#'         \code{agents}, or
+#'            Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{count(agents)}).
+#'            Columns must be in the same order as \code{var}.
+#'
+#' @return NLworlds object with the values \code{val} assigned to the patches variables \code{var}
+#'         for the \code{agents}, or
 #'
 #'         SpatialPointsDataFrame representing the \code{turtles} with
-#'         the values \code{tVal} assigned to the variable \code{tVar} for the \code{agents}.
+#'         the values \code{val} assigned to the variables \code{var} for the \code{agents}.
 #'
 #' @details If \code{agents} are patches, \code{world} must be provided and \code{turtles}
 #'          must not be provided. If \code{agents} are turtles, \code{turtles} must be
@@ -1762,15 +1768,42 @@ setMethod(
   signature = c(world = "NLworldStack", turtles = "missing", agents = "matrix", var = "character", val = "ANY"),
   definition = function(world, agents, var, val) {
 
+
     if(identical(patches(world), agents)){
-      colNum <- match(var, names(world))
-      world@layers[[colNum]][] <- val
+
+      if(length(var) == 1){
+
+        colNum <- match(var, names(world))
+        world@layers[[colNum]][] <- val
+
+      } else {
+
+        for(i in 1:length(var)){
+          colNum <- match(var[i], names(world))
+          world@layers[[colNum]][] <- val[,i]
+        }
+
+      }
+
     } else {
+
       valuesW <- values(world)
       cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-      valuesW[cells, var] <- val
-      colNum <- match(var, colnames(valuesW))
-      world@layers[[colNum]][] <- valuesW[,var]
+
+      if(length(var) == 1){
+
+        colNum <- match(var, names(world))
+        valuesW[cells, colNum] <- val
+        world@layers[[colNum]][] <- valuesW[,colNum]
+
+      } else {
+
+        for(i in 1:length(val)){
+          colNum <- match(var[i], colnames(valuesW))
+          valuesW[cells, colNum] <- val[,i]
+          world@layers[[colNum]][] <- valuesW[,colNum]
+        }
+      }
     }
 
     return(world)
@@ -1786,26 +1819,61 @@ setMethod(
 
     if(identical(agents, turtles)){
 
-      if(var == "xcor"){
-        turtles@coords[, 1] <- val
-      } else if(var == "ycor"){
-        turtles@coords[, 2] <- val
+      if(length(var) == 1){
+
+        if(var == "xcor"){
+          turtles@coords[, 1] <- val
+        } else if(var == "ycor"){
+          turtles@coords[, 2] <- val
+        } else {
+          turtles@data[, var] <- val
+        }
+
       } else {
-        turtles@data[, var] <- val
+
+        if(any(var == "xor" | var == "ycor")){
+
+          turtlesData <- cbind(turtles@coords, turtles@data)
+          turtlesData[, var] <- val
+          turtles@coords <- turtlesData[,c(1,2)]
+          turtles@data <- turtlesData[,3:ncol(turtles@data)]
+
+        } else {
+
+          turtles@data[, var] <- val
+
+        }
       }
 
     } else {
 
       iAgents <- row.match(agents@data, turtles@data) # using data.table is not faster
 
-      if(var == "xcor"){
-        turtles@coords[iAgents, 1] <- val
-      } else if(var == "ycor"){
-        turtles@coords[iAgents, 2] <- val
-      } else {
-        turtles@data[iAgents, var] <- val
-      }
+      if(length(var) == 1){
 
+        if(var == "xcor"){
+          turtles@coords[iAgents, 1] <- val
+        } else if(var == "ycor"){
+          turtles@coords[iAgents, 2] <- val
+        } else {
+          turtles@data[iAgents, var] <- val
+        }
+
+      } else {
+
+        if(any(var == "xcor" | var == "ycor")){
+
+          turtlesData <- cbind(turtles@coords, turtles@data)
+          turtlesData[iAgents, var] <- val
+          turtles@coords <- cbind(xcor = turtlesData[,1], ycor = turtlesData[,2])
+          turtles@data <- turtlesData[,3:ncol(turtles@data)]
+
+        } else {
+
+          turtles@data[iAgents, var] <- val
+
+        }
+      }
     }
 
     return(turtles)
