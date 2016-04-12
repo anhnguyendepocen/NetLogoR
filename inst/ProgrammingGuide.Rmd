@@ -15,6 +15,8 @@ In NetLogoR, the world is a `NLworlds` R object, either a `NLworld` or a `NLworl
 
 There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates `pxcor` and `pycor`, representing their center, as `matrix` objects. See `help("NLworld")` for more details on the patch coordinates system. Turtles are defined by their coordinates `xcor` and `ycor` and data associated as `SpatialPointDataFrame` objects. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).
 
+Links are not implemented in NetLogoR.
+
 
 ### Procedures
 
@@ -104,6 +106,8 @@ If a for-loop or a scheduler function (e.g., see SpaDES package) is used in the 
 ### Lists and strings
 
 Lists may be seen as global variables holding one or more values and strings may be seen as global variables holding characters. Lists and strings are inherent to the R language. Please see R manuals for any related questions.
+
+NetLogo uses lists to store elements. In R, it is easier to use vector when all the elements stored are numerical.
 
 
 ### Math and random numbers

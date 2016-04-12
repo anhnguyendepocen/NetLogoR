@@ -71,5 +71,7 @@ Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 }
 \seealso{
 \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#patch-at}
+
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#at-points}
 }
 

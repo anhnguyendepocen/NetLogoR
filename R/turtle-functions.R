@@ -2076,7 +2076,7 @@ setMethod(
 #'          AND given \code{breed} must exists inside \code{turtles} for \code{TRUE}
 #'          to be returned.
 #'
-#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#is-of-type}
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#member}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,

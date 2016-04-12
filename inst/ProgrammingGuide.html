@@ -122,6 +122,7 @@ $(document).ready(function () {
 <h3>World and agents</h3>
 <p>In NetLogoR, the world is a <code>NLworlds</code> R object, either a <code>NLworld</code> or a <code>NLworldStack</code> R object. The world is two dimensional and is divided into a grid of square patches of resolution 1.</p>
 <p>There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates <code>pxcor</code> and <code>pycor</code>, representing their center, as <code>matrix</code> objects. See <code>help(&quot;NLworld&quot;)</code> for more details on the patch coordinates system. Turtles are defined by their coordinates <code>xcor</code> and <code>ycor</code> and data associated as <code>SpatialPointDataFrame</code> objects. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).</p>
+<p>Links are not implemented in NetLogoR.</p>
 </div>
 <div id="procedures" class="section level3">
 <h3>Procedures</h3>
@@ -175,6 +176,7 @@ wolves &lt;- createTurtles(world = w1, n = 5, breed = &quot;wolf&quot;) # 5 wolv
 <div id="lists-and-strings" class="section level3">
 <h3>Lists and strings</h3>
 <p>Lists may be seen as global variables holding one or more values and strings may be seen as global variables holding characters. Lists and strings are inherent to the R language. Please see R manuals for any related questions.</p>
+<p>NetLogo uses lists to store elements. In R, it is easier to use vector when all the elements stored are numerical.</p>
 </div>
 <div id="math-and-random-numbers" class="section level3">
 <h3>Math and random numbers</h3>
