@@ -5,13 +5,34 @@ date: "4 février 2016"
 output: html_document
 ---
 
+\
+
+
+#### April 2016
+
+Potential tasks to do:
+
+* E) Remove "useless" parameters in signature functions (e.g., each time "world" is asked, it is to be used with the wrap function. "world" is not needed when torus = FALSE). Need to be changed in all dependent functions and tests associated. E.g., fd(), bk() and NLdist() but maybe others.
+
+* F) Rename functions with shorter names.
+
+* G) Increase functions speed (e.g., better manage the outputs by removing lists)
+
+* L) Code all the NL link functions.
+
+* M) Build new modele example(s) (mostly to help pinpoint slow and not-general enough functions).
+
+* N) Build the Wolf-Sheep-Predation model (or another one) using SpaDES.
+
+\
 
 
 #### March 2016
 
 Here are the remaining tasks to do in the remaining 5 to 6 weeks.
 
-* A) Make the functions clearTurtles(), clearAll() (this one is not written yet) and resizeWorld() work by figuring out the removing of R objects and environments when wrapping functions OR just explain in the dictionary or programming guide how to remove R objects and not building functions for that.
+* A) (Done) Make the functions clearTurtles(), clearAll() (this one is not written yet) and resizeWorld() work by figuring out the removing of R objects and environments when wrapping functions OR just explain in the dictionary or programming guide how to remove R objects and not building functions for that.
+*Explained in the NLR dictionnary how to emulate these functions. They weren't that necessary to be implemented as functions as their replacements suggested are really easy, fast and straightforward to use.*
 
 * B) (Done) Add a torus option to a few functions missing it (e.g., diffuse() but maybe others).
 *Only diffuse() was missing the torus option*
@@ -32,18 +53,19 @@ Here are the remaining tasks to do in the remaining 5 to 6 weeks.
 *I built two model examples: Butterfly-1 and Wolf-Sheep-Predation. Both use a for-loop for the time. The Wolf-Sheep-Predation could be written using SpaDES*
 
 * I) (Done) Update the programming guide with the on-going changes.
-*Up to date for the changes made until 2016-04-11*
+*Up to date for the changes made until 2016-04-13*
 
-* J) Complete the NLR dictionary with all the NL functions not defined in NLR because not needed or already in R or R packages.
+* J) (Done) Complete the NLR dictionary with all the NL functions not defined in NLR because not needed or already in R or R packages.
+*3 entries missing. An issue was opened about it*
 
 * K) Code all the NL visual functions (e.g., plotting/drawing) and update the documents (i.e., dictionary and guide).
+*I don't think this is necessary because a lot of the plotting functions exist and making a nice interface is not the point of using NetLogoR. Besides, it will be very slow and never as efficient as NetLogo*
 
 * L) Code all the NL link functions and update the documents (i.e., dictionary and guide).
 
 Some of these tasks are faster to realize than others (e.g., B and C are the quickest to do and K and L will take the most time). There are also tasks more important to be done than others if I cannot do everything (e.g., I think H is one of the most important to do to make sure the necessary minimum set of functions is done).
 Which tasks do you prefer that I start to work on first?
-  
-\
+
 \
 
 

@@ -115,12 +115,40 @@ $(document).ready(function () {
 </div>
 
 
+<p><br />
+</p>
+<div id="april-2016" class="section level4">
+<h4>April 2016</h4>
+<p>Potential tasks to do:</p>
+<ul>
+<li><ol start="5" style="list-style-type: upper-alpha">
+<li>Remove “useless” parameters in signature functions (e.g., each time “world” is asked, it is to be used with the wrap function. “world” is not needed when torus = FALSE). Need to be changed in all dependent functions and tests associated. E.g., fd(), bk() and NLdist() but maybe others.</li>
+</ol></li>
+<li><ol start="6" style="list-style-type: upper-alpha">
+<li>Rename functions with shorter names.</li>
+</ol></li>
+<li><ol start="7" style="list-style-type: upper-alpha">
+<li>Increase functions speed (e.g., better manage the outputs by removing lists)</li>
+</ol></li>
+<li><ol start="12" style="list-style-type: upper-alpha">
+<li>Code all the NL link functions.</li>
+</ol></li>
+<li><ol start="13" style="list-style-type: upper-alpha">
+<li>Build new modele example(s) (mostly to help pinpoint slow and not-general enough functions).</li>
+</ol></li>
+<li><ol start="14" style="list-style-type: upper-alpha">
+<li>Build the Wolf-Sheep-Predation model (or another one) using SpaDES.</li>
+</ol></li>
+</ul>
+<p><br />
+</p>
+</div>
 <div id="march-2016" class="section level4">
 <h4>March 2016</h4>
 <p>Here are the remaining tasks to do in the remaining 5 to 6 weeks.</p>
 <ul>
 <li><ol style="list-style-type: upper-alpha">
-<li>Make the functions clearTurtles(), clearAll() (this one is not written yet) and resizeWorld() work by figuring out the removing of R objects and environments when wrapping functions OR just explain in the dictionary or programming guide how to remove R objects and not building functions for that.</li>
+<li>(Done) Make the functions clearTurtles(), clearAll() (this one is not written yet) and resizeWorld() work by figuring out the removing of R objects and environments when wrapping functions OR just explain in the dictionary or programming guide how to remove R objects and not building functions for that. <em>Explained in the NLR dictionnary how to emulate these functions. They weren’t that necessary to be implemented as functions as their replacements suggested are really easy, fast and straightforward to use.</em></li>
 </ol></li>
 <li><ol start="2" style="list-style-type: upper-alpha">
 <li>(Done) Add a torus option to a few functions missing it (e.g., diffuse() but maybe others). <em>Only diffuse() was missing the torus option</em></li>
@@ -144,13 +172,13 @@ $(document).ready(function () {
 <li>(Done) Build a model with the NLR functions (e.g., take a NL example model and translate it in NLR). Document the steps of doing it in the programming guide in a “How to build a NLR model”. <em>I built two model examples: Butterfly-1 and Wolf-Sheep-Predation. Both use a for-loop for the time. The Wolf-Sheep-Predation could be written using SpaDES</em></li>
 </ol></li>
 <li><ol style="list-style-type: upper-roman">
-<li>(Done) Update the programming guide with the on-going changes. <em>Up to date for the changes made until 2016-04-11</em></li>
+<li>(Done) Update the programming guide with the on-going changes. <em>Up to date for the changes made until 2016-04-13</em></li>
 </ol></li>
 <li><ol start="10" style="list-style-type: upper-alpha">
-<li>Complete the NLR dictionary with all the NL functions not defined in NLR because not needed or already in R or R packages.</li>
+<li>(Done) Complete the NLR dictionary with all the NL functions not defined in NLR because not needed or already in R or R packages. <em>3 entries missing. An issue was opened about it</em></li>
 </ol></li>
 <li><ol start="11" style="list-style-type: upper-alpha">
-<li>Code all the NL visual functions (e.g., plotting/drawing) and update the documents (i.e., dictionary and guide).</li>
+<li>Code all the NL visual functions (e.g., plotting/drawing) and update the documents (i.e., dictionary and guide). <em>I don’t think this is necessary because a lot of the plotting functions exist and making a nice interface is not the point of using NetLogoR. Besides, it will be very slow and never as efficient as NetLogo</em></li>
 </ol></li>
 <li><ol start="12" style="list-style-type: upper-alpha">
 <li>Code all the NL link functions and update the documents (i.e., dictionary and guide).</li>
@@ -158,7 +186,6 @@ $(document).ready(function () {
 </ul>
 <p>Some of these tasks are faster to realize than others (e.g., B and C are the quickest to do and K and L will take the most time). There are also tasks more important to be done than others if I cannot do everything (e.g., I think H is one of the most important to do to make sure the necessary minimum set of functions is done). Which tasks do you prefer that I start to work on first?</p>
 <p><br />
-<br />
 </p>
 </div>
 <div id="february-2016" class="section level4">
