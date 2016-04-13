@@ -107,7 +107,7 @@ If a for-loop or a scheduler function (e.g., see SpaDES package) is used in the 
 
 Lists may be seen as global variables holding one or more values and strings may be seen as global variables holding characters. Lists and strings are inherent to the R language. Please see R manuals for any related questions.
 
-NetLogo uses lists to store elements. In R, it is easier to use vector when all the elements stored are numerical.
+NetLogo uses lists to store elements. In R, it is easier to use vectors when all the elements stored are numerical.
 
 
 ### Math and random numbers
@@ -118,6 +118,8 @@ R is a software dedicated for data management and statistical analyses. The nota
 ### Input/output
 
 Reading and writing files is inherent to the R language. Please see R manuals for any related questions on basic functions, as well as the different packages, for more complex functions to manage files.
+
+In R, a file is loaded/opened by assigning its content to an R object. The R object can be read, used and modified but this does not affect the original file. The modified R object can later be written out as a file, either by overwritting the original file or by creating a new file.
 
 
 ### View, plot, screen output

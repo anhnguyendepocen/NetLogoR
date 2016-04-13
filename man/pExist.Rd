@@ -41,6 +41,6 @@ Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
             Northwestern University. Evanston, IL.
 }
 \seealso{
-\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#is-of-type}
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#member}
 }
 
