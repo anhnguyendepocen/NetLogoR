@@ -680,7 +680,7 @@ $(document).ready(function () {
 <li><p>link-with: links not implemented.</p></li>
 <li><p>with-max: <code>withMax()</code> from NetLogoR.</p></li>
 <li><p>with-min: <code>withMin()</code> from NetLogoR.</p></li>
-<li><p>with-local-randomness: save the seed (e.g., <code>oldSeed &lt;- .Random.seed</code>) and reuse it later with <code>set.seed(oldSeed)</code>.</p></li>
+<li><p>with-local-randomness: save the current seed and RNG with <code>oldSeed &lt;- get(&quot;.Random.seed&quot;, envir = .GlobalEnv)</code> and <code>oldRNGkind &lt;- RNGkind()</code>, and reassign it later with <code>do.call(&quot;RNGkind&quot;, as.list(oldRNGkind))</code> and <code>assign(&quot;.Random.seed&quot;, oldSeed, envir = .GlobalEnv)</code>.</p></li>
 <li><p>without-interruption: not implemented.</p></li>
 <li><p>word: <code>paste()</code>.</p></li>
 <li>world-width: <code>worldWidth()</code> in NetLogoR.</li>

@@ -885,7 +885,7 @@ See http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf for more colors.
 
 * with-min: `withMin()` from NetLogoR.
 
-* with-local-randomness: save the seed (e.g., `oldSeed <- .Random.seed`) and reuse it later with `set.seed(oldSeed)`.
+* with-local-randomness: save the current seed and RNG with `oldSeed <- get(".Random.seed", envir = .GlobalEnv)` and `oldRNGkind <- RNGkind()`, and reassign it later with `do.call("RNGkind", as.list(oldRNGkind))` and `assign(".Random.seed", oldSeed, envir = .GlobalEnv)`.
 
 * without-interruption: not implemented.
 
