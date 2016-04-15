@@ -3,18 +3,17 @@
 \docType{methods}
 \name{inCone}
 \alias{inCone}
-\alias{inCone,SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame,NLworlds-method}
-\alias{inCone,SpatialPointsDataFrame,numeric,numeric,matrix,NLworlds-method}
+\alias{inCone,SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame-method}
+\alias{inCone,SpatialPointsDataFrame,numeric,numeric,matrix-method}
 \title{Agents in cone}
 \usage{
 inCone(turtles, radius, angle, agents, world, torus = FALSE)
 
-
-  \S4method{inCone}{SpatialPointsDataFrame,numeric,numeric,matrix,NLworlds}(turtles,
+\S4method{inCone}{SpatialPointsDataFrame,numeric,numeric,matrix}(turtles,
   radius, angle, agents, world, torus = FALSE)
 
 
-  \S4method{inCone}{SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame,NLworlds}(turtles,
+  \S4method{inCone}{SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame}(turtles,
   radius, angle, agents, world, torus = FALSE)
 }
 \arguments{
@@ -62,6 +61,8 @@ Report the \code{agents} within the "cone of vision" in front of each one of the
 
          Distances to patches are calculated to their center.
 
+         If \code{torus = FALSE}, \code{world} does not need to be provided.
+
          If \code{torus = TRUE}, the \code{radius} distances are calculated
          around the sides of the \code{world} to select \code{agents}.
 }
@@ -69,8 +70,8 @@ Report the \code{agents} within the "cone of vision" in front of each one of the
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90, world = w1)
-t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1, world = w1)
+p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90)
+t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1)
 
 
 }

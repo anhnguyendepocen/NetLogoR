@@ -1595,6 +1595,8 @@ setMethod(
 #'
 #'          Distances to patches are calculated to their center.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE}, the \code{radius} distances are calculated
 #'          around the sides of the \code{world} to select \code{agents}.
 #'
@@ -1608,8 +1610,8 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
-#' p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90, world = w1)
-#' t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1, world = w1)
+#' p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90)
+#' t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1)
 #'
 #'
 #' @export
@@ -1628,7 +1630,7 @@ setGeneric(
 #' @rdname inCone
 setMethod(
   "inCone",
-  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "matrix", world = "NLworlds"),
+  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "matrix"),
   definition = function(turtles, radius, angle, agents, world, torus) {
 
     # Find the patches within distances
@@ -1686,7 +1688,7 @@ setMethod(
 #' @rdname inCone
 setMethod(
   "inCone",
-  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "SpatialPointsDataFrame", world = "NLworlds"),
+  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "SpatialPointsDataFrame"),
   definition = function(turtles, radius, angle, agents, world, torus) {
     pCoords <- inCone(turtles = turtles, radius = radius, angle = angle, agents = agents@coords, world = world, torus = torus)
     # Merge the coordinates within the cone to the turtles data
