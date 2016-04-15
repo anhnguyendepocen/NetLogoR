@@ -315,7 +315,7 @@ setMethod(
 #'
 #' @export
 #' @importFrom SpaDES adj
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table setkey
 #' @docType methods
 #' @rdname neighbors
 #'
@@ -334,7 +334,7 @@ setMethod(
   signature = c(world = "NLworlds", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
-    if (TRUE) { # This is just to force data.frame version for now.
+    if (NROW(agents)<1e2) { # data.frame is faster below 100 agents, data.table faster above
        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
        neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
 
@@ -349,18 +349,19 @@ setMethod(
 
     } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-      neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
-      cellNum <- data.table(cellNum, id=seq_len(length(cellNum)))
-      pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
-      # there is no "unique" in the next line... not clear what it was doing in the
-      #  data.frame code above.
-      neighbors <- data.table(neighbors, pCoords, id=rep(cellNum[,id], nNeighbors))
-      setkey(cellNum, id)
-      setkey(neighbors, id)
-      neighbors_dt <- neighbors[cellNum][,cellNum:=NULL]
-      browser()
-      #setkey(neighbors_dt, from, to, id)
-      listAgents <- lapply(split(neighbors_dt[,list(pxcor,pycor)], neighbors_dt[,id]), as.matrix)
+      neighbors <- data.table(adj(world, cells = cellNum, directions = nNeighbors, torus = torus))
+      cellNum <- data.table(cellNum=cellNum, id=seq_along(cellNum))
+      pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,to])
+      neighbors[,`:=`(pxcor=pCoords[,1], pycor=pCoords[,2])]
+      neighbors <- unique(neighbors)
+      #setnames(cellNum, "cellNum", "from")
+      setkey(cellNum, cellNum)
+      setkey(neighbors, from)
+      neighbors_dt <- cellNum[neighbors, allow.cartesian=TRUE]
+      setkey(neighbors_dt, id)
+      listAgents <- cbind(pxcor = neighbors_dt$pxcor,
+                          pycor = neighbors_dt$pycor,
+                          id = neighbors_dt$id)# %>% as.factor %>% as.numeric)
     }
 
     return(listAgents)

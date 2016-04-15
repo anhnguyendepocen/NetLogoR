@@ -291,6 +291,12 @@ test_that("neighbors works with output as a matrix with id", {
   n82 <- cbind(pxcor = c(8, 8, 9), pycor = c(9, 8, 8))
   expect_equivalent(nrow(merge(n8[n8[,"id"] == 2, c("pxcor", "pycor")], n82)), 3)
 
+  # Too simple a test for the data.table version of the
+  agents <- sample(0:9, replace = TRUE, size = 200) %>% matrix(ncol=2)
+  n4 <- neighbors(world = w1, agents = agents, nNeighbors = 4)
+  expect_true(all(unique(n4[,"id"]) == 1:100))
+
+
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
