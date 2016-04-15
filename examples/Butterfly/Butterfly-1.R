@@ -17,8 +17,8 @@ elevation <- createNLworld(minPxcor = 0, maxPxcor = 149, minPycor = 0, maxPycor 
 # Elevation decreases linearly with distance from the center of the hill
 # Hills are at (30,30) and (120,100)
 # The 1st hill is 100 units high, the 2nd hill is 50 units high
-elev1 <- 100 - NLdist(world = elevation, agents = patches(elevation), agents2 = cbind(x = 30, y = 30))
-elev2 <- 50 - NLdist(world = elevation, agents = patches(elevation), agents2 = cbind(x = 120, y = 100))
+elev1 <- 100 - NLdist(agents = patches(elevation), agents2 = cbind(x = 30, y = 30))
+elev2 <- 50 - NLdist(agents = patches(elevation), agents2 = cbind(x = 120, y = 100))
 pElevation <- ifelse(elev1 > elev2, elev1, elev2)
 # Assign the elevation values to the patches
 elevation <- set(world = elevation, agents = patches(elevation), val = pElevation)
