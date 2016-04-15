@@ -951,6 +951,8 @@ setMethod(
 #'          the directions are calculated for each pair \code{agents[i]} and \code{agents2[i]}
 #'          and not for each \code{agents} towards all the \code{agents2}.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE} and the distance from one \code{agents} to
 #'          its corresponding \code{agents2} is smaller around the
 #'          sides of the \code{world} than across it, then the direction to \code{agents2}
@@ -969,9 +971,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' towards(world = w1, agents = patches(w1), agents2 = cbind(x = 0, y = 0))
+#' towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
 #' t1 <- createTurtles(n = 10, world = w1)
-#' towards(world = w1, agents = t1, agents2 = cbind(x = 0, y = 0))
+#' towards(agents = t1, agents2 = cbind(x = 0, y = 0))
 #'
 #'
 #' @export
@@ -983,7 +985,7 @@ setMethod(
 #'
 setGeneric(
   "towards",
-  function(world, agents, agents2, torus = FALSE) {
+  function(agents, agents2, world, torus = FALSE) {
     standardGeneric("towards")
   })
 
@@ -991,8 +993,8 @@ setGeneric(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "matrix", agents2 = "matrix"),
-  definition = function(world, agents, agents2, torus) {
+  signature = c(agents = "matrix", agents2 = "matrix"),
+  definition = function(agents, agents2, world, torus) {
 
     if(torus == FALSE){
 
@@ -1000,6 +1002,10 @@ setMethod(
       heading[heading < 0] <- heading[heading < 0] + 360
 
     } else {
+
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
 
       if(nrow(agents2) == 1 & nrow(agents) != 1){
         agents2 <- cbind(x = rep(agents2[,1], nrow(agents)), y = rep(agents2[,2], nrow(agents)))
@@ -1055,9 +1061,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(world, agents, agents2, torus) {
-    heading <- towards(world = world, agents = agents@coords, agents2 = agents2, torus = torus)
+  signature = c(agents = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(agents, agents2, world, torus) {
+    heading <- towards(agents = agents@coords, agents2 = agents2, world = world, torus = torus)
     # The direction to a turtle's location return the turtle's heading
     heading <- ifelse(agents@coords[,1] == agents2[,1] & agents@coords[,2] == agents2[,2], agents@data$heading, heading)
     return(heading)
@@ -1068,9 +1074,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "matrix", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents, agents2, torus) {
-    towards(world = world, agents = agents, agents2 = agents2@coords, torus = torus)
+  signature = c(agents = "matrix", agents2 = "SpatialPointsDataFrame"),
+  definition = function(agents, agents2, world, torus) {
+    towards(agents = agents, agents2 = agents2@coords, world = world, torus = torus)
   }
 )
 
@@ -1078,9 +1084,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents, agents2, torus) {
-    heading <- towards(world = world, agents = agents@coords, agents2 = agents2@coords, torus = torus)
+  signature = c(agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(agents, agents2, world, torus) {
+    heading <- towards(agents = agents@coords, agents2 = agents2@coords, world = world, torus = torus)
     # The direction to a turtle's location return the turtle's heading
     heading <- ifelse(agents@coords[,1] == agents2@coords[,1] & agents@coords[,2] == agents2@coords[,2], agents@data$heading, heading)
     return(heading)

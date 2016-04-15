@@ -429,6 +429,31 @@ test_that("towards works",{
   # Turtles to turtle
   tTOt <- towards(world = ws, agents = t3, agents2 = t2, torus = FALSE)
   expect_equivalent(tTOt[4], 315)
+
+  # Works without world provided when torus = FALSE
+  pTOp <- towards(agents = patches(world = w1), agents2 = patches(world = w1))
+  expect_equivalent(pTOp, rep(0, 100))
+  pTOp <- towards(agents = patches(world = w1), agents2 = patch(world = w1, x = 1, y = 1), torus = FALSE)
+  expect_equivalent(pTOp[1], 180)
+  expect_error(towards(agents = patches(world = w1), agents2 = patch(world = w1, x = 1, y = 1), torus = TRUE))
+  pTOl <- towards(agents = patches(world = w1), agents2 = cbind(x = 4, y = 8), torus = FALSE)
+  expect_equivalent(pTOl[21], 90)
+  expect_equivalent(pTOl[30], 270)
+  expect_error(towards(agents = patches(world = w1), agents2 = cbind(x = 4, y = 8), torus = TRUE))
+  pTOt <- towards(agents = patches(world = w1), agents2 = t1, torus = FALSE)
+  expect_equivalent(pTOt[100], 315)
+  expect_error(towards(agents = patches(world = w1), agents2 = t2, torus = TRUE))
+  tTOp <- towards(agents = t3, agents2 = patch(world = w1, x = 5, y = 4), torus = FALSE)
+  expect_equivalent(tTOp[1], 90)
+  expect_error(towards(agents = t3, agents2 = patch(world = w1, x = 7, y = 2), torus = TRUE))
+  tTOl <- towards(agents = t3, agents2 = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOl[1], 90)
+  expect_equivalent(tTOl[3], 45)
+  expect_error(towards(agents = t3, agents2 = cbind(x = 8, y = 4), torus = TRUE))
+  tTOt <- towards(agents = t3, agents2 = t3, torus = FALSE)
+  expect_equivalent(tTOt, t3@data$heading)
+  tTOt <- towards(agents = t3, agents2 = t2, torus = FALSE)
+  expect_equivalent(tTOt[4], 315)
 })
 
 test_that("face works",{
