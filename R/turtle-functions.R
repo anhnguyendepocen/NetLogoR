@@ -1106,6 +1106,8 @@ setMethod(
 #' @details The number of agents/locations in \code{agents2} must be equal to 1 or
 #'          to the length of \code{turtles}.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE} and the distance from one \code{turtles} to
 #'          its corresponding agent/location \code{agents2} is smaller around the
 #'          sides of the \code{world} than across it, then the direction to the agent/location
@@ -1131,8 +1133,8 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo = "w1")
 #'
-#' t1 <- face(world = w1, turtles = t1, agents2 = cbind(x = 0, y = 0))
-#' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
+#' t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
+#' t1 <- fd(turtles = t1, dist = 0.5)
 #' Plot(t1, addTo = "w1")
 #'
 #'
@@ -1144,7 +1146,7 @@ setMethod(
 #'
 setGeneric(
   "face",
-  function(world, turtles, agents2, torus = FALSE) {
+  function(turtles, agents2, world, torus = FALSE) {
     standardGeneric("face")
   })
 
@@ -1152,10 +1154,10 @@ setGeneric(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(world, turtles, agents2, torus) {
+  signature = c(turtles = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(turtles, agents2, world, torus) {
 
-    newHeading <- towards(world = world, agents = turtles, agents2 = agents2, torus = torus)
+    newHeading <- towards(agents = turtles, agents2 = agents2, world = world, torus = torus)
     turtles@data$heading <- newHeading
     return(turtles)
 
@@ -1166,9 +1168,9 @@ setMethod(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, turtles, agents2, torus) {
-    face(world = world, turtles = turtles, agents2 = agents2@coords, torus = torus)
+  signature = c(turtles = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(turtles, agents2, world, torus) {
+    face(turtles = turtles, agents2 = agents2@coords, world = world, torus = torus)
   }
 )
 
