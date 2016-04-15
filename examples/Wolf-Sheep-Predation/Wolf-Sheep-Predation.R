@@ -1,6 +1,6 @@
 ################################################################################
 # Wolf sheep predation
-# by Wilensky (1997, 1999) NetLogo Wolf Sheep Predation model.
+# by Wilensky (1997) NetLogo Wolf Sheep Predation model.
 # http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation
 #
 # Converted into R using the NetLogoR package
@@ -15,19 +15,21 @@ library(SpaDES)
 
 ## Global variables (some represent the model buttons)
 # Grass settings
-grassOn <- TRUE
-grassTGrowth <- 30
-greenCount <- numeric() # keep track of how much grass there is
+grassOn <- TRUE # TRUE to include grass in the model, FALSE to only include wolves and sheep
+grassTGrowth <- 30 # how long it takes for grass to regrow once it is eaten
+numGreen <- numeric() # keep track of how much grass there is
 
 # Sheep settings
-nSheep <- 100
-gainFoodSheep <- 4
-reproSheep <- 4
+nSheep <- 100 # initial sheep population size
+gainFoodSheep <- 4 # amount of energy sheep get for every grass patch eaten
+reproSheep <- 4 # probability in % of a sheep reproducing at each time step
+numSheep <- nSheep # keep track of how many sheep there are
 
 # Wolf settings
-nWolf <- 50
-gainFoodWolf <- 20
-reproWolf <- 5
+nWolf <- 50 # initial wolf population size
+gainFoodWolf <- 20 # amount of energy wolves get for every sheep eaten
+reproWolf <- 5 # probability in % of a wolf reproducing at each time step
+numWolves <- nWolf # keep track of how many wolves there is
 
 # torus = TRUE # just for reminder, to be used in the movement functions (e.g., fd())
 
@@ -66,7 +68,7 @@ wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, 
 # Initialize the count of grass
 if(grassOn == TRUE){
   pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches equal to 1 (green)
-  greenCount <- count(pGreen)
+  numGreen <- count(pGreen)
 }
 
 # # Visualize the world
@@ -319,11 +321,11 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
     field <- growGrass()
     pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches equal to 1 (green)
     npGreen <- count(pGreen)
-    greenCount <- c(greenCount, npGreen) # add the new number of green patches
+    numGreen <- c(numGreen, npGreen) # add the new number of green patches
   }
 
-  nSheep <- c(nSheep, count(sheep)) # add the new number of sheep
-  nWolf <- c(nWolf, count(wolves)) # add the new numbr of wolves
+  numSheep <- c(numSheep, count(sheep)) # add the new number of sheep
+  numWolves <- c(numWolves, count(wolves)) # add the new numbr of wolves
 
   time <- time + 1
   # # Help for checking the model is working
@@ -333,23 +335,23 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
 
 ## Plot outputs
 dev()
-timeStep <- 1:length(nSheep)
+timeStep <- 1:length(numSheep)
 
 if(grassOn == TRUE){
 
-  plot(timeStep, nSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
-       ylim = c(min = 0, max = max(c(max(nSheep), max(nWolf), max(greenCount / 4)))))
-  lines(timeStep, nWolf, col = "red", lwd = 2)
-  lines(timeStep, greenCount / 4, col = "green", lwd = 2)
+  plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
+       ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreen / 4)))))
+  lines(timeStep, numWolves, col = "red", lwd = 2)
+  lines(timeStep, numGreen / 4, col = "green", lwd = 2)
 
   legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
          bg = "white")
 
 } else {
 
-  plot(timeStep, nSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
-       ylim = c(min = 0, max = max(c(max(nSheep), max(nWolf)))))
-  lines(timeStep, nWolf, col = "red", lwd = 2)
+  plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
+       ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves)))))
+  lines(timeStep, numWolves, col = "red", lwd = 2)
 
   legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
 }

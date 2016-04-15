@@ -20,10 +20,10 @@
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' NLall(agents = patches(w1), world = w1, val = 5)
 #' w2 <- w1
-#' w2[] <- 5
+#' w2 <- set(world = w1, agents = patches(w1), val = 5)
 #' NLall(agents = patches(w2), world = w2, val = 5)
 #'
 #' # Turtles
@@ -244,7 +244,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- sortOn(agents = patches(w1), world = w1)
 #'
@@ -337,7 +337,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 #'
@@ -435,7 +435,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- withMax(agents = patches(w1), world = w1)
 #'
@@ -534,7 +534,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- withMin(agents = patches(w1), world = w1)
 #'
@@ -640,7 +640,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- maxOneOf(agents = patches(w1), world = w1)
 #'
@@ -739,7 +739,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- minOneOf(agents = patches(w1), world = w1)
 #'
@@ -1172,7 +1172,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:10, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:10, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1314,7 +1314,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:10, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:10, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1417,6 +1417,8 @@ setMethod(
 #'
 #' @details Distances from/to patches are calculated from/to their center.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE}, the \code{radius} distances are calculared
 #'          around the sides of the \code{world} to select \code{agents2}.
 #'
@@ -1430,10 +1432,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
-#' p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
-#' t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1, world = w1)
-#' p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1), world = w1)
-#' t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1, world = w1)
+#' p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1))
+#' t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1)
+#' p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1))
+#' t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1)
 #'
 #'
 #' @export
@@ -1455,7 +1457,7 @@ setGeneric(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "matrix", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
+  signature = c(agents = "matrix", radius = "numeric", agents2 = "matrix"),
   definition = function(agents, radius, agents2, world, torus) {
     inRadius(agents = SpatialPointsDataFrame(coords = agents, data = data.frame(rep(NA, nrow(agents)))), radius = radius, agents2 = agents2, world = world, torus = torus)
   }
@@ -1465,7 +1467,7 @@ setMethod(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "matrix", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  signature = c(agents = "matrix", radius = "numeric", agents2 = "SpatialPointsDataFrame"),
   definition = function(agents, radius, agents2, world, torus) {
     inRadius(agents = SpatialPointsDataFrame(coords = agents, data = data.frame(rep(NA, nrow(agents)))), radius = radius, agents2 = agents2, world = world, torus = torus)
   }
@@ -1475,13 +1477,17 @@ setMethod(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
+  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "matrix"),
   definition = function(agents, radius, agents2, world, torus) {
 
     # Create buffers around the locations of agents
     pBuffer <- gBuffer(agents, byid = TRUE, id = 1:length(agents), width = radius, quadsegs = 50)
 
     if(torus == TRUE){
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
+
       worldWrap <- createNLworld(minPxcor = minPxcor(world) - radius, maxPxcor = maxPxcor(world) + radius,
                                  minPycor = minPycor(world) - radius, maxPycor = maxPycor(world) + radius)
       pAllWrap <- patches(worldWrap)
@@ -1512,13 +1518,17 @@ setMethod(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "SpatialPointsDataFrame"),
   definition = function(agents, radius, agents2, world, torus) {
 
     # Create buffers around the locations of agents
     pBuffer <- gBuffer(agents, byid = TRUE, id = 1:length(agents), width = radius, quadsegs = 50)
 
     if(torus == TRUE){
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
+
       agents2c <- agents2@coords
       agents2c1 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
       agents2c2 <- cbind(agents2c[,1], agents2c[,2] + (world@extent@ymax - world@extent@ymin))
@@ -1585,6 +1595,8 @@ setMethod(
 #'
 #'          Distances to patches are calculated to their center.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE}, the \code{radius} distances are calculated
 #'          around the sides of the \code{world} to select \code{agents}.
 #'
@@ -1598,8 +1610,8 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
-#' p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90, world = w1)
-#' t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1, world = w1)
+#' p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90)
+#' t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1)
 #'
 #'
 #' @export
@@ -1618,7 +1630,7 @@ setGeneric(
 #' @rdname inCone
 setMethod(
   "inCone",
-  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "matrix", world = "NLworlds"),
+  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "matrix"),
   definition = function(turtles, radius, angle, agents, world, torus) {
 
     # Find the patches within distances
@@ -1676,7 +1688,7 @@ setMethod(
 #' @rdname inCone
 setMethod(
   "inCone",
-  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "SpatialPointsDataFrame", world = "NLworlds"),
+  signature = c(turtles = "SpatialPointsDataFrame", radius = "numeric", angle = "numeric", agents = "SpatialPointsDataFrame"),
   definition = function(turtles, radius, angle, agents, world, torus) {
     pCoords <- inCone(turtles = turtles, radius = radius, angle = angle, agents = agents@coords, world = world, torus = torus)
     # Merge the coordinates within the cone to the turtles data
@@ -1720,9 +1732,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- 1:25
-#' w1 <- set(world = w1, agents = patch(w1, 0, 0), val = 0) # set the patch[0,0] to 0
-#' of(world = w1, agents = patch(w1, 0, 0)) # 0
+#' w1 <- set(world = w1, agents = patches(w1), val = 1)
+#' w1 <- set(world = w1, agents = patch(w1, 0, 4), val = 0) # set the patch[0,0] to 0
+#' of(world = w1, agents = patches(w1))
 #'
 #' t1 <- createTurtles(n = 3, world = w1, heading = 0)
 #' t2 <- set(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180) # set the heading of the turtle 0 to 180

@@ -3,30 +3,26 @@
 \docType{methods}
 \name{towards}
 \alias{towards}
-\alias{towards,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
-\alias{towards,NLworlds,SpatialPointsDataFrame,matrix-method}
-\alias{towards,NLworlds,matrix,SpatialPointsDataFrame-method}
-\alias{towards,NLworlds,matrix,matrix-method}
+\alias{towards,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
+\alias{towards,SpatialPointsDataFrame,matrix-method}
+\alias{towards,matrix,SpatialPointsDataFrame-method}
+\alias{towards,matrix,matrix-method}
 \title{Directions towards}
 \usage{
-towards(world, agents, agents2, torus = FALSE)
+towards(agents, agents2, world, torus = FALSE)
 
-\S4method{towards}{NLworlds,matrix,matrix}(world, agents, agents2,
+\S4method{towards}{matrix,matrix}(agents, agents2, world, torus = FALSE)
+
+\S4method{towards}{SpatialPointsDataFrame,matrix}(agents, agents2, world,
   torus = FALSE)
 
-\S4method{towards}{NLworlds,SpatialPointsDataFrame,matrix}(world, agents,
-  agents2, torus = FALSE)
+\S4method{towards}{matrix,SpatialPointsDataFrame}(agents, agents2, world,
+  torus = FALSE)
 
-\S4method{towards}{NLworlds,matrix,SpatialPointsDataFrame}(world, agents,
-  agents2, torus = FALSE)
-
-
-  \S4method{towards}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
-  agents, agents2, torus = FALSE)
+\S4method{towards}{SpatialPointsDataFrame,SpatialPointsDataFrame}(agents,
+  agents2, world, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
-
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
@@ -41,6 +37,8 @@ towards(world, agents, agents2, torus = FALSE)
 
                Matrix (ncol = 2) with the first column "x and the second column
                "y" representing locations coordinates.}
+
+\item{world}{NLworlds object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
@@ -59,6 +57,8 @@ Report the directions of each \code{agents} towards each corresponding \code{age
          the directions are calculated for each pair \code{agents[i]} and \code{agents2[i]}
          and not for each \code{agents} towards all the \code{agents2}.
 
+         If \code{torus = FALSE}, \code{world} does not need to be provided.
+
          If \code{torus = TRUE} and the distance from one \code{agents} to
          its corresponding \code{agents2} is smaller around the
          sides of the \code{world} than across it, then the direction to \code{agents2}
@@ -69,9 +69,9 @@ Report the directions of each \code{agents} towards each corresponding \code{age
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-towards(world = w1, agents = patches(w1), agents2 = cbind(x = 0, y = 0))
+towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
 t1 <- createTurtles(n = 10, world = w1)
-towards(world = w1, agents = t1, agents2 = cbind(x = 0, y = 0))
+towards(agents = t1, agents2 = cbind(x = 0, y = 0))
 
 
 }

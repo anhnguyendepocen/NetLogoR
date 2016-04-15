@@ -157,6 +157,24 @@ test_that("fd works",{
   expect_identical(t7.2@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
   expect_identical(t7.3@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
   expect_identical(t7.4@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
+
+  # Work without world provided when torus = FALSE and out = TRUE
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t2 <- fd(turtles = t1, dist = 1)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
+  t3 <- fd(turtles = t1, dist = 5, torus = FALSE, out = TRUE)
+  expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
+  expect_error(fd(turtles = t1, dist = 5, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = -1, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = 5, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = 5, torus = FALSE, out = FALSE))
+  t6 <- createTurtles(n = 2, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t7.1 <- fd(turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  expect_identical(t7.1@coords, cbind(xcor = c(5, 1), ycor = c(0, 0)))
+  expect_error(fd(turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE))
+  expect_error(fd(turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE))
+  expect_error(fd(wturtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
 })
 
 test_that("bk works",{
@@ -178,7 +196,6 @@ test_that("bk works",{
   w2[] <- runif(25)
   ws <-NLstack(w1, w2)
 
-  t1 <- createTurtles(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 90)
   t2 <- bk(world = ws, turtles = t1, dist = -1)
   expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
   expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
@@ -190,10 +207,8 @@ test_that("bk works",{
   expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
 
   # Argument out
-  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   t3out <- bk(world = w1, turtles = t1, dist = -5, torus = FALSE, out = FALSE)
   expect_identical(t3out@coords, t1@coords)
-  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   t3out <- bk(world = ws, turtles = t1, dist = -5, torus = FALSE, out = FALSE)
   expect_identical(t3out@coords, t1@coords)
 
@@ -206,6 +221,20 @@ test_that("bk works",{
   expect_identical(t7.2@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
   expect_identical(t7.3@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
   expect_identical(t7.4@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
+
+  # Works without world provided when torus = FALSE and out = TRUE
+  t2 <- bk(turtles = t1, dist = -1)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
+  t3 <- bk(turtles = t1, dist = -5, torus = FALSE)
+  expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
+  expect_error(bk(turtles = t1, dist = -5, torus = TRUE))
+  expect_error(bk(turtles = t1, dist = 1, torus = TRUE))
+  expect_error(bk(turtles = t1, dist = -5, torus = FALSE, out = FALSE))
+  t7.1 <- bk(turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE))
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE))
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
 })
 
 test_that("home works",{
@@ -400,6 +429,31 @@ test_that("towards works",{
   # Turtles to turtle
   tTOt <- towards(world = ws, agents = t3, agents2 = t2, torus = FALSE)
   expect_equivalent(tTOt[4], 315)
+
+  # Works without world provided when torus = FALSE
+  pTOp <- towards(agents = patches(world = w1), agents2 = patches(world = w1))
+  expect_equivalent(pTOp, rep(0, 100))
+  pTOp <- towards(agents = patches(world = w1), agents2 = patch(world = w1, x = 1, y = 1), torus = FALSE)
+  expect_equivalent(pTOp[1], 180)
+  expect_error(towards(agents = patches(world = w1), agents2 = patch(world = w1, x = 1, y = 1), torus = TRUE))
+  pTOl <- towards(agents = patches(world = w1), agents2 = cbind(x = 4, y = 8), torus = FALSE)
+  expect_equivalent(pTOl[21], 90)
+  expect_equivalent(pTOl[30], 270)
+  expect_error(towards(agents = patches(world = w1), agents2 = cbind(x = 4, y = 8), torus = TRUE))
+  pTOt <- towards(agents = patches(world = w1), agents2 = t1, torus = FALSE)
+  expect_equivalent(pTOt[100], 315)
+  expect_error(towards(agents = patches(world = w1), agents2 = t2, torus = TRUE))
+  tTOp <- towards(agents = t3, agents2 = patch(world = w1, x = 5, y = 4), torus = FALSE)
+  expect_equivalent(tTOp[1], 90)
+  expect_error(towards(agents = t3, agents2 = patch(world = w1, x = 7, y = 2), torus = TRUE))
+  tTOl <- towards(agents = t3, agents2 = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOl[1], 90)
+  expect_equivalent(tTOl[3], 45)
+  expect_error(towards(agents = t3, agents2 = cbind(x = 8, y = 4), torus = TRUE))
+  tTOt <- towards(agents = t3, agents2 = t3, torus = FALSE)
+  expect_equivalent(tTOt, t3@data$heading)
+  tTOt <- towards(agents = t3, agents2 = t2, torus = FALSE)
+  expect_equivalent(tTOt[4], 315)
 })
 
 test_that("face works",{
@@ -417,6 +471,19 @@ test_that("face works",{
   expect_identical(t6@data$heading, 180)
   expect_identical(t7@data$heading, 0)
   t8 <- face(world = w1, turtles = t1, agents2 = t1)
+  expect_identical(t8@data$heading, t1@data$heading)
+
+  # Works without world provided when torus = FALSE
+  t2 <- face(turtles = t1, agents2 = cbind(x = 2, y = 0))
+  expect_identical(t2@data$heading, rep(180, 5))
+  t3 <- face(turtles = t1, agents2 = patch(world = w1, x = 0, y = 2))
+  expect_identical(t3@data$heading, rep(270, 5))
+  t5 <- face(turtles = t1, agents2 = t4)
+  expect_identical(t5@data$heading, rep(315, 5))
+  t6 <- face(turtles = t4, agents2 = cbind(x = 1, y = 0), torus = FALSE)
+  expect_error(face(turtles = t4, agents2 = cbind(x = 1, y = 0), torus = TRUE))
+  expect_identical(t6@data$heading, 180)
+  t8 <- face(turtles = t1, agents2 = t1)
   expect_identical(t8@data$heading, t1@data$heading)
 })
 

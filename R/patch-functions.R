@@ -28,7 +28,7 @@
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' plot(w1)
 #' # Diffuse 50% of each patch value to its 8 neighbors
 #' w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)
@@ -110,11 +110,11 @@ setMethod(
 #'
 #' @details Distances from/to a patch are measured from/to its center.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE}, a distance around the sides of the \code{world} is
 #'          reported only if smaller than the one across the \code{world} (i.e., as calculated
 #'          with \code{torus = FALSE}).
-#'
-#'          Coordinates of \code{agents} and \code{agents2} must be inside the \code{world}'s extent.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#distance}
 #'
@@ -126,10 +126,10 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' NLdist(world = w1, agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
-#' NLdist(world = w1, agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)), torus = TRUE)
+#' NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
+#' NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)), world = w1, torus = TRUE)
 #' t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
-#' NLdist(world = w1, agents = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
+#' NLdist(agents = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 #'
 #'
 #' @export
@@ -140,7 +140,7 @@ setMethod(
 #'
 setGeneric(
   "NLdist",
-  function(world, agents, agents2, torus = FALSE, allPairs = FALSE) {
+  function(agents, agents2, world, torus = FALSE, allPairs = FALSE) {
     standardGeneric("NLdist")
   })
 
@@ -148,19 +148,17 @@ setGeneric(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", agents = "matrix", agents2 = "matrix"),
-  definition = function(world, agents, agents2, torus, allPairs) {
-
-    if(min(agents[,1]) < world@extent@xmin | max(agents[,1]) > world@extent@xmax |
-       min(agents[,2]) < world@extent@ymin | max(agents[,2]) > world@extent@ymax |
-       min(agents2[,1]) < world@extent@xmin | max(agents2[,1]) > world@extent@xmax |
-       min(agents2[,2]) < world@extent@ymin | max(agents2[,2]) > world@extent@ymax){
-      stop("Given coordinates are outside the world's extent.")
-    }
+  signature = c(agents = "matrix", agents2 = "matrix"),
+  definition = function(agents, agents2, world, torus, allPairs) {
 
     dist <- pointDistance(p1 = agents, p2 = agents2, lonlat = FALSE, allpairs = allPairs)
 
     if(torus == TRUE){
+
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
+
       # Need to create coordinates for "agents2" in a wrapped world
       # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
       to1 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
@@ -191,8 +189,8 @@ setMethod(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", agents = "matrix", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents, agents2, torus, allPairs) {
+  signature = c(agents = "matrix", agents2 = "SpatialPointsDataFrame"),
+  definition = function(agents, agents2, world, torus, allPairs) {
     NLdist(world = world, agents = agents, agents2 = agents2@coords, torus = torus, allPairs = allPairs)
   }
 )
@@ -201,8 +199,8 @@ setMethod(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(world, agents, agents2, torus, allPairs) {
+  signature = c(agents = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(agents, agents2, world, torus, allPairs) {
     NLdist(world = world, agents = agents@coords, agents2 = agents2, torus = torus, allPairs = allPairs)
   }
 )
@@ -211,8 +209,8 @@ setMethod(
 #' @rdname NLdist
 setMethod(
   "NLdist",
-  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents, agents2, torus, allPairs) {
+  signature = c(agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(agents, agents2, world, torus, allPairs) {
     NLdist(world = world, agents = agents@coords, agents2 = agents2@coords, torus = torus, allPairs = allPairs)
   }
 )
@@ -496,7 +494,7 @@ setMethod(
 #'
 #' @examples
 #' p1 <- noPatches()
-#' nrow(p1)
+#' count(p1)
 #'
 #'
 #' @export
@@ -699,7 +697,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
 #' allPatches <- patches(world = w1)
-#' nrow(allPatches)
+#' count(allPatches)
 #'
 #'
 #' @export
@@ -806,7 +804,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' pxcor_ <- randomPxcor(world = w1, n = 10)
+#' pxcor <- randomPxcor(world = w1, n = 10)
 #'
 #'
 #' @export
@@ -852,7 +850,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' pycor_ <- randomPycor(world = w1, n = 10)
+#' pycor <- randomPycor(world = w1, n = 10)
 #'
 #'
 #' @export

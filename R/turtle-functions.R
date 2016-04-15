@@ -37,7 +37,7 @@
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
@@ -163,7 +163,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #'
 #' library(SpaDES)
@@ -171,7 +171,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 #'
-#' t1 <- fd(world = w1, turtles = t1, dist = 1)
+#' t1 <- fd(turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -236,7 +236,10 @@ setMethod(
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
-#' @details If a distance to move leads a turtle outside of the \code{world}'s extent
+#' @details If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
+#'          does not need to be provided.
+#'
+#'          If a distance to move leads a turtle outside of the \code{world}'s extent
 #'          and \code{torus = TRUE}, the turtle is
 #'          relocated on the other side of the \code{world}, inside its extent; if
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
@@ -258,7 +261,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createOTurtles(world = w1, n = 10)
 #'
 #' library(SpaDES)
@@ -266,7 +269,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- fd(world = w1, turtles = t1, dist = 1)
+#' t1 <- fd(turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -280,7 +283,7 @@ setMethod(
 #'
 setGeneric(
   "fd",
-  function(world, turtles, dist, torus = FALSE, out = TRUE) {
+  function(turtles, dist, world, torus = FALSE, out = TRUE) {
     standardGeneric("fd")
   })
 
@@ -288,8 +291,8 @@ setGeneric(
 #' @rdname fd
 setMethod(
   "fd",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
-  definition = function(world, turtles, dist, torus, out) {
+  signature = c(turtles = "SpatialPointsDataFrame", dist = "numeric"),
+  definition = function(turtles, dist, world, torus, out) {
 
     prevXcor <- turtles@coords[,1]
     prevYcor <- turtles@coords[,2]
@@ -301,12 +304,18 @@ setMethod(
     fdYcor <- prevYcor + cos(rad(turtles@data$heading)) * dist
 
     if(torus == TRUE){
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
       tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
       fdXcor <- tCoords[,1]
       fdYcor <- tCoords[,2]
     }
 
     if(torus == FALSE & out == FALSE){
+      if(missing(world)){
+        stop("A world must be provided as torus = FALSE and out = FALSE")
+      }
       outX <- fdXcor < world@extent@xmin | fdXcor > world@extent@xmax
       outY <- fdYcor < world@extent@ymin | fdYcor > world@extent@ymax
       outXY <- which(outX | outY) # position of turtles out of the world's extent
@@ -333,7 +342,10 @@ setMethod(
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
-#' @details If a distance to move leads a turtle outside of the \code{world}'s extent
+#' @details If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
+#'          does not need to be provided.
+#'
+#'          If a distance to move leads a turtle outside of the \code{world}'s extent
 #'          and \code{torus = TRUE}, the turtle is
 #'          relocated on the other side of the \code{world}, inside its extent; if
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
@@ -358,7 +370,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createOTurtles(world = w1, n = 10)
 #'
 #' library(SpaDES)
@@ -366,11 +378,11 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- fd(world = w1, turtles = t1, dist = 2)
+#' t1 <- fd(turtles = t1, dist = 2)
 #' Plot(t1, addTo ="w1")
-#' t1 <- bk(world = w1, turtles = t1, dist = 1)
+#' t1 <- bk(turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
-#' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
+#' t1 <- fd(turtles = t1, dist = 0.5)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -382,7 +394,7 @@ setMethod(
 #'
 setGeneric(
   "bk",
-  function(world, turtles, dist, torus = FALSE, out = TRUE) {
+  function(turtles, dist, world, torus = FALSE, out = TRUE) {
     standardGeneric("bk")
   })
 
@@ -390,10 +402,10 @@ setGeneric(
 #' @rdname bk
 setMethod(
   "bk",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
-  definition = function(world, turtles, dist, torus, out) {
+  signature = c(turtles = "SpatialPointsDataFrame", dist = "numeric"),
+  definition = function(turtles, dist, world, torus, out) {
 
-    fd(world = world, turtles = turtles, dist = -dist, torus = torus, out = out)
+    fd(turtles = turtles, dist = -dist, world = world, torus = torus, out = out)
 
   }
 )
@@ -433,7 +445,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
@@ -645,9 +657,9 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
-#' length(t1)
+#' count(t1)
 #' t1 <- die(turtles = t1, who = c(2, 3, 4))
-#' length(t1)
+#' count(t1)
 #'
 #'
 #' @export
@@ -711,9 +723,9 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
-#' length(t1)
+#' count(t1)
 #' t1 <- hatch(turtles = t1, who = 0, n = 2)
-#' length(t1)
+#' count(t1)
 #'
 #'
 #' @export
@@ -826,7 +838,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                           ycor = randomYcor(world = w1, n = 10)))
 #' library(SpaDES)
@@ -883,7 +895,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                            ycor = randomYcor(world = w1, n = 10)))
 #' library(SpaDES)
@@ -939,6 +951,8 @@ setMethod(
 #'          the directions are calculated for each pair \code{agents[i]} and \code{agents2[i]}
 #'          and not for each \code{agents} towards all the \code{agents2}.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE} and the distance from one \code{agents} to
 #'          its corresponding \code{agents2} is smaller around the
 #'          sides of the \code{world} than across it, then the direction to \code{agents2}
@@ -957,9 +971,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' towards(world = w1, agents = patches(w1), agents2 = cbind(x = 0, y = 0))
+#' towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
 #' t1 <- createTurtles(n = 10, world = w1)
-#' towards(world = w1, agents = t1, agents2 = cbind(x = 0, y = 0))
+#' towards(agents = t1, agents2 = cbind(x = 0, y = 0))
 #'
 #'
 #' @export
@@ -971,7 +985,7 @@ setMethod(
 #'
 setGeneric(
   "towards",
-  function(world, agents, agents2, torus = FALSE) {
+  function(agents, agents2, world, torus = FALSE) {
     standardGeneric("towards")
   })
 
@@ -979,8 +993,8 @@ setGeneric(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "matrix", agents2 = "matrix"),
-  definition = function(world, agents, agents2, torus) {
+  signature = c(agents = "matrix", agents2 = "matrix"),
+  definition = function(agents, agents2, world, torus) {
 
     if(torus == FALSE){
 
@@ -988,6 +1002,10 @@ setMethod(
       heading[heading < 0] <- heading[heading < 0] + 360
 
     } else {
+
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
 
       if(nrow(agents2) == 1 & nrow(agents) != 1){
         agents2 <- cbind(x = rep(agents2[,1], nrow(agents)), y = rep(agents2[,2], nrow(agents)))
@@ -1043,9 +1061,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(world, agents, agents2, torus) {
-    heading <- towards(world = world, agents = agents@coords, agents2 = agents2, torus = torus)
+  signature = c(agents = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(agents, agents2, world, torus) {
+    heading <- towards(agents = agents@coords, agents2 = agents2, world = world, torus = torus)
     # The direction to a turtle's location return the turtle's heading
     heading <- ifelse(agents@coords[,1] == agents2[,1] & agents@coords[,2] == agents2[,2], agents@data$heading, heading)
     return(heading)
@@ -1056,9 +1074,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "matrix", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents, agents2, torus) {
-    towards(world = world, agents = agents, agents2 = agents2@coords, torus = torus)
+  signature = c(agents = "matrix", agents2 = "SpatialPointsDataFrame"),
+  definition = function(agents, agents2, world, torus) {
+    towards(agents = agents, agents2 = agents2@coords, world = world, torus = torus)
   }
 )
 
@@ -1066,9 +1084,9 @@ setMethod(
 #' @rdname towards
 setMethod(
   "towards",
-  signature = c(world = "NLworlds", agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, agents, agents2, torus) {
-    heading <- towards(world = world, agents = agents@coords, agents2 = agents2@coords, torus = torus)
+  signature = c(agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(agents, agents2, world, torus) {
+    heading <- towards(agents = agents@coords, agents2 = agents2@coords, world = world, torus = torus)
     # The direction to a turtle's location return the turtle's heading
     heading <- ifelse(agents@coords[,1] == agents2@coords[,1] & agents@coords[,2] == agents2@coords[,2], agents@data$heading, heading)
     return(heading)
@@ -1088,6 +1106,8 @@ setMethod(
 #' @details The number of agents/locations in \code{agents2} must be equal to 1 or
 #'          to the length of \code{turtles}.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE} and the distance from one \code{turtles} to
 #'          its corresponding agent/location \code{agents2} is smaller around the
 #'          sides of the \code{world} than across it, then the direction to the agent/location
@@ -1105,16 +1125,16 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
-#' clearplot()
+#' clearPlot()
 #' Plot(w1)
 #' Plot(t1, addTo = "w1")
 #'
-#' t1 <- face(world = w1, turtles = t1, agents2 = cbind(x = 0, y = 0))
-#' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
+#' t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
+#' t1 <- fd(turtles = t1, dist = 0.5)
 #' Plot(t1, addTo = "w1")
 #'
 #'
@@ -1126,7 +1146,7 @@ setMethod(
 #'
 setGeneric(
   "face",
-  function(world, turtles, agents2, torus = FALSE) {
+  function(turtles, agents2, world, torus = FALSE) {
     standardGeneric("face")
   })
 
@@ -1134,10 +1154,10 @@ setGeneric(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(world, turtles, agents2, torus) {
+  signature = c(turtles = "SpatialPointsDataFrame", agents2 = "matrix"),
+  definition = function(turtles, agents2, world, torus) {
 
-    newHeading <- towards(world = world, agents = turtles, agents2 = agents2, torus = torus)
+    newHeading <- towards(agents = turtles, agents2 = agents2, world = world, torus = torus)
     turtles@data$heading <- newHeading
     return(turtles)
 
@@ -1148,9 +1168,9 @@ setMethod(
 #' @rdname face
 setMethod(
   "face",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(world, turtles, agents2, torus) {
-    face(world = world, turtles = turtles, agents2 = agents2@coords, torus = torus)
+  signature = c(turtles = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
+  definition = function(turtles, agents2, world, torus) {
+    face(turtles = turtles, agents2 = agents2@coords, world = world, torus = torus)
   }
 )
 
@@ -1176,6 +1196,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- left(turtles = t1, angle = 180)
@@ -1230,6 +1251,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- right(turtles = t1, angle = 180)
@@ -1293,7 +1315,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
@@ -1415,7 +1437,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
@@ -1737,7 +1759,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #'
 #' library(SpaDES)
@@ -1961,7 +1983,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #'
 #' library(SpaDES)
@@ -2020,7 +2042,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #'
 #' library(SpaDES)
@@ -2259,7 +2281,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
 #'
 #' library(SpaDES)
@@ -2362,7 +2384,7 @@ setMethod(
 #'
 #' @examples
 #' t1 <- noTurtles()
-#' length(t1)
+#' count(t1)
 #'
 #'
 #' @export
@@ -2760,12 +2782,12 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
 #' p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
-#' nrow(p1) # 99 patches
+#' count(p1) # 99 patches
 #'
-#'# Turtles
+#' # Turtles
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
 #' t2 <- other(agents = t1, except = turtle(t1, who = 0))
-#' length(t2) # 9 turtles
+#' count(t2) # 9 turtles
 #'
 #'
 #' @export
@@ -2855,7 +2877,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- runif(length(w1))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
@@ -2919,7 +2941,8 @@ setMethod(
 #'         values for the requested variables for the \code{agents}. The row order
 #'         of the returned matrix follws the order of the \code{agents}.
 #'
-#' @details If \code{agents} are turtles, \code{world} must not be provided.
+#' @details If \code{agents} are patches, \code{world} must be provided.
+#'          If \code{agents} are turtles, \code{world} must not be provided.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#of}
 #'
@@ -2929,7 +2952,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- 1:25
+#' w1 <- set(world = w1, agents = patches(w1), val = 1:25)
 #' of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 #'
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))

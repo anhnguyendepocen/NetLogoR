@@ -3,21 +3,19 @@
 \docType{methods}
 \name{face}
 \alias{face}
-\alias{face,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
-\alias{face,NLworlds,SpatialPointsDataFrame,matrix-method}
+\alias{face,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
+\alias{face,SpatialPointsDataFrame,matrix-method}
 \title{Face something}
 \usage{
-face(world, turtles, agents2, torus = FALSE)
+face(turtles, agents2, world, torus = FALSE)
 
-\S4method{face}{NLworlds,SpatialPointsDataFrame,matrix}(world, turtles, agents2,
+\S4method{face}{SpatialPointsDataFrame,matrix}(turtles, agents2, world,
   torus = FALSE)
 
-\S4method{face}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame}(world,
-  turtles, agents2, torus = FALSE)
+\S4method{face}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles, agents2,
+  world, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
-
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
@@ -29,6 +27,8 @@ by \code{createOTurtles()} representing the moving agents.}
 
                Matrix (ncol = 2) with the first column "x and the second column
                "y" representing locations coordinates.}
+
+\item{world}{NLworlds object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
@@ -43,6 +43,8 @@ Set the \code{turtles}' heading towards \code{agents2}.
 The number of agents/locations in \code{agents2} must be equal to 1 or
          to the length of \code{turtles}.
 
+         If \code{torus = FALSE}, \code{world} does not need to be provided.
+
          If \code{torus = TRUE} and the distance from one \code{turtles} to
          its corresponding agent/location \code{agents2} is smaller around the
          sides of the \code{world} than across it, then the direction to the agent/location
@@ -52,16 +54,16 @@ The number of agents/locations in \code{agents2} must be equal to 1 or
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- runif(length(w1))
+w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
 library(SpaDES)
-clearplot()
+clearPlot()
 Plot(w1)
 Plot(t1, addTo = "w1")
 
-t1 <- face(world = w1, turtles = t1, agents2 = cbind(x = 0, y = 0))
-t1 <- fd(world = w1, turtles = t1, dist = 0.5)
+t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
+t1 <- fd(turtles = t1, dist = 0.5)
 Plot(t1, addTo = "w1")
 
 

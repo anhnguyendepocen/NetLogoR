@@ -38,7 +38,7 @@ The identity of the turtles is defined by their "who" number. This
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- runif(length(w1))
+w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t1 <- createOTurtles(n = 10, world = w1)
 
 library(SpaDES)
@@ -46,7 +46,7 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 
-t1 <- fd(world = w1, turtles = t1, dist = 1)
+t1 <- fd(turtles = t1, dist = 1)
 Plot(t1, addTo ="w1")
 
 

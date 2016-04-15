@@ -3,25 +3,25 @@
 \docType{methods}
 \name{inRadius}
 \alias{inRadius}
-\alias{inRadius,SpatialPointsDataFrame,numeric,SpatialPointsDataFrame,NLworlds-method}
-\alias{inRadius,SpatialPointsDataFrame,numeric,matrix,NLworlds-method}
-\alias{inRadius,matrix,numeric,SpatialPointsDataFrame,NLworlds-method}
-\alias{inRadius,matrix,numeric,matrix,NLworlds-method}
+\alias{inRadius,SpatialPointsDataFrame,numeric,SpatialPointsDataFrame-method}
+\alias{inRadius,SpatialPointsDataFrame,numeric,matrix-method}
+\alias{inRadius,matrix,numeric,SpatialPointsDataFrame-method}
+\alias{inRadius,matrix,numeric,matrix-method}
 \title{Agents in radius}
 \usage{
 inRadius(agents, radius, agents2, world, torus = FALSE)
 
-\S4method{inRadius}{matrix,numeric,matrix,NLworlds}(agents, radius, agents2,
-  world, torus = FALSE)
+\S4method{inRadius}{matrix,numeric,matrix}(agents, radius, agents2, world,
+  torus = FALSE)
 
-\S4method{inRadius}{matrix,numeric,SpatialPointsDataFrame,NLworlds}(agents,
-  radius, agents2, world, torus = FALSE)
+\S4method{inRadius}{matrix,numeric,SpatialPointsDataFrame}(agents, radius,
+  agents2, world, torus = FALSE)
 
-\S4method{inRadius}{SpatialPointsDataFrame,numeric,matrix,NLworlds}(agents,
-  radius, agents2, world, torus = FALSE)
+\S4method{inRadius}{SpatialPointsDataFrame,numeric,matrix}(agents, radius,
+  agents2, world, torus = FALSE)
 
 
-  \S4method{inRadius}{SpatialPointsDataFrame,numeric,SpatialPointsDataFrame,NLworlds}(agents,
+  \S4method{inRadius}{SpatialPointsDataFrame,numeric,SpatialPointsDataFrame}(agents,
   radius, agents2, world, torus = FALSE)
 }
 \arguments{
@@ -61,6 +61,8 @@ each of the \code{agents}.
 \details{
 Distances from/to patches are calculated from/to their center.
 
+         If \code{torus = FALSE}, \code{world} does not need to be provided.
+
          If \code{torus = TRUE}, the \code{radius} distances are calculared
          around the sides of the \code{world} to select \code{agents2}.
 }
@@ -68,10 +70,10 @@ Distances from/to patches are calculated from/to their center.
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
-t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1, world = w1)
-p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1), world = w1)
-t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1, world = w1)
+p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1))
+t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1)
+p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1))
+t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1)
 
 
 }

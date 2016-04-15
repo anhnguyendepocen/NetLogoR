@@ -5,7 +5,7 @@ date: "4 février 2016"
 output: html_document
 ---
 
-\
+
 
 
 #### April 2016
@@ -18,7 +18,7 @@ Potential tasks to do:
 
 * L) Code all the NL link functions.
 
-* E) Remove "useless" parameters in signature functions (e.g., each time "world" is asked, it is to be used with the wrap function. "world" is not needed when torus = FALSE). Need to be changed in all dependent functions and tests associated. E.g., fd(), bk() and NLdist() but maybe others.
+* E) (Done) Remove "useless" parameters in signature functions (e.g., each time "world" is asked, it is to be used with the wrap function. "world" is not needed when torus = FALSE). Need to be changed in all dependent functions and tests associated. E.g., fd(), bk() and NLdist() but maybe others.
 
 * G) Increase functions speed (e.g., better manage the outputs by removing lists)
 

@@ -48,7 +48,7 @@ What is given is lost for the patches.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- runif(length(w1))
+w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 plot(w1)
 # Diffuse 50\% of each patch value to its 8 neighbors
 w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)

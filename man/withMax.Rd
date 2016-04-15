@@ -55,7 +55,7 @@ equals to the maximum value.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 plot(w1)
 p1 <- withMax(agents = patches(w1), world = w1)
 

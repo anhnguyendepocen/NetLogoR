@@ -19,7 +19,7 @@ Report an empty patch agentset.
 }
 \examples{
 p1 <- noPatches()
-nrow(p1)
+count(p1)
 
 
 }
