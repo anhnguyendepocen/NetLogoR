@@ -236,7 +236,10 @@ setMethod(
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
-#' @details If a distance to move leads a turtle outside of the \code{world}'s extent
+#' @details If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
+#'          does not need to be provided.
+#'
+#'          If a distance to move leads a turtle outside of the \code{world}'s extent
 #'          and \code{torus = TRUE}, the turtle is
 #'          relocated on the other side of the \code{world}, inside its extent; if
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
@@ -266,7 +269,7 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- fd(world = w1, turtles = t1, dist = 1)
+#' t1 <- fd(turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -280,7 +283,7 @@ setMethod(
 #'
 setGeneric(
   "fd",
-  function(world, turtles, dist, torus = FALSE, out = TRUE) {
+  function(turtles, dist, world, torus = FALSE, out = TRUE) {
     standardGeneric("fd")
   })
 
@@ -288,8 +291,8 @@ setGeneric(
 #' @rdname fd
 setMethod(
   "fd",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
-  definition = function(world, turtles, dist, torus, out) {
+  signature = c(turtles = "SpatialPointsDataFrame", dist = "numeric"),
+  definition = function(turtles, dist, world, torus, out) {
 
     prevXcor <- turtles@coords[,1]
     prevYcor <- turtles@coords[,2]
@@ -301,12 +304,18 @@ setMethod(
     fdYcor <- prevYcor + cos(rad(turtles@data$heading)) * dist
 
     if(torus == TRUE){
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
       tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
       fdXcor <- tCoords[,1]
       fdYcor <- tCoords[,2]
     }
 
     if(torus == FALSE & out == FALSE){
+      if(missing(world)){
+        stop("A world must be provided as torus = FALSE and out = FALSE")
+      }
       outX <- fdXcor < world@extent@xmin | fdXcor > world@extent@xmax
       outY <- fdYcor < world@extent@ymin | fdYcor > world@extent@ymax
       outXY <- which(outX | outY) # position of turtles out of the world's extent

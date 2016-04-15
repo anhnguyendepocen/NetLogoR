@@ -3,22 +3,22 @@
 \docType{methods}
 \name{fd}
 \alias{fd}
-\alias{fd,NLworlds,SpatialPointsDataFrame,numeric-method}
+\alias{fd,SpatialPointsDataFrame,numeric-method}
 \title{Move forward}
 \usage{
-fd(world, turtles, dist, torus = FALSE, out = TRUE)
+fd(turtles, dist, world, torus = FALSE, out = TRUE)
 
-\S4method{fd}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles, dist,
+\S4method{fd}{SpatialPointsDataFrame,numeric}(turtles, dist, world,
   torus = FALSE, out = TRUE)
 }
 \arguments{
-\item{world}{NLworlds object.}
-
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
 \item{dist}{Numeric. Vector of distances to move. Must
 be of length 1 or of length \code{turtles}.}
+
+\item{world}{NLworlds object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
@@ -36,7 +36,10 @@ SpatialPointsDataFrame representing the \code{turtles} with updated
 Move the \code{turtles} forward with their headings as directions.
 }
 \details{
-If a distance to move leads a turtle outside of the \code{world}'s extent
+If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
+         does not need to be provided.
+
+         If a distance to move leads a turtle outside of the \code{world}'s extent
          and \code{torus = TRUE}, the turtle is
          relocated on the other side of the \code{world}, inside its extent; if
          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
@@ -58,7 +61,7 @@ clearPlot()
 Plot(w1)
 Plot(t1, addTo ="w1")
 
-t1 <- fd(world = w1, turtles = t1, dist = 1)
+t1 <- fd(turtles = t1, dist = 1)
 Plot(t1, addTo ="w1")
 
 

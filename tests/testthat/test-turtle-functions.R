@@ -157,6 +157,24 @@ test_that("fd works",{
   expect_identical(t7.2@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
   expect_identical(t7.3@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
   expect_identical(t7.4@coords, cbind(xcor = c(0, 1), ycor = c(0, 0)))
+
+  # Work without world provided when torus = FALSE and out = TRUE
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t2 <- fd(turtles = t1, dist = 1)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
+  t3 <- fd(turtles = t1, dist = 5, torus = FALSE, out = TRUE)
+  expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
+  expect_error(fd(turtles = t1, dist = 5, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = -1, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = 5, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = 5, torus = FALSE, out = FALSE))
+  t6 <- createTurtles(n = 2, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t7.1 <- fd(turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  expect_identical(t7.1@coords, cbind(xcor = c(5, 1), ycor = c(0, 0)))
+  expect_error(fd(turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE))
+  expect_error(fd(turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE))
+  expect_error(fd(wturtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
 })
 
 test_that("bk works",{
