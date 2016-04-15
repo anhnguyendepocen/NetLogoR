@@ -49,7 +49,8 @@ Vector of values for the \code{agents} if one variable is requested. The class d
 Report the \code{agents} values for the requested variable.
 }
 \details{
-If \code{agents} are turtles, \code{world} must not be provided.
+If \code{agents} are patches, \code{world} must be provided.
+         If \code{agents} are turtles, \code{world} must not be provided.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

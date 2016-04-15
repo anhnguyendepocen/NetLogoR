@@ -2939,7 +2939,8 @@ setMethod(
 #'         values for the requested variables for the \code{agents}. The row order
 #'         of the returned matrix follws the order of the \code{agents}.
 #'
-#' @details If \code{agents} are turtles, \code{world} must not be provided.
+#' @details If \code{agents} are patches, \code{world} must be provided.
+#'          If \code{agents} are turtles, \code{world} must not be provided.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#of}
 #'
