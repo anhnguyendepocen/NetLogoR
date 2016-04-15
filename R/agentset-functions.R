@@ -1417,6 +1417,8 @@ setMethod(
 #'
 #' @details Distances from/to patches are calculated from/to their center.
 #'
+#'          If \code{torus = FALSE}, \code{world} does not need to be provided.
+#'
 #'          If \code{torus = TRUE}, the \code{radius} distances are calculared
 #'          around the sides of the \code{world} to select \code{agents2}.
 #'
@@ -1430,10 +1432,10 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
-#' p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
-#' t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1, world = w1)
-#' p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1), world = w1)
-#' t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1, world = w1)
+#' p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1))
+#' t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1)
+#' p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1))
+#' t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1)
 #'
 #'
 #' @export
@@ -1455,7 +1457,7 @@ setGeneric(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "matrix", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
+  signature = c(agents = "matrix", radius = "numeric", agents2 = "matrix"),
   definition = function(agents, radius, agents2, world, torus) {
     inRadius(agents = SpatialPointsDataFrame(coords = agents, data = data.frame(rep(NA, nrow(agents)))), radius = radius, agents2 = agents2, world = world, torus = torus)
   }
@@ -1465,7 +1467,7 @@ setMethod(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "matrix", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  signature = c(agents = "matrix", radius = "numeric", agents2 = "SpatialPointsDataFrame"),
   definition = function(agents, radius, agents2, world, torus) {
     inRadius(agents = SpatialPointsDataFrame(coords = agents, data = data.frame(rep(NA, nrow(agents)))), radius = radius, agents2 = agents2, world = world, torus = torus)
   }
@@ -1475,13 +1477,17 @@ setMethod(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "matrix", world = "NLworlds"),
+  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "matrix"),
   definition = function(agents, radius, agents2, world, torus) {
 
     # Create buffers around the locations of agents
     pBuffer <- gBuffer(agents, byid = TRUE, id = 1:length(agents), width = radius, quadsegs = 50)
 
     if(torus == TRUE){
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
+
       worldWrap <- createNLworld(minPxcor = minPxcor(world) - radius, maxPxcor = maxPxcor(world) + radius,
                                  minPycor = minPycor(world) - radius, maxPycor = maxPycor(world) + radius)
       pAllWrap <- patches(worldWrap)
@@ -1512,13 +1518,17 @@ setMethod(
 #' @rdname inRadius
 setMethod(
   "inRadius",
-  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "SpatialPointsDataFrame", world = "NLworlds"),
+  signature = c(agents = "SpatialPointsDataFrame", radius = "numeric", agents2 = "SpatialPointsDataFrame"),
   definition = function(agents, radius, agents2, world, torus) {
 
     # Create buffers around the locations of agents
     pBuffer <- gBuffer(agents, byid = TRUE, id = 1:length(agents), width = radius, quadsegs = 50)
 
     if(torus == TRUE){
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
+
       agents2c <- agents2@coords
       agents2c1 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
       agents2c2 <- cbind(agents2c[,1], agents2c[,2] + (world@extent@ymax - world@extent@ymin))
