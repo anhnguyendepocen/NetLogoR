@@ -54,7 +54,7 @@ If \code{agents} are patches, \code{world} must be provided.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- 1:25
+w1 <- set(world = w1, agents = patches(w1), val = 1:25)
 of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))

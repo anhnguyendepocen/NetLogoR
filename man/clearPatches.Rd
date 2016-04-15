@@ -27,12 +27,12 @@ The name of the layer is set to \code{""}.
 }
 \examples{
 w1 <- createNLworld()
-w1[] <- runif(length(w1))
-w1Val <- values(w1)
+w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
+w1Val <- of(world = w1, agents = patches(w1))
 summary(w1Val)
 
 w1 <- clearPatches(w1)
-w1Val <- values(w1)
+w1Val <- of(world = w1, agents = patches(w1))
 summary(w1Val)
 
 

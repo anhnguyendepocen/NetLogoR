@@ -23,7 +23,7 @@ Report \code{n} random pxcor coordinates within the \code{world}'s extent.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-pxcor_ <- randomPxcor(world = w1, n = 10)
+pxcor <- randomPxcor(world = w1, n = 10)
 
 
 }

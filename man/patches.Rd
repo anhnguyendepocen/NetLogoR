@@ -27,7 +27,7 @@ Report the coordinates of all the patches in the \code{world}.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
 allPatches <- patches(world = w1)
-nrow(allPatches)
+count(allPatches)
 
 
 }

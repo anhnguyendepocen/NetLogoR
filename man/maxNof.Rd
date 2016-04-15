@@ -62,7 +62,7 @@ among the maximum values.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1[] <- sample(1:10, size = length(w1), replace = TRUE)
+w1 <- set(world = w1, agents = patches(w1), val = sample(1:10, size = count(patches(w1)), replace = TRUE))
 plot(w1)
 p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 

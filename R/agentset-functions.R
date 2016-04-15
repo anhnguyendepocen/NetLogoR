@@ -20,10 +20,10 @@
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 #' NLall(agents = patches(w1), world = w1, val = 5)
 #' w2 <- w1
-#' w2[] <- 5
+#' w2 <- set(world = w1, agents = patches(w1), val = 5)
 #' NLall(agents = patches(w2), world = w2, val = 5)
 #'
 #' # Turtles
@@ -244,7 +244,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- sortOn(agents = patches(w1), world = w1)
 #'
@@ -337,7 +337,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 #'
@@ -435,7 +435,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- withMax(agents = patches(w1), world = w1)
 #'
@@ -534,7 +534,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- withMin(agents = patches(w1), world = w1)
 #'
@@ -640,7 +640,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- maxOneOf(agents = patches(w1), world = w1)
 #'
@@ -739,7 +739,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:5, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- minOneOf(agents = patches(w1), world = w1)
 #'
@@ -1172,7 +1172,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:10, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:10, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1314,7 +1314,7 @@ setMethod(
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- sample(1:10, size = length(w1), replace = TRUE)
+#' w1 <- set(world = w1, agents = patches(w1), val = sample(1:10, size = count(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1732,9 +1732,9 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1[] <- 1:25
-#' w1 <- set(world = w1, agents = patch(w1, 0, 0), val = 0) # set the patch[0,0] to 0
-#' of(world = w1, agents = patch(w1, 0, 0)) # 0
+#' w1 <- set(world = w1, agents = patches(w1), val = 1)
+#' w1 <- set(world = w1, agents = patch(w1, 0, 4), val = 0) # set the patch[0,0] to 0
+#' of(world = w1, agents = patches(w1))
 #'
 #' t1 <- createTurtles(n = 3, world = w1, heading = 0)
 #' t2 <- set(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180) # set the heading of the turtle 0 to 180
