@@ -526,7 +526,7 @@ See http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf for more colors.
 
 * netlogo-web?: not implemented.
 
-* new-seed:  
+* new-seed: `rm(.Random.seed)` removes the old seed and automatically select a random new one.  
 
 * no-display: not implemented.
 
@@ -885,7 +885,7 @@ See http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf for more colors.
 
 * with-min: `withMin()` from NetLogoR.
 
-* with-local-randomness:
+* with-local-randomness: save the seed (e.g., `oldSeed <- .Random.seed`) and reuse it later with `set.seed(oldSeed)`.
 
 * without-interruption: not implemented.
 

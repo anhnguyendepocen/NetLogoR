@@ -458,7 +458,7 @@ $(document).ready(function () {
 <li><p>netlogo-applet?: not implemented.</p></li>
 <li><p>netlogo-version: <code>R.Version()</code>.</p></li>
 <li><p>netlogo-web?: not implemented.</p></li>
-<li><p>new-seed:</p></li>
+<li><p>new-seed: <code>rm(.Random.seed)</code> removes the old seed and automatically select a random new one.</p></li>
 <li><p>no-display: not implemented.</p></li>
 <li><p>nobody: not implemented.</p></li>
 <li><p>no-links: links not implemented.</p></li>
@@ -680,7 +680,7 @@ $(document).ready(function () {
 <li><p>link-with: links not implemented.</p></li>
 <li><p>with-max: <code>withMax()</code> from NetLogoR.</p></li>
 <li><p>with-min: <code>withMin()</code> from NetLogoR.</p></li>
-<li><p>with-local-randomness:</p></li>
+<li><p>with-local-randomness: save the seed (e.g., <code>oldSeed &lt;- .Random.seed</code>) and reuse it later with <code>set.seed(oldSeed)</code>.</p></li>
 <li><p>without-interruption: not implemented.</p></li>
 <li><p>word: <code>paste()</code>.</p></li>
 <li>world-width: <code>worldWidth()</code> in NetLogoR.</li>
