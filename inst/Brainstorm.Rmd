@@ -12,19 +12,18 @@ output: html_document
 
 Potential tasks to do:
 
-* E) Remove "useless" parameters in signature functions (e.g., each time "world" is asked, it is to be used with the wrap function. "world" is not needed when torus = FALSE). Need to be changed in all dependent functions and tests associated. E.g., fd(), bk() and NLdist() but maybe others.
-
-* F) Rename functions with shorter names.
-
-* G) Increase functions speed (e.g., better manage the outputs by removing lists)
-
-* L) Code all the NL link functions.
+* N) Build the Wolf-Sheep-Predation model (or another one) using SpaDES.
 
 * M) Build new modele example(s) (mostly to help pinpoint slow and not-general enough functions).
 
-* N) Build the Wolf-Sheep-Predation model (or another one) using SpaDES.
+* L) Code all the NL link functions.
 
-\
+* E) Remove "useless" parameters in signature functions (e.g., each time "world" is asked, it is to be used with the wrap function. "world" is not needed when torus = FALSE). Need to be changed in all dependent functions and tests associated. E.g., fd(), bk() and NLdist() but maybe others.
+
+* G) Increase functions speed (e.g., better manage the outputs by removing lists)
+
+* F) Rename functions with shorter names.
+
 
 
 #### March 2016
