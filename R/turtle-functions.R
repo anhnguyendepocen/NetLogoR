@@ -342,7 +342,10 @@ setMethod(
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
-#' @details If a distance to move leads a turtle outside of the \code{world}'s extent
+#' @details If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
+#'          does not need to be provided.
+#'
+#'          If a distance to move leads a turtle outside of the \code{world}'s extent
 #'          and \code{torus = TRUE}, the turtle is
 #'          relocated on the other side of the \code{world}, inside its extent; if
 #'          \code{torus = FALSE} and \code{out = TRUE}, the turtle moves past the
@@ -375,11 +378,11 @@ setMethod(
 #' Plot(w1)
 #' Plot(t1, addTo ="w1")
 #'
-#' t1 <- fd(world = w1, turtles = t1, dist = 2)
+#' t1 <- fd(turtles = t1, dist = 2)
 #' Plot(t1, addTo ="w1")
-#' t1 <- bk(world = w1, turtles = t1, dist = 1)
+#' t1 <- bk(turtles = t1, dist = 1)
 #' Plot(t1, addTo ="w1")
-#' t1 <- fd(world = w1, turtles = t1, dist = 0.5)
+#' t1 <- fd(turtles = t1, dist = 0.5)
 #' Plot(t1, addTo ="w1")
 #'
 #'
@@ -391,7 +394,7 @@ setMethod(
 #'
 setGeneric(
   "bk",
-  function(world, turtles, dist, torus = FALSE, out = TRUE) {
+  function(turtles, dist, world, torus = FALSE, out = TRUE) {
     standardGeneric("bk")
   })
 
@@ -399,10 +402,10 @@ setGeneric(
 #' @rdname bk
 setMethod(
   "bk",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
-  definition = function(world, turtles, dist, torus, out) {
+  signature = c(turtles = "SpatialPointsDataFrame", dist = "numeric"),
+  definition = function(turtles, dist, world, torus, out) {
 
-    fd(world = world, turtles = turtles, dist = -dist, torus = torus, out = out)
+    fd(turtles = turtles, dist = -dist, world = world, torus = torus, out = out)
 
   }
 )

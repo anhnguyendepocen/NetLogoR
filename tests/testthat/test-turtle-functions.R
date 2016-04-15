@@ -196,7 +196,6 @@ test_that("bk works",{
   w2[] <- runif(25)
   ws <-NLstack(w1, w2)
 
-  t1 <- createTurtles(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 90)
   t2 <- bk(world = ws, turtles = t1, dist = -1)
   expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
   expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
@@ -208,10 +207,8 @@ test_that("bk works",{
   expect_identical(cbind(xcor = rep(4, 10), ycor = t1@coords[,2]), t5@coords)
 
   # Argument out
-  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   t3out <- bk(world = w1, turtles = t1, dist = -5, torus = FALSE, out = FALSE)
   expect_identical(t3out@coords, t1@coords)
-  t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   t3out <- bk(world = ws, turtles = t1, dist = -5, torus = FALSE, out = FALSE)
   expect_identical(t3out@coords, t1@coords)
 
@@ -224,6 +221,20 @@ test_that("bk works",{
   expect_identical(t7.2@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
   expect_identical(t7.3@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
   expect_identical(t7.4@coords, cbind(xcor = c(4, 3), ycor = c(0, 0)))
+
+  # Works without world provided when torus = FALSE and out = TRUE
+  t2 <- bk(turtles = t1, dist = -1)
+  expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
+  expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)
+  t3 <- bk(turtles = t1, dist = -5, torus = FALSE)
+  expect_identical(cbind(xcor = t1@coords[,1] + 5, ycor = t1@coords[,2]), t3@coords)
+  expect_error(bk(turtles = t1, dist = -5, torus = TRUE))
+  expect_error(bk(turtles = t1, dist = 1, torus = TRUE))
+  expect_error(bk(turtles = t1, dist = -5, torus = FALSE, out = FALSE))
+  t7.1 <- bk(turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE))
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE))
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
 })
 
 test_that("home works",{
