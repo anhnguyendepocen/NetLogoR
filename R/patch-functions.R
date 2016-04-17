@@ -334,12 +334,12 @@ setMethod(
 
     if (NROW(agents)<1e2) { # data.frame is faster below 100 agents, data.table faster above
        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-       neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+       neighbors <- adj(world, cells = cellNum, directions = nNeighbors,
+                        torus = torus, id=seq_along(cellNum))
 
        pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
 
-       neighbors_df <- merge(unique(data.frame(neighbors, pCoords)), data.frame(cellNum, id = 1:length(cellNum)),
-                             by.x = "from", by.y = "cellNum")
+       neighbors_df <- data.frame(neighbors, pCoords)
 
        # Output as a matrix
        neighbors_df <- neighbors_df[order(neighbors_df$id),]
@@ -347,19 +347,20 @@ setMethod(
 
     } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-      neighbors <- data.table(adj(world, cells = cellNum, directions = nNeighbors, torus = torus))
+      neighbors <- data.table(adj(world, cells = cellNum, directions = nNeighbors,
+                                  torus = torus, id=seq_along(cellNum)))
       cellNum <- data.table(cellNum=cellNum, id=seq_along(cellNum))
       pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,to])
       neighbors[,`:=`(pxcor=pCoords[,1], pycor=pCoords[,2])]
-      neighbors <- unique(neighbors)
+#      neighbors <- unique(neighbors)
       #setnames(cellNum, "cellNum", "from")
-      setkey(cellNum, cellNum)
-      setkey(neighbors, from)
-      neighbors_dt <- cellNum[neighbors, allow.cartesian=TRUE]
-      setkey(neighbors_dt, id)
-      listAgents <- cbind(pxcor = neighbors_dt$pxcor,
-                          pycor = neighbors_dt$pycor,
-                          id = neighbors_dt$id)# %>% as.factor %>% as.numeric)
+#      setkey(cellNum, cellNum)
+#      setkey(neighbors, from)
+#      neighbors_dt <- cellNum[neighbors, allow.cartesian=TRUE]
+      setkey(neighbors, id)
+      listAgents <- cbind(pxcor = neighbors$pxcor,
+                          pycor = neighbors$pycor,
+                          id = neighbors$id)# %>% as.factor %>% as.numeric)
     }
 
     return(listAgents)
