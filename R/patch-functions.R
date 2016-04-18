@@ -332,7 +332,7 @@ setMethod(
   signature = c(world = "NLworlds", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
-    if (NROW(agents)<1e2) { # data.frame is faster below 100 agents, data.table faster above
+    if(nrow(agents) < 100) { # data.frame is faster below 100 agents, data.table faster above
        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
        neighbors <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
 
@@ -343,26 +343,26 @@ setMethod(
 
        # Output as a matrix
        neighbors_df <- neighbors_df[order(neighbors_df$id),]
-       listAgents <- cbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
+       neighborsID <- cbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
 
     } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
       neighbors <- data.table(adj(world, cells = cellNum, directions = nNeighbors, torus = torus))
-      cellNum <- data.table(cellNum=cellNum, id=seq_along(cellNum))
+      cellNum <- data.table(cellNum = cellNum, id = seq_along(cellNum))
       pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,to])
-      neighbors[,`:=`(pxcor=pCoords[,1], pycor=pCoords[,2])]
+      neighbors[,`:=`(pxcor = pCoords[,1], pycor = pCoords[,2])]
       neighbors <- unique(neighbors)
       #setnames(cellNum, "cellNum", "from")
       setkey(cellNum, cellNum)
       setkey(neighbors, from)
-      neighbors_dt <- cellNum[neighbors, allow.cartesian=TRUE]
+      neighbors_dt <- cellNum[neighbors, allow.cartesian = TRUE]
       setkey(neighbors_dt, id)
-      listAgents <- cbind(pxcor = neighbors_dt$pxcor,
+      neighborsID <- cbind(pxcor = neighbors_dt$pxcor,
                           pycor = neighbors_dt$pycor,
-                          id = neighbors_dt$id)# %>% as.factor %>% as.numeric)
+                          id = neighbors_dt$id) # %>% as.factor %>% as.numeric)
     }
 
-    return(listAgents)
+    return(neighborsID)
   }
 )
 
