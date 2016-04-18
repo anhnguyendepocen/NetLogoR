@@ -59,7 +59,6 @@ doEvent.WolfSheepPredation = function(sim, eventTime, eventType, debug = FALSE) 
     sim <- scheduleEvent(sim, params(sim)$WolfSheepPredation$.plotInitialTime, "WolfSheepPredation", "plot")
     sim <- scheduleEvent(sim, params(sim)$WolfSheepPredation$.saveInitialTime, "WolfSheepPredation", "save")
     sim <- scheduleEvent(sim, start(sim), "WolfSheepPredation","event")
-    sim <- scheduleEvent(sim, end(sim) - 0.01, "WolfSheepPredation", "endEvent") ##just before the end, create the outputs
 
   } else if (eventType == "plot") {
 
@@ -75,10 +74,6 @@ doEvent.WolfSheepPredation = function(sim, eventTime, eventType, debug = FALSE) 
 
     sim <- sim$WolfSheepPredationEvent(sim)
     sim <- scheduleEvent(sim, time(sim) + 1, "WolfSheepPredation", "event")
-
-  } else if (eventType == "endEvent") {
-
-    sim <- sim$WolfSheepPredationOutputs(sim)
 
   } else {
     warning(paste("Undefined event type: '", current(sim)[1, "eventType", with = FALSE],
@@ -105,10 +100,10 @@ WolfSheepPredationInit <- function(sim) {
   # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
     # Initialize patch values (grass and countdown) at random
-    grassVal <- sample(c(0,1), size = length(grass), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
+    grassVal <- sample(c(0,1), size = count(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
     grass <- set(world = grass, agents = patches(grass), val = grassVal)
     countdown <- grass # countdown is a new NLworld with the same extent as grass
-    countdownVal <- runif(n = length(grass), min = 0, max = params(sim)$WolfSheepPredation$grassTGrowth) # grass grow clock
+    countdownVal <- runif(n = count(patches(grass)), min = 0, max = params(sim)$WolfSheepPredation$grassTGrowth) # grass grow clock
     countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
     field <- NLstack(grass, countdown)
   }
@@ -159,7 +154,7 @@ WolfSheepPredationSave <- function(sim) {
   sim$numSheep <- c(sim$numSheep, count(sim$sheep)) # add the new number of sheep
   sim$numWolves <- c(sim$numWolves, count(sim$wolves)) # add the new numbr of wolves
 
-  if(param(sim)$WolfSheepPredation$grassOn == TRUE){
+  if(params(sim)$WolfSheepPredation$grassOn == TRUE){
     pGreen <- NLwith(world = sim$field, var = "grass", agents = patches(sim$field), val = 1) # patches equal to 1 (green)
     sim$numGreen <- c(sim$numGreen, count(pGreen)) # add the new number of green patches
   }
@@ -168,85 +163,55 @@ WolfSheepPredationSave <- function(sim) {
 }
 
 ### template for plot events
-
-#### Plot positions
 WolfSheepPredationPlot <- function(sim) {
-
-  if(param(sim)$WolfSheepPredation$grassOn == TRUE){
-    Plot(sim$field[[1]])
-    Plot(sim$sheep, addTo = "field$grass")
-    Plot(sim$wolves, addTo = "field$grass")
+  clearPlot()
+  if(params(sim)$WolfSheepPredation$grassOn == TRUE){
+    Plot(sim$field$grass)
+    Plot(sim$sheep, addTo = "sim$field$grass")
+    Plot(sim$wolves, addTo = "sim$field$grass")
   } else {
     Plot(sim$grass)
-    Plot(sim$sheep, addTo = "grass")
-    Plot(sim$wolves, addTo = "grass")
+    Plot(sim$sheep, addTo = "sim$grass")
+    Plot(sim$wolves, addTo = "sim$grass")
   }
 
   return(invisible(sim))
 }
-
-#### Plot outputs
-WolfSheepPredationOutputs <- function(sim) {
-
-  timeStep <- 1:length(sim$numSheep)
-
-  if(params(sim)$WolfSheepPredation$grassOn == TRUE){
-
-    plot(timeStep, sim$numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
-         ylim = c(min = 0, max = max(c(max(sim$numSheep), max(sim$numWolves), max(sim$numGreen / 4)))))
-    lines(timeStep, sim$numWolves, col = "red", lwd = 2)
-    lines(timeStep, sim$numGreen / 4, col = "green", lwd = 2)
-
-    legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
-           bg = "white")
-
-  } else {
-
-    plot(timeStep, sim$numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
-         ylim = c(min = 0, max = max(c(max(sim$numSheep), max(sim$numWolves)))))
-    lines(timeStep, sim$numWolves, col = "red", lwd = 2)
-
-    legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
-  }
-
-  return(invisible(sim))
-}
-
 
 ### template for the main event using the different functions defined under
 WolfSheepPredationEvent <- function(sim){
 
-  if(NLany(sheep) | NLany(wolves)){
+  if(NLany(sim$sheep) | NLany(sim$wolves)){
 
     # Ask sheep
     if(count(sim$sheep) != 0){
-      moveSheep()
+      moveSheep(sim)
       if(params(sim)$WolfSheepPredation$grassOn == TRUE){
         energySheep <- of(agents = sim$sheep, var = "energy")
         sim$sheep <- set(turtles = sim$sheep, agents = sim$sheep, var = "energy", val = energySheep - 1)
-        eatGrass()
+        eatGrass(sim)
       }
-      deathSheep()
+      dieSheep(sim)
       if(count(sim$sheep) != 0){
-        reproduceSheep()
+        reproduceSheep(sim)
       }
     }
 
     # Ask wolves
     if(count(sim$wolves) != 0){
-      moveWolves()
+      moveWolves(sim)
       energyWolves <- of(agents = sim$wolves, var = "energy")
       sim$wolves <- set(turtles = sim$wolves, agents = sim$wolves, var = "energy", val = energyWolves - 1)
-      catchSheep()
-      deathWolves()
+      catchSheep(sim)
+      dieWolves(sim)
       if(count(sim$wolves) != 0){
-        reproduceWolf()
+        reproduceWolves(sim)
       }
     }
 
     # Ask grass
     if(params(sim)$WolfSheepPredation$grassOn == TRUE){
-      growGrass()
+      growGrass(sim)
     }
 
   }
@@ -406,7 +371,7 @@ growGrass <- function(sim) {
 
   pBrownCountdown0 <- which(pBrownCountdown <= 0) # patches with a countdown <= 0
   if(length(pBrownCountdown0) != 0){
-    pGrow <- pBrown[pBrownCountdown0, ] # patches with grass equal to 0 (brown) and countdown <= 0
+    pGrow <- pBrown[pBrownCountdown0, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
     # Grow some grass on these patches and reset the countdown
     sim$field <- set(world = sim$field, var = c("grass", "countdown"), agents = pGrow,
                  val = cbind(grass = rep(1, count(pGrow)), countdown = rep(params(sim)$WolfSheepPredation$grassTGrowth, count(pGrow))))
@@ -414,7 +379,7 @@ growGrass <- function(sim) {
 
   pBrownCountdown1 <- which(!pBrownCountdown <= 0) # patches with a countdown > 0
   if(length(pBrownCountdown1) != 0){
-    pWait <- pBrown[pBrownCountdown1, ] # patches with grass equal to 0 (brown) and countdown > 0
+    pWait <- pBrown[pBrownCountdown1, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown > 0
     # Decrease the countdown for the patches which wait
     sim$field <- set(world = sim$field, var = "countdown", agents = pWait, val = pBrownCountdown[pBrownCountdown1] - 1)
   }

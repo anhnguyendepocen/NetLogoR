@@ -43,10 +43,10 @@ grass <- createNLworld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor =
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
 if(grassOn == TRUE){
   # Initialize patch values (grass and countdown) at random
-  grassVal <- sample(c(0,1), size = length(grass), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
+  grassVal <- sample(c(0,1), size = count(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
   grass <- set(world = grass, agents = patches(grass), val = grassVal)
   countdown <- grass # countdown is a new NLworld with the same extent as grass
-  countdownVal <- runif(n = length(grass), min = 0, max = grassTGrowth) # grass grow clock
+  countdownVal <- runif(n = count(patches(grass)), min = 0, max = grassTGrowth) # grass grow clock
   countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
   field <- NLstack(grass, countdown)
 }
@@ -254,7 +254,7 @@ growGrass <- function(){ # only patches
 
   pBrownCountdown0 <- which(pBrownCountdown <= 0) # patches with a countdown <= 0
   if(length(pBrownCountdown0) != 0){
-    pGrow <- pBrown[pBrownCountdown0, ] # patches with grass equal to 0 (brown) and countdown <= 0
+    pGrow <- pBrown[pBrownCountdown0, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
     # Grow some grass on these patches and reset the countdown
     field <- set(world = field, var = c("grass", "countdown"), agents = pGrow,
                  val = cbind(grass = rep(1, count(pGrow)), countdown = rep(grassTGrowth, count(pGrow))))
@@ -262,7 +262,7 @@ growGrass <- function(){ # only patches
 
   pBrownCountdown1 <- which(!pBrownCountdown <= 0) # patches with a countdown > 0
   if(length(pBrownCountdown1) != 0){
-    pWait <- pBrown[pBrownCountdown1, ] # patches with grass equal to 0 (brown) and countdown > 0
+    pWait <- pBrown[pBrownCountdown1, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown > 0
     # Decrease the countdown for the patches which wait
     field <- set(world = field, var = "countdown", agents = pWait, val = pBrownCountdown[pBrownCountdown1] - 1)
   }
