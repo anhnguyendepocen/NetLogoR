@@ -808,6 +808,17 @@ test_that("turtle works",{
   expect_equivalent(t15, t13)
   t16 <- turtle(t1, 11)
   expect_equivalent(noTurtles(),t16)
+
+  # With duplicate
+  t1@data$who <- c(0,0,0,1,1,1,2,3,4,4)
+  expect_warning(turtle(t1, 0))
+  t2 <- turtle(t1, 0)
+  expect_equivalent(length(t2), 1)
+  expect_warning(turtle(t1, c(0, 2, 1)))
+  t3 <- turtle(t1, c(0, 2, 1))
+  expect_equivalent(length(t3), 3)
+  expect_equivalent(t3@data$who, c(0, 2, 1))
+
 })
 
 test_that("turtlesOn works",{
@@ -916,8 +927,8 @@ test_that("turtleSet works",{
   t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
 
   expect_warning(turtleSet(t1, t2, t3))
-  # tAll <- turtleSet(t1, t2, t3) # cause warning
-  # expect_equivalent(length(tAll), 10)
+  tAll <- turtleSet(t1, t2, t3) # cause warning
+  expect_equivalent(length(tAll), 10)
 
   t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
   t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
@@ -925,9 +936,9 @@ test_that("turtleSet works",{
   expect_equivalent(length(tAll), 13)
 
   expect_warning(turtleSet(t1, t1))
-  # tAll2 <- turtleSet(t1, t1)
-  # expect_identical(tAll2@coords, t1@coords)
-  # expect_identical(tAll2@data, t1@data)
+  tAll2 <- turtleSet(t1, t1)
+  expect_identical(tAll2@coords, t1@coords)
+  expect_identical(tAll2@data, t1@data)
 })
 
 test_that("turtlesOwn works",{

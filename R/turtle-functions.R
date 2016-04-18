@@ -2209,13 +2209,11 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
 
-    newTurtles <- turtles[na.omit(match(who, turtles$who)),] # %>% na.omit %>% sort
+    if(anyDuplicated(turtles@data$who) != 0){
+      warning("Duplicated who numbers among the input turtles")
+    }
 
-    # if(anyDuplicated(turtles@data$who) != 0){
-    #   warning("Duplicated who numbers among the input turtles")
-    # }
-    #
-    # newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort, turtles@data$who faster than turtles$who
+    newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort, turtles@data$who faster than turtles$who
 
     return(newTurtles)
   }
