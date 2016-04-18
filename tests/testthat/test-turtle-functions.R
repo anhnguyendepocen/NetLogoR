@@ -806,6 +806,8 @@ test_that("turtle works",{
   expect_identical(t14, t12)
   t15 <- turtle(t6, 3)
   expect_equivalent(t15, t13)
+  t16 <- turtle(t1, 11)
+  expect_equivalent(noTurtles(),t16)
 })
 
 test_that("turtlesOn works",{
@@ -910,14 +912,22 @@ test_that("turtlesAt works",{
 test_that("turtleSet works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = "sheep")
-  t2 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2), breed = "wolf")
-  t3 <- createTurtles(n = 1, coords = randomXYcor(world = w1, n = 1), breed = "sheperd")
+  t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+  t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+
+  expect_warning(turtleSet(t1, t2, t3))
+  # tAll <- turtleSet(t1, t2, t3) # cause warning
+  # expect_equivalent(length(tAll), 10)
+
+  t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
+  t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
   tAll <- turtleSet(t1, t2, t3)
   expect_equivalent(length(tAll), 13)
-  expect_identical(tAll@data$who, c(0:9, 0, 1, 0))
-  tAll2 <- turtleSet(t1, t1)
-  expect_identical(tAll2@coords, t1@coords)
-  expect_identical(tAll2@data, t1@data)
+
+  expect_warning(turtleSet(t1, t1))
+  # tAll2 <- turtleSet(t1, t1)
+  # expect_identical(tAll2@coords, t1@coords)
+  # expect_identical(tAll2@data, t1@data)
 })
 
 test_that("turtlesOwn works",{

@@ -2211,6 +2211,12 @@ setMethod(
 
     newTurtles <- turtles[na.omit(match(who, turtles$who)),] # %>% na.omit %>% sort
 
+    # if(anyDuplicated(turtles@data$who) != 0){
+    #   warning("Duplicated who numbers among the input turtles")
+    # }
+    #
+    # newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort, turtles@data$who faster than turtles$who
+
     return(newTurtles)
   }
 )
@@ -2221,6 +2227,21 @@ setMethod(
   "turtle",
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
+
+    # tData <- turtles@data
+    #
+    # if(anyDuplicated(tData[,c("who", "breed")]) != 0){
+    #   warning("Duplicated (who numbers and breeds) among the input turtles")
+    # }
+    #
+    # if(length(breed) == 1 & length(who) != 1){
+    #   breed <- rep(breed, length(who))
+    # }
+    #
+    # tSelect <- tData[tData$who %in% who & tData$breed %in% breed, ]
+    # tPos <- rownames(subset(tSelect, !duplicated(tSelect[,c("who", "breed")])))
+    #
+    # return(turtles[tPos,])
 
     whoTurtles <- turtle(turtles = turtles, who = who)
 
@@ -2233,8 +2254,8 @@ setMethod(
     whoBreed <- tSelect[tSelect$breed == breed, "who"]
 
     turtle(turtles = turtles, who = whoBreed)
-  }
-)
+
+})
 
 
 ################################################################################
@@ -2499,20 +2520,20 @@ setMethod(
 ################################################################################
 #' Create a turtle agenset
 #'
-#' Report a turtle agentset containing all turtles provided in the inputs.
+#' Report a turtle agentset containing all unique turtles provided in the inputs.
 #'
 #' @param ... SpatialPointsDataFrame objects created by \code{createTurtles()} or
 #'            by \code{createOTurtles()} representing the moving agents.
 #'
 #' @return SpatialPointsDataFrame with all the turtles provided in the inputs.
 #'
-#' @details Duplicated turtles are removed. Duplicates are identified based on the
-#'          turtles' coordinates and all their variables values.
+#' @details Duplicated turtles are identified only by their similar who numbers.
+#'          The choice of unique turtle per who number is random. Use set() to
+#'          modify the turtles who numbers in some of the inputs, prior using
+#'          turtleSet(), to avoid turtles with duplicated who numbers.
 #'
-#'          This functions does not affect the turtles coordinates and variables.
-#'          Therefore there may be multiple turtles with the same variable value (e.g.,
-#'          "who" number, and color). This must be taken care of prior or later
-#'          using this function to avoid further confusions.
+#'          Colors are not updated. Several turtles in the output may have the
+#'          same color.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle-set}
 #'
@@ -2524,7 +2545,9 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 #' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+#' t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
 #' t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+#' t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
 #' t4 <- turtleSet(t1, t2, t3)
 #'
 #'
@@ -2551,8 +2574,12 @@ setMethod(
     dots <-list(...)
 
     allList <- lapply(dots, function(x){cbind(x@coords, x@data)})
-    allDf <- rbindlist(allList)
-    allDf <- as.data.frame(unique(allDf))
+    allDf <- as.data.frame(rbindlist(allList))
+
+    if(anyDuplicated(allDf$who) != 0){
+      warning("Duplicated who numbers among the input turtles")
+      allDf <- allDf[!duplicated(allDf$who), ]
+    }
 
     allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
     return(allTurtles)

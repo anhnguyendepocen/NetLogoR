@@ -664,4 +664,9 @@ test_that("set works",{
   t6 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
   expect_identical(t5, t6)
 
+  # Warning with who numbers
+  expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 0))
+  # t7 <- set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 0) # cause warning
+  # expect_equivalent(t7@data$who[c(1,2)], c(0,0))
+  # expect_warning(set(turtles = t7, agents = t7[t7$who %in% 0,], var = "heading", val = 0))
 })
