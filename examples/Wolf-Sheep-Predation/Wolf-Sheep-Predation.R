@@ -11,6 +11,7 @@
 ## Packages required
 library(NetLogoR)
 library(SpaDES)
+library(profvis)
 
 
 ## Global variables (some represent the model buttons)
@@ -282,7 +283,7 @@ growGrass <- function(){ # only patches
 
 
 ## Go
-
+profvisWolfSheep <- profvis({
 time <- 0
 while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
@@ -329,9 +330,9 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
 
   time <- time + 1
   # # Help for checking the model is working
-  # print(time)
+  #print(time)
 }
-
+})
 
 ## Plot outputs
 dev()
@@ -357,3 +358,4 @@ if(grassOn == TRUE){
 }
 
 
+profvisWolfSheep

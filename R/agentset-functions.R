@@ -1868,7 +1868,8 @@ setMethod(
 
       } else {
 
-        iAgents <- row.match(agents@data, turtles@data) # using data.table is not faster
+        #browser()
+        iAgents <- match(agents@data$who, turtles@data$who) # using data.table is not faster
 
         if(length(var) == 1){
 
