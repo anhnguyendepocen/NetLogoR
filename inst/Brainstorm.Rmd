@@ -12,7 +12,7 @@ output: html_document
 
 Potential tasks to do:
 
-* N) Build the Wolf-Sheep-Predation model (or another one) using SpaDES.
+* N) (Done) Build the Wolf-Sheep-Predation model (or another one) using SpaDES.
 
 * M) Build new modele example(s) (mostly to help pinpoint slow and not-general enough functions).
 
