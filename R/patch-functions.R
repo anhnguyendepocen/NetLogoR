@@ -335,10 +335,8 @@ setMethod(
     if(nrow(agents) < 100) { # data.frame is faster below 100 agents, data.table faster above
        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
        neighbors <- adj(world, cells = cellNum, directions = nNeighbors,
-                        torus = torus, id=seq_along(cellNum))
-
+                        torus = torus, id = seq_along(cellNum))
        pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,2])
-
        neighbors_df <- data.frame(neighbors, pCoords)
 
        # Output as a matrix
@@ -348,14 +346,14 @@ setMethod(
     } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
       neighbors <- data.table(adj(world, cells = cellNum, directions = nNeighbors,
-                                  torus = torus, id=seq_along(cellNum)))
-      cellNum <- data.table(cellNum=cellNum, id=seq_along(cellNum))
+                                  torus = torus, id = seq_along(cellNum)))
+      cellNum <- data.table(cellNum = cellNum, id = seq_along(cellNum))
       pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,to])
-      neighbors[,`:=`(pxcor=pCoords[,1], pycor=pCoords[,2])]
+      neighbors[,`:=`(pxcor = pCoords[,1], pycor = pCoords[,2])]
       setkey(neighbors, id)
-      listAgents <- cbind(pxcor = neighbors$pxcor,
-                          pycor = neighbors$pycor,
-                          id = neighbors$id)# %>% as.factor %>% as.numeric)
+      neighborsID <- cbind(pxcor = neighbors$pxcor,
+                           pycor = neighbors$pycor,
+                           id = neighbors$id) # %>% as.factor %>% as.numeric)
     }
 
     return(neighborsID)

@@ -663,4 +663,5 @@ test_that("set works",{
   expect_equivalent(t5@data$heading, c(33,66,180,270,0))
   t6 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
   expect_identical(t5, t6)
+
 })

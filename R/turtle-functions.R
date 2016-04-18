@@ -2208,18 +2208,8 @@ setMethod(
   "turtle",
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
-    #browser()
-    #newTurtles <- turtles[turtles$who %in% who, ]
-    newTurtles <- turtles[na.omit(match(who, turtles$who)),]# %>% na.omit %>% sort
 
-    #if(!identical(newTurtles@data$who, who)){
-
-      # Order the turtles in the order of the given who
-      #iTurtles <- match(who, newTurtles@data$who)
-      #iTurtles <- iTurtles[!is.na(iTurtles)]
-      #newTurtles@coords <- cbind(xcor = newTurtles@coords[iTurtles,1], ycor = newTurtles@coords[iTurtles,2])
-      #newTurtles@data <- newTurtles@data[iTurtles,]
-    #}
+    newTurtles <- turtles[na.omit(match(who, turtles$who)),] # %>% na.omit %>% sort
 
     return(newTurtles)
   }

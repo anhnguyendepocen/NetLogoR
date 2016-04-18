@@ -1868,8 +1868,8 @@ setMethod(
 
       } else {
 
-        #browser()
-        iAgents <- match(agents@data$who, turtles@data$who) # using data.table is not faster
+        iAgents <- row.match(agents@data, turtles@data)
+        # iAgents <- match(agents@data$who, turtles@data$who) # need to make changes in turtleSet if taking only the who numbers
 
         if(length(var) == 1){
 

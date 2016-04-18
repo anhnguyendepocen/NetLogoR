@@ -348,7 +348,6 @@ test_that("neighbors works with output as a matrix with id", {
   n4 <- neighbors(world = w1, agents = agents, nNeighbors = 4)
   expect_true(all(unique(n4[,"id"]) == 1:nrow(agents)))
 
-
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
