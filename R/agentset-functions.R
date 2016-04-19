@@ -1868,13 +1868,7 @@ setMethod(
 
       } else {
 
-        agentsWho <- agents@data$who
-        turtlesWho <- turtles@data$who
-        if(any(anyDuplicated(agentsWho) != 0 | anyDuplicated(turtlesWho) != 0)){
-          warning("Duplicated who numbers among the input turtles or agents")
-        }
-
-        iAgents <- match(agentsWho, turtlesWho)
+        iAgents <- match(agents@data$who, turtles@data$who)
 
         if(length(var) == 1){
 
@@ -1905,7 +1899,7 @@ setMethod(
 
       if(any(var == "who")){ # if the who numbers have been modified, check for duplicates
         if(anyDuplicated(turtles@data$who) != 0){
-          warning("Duplicated who numbers among the resulting turtles")
+          warning("Duplicated who numbers among the resulting turtles. Please, reassign who numbers to keep them unique inside the agentset.")
         }
       }
 

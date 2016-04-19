@@ -49,10 +49,8 @@ If \code{dy} is negative, the distance to the south is computed (down).
 \code{dy} must be of length 1 or of the same length as number of patches
 or turtles in \code{agents}.}
 
-\item{breed}{Characters. Vector of "breed" names to select the \code{turtles}.
-Must be of length 1 or of length \code{turtles}.
-If missing, there is
-no distinction based upon "breed".}
+\item{breed}{Characters. Vector of "breed" names for the selected \code{turtles}.
+If missing, there is no distinction based upon "breed".}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}

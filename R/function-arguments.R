@@ -68,7 +68,10 @@
 #' @param color Character. Vector of color names. Must be of length \code{n}.
 #'              If missing, colors are assigned using the function \code{rainbow(n)}.
 #'
-#' @param who Integer. Vector of the "who" numbers of the selected turtles.
+#' @param who Integer. Vector of the "who" numbers for the selected \code{turtles}.
+#'
+#' @param breed Characters. Vector of "breed" names for the selected \code{turtles}.
+#'              If missing, there is no distinction based upon "breed".
 #'
 #' @param var Character. The name of the selected \code{agents} variable.
 #'            If \code{agents} are patches and the \code{world} is a

@@ -142,8 +142,6 @@ setMethod(
 #' Create \code{n} turtles at the center of the \code{world} with their headings evenly
 #' distributed.
 #'
-#' @inheritParams fargs
-#'
 #' @inheritParams createTurtles
 #'
 #' @return SpatialPointsDataFrame of length \code{n} with the columns for the
@@ -1825,9 +1823,9 @@ setMethod(
 #'
 #' Create \code{n} new turtles on specific \code{patches}.
 #'
-#' @inheritParams fargs
-#'
 #' @inheritParams createTurtles
+#'
+#' @inheritParams fargs
 #'
 #' @return SpatialPointsDataFrame including the new
 #'         sprouted turtles.
@@ -2167,16 +2165,15 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param breed   Characters. Vector of "breed" names to select the \code{turtles}.
-#'                Must be of length 1 or of length \code{turtles}.
-#'                If missing, there is
-#'                no distinction based upon "breed".
-#'
-#' @return SpatialPointsDataFrame of the selected turtles sorted in the order of
-#'         the \code{who} and \code{breed} provided.
+#' @return SpatialPointsDataFrame of the selected \code{turtles} sorted in the order of
+#'         the \code{who} numbers requested. If \code{breed} was provided, the
+#'         \code{turtles} selected are of one of the \code{breed}.
 #'
 #' @details If no turtle matches the given \code{who} numbers, with potentially the given
 #'          \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
+#'
+#'          If there are duplicates "who" numbers among the \code{turtles}, the first
+#'          matching turtle with the requested \code{who} number is returned.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle}
 #'
@@ -2209,10 +2206,6 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
 
-    if(anyDuplicated(turtles@data$who) != 0){
-      warning("Duplicated who numbers among the input turtles")
-    }
-
     newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort, turtles@data$who faster than turtles$who
 
     return(newTurtles)
@@ -2226,32 +2219,8 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
 
-    # tData <- turtles@data
-    #
-    # if(anyDuplicated(tData[,c("who", "breed")]) != 0){
-    #   warning("Duplicated (who numbers and breeds) among the input turtles")
-    # }
-    #
-    # if(length(breed) == 1 & length(who) != 1){
-    #   breed <- rep(breed, length(who))
-    # }
-    #
-    # tSelect <- tData[tData$who %in% who & tData$breed %in% breed, ]
-    # tPos <- rownames(subset(tSelect, !duplicated(tSelect[,c("who", "breed")])))
-    #
-    # return(turtles[tPos,])
-
-    whoTurtles <- turtle(turtles = turtles, who = who)
-
-    if(length(breed) == 1 & length(who) != 1){
-      breed <- rep(breed, length(who))
-    }
-
-    tSelect <- whoTurtles@data
-    tSelect <- tSelect[match(who, tSelect$who),] # order them by the order of given who
-    whoBreed <- tSelect[tSelect$breed == breed, "who"]
-
-    turtle(turtles = turtles, who = whoBreed)
+    tBreed <- turtles[turtles@data$breed %in% breed,]
+    turtle(tBreed, who)
 
 })
 
@@ -2525,9 +2494,10 @@ setMethod(
 #'
 #' @return SpatialPointsDataFrame with all the turtles provided in the inputs.
 #'
-#' @details Duplicated turtles are identified only by their similar who numbers.
-#'          The choice of unique turtle per who number is random. Use set() to
-#'          modify the turtles who numbers in some of the inputs, prior using
+#' @details Duplicated turtles are identified based only on their who numbers.
+#'          The choice of unique turtle per who number is random.
+#'          To keep all turtles from the inputs, use set() to
+#'          reassign who numbers in some of the inputs, prior using
 #'          turtleSet(), to avoid turtles with duplicated who numbers.
 #'
 #'          Colors are not updated. Several turtles in the output may have the
@@ -2575,7 +2545,7 @@ setMethod(
     allDf <- as.data.frame(rbindlist(allList))
 
     if(anyDuplicated(allDf$who) != 0){
-      warning("Duplicated who numbers among the input turtles")
+      warning("Duplicated turtles based on who numbers are present among the inputs.")
       allDf <- allDf[!duplicated(allDf$who), ]
     }
 

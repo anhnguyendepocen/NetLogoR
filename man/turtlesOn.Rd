@@ -37,10 +37,8 @@ by \code{createOTurtles()} representing the moving agents.}
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
 
-\item{breed}{Characters. Vector of "breed" names to select the \code{turtles}.
-Must be of length 1 or of length \code{turtles}.
-If missing, there is
-no distinction based upon "breed".}
+\item{breed}{Characters. Vector of "breed" names for the selected \code{turtles}.
+If missing, there is no distinction based upon "breed".}
 
 \item{simplify}{Logical. If \code{simplify = TRUE}, all \code{turtles} on the same
 location as any \code{agents} are returned; if \code{simplify = FALSE},

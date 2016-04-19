@@ -21,9 +21,10 @@ SpatialPointsDataFrame with all the turtles provided in the inputs.
 Report a turtle agentset containing all unique turtles provided in the inputs.
 }
 \details{
-Duplicated turtles are identified only by their similar who numbers.
-         The choice of unique turtle per who number is random. Use set() to
-         modify the turtles who numbers in some of the inputs, prior using
+Duplicated turtles are identified based only on their who numbers.
+         The choice of unique turtle per who number is random.
+         To keep all turtles from the inputs, use set() to
+         reassign who numbers in some of the inputs, prior using
          turtleSet(), to avoid turtles with duplicated who numbers.
 
          Colors are not updated. Several turtles in the output may have the
