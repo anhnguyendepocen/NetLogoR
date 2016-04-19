@@ -146,7 +146,7 @@ test_that("NLwith works with turtles",{
   t6 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
   expect_identical(t6, turtle(turtles = t1, who = c(0, 1, 2, 3)))
   t7 <- NLwith(agents = t1, var = "breed", val = "moose")
-  expect_identical(t7, noTurtles())
+  expect_equivalent(t7, noTurtles())
 })
 
 test_that("withMax works with patches",{
@@ -331,7 +331,7 @@ test_that("nOf works",{
   expect_equivalent(nrow(t2data), 2)
   expect_equivalent(nrow(unique(t2data)), 2)
   t3 <- nOf(agents = t1, n = 10)
-  expect_identical(t3, t1)
+  expect_identical(nrow(merge(t1@data, t3@data)), nrow(t1@data))
 
   # With matrix ncol = 3
   n4 <-neighbors(world = w1, agents = t1, nNeighbors = 8)

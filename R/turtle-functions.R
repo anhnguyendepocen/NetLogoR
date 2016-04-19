@@ -2785,20 +2785,12 @@ setMethod(
     if(nrow(sameTurtles) == 0){
       # If agents does not contain except
       return(agents)
+
     } else {
-
       tRemove <- match(sameTurtles$who, t1Data$who)
-      newCoords <- agents@coords[-tRemove,]
-      newData <- agents@data[-tRemove,]
+      newTurtles <- agents[-tRemove, ]
+      return(newTurtles)
 
-      if(nrow(newCoords) == 0){
-        # If agents and except are the same
-        noTurtles()
-      } else {
-
-        newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
-        return(newTurtles)
-      }
     }
   }
 )
