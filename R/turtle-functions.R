@@ -1943,7 +1943,7 @@ setMethod(
   "inspect",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
-    tData <- cbind(turtles[turtles$who %in% who,]@data, turtles[turtles$who %in% who,]@coords)
+    tData <- cbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
     return(tData)
   }
 )
@@ -2181,7 +2181,7 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
 
-    newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort, turtles@data$who faster than turtles$who
+    newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort
 
     return(newTurtles)
   }
@@ -2294,7 +2294,7 @@ setMethod(
   "turtlesOn",
   signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix", breed = "character"),
   definition = function(world, turtles, agents, breed, simplify) {
-    tBreed <- turtles[turtles$breed %in% breed,]
+    tBreed <- turtles[turtles@data$breed %in% breed,]
     turtlesOn(world = world, turtles = tBreed, agents = agents, simplify = simplify)
   }
 )
@@ -2359,7 +2359,7 @@ setMethod(
   signature = "missing",
   definition = function() {
     t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
-    return(t0[t0$who == 1,])
+    return(t0[t0@data$who == 1,])
   }
 )
 
