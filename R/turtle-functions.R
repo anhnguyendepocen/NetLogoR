@@ -679,13 +679,7 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
 
-    whoTurtles <- turtles@data$who
-    toSelect <- whoTurtles[which(!whoTurtles %in% who)]
-    if(length(toSelect) == 0){
-      newTurtles <- noTurtles()
-    } else {
-      newTurtles <- turtle(turtles, toSelect)
-    }
+    newTurtles <- turtles[-na.omit(match(who, turtles@data$who)),]
 
     return(newTurtles)
   }
