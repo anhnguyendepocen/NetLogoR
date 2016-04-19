@@ -90,7 +90,7 @@ setMethod(
       li$color <- rainbow(n)
 
     turtles<-SpatialPointsDataFrame(coords = li$coords,
-                                    data = data.frame(who = seq(from = 0, to = n - 1, by = 1),
+                                    data = data.table(who = seq(from = 0, to = n - 1, by = 1),
                                                       heading = li$heading,
                                                       prevX = rep(NA, n),
                                                       prevY = rep(NA, n),
