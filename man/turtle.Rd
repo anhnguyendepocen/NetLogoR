@@ -32,7 +32,7 @@ Report the individuals among \code{turtles} based on their \code{who} numbers
 and \code{breed}.
 }
 \details{
-If no turtle matches the given \code{who} numbers, with potentially the given
+If no turtle matches the given \code{who} numbers, with potentially one of the given
          \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
 
          If there are duplicates "who" numbers among the \code{turtles}, the first

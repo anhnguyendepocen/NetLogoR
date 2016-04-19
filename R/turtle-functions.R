@@ -2169,7 +2169,7 @@ setMethod(
 #'         the \code{who} numbers requested. If \code{breed} was provided, the
 #'         \code{turtles} selected are of one of the \code{breed}.
 #'
-#' @details If no turtle matches the given \code{who} numbers, with potentially the given
+#' @details If no turtle matches the given \code{who} numbers, with potentially one of the given
 #'          \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
 #'
 #'          If there are duplicates "who" numbers among the \code{turtles}, the first
@@ -2233,15 +2233,13 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @inheritParams turtle
-#'
 #' @param simplify Logical. If \code{simplify = TRUE}, all \code{turtles} on the same
 #'                 location as any \code{agents} are returned; if \code{simplify = FALSE},
 #'                 the \code{turtles} are evaluated on each \code{agents} locations
 #'                 individually.
 #'
-#' @return SpatialPointsDataFrame representing any individuals from \code{turtles} of the given
-#'         \code{breed}, if speficied,
+#' @return SpatialPointsDataFrame representing any individuals from \code{turtles} of
+#'         any of the given \code{breed}, if speficied,
 #'         located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
 #'
 #'         Matrix (ncol = 2) with the first column "whoTurtles" and the second column
@@ -2400,10 +2398,8 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @inheritParams turtle
-#'
 #' @return SpatialPointsDataFrame representing the individuals among \code{turtles}
-#'         of the given \code{breed}, if specified,
+#'         of any of the given \code{breed}, if specified,
 #'         which are located on the patches at \code{(dx, dy)} distances of the
 #'         \code{agents}.
 #'
@@ -2736,7 +2732,7 @@ setMethod(
 ################################################################################
 #' Others
 #'
-#' Report an agentset of all \code{agents} except specific ones.
+#' Report an agentset of the \code{agents} except specific ones.
 #'
 #' @inheritParams fargs
 #'

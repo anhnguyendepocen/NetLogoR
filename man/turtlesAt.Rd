@@ -57,7 +57,7 @@ If missing, there is no distinction based upon "breed".}
 }
 \value{
 SpatialPointsDataFrame representing the individuals among \code{turtles}
-        of the given \code{breed}, if specified,
+        of any of the given \code{breed}, if specified,
         which are located on the patches at \code{(dx, dy)} distances of the
         \code{agents}.
 }

@@ -46,8 +46,8 @@ the \code{turtles} are evaluated on each \code{agents} locations
 individually.}
 }
 \value{
-SpatialPointsDataFrame representing any individuals from \code{turtles} of the given
-        \code{breed}, if speficied,
+SpatialPointsDataFrame representing any individuals from \code{turtles} of
+        any of the given \code{breed}, if speficied,
         located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
 
         Matrix (ncol = 2) with the first column "whoTurtles" and the second column

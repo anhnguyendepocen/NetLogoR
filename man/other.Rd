@@ -35,7 +35,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second
         the ones in \code{except}.
 }
 \description{
-Report an agentset of all \code{agents} except specific ones.
+Report an agentset of the \code{agents} except specific ones.
 }
 \details{
 Both \code{agents} and \code{except} must be of the same class (e.g., both
