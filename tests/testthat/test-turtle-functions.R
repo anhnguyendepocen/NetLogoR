@@ -758,13 +758,12 @@ test_that("tExist works",{
   expect_identical(tExist(turtles = t1, who = c(3, 9)), c(TRUE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3, 9), breed = "sheep"), c(TRUE, FALSE))
   expect_identical(tExist(turtles = t1, who = c(9, 3), breed = "sheep"), c(FALSE, TRUE))
-  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("wolf", "sheep")), c(FALSE, FALSE))
-  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("wolf", "wolf")), c(FALSE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("wolf", "sheep")), c(TRUE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3, 9), breed = "wolf"), c(FALSE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("sheep", "wolf")), c(TRUE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3,11, 9)), c(TRUE, FALSE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = "sheep"), c(TRUE, FALSE, FALSE))
-  expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = c("sheep", "sheep", "wolf")), c(TRUE, FALSE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = c("sheep", "wolf")), c(TRUE, FALSE, TRUE))
 })
 
 test_that("turtle works",{

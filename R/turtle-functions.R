@@ -2081,20 +2081,9 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param who     Integer. Vector of the "who" numbers of the turtles to check for existence.
-#'
-#' @param breed   Characters. Vector of "breed" names for the turtles to check
-#'                for existence. Must be of length 1 or of length \code{n}.
-#'                If missing, there is
-#'                no distinction based upon "breed".
-#'
-#' @return Logical. Vector of \code{TRUE} or \code{FALSE} if the turtles with
-#'         the given \code{who} numbers and potentially given \code{breed} exist or not
-#'         in the given \code{turtles} agentset.
-#'
-#' @details If \code{breed} is provided, the turtle with the given \code{who} number
-#'          AND given \code{breed} must exists inside \code{turtles} for \code{TRUE}
-#'          to be returned.
+#' @return Logical. Vector of \code{TRUE} or \code{FALSE} if the \code{who} numbers
+#'         with any of the \code{breed}, if provided, exist or not
+#'         inside the \code{turtles} agentset.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#member}
 #'
@@ -2142,16 +2131,8 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
 
-    whoExist <- tExist(turtles = turtles, who = who)
-
-    if(length(breed) == 1 & length(who) != 1){
-      breed <- rep(breed, length(who))
-    }
-    whoTurtles <- turtles@data[turtles@data$who %in% who,] # select the who turtles
-    whoTurtles <- whoTurtles[match(who, whoTurtles$who),] # order them by the order of given who
-    breedExist <- whoTurtles$breed == breed
-
-    return(whoExist & breedExist)
+   tBreed <- turtles[turtles@data$breed %in% breed,]
+   tExist(tBreed, who)
 
   }
 )
