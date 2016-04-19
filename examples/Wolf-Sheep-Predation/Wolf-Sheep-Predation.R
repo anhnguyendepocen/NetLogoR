@@ -11,7 +11,7 @@
 ## Packages required
 library(NetLogoR)
 library(SpaDES)
-library(profvis)
+library(profvis) # test the speed of the different functions
 
 
 ## Global variables (some represent the model buttons)

@@ -7,12 +7,12 @@ wolfSheepParams <- list(#.plotInitialTime = 0, .plotInterval = 10, # plotting at
                         .plotInitialTime = NA, .plotInterval = NA, # plotting slows the model a lot
                         .saveInitialTime = 0, .saveInterval = 1,
                         grassOn = TRUE, grassTGrowth = 30,
-                        nSheep = 100, gainFoodSheep = 5, reproSheep = 4,
+                        nSheep = 100, gainFoodSheep = 4, reproSheep = 4,
                         nWolf = 50, gainFoodWolf = 20, reproWolf = 5)
 
 # Model init
 wolfSheepSim <- simInit(
-  times = list(start = 0, end = 100), # plot the output before the last save event so end = maximum time steps + 1
+  times = list(start = 0, end = 500),
   params = list(WolfSheepPredation = wolfSheepParams),
   modules = list("WolfSheepPredation"),
   paths = list(modulePath = paste(getwd(), "/examples/Wolf-Sheep-Predation", sep = ""))
