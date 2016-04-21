@@ -2511,7 +2511,6 @@ setMethod(
   definition = function(...) {
 
     dots <-list(...)
-
     allList <- lapply(dots, function(x){cbind(x@coords, x@data)})
     allDf <- as.data.frame(rbindlist(allList))
 
@@ -2520,7 +2519,11 @@ setMethod(
       allDf <- allDf[!duplicated(allDf$who), ]
     }
 
-    allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
+    if(nrow(allDf) == 0){
+      allTurtles <- noTurtles()
+    } else {
+      allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
+    }
     return(allTurtles)
   }
 )

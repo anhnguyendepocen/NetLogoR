@@ -927,6 +927,9 @@ test_that("turtleSet works",{
   # tAll2 <- turtleSet(t1, t1) # cause warnings
   # expect_identical(tAll2@coords, t1@coords)
   # expect_identical(tAll2@data, t1@data)
+
+  t4 <- turtleSet(noTurtles(), noTurtles())
+  expect_equivalent(t4, noTurtles())
 })
 
 test_that("turtlesOwn works",{
