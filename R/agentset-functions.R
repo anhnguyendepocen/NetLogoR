@@ -1793,11 +1793,17 @@ setMethod(
 
         if(length(var) == 1){
 
+          val <- val[!is.na(cells)]
+          cells <- cells[!is.na(cells)]
+
           colNum <- match(var, colnames(valuesW))
           valuesW[cells, colNum] <- val
           world@layers[[colNum]][] <- valuesW[,colNum]
 
         } else {
+
+          val <- val[!is.na(cells), , drop = FALSE]
+          cells <- cells[!is.na(cells)]
 
           for(i in 1:length(var)){
             colNum <- match(var[i], colnames(valuesW))

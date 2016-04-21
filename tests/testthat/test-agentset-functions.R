@@ -669,4 +669,11 @@ test_that("set works",{
   expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 0, heading = 0)))
   t7 <- set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 100) # no warning because no duplicates who numbers
   t8 <- set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 100, heading = 0))
+
+  # With NAs
+  w4 <- set(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
+  w5 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = 2, w1 = 2))
+  expect_equivalent(w4, w5)
+  w6 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = NA, w1 = 2))
+  expect_equivalent(w6[1,2][1,2], as.numeric(NA))
 })
