@@ -12,7 +12,7 @@
 library(NetLogoR)
 library(SpaDES)
 #library(testthat) # for testing
-library(profvis) # to test function speed
+#library(profvis) # to test function speed
 
 ## Global variables (model parameters)
 nAnts <- 125 # varies from 0 to 200 in the NetLogo model
@@ -204,12 +204,12 @@ wiggle <- function(turtles){
 # }
 # #
 
-profile <- profvis({
+#profile <- profvis({ # test function speed
 
 ## Go
 # time <- 0
 while(sum(f_fS_world[, "food"]) != 0){ # as long as there is food in the world
-
+#for(i in 1:200){ # to test function speed
   # Ants not carrying food
   aRed <- NLwith(agents = ants, var = "color", val = "red")
   if(count(aRed) != 0){
@@ -255,8 +255,8 @@ while(sum(f_fS_world[, "food"]) != 0){ # as long as there is food in the world
   # expect_equivalent(count(ants), nAnts)
 }
 
-})
-profile
+#}) # to test function speed
+#profile # to test function speed
 
 ## Plot outputs
 dev()
@@ -267,7 +267,7 @@ plot(timeStep, food1, type = "l", col = "coral", lwd = 2, ylab = "Food", xlab = 
 lines(timeStep, food2, col = "yellow", lwd = 2)
 lines(timeStep, food3, col = "green", lwd = 2)
 
-legend("bottomleft", legend = c("food1", "food2", "food3"), lwd = c(2, 2, 2), col = c("coral", "yellow", "green"),
+legend("topright", legend = c("food1", "food2", "food3"), lwd = c(2, 2, 2), col = c("coral", "yellow", "green"),
        bg = "white")
 
 
