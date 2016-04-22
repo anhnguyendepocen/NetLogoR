@@ -39,6 +39,7 @@
 #' @importFrom SpaDES adj
 #' @importFrom data.table data.table
 #' @importFrom data.table setkey
+#' @importFrom plyr count
 #' @docType methods
 #' @rdname diffuse
 #'
@@ -69,8 +70,8 @@ setMethod(
     #newWorld <- setValues(world, as.numeric(newVal))
 
     df <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
-    nNeigh <- table(df[,"from"])
-    toGiveNeigh <- rep(toGive, as.numeric(nNeigh))
+    nNeigh <- plyr::count(df[,"from"])
+    toGiveNeigh <- rep(toGive, nNeigh$freq)
     df <- df[order(df[, "from"]),]
     DT <- data.table(df, toGiveNeigh)
     setkey(DT, from)
