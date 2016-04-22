@@ -54,7 +54,7 @@
 #'
 setGeneric(
   "createTurtles",
-  function(n, coords, world, heading, breed, color) {
+  function(n, coords, world, heading, breed, color, agent=TRUE) {
     standardGeneric("createTurtles")
   })
 
@@ -63,7 +63,7 @@ setGeneric(
 setMethod(
   "createTurtles",
   signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
-  definition = function(n, coords, world, heading, breed, color) {
+  definition = function(n, coords, world, heading, breed, color, agent = TRUE) {
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
     names(li) <- names(match.call())[-1]
@@ -89,14 +89,24 @@ setMethod(
     if(missing(color))
       li$color <- rainbow(n)
 
+    if(!agent) {
     turtles<-SpatialPointsDataFrame(coords = li$coords,
+                            data = data.table(who = seq(from = 0, to = n - 1, by = 1),
+                                              heading = li$heading,
+                                              prevX = rep(NA, n),
+                                              prevY = rep(NA, n),
+                                              breed = li$breed,
+                                              color = li$color, stringsAsFactors=FALSE))
+    } else {
+    turtles<-agentDataTable(coords = li$coords,
                                     data = data.table(who = seq(from = 0, to = n - 1, by = 1),
                                                       heading = li$heading,
                                                       prevX = rep(NA, n),
                                                       prevY = rep(NA, n),
                                                       breed = li$breed,
-                                                      color = li$color,
-                                                      stringsAsFactors=FALSE))
+                                                      color = li$color))#,
+
+    }                                   #stringsAsFactors=FALSE))
     return(turtles)
   }
 )
@@ -106,7 +116,7 @@ setMethod(
 setMethod(
   "createTurtles",
   signature = c("numeric", "missing", "NLworlds", "ANY", "ANY", "ANY"),
-  definition = function(n, coords, world, heading, breed, color) {
+  definition = function(n, coords, world, heading, breed, color, agent) {
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
     names(li) <- names(match.call())[-1]
@@ -131,7 +141,8 @@ setMethod(
     coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
                     ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), n))
 
-    createTurtles(n = n, coords = coords, heading = li$heading, breed = li$breed, color = li$color)
+    out <- createTurtles(n = n, coords = coords, heading = li$heading, breed = li$breed, color = li$color, agent = agent)
+    return(out)
   }
 )
 
@@ -328,6 +339,48 @@ setMethod(
   }
 )
 
+
+#' @export
+#' @rdname fd
+#' @include Classes.R
+setMethod(
+  "fd",
+  signature = c(turtles = "agentDataTable", dist = "numeric"),
+  definition = function(turtles, dist, world, torus, out) {
+
+    prevXcor <- turtles$xcor
+    prevYcor <- turtles$ycor
+
+    turtles[,`:=`(prevX = xcor, prevY=ycor)]
+
+    fdXcor <- turtles$xcor + sin(rad(turtles$heading)) * dist
+    fdYcor <- turtles$ycor + cos(rad(turtles$heading)) * dist
+
+    if(torus == TRUE){
+      if(missing(world)){
+        stop("A world must be provided as torus = TRUE")
+      }
+      tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
+      fdXcor <- tCoords[,1]
+      fdYcor <- tCoords[,2]
+    }
+
+    if(torus == FALSE & out == FALSE){
+      if(missing(world)){
+        stop("A world must be provided as torus = FALSE and out = FALSE")
+      }
+      outX <- fdXcor < world@extent@xmin | fdXcor > world@extent@xmax
+      outY <- fdYcor < world@extent@ymin | fdYcor > world@extent@ymax
+      outXY <- which(outX | outY) # position of turtles out of the world's extent
+      fdXcor[outXY] <- prevXcor[outXY]
+      fdYcor[outXY] <- prevYcor[outXY]
+    }
+
+    turtles[,`:=`(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))]
+    turtles[]
+    return(turtles)
+  }
+)
 
 ################################################################################
 #' Move backward

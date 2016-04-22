@@ -129,7 +129,7 @@ test_that("fd works",{
   w2[] <- runif(25)
   ws <-NLstack(w1, w2)
 
-  t1 <- createTurtles(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 90)
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 90, agent = FALSE)
   t2 <- fd(world = ws, turtles = t1, dist = 1)
   expect_identical(t1@coords, cbind(xcor = t2@data$prevX, ycor = t2@data$prevY))
   expect_identical(cbind(xcor = t1@coords[,1] + 1, ycor = t1@coords[,2]), t2@coords)

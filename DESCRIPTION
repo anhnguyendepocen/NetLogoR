@@ -28,3 +28,12 @@ VignetteBuilder: knitr
 ByteCompile: yes
 LazyData: true
 RoxygenNote: 5.0.1
+Collate:
+    'Classes.R'
+    'NLworlds-class.R'
+    'NetLogoR-package.R'
+    'agentset-functions.R'
+    'function-arguments.R'
+    'patch-functions.R'
+    'turtle-functions.R'
+    'world-functions.R'

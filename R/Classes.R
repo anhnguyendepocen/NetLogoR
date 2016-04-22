@@ -15,21 +15,6 @@ setGeneric("SpatialPointsDataTable", function(coords, data,
   standardGeneric("SpatialPointsDataTable")
 })
 
-#' @importClassesFrom sp SpatialPoints SpatialPointsDataFrame
-#' @name AgentDataTable
-#' @rdname AgentDataTable
-#' @author Eliot McIntire
-#' @exportClass AgentDataTable
-setClass("AgentDataTable",
-         contains = "data.table"
-)
-
-setGeneric("AgentDataTable", function(coords, data,
-                                              coords.nrs = numeric(0), proj4string = CRS(as.character(NA)),
-                                              match.ID, bbox = NULL) {
-  standardGeneric("AgentDataTable")
-})
-
 #' @export
 #' @rdname SpatialPointsDataTable
 setMethod(
@@ -95,3 +80,26 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
     as.matrix(bbox)
 
 }
+
+#' @importClassesFrom data.table data.table
+#' @name agentDataTable
+#' @rdname agentDataTable
+#' @author Eliot McIntire
+#' @exportClass agentDataTable
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtles(world = w1, n = 10)
+#' t2 <- agentDataTable(coordinates(t1), t1@data)
+agentDataTable <- function(coords, data, coords.nrs = numeric(0), proj4string = CRS(as.character(NA)),
+                           match.ID, bbox = NULL) {
+  dt <- data.table(coords, data)
+  attr(dt, "proj4string") <- proj4string
+  attr(dt, "bbox") <- bbox
+  attr(dt, "coords.nrs") <- coords.nrs
+  class(dt) <- c("agentDataTable", "data.table", "data.frame", "list", "oldClass", "vector")
+  dt
+}
+
+
+
+

@@ -332,7 +332,7 @@ setMethod(
   signature = c(world = "NLworlds", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
-    if(nrow(agents) < 100) { # data.frame is faster below 100 agents, data.table faster above
+    if(nrow(agents) < 100000) { # data.frame is faster below 100 agents, data.table faster above
        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
        neighbors <- adj(world, cells = cellNum, directions = nNeighbors,
                         torus = torus, id=seq_along(cellNum))
@@ -372,6 +372,27 @@ setMethod(
     neighbors(world = world, agents = pTurtles, nNeighbors = nNeighbors, torus = torus)
   }
 )
+
+#' @export
+#' @rdname neighbors
+setMethod(
+  "neighbors",
+  signature = c(world = "NLworlds", agents = "agentDataTable", nNeighbors = "numeric"),
+  definition = function(world, agents, nNeighbors, torus) {
+    pTurtles <- patch(world = world, x = agents$xcor, y = agents$ycor, duplicate = TRUE)
+
+    cellNum <- cellFromPxcorPycor(world = world, pxcor = agents$xcor, pycor = agents$ycor)
+
+    neighbors <- adj(world, cells = cellNum, directions = nNeighbors,
+                     torus = torus, id=seq_along(cellNum))
+    pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,"to"])
+    cbind(pxcor = pCoords[,"pxcor"],
+                        pycor = pCoords[,"pycor"],
+                        id = neighbors[,"id"])[order(neighbors[,"id"]),]# %>% as.factor %>% as.numeric)
+
+  }
+)
+
 
 
 ################################################################################
