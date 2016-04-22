@@ -758,13 +758,12 @@ test_that("tExist works",{
   expect_identical(tExist(turtles = t1, who = c(3, 9)), c(TRUE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3, 9), breed = "sheep"), c(TRUE, FALSE))
   expect_identical(tExist(turtles = t1, who = c(9, 3), breed = "sheep"), c(FALSE, TRUE))
-  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("wolf", "sheep")), c(FALSE, FALSE))
-  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("wolf", "wolf")), c(FALSE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("wolf", "sheep")), c(TRUE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3, 9), breed = "wolf"), c(FALSE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("sheep", "wolf")), c(TRUE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3,11, 9)), c(TRUE, FALSE, TRUE))
   expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = "sheep"), c(TRUE, FALSE, FALSE))
-  expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = c("sheep", "sheep", "wolf")), c(TRUE, FALSE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = c("sheep", "wolf")), c(TRUE, FALSE, TRUE))
 })
 
 test_that("turtle works",{
@@ -791,21 +790,23 @@ test_that("turtle works",{
   t8 <- turtle(t1, who = c(9, 3), breed = "sheep")
   expect_identical(t7, t8)
   t9 <- turtle(t1, who = c(3, 9), breed = c("wolf", "sheep"))
-  expect_equivalent(length(t9), 0)
-  t10 <- turtle(t1, who = c(3, 9), breed = c("wolf", "wolf"))
+  expect_equivalent(t9, t6)
+  t10 <- turtle(t1, who = c(3, 9), breed = "wolf")
   expect_identical(t10@data$who, 9)
   expect_identical(t10@data$breed, "wolf")
   expect_equivalent(length(t10), 1)
-  t11 <- turtle(t1, who = c(3, 9), breed = "wolf")
-  expect_identical(t10, t11)
+  t11 <- turtle(t1, who = c(3, 9), breed = c("sheep", "wolf"))
+  expect_identical(t9, t11)
   t12 <- turtle(t1, who = c(3, 11, 9))
   expect_identical(t12, t6)
   t13 <- turtle(t1, who = c(3, 11, 9), breed = "sheep")
   expect_equivalent(t13, t8)
-  t14 <- turtle(t1, who = c(3, 11, 9), breed = c("sheep", "sheep", "wolf"))
+  t14 <- turtle(t1, who = c(3, 11, 9), breed = c("sheep", "wolf"))
   expect_identical(t14, t12)
   t15 <- turtle(t6, 3)
   expect_equivalent(t15, t13)
+  t16 <- turtle(t1, 11)
+  expect_equivalent(noTurtles(),t16)
 })
 
 test_that("turtlesOn works",{
@@ -910,14 +911,25 @@ test_that("turtlesAt works",{
 test_that("turtleSet works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = "sheep")
-  t2 <- createTurtles(n = 2, coords = randomXYcor(world = w1, n = 2), breed = "wolf")
-  t3 <- createTurtles(n = 1, coords = randomXYcor(world = w1, n = 1), breed = "sheperd")
+  t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+  t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+
+  expect_warning(turtleSet(t1, t2, t3))
+  # tAll <- turtleSet(t1, t2, t3) # cause warning
+  # expect_equivalent(length(tAll), 10)
+
+  t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
+  t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
   tAll <- turtleSet(t1, t2, t3)
   expect_equivalent(length(tAll), 13)
-  expect_identical(tAll@data$who, c(0:9, 0, 1, 0))
-  tAll2 <- turtleSet(t1, t1)
-  expect_identical(tAll2@coords, t1@coords)
-  expect_identical(tAll2@data, t1@data)
+
+  expect_warning(turtleSet(t1, t1))
+  # tAll2 <- turtleSet(t1, t1) # cause warnings
+  # expect_identical(tAll2@coords, t1@coords)
+  # expect_identical(tAll2@data, t1@data)
+
+  t4 <- turtleSet(noTurtles(), noTurtles())
+  expect_equivalent(t4, noTurtles())
 })
 
 test_that("turtlesOwn works",{

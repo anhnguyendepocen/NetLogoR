@@ -14,7 +14,7 @@ die(turtles, who)
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
+\item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 }
 \value{
 SpatialPointsDataFrame representing the \code{turtles} with the selected

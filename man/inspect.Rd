@@ -14,7 +14,7 @@ inspect(turtles, who)
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
+\item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 }
 \value{
 Dataframe (nrow = \code{length(who)}) with the variables for the selected

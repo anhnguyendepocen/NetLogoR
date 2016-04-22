@@ -14,7 +14,7 @@ hatch(turtles, who, n, breed)
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
+\item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 
 \item{n}{Integer.}
 

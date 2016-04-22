@@ -153,8 +153,6 @@ setMethod(
 #' Create \code{n} turtles at the center of the \code{world} with their headings evenly
 #' distributed.
 #'
-#' @inheritParams fargs
-#'
 #' @inheritParams createTurtles
 #'
 #' @return SpatialPointsDataFrame of length \code{n} with the columns for the
@@ -734,13 +732,7 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
 
-    whoTurtles <- turtles@data$who
-    toSelect <- whoTurtles[which(!whoTurtles %in% who)]
-    if(length(toSelect) == 0){
-      newTurtles <- noTurtles()
-    } else {
-      newTurtles <- turtle(turtles, toSelect)
-    }
+    newTurtles <- turtles[-na.omit(match(who, turtles@data$who)),]
 
     return(newTurtles)
   }
@@ -1878,9 +1870,9 @@ setMethod(
 #'
 #' Create \code{n} new turtles on specific \code{patches}.
 #'
-#' @inheritParams fargs
-#'
 #' @inheritParams createTurtles
+#'
+#' @inheritParams fargs
 #'
 #' @return SpatialPointsDataFrame including the new
 #'         sprouted turtles.
@@ -2004,7 +1996,7 @@ setMethod(
   "inspect",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
-    tData <- cbind(turtles[turtles$who %in% who,]@data, turtles[turtles$who %in% who,]@coords)
+    tData <- cbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
     return(tData)
   }
 )
@@ -2136,20 +2128,9 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param who     Integer. Vector of the "who" numbers of the turtles to check for existence.
-#'
-#' @param breed   Characters. Vector of "breed" names for the turtles to check
-#'                for existence. Must be of length 1 or of length \code{n}.
-#'                If missing, there is
-#'                no distinction based upon "breed".
-#'
-#' @return Logical. Vector of \code{TRUE} or \code{FALSE} if the turtles with
-#'         the given \code{who} numbers and potentially given \code{breed} exist or not
-#'         in the given \code{turtles} agentset.
-#'
-#' @details If \code{breed} is provided, the turtle with the given \code{who} number
-#'          AND given \code{breed} must exists inside \code{turtles} for \code{TRUE}
-#'          to be returned.
+#' @return Logical. Vector of \code{TRUE} or \code{FALSE} if the \code{who} numbers
+#'         with any of the \code{breed}, if provided, exist or not
+#'         inside the \code{turtles} agentset.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#member}
 #'
@@ -2197,16 +2178,8 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
 
-    whoExist <- tExist(turtles = turtles, who = who)
-
-    if(length(breed) == 1 & length(who) != 1){
-      breed <- rep(breed, length(who))
-    }
-    whoTurtles <- turtles@data[turtles@data$who %in% who,] # select the who turtles
-    whoTurtles <- whoTurtles[match(who, whoTurtles$who),] # order them by the order of given who
-    breedExist <- whoTurtles$breed == breed
-
-    return(whoExist & breedExist)
+   tBreed <- turtles[turtles@data$breed %in% breed,]
+   tExist(tBreed, who)
 
   }
 )
@@ -2220,16 +2193,15 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param breed   Characters. Vector of "breed" names to select the \code{turtles}.
-#'                Must be of length 1 or of length \code{turtles}.
-#'                If missing, there is
-#'                no distinction based upon "breed".
+#' @return SpatialPointsDataFrame of the selected \code{turtles} sorted in the order of
+#'         the \code{who} numbers requested. If \code{breed} was provided, the
+#'         \code{turtles} selected are of one of the \code{breed}.
 #'
-#' @return SpatialPointsDataFrame of the selected turtles sorted in the order of
-#'         the \code{who} and \code{breed} provided.
-#'
-#' @details If no turtle matches the given \code{who} numbers, with potentially the given
+#' @details If no turtle matches the given \code{who} numbers, with potentially one of the given
 #'          \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
+#'
+#'          If there are duplicates "who" numbers among the \code{turtles}, the first
+#'          matching turtle with the requested \code{who} number is returned.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle}
 #'
@@ -2261,18 +2233,8 @@ setMethod(
   "turtle",
   signature = c("SpatialPointsDataFrame", "numeric", "missing"),
   definition = function(turtles, who) {
-    #browser()
-    #newTurtles <- turtles[turtles$who %in% who, ]
-    newTurtles <- turtles[na.omit(match(who, turtles$who)),]# %>% na.omit %>% sort
 
-    #if(!identical(newTurtles@data$who, who)){
-
-      # Order the turtles in the order of the given who
-      #iTurtles <- match(who, newTurtles@data$who)
-      #iTurtles <- iTurtles[!is.na(iTurtles)]
-      #newTurtles@coords <- cbind(xcor = newTurtles@coords[iTurtles,1], ycor = newTurtles@coords[iTurtles,2])
-      #newTurtles@data <- newTurtles@data[iTurtles,]
-    #}
+    newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort
 
     return(newTurtles)
   }
@@ -2285,19 +2247,10 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
 
-    whoTurtles <- turtle(turtles = turtles, who = who)
+    tBreed <- turtles[turtles@data$breed %in% breed,]
+    turtle(tBreed, who)
 
-    if(length(breed) == 1 & length(who) != 1){
-      breed <- rep(breed, length(who))
-    }
-
-    tSelect <- whoTurtles@data
-    tSelect <- tSelect[match(who, tSelect$who),] # order them by the order of given who
-    whoBreed <- tSelect[tSelect$breed == breed, "who"]
-
-    turtle(turtles = turtles, who = whoBreed)
-  }
-)
+})
 
 
 ################################################################################
@@ -2308,15 +2261,13 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @inheritParams turtle
-#'
 #' @param simplify Logical. If \code{simplify = TRUE}, all \code{turtles} on the same
 #'                 location as any \code{agents} are returned; if \code{simplify = FALSE},
 #'                 the \code{turtles} are evaluated on each \code{agents} locations
 #'                 individually.
 #'
-#' @return SpatialPointsDataFrame representing any individuals from \code{turtles} of the given
-#'         \code{breed}, if speficied,
+#' @return SpatialPointsDataFrame representing any individuals from \code{turtles} of
+#'         any of the given \code{breed}, if speficied,
 #'         located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
 #'
 #'         Matrix (ncol = 2) with the first column "whoTurtles" and the second column
@@ -2396,7 +2347,7 @@ setMethod(
   "turtlesOn",
   signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix", breed = "character"),
   definition = function(world, turtles, agents, breed, simplify) {
-    tBreed <- turtles[turtles$breed %in% breed,]
+    tBreed <- turtles[turtles@data$breed %in% breed,]
     turtlesOn(world = world, turtles = tBreed, agents = agents, simplify = simplify)
   }
 )
@@ -2461,7 +2412,7 @@ setMethod(
   signature = "missing",
   definition = function() {
     t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
-    return(t0[t0$who == 1,])
+    return(t0[t0@data$who == 1,])
   }
 )
 
@@ -2475,10 +2426,8 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @inheritParams turtle
-#'
 #' @return SpatialPointsDataFrame representing the individuals among \code{turtles}
-#'         of the given \code{breed}, if specified,
+#'         of any of the given \code{breed}, if specified,
 #'         which are located on the patches at \code{(dx, dy)} distances of the
 #'         \code{agents}.
 #'
@@ -2562,20 +2511,21 @@ setMethod(
 ################################################################################
 #' Create a turtle agenset
 #'
-#' Report a turtle agentset containing all turtles provided in the inputs.
+#' Report a turtle agentset containing all unique turtles provided in the inputs.
 #'
 #' @param ... SpatialPointsDataFrame objects created by \code{createTurtles()} or
 #'            by \code{createOTurtles()} representing the moving agents.
 #'
 #' @return SpatialPointsDataFrame with all the turtles provided in the inputs.
 #'
-#' @details Duplicated turtles are removed. Duplicates are identified based on the
-#'          turtles' coordinates and all their variables values.
+#' @details Duplicated turtles are identified based only on their who numbers.
+#'          The choice of unique turtle per who number is random.
+#'          To keep all turtles from the inputs, use set() to
+#'          reassign who numbers in some of the inputs, prior using
+#'          turtleSet(), to avoid turtles with duplicated who numbers.
 #'
-#'          This functions does not affect the turtles coordinates and variables.
-#'          Therefore there may be multiple turtles with the same variable value (e.g.,
-#'          "who" number, and color). This must be taken care of prior or later
-#'          using this function to avoid further confusions.
+#'          Colors are not updated. Several turtles in the output may have the
+#'          same color.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle-set}
 #'
@@ -2587,7 +2537,9 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 #' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+#' t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
 #' t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+#' t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
 #' t4 <- turtleSet(t1, t2, t3)
 #'
 #'
@@ -2612,12 +2564,19 @@ setMethod(
   definition = function(...) {
 
     dots <-list(...)
-
     allList <- lapply(dots, function(x){cbind(x@coords, x@data)})
-    allDf <- rbindlist(allList)
-    allDf <- as.data.frame(unique(allDf))
+    allDf <- as.data.frame(rbindlist(allList))
 
-    allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
+    if(anyDuplicated(allDf$who) != 0){
+      warning("Duplicated turtles based on who numbers are present among the inputs.")
+      allDf <- allDf[!duplicated(allDf$who), ]
+    }
+
+    if(nrow(allDf) == 0){
+      allTurtles <- noTurtles()
+    } else {
+      allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
+    }
     return(allTurtles)
   }
 )
@@ -2804,7 +2763,7 @@ setMethod(
 ################################################################################
 #' Others
 #'
-#' Report an agentset of all \code{agents} except specific ones.
+#' Report an agentset of the \code{agents} except specific ones.
 #'
 #' @inheritParams fargs
 #'
@@ -2882,20 +2841,12 @@ setMethod(
     if(nrow(sameTurtles) == 0){
       # If agents does not contain except
       return(agents)
+
     } else {
-
       tRemove <- match(sameTurtles$who, t1Data$who)
-      newCoords <- agents@coords[-tRemove,]
-      newData <- agents@data[-tRemove,]
+      newTurtles <- agents[-tRemove, ]
+      return(newTurtles)
 
-      if(nrow(newCoords) == 0){
-        # If agents and except are the same
-        noTurtles()
-      } else {
-
-        newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
-        return(newTurtles)
-      }
     }
   }
 )

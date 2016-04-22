@@ -18,22 +18,25 @@ by \code{createOTurtles()} representing the moving agents.}
 SpatialPointsDataFrame with all the turtles provided in the inputs.
 }
 \description{
-Report a turtle agentset containing all turtles provided in the inputs.
+Report a turtle agentset containing all unique turtles provided in the inputs.
 }
 \details{
-Duplicated turtles are removed. Duplicates are identified based on the
-         turtles' coordinates and all their variables values.
+Duplicated turtles are identified based only on their who numbers.
+         The choice of unique turtle per who number is random.
+         To keep all turtles from the inputs, use set() to
+         reassign who numbers in some of the inputs, prior using
+         turtleSet(), to avoid turtles with duplicated who numbers.
 
-         This functions does not affect the turtles coordinates and variables.
-         Therefore there may be multiple turtles with the same variable value (e.g.,
-         "who" number, and color). This must be taken care of prior or later
-         using this function to avoid further confusions.
+         Colors are not updated. Several turtles in the output may have the
+         same color.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
 t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
 t4 <- turtleSet(t1, t2, t3)
 
 

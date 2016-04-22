@@ -66,7 +66,10 @@ or turtles in \code{agents}.}
 \item{color}{Character. Vector of color names. Must be of length \code{n}.
 If missing, colors are assigned using the function \code{rainbow(n)}.}
 
-\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
+\item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
+
+\item{breed}{Characters. Vector of "breed" names for the selected \code{turtles}.
+If missing, there is no distinction based upon "breed".}
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a

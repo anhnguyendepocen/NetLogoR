@@ -396,13 +396,7 @@ setMethod(
   definition = function(agents, var, val) {
     turtles <- cbind(agents@coords, agents@data)
     turtlesWith <- turtles[turtles[,var] %in% val, ]
-    if(nrow(turtlesWith) == 0){
-      noTurtles()
-    } else {
-      newTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = turtlesWith$xcor, ycor = turtlesWith$ycor),
-                                           data = turtlesWith[,3:ncol(turtlesWith)])
-      return(newTurtles)
-    }
+    turtle(agents, turtlesWith$who)
   }
 )
 
@@ -1026,16 +1020,9 @@ setMethod(
   "nOf",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(agents, n) {
-    row <- sample(1:length(agents), size = n, replace = FALSE)
-    row <- row[order(row)]
-    newCoords <- agents@coords[row,]
-    newData <- agents@data[row,]
+    ind <- sample(1:length(agents), size = n, replace = FALSE)
+    newTurtles <- agents[ind, ]
 
-    if(length(row) == 1){ # to keep the class = matrix
-      newCoords <- cbind(xcor = newCoords[1], ycor = newCoords[2])
-    }
-
-    newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
     return(newTurtles)
   }
 )
@@ -1272,10 +1259,7 @@ setMethod(
 
       tSelect <- as.numeric(rownames(maxAgents))
       tSelect <- sort(tSelect)
-
-      tSelectCoords <- cbind(xcor = agents@coords[tSelect,1], ycor = agents@coords[tSelect,2])
-      tSelectData <- agents@data[tSelect,]
-      maxTurtles <- SpatialPointsDataFrame(coords = tSelectCoords, data = tSelectData)
+      maxTurtles <- agents[tSelect,]
       return(maxTurtles)
     }
   }
@@ -1809,11 +1793,17 @@ setMethod(
 
         if(length(var) == 1){
 
+          val <- val[!is.na(cells)]
+          cells <- cells[!is.na(cells)]
+
           colNum <- match(var, colnames(valuesW))
           valuesW[cells, colNum] <- val
           world@layers[[colNum]][] <- valuesW[,colNum]
 
         } else {
+
+          val <- val[!is.na(cells), , drop = FALSE]
+          cells <- cells[!is.na(cells)]
 
           for(i in 1:length(var)){
             colNum <- match(var[i], colnames(valuesW))
@@ -1868,8 +1858,7 @@ setMethod(
 
       } else {
 
-        #browser()
-        iAgents <- match(agents@data$who, turtles@data$who) # using data.table is not faster
+        iAgents <- match(agents@data$who, turtles@data$who)
 
         if(length(var) == 1){
 
@@ -1895,6 +1884,12 @@ setMethod(
             turtles@data[iAgents, var] <- val
 
           }
+        }
+      }
+
+      if(any(var == "who")){ # if the who numbers have been modified, check for duplicates
+        if(anyDuplicated(turtles@data$who) != 0){
+          warning("Duplicated who numbers among the resulting turtles. Please, reassign who numbers to keep them unique inside the agentset.")
         }
       }
 

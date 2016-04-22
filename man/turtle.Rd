@@ -17,24 +17,26 @@ turtle(turtles, who, breed)
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integer. Vector of the "who" numbers of the selected turtles.}
+\item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 
-\item{breed}{Characters. Vector of "breed" names to select the \code{turtles}.
-Must be of length 1 or of length \code{turtles}.
-If missing, there is
-no distinction based upon "breed".}
+\item{breed}{Characters. Vector of "breed" names for the selected \code{turtles}.
+If missing, there is no distinction based upon "breed".}
 }
 \value{
-SpatialPointsDataFrame of the selected turtles sorted in the order of
-        the \code{who} and \code{breed} provided.
+SpatialPointsDataFrame of the selected \code{turtles} sorted in the order of
+        the \code{who} numbers requested. If \code{breed} was provided, the
+        \code{turtles} selected are of one of the \code{breed}.
 }
 \description{
 Report the individuals among \code{turtles} based on their \code{who} numbers
 and \code{breed}.
 }
 \details{
-If no turtle matches the given \code{who} numbers, with potentially the given
+If no turtle matches the given \code{who} numbers, with potentially one of the given
          \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
+
+         If there are duplicates "who" numbers among the \code{turtles}, the first
+         matching turtle with the requested \code{who} number is returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

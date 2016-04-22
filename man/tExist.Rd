@@ -17,26 +17,19 @@ tExist(turtles, who, breed)
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
 
-\item{who}{Integer. Vector of the "who" numbers of the turtles to check for existence.}
+\item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 
-\item{breed}{Characters. Vector of "breed" names for the turtles to check
-for existence. Must be of length 1 or of length \code{n}.
-If missing, there is
-no distinction based upon "breed".}
+\item{breed}{Characters. Vector of "breed" names for the selected \code{turtles}.
+If missing, there is no distinction based upon "breed".}
 }
 \value{
-Logical. Vector of \code{TRUE} or \code{FALSE} if the turtles with
-        the given \code{who} numbers and potentially given \code{breed} exist or not
-        in the given \code{turtles} agentset.
+Logical. Vector of \code{TRUE} or \code{FALSE} if the \code{who} numbers
+        with any of the \code{breed}, if provided, exist or not
+        inside the \code{turtles} agentset.
 }
 \description{
 Report \code{TRUE} if a turtle exists inside the \code{turtles} agentset, report
 \code{FALSE} otherwise.
-}
-\details{
-If \code{breed} is provided, the turtle with the given \code{who} number
-         AND given \code{breed} must exists inside \code{turtles} for \code{TRUE}
-         to be returned.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

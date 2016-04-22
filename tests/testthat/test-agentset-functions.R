@@ -146,7 +146,7 @@ test_that("NLwith works with turtles",{
   t6 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
   expect_identical(t6, turtle(turtles = t1, who = c(0, 1, 2, 3)))
   t7 <- NLwith(agents = t1, var = "breed", val = "moose")
-  expect_identical(t7, noTurtles())
+  expect_equivalent(t7, noTurtles())
 })
 
 test_that("withMax works with patches",{
@@ -331,7 +331,7 @@ test_that("nOf works",{
   expect_equivalent(nrow(t2data), 2)
   expect_equivalent(nrow(unique(t2data)), 2)
   t3 <- nOf(agents = t1, n = 10)
-  expect_identical(t3, t1)
+  expect_identical(nrow(merge(t1@data, t3@data)), nrow(t1@data))
 
   # With matrix ncol = 3
   n4 <-neighbors(world = w1, agents = t1, nNeighbors = 8)
@@ -663,4 +663,17 @@ test_that("set works",{
   expect_equivalent(t5@data$heading, c(33,66,180,270,0))
   t6 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
   expect_identical(t5, t6)
+
+  # Warning with who numbers
+  expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 0))
+  expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 0, heading = 0)))
+  t7 <- set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 100) # no warning because no duplicates who numbers
+  t8 <- set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 100, heading = 0))
+
+  # With NAs
+  w4 <- set(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
+  w5 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = 2, w1 = 2))
+  expect_equivalent(w4, w5)
+  w6 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = NA, w1 = 2))
+  expect_equivalent(w6[1,2][1,2], as.numeric(NA))
 })
