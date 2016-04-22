@@ -14,8 +14,6 @@ library(SpaDES)
 #library(testthat) # for testing
 library(profvis) # to test function speed
 
-profile <- profvis({
-
 ## Global variables (model parameters)
 nAnts <- 125 # varies from 0 to 200 in the NetLogo model
 rDiff <- 50 # varies from 0 to 99 in the NetLogo model
@@ -64,11 +62,11 @@ world <- NLstack(chemical, nest, nestScent, foodSource, food)
 # Ants
 ants <- createTurtles(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
 
-# Visualize the world
-dev() # open a new plotting window
-clearPlot()
-Plot(world)
-Plot(ants, addTo = "world$foodSource") # plot on a new window
+# # Visualize the world
+# dev() # open a new plotting window
+# clearPlot()
+# Plot(world)
+# Plot(ants, addTo = "world$foodSource") # plot on a new window
 
 # Initialize the output objects
 f_fS_world <- of(world = world, var = c("food", "foodSource"), agents = patches(world))
@@ -206,9 +204,10 @@ wiggle <- function(turtles){
 # }
 # #
 
+profile <- profvis({
 
 ## Go
-time <- 0
+# time <- 0
 while(sum(f_fS_world[, "food"]) != 0){ # as long as there is food in the world
 
   # Ants not carrying food
@@ -256,6 +255,9 @@ while(sum(f_fS_world[, "food"]) != 0){ # as long as there is food in the world
   # expect_equivalent(count(ants), nAnts)
 }
 
+})
+profile
+
 ## Plot outputs
 dev()
 clearPlot()
@@ -268,5 +270,4 @@ lines(timeStep, food3, col = "green", lwd = 2)
 legend("bottomleft", legend = c("food1", "food2", "food3"), lwd = c(2, 2, 2), col = c("coral", "yellow", "green"),
        bg = "white")
 
-})
-profile
+
