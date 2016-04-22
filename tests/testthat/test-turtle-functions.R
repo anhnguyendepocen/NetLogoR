@@ -928,8 +928,11 @@ test_that("turtleSet works",{
   # expect_identical(tAll2@coords, t1@coords)
   # expect_identical(tAll2@data, t1@data)
 
-  t4 <- turtleSet(noTurtles(), noTurtles())
-  expect_equivalent(t4, noTurtles())
+  t4 <- turtleSet(t1, noTurtles())
+  expect_equivalent(t4, t1)
+
+  t5 <- turtleSet(noTurtles(), noTurtles())
+  expect_equivalent(noTurtles(), t5)
 })
 
 test_that("turtlesOwn works",{
