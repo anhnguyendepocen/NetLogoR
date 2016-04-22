@@ -37,6 +37,8 @@
 #'
 #' @export
 #' @importFrom SpaDES adj
+#' @importFrom data.table data.table
+#' @importFrom data.table setkey
 #' @docType methods
 #' @rdname diffuse
 #'
@@ -58,15 +60,29 @@ setMethod(
     val <- values(world)
     cellNum <- 1:length(val)
     toGive <- (val * share) / nNeighbors
-    df1 <- cbind.data.frame(cellNum, toGive)
-    df2 <- as.data.frame(adj(world, cells = cellNum, directions = nNeighbors, torus = torus))
-    df3 <- merge(df2, df1, by.x = "from", by.y = "cellNum", all = TRUE)
+    #df1 <- cbind.data.frame(cellNum, toGive)
+    #df2 <- as.data.frame(adj(world, cells = cellNum, directions = nNeighbors, torus = torus))
+    #df3 <- merge(df2, df1, by.x = "from", by.y = "cellNum", all = TRUE)
+    #loose <- tapply(df3$toGive, FUN = sum, INDEX = df3$from) # how much each patch give
+    #win <- tapply(df3$toGive, FUN = sum, INDEX = df3$to) # how much each patch receive
+    #newVal <- val - loose + win
+    #newWorld <- setValues(world, as.numeric(newVal))
 
-    loose <- tapply(df3$toGive, FUN = sum, INDEX = df3$from) # how much each patch give
-    win <- tapply(df3$toGive, FUN = sum, INDEX = df3$to) # how much each patch receive
-    newVal <- val - loose + win
+    df <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+    nNeigh <- table(df[,"from"])
+    toGiveNeigh <- rep(toGive, as.numeric(nNeigh))
+    df <- df[order(df[, "from"]),]
+    DT <- data.table(df, toGiveNeigh)
+    setkey(DT, from)
+    DT <- DT[ , loose := sum(toGiveNeigh), by = from] # how much each patch give
+    loose <- unique(DT[,c(1, 4), with = FALSE]) # from and loose
+    setkey(DT, to)
+    DT <- DT[ , win := sum(toGiveNeigh), by = to] # how much each patch receive
+    win <- unique(DT[,c(2, 5), with = FALSE]) # to and win
 
-    newWorld <- setValues(world, as.numeric(newVal))
+    newVal <- val - loose[,loose] + win[,win]
+    newWorld <- setValues(world, newVal)
+
     return(newWorld)
   }
 )
