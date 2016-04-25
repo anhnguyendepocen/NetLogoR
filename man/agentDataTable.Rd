@@ -3,13 +3,17 @@
 \name{agentDataTable}
 \alias{agentDataTable}
 \usage{
-agentDataTable(coords, data, coords.nrs = numeric(0),
+agentDataTable(coords, ..., coords.nrs = numeric(0),
   proj4string = CRS(as.character(NA)), match.ID, bbox = NULL)
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(world = w1, n = 10)
-t2 <- agentDataTable(coordinates(t1), t1@data)
+t1 <- createTurtles(world = w1, n = 10, agent = TRUE)
+
+library(microbenchmark)
+N = 1e5
+microbenchmark(createTurtles(world = w1, n = N, agent = TRUE),
+              createTurtles(world = w1, n = N, agent = FALSE))
 }
 \author{
 Eliot McIntire
