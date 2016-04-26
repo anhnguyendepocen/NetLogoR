@@ -4,7 +4,7 @@
 \name{patches}
 \alias{patches}
 \alias{patches,NLworld-method}
-\alias{patches,NLworldMatrix-method}
+\alias{patches,NLworldMs-method}
 \alias{patches,NLworldStack-method}
 \title{All the patches in a world}
 \usage{
@@ -12,7 +12,7 @@ patches(world)
 
 \S4method{patches}{NLworld}(world)
 
-\S4method{patches}{NLworldMatrix}(world)
+\S4method{patches}{NLworldMs}(world)
 
 \S4method{patches}{NLworldStack}(world)
 }

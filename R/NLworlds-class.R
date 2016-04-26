@@ -82,11 +82,14 @@ setReplaceMethod(
 
 
 
-#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
-#'             Center for Connected Learning and Computer-Based Modeling,
-#'             Northwestern University. Evanston, IL.
+################################################################################
+#' The NLworldMatrix class
+#'
+#' This is similar to \code{NLworld}, but it is an s3 class extension of
+#' \code{matrix}.
 #'
 #' @aliases NLworldMatrix
+#' @seealso NLworld
 #' @name NLworldMatrix
 #' @rdname NLworldMatrix
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty

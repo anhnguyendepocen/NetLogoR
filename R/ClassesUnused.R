@@ -1,3 +1,7 @@
+#' SpatialPointsDataTable Class
+#'
+#' This is incomplete.
+#'
 #' @importClassesFrom sp SpatialPoints SpatialPointsDataFrame
 #' @name SpatialPointsDataTable
 #' @rdname SpatialPointsDataTable

@@ -4,6 +4,7 @@
 \name{of}
 \alias{of}
 \alias{of,NLworld,matrix,missing-method}
+\alias{of,NLworldMatrix,matrix,missing-method}
 \alias{of,NLworldStack,matrix,character-method}
 \alias{of,missing,SpatialPointsDataFrame,character-method}
 \title{Values of an agents variable}
@@ -13,6 +14,8 @@ of(world, agents, var)
 \S4method{of}{missing,SpatialPointsDataFrame,character}(agents, var)
 
 \S4method{of}{NLworld,matrix,missing}(world, agents)
+
+\S4method{of}{NLworldMatrix,matrix,missing}(world, agents)
 
 \S4method{of}{NLworldStack,matrix,character}(world, agents, var)
 }

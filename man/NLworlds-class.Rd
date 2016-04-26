@@ -15,5 +15,7 @@ classes. Mostly used for building function purposes.
 }}
 \author{
 Sarah Bauduin
+
+Sarah Bauduin
 }
 

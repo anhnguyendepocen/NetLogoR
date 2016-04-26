@@ -2,12 +2,15 @@
 % Please edit documentation in R/NLworlds-class.R
 \name{NLworldMatrix}
 \alias{NLworldMatrix}
+\title{The NLworldMatrix class}
+\description{
+This is similar to \code{NLworld}, but it is an s3 class extension of
+\code{matrix}.
+}
 \author{
 Sarah Bauduin, Eliot McIntire, and Alex Chubaty
 }
-\references{
-Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
-            Center for Connected Learning and Computer-Based Modeling,
-            Northwestern University. Evanston, IL.
+\seealso{
+NLworld
 }
 
