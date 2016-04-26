@@ -7,13 +7,13 @@
 \alias{createTurtles,numeric,missing,NLworlds-method}
 \title{Create turtles}
 \usage{
-createTurtles(n, coords, world, heading, breed, color, agent = TRUE)
+createTurtles(n, coords, world, heading, breed, color, agent = FALSE)
 
 \S4method{createTurtles}{numeric,matrix,missing}(n, coords, world, heading,
-  breed, color, agent = TRUE)
+  breed, color, agent = FALSE)
 
 \S4method{createTurtles}{numeric,missing,NLworlds}(n, coords, world, heading,
-  breed, color, agent = TRUE)
+  breed, color, agent = FALSE)
 }
 \arguments{
 \item{n}{Integer.}

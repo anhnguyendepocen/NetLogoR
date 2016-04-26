@@ -395,6 +395,28 @@ setMethod(
   }
 )
 
+
+#' @export
+#' @rdname NLwith
+setMethod(
+  "NLwith",
+  signature = c("matrix", "NLworldArray", "character", "ANY"),
+  definition = function(agents, world, var, val) {
+    xmin <- attr(world, "xmin")
+    xmax <- attr(world, "xmax")
+    ymin <- attr(world, "ymin")
+    ymax <- attr(world, "ymax")
+    pxcor <- agents[,1] - xmin + 1
+    pycor <- agents[,2] - ymin + 1
+    arrayCol <- match(var, dimnames(world)[[3]])
+    values <- world[cbind(pxcor, rev(pycor), arrayCol)]
+    pVal <- which(values %in% val)
+    pxcorVal <- pxcor[pVal]
+    pycorVal <- pycor[pVal]
+    return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
+  }
+)
+
 #' @export
 #' @rdname NLwith
 setMethod(
@@ -1786,7 +1808,8 @@ setMethod(
 #' @rdname set
 setMethod(
   "set",
-  signature = c(world = "NLworldStack", turtles = "missing", agents = "matrix", var = "character", val = "ANY"),
+  signature = c(world = "NLworldStack", turtles = "missing", agents = "matrix",
+                var = "character", val = "ANY"),
   definition = function(world, agents, var, val) {
 
     if(count(agents) != 0){
@@ -1933,16 +1956,30 @@ setMethod(
       if(identical(patches(world), agents)){
         world[] <- matrix(val,ncol=dim(world)[2],byrow=TRUE)
       } else {
-        #browser()
         cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
         world[cells] <- val
-        #valuesW <- values(world)
-        #cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-        #valuesW[cells] <- val
-        #world[] <- valuesW
       }
-
     }
+    return(world)
+  })
 
+#' @export
+#' @rdname set
+setMethod(
+  "set",
+  signature = c(world = "NLworldArray", turtles = "missing", agents = "matrix",
+                var = "character", val = "ANY"),
+  definition = function(world, agents, var, val) {
+
+    if(NROW(agents) != 0){
+
+      if(identical(patches(world), agents)){
+        world[] <- matrix(val,ncol=dim(world)[2],byrow=TRUE)
+      } else {
+        cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+        arrayDim <- match(var, dimnames(world)[[3]])
+        world[cbind(cells, arrayDim)] <- val
+      }
+    }
     return(world)
   })

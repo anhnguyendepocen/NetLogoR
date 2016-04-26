@@ -497,7 +497,7 @@ setMethod(
 #' @rdname patch
 setMethod(
   "patch",
-  signature = c(world = "NLworldMatrix", x = "numeric", y = "numeric"),
+  signature = c(world = "NLworldMs", x = "numeric", y = "numeric"),
   definition = function(world, x, y, duplicate, torus, out) {
 
     pxcor_ <- round(x)
@@ -528,6 +528,7 @@ setMethod(
     return(pCoords)
   }
 )
+
 
 ################################################################################
 #' No patches
@@ -777,7 +778,7 @@ setMethod(
 #' @rdname patches
 setMethod(
   "patches",
-  signature = "NLworldMatrix",
+  signature = "NLworldMs",
   definition = function(world) {
     dims <- dim(world)
     return(cbind(pxcor=rep.int(1:dims[1], dims[2]) + attr(world, "xmin") - 1,

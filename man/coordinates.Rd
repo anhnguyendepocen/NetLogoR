@@ -12,12 +12,12 @@ t1 <- createTurtles(world = w1, n = 10, agent = TRUE)
 coordinates(t1)
 
 library(microbenchmark)
-N = 1e2
+N = 1e4
 coords <-  cbind(xcor=runif(N, xmin(w1), xmax(w1)),
                  ycor = runif(N, ymin(w1), ymax(w1)))
 turtlesDT <- createTurtles(coords = coords, n = N, agent = TRUE)
 turtlesDF <- createTurtles(coords = coords, n = N, agent = FALSE)
 microbenchmark(coordinates(turtlesDT), coordinates(turtlesDF))
-coordinates(turtlesDT) <- coords
+microbenchmark(coordinates(turtlesDT) <- coords)
 }
 

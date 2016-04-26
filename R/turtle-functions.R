@@ -1650,7 +1650,7 @@ setMethod(
 #' @rdname patchHere
 setMethod(
   "patchHere",
-  signature = c("NLworldMatrix", "SpatialPointsDataFrame"),
+  signature = c("NLworldMs", "SpatialPointsDataFrame"),
   definition = function(world, turtles) {
 
     pTurtles <- patch(world = world, x = turtles@coords[,1], y = turtles@coords[,2], duplicate = TRUE, out = TRUE)
@@ -3062,6 +3062,23 @@ setMethod(
       return(valuesW[cells])
     }
 })
+
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("NLworldMatrix", "matrix", "missing"),
+  definition = function(world, agents) {
+    #valuesW <- values(world)
+
+    if(identical(patches(world), agents)){
+      return(world %>% as.numeric())
+    } else {
+      return(world[agents - c(attr(world, "xmin"), attr(world, "ymin")) + 1])
+      #cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+      #return(valuesW[cells])
+    }
+  })
 
 #' @export
 #' @rdname of

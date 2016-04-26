@@ -3,6 +3,7 @@
 \docType{methods}
 \name{patch}
 \alias{patch}
+\alias{patch,NLworldMatrix,numeric,numeric-method}
 \alias{patch,NLworlds,numeric,numeric-method}
 \title{Patches coordinates}
 \usage{
@@ -10,6 +11,9 @@ patch(world, x, y, duplicate = FALSE, torus = FALSE, out = FALSE)
 
 \S4method{patch}{NLworlds,numeric,numeric}(world, x, y, duplicate = FALSE,
   torus = FALSE, out = FALSE)
+
+\S4method{patch}{NLworldMatrix,numeric,numeric}(world, x, y,
+  duplicate = FALSE, torus = FALSE, out = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}

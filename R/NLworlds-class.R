@@ -93,12 +93,52 @@ setReplaceMethod(
 #' @exportClass NLworldMatrix
 setOldClass("NLworldMatrix")
 
+#' @exportClass NLworldMatrix
 createNLworldMatrix <- function(data, minPxcor, maxPxcor, minPycor, maxPycor) {
   # define the patch coordinates with the raster row and column numbers
   numX <- (maxPxcor - minPxcor + 1)
   numY <- (maxPycor - minPycor + 1)
   world <- matrix(ncol=numY,
                  nrow=numX,data = data)
+  attr(world, "xmin") <- minPxcor
+  attr(world, "xmax") <- maxPxcor
+  attr(world, "ymin") <- minPycor
+  attr(world, "ymax") <- maxPycor
+  attr(world, "res") <- 1
+  class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
+  return(world)
+}
+
+#' @exportClass NLworldArray
+setOldClass("NLworldArray")
+
+#' @export
+#' @importFrom SpaDES updateList
+#' @importFrom abind abind
+NLworldArray <- function(...) {
+  NLwMs <- list(...)
+  if(do.call("all.equal",lapply(NLwMs, dim))) {
+    out <- abind::abind(NLwMs, along = 3)
+  } else {
+    stop("NLworldMatrix dimensions must all be equal")
+  }
+  objNames <- as.character(substitute(deparse(...))[-1])
+  dimnames(out) <- list(NULL, NULL, objNames)
+  attributes(out) <- updateList(attributes(NLwMs[[1]]), attributes(out))
+  class(out) <- c("NLworldArray", "structure", "vector")
+  return(out)
+}
+
+
+#' @exportClass NLworldMatrix
+createNLworldArray <- function(array, minPxcor, maxPxcor, minPycor, maxPycor) {
+  stop("Not completed yet")
+  browser()
+  # define the patch coordinates with the raster row and column numbers
+  numX <- (maxPxcor - minPxcor + 1)
+  numY <- (maxPycor - minPycor + 1)
+  world <- matrix(ncol=numY,
+                  nrow=numX,data = data)
   attr(world, "xmin") <- minPxcor
   attr(world, "xmax") <- maxPxcor
   attr(world, "ymin") <- minPycor
@@ -141,18 +181,6 @@ setReplaceMethod(
   }
 )
 
-
-
-#
-#   contains = c("matrix"),
-#   representation (
-#     minPxcor = "numeric",
-#     maxPxcor = "numeric",
-#     minPycor = "numeric",
-#     maxPycor = "numeric",
-#     pxcor = "numeric",
-#     pycor = "numeric"
-#   )
 
 
 
@@ -267,9 +295,17 @@ setReplaceMethod(
 #' @author Sarah Bauduin
 #' @exportClass NLworlds
 setClassUnion(name="NLworlds",
-              members=c("NLworld", "NLworldStack", "NLworldMatrix")
+              members=c("NLworld", "NLworldStack")
 )
 
+#' @aliases NLworlds
+#' @name NLworlds-class
+#' @rdname NLworlds-class
+#' @author Sarah Bauduin
+#' @exportClass NLworlds
+setClassUnion(name="NLworldMs",
+              members=c("NLworldMatrix", "NLworldArray")
+)
 
 ################################################################################
 #' Create a NLworldStack
@@ -362,7 +398,6 @@ setMethod(
   "cellFromPxcorPycor",
   signature = c("NLworlds", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
-    browser()
     cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
     return(cellNum)
   }

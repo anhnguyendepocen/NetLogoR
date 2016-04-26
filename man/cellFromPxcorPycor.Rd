@@ -9,6 +9,8 @@
 cellFromPxcorPycor(world, pxcor, pycor)
 
 \S4method{cellFromPxcorPycor}{NLworlds,numeric,numeric}(world, pxcor, pycor)
+
+\S4method{cellFromPxcorPycor}{NLworlds,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
 \item{world}{NLworlds object.}

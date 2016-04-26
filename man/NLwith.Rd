@@ -5,12 +5,15 @@
 \alias{NLwith}
 \alias{NLwith,SpatialPointsDataFrame,missing,character-method}
 \alias{NLwith,matrix,NLworld,missing-method}
+\alias{NLwith,matrix,NLworldMatrix,missing-method}
 \alias{NLwith,matrix,NLworldStack,character-method}
 \title{Agents with}
 \usage{
 NLwith(agents, world, var, val)
 
 \S4method{NLwith}{matrix,NLworld,missing}(agents, world, val)
+
+\S4method{NLwith}{matrix,NLworldMatrix,missing}(agents, world, val)
 
 \S4method{NLwith}{matrix,NLworldStack,character}(agents, world, var, val)
 
