@@ -37,7 +37,7 @@ numWolves <- nWolf # keep track of how many wolves there is
 
 ## Setup
 # Create the world
-grass <- createNLworld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
+grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
@@ -67,6 +67,19 @@ wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf
 wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 
 # Initialize the count of grass
+fieldV <- field$grass[]
+fieldM <- createNLworldMatrix(minPxcor(field$grass), maxPxcor(field$grass), minPycor(field$grass),
+              maxPycor(field$grass), data = fieldV)
+#fieldM <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
+#fieldM[] <- fieldV
+pt <- patches(field)
+pGreenM <- NLwith(world = fieldM, agents = pt, val = 1) # patches equal to 1 (green)
+
+microbenchmark(times = 100,
+pGreenM <- NLwith(world = fieldM, agents = pt, val = 1), # patches equal to 1 (green)
+pGreen <- NLwith(world = field$grass, agents = pt, val = 1) # patches equal to 1 (green)
+)
+
 if(grassOn == TRUE){
   pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches equal to 1 (green)
   numGreen <- count(pGreen)
@@ -283,7 +296,7 @@ growGrass <- function(){ # only patches
 
 
 ## Go
-profvisWolfSheep <- profvis({
+#profvisWolfSheep <- profvis({
 time <- 0
 while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
@@ -332,7 +345,17 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
   # # Help for checking the model is working
   #print(time)
 }
-})
+
+
+
+
+
+
+
+
+
+
+#})
 
 ## Plot outputs
 dev()
@@ -358,4 +381,4 @@ if(grassOn == TRUE){
 }
 
 
-profvisWolfSheep
+#profvisWolfSheep

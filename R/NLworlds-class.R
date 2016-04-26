@@ -71,7 +71,6 @@ setReplaceMethod(
   "[",
   signature("NLworld","numeric","numeric","numeric"),
   definition = function(x, i, j, value) {
-
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     x@data@values[cells] <- value
 
@@ -79,6 +78,82 @@ setReplaceMethod(
     return(x)
   }
 )
+
+
+
+
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @aliases NLworldMatrix
+#' @name NLworldMatrix
+#' @rdname NLworldMatrix
+#' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
+#' @exportClass NLworldMatrix
+setOldClass("NLworldMatrix")
+
+createNLworldMatrix <- function(data, minPxcor, maxPxcor, minPycor, maxPycor) {
+  # define the patch coordinates with the raster row and column numbers
+  numX <- (maxPxcor - minPxcor + 1)
+  numY <- (maxPycor - minPycor + 1)
+  world <- matrix(ncol=numY,
+                 nrow=numX,data = data)
+  attr(world, "xmin") <- minPxcor
+  attr(world, "xmax") <- maxPxcor
+  attr(world, "ymin") <- minPycor
+  attr(world, "ymax") <- maxPycor
+  attr(world, "res") <- 1
+  class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
+  return(world)
+}
+
+#' @export
+#' @name [
+#' @docType methods
+#' @rdname NLworld-class
+setMethod(
+  "[",
+  signature("NLworldMatrix", "numeric", "numeric", "ANY"),
+  definition = function(x, i, j, drop) {
+
+    cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
+    xValues <- values(x)
+    cellValues <- xValues[cells]
+
+    return(cellValues)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname NLworld-class
+setReplaceMethod(
+  "[",
+  signature("NLworldMatrix","numeric","numeric","numeric"),
+  definition = function(x, i, j, value) {
+
+    cells <- which(x[,"pxcor"] %in% i & x[,"pycor"] %in% j, TRUE) # cell number(s)
+    x@data@values[cells] <- value
+
+    validObject(x)
+    return(x)
+  }
+)
+
+
+
+#
+#   contains = c("matrix"),
+#   representation (
+#     minPxcor = "numeric",
+#     maxPxcor = "numeric",
+#     minPycor = "numeric",
+#     maxPycor = "numeric",
+#     pxcor = "numeric",
+#     pycor = "numeric"
+#   )
+
 
 
 ################################################################################

@@ -379,6 +379,26 @@ setMethod(
 #' @rdname NLwith
 setMethod(
   "NLwith",
+  signature = c("matrix", "NLworldMatrix", "missing", "ANY"),
+  definition = function(agents, world, val) {
+    xmin <- attr(world, "xmin")
+    xmax <- attr(world, "xmax")
+    ymin <- attr(world, "ymin")
+    ymax <- attr(world, "ymax")
+    pxcor <- agents[,1] - xmin + 1
+    pycor <- agents[,2] - ymin + 1
+    values <- world[cbind(pxcor, rev(pycor))]
+    pVal <- which(values %in% val)
+    pxcorVal <- pxcor[pVal]
+    pycorVal <- pycor[pVal]
+    return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
+  }
+)
+
+#' @export
+#' @rdname NLwith
+setMethod(
+  "NLwith",
   signature = c("matrix", "NLworldStack", "character", "ANY"),
   definition = function(agents, world, var, val) {
     names_l <- names(world)
@@ -387,6 +407,7 @@ setMethod(
     NLwith(world = world_l, agents = agents, val = val)
   }
 )
+
 
 #' @export
 #' @rdname NLwith
@@ -1788,19 +1809,20 @@ setMethod(
 
       } else {
 
-        valuesW <- values(world)
         cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
 
         if(length(var) == 1){
 
+          valuesW <- values(world[[var]])
           val <- val[!is.na(cells)]
           cells <- cells[!is.na(cells)]
 
-          colNum <- match(var, colnames(valuesW))
-          valuesW[cells, colNum] <- val
-          world@layers[[colNum]][] <- valuesW[,colNum]
+          colNum <- match(var, names(world))
+          valuesW[cells] <- val
+          world@layers[[colNum]][] <- valuesW
 
         } else {
+          valuesW <- values(world)
 
           val <- val[!is.na(cells), , drop = FALSE]
           cells <- cells[!is.na(cells)]

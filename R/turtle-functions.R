@@ -54,7 +54,7 @@
 #'
 setGeneric(
   "createTurtles",
-  function(n, coords, world, heading, breed, color, agent=TRUE) {
+  function(n, coords, world, heading, breed, color, agent=FALSE) {
     standardGeneric("createTurtles")
   })
 
@@ -63,7 +63,7 @@ setGeneric(
 setMethod(
   "createTurtles",
   signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
-  definition = function(n, coords, world, heading, breed, color, agent = TRUE) {
+  definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
     names(li) <- names(match.call())[-1]
