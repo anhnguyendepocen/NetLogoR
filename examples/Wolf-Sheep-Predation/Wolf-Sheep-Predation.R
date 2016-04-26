@@ -38,8 +38,8 @@ numWolves <- nWolf # keep track of how many wolves there is
 ## Setup
 # Create the world
 #grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
-grassM <- createNLworldMatrix(minPxcor = -10, maxPxcor = 10, minPycor = -10,
-                             maxPycor = 10, data = NA)
+grassM <- createNLworldMatrix(minPxcor = -50, maxPxcor = 50, minPycor = -50,
+                             maxPycor = 50, data = NA)
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
@@ -325,7 +325,7 @@ growGrass <- function(){ # only patches
 ## Go
 #profvisWolfSheep <- profvis({
 time <- 0
-while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
+while((NLany(sheep) | NLany(wolves)) & time < 50 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
   # Ask sheep
   if(NROW(sheep) != 0){
@@ -371,6 +371,36 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
   time <- time + 1
   # # Help for checking the model is working
   print(time)
+
+  if(exists("curDev")) dev(curDev)
+  curDev <- dev()
+  a = raster(matrix(grassM, ncol=ncol(grassM)))
+  Plot(a)
+  dev(curDev+1)
+  timeStep <- 1:length(numSheep)
+
+  if(grassOn == TRUE){
+
+    if(time==1)
+      plot(0,xlim = c(0,500), type = "n",ylab = "Population size", xlab = "Time step",
+         ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreenM / 4)))))
+
+    points(time, numSheep[time+1], col = "blue", pch=19)
+    points(time, numWolves[time+1], col = "red", pch=19)
+    points(time, numGreenM[time+1] / 4, col = "green", pch=19)
+
+    legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
+           bg = "white")
+
+  } else {
+
+    plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
+         ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves)))))
+    lines(timeStep, numWolves, col = "red", lwd = 2)
+
+    legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
+  }
+
 }
 
 
@@ -385,27 +415,27 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
 #})
 
 ## Plot outputs
-dev()
-timeStep <- 1:length(numSheep)
-
-if(grassOn == TRUE){
-
-  plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
-       ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreen / 4)))))
-  lines(timeStep, numWolves, col = "red", lwd = 2)
-  lines(timeStep, numGreen / 4, col = "green", lwd = 2)
-
-  legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
-         bg = "white")
-
-} else {
-
-  plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
-       ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves)))))
-  lines(timeStep, numWolves, col = "red", lwd = 2)
-
-  legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
-}
+# dev()
+# timeStep <- 1:length(numSheep)
+#
+# if(grassOn == TRUE){
+#
+#   plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
+#        ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreenM / 4)))))
+#   lines(timeStep, numWolves, col = "red", lwd = 2)
+#   lines(timeStep, numGreen / 4, col = "green", lwd = 2)
+#
+#   legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
+#          bg = "white")
+#
+# } else {
+#
+#   plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
+#        ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves)))))
+#   lines(timeStep, numWolves, col = "red", lwd = 2)
+#
+#   legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
+# }
 
 
 #profvisWolfSheep
