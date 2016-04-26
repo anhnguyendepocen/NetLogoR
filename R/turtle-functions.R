@@ -922,6 +922,22 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname randomXcor
+setMethod(
+  "randomXcor",
+  signature = c("NLworldMs", "numeric"),
+  definition = function(world, n) {
+    if(n == 0){
+      return(xcor = numeric())
+    } else {
+      xmin <- attr(world, "xmin")
+      xmax <- attr(world, "xmax")
+      xcor <- round(runif(n = n, min = xmin, max = xmax), digits = 5)
+      return(xcor)
+    }
+  }
+)
 
 ################################################################################
 #' Random ycor
@@ -973,6 +989,24 @@ setMethod(
     } else {
       ymin <- world@extent@ymin
       ymax <- world@extent@ymax
+      ycor <- round(runif(n = n, min = ymin, max = ymax), digits = 5)
+      return(ycor)
+    }
+  }
+)
+
+#' @export
+#' @rdname randomYcor
+setMethod(
+  "randomYcor",
+  signature = c("NLworldMs", "numeric"),
+  definition = function(world, n) {
+
+    if(n == 0){
+      return(ycor = numeric())
+    } else {
+      ymin <- attr(world, "ymin")
+      ymax <- attr(world, "ymax")
       ycor <- round(runif(n = n, min = ymin, max = ymax), digits = 5)
       return(ycor)
     }
@@ -2131,6 +2165,16 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname randomXYcor
+setMethod(
+  "randomXYcor",
+  signature = c("NLworldMs", "numeric"),
+  definition = function(world, n) {
+    xycor <- cbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
+    return(xycor)
+  }
+)
 
 ################################################################################
 #' Do the turtles exist?
@@ -2357,7 +2401,8 @@ setMethod(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix", breed = "character"),
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame",
+                agents = "matrix", breed = "character"),
   definition = function(world, turtles, agents, breed, simplify) {
     tBreed <- turtles[turtles@data$breed %in% breed,]
     turtlesOn(world = world, turtles = tBreed, agents = agents, simplify = simplify)
@@ -2368,7 +2413,8 @@ setMethod(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame", breed = "missing"),
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame",
+                agents = "SpatialPointsDataFrame", breed = "missing"),
   definition = function(world, turtles, agents, simplify) {
     turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), simplify = simplify)
   }
@@ -2381,6 +2427,17 @@ setMethod(
   signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame", breed = "character"),
   definition = function(world, turtles, agents, breed, simplify) {
     turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), breed = breed, simplify = simplify)
+  }
+)
+
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c(world = "NLworldMs", turtles = "SpatialPointsDataFrame",
+                agents = "SpatialPointsDataFrame", breed = "missing"),
+  definition = function(world, turtles, agents, simplify) {
+    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), simplify = simplify)
   }
 )
 

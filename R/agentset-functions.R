@@ -1152,8 +1152,11 @@ setMethod(
     } else if(ncol(agents) == 3){
       mApply(X = agents[, c("pxcor", "pycor")], INDEX = as.factor(agents[, "id"]), FUN = oneOf, keepmatrix = TRUE)
     } else {
-      whoTurtles <- tapply(X = agents[,"whoTurtles"], INDEX = as.factor(agents[, "id"]),
-                           FUN = function(x){ifelse(length(x) == 1, x, sample(x, size = 1))})
+      # Not working
+      whoRow <- sample(seq_len(NROW(agents)), size = 1)
+      whoTurtles <- agents[whoRow,"whoTurtles"]
+      #whoTurtles <- tapply(X = agents[,"whoTurtles"], INDEX = as.factor(agents[, "id"]),
+      #                     FUN = function(x){ifelse(length(x) == 1, x, sample(x, size = 1))})
       return(as.numeric(whoTurtles))
     }
   }

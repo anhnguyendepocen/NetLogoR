@@ -37,22 +37,20 @@ numWolves <- nWolf # keep track of how many wolves there is
 
 ## Setup
 # Create the world
-grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
+#grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
 grassM <- createNLworldMatrix(minPxcor = -10, maxPxcor = 10, minPycor = -10,
                              maxPycor = 10, data = NA)
-grassVal <- 1:441
-grassValM <- 1:441
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
 if(grassOn == TRUE){
   # Initialize patch values (grass and countdown) at random
-  grassVal <- sample(c(0,1), size = count(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
-  grass <- set(world = grass, agents = patches(grass), val = grassVal)
-  countdown <- grass # countdown is a new NLworld with the same extent as grass
-  countdownVal <- runif(n = count(patches(grass)), min = 0, max = grassTGrowth) # grass grow clock
-  countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
-  field <- NLstack(grass, countdown)
+  # grassVal <- sample(c(0,1), size = count(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
+  # grass <- set(world = grass, agents = patches(grass), val = grassVal)
+  # countdown <- grass # countdown is a new NLworld with the same extent as grass
+  # countdownVal <- runif(n = count(patches(grass)), min = 0, max = grassTGrowth) # grass grow clock
+  # countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
+  # field <- NLstack(grass, countdown)
 
   grassValM <- sample(c(0,1), size = length(grassM), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
 #microbenchmark(
@@ -73,27 +71,24 @@ if(grassOn == TRUE){
 # When field is updated, the values on the individual NLworld grass and countdown are not updated, only the layers in field are
 
 # Create the sheep
-sheep <- createTurtles(n = nSheep, coords = randomXYcor(world = grass, n = nSheep), breed = "aSheep", color = rep("red", nSheep))
+sheep <- createTurtles(n = nSheep, coords = randomXYcor(world = grassM, n = nSheep),
+                       breed = "aSheep", color = rep("red", nSheep))
 # Add the energy variable
-sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = runif(n = nSheep, min = 0, max = 2 * gainFoodSheep))
+sheep <- turtlesOwn(turtles = sheep, tVar = "energy",
+                    tVal = runif(n = nSheep, min = 0, max = 2 * gainFoodSheep))
 
 # Create the wolves
-wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grassM, n = nWolf),
+                        breed = "wolf", color = rep("black", nWolf))
 # Add the energy variable
-wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
+wolves <- turtlesOwn(turtles = wolves, tVar = "energy",
+                     tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 
 # Initialize the count of grass
-pt <- patches(grassM)
-pGreenM <- NLwith(world = grassM, agents = pt, val = 1) # patches equal to 1 (green)
-
-# microbenchmark(times = 100,
-# pGreenM <- NLwith(world = grassM, agents = pt, val = 1), # patches equal to 1 (green)
-# pGreen <- NLwith(world = grass, agents = pt, val = 1) # patches equal to 1 (green)
-# )
 
 if(grassOn == TRUE){
-  pGreen <- NLwith(world = grassM, agents = patches(grassM), val = 1) # patches equal to 1 (green)
-  numGreen <- NROW(pGreen)
+  pGreenM <- NLwith(world = grassM, agents = patches(grassM), val = 1) # patches equal to 1 (green)
+  numGreenM <- NROW(pGreenM)
 }
 
 # # Visualize the world
@@ -122,7 +117,7 @@ move <- function(turtles){ # sheep and wolves
   # turtles <- left(turtles, angle = runif(n = count(turtles), min = 0, max = 50))
   # The two above functions can be replaced by this next one, as a negative value to turn right will turn left
   turtles <- right(turtles, angle = runif(n = NROW(turtles), min = -50, max = 50))
-  turtles <- fd(world = grass, turtles = turtles, dist = 1, torus = TRUE)
+  turtles <- fd(world = grassM, turtles = turtles, dist = 1, torus = TRUE)
   return(turtles)
 }
 
@@ -151,7 +146,6 @@ eatGrass <- function(){ # only sheep
     #field <- set(world = field, agents = pHere, var = "grass", val = 0)
     #grassM <- set(world = grassM, agents = pHereM, val = 0)
     fieldM <- set(world = fieldM, agents = pHereM, var = "grassM", val = 0)
-
   }
 
   return(list(fieldM, sheep)) # return the two objects updated in this function
@@ -207,7 +201,7 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
   reproWho <- whoTurtles[repro] # "who" of turtles which reproduce
   reproInd <- turtle(turtles, who = reproWho) # turtles which reproduce
 
-  if(count(reproInd) != 0){ # if there is at least one turtle reproducing
+  if(NROW(reproInd) != 0){ # if there is at least one turtle reproducing
     energyTurtles <- of(agents = reproInd, var = "energy")
     # Divide the energy between the parent and offspring
     turtles <- set(turtles = turtles, agents = reproInd, var = "energy", val = energyTurtles / 2)
@@ -215,10 +209,10 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
 
     # Move the offspring by 1 step
     whoNewTurtles <- of(agents = turtles, var = "who") # "who" of the turtles after they reproduced
-    whoOffspring <- which(!whoNewTurtles %in% whoTurtles) # "who" of offspring
+    whoOffspring <- whoNewTurtles[!whoNewTurtles %in% whoTurtles] # "who" of offspring
     offspring <- turtle(turtles = turtles, who = whoOffspring)
-    offspringMoved <- right(turtles = offspring, angle = runif(n = count(offspring), min = 0, max = 360))
-    offspringMoved <- fd(world = grass, turtles = offspring, dist = 1, torus = TRUE)
+    offspringMoved <- right(turtles = offspring, angle = runif(n = NROW(offspring), min = 0, max = 360))
+    offspringMoved <- fd(world = grassM, turtles = offspring, dist = 1, torus = TRUE)
     # Update the headings and coordinates of the offsprings inside the turtles
     valOffspring <- of(agents = offspringMoved, var = c("heading", "xcor", "ycor"))
     turtles <- set(turtles = turtles, agents = offspring, var = c("heading", "xcor", "ycor"), val = valOffspring)
@@ -241,7 +235,7 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
 
 catchSheep <- function(){ # only wolves
   # "who" numbers of sheep that are on the same patches as the wolves
-  sheepWolves <- turtlesOn(world = grass, turtles = sheep, agents = wolves, simplify = FALSE)
+  sheepWolves <- turtlesOn(world = grassM, turtles = sheep, agents = wolves, simplify = FALSE)
   if(nrow(sheepWolves) != 0){
     # sheepWolves[,"whoTurtles"] are the "who" numbers of sheep
     # sheepWolves[,"id"] represent the rank/order of the individual wolf in the wolves (! not the "who" numbers of the wolves)
@@ -291,14 +285,16 @@ growGrass <- function(){ # only patches
   #pBrownCountdown0 <- which(pBrownCountdown <= 0) # patches with a countdown <= 0
   pBrownCountdown0M <- which(pBrownCountdownM <= 0) # patches with a countdown <= 0
   if(length(pBrownCountdown0M) != 0){
-    pGrow <- pBrownM[pBrownCountdown0M, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
+    pGrowM <- pBrownM[pBrownCountdown0M, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
     # Grow some grass on these patches and reset the countdown
     #field <- set(world = field, var = c("grass", "countdown"), agents = pGrow,
     #             val = cbind(grass = rep(1, count(pGrow)), countdown = rep(grassTGrowth, count(pGrow))))
 
     #NOT DONE YET
-    field <- set(world = field, var = c("grass", "countdown"), agents = pGrow,
-                 val = cbind(grass = rep(1, count(pGrow)), countdown = rep(grassTGrowth, count(pGrow))))
+    browser()
+    fieldM <- set(world = fieldM, var = c("grassM", "countdownM"),
+                  agents = pGrowM, val = cbind(grassM = rep(1, count(pGrowM)),
+                                               countdownM = rep(grassTGrowth, count(pGrowM))))
   }
 
   pBrownCountdown1M <- which(!pBrownCountdownM <= 0) # patches with a countdown > 0
@@ -365,8 +361,8 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
   if(grassOn == TRUE){
     fieldM <- growGrass()
     pGreenM <- NLwith(world = fieldM, var = "grassM", agents = patches(fieldM), val = 1) # patches equal to 1 (green)
-    npGreen <- NROW(pGreen)
-    numGreen <- c(numGreen, npGreen) # add the new number of green patches
+    npGreenM <- NROW(pGreenM)
+    numGreenM <- c(numGreenM, npGreenM) # add the new number of green patches
   }
 
   numSheep <- c(numSheep, NROW(sheep)) # add the new number of sheep

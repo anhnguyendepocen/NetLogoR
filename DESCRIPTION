@@ -29,9 +29,9 @@ ByteCompile: yes
 LazyData: true
 RoxygenNote: 5.0.1
 Collate:
+    'NLworlds-class.R'
     'Classes.R'
     'ClassesUnused.R'
-    'NLworlds-class.R'
     'NetLogoR-package.R'
     'agentset-functions.R'
     'function-arguments.R'

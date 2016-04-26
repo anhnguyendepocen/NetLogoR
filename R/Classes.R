@@ -17,9 +17,17 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
     bbox = colRanges(coords)
     dimnames(bbox)[[2]] = c("min", "max")
     as.matrix(bbox)
-
 }
 
+#' @include NLworlds-class.R
+#' @importFrom raster extent
+setMethod(
+  "extent",
+  signature("NLworldMs"),
+  definition = function (x, ...) {
+    extent(cbind(c(attr(x, "xmin"), attr(x, "ymin")),
+          c(attr(x, "xmax"), attr(x, "ymax"))))
+  })
 
 #' agentDataTable class
 #'
