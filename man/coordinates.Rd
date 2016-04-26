@@ -3,8 +3,12 @@
 \docType{methods}
 \name{coordinates,agentDataTable-method}
 \alias{coordinates,agentDataTable-method}
+\title{Extract coordinates from agentDataTable}
 \usage{
 \S4method{coordinates}{agentDataTable}(obj, ...)
+}
+\description{
+This is incomplete
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

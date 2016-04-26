@@ -2,9 +2,13 @@
 % Please edit documentation in R/Classes.R
 \name{agentDataTable}
 \alias{agentDataTable}
+\title{agentDataTable class}
 \usage{
 agentDataTable(coords, ..., coords.nrs = numeric(0),
   proj4string = CRS(as.character(NA)), match.ID, bbox = NULL)
+}
+\description{
+This is incomplete.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

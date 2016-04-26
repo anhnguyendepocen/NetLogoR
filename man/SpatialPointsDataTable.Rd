@@ -4,9 +4,13 @@
 \name{SpatialPointsDataTable}
 \alias{SpatialPointsDataTable}
 \alias{SpatialPointsDataTable,ANY-method}
+\title{SpatialPointsDataTable Class}
 \usage{
 \S4method{SpatialPointsDataTable}{ANY}(coords, data, coords.nrs = numeric(0),
   proj4string = CRS(as.character(NA)), match.ID, bbox = NULL)
+}
+\description{
+This is incomplete.
 }
 \author{
 Eliot McIntire

@@ -21,6 +21,11 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
 }
 
 
+#' agentDataTable class
+#'
+#' This is incomplete.
+#'
+#'
 #' @importClassesFrom data.table data.table
 #' @name agentDataTable
 #' @rdname agentDataTable
@@ -47,6 +52,10 @@ agentDataTable <- function(coords, ..., coords.nrs = numeric(0), proj4string = C
 setOldClass("agentDataTable")
 
 
+#' Extract coordinates from agentDataTable
+#'
+#' This is incomplete
+#'
 #' @export
 #' @rdname coordinates
 #' @examples
