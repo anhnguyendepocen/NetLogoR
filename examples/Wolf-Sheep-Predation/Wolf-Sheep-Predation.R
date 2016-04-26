@@ -38,6 +38,8 @@ numWolves <- nWolf # keep track of how many wolves there is
 ## Setup
 # Create the world
 grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
+grass <- createNLworldMatrix(minPxcor = -10, maxPxcor = 10, minPycor = -10,
+                             maxPycor = 10, data = NA)
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat

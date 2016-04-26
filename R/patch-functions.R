@@ -741,6 +741,20 @@ setMethod(
 #' @rdname patches
 setMethod(
   "patches",
+  signature = "NLworldMatrix",
+  definition = function(world) {
+    dims <- dim(world)
+    #browser()
+    #att <- attributes(world)
+    return(cbind(pxcor=rep.int(1:dims[1], dims[2]) + attr(world, "xmin") - 1,
+          pycor=rep(dims[2]:1, each=dims[1])+ attr(world, "ymin") - 1))
+  }
+)
+
+#' @export
+#' @rdname patches
+setMethod(
+  "patches",
   signature = "NLworldStack",
   definition = function(world) {
     world_l <- world[[1]]
