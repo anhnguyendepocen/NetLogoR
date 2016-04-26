@@ -267,7 +267,7 @@ setReplaceMethod(
 #' @author Sarah Bauduin
 #' @exportClass NLworlds
 setClassUnion(name="NLworlds",
-              members=c("NLworld", "NLworldStack")
+              members=c("NLworld", "NLworldStack", "NLworldMatrix")
 )
 
 
@@ -362,11 +362,22 @@ setMethod(
   "cellFromPxcorPycor",
   signature = c("NLworlds", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
+    browser()
     cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
     return(cellNum)
   }
 )
 
+#' @export
+#' @rdname cellFromPxcorPycor
+setMethod(
+  "cellFromPxcorPycor",
+  signature = c("NLworlds", "numeric", "numeric"),
+  definition = function(world, pxcor, pycor) {
+    cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
+    return(cellNum)
+  }
+)
 
 ################################################################################
 #' Patches coordinates from cells numbers

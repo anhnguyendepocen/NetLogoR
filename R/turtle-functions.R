@@ -1646,6 +1646,18 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname patchHere
+setMethod(
+  "patchHere",
+  signature = c("NLworldMatrix", "SpatialPointsDataFrame"),
+  definition = function(world, turtles) {
+
+    pTurtles <- patch(world = world, x = turtles@coords[,1], y = turtles@coords[,2], duplicate = TRUE, out = TRUE)
+    return(pTurtles)
+
+  }
+)
 
 ################################################################################
 #' Patches on the left
@@ -2314,9 +2326,9 @@ setGeneric(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "matrix", breed = "missing"),
+  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame",
+                agents = "matrix", breed = "missing"),
   definition = function(world, turtles, agents, simplify) {
-
     pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
     pTurtles <- cbind(pTurtles, who = turtles@data$who)
 
@@ -2369,6 +2381,38 @@ setMethod(
   signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame", breed = "character"),
   definition = function(world, turtles, agents, breed, simplify) {
     turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), breed = breed, simplify = simplify)
+  }
+)
+
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c(world = "NLworldMatrix", turtles = "SpatialPointsDataFrame",
+                agents = "matrix", breed = "missing"),
+  definition = function(world, turtles, agents, simplify) {
+
+    pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
+    pTurtles <- cbind(pTurtles, who = turtles@data$who)
+
+
+    if(simplify == TRUE){
+
+      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+
+      if(nrow(pOn) == 0){
+        return(noTurtles())
+      } else {
+        turtle(turtles = turtles, who = pOn[,3])
+      }
+
+    } else {
+      agents <- cbind(agents, id = 1:nrow(agents))
+      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+      pOn <- pOn[order(pOn[,"id"]),]
+      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
+      return(turtlesID)
+    }
   }
 )
 
@@ -3041,3 +3085,4 @@ setMethod(
       }
     }
 })
+

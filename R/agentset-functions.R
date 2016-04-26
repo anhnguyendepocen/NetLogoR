@@ -1919,3 +1919,30 @@ setMethod(
 
     return(turtles)
 })
+
+
+#' @export
+#' @rdname set
+setMethod(
+  "set",
+  signature = c(world = "NLworldMatrix", turtles = "missing", agents = "matrix", var = "missing", val = "ANY"),
+  definition = function(world, agents, val) {
+
+    if(NROW(agents) != 0){
+
+      if(identical(patches(world), agents)){
+        world[] <- matrix(val,ncol=dim(world)[2],byrow=TRUE)
+      } else {
+        #browser()
+        cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+        world[cells] <- val
+        #valuesW <- values(world)
+        #cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+        #valuesW[cells] <- val
+        #world[] <- valuesW
+      }
+
+    }
+
+    return(world)
+  })

@@ -493,6 +493,42 @@ setMethod(
 )
 
 
+#' @export
+#' @rdname patch
+setMethod(
+  "patch",
+  signature = c(world = "NLworldMatrix", x = "numeric", y = "numeric"),
+  definition = function(world, x, y, duplicate, torus, out) {
+
+    pxcor_ <- round(x)
+    pycor_ <- round(y)
+
+    if(torus == TRUE){
+      pCoords <- wrap(cbind(x = pxcor_, y = pycor_), extent(world))
+      pxcor_ <- pCoords[,1]
+      pycor_ <- pCoords[,2]
+    }
+
+    pxcor_[pxcor_ < attr(world,"xmin") | pxcor_ > attr(world,"xmax")] <- NA
+    pycor_[pycor_ < attr(world,"ymin") | pxcor_ > attr(world,"ymax")] <- NA
+    pxcor_[is.na(pycor_)] <- NA
+    pycor_[is.na(pxcor_)] <- NA
+
+    if(out == FALSE){
+      pxcor_ = pxcor_[!is.na(pxcor_)]
+      pycor_ = pycor_[!is.na(pycor_)]
+    }
+
+    pCoords <- matrix(data = cbind(pxcor_, pycor_), ncol = 2, nrow = length(pxcor_),
+                      dimnames = list(NULL, c("pxcor", "pycor")))
+
+    if(duplicate == FALSE){
+      pCoords <- unique(pCoords)
+    }
+    return(pCoords)
+  }
+)
+
 ################################################################################
 #' No patches
 #'
@@ -744,8 +780,6 @@ setMethod(
   signature = "NLworldMatrix",
   definition = function(world) {
     dims <- dim(world)
-    #browser()
-    #att <- attributes(world)
     return(cbind(pxcor=rep.int(1:dims[1], dims[2]) + attr(world, "xmin") - 1,
           pycor=rep(dims[2]:1, each=dims[1])+ attr(world, "ymin") - 1))
   }

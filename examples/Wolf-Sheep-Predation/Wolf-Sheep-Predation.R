@@ -38,8 +38,10 @@ numWolves <- nWolf # keep track of how many wolves there is
 ## Setup
 # Create the world
 grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
-grass <- createNLworldMatrix(minPxcor = -10, maxPxcor = 10, minPycor = -10,
+grassM <- createNLworldMatrix(minPxcor = -10, maxPxcor = 10, minPycor = -10,
                              maxPycor = 10, data = NA)
+grassVal <- 1:441
+grassValM <- 1:441
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
@@ -51,7 +53,19 @@ if(grassOn == TRUE){
   countdownVal <- runif(n = count(patches(grass)), min = 0, max = grassTGrowth) # grass grow clock
   countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
   field <- NLstack(grass, countdown)
-}
+
+  grassValM <- sample(c(0,1), size = length(grassM), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
+#microbenchmark(
+  grassM <- set(world = grassM, agents = patches(grassM), val = grassValM)#,
+ # grass <- set(world = grass, agents = patches(grass), val = grassVal)
+#)
+
+  countdownM <- grassM # countdown is a new NLworld with the same extent as grass
+  countdownValM <- runif(n = length(grassM), min = 0, max = grassTGrowth) # grass grow clock
+  countdownM <- set(world = countdownM, agents = patches(countdownM), val = countdownValM)
+  fieldM <- abind::abind(grassM, countdownM, along=3)
+
+  }
 # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
 # because they all have the same extent and number of patches
 # When patches values are used (e.g., when the sheep eat the grass), use only field as the world argument for the functions
@@ -69,22 +83,17 @@ wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf
 wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 
 # Initialize the count of grass
-fieldV <- field$grass[]
-fieldM <- createNLworldMatrix(minPxcor(field$grass), maxPxcor(field$grass), minPycor(field$grass),
-              maxPycor(field$grass), data = fieldV)
-#fieldM <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
-#fieldM[] <- fieldV
-pt <- patches(field)
-pGreenM <- NLwith(world = fieldM, agents = pt, val = 1) # patches equal to 1 (green)
+pt <- patches(grassM)
+pGreenM <- NLwith(world = grassM, agents = pt, val = 1) # patches equal to 1 (green)
 
-microbenchmark(times = 100,
-pGreenM <- NLwith(world = fieldM, agents = pt, val = 1), # patches equal to 1 (green)
-pGreen <- NLwith(world = field$grass, agents = pt, val = 1) # patches equal to 1 (green)
-)
+# microbenchmark(times = 100,
+# pGreenM <- NLwith(world = grassM, agents = pt, val = 1), # patches equal to 1 (green)
+# pGreen <- NLwith(world = grass, agents = pt, val = 1) # patches equal to 1 (green)
+# )
 
 if(grassOn == TRUE){
-  pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches equal to 1 (green)
-  numGreen <- count(pGreen)
+  pGreen <- NLwith(world = grassM, agents = patches(grassM), val = 1) # patches equal to 1 (green)
+  numGreen <- NROW(pGreen)
 }
 
 # # Visualize the world
@@ -112,7 +121,7 @@ move <- function(turtles){ # sheep and wolves
   # turtles <- right(turtles, angle = runif(n = count(turtles), min = 0, max = 50))
   # turtles <- left(turtles, angle = runif(n = count(turtles), min = 0, max = 50))
   # The two above functions can be replaced by this next one, as a negative value to turn right will turn left
-  turtles <- right(turtles, angle = runif(n = count(turtles), min = -50, max = 50))
+  turtles <- right(turtles, angle = runif(n = NROW(turtles), min = -50, max = 50))
   turtles <- fd(world = grass, turtles = turtles, dist = 1, torus = TRUE)
   return(turtles)
 }
@@ -126,17 +135,21 @@ move <- function(turtles){ # sheep and wolves
 # #
 
 eatGrass <- function(){ # only sheep
-  pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches with grass equal to 1 (green)
-  sheepOnGreen <- turtlesOn(world = field, turtles = sheep, agents = pGreen) # sheep on green patches
-
-  if(count(sheepOnGreen) != 0){
+  pGreen <- NLwith(world = grassM, agents = patches(grassM), val = 1) # patches with grass equal to 1 (green)
+  #microbenchmark(
+  #sheepOnGreen <- turtlesOn(world = grass, turtles = sheep, agents = pGreen), # sheep on green patches
+  sheepOnGreenM <- turtlesOn(world = grassM, turtles = sheep, agents = pGreenM) # sheep on green patches
+#)
+  if(NROW(sheepOnGreenM) != 0){
     # These sheep gain energy by eating
     energySheep <- of(agents = sheepOnGreen, var = "energy") # energy before eating
-    sheep <- set(turtles = sheep, agents = sheepOnGreen, var = "energy", val = energySheep + gainFoodSheep) # update energy
+    sheep <- set(turtles = sheep, agents = sheepOnGreenM, var = "energy", val = energySheep + gainFoodSheep) # update energy
 
     # If a sheep is on a green patch (value equal to 1), it eats the grass and turns it to brown (value to 0)
-    pHere <- patchHere(world = field, turtles = sheepOnGreen)
-    field <- set(world = field, agents = pHere, var = "grass", val = 0)
+    #pHere <- patchHere(world = field, turtles = sheepOnGreen)
+    pHereM <- patchHere(world = grassM, turtles = sheepOnGreenM)
+    #field <- set(world = field, agents = pHere, var = "grass", val = 0)
+    grassM <- set(world = grassM, agents = pHereM, val = 0)
 
   }
 
