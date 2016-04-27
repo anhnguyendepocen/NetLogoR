@@ -324,8 +324,9 @@ growGrass <- function(){ # only patches
 
 ## Go
 #profvisWolfSheep <- profvis({
+plot.it = FALSE
 time <- 0
-while((NLany(sheep) | NLany(wolves)) & time < 50 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
+while((NLany(sheep) | NLany(wolves)) & time < 100 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
   # Ask sheep
   if(NROW(sheep) != 0){
@@ -372,35 +373,38 @@ while((NLany(sheep) | NLany(wolves)) & time < 50 ){ # as long as there are sheep
   # # Help for checking the model is working
   print(time)
 
-  if(exists("curDev")) dev(curDev)
-  curDev <- dev()
-  a = raster(matrix(grassM, ncol=ncol(grassM)))
-  Plot(a)
-  dev(curDev+1)
-  timeStep <- 1:length(numSheep)
+  if(plot.it){
+    if(exists("curDev")) dev(curDev)
+    curDev <- dev()
+    if(time==1) clearPlot()
 
-  if(grassOn == TRUE){
+    a = raster(matrix(grassM, ncol=ncol(grassM)))
+    Plot(a)
+    dev(curDev+1)
+    timeStep <- 1:length(numSheep)
 
-    if(time==1)
-      plot(0,xlim = c(0,500), type = "n",ylab = "Population size", xlab = "Time step",
-         ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreenM / 4)))))
+    if(grassOn == TRUE){
 
-    points(time, numSheep[time+1], col = "blue", pch=19)
-    points(time, numWolves[time+1], col = "red", pch=19)
-    points(time, numGreenM[time+1] / 4, col = "green", pch=19)
+      if(time==1)
+        plot(0,xlim = c(0,500), type = "n",ylab = "Population size", xlab = "Time step",
+           ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreenM / 4)))))
 
-    legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
-           bg = "white")
+      points(time, numSheep[time+1], col = "blue", pch=19)
+      points(time, numWolves[time+1], col = "red", pch=19)
+      points(time, numGreenM[time+1] / 4, col = "green", pch=19)
 
-  } else {
+      legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
+             bg = "white")
 
-    plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
-         ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves)))))
-    lines(timeStep, numWolves, col = "red", lwd = 2)
+    } else {
 
-    legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
+      plot(timeStep, numSheep, type = "l", col = "blue", lwd = 2, ylab = "Population size", xlab = "Time step",
+           ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves)))))
+      lines(timeStep, numWolves, col = "red", lwd = 2)
+
+      legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
+    }
   }
-
 }
 
 
