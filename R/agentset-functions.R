@@ -1752,6 +1752,13 @@ setMethod(
       } else {
         valuesW <- values(world)
         cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+
+        if(length(val) == 1 & length(cells) != 1){
+          val <- rep(val, length(cells))
+        }
+        val <- val[!is.na(cells)]
+        cells <- cells[!is.na(cells)]
+
         valuesW[cells] <- val
         world[] <- valuesW
       }
@@ -1793,6 +1800,9 @@ setMethod(
 
         if(length(var) == 1){
 
+          if(length(val) == 1 & length(cells) != 1){
+            val <- rep(val, length(cells))
+          }
           val <- val[!is.na(cells)]
           cells <- cells[!is.na(cells)]
 
@@ -1802,7 +1812,16 @@ setMethod(
 
         } else {
 
-          val <- val[!is.na(cells), , drop = FALSE]
+          if(nrow(val) == 1 & length(cells) != 1){
+            val <- val[rep(1, length(cells)),]
+          }
+
+          if(is.matrix(val)){
+            val <- val[!is.na(cells), , drop = FALSE]
+          } else {
+            val <- val[!is.na(cells),]
+          }
+
           cells <- cells[!is.na(cells)]
 
           for(i in 1:length(var)){

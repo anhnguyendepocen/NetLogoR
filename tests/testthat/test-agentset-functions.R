@@ -626,6 +626,10 @@ test_that("set works",{
   expect_equivalent(values(w1), 1:25)
   w1 <- set(world = w1, agents = patch(w1, 0, 0), val = 100)
   expect_equivalent(w1[0,0], 100)
+  w1 <- set(world = w1, agents = patch(w1, c(-1, 0), c(-1, 0)), val = -10)
+  expect_equivalent(w1[0,0], -10)
+  w1_ <- set(world = w1, agents = patch(w1, c(-1, -2), c(-1, 0)), val = -20)
+  expect_equivalent(w1, w1_)
 
   w1[] <- 1:25
   w2 <- w1
@@ -647,6 +651,15 @@ test_that("set works",{
   expect_equivalent(values(w3), cbind(w1 = 101:125, w2 = 125:101))
   w3 <- set(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 101:125, w1 = 125:101))
   expect_equivalent(values(w3), cbind(w1 = 125:101, w2 = 101:125))
+  w3 <- set(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101, w2 = 125))
+  expect_equivalent(values(w3), cbind(w1 = rep(101, 25), w2 = rep(125, 25)))
+  w3 <- set(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 125, w1 = 101))
+  expect_equivalent(values(w3), cbind(w1 = rep(101, 25), w2 = rep(125, 25)))
+  w3 <- set(world = w3, agents = patch(w3,c(-1, 0), c(-1, 0)), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 1))
+  expect_equivalent(w3[0,0], cbind(w1 = 0, w2 = 1))
+  valW3 <- values(w3)
+  expect_equivalent(length(valW3[is.na(valW3[,1]),1]), 0)
+  expect_equivalent(length(valW3[is.na(valW3[,2]),2]), 0)
 
   # Set work with turtles
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
