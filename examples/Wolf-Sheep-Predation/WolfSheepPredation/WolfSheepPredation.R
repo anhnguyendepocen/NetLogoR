@@ -63,22 +63,11 @@ doEvent.WolfSheepPredation = function(sim, eventTime, eventType, debug = FALSE) 
   } else if (eventType == "plot") {
 
     dev(4)
-    sim <- sim$WolfSheepPredationPlot(sim)
-    sim <- scheduleEvent(sim, time(sim) + params(sim)$WolfSheepPredation$.plotInterval, "WolfSheepPredation", "plot")
+    sim <- sim$WolfSheepPredationPosition(sim)
     dev(5)
-    if(time(sim)==params(sim)$WolfSheepPredation$.plotInitialTime) {
-      plot(time(sim), length(sim$wolves), xlim = c(start(sim),end(sim)), 
-           col = "blue", pch=19, cex = 0.5, ylim = c(0, params(sim)$WolfSheepPredation$nSheep*6))
-      points(time(sim), length(sim$sheep), 
-             col = "red", pch=19, cex = 0.5)
-    } else {
-      points(time(sim), length(sim$wolves), 
-           col = "blue", pch=19, cex = 0.5)
-      points(time(sim), length(sim$sheep), 
-             col = "red", pch=19, cex = 0.5)
-      points(time(sim), sim$numGreen[time(sim)]/4, 
-             col = "green", pch=19, cex = 0.5)
-    }
+    sim <- sim$WolfSheepPredationPopSize(sim)
+
+    sim <- scheduleEvent(sim, time(sim) + params(sim)$WolfSheepPredation$.plotInterval, "WolfSheepPredation", "plot")
 
   } else if (eventType == "save") {
 
@@ -178,18 +167,39 @@ WolfSheepPredationSave <- function(sim) {
 }
 
 ### template for plot events
-WolfSheepPredationPlot <- function(sim) {
-  if(time(sim)==start(sim)) clearPlot()
+WolfSheepPredationPosition <- function(sim) { # Plot the positions
+  if(time(sim) == start(sim)) clearPlot()
+
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
     Plot(sim$field$grass, na.color = "white")
-    if(NROW(sim$sheep)>0)
+    if(count(sim$sheep)>0)
       Plot(sim$sheep, addTo = "sim$field$grass")
-    if(NROW(sim$wolves)>0)
+    if(count(sim$wolves)>0)
       Plot(sim$wolves, addTo = "sim$field$grass")
   } else {
     Plot(sim$grass)
     Plot(sim$sheep, addTo = "sim$grass")
     Plot(sim$wolves, addTo = "sim$grass")
+  }
+
+  return(invisible(sim))
+}
+
+WolfSheepPredationPopSize <- function(sim) {  # Plot the population sizes
+
+  if(time(sim) == params(sim)$WolfSheepPredation$.plotInitialTime) {
+    clearPlot()
+    plot(time(sim), length(sim$wolves), xlim = c(start(sim),end(sim)),
+         col = "blue", pch=19, cex = 0.5, ylim = c(0, params(sim)$WolfSheepPredation$nSheep*6))
+    points(time(sim), length(sim$sheep),
+           col = "red", pch=19, cex = 0.5)
+  } else {
+    points(time(sim), length(sim$wolves),
+           col = "blue", pch=19, cex = 0.5)
+    points(time(sim), length(sim$sheep),
+           col = "red", pch=19, cex = 0.5)
+    points(time(sim), sim$numGreen[time(sim)]/4,
+           col = "green", pch=19, cex = 0.5)
   }
 
   return(invisible(sim))
