@@ -1,5 +1,5 @@
 a <- Sys.time()
-useNLworldMatrix <- FALSE
+useNLworldMatrix <- TRUE
 plot.it <- TRUE
 ################################################################################
 # Wolf sheep predation
@@ -58,7 +58,7 @@ if(grassOn == TRUE){
   if(is(grass, "Raster")) {
     field <- NLstack(grass, countdown)
   } else {
-    NLworldArray(grass, countdown)
+    field <- NLworldArray(grass, countdown)
   }
 }
 # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
