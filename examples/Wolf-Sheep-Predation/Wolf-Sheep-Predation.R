@@ -60,7 +60,7 @@ if(grassOn == TRUE){
   if(is(grass, "Raster")) {
     field <- NLstack(grass, countdown)
   } else {
-    field <- NLworldArray(grass, countdown)
+    NLworldArray(grass, countdown)
   }
 }
 # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
