@@ -29,7 +29,7 @@ numSheep <- nSheep # keep track of how many sheep there are
 
 # Wolf settings
 nWolf <- 50 # initial wolf population size
-gainFoodWolf <- 35 # amount of energy wolves get for every sheep eaten
+gainFoodWolf <- 15 # amount of energy wolves get for every sheep eaten
 reproWolf <- 20 # probability in % of a wolf reproducing at each time step
 numWolves <- nWolf # keep track of how many wolves there is
 
@@ -39,8 +39,8 @@ numWolves <- nWolf # keep track of how many wolves there is
 ## Setup
 # Create the world
 #grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
-grassM <- createNLworldMatrix(minPxcor = -50, maxPxcor = 50, minPycor = -50,
-                             maxPycor = 50, data = NA)
+grassM <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25,
+                             maxPycor = 25, data = NA)
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
