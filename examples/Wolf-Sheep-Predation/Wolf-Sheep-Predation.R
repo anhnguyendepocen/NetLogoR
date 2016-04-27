@@ -1,7 +1,7 @@
 a <- Sys.time()
-useNLworldMatrix <- TRUE
+useNLworldMatrix <- FALSE
 plot.it <- TRUE
-maxTime <- 300
+maxTime <- 50
 ################################################################################
 # Wolf sheep predation
 # by Wilensky (1997) NetLogo Wolf Sheep Predation model.
@@ -347,11 +347,18 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
   if(plot.it){
     if(exists("curDev")) dev(curDev) else curDev <- dev(xpos=10)
     if(time==1) clearPlot(curDev)
-    a = raster(matrix(field[,,1], ncol=ncol(grass)), xmn=attr(field, "xmin"), xmx=attr(field, "xmax"),
-               ymn=attr(field, "ymin"), ymx=attr(field, "ymax"))
-    Plot(a)
-    Plot(wolves, addTo="a")
-    Plot(sheep, addTo="a")
+    if(useNLworldMatrix) {
+      grassRas = raster(matrix(field[,,1], ncol=ncol(grass)), xmn=attr(field, "xmin"), xmx=attr(field, "xmax"),
+                 ymn=attr(field, "ymin"), ymx=attr(field, "ymax"))
+      countdownRas = raster(matrix(field[,,2], ncol=ncol(grass)), xmn=attr(field, "xmin"), xmx=attr(field, "xmax"),
+                 ymn=attr(field, "ymin"), ymx=attr(field, "ymax"))
+    } else {
+      grassRas <- grass
+      countdownRas <- countdown
+    }
+    Plot(grassRas,countdownRas)
+    Plot(wolves, addTo="grassRas")
+    Plot(sheep, addTo="grassRas")
     dev(curDev+1, xpos = -10)
     timeStep <- 1:length(numSheep)
 

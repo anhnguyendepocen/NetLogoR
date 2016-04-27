@@ -3158,7 +3158,6 @@ setMethod(
   "of",
   signature = c("NLworldStack", "matrix", "character"),
   definition = function(world, agents, var) {
-    totalN <<- totalN+1
 
     valuesW <- values(world)
 
