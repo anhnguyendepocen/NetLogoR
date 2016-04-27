@@ -1,6 +1,7 @@
 a <- Sys.time()
-useNLworldMatrix <- FALSE
+useNLworldMatrix <- TRUE
 plot.it <- TRUE
+maxTime <- 300
 ################################################################################
 # Wolf sheep predation
 # by Wilensky (1997) NetLogo Wolf Sheep Predation model.
@@ -25,7 +26,7 @@ numGreen <- numeric() # keep track of how much grass there is
 
 # Sheep settings
 nSheep <- 100 # initial sheep population size
-gainFoodSheep <- 4 # amount of energy sheep get for every grass patch eaten
+gainFoodSheep <- 2.5 # amount of energy sheep get for every grass patch eaten
 reproSheep <- 4 # probability in % of a sheep reproducing at each time step
 numSheep <- nSheep # keep track of how many sheep there are
 
@@ -50,6 +51,7 @@ if(useNLworldMatrix) {
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
 if(grassOn == TRUE){
   # Initialize patch values (grass and countdown) at random
+  grassVal <- 1:25
   grassVal <- sample(c(0,1), size = count(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
   grass <- set(world = grass, agents = patches(grass), val = grassVal)
   countdown <- grass # countdown is a new NLworld with the same extent as grass
@@ -58,7 +60,7 @@ if(grassOn == TRUE){
   if(is(grass, "Raster")) {
     field <- NLstack(grass, countdown)
   } else {
-    NLworldArray(grass, countdown)
+    field <- NLworldArray(grass, countdown)
   }
 }
 # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
@@ -296,7 +298,7 @@ growGrass <- function(){ # only patches
 ## Go
 #profvisWolfSheep <- profvis({
 time <- 0
-while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
+while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
   # Ask sheep
   if(count(sheep) != 0){
@@ -343,26 +345,27 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
   # # Help for checking the model is working
   #print(time)
   if(plot.it){
-    #  if(exists("curDev")) dev(curDev)
-    curDev <- dev()
-    if(time==1) clearPlot()
-
-    #a = raster(matrix(grassM, ncol=ncol(grassM)))
-    #Plot(a)
-    #dev(curDev+1)
+    if(exists("curDev")) dev(curDev) else curDev <- dev(xpos=10)
+    if(time==1) clearPlot(curDev)
+    a = raster(matrix(field[,,1], ncol=ncol(grass)), xmn=attr(field, "xmin"), xmx=attr(field, "xmax"),
+               ymn=attr(field, "ymin"), ymx=attr(field, "ymax"))
+    Plot(a)
+    Plot(wolves, addTo="a")
+    Plot(sheep, addTo="a")
+    dev(curDev+1, xpos = -10)
     timeStep <- 1:length(numSheep)
 
     if(grassOn == TRUE){
 
       if(time==1)
-        plot(0,xlim = c(0,500), type = "n",ylab = "Population size", xlab = "Time step",
-             ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreen / 4)))))
+        plot(0,xlim = c(0,maxTime), type = "n",ylab = "Population size", xlab = "Time step",
+             ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreen / 2)))))
 
-      points(time, numSheep[time+1], col = "blue", pch=19)
-      points(time, numWolves[time+1], col = "red", pch=19)
+      points(time, numSheep[time+1], col = "red", pch=19)
+      points(time, numWolves[time+1], col = "black", pch=19)
       points(time, numGreen[time+1] / 4, col = "green", pch=19)
 
-      legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
+      legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("red", "black", "green"),
              bg = "white")
 
     } else {

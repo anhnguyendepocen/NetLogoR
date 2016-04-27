@@ -1981,7 +1981,13 @@ setMethod(
       } else {
         cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
         arrayDim <- match(var, dimnames(world)[[3]])
-        world[cbind(cells, arrayDim)] <- val
+        if(length(arrayDim)>1) {
+          ind <- rep_len(seq_len(NROW(cells)), length.out = length(cells))
+          arrayDim <- rep(arrayDim,each=NROW(cells))
+          world[cbind(cells[ind,],arrayDim)] <- val
+        } else {
+          world[cbind(cells,arrayDim)] <- val
+        }
       }
     }
     return(world)

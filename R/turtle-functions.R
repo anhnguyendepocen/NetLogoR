@@ -2441,11 +2441,13 @@ setMethod(
   }
 )
 
+
+
 #' @export
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c(world = "NLworldMatrix", turtles = "SpatialPointsDataFrame",
+  signature = c(world = "NLworldMs", turtles = "SpatialPointsDataFrame",
                 agents = "matrix", breed = "missing"),
   definition = function(world, turtles, agents, simplify) {
 
@@ -3126,14 +3128,27 @@ setMethod(
   "of",
   signature = c("NLworldMatrix", "matrix", "missing"),
   definition = function(world, agents) {
-    #valuesW <- values(world)
 
     if(identical(patches(world), agents)){
-      return(world %>% as.numeric())
+      return(as.numeric(world))
     } else {
       return(world[agents - c(attr(world, "xmin"), attr(world, "ymin")) + 1])
-      #cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-      #return(valuesW[cells])
+    }
+  })
+
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("NLworldArray", "matrix", "character"),
+  definition = function(world, agents, var) {
+    #valuesW <- values(world)
+
+    colNum <- match(var, dimnames(world)[[3]])
+    if(identical(patches(world), agents)){
+      return(as.numeric(world[,,colNum]))
+    } else {
+      return(world[cbind(agents - c(attr(world, "xmin"), attr(world, "ymin")) + 1,colNum)])
     }
   })
 
@@ -3143,6 +3158,7 @@ setMethod(
   "of",
   signature = c("NLworldStack", "matrix", "character"),
   definition = function(world, agents, var) {
+    totalN <<- totalN+1
 
     valuesW <- values(world)
 
