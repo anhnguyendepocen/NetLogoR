@@ -62,7 +62,7 @@ if(grassOn == TRUE){
   countdownM <- grassM # countdown is a new NLworld with the same extent as grass
   countdownValM <- runif(n = length(grassM), min = 0, max = grassTGrowth) # grass grow clock
   countdownM <- set(world = countdownM, agents = patches(countdownM), val = countdownValM)
-  if(is(grassM, "Raster")) {fieldM <- stack(grassM, countdownM)
+  if(is(grassM, "Raster")) {fieldM <- NLstack(grassM, countdownM)
   } else {fieldM <- NLworldArray(grassM, countdownM)}
 
   }
