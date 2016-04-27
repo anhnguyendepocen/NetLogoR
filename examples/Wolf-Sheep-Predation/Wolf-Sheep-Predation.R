@@ -1,3 +1,4 @@
+a = Sys.time()
 ################################################################################
 # Wolf sheep predation
 # by Wilensky (1997) NetLogo Wolf Sheep Predation model.
@@ -22,14 +23,14 @@ numGreen <- numeric() # keep track of how much grass there is
 
 # Sheep settings
 nSheep <- 100 # initial sheep population size
-gainFoodSheep <- 4 # amount of energy sheep get for every grass patch eaten
-reproSheep <- 4 # probability in % of a sheep reproducing at each time step
+gainFoodSheep <- 3 # amount of energy sheep get for every grass patch eaten
+reproSheep <- 3 # probability in % of a sheep reproducing at each time step
 numSheep <- nSheep # keep track of how many sheep there are
 
 # Wolf settings
 nWolf <- 50 # initial wolf population size
-gainFoodWolf <- 20 # amount of energy wolves get for every sheep eaten
-reproWolf <- 5 # probability in % of a wolf reproducing at each time step
+gainFoodWolf <- 35 # amount of energy wolves get for every sheep eaten
+reproWolf <- 20 # probability in % of a wolf reproducing at each time step
 numWolves <- nWolf # keep track of how many wolves there is
 
 # torus = TRUE # just for reminder, to be used in the movement functions (e.g., fd())
@@ -371,7 +372,7 @@ while((NLany(sheep) | NLany(wolves)) & time < 100 ){ # as long as there are shee
 
   time <- time + 1
   # # Help for checking the model is working
-  print(time)
+  #print(time)
 
   if(plot.it){
     if(exists("curDev")) dev(curDev)
@@ -443,3 +444,5 @@ while((NLany(sheep) | NLany(wolves)) & time < 100 ){ # as long as there are shee
 
 
 #profvisWolfSheep
+b = Sys.time()
+print(b-a)
