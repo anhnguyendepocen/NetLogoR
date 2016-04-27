@@ -23,13 +23,13 @@ numGreen <- numeric() # keep track of how much grass there is
 
 # Sheep settings
 nSheep <- 100 # initial sheep population size
-gainFoodSheep <- 3 # amount of energy sheep get for every grass patch eaten
-reproSheep <- 3 # probability in % of a sheep reproducing at each time step
+gainFoodSheep <- 2.5 # amount of energy sheep get for every grass patch eaten
+reproSheep <- 2 # probability in % of a sheep reproducing at each time step
 numSheep <- nSheep # keep track of how many sheep there are
 
 # Wolf settings
 nWolf <- 50 # initial wolf population size
-gainFoodWolf <- 15 # amount of energy wolves get for every sheep eaten
+gainFoodWolf <-19 # amount of energy wolves get for every sheep eaten
 reproWolf <- 20 # probability in % of a wolf reproducing at each time step
 numWolves <- nWolf # keep track of how many wolves there is
 
@@ -38,9 +38,9 @@ numWolves <- nWolf # keep track of how many wolves there is
 
 ## Setup
 # Create the world
-#grass <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
-grassM <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25,
-                             maxPycor = 25, data = NA)
+grassM <- createNLworld(minPxcor = -10, maxPxcor = 10, minPycor = -10, maxPycor = 10)
+#grassM <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25,
+#                             maxPycor = 25, data = NA)
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
@@ -62,7 +62,8 @@ if(grassOn == TRUE){
   countdownM <- grassM # countdown is a new NLworld with the same extent as grass
   countdownValM <- runif(n = length(grassM), min = 0, max = grassTGrowth) # grass grow clock
   countdownM <- set(world = countdownM, agents = patches(countdownM), val = countdownValM)
-  fieldM <- NLworldArray(grassM, countdownM)
+  if(is(grassM, "Raster")) {fieldM <- stack(grassM, countdownM)
+  } else {fieldM <- NLworldArray(grassM, countdownM)}
 
   }
 # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
@@ -325,9 +326,11 @@ growGrass <- function(){ # only patches
 
 ## Go
 #profvisWolfSheep <- profvis({
-plot.it = FALSE
+d = Sys.time()
+plot.it = TRUE
 time <- 0
-while((NLany(sheep) | NLany(wolves)) & time < 100 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
+maxTime <- 400
+while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
   # Ask sheep
   if(NROW(sheep) != 0){
@@ -375,13 +378,13 @@ while((NLany(sheep) | NLany(wolves)) & time < 100 ){ # as long as there are shee
   #print(time)
 
   if(plot.it){
-    if(exists("curDev")) dev(curDev)
+    #  if(exists("curDev")) dev(curDev)
     curDev <- dev()
     if(time==1) clearPlot()
 
-    a = raster(matrix(grassM, ncol=ncol(grassM)))
-    Plot(a)
-    dev(curDev+1)
+    #a = raster(matrix(grassM, ncol=ncol(grassM)))
+    #Plot(a)
+    #dev(curDev+1)
     timeStep <- 1:length(numSheep)
 
     if(grassOn == TRUE){
@@ -446,3 +449,4 @@ while((NLany(sheep) | NLany(wolves)) & time < 100 ){ # as long as there are shee
 #profvisWolfSheep
 b = Sys.time()
 print(b-a)
+print(b-d); print(paste("wolves",NROW(wolves))); print(paste("sheep",NROW(sheep)))
