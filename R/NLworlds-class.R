@@ -97,7 +97,7 @@ setReplaceMethod(
 setOldClass("NLworldMatrix")
 
 #' @exportClass NLworldMatrix
-createNLworldMatrix <- function(data, minPxcor, maxPxcor, minPycor, maxPycor) {
+createNLworldMatrix <- function(data = NA, minPxcor, maxPxcor, minPycor, maxPycor) {
   # define the patch coordinates with the raster row and column numbers
   numX <- (maxPxcor - minPxcor + 1)
   numY <- (maxPycor - minPycor + 1)
