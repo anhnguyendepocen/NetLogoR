@@ -356,11 +356,11 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
 
       if(time==1)
         plot(0,xlim = c(0,500), type = "n",ylab = "Population size", xlab = "Time step",
-             ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreenM / 4)))))
+             ylim = c(min = 0, max = max(c(max(numSheep), max(numWolves), max(numGreen / 4)))))
 
       points(time, numSheep[time+1], col = "blue", pch=19)
       points(time, numWolves[time+1], col = "red", pch=19)
-      points(time, numGreenM[time+1] / 4, col = "green", pch=19)
+      points(time, numGreen[time+1] / 4, col = "green", pch=19)
 
       legend("topleft", legend = c("Sheep", "Wolves", "Grass / 4"), lwd = c(2, 2, 2), col = c("blue", "red", "green"),
              bg = "white")
