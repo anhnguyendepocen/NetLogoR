@@ -56,7 +56,6 @@ setMethod(
   signature("NLworld", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
-    browser()
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     xValues <- values(x)
     cellValues <- xValues[cells]
@@ -79,98 +78,6 @@ setReplaceMethod(
     return(x)
   }
 )
-
-
-
-
-################################################################################
-#' The NLworldMatrix class
-#'
-#' This is similar to \code{NLworld}, but it is an s3 class extension of
-#' \code{matrix}.
-#'
-#' @aliases NLworldMatrix
-#' @seealso NLworld
-#' @name NLworldMatrix
-#' @rdname NLworldMatrix
-#' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
-#' @exportClass NLworldMatrix
-setOldClass("NLworldMatrix")
-
-#' @exportClass NLworldMatrix
-createNLworldMatrix <- function(data = NA, minPxcor, maxPxcor, minPycor, maxPycor) {
-  # define the patch coordinates with the raster row and column numbers
-  numX <- (maxPxcor - minPxcor + 1)
-  numY <- (maxPycor - minPycor + 1)
-  world <- matrix(ncol = numX,
-                  nrow = numY, data = data, byrow = TRUE) # byrow = TRUE to be similar as a raster when assigning data
-  attr(world, "minPxcor") <- minPxcor
-  attr(world, "maxPxcor") <- maxPxcor
-  attr(world, "minPycor") <- minPycor
-  attr(world, "maxPycor") <- maxPycor
-  attr(world, "extent") <- extent(minPxcor - 0.5, maxPxcor + 0.5, minPycor - 0.5, maxPycor + 0.5) # not sure the extent is needed as an attribute
-  attr(world, "res") <- 1
-  class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
-  return(world)
-}
-
-#' @exportClass NLworldArray
-setOldClass("NLworldArray")
-
-#' @export
-#' @importFrom SpaDES updateList
-#' @importFrom abind abind
-NLworldArray <- function(...) {
-  NLwMs <- list(...)
-  #if(do.call("all.equal",lapply(NLwMs, dim))) {
-  if(length(unique(lapply(NLwMs, FUN = function(x){attr(x, "extent")}))) == 1) { # similar dimensions can have different extent
-    out <- abind::abind(NLwMs, along = 3)
-  } else {
-    #stop("NLworldMatrix dimensions must all be equal")
-    stop("NLworldMatrix extents must all be equal")
-  }
-  objNames <- as.character(substitute(deparse(...))[-1])
-  dimnames(out) <- list(NULL, NULL, objNames)
-  attributes(out) <- updateList(attributes(NLwMs[[1]]), attributes(out))
-  class(out) <- c("NLworldArray", "structure", "vector")
-  return(out)
-}
-
-#' @export
-#' @name [
-#' @docType methods
-#' @rdname NLworld-class
-setMethod(
-  "[",
-  signature("NLworldMatrix", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
-
-    cellNum <- cellFromPxcorPycor(world = x, pxcor = i, pycor = j)
-    allValues <- as.numeric(t(x)) # t() to retrieve the values by rows
-    cellValues <- allValues[cellNum]
-
-    return(cellValues)
-  }
-)
-
-#' @export
-#' @name [<-
-#' @rdname NLworld-class
-setReplaceMethod(
-  "[",
-  signature("NLworldMatrix","numeric","numeric","numeric"),
-  definition = function(x, i, j, value) {
-
-    matj <- i - attr(x, "minPxcor") + 1
-    mati <- attr(x, "maxPycor") - j + 1
-    x[cbind(mati, matj)] <- value
-
-    validObject(x)
-    return(x)
-  }
-)
-
-
 
 
 ################################################################################
@@ -270,33 +177,6 @@ setReplaceMethod(
 
 
 ################################################################################
-#' The \code{NLworlds} class
-#'
-#'
-#' The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
-#' classes. Mostly used for building function purposes.
-#'
-#' @slot members  NLworld, NLworldStack
-#'
-#' @aliases NLworlds
-#' @name NLworlds-class
-#' @rdname NLworlds-class
-#' @author Sarah Bauduin
-#' @exportClass NLworlds
-setClassUnion(name="NLworlds",
-              members=c("NLworld", "NLworldStack")
-)
-
-#' @aliases NLworlds
-#' @name NLworlds-class
-#' @rdname NLworlds-class
-#' @author Sarah Bauduin, and Eliot McIntire
-#' @exportClass NLworlds
-setClassUnion(name="NLworldMs",
-              members=c("NLworldMatrix", "NLworldArray")
-)
-
-################################################################################
 #' Create a NLworldStack
 #'
 #' Stack multiple NLworld objects.
@@ -355,11 +235,150 @@ setMethod(
 
 
 ################################################################################
+#' The NLworlds class
+#'
+#'
+#' The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
+#' classes. Mostly used for building function purposes.
+#'
+#' @slot members  NLworld, NLworldStack
+#'
+#' @aliases NLworlds
+#' @name NLworlds-class
+#' @rdname NLworlds-class
+#' @author Sarah Bauduin
+#' @exportClass NLworlds
+setClassUnion(name="NLworlds",
+              members=c("NLworld", "NLworldStack")
+)
+
+
+################################################################################
+#' The NLworldMatrix class
+#'
+#' This is similar to \code{NLworld}, but it is an s3 class extension of
+#' \code{matrix}.
+#'
+#' @aliases NLworldMatrix
+#' @seealso NLworld
+#' @name NLworldMatrix
+#' @rdname NLworldMatrix
+#' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
+#' @exportClass NLworldMatrix
+setOldClass("NLworldMatrix")
+
+#' @exportClass NLworldMatrix
+createNLworldMatrix <- function(data = NA, minPxcor, maxPxcor, minPycor, maxPycor) {
+  # define the patch coordinates with the raster row and column numbers
+  numX <- (maxPxcor - minPxcor + 1)
+  numY <- (maxPycor - minPycor + 1)
+  world <- matrix(ncol = numX,
+                  nrow = numY, data = data, byrow = TRUE) # byrow = TRUE to be similar as a raster when assigning data
+  attr(world, "minPxcor") <- minPxcor
+  attr(world, "maxPxcor") <- maxPxcor
+  attr(world, "minPycor") <- minPycor
+  attr(world, "maxPycor") <- maxPycor
+  attr(world, "extent") <- extent(minPxcor - 0.5, maxPxcor + 0.5, minPycor - 0.5, maxPycor + 0.5)
+  attr(world, "res") <- 1
+  class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
+  return(world)
+}
+
+#' @export
+#' @name [
+#' @docType methods
+#' @rdname NLworldMatrix-class
+setMethod(
+  "[",
+  signature("NLworldMatrix", "numeric", "numeric", "ANY"),
+  definition = function(x, i, j, drop) {
+
+    cellNum <- cellFromPxcorPycor(world = x, pxcor = i, pycor = j)
+    allValues <- as.numeric(t(x)) # t() to retrieve the values by rows
+    cellValues <- allValues[cellNum]
+
+    return(cellValues)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname NLworldMatrix-class
+setReplaceMethod(
+  "[",
+  signature("NLworldMatrix","numeric","numeric","numeric"),
+  definition = function(x, i, j, value) {
+
+    matj <- i - attr(x, "minPxcor") + 1
+    mati <- attr(x, "maxPycor") - j + 1
+    x[cbind(mati, matj)] <- value
+
+    validObject(x)
+    return(x)
+  }
+)
+
+
+################################################################################
+#' The NLworldArray class
+#'
+#' This is similar to \code{NLworldStack}, but it is an s3 class extension of
+#' \code{array}.
+#'
+#' @aliases NLworldArray
+#' @seealso NLworldStack
+#' @name NLworldArray
+#' @rdname NLworldArray
+#' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
+#' @exportClass NLworldArray
+setOldClass("NLworldArray")
+
+#' @export
+#' @importFrom SpaDES updateList
+#' @importFrom abind abind
+NLworldArray <- function(...) {
+  NLwMs <- list(...)
+  #if(do.call("all.equal",lapply(NLwMs, dim))) {
+  if(length(unique(lapply(NLwMs, FUN = function(x){attr(x, "extent")}))) == 1) { # similar dimensions can have different extent
+    out <- abind::abind(NLwMs, along = 3)
+  } else {
+    #stop("NLworldMatrix dimensions must all be equal")
+    stop("NLworldMatrix extents must all be equal")
+  }
+  objNames <- as.character(substitute(deparse(...))[-1])
+  dimnames(out) <- list(NULL, NULL, objNames)
+  attributes(out) <- updateList(attributes(NLwMs[[1]]), attributes(out))
+  class(out) <- c("NLworldArray", "structure", "vector")
+  return(out)
+}
+
+
+################################################################################
+#' The NLworldMs class
+#'
+#'
+#' The \code{NLworldMs} class is the union of the \code{NLworldMatrix} and \code{NLworldArray}
+#' classes. Mostly used for building function purposes.
+#'
+#' @slot members  NLworldMatrix, NLworldArray
+#'
+#' @aliases NLworldMs
+#' @name NLworldMs-class
+#' @rdname NLworldMs-class
+#' @author Sarah Bauduin, and Eliot McIntire
+#' @exportClass NLworldMs
+setClassUnion(name="NLworldMs",
+              members=c("NLworldMatrix", "NLworldArray")
+)
+
+
+################################################################################
 #' Cells numbers from patches coordinates
 #'
 #' Report the cells numbers as defined for a Raster* object given the patches
 #' coordinates \code{pxcor} and \code{pycor}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Numeric. Vector of cells number.
@@ -411,6 +430,7 @@ setMethod(
 #'
 #' Report the patches coordinates given the cells numbers as defined for a Raster* object.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @param cellNum Integer. Vector of cells number.
