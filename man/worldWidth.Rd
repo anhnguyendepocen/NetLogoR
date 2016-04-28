@@ -3,15 +3,18 @@
 \docType{methods}
 \name{worldWidth}
 \alias{worldWidth}
+\alias{worldWidth,NLworldMs-method}
 \alias{worldWidth,NLworlds-method}
 \title{World width}
 \usage{
 worldWidth(world)
 
 \S4method{worldWidth}{NLworlds}(world)
+
+\S4method{worldWidth}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 }
 \value{
 Integer.
