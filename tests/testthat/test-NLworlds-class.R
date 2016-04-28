@@ -81,3 +81,19 @@ test_that("PxcorPycorFromCell works",{
   pCoords1 <- PxcorPycorFromCell(world = ws, cellNum = c(100, 91, 2))
   expect_identical(pCoords1, pCoords2)
 })
+
+test_that("createNLworldMatrix works similarly as createNLworld",{
+  w1 <- createNLworld(minPxcor = -2, maxPxcor = 7, minPycor = -4, maxPycor = 5)
+  w1[] <- 1:100
+  w2 <- createNLworldMatrix(minPxcor = -2, maxPxcor = 7, minPycor = -4, maxPycor = 5, data = 1:100)
+  expect_equivalent(values(w1), as.numeric(t(w2)))
+  expect_identical(extent(w1), attr(w2, "extent"))
+  expect_identical(extent(w1)[1], attr(w2, "xmin"))
+  expect_identical(extent(w1)[2], attr(w2, "xmax"))
+  expect_identical(extent(w1)[3], attr(w2, "ymin"))
+  expect_identical(extent(w1)[4], attr(w2, "ymax"))
+  expect_identical(minPxcor(w1), attr(w2, "minPxcor"))
+  expect_identical(maxPxcor(w1), attr(w2, "maxPxcor"))
+  expect_identical(minPycor(w1), attr(w2, "minPycor"))
+  expect_identical(maxPycor(w1), attr(w2, "maxPycor"))
+})

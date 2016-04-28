@@ -102,12 +102,17 @@ createNLworldMatrix <- function(data = NA, minPxcor, maxPxcor, minPycor, maxPyco
   # define the patch coordinates with the raster row and column numbers
   numX <- (maxPxcor - minPxcor + 1)
   numY <- (maxPycor - minPycor + 1)
-  world <- matrix(ncol=numY,
-                 nrow=numX,data = data)
-  attr(world, "xmin") <- minPxcor
-  attr(world, "xmax") <- maxPxcor
-  attr(world, "ymin") <- minPycor
-  attr(world, "ymax") <- maxPycor
+  world <- matrix(ncol = numY,
+                  nrow = numX, data = data, byrow = TRUE) # byrow = TRUE to be similar as a raster when assigning data
+  attr(world, "minPxcor") <- minPxcor
+  attr(world, "maxPxcor") <- maxPxcor
+  attr(world, "minPycor") <- minPycor
+  attr(world, "maxPycor") <- maxPycor
+  attr(world, "xmin") <- minPxcor - 0.5
+  attr(world, "xmax") <- maxPxcor + 0.5
+  attr(world, "ymin") <- minPycor - 0.5
+  attr(world, "ymax") <- maxPycor + 0.5
+  attr(world, "extent") <- extent(minPxcor - 0.5, maxPxcor + 0.5, minPycor - 0.5, maxPycor + 0.5) # not sure the extent is needed as an attribute
   attr(world, "res") <- 1
   class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
   return(world)
@@ -133,7 +138,7 @@ NLworldArray <- function(...) {
   return(out)
 }
 
-
+# createNLworldArray() is not really necessary as it is done using NLworldArray()
 #' @exportClass NLworldMatrix
 createNLworldArray <- function(array, minPxcor, maxPxcor, minPycor, maxPycor) {
   stop("Not completed yet")
