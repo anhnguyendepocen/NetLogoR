@@ -56,6 +56,7 @@ setMethod(
   signature("NLworld", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
+    browser()
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     xValues <- values(x)
     cellValues <- xValues[cells]
@@ -136,7 +137,6 @@ NLworldArray <- function(...) {
 #' @exportClass NLworldMatrix
 createNLworldArray <- function(array, minPxcor, maxPxcor, minPycor, maxPycor) {
   stop("Not completed yet")
-  browser()
   # define the patch coordinates with the raster row and column numbers
   numX <- (maxPxcor - minPxcor + 1)
   numY <- (maxPycor - minPycor + 1)

@@ -1,6 +1,6 @@
 a <- Sys.time()
 useNLworldMatrix <- FALSE
-plot.it <- TRUE
+plot.it <- FALSE
 maxTime <- 50
 ################################################################################
 # Wolf sheep predation
@@ -296,7 +296,7 @@ growGrass <- function(){ # only patches
 
 
 ## Go
-#profvisWolfSheep <- profvis({
+profvisWolfSheep <- profvis({
 time <- 0
 while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
@@ -385,7 +385,7 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
     }
   }
 }
-#})
+})
 
 # ## Plot outputs
 # dev()
@@ -411,6 +411,6 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
 # }
 
 
-#profvisWolfSheep
+profvisWolfSheep
 b <- Sys.time()
 print(paste("time =",time, "in", format(b-a, digits = 2), "wolves", NROW(wolves), "sheep", NROW(sheep)))
