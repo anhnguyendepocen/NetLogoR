@@ -108,10 +108,6 @@ createNLworldMatrix <- function(data = NA, minPxcor, maxPxcor, minPycor, maxPyco
   attr(world, "maxPxcor") <- maxPxcor
   attr(world, "minPycor") <- minPycor
   attr(world, "maxPycor") <- maxPycor
-  attr(world, "xmin") <- minPxcor - 0.5
-  attr(world, "xmax") <- maxPxcor + 0.5
-  attr(world, "ymin") <- minPycor - 0.5
-  attr(world, "ymax") <- maxPycor + 0.5
   attr(world, "extent") <- extent(minPxcor - 0.5, maxPxcor + 0.5, minPycor - 0.5, maxPycor + 0.5) # not sure the extent is needed as an attribute
   attr(world, "res") <- 1
   class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
