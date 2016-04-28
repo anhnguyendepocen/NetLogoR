@@ -126,10 +126,12 @@ setOldClass("NLworldArray")
 #' @importFrom abind abind
 NLworldArray <- function(...) {
   NLwMs <- list(...)
-  if(do.call("all.equal",lapply(NLwMs, dim))) {
+  #if(do.call("all.equal",lapply(NLwMs, dim))) {
+  if(length(unique(lapply(NLwMs, FUN = function(x){attr(x, "extent")}))) == 1) { # similar dimensions can have different extent
     out <- abind::abind(NLwMs, along = 3)
   } else {
-    stop("NLworldMatrix dimensions must all be equal")
+    #stop("NLworldMatrix dimensions must all be equal")
+    stop("NLworldMatrix extents must all be equal")
   }
   objNames <- as.character(substitute(deparse(...))[-1])
   dimnames(out) <- list(NULL, NULL, objNames)
