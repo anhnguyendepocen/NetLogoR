@@ -167,9 +167,14 @@ setMethod(
   signature("NLworldMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
-    cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
-    xValues <- values(x)
-    cellValues <- xValues[cells]
+    pxcor <- i - attr(x, "minPxcor") + 1
+    pycor <- attr(x, "maxPycor") - j + 1
+    matValues <- x[pxcor, pycor]
+    cellValues <- as.numeric(t(matValues)) # t() to retrieve the values by rows
+
+    # cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
+    # xValues <- values(x)
+    # cellValues <- xValues[cells]
 
     return(cellValues)
   }
@@ -183,8 +188,12 @@ setReplaceMethod(
   signature("NLworldMatrix","numeric","numeric","numeric"),
   definition = function(x, i, j, value) {
 
-    cells <- which(x[,"pxcor"] %in% i & x[,"pycor"] %in% j, TRUE) # cell number(s)
-    x@data@values[cells] <- value
+    pxcor <- i - attr(x, "minPxcor") + 1
+    pycor <- attr(x, "maxPycor") - j + 1
+    x[pxcor, pycor] <- value
+
+    # cells <- which(x[,"pxcor"] %in% i & x[,"pycor"] %in% j, TRUE) # cell number(s)
+    # x@data@values[cells] <- value
 
     validObject(x)
     return(x)
