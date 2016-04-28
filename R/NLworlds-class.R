@@ -102,8 +102,8 @@ createNLworldMatrix <- function(data = NA, minPxcor, maxPxcor, minPycor, maxPyco
   # define the patch coordinates with the raster row and column numbers
   numX <- (maxPxcor - minPxcor + 1)
   numY <- (maxPycor - minPycor + 1)
-  world <- matrix(ncol = numY,
-                  nrow = numX, data = data, byrow = TRUE) # byrow = TRUE to be similar as a raster when assigning data
+  world <- matrix(ncol = numX,
+                  nrow = numY, data = data, byrow = TRUE) # byrow = TRUE to be similar as a raster when assigning data
   attr(world, "minPxcor") <- minPxcor
   attr(world, "maxPxcor") <- maxPxcor
   attr(world, "minPycor") <- minPycor
@@ -145,14 +145,9 @@ setMethod(
   signature("NLworldMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
-    pxcor <- i - attr(x, "minPxcor") + 1
-    pycor <- attr(x, "maxPycor") - j + 1
-    matValues <- x[pxcor, pycor]
-    cellValues <- as.numeric(t(matValues)) # t() to retrieve the values by rows
-
-    # cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
-    # xValues <- values(x)
-    # cellValues <- xValues[cells]
+    cellNum <- cellFromPxcorPycor(world = x, pxcor = i, pycor = j)
+    allValues <- as.numeric(t(x)) # t() to retrieve the values by rows
+    cellValues <- allValues[cellNum]
 
     return(cellValues)
   }
@@ -166,12 +161,9 @@ setReplaceMethod(
   signature("NLworldMatrix","numeric","numeric","numeric"),
   definition = function(x, i, j, value) {
 
-    pxcor <- i - attr(x, "minPxcor") + 1
-    pycor <- attr(x, "maxPycor") - j + 1
-    x[pxcor, pycor] <- value
-
-    # cells <- which(x[,"pxcor"] %in% i & x[,"pycor"] %in% j, TRUE) # cell number(s)
-    # x@data@values[cells] <- value
+    matj <- i - attr(x, "minPxcor") + 1
+    mati <- attr(x, "maxPycor") - j + 1
+    x[cbind(mati, matj)] <- value
 
     validObject(x)
     return(x)
@@ -298,7 +290,7 @@ setClassUnion(name="NLworlds",
 #' @aliases NLworlds
 #' @name NLworlds-class
 #' @rdname NLworlds-class
-#' @author Sarah Bauduin
+#' @author Sarah Bauduin, and Eliot McIntire
 #' @exportClass NLworlds
 setClassUnion(name="NLworldMs",
               members=c("NLworldMatrix", "NLworldArray")
@@ -404,9 +396,12 @@ setMethod(
 #' @rdname cellFromPxcorPycor
 setMethod(
   "cellFromPxcorPycor",
-  signature = c("NLworlds", "numeric", "numeric"),
+  signature = c("NLworldMs", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
-    cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
+    j <- pxcor - attr(world, "minPxcor") + 1
+    i <- attr(world, "maxPycor") - pycor + 1
+    matCellNum <- matrix(data = 1:(ncol(world) * nrow(world)), ncol = ncol(world), byrow = TRUE)
+    cellNum <- matCellNum[cbind(i, j)]
     return(cellNum)
   }
 )
@@ -449,6 +444,19 @@ setMethod(
   definition = function(world, cellNum) {
     XY <- xyFromCell(world, cellNum)
     pCoords <- cbind(pxcor = XY[,1], pycor = XY[,2])
+    return(pCoords)
+  }
+)
+
+#' @export
+#' @rdname PxcorPycorFromCell
+setMethod(
+  "PxcorPycorFromCell",
+  signature = c("NLworldMs", "numeric"),
+  definition = function(world, cellNum) {
+    pxcor <- rep(attr(world, "minPxcor"):attr(world, "maxPxcor"), nrow(world))
+    pycor <- rep(attr(world, "maxPycor"):attr(world, "minPycor"), each = ncol(world))
+    pCoords <- cbind(pxcor = pxcor[cellNum], pycor = pycor[cellNum])
     return(pCoords)
   }
 )
