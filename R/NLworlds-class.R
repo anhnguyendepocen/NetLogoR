@@ -140,24 +140,6 @@ NLworldArray <- function(...) {
   return(out)
 }
 
-# createNLworldArray() is not really necessary as it is done using NLworldArray()
-#' @exportClass NLworldMatrix
-createNLworldArray <- function(array, minPxcor, maxPxcor, minPycor, maxPycor) {
-  stop("Not completed yet")
-  # define the patch coordinates with the raster row and column numbers
-  numX <- (maxPxcor - minPxcor + 1)
-  numY <- (maxPycor - minPycor + 1)
-  world <- matrix(ncol=numY,
-                  nrow=numX,data = data)
-  attr(world, "xmin") <- minPxcor
-  attr(world, "xmax") <- maxPxcor
-  attr(world, "ymin") <- minPycor
-  attr(world, "ymax") <- maxPycor
-  attr(world, "res") <- 1
-  class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
-  return(world)
-}
-
 #' @export
 #' @name [
 #' @docType methods
