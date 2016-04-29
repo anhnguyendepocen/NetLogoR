@@ -3357,6 +3357,7 @@ setMethod(
 #'
 #'
 #' @export
+#' @importFrom plyr mapvalues
 #' @docType methods
 #' @rdname of
 #'
@@ -3400,20 +3401,35 @@ setMethod(
   signature = c("missing", "agentMatrix", "character"),
   definition = function(agents, var) {
 
-    if(length(var) == 1){
-      if(var == "xcor"){
-        return(agents@.Data[,1])
-      } else if(var == "ycor"){
-        return(agents@.Data[,2])
-      } else {
-        return(agents@.Data[,var, drop=FALSE])
-      }
+    # if(length(var) == 1){
+    #   if(var == "xcor"){
+    #     return(agents@.Data[,1])
+    #   } else if(var == "ycor"){
+    #     return(agents@.Data[,2])
+    #   } else {
+    #     return(agents@.Data[,var, drop=FALSE])
+    #   }
+    # } else {
+    #   if(any(var == "xcor" | var == "ycor")){
+    #     return(agents@.Data[,var, drop=FALSE])
+    #   } else {
+    #     agents@.Data[,var, drop=FALSE]
+    #   }
+    # }
+
+    if(any(names(agents@levels) %in% var)){
+
+      agentsData <- as.data.frame(agents@.Data)
+      # Recode the factors with the characters
+      # Not working
+      agentsData[,names(agents@levels)] <- do.call(cbind,lapply(1:length(agents@levels),
+                                                                function(x){mapvalues(as.factor(agentsData[,names(agents@levels)[x]]),
+                                                                                      from = unique(agentsData[,names(agents@levels)[x]]),
+                                                                                      to = agents@levels[names(agents@levels)[x]])}))
+      return(agentsData[,var])
+
     } else {
-      if(any(var == "xcor" | var == "ycor")){
-        return(agents@.Data[,var, drop=FALSE])
-      } else {
-        agents@.Data[,var, drop=FALSE]
-      }
+      return(agents@.Data[,var])
     }
   })
 
