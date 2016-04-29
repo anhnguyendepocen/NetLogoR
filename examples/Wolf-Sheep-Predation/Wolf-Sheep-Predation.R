@@ -156,18 +156,32 @@ eatGrass <- function(){ # only sheep
 }
 
 # # Test eatGrass()
-# grass <- createNLworld(1, 10, 1, 10)
+# if(useFastClasses){
+#   grass <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+# } else {
+#   grass <- createNLworld(1, 10, 1, 10)
+# }
 # grass <- set(world = grass, agents = patches(grass), val = c(rep(1, 50), rep(0, 50)))
 # countdown <- grass
 # countdown <- set(world = countdown, agents = patches(countdown), val = 0)
-# field <- NLstack(grass, countdown)
-# sheep <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
+# if(useFastClasses){
+#   field <- NLworldArray(grass, countdown)
+#   sheep <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
+# } else {
+#   field <- NLstack(grass, countdown)
+#   sheep <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
+# }
 # sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = 1:10)
-# plot(field$grass)
-# points(sheep)
+# if(useFastClasses == FALSE){
+#   plot(field$grass)
+#   points(sheep)
+# }
 # resultsEatGrass <- eatGrass()
 # fieldEat <- resultsEatGrass[[1]]
-# plot(fieldEat$grass)
+# if(useFastClasses == FALSE){
+#   plot(fieldEat$grass)
+# }
+# of(world = fieldEat, var = "grass", agents = patches(grass)) == c(rep(1,9), 0, rep(1, 8), 0, rep(1, 8), 0 , rep(1, 8), 0, rep(1, 8), 0, rep(1, 4), rep(0, 50))
 # sheepEat <- resultsEatGrass[[2]]
 # of(agents = sheepEat, var = "energy")[6:10] == (6:10 + gainFoodSheep)
 # #

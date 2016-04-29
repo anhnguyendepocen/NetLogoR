@@ -2079,6 +2079,9 @@ setMethod(
         matj <- agents[,1] - attr(world, "minPxcor") + 1
         mati <- attr(world, "maxPycor") - agents[,2] + 1
 
+        if(length(val) == 1 & length(matj) != 1){
+          val <- rep(val, length(matj))
+        }
         val <- val[!is.na(matj)]
         matj <- matj[!is.na(matj)]
         mati <- mati[!is.na(mati)]
@@ -2116,6 +2119,9 @@ setMethod(
           matj <- agents[,1] - attr(world, "minPxcor") + 1
           mati <- attr(world, "maxPycor") - agents[,2] + 1
 
+          if(length(val) == 1 & length(matj) != 1){
+            val <- rep(val, length(matj))
+          }
           val <- val[!is.na(matj)]
           matj <- matj[!is.na(matj)]
           mati <- mati[!is.na(mati)]
@@ -2132,7 +2138,14 @@ setMethod(
           matj <- agents[,1] - attr(world, "minPxcor") + 1
           mati <- attr(world, "maxPycor") - agents[,2] + 1
 
-          val <- val[!is.na(matj),, drop = FALSE]
+          if(nrow(val) == 1 & length(matj) != 1){
+            val <- val[rep(1, length(matj)),]
+          }
+          if(is.matrix(val)){
+            val <- val[!is.na(matj), , drop = FALSE]
+          } else {
+            val <- val[!is.na(matj),]
+          }
           matj <- matj[!is.na(matj)]
           mati <- mati[!is.na(mati)]
 
