@@ -130,6 +130,31 @@ test_that("NLwith works with patches",{
   expect_identical(p1w2, patch(ws, x = c(2,2), y = c(4,2)))
   p5 <- NLwith(agents = patches(world = ws), world = ws, var = "w1", val = 10)
   expect_equivalent(p5, noPatches())
+
+  # With NLworldMatrix
+  valw3 <- rep(0, 25)
+  valw3[c(2, 17)] <- 1
+  w3 <- createNLworldMatrix(data = valw3, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  p3 <- NLwith(world = w3, agents = patches(world = w3), val = 1)
+  expect_equivalent(p1, p3)
+  p4 <- NLwith(agents = patches(world = w3), world = w3, val = 0)
+  expect_equivalent(p2, p4)
+  p5 <- NLwith(agents = patches(world = w3), world = w3, val = c(0, 1))
+  expect_equivalent(patches(world = w1), p5)
+  p6 <- NLwith(agents = patches(world = w3), world = w3, val = 10)
+  expect_equivalent(p6, noPatches())
+
+  # With NLworldArray
+  valw4 <- rep(0, 25)
+  valw4[c(3, 13)] <- 1
+  w4 <- createNLworldMatrix(data = valw4, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w5 <- NLworldArray(w3, w4)
+  p7 <- NLwith(world = w5, agents = patches(world = w5), var = "w3", val = 1)
+  p8 <- NLwith(world = w5, agents = patches(world = w5), var = "w4", val = 1)
+  expect_equivalent(p1w1, p7)
+  expect_equivalent(p1w2, p8)
+  p9 <- NLwith(agents = patches(world = w5), world = w5, var = "w3", val = 10)
+  expect_equivalent(p9, noPatches())
 })
 
 test_that("NLwith works with turtles",{

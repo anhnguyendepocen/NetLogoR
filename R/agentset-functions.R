@@ -326,6 +326,7 @@ setMethod(
 #' Report the patches or the turtles among \code{agents} which have their variable
 #' equals to a specific value.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Matrix (ncol = 2) with the first column "pxcor" and the second column
@@ -390,48 +391,6 @@ setMethod(
 #' @rdname NLwith
 setMethod(
   "NLwith",
-  signature = c("matrix", "NLworldMatrix", "missing", "ANY"),
-  definition = function(agents, world, val) {
-    xmin <- attr(world, "xmin")
-    xmax <- attr(world, "xmax")
-    ymin <- attr(world, "ymin")
-    ymax <- attr(world, "ymax")
-    pxcor <- agents[,1] - xmin + 1
-    pycor <- agents[,2] - ymin + 1
-    values <- world[cbind(pxcor, rev(pycor))]
-    pVal <- which(values %in% val)
-    pxcorVal <- pxcor[pVal]
-    pycorVal <- pycor[pVal]
-    return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
-  }
-)
-
-
-#' @export
-#' @rdname NLwith
-setMethod(
-  "NLwith",
-  signature = c("matrix", "NLworldArray", "character", "ANY"),
-  definition = function(agents, world, var, val) {
-    xmin <- attr(world, "xmin")
-    xmax <- attr(world, "xmax")
-    ymin <- attr(world, "ymin")
-    ymax <- attr(world, "ymax")
-    pxcor <- agents[,1] - xmin + 1
-    pycor <- agents[,2] - ymin + 1
-    arrayCol <- match(var, dimnames(world)[[3]])
-    values <- world[cbind(pxcor, rev(pycor), arrayCol)]
-    pVal <- which(values %in% val)
-    pxcorVal <- pxcor[pVal]
-    pycorVal <- pycor[pVal]
-    return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
-  }
-)
-
-#' @export
-#' @rdname NLwith
-setMethod(
-  "NLwith",
   signature = c("matrix", "NLworldStack", "character", "ANY"),
   definition = function(agents, world, var, val) {
     names_l <- names(world)
@@ -441,6 +400,60 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname NLwith
+setMethod(
+  "NLwith",
+  signature = c("matrix", "NLworldMatrix", "missing", "ANY"),
+  definition = function(agents, world, val) {
+
+    agentsCell <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    allVal <- as.numeric(t(world)) # t() to retrieve the values by rows
+    agentsValues <- allVal[agentsCell]
+    pVal <- which(agentsValues %in% val)
+    return(agents[pVal, , drop = FALSE])
+
+    # xmin <- attr(world, "xmin")
+    # xmax <- attr(world, "xmax")
+    # ymin <- attr(world, "ymin")
+    # ymax <- attr(world, "ymax")
+    # pxcor <- agents[,1] - xmin + 1
+    # pycor <- agents[,2] - ymin + 1
+    # values <- world[cbind(pxcor, rev(pycor))]
+    # pVal <- which(values %in% val)
+    # pxcorVal <- pxcor[pVal]
+    # pycorVal <- pycor[pVal]
+    # return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
+  }
+)
+
+#' @export
+#' @rdname NLwith
+setMethod(
+  "NLwith",
+  signature = c("matrix", "NLworldArray", "character", "ANY"),
+  definition = function(agents, world, var, val) {
+
+    agentsCell <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    allVal <- as.numeric(t(world[,,var])) # t() to retrieve the values by rows
+    agentsValues <- allVal[agentsCell]
+    pVal <- which(agentsValues %in% val)
+    return(agents[pVal, , drop = FALSE])
+
+    # xmin <- attr(world, "xmin")
+    # xmax <- attr(world, "xmax")
+    # ymin <- attr(world, "ymin")
+    # ymax <- attr(world, "ymax")
+    # pxcor <- agents[,1] - xmin + 1
+    # pycor <- agents[,2] - ymin + 1
+    # arrayCol <- match(var, dimnames(world)[[3]])
+    # values <- world[cbind(pxcor, rev(pycor), arrayCol)]
+    # pVal <- which(values %in% val)
+    # pxcorVal <- pxcor[pVal]
+    # pycorVal <- pycor[pVal]
+    # return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
+  }
+)
 
 #' @export
 #' @rdname NLwith
