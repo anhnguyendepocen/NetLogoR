@@ -19,14 +19,14 @@ of(world, agents, var)
 
 \S4method{of}{NLworld,matrix,missing}(world, agents)
 
+\S4method{of}{NLworldStack,matrix,character}(world, agents, var)
+
 \S4method{of}{NLworldMatrix,matrix,missing}(world, agents)
 
 \S4method{of}{NLworldArray,matrix,character}(world, agents, var)
-
-\S4method{of}{NLworldStack,matrix,character}(world, agents, var)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
@@ -36,9 +36,9 @@ of(world, agents, var)
 
 \item{var}{Character. Vector of the name of the selected \code{agents} variables.
 If \code{agents} are patches and the \code{world} is a
-\code{NLworld} object, \code{var} must not be provided. If
+\code{NLworld} or \code{NLworldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-object, \code{var} is the name of the layers to use to define the patches
+or \code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
 the turtles' variable and can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,

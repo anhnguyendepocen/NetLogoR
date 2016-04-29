@@ -3316,13 +3316,14 @@ setMethod(
 #'
 #' Report the \code{agents} values for the requested variable.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @param var Character. Vector of the name of the selected \code{agents} variables.
 #'            If \code{agents} are patches and the \code{world} is a
-#'            \code{NLworld} object, \code{var} must not be provided. If
+#'            \code{NLworld} or \code{NLworldMatrix} object, \code{var} must not be provided. If
 #'            \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-#'            object, \code{var} is the name of the layers to use to define the patches
+#'            or \code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
 #'            values. If \code{agents} are turtles, \code{var} is some of
 #'            the turtles' variable and can be equal to \code{"xcor"},
 #'            \code{"ycor"}, any of the variables created when turtles were created,
@@ -3437,36 +3438,6 @@ setMethod(
 #' @rdname of
 setMethod(
   "of",
-  signature = c("NLworldMatrix", "matrix", "missing"),
-  definition = function(world, agents) {
-
-    if(identical(patches(world), agents)){
-      return(as.numeric(world))
-    } else {
-      return(world[agents - c(attr(world, "xmin"), attr(world, "ymin")) + 1])
-    }
-  })
-
-#' @export
-#' @rdname of
-setMethod(
-  "of",
-  signature = c("NLworldArray", "matrix", "character"),
-  definition = function(world, agents, var) {
-    #valuesW <- values(world)
-
-    colNum <- match(var, dimnames(world)[[3]])
-    if(identical(patches(world), agents)){
-      return(as.numeric(world[,,colNum]))
-    } else {
-      return(world[cbind(agents - c(attr(world, "xmin"), attr(world, "ymin")) + 1,colNum)])
-    }
-  })
-
-#' @export
-#' @rdname of
-setMethod(
-  "of",
   signature = c("NLworldStack", "matrix", "character"),
   definition = function(world, agents, var) {
 
@@ -3486,3 +3457,49 @@ setMethod(
     }
 })
 
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("NLworldMatrix", "matrix", "missing"),
+  definition = function(world, agents) {
+
+    if(identical(patches(world), agents)){
+      return(as.numeric(t(world))) # values must be returned by row
+    } else {
+
+      cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+      allValues <- as.numeric(t(world)) # t() to retrieve the values by rows
+      cellValues <- allValues[cellNum]
+      return(cellValues)
+    }
+  })
+
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("NLworldArray", "matrix", "character"),
+  definition = function(world, agents, var) {
+
+    #colNum <- match(var, dimnames(world)[[3]])
+    if(length(var) == 1){
+      world_l <- createNLworldMatrix(data = as.numeric(t(world[,,var])), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+                                     minPycor = minPycor(world), maxPycor = maxPycor(world))
+      of(world = world_l, agents = agents)
+    } else {
+      if(identical(patches(world), agents)){
+        listVar <- lapply(var, function(x){as.numeric(t(world[,,x]))})
+        matVar <- do.call(cbind,listVar)
+        colnames(matVar) <- var
+        return(matVar)
+      } else {
+        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+        listVar <- lapply(var, function(x){as.numeric(t(world[,,x]))})
+        matVar <- do.call(cbind,listVar)
+        colnames(matVar) <- var
+        return(matVar[cellNum,, drop = FALSE])
+      }
+
+    }
+  })
