@@ -288,19 +288,29 @@ catchSheep <- function(){ # only wolves
 }
 
 # # Test catchSheep()
-# grass <- createNLworld(1, 10, 1, 10)
+# if(useFastClasses){
+#   grass <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+# } else {
+#   grass <- createNLworld(1, 10, 1, 10)
+# }
 # grass <- set(world = grass, agents = patches(grass), val = c(rep(1, 50), rep(0, 50)))
 # countdown <- grass
 # countdown <- set(world = countdown, agents = patches(countdown), val = 0)
-# field <- NLstack(grass, countdown)
-# sheep <- createTurtles(n = 10, coords = cbind(xcor = c(1,1,2,2,3,4,5,6,7,8), ycor = c(1,1,2,2,3,4,5,6,7,8)))
-# wolves <- createTurtles(n = 5, coords = cbind(xcor = 1:5, ycor = 1:5))
+# if(useFastClasses){
+#   field <- NLworldArray(grass, countdown)
+#   sheep <- createTurtlesAM(n = 10, coords = cbind(xcor = c(1,1,2,2,3,4,5,6,7,8), ycor = c(1,1,2,2,3,4,5,6,7,8)))
+#   wolves <- createTurtlesAM(n = 5, coords = cbind(xcor = 1:5, ycor = 1:5))
+# } else {
+#   field <- NLstack(grass, countdown)
+#   sheep <- createTurtles(n = 10, coords = cbind(xcor = c(1,1,2,2,3,4,5,6,7,8), ycor = c(1,1,2,2,3,4,5,6,7,8)))
+#   wolves <- createTurtles(n = 5, coords = cbind(xcor = 1:5, ycor = 1:5))
+# }
 # wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = 1:5)
 # catchSheepResults <- catchSheep()
 # sheepCatch <- catchSheepResults[[1]]
 # wolvesCatch <- catchSheepResults[[2]]
 # count(sheepCatch) == 5
-# count(wolves) == 5
+# count(wolvesCatch) == 5
 # of(agents = wolvesCatch, var = "energy") == (1:5 + gainFoodWolf)
 # #
 
