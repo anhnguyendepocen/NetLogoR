@@ -1,3 +1,4 @@
+a = Sys.time()
 useFastClasses <- TRUE
 ################################################################################
 # Wolf sheep predation
@@ -355,7 +356,7 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
 
   time <- time + 1
   # # Help for checking the model is working
-  print(time)
+  #print(time)
 }
 #})
 
@@ -382,5 +383,6 @@ if(grassOn == TRUE){
   legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
 }
 
-
+b = Sys.time()
+b-a
 #profvisWolfSheep
