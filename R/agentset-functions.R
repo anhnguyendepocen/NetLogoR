@@ -2073,7 +2073,7 @@ setMethod(
       if(identical(patches(world), agents)){
         world[] <- matrix(val,ncol=dim(world)[2],byrow=TRUE)
       } else {
-        cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+        cells <- agents-c(attr(world, "minPxcor"), attr(world, "minPycor"))+1
         world[cells] <- val
       }
     }
@@ -2093,7 +2093,7 @@ setMethod(
       if(identical(patches(world), agents)){
         world[] <- matrix(val,ncol=dim(world)[2],byrow=TRUE)
       } else {
-        cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+        cells <- agents-c(attr(world, "minPxcor"), attr(world, "minPycor"))+1
         arrayDim <- match(var, dimnames(world)[[3]])
         if(length(arrayDim)>1) {
           ind <- rep_len(seq_len(NROW(cells)), length.out = length(cells))
