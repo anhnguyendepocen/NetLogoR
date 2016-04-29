@@ -217,24 +217,49 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
   reproWho <- whoTurtles[repro] # "who" of turtles which reproduce
   reproInd <- turtle(turtles, who = reproWho) # turtles which reproduce
 
+  reproAM <- runif(n = count(turtlesAM), min = 0, max = 100) < reproTurtles
+  whoTurtlesAM <- of(agents = turtlesAM, var = "who") # "who" of the turtles before they reproduce
+  reproWhoAM <- whoTurtlesAM[reproAM] # "who" of turtles which reproduce
+  reproIndAM <- turtle(turtlesAM, who = reproWhoAM) # turtles which reproduce
+
   if(count(reproInd) != 0){ # if there is at least one turtle reproducing
     energyTurtles <- of(agents = reproInd, var = "energy")
     # Divide the energy between the parent and offspring
     turtles <- set(turtles = turtles, agents = reproInd, var = "energy", val = energyTurtles / 2)
 
-    turtles <- hatch(turtles = turtles, who = reproWho, n = 1), # hatch one offspring per parent
+    energyTurtlesAM <- of(agents = reproIndAM, var = "energy")
+    # Divide the energy between the parent and offspring
+    turtlesAM <- set(turtles = turtlesAM, agents = reproIndAM, var = "energy",
+                     val = energyTurtlesAM / 2)
+
+    turtles <- hatch(turtles = turtles, who = reproWho, n = 1) # hatch one offspring per parent
     turtlesAM <- hatch(turtles = turtlesAM, who = reproWho, n = 1) # hatch one offspring per parent
 
 
     # Move the offspring by 1 step
     whoNewTurtles <- of(agents = turtles, var = "who") # "who" of the turtles after they reproduced
+    whoNewTurtlesAM <- of(agents = turtlesAM, var = "who") # "who" of the turtles after they reproduced
     whoOffspring <- which(!whoNewTurtles %in% whoTurtles) # "who" of offspring
+    whoOffspring <- which(!whoNewTurtlesAM %in% whoTurtles) # "who" of offspring
     offspring <- turtle(turtles = turtles, who = whoOffspring)
     offspringMoved <- right(turtles = offspring, angle = runif(n = count(offspring), min = 0, max = 360))
     offspringMoved <- fd(world = grass, turtles = offspring, dist = 1, torus = TRUE)
     # Update the headings and coordinates of the offsprings inside the turtles
     valOffspring <- of(agents = offspringMoved, var = c("heading", "xcor", "ycor"))
     turtles <- set(turtles = turtles, agents = offspring, var = c("heading", "xcor", "ycor"), val = valOffspring)
+
+
+    whoNewTurtles <- of(agents = turtles, var = "who") # "who" of the turtles after they reproduced
+    whoNewTurtlesAM <- of(agents = turtlesAM, var = "who") # "who" of the turtles after they reproduced
+    whoOffspring <- which(!whoNewTurtles %in% whoTurtles) # "who" of offspring
+    whoOffspring <- which(!whoNewTurtlesAM %in% whoTurtles) # "who" of offspring
+    offspring <- turtle(turtles = turtles, who = whoOffspring)
+    offspringMoved <- right(turtles = offspring, angle = runif(n = count(offspring), min = 0, max = 360))
+    offspringMoved <- fd(world = grass, turtles = offspring, dist = 1, torus = TRUE)
+    # Update the headings and coordinates of the offsprings inside the turtles
+    valOffspring <- of(agents = offspringMoved, var = c("heading", "xcor", "ycor"))
+    turtles <- set(turtles = turtles, agents = offspring, var = c("heading", "xcor", "ycor"), val = valOffspring)
+
   }
 
   return(turtles)
