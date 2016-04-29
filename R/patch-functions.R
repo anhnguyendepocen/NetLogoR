@@ -797,6 +797,7 @@ setMethod(
 #'
 #' Report the coordinates of all the patches in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Matrix (ncol = 2) with the first column "pxcor" and the second column
@@ -841,11 +842,10 @@ setMethod(
 #' @rdname patches
 setMethod(
   "patches",
-  signature = "NLworldMs",
+  signature = "NLworldStack",
   definition = function(world) {
-    dims <- dim(world)
-    return(cbind(pxcor=rep.int(1:dims[1], dims[2]) + attr(world, "xmin") - 1,
-          pycor=rep(dims[2]:1, each=dims[1])+ attr(world, "ymin") - 1))
+    world_l <- world[[1]]
+    patches(world = world_l)
   }
 )
 
@@ -853,10 +853,9 @@ setMethod(
 #' @rdname patches
 setMethod(
   "patches",
-  signature = "NLworldStack",
+  signature = "NLworldMs",
   definition = function(world) {
-    world_l <- world[[1]]
-    patches(world = world_l)
+    return(PxcorPycorFromCell(world = world, cellNum = 1:(dim(world)[1] * dim(world)[2])))
   }
 )
 

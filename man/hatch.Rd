@@ -4,11 +4,14 @@
 \name{hatch}
 \alias{hatch}
 \alias{hatch,SpatialPointsDataFrame,numeric,numeric-method}
+\alias{hatch,agentMatrix,numeric,numeric-method}
 \title{Hatch new turtles}
 \usage{
 hatch(turtles, who, n, breed)
 
 \S4method{hatch}{SpatialPointsDataFrame,numeric,numeric}(turtles, who, n, breed)
+
+\S4method{hatch}{agentMatrix,numeric,numeric}(turtles, who, n, breed)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

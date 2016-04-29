@@ -27,14 +27,11 @@ agentMatrix(..., coords)
 
 \S4method{[}{agentMatrix,missing,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
-<<<<<<< HEAD
 \S4method{[}{agentMatrix,numeric,missing,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{$}{agentMatrix}(x, name)
 
 \S4method{show}{agentMatrix}(object)
-
-\S4method{NROW}{agentMatrix}(x)
 
 \S4method{nrow}{agentMatrix}(x)
 
@@ -52,14 +49,6 @@ cbind(..., deparse.level = 1)
 \item{...}{Vectors or a data.frame or a matrix of extra columns to add to the coordinates}
 
 \item{coords}{A matrix with 2 columns representing x and y coordinates}
-=======
-\S4method{show}{agentMatrix}(object)
-}
-\arguments{
-\item{coords}{A matrix with 2 columns representing x and y coordinates}
-
-\item{...}{Vectors or a data.frame or a matrix of extra columns to add to the coordinates}
->>>>>>> f2fceea5475dfe0410dd9f4a3ed79be69c7b8a09
 }
 \description{
 This is incomplete.
@@ -78,11 +67,7 @@ newAgent <- new("agentMatrix",
       char2 = LETTERS[c(4,24,3)],
       nums = 5:7)
 
-<<<<<<< HEAD
 # compare speeds -- about 5x faster
-=======
-# compare speeds
->>>>>>> f2fceea5475dfe0410dd9f4a3ed79be69c7b8a09
 microbenchmark(times = 499,
   spdf={
      SpatialPointsDataFrame(coords=cbind(pxcor=c(1,2,5),pycor=c(3,4,6)),
@@ -113,14 +98,11 @@ newAgent <- agentMatrix(
       nums2 = c(4.5, 2.6, 2343),
       char2 = LETTERS[c(4,24,3)],
       nums = 5:7)
-<<<<<<< HEAD
 
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-=======
->>>>>>> f2fceea5475dfe0410dd9f4a3ed79be69c7b8a09
 
 }
 \author{

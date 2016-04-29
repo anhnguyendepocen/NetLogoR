@@ -3,8 +3,11 @@
 \name{NLworlds-class}
 \alias{NLworlds}
 \alias{NLworlds-class}
-\title{The NLworlds class}
+\title{The \code{NLworlds} class}
 \description{
+The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
+classes. Mostly used for building function purposes.
+
 The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
 classes. Mostly used for building function purposes.
 }
@@ -12,8 +15,14 @@ classes. Mostly used for building function purposes.
 
 \describe{
 \item{\code{members}}{NLworld, NLworldStack}
+
+\item{\code{members}}{NLworld, NLworldStack}
 }}
 \author{
+Sarah Bauduin
+
+Sarah Bauduin
+
 Sarah Bauduin
 }
 

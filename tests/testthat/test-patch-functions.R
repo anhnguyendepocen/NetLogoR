@@ -634,6 +634,27 @@ test_that("patchDistDir works with turtles", {
   expect_identical(p1, patch(w1, c(4, 2, 7), c(0, 1, 5), duplicate = TRUE, out = TRUE))
 })
 
+test_that("patches work",{
+  w1 <- createNLworld(0, 9, 0, 9)
+  p1 <- patches(w1)
+  expect_equivalent(PxcorPycorFromCell(w1, cellNum = 1:length(w1)), p1)
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLstack(w1, w2)
+  ps <- patches(ws)
+  expect_identical(p1, ps)
+
+  # With NlworldMs
+  w3 <- createNLworldMatrix(data = runif(100), minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  p3 <- patches(w3)
+  expect_equivalent(p1, p3)
+  w4 <- createNLworldMatrix(data = runif(100), minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  w5 <- NLworldArray(w3, w4)
+  p5 <- patches(w5)
+  expect_identical(p3, p5)
+})
+
 test_that("randomPxcor and randomPycor works", {
   w1 <- createNLworld(0, 9, -10, -5)
   pxcor100 <- randomPxcor(world = w1, n = 100)

@@ -12,12 +12,12 @@ patches(world)
 
 \S4method{patches}{NLworld}(world)
 
-\S4method{patches}{NLworldMs}(world)
-
 \S4method{patches}{NLworldStack}(world)
+
+\S4method{patches}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 }
 \value{
 Matrix (ncol = 2) with the first column "pxcor" and the second column
