@@ -3443,7 +3443,7 @@ setMethod(
     if(identical(patches(world), agents)){
       return(as.numeric(world))
     } else {
-      return(world[agents - c(attr(world, "xmin"), attr(world, "ymin")) + 1])
+      return(world[agents - c(attr(world, "minPxcor"), attr(world, "minPycor")) + 1])
     }
   })
 
@@ -3459,7 +3459,7 @@ setMethod(
     if(identical(patches(world), agents)){
       return(as.numeric(world[,,colNum]))
     } else {
-      return(world[cbind(agents - c(attr(world, "xmin"), attr(world, "ymin")) + 1,colNum)])
+      return(world[cbind(agents - c(attr(world, "minPxcor"), attr(world, "minPycor")) + 1,colNum)])
     }
   })
 

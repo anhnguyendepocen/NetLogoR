@@ -413,17 +413,6 @@ setMethod(
     pVal <- which(agentsValues %in% val)
     return(agents[pVal, , drop = FALSE])
 
-    # xmin <- attr(world, "xmin")
-    # xmax <- attr(world, "xmax")
-    # ymin <- attr(world, "ymin")
-    # ymax <- attr(world, "ymax")
-    # pxcor <- agents[,1] - xmin + 1
-    # pycor <- agents[,2] - ymin + 1
-    # values <- world[cbind(pxcor, rev(pycor))]
-    # pVal <- which(values %in% val)
-    # pxcorVal <- pxcor[pVal]
-    # pycorVal <- pycor[pVal]
-    # return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
   }
 )
 
