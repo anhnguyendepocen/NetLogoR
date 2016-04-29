@@ -461,7 +461,7 @@ setMethod(
   "NLwith",
   signature = c("agentMatrix", "missing", "character", "ANY"),
   definition = function(agents, var, val) {
-    turtlesWith <- agents@x[agents@x[,var] %in% val, , drop=FALSE]
+    turtlesWith <- agents@.Data[agents@.Data[,var] %in% val, , drop=FALSE]
     turtle(agents, turtlesWith[,"who"])
   }
 )
@@ -2009,10 +2009,10 @@ setMethod(
 
       } else {
 
-        iAgents <- match(agents@x[,"who"], turtles@x[,"who"])
+        iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
 
         if(length(var) == 1){
-          turtles@x[iAgents, var] <- val
+          turtles@.Data[iAgents, var] <- val
         }
       }
 

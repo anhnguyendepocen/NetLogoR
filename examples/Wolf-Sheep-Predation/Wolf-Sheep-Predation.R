@@ -221,7 +221,10 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
     energyTurtles <- of(agents = reproInd, var = "energy")
     # Divide the energy between the parent and offspring
     turtles <- set(turtles = turtles, agents = reproInd, var = "energy", val = energyTurtles / 2)
-    turtles <- hatch(turtles = turtles, who = reproWho, n = 1) # hatch one offspring per parent
+
+    turtles <- hatch(turtles = turtles, who = reproWho, n = 1), # hatch one offspring per parent
+    turtlesAM <- hatch(turtles = turtlesAM, who = reproWho, n = 1) # hatch one offspring per parent
+
 
     # Move the offspring by 1 step
     whoNewTurtles <- of(agents = turtles, var = "who") # "who" of the turtles after they reproduced

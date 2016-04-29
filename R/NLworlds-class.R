@@ -194,15 +194,6 @@ setClassUnion(name="NLworlds",
               members=c("NLworld", "NLworldStack")
 )
 
-#' @aliases NLworlds
-#' @name NLworlds-class
-#' @rdname NLworlds-class
-#' @author Sarah Bauduin
-#' @exportClass NLworlds
-setClassUnion(name="NLworldMs",
-              members=c("NLworldMatrix", "NLworldArray")
-)
-
 
 ################################################################################
 #' Create a NLworldStack
@@ -507,5 +498,14 @@ setMethod(
     pCoords <- cbind(pxcor = pxcor[cellNum], pycor = pycor[cellNum])
     return(pCoords)
   }
+)
+
+#' @aliases NLworlds
+#' @name NLworlds-class
+#' @rdname NLworlds-class
+#' @author Sarah Bauduin
+#' @exportClass NLworlds
+setClassUnion(name="NLworldMs",
+              members=c("NLworldMatrix", "NLworldArray")
 )
 

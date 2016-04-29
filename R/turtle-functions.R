@@ -403,14 +403,14 @@ setMethod(
   signature = c(turtles = "agentMatrix", dist = "numeric"),
   definition = function(turtles, dist, world, torus, out) {
 
-    prevXcor <- turtles@x[,1]
-    prevYcor <- turtles@x[,2]
+    prevXcor <- turtles@.Data[,1]
+    prevYcor <- turtles@.Data[,2]
 
-    turtles@x[,"prevX"] <- prevXcor
-    turtles@x[,"prevY"] <- prevYcor
+    turtles@.Data[,"prevX"] <- prevXcor
+    turtles@.Data[,"prevY"] <- prevYcor
 
-    fdXcor <- prevXcor + sin(rad(turtles@x[,"heading"])) * dist
-    fdYcor <- prevYcor + cos(rad(turtles@x[,"heading"])) * dist
+    fdXcor <- prevXcor + sin(rad(turtles@.Data[,"heading"])) * dist
+    fdYcor <- prevYcor + cos(rad(turtles@.Data[,"heading"])) * dist
 
     if(torus == TRUE){
       if(missing(world)){
@@ -432,7 +432,7 @@ setMethod(
       fdYcor[outXY] <- prevYcor[outXY]
     }
 
-    turtles@x[,1:2] <- cbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
+    turtles@.Data[,1:2] <- cbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
     return(turtles)
   }
 )
@@ -803,7 +803,7 @@ setMethod(
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
 
-    newTurtles <- turtles[-na.omit(match(who, turtles@x[,"who"])),]
+    newTurtles <- turtles[-na.omit(match(who, turtles@.Data[,"who"])),]
 
     return(newTurtles)
   }
@@ -886,6 +886,25 @@ setMethod(
   }
 )
 
+
+#' @export
+#' @rdname hatch
+setMethod(
+  "hatch",
+  signature = c("agentMatrix", "numeric", "numeric", "ANY"),
+  definition = function(turtles, who, n, breed) {
+
+    iTurtle <- match(who, turtles@.Data[,"who"])
+    newData <- turtles@.Data[iTurtle,,drop=FALSE]
+    newData[,"who"] <- seq_len(length(iTurtle)) + (max(turtles@.Data[,"who"]))
+    if(!missing(breed)){
+      newData[, "breed"] <- match(breed, turtles@levels$breed)
+    }
+
+    turtles@.Data <- rbind(turtles@.Data, newData)
+    return(turtles)
+  }
+)
 
 ################################################################################
 #' Can the turtles move?
@@ -1002,8 +1021,8 @@ setMethod(
     if(n == 0){
       return(xcor = numeric())
     } else {
-      xmin <- attr(world, "xmin")
-      xmax <- attr(world, "xmax")
+      xmin <- attr(world, "minPxcor")
+      xmax <- attr(world, "maxPxcor")
       xcor <- round(runif(n = n, min = xmin, max = xmax), digits = 5)
       return(xcor)
     }
@@ -1076,8 +1095,8 @@ setMethod(
     if(n == 0){
       return(ycor = numeric())
     } else {
-      ymin <- attr(world, "ymin")
-      ymax <- attr(world, "ymax")
+      ymin <- attr(world, "minPycor")
+      ymax <- attr(world, "maxPycor")
       ycor <- round(runif(n = n, min = ymin, max = ymax), digits = 5)
       return(ycor)
     }
@@ -1386,11 +1405,11 @@ setMethod(
   "left",
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, angle) {
-    newHeading <- turtles@x[,"heading"] - angle
+    newHeading <- turtles@.Data[,"heading"] - angle
     newHeading[newHeading < 0] <- newHeading[newHeading < 0] + 360
     newHeading[newHeading >= 360] <- newHeading[newHeading >= 360] - 360
 
-    turtles@x[,"heading"] <- newHeading
+    turtles@.Data[,"heading"] <- newHeading
     return(turtles)
   }
 )
@@ -1796,7 +1815,7 @@ setMethod(
   signature = c("NLworldMs", "agentMatrix"),
   definition = function(world, turtles) {
 
-    pTurtles <- patch(world = world, x = turtles@x[,1], y = turtles@x[,2],
+    pTurtles <- patch(world = world, x = turtles@.Data[,1], y = turtles@.Data[,2],
                       duplicate = TRUE, out = TRUE)
     return(pTurtles)
 
@@ -2413,7 +2432,7 @@ setMethod(
   signature = c("agentMatrix", "numeric", "missing"),
   definition = function(turtles, who) {
 
-    turtles[na.omit(match(who, turtles@x[,"who"])),] # %>% na.omit %>% sort
+    turtles[na.omit(match(who, turtles@.Data[,"who"])),] # %>% na.omit %>% sort
 
   }
 )
@@ -2977,7 +2996,7 @@ setMethod(
 
     tVal <- matrix(tVal, ncol=1)
     colnames(tVal) <- tVar
-    turtles@x <- fastCbind(turtles@x, tVal)
+    turtles@.Data <- fastCbind(turtles@.Data, tVal)
     turtles
     #tVal <- matrix(tVal, ncol=1)
     #colnames(tVal) <- tVar
@@ -2996,7 +3015,7 @@ setMethod(
     tVal <- matrix(tVal, ncol=1)
     colnames(tVal) <- tVar
     newCol <- agentMatrix(tVal)
-    fastCbind(turtles@x, newCol@x[,-(1:2), drop=FALSE])
+    fastCbind(turtles@.Data, newCol@.Data[,-(1:2), drop=FALSE])
   }
 )
 
@@ -3365,17 +3384,17 @@ setMethod(
 
     if(length(var) == 1){
       if(var == "xcor"){
-        return(agents@x[,1])
+        return(agents@.Data[,1])
       } else if(var == "ycor"){
-        return(agents@x[,2])
+        return(agents@.Data[,2])
       } else {
-        return(agents@x[,var])
+        return(agents@.Data[,var])
       }
     } else {
       if(any(var == "xcor" | var == "ycor")){
-        return(agents@x[,var])
+        return(agents@.Data[,var])
       } else {
-        agents@x[,var]
+        agents@.Data[,var]
       }
     }
   })

@@ -152,8 +152,8 @@ setMethod("initialize",
         otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
       }
       if(length(otherCols)>0) {
-        .Object@x <- otherCols
-        .Object@levels <- rep(list(NULL), ncol(.Object@x))
+        .Object@.Data <- otherCols
+        .Object@levels <- rep(list(NULL), ncol(.Object@.Data))
         names(.Object@levels) <- colnames(otherCols)
         if(Coords) {
           .Object@bbox <- NetLogoR:::.bboxCoords(coords)
@@ -184,7 +184,7 @@ setMethod("initialize",
         })
 
       if(length(otherCols)>0) {
-        .Object@x <- do.call(cbind,otherCols)
+        .Object@.Data <- do.call(cbind,otherCols)
         .Object@levels <- lapply(otherCols[charCols], function(x) if(is.factor(x)) levels(x) else NULL)
         if(Coords) {
           .Object@bbox <- NetLogoR:::.bboxCoords(coords)
@@ -269,7 +269,7 @@ setMethod(
   "coordinates",
   signature("agentMatrix"),
   definition = function (obj, ...) {
-    obj@x[,1:2]
+    obj@.Data[,1:2]
   })
 
 
@@ -289,9 +289,9 @@ setMethod(
   signature(x="agentMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, ..., drop) {
 
-    x@x <- x@x[i,unique(c(1:2,j)),...,drop=drop]
+    x@.Data <- x@.Data[i,unique(c(1:2,j)),...,drop=drop]
     x@levels <- x@levels[j-2]
-    x@bbox <- .bboxCoords(x@x[i,1:2])
+    x@bbox <- .bboxCoords(x@.Data[i,1:2])
     x
 
 
@@ -307,7 +307,7 @@ setMethod(
   signature(x="agentMatrix", "missing", "character", "ANY"),
   definition = function(x, j, ..., drop) {
 
-    cols <- match(j, colnames(x@x))
+    cols <- match(j, colnames(x@.Data))
     x[,cols,...,drop=FALSE]
 
   }
@@ -322,7 +322,7 @@ setMethod(
   signature(x="agentMatrix", "numeric", "character", "ANY"),
   definition = function(x, i, j, ..., drop) {
 
-    cols <- match(j, colnames(x@x))
+    cols <- match(j, colnames(x@.Data))
     x[i,cols,...,drop=FALSE]
 
   }
@@ -337,11 +337,15 @@ setMethod(
   signature(x="agentMatrix", "missing", "numeric", "ANY"),
   definition = function(x, j, ..., drop) {
 
-
-
-    x@x <- x@x[,unique(c(1:2,j)),...,drop=drop]
-    x@levels <- x@levels[c(1:2,j)]
-    x@bbox <- .bboxCoords(x@x[,1:2])
+    colNames <- colnames(x@.Data)[j]
+    levelInd <- match(colNames, names(x@levels))
+    x@.Data <- x@.Data[,unique(c(1:2,j)),...,drop=drop]
+    if(all(is.na(levelInd))) {
+      x@levels <- NULL
+    } else {
+      x@levels <- x@levels[colNames]
+    }
+    x@bbox <- .bboxCoords(x@.Data[,1:2])
     x
 
   }
@@ -357,8 +361,8 @@ setMethod(
   signature(x="agentMatrix", "numeric", "missing", "ANY"),
   definition = function(x, i, ..., drop) {
 
-    x@x <- x@x[i,,drop=FALSE]
-    x@bbox <- .bboxCoords(x@x[,1:2,drop=FALSE])
+    x@.Data <- x@.Data[i,,drop=FALSE]
+    x@bbox <- .bboxCoords(x@.Data[,1:2,drop=FALSE])
     x
 
   }
@@ -372,7 +376,7 @@ setMethod(
   "$",
   signature(x="agentMatrix"),
   definition = function(x, name) {
-    x@x[,name]
+    x[,name]
 
   }
 )
@@ -386,8 +390,8 @@ setMethod(
   signature(object="agentMatrix"),
   definition = function(object) {
 
-    if(NROW(object@x)>0) {
-      tmp <- data.frame(object@x)
+    if(NROW(object@.Data)>0) {
+      tmp <- data.frame(object@.Data)
       colNames <- colnames(tmp[,names(object@levels),drop=FALSE])
       tmp[,names(object@levels)] <-
         sapply(seq_along(names(object@levels)), function(x) {
@@ -397,24 +401,24 @@ setMethod(
                               object@levels[[colNames[x]]][curLevels]) )
         })
     } else {
-      tmp <- object@x
+      tmp <- object@.Data
     }
     show(tmp)
 
   }
 )
 
-#' @export
-#' @name [
-#' @docType methods
-#' @rdname agentMatrix
-setMethod(
-  "NROW",
-  signature(x="agentMatrix"),
-  definition = function(x) {
-    NROW(x@x)
-  }
-)
+# @export
+# @name [
+# @docType methods
+# @rdname agentMatrix
+# setMethod(
+#   "NROW",
+#   signature(x="agentMatrix"),
+#   definition = function(x) {
+#     NROW(x@.Data)
+#   }
+# )
 
 #' @export
 #' @name [
@@ -424,7 +428,7 @@ setMethod(
   "nrow",
   signature(x="agentMatrix"),
   definition = function(x) {
-    nrow(x@x)
+    nrow(x@.Data)
   }
 )
 
@@ -441,10 +445,10 @@ head.agentMatrix <- function(x, n = 6L, ...) {
 #' @docType methods
 #' @rdname agentMatrix
 tail.agentMatrix <- function(x, n = 6L, ...) {
-  len <- NROW(x@x)
+  len <- NROW(x@.Data)
   ind <- (len - n + 1):len
   out <- x[ind,,drop=FALSE]
-  rownames(out@x) <- ind
+  rownames(out@.Data) <- ind
   out
 
 }
@@ -467,17 +471,17 @@ setMethod(
 
     tmp <- list(...)
     if(length(tmp) != 2) stop("cbind for agentMatrix is only defined for 2 agentMatrices")
-    notAM <- sapply(tmp, function(x) all(is.na(x@x[,1:2])))
+    notAM <- sapply(tmp, function(x) all(is.na(x@.Data[,1:2])))
 
-    if(NROW(tmp[[2]]@x) == 1) {
-      tmp[[2]]@x <- tmp[[2]]@x[rep_len(1, length.out=NROW(tmp[[1]]@x)),]
+    if(NROW(tmp[[2]]@.Data) == 1) {
+      tmp[[2]]@.Data <- tmp[[2]]@.Data[rep_len(1, length.out=NROW(tmp[[1]]@.Data)),]
     }
 
-    if(any(colnames(tmp[[1]]@x)[-(1:2)] %in% colnames(tmp[[2]]@x)[-(1:2)])) {
+    if(any(colnames(tmp[[1]]@.Data)[-(1:2)] %in% colnames(tmp[[2]]@.Data)[-(1:2)])) {
       stop("There are duplicate columns in the two agentMatrix objects. Please remove duplicates.")
     }
-    newMat <- cbind(tmp[[1]]@x, tmp[[2]]@x[,-(1:2),drop=FALSE])
-    tmp[[1]]@x <- newMat
+    newMat <- cbind(tmp[[1]]@.Data, tmp[[2]]@.Data[,-(1:2),drop=FALSE])
+    tmp[[1]]@.Data <- newMat
     colnames(newMat)
     tmp[[1]]@levels <- SpaDES::updateList(tmp[[2]]@levels, tmp[[1]]@levels)
 
@@ -494,7 +498,7 @@ setMethod(
   "length",
   signature(x="agentMatrix"),
   definition = function(x) {
-    length(x@x)
+    length(x@.Data)
   }
 )
 
