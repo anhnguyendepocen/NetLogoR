@@ -4,6 +4,7 @@
 \name{minPxcor}
 \alias{minPxcor}
 \alias{minPxcor,NLworld-method}
+\alias{minPxcor,NLworldMs-method}
 \alias{minPxcor,NLworldStack-method}
 \title{Minimum pxcor}
 \usage{
@@ -12,9 +13,11 @@ minPxcor(world)
 \S4method{minPxcor}{NLworld}(world)
 
 \S4method{minPxcor}{NLworldStack}(world)
+
+\S4method{minPxcor}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 }
 \value{
 Integer.

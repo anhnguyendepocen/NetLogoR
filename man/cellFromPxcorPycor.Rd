@@ -3,6 +3,7 @@
 \docType{methods}
 \name{cellFromPxcorPycor}
 \alias{cellFromPxcorPycor}
+\alias{cellFromPxcorPycor,NLworldMs,numeric,numeric-method}
 \alias{cellFromPxcorPycor,NLworlds,numeric,numeric-method}
 \title{Cells numbers from patches coordinates}
 \usage{
@@ -10,10 +11,10 @@ cellFromPxcorPycor(world, pxcor, pycor)
 
 \S4method{cellFromPxcorPycor}{NLworlds,numeric,numeric}(world, pxcor, pycor)
 
-\S4method{cellFromPxcorPycor}{NLworlds,numeric,numeric}(world, pxcor, pycor)
+\S4method{cellFromPxcorPycor}{NLworldMs,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 
 \item{pxcor}{Integer. Vector of patches pxcor coordinates. Must be of length 1
 or of the same length as \code{pycor}.}

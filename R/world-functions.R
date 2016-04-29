@@ -169,6 +169,7 @@ setMethod(
 #'
 #' Report the patches maximum pxcor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -217,12 +218,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname maxPxcor
+setMethod(
+  "maxPxcor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(attr(world, "maxPxcor"))
+  }
+)
+
 
 ################################################################################
 #' Maximum pycor
 #'
 #' Report the patches maximum pycor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -271,12 +283,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname maxPycor
+setMethod(
+  "maxPycor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(attr(world, "maxPycor"))
+  }
+)
+
 
 ################################################################################
 #' Minimum pxcor
 #'
 #' Report the patches minimum pxcor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -325,12 +348,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname minPxcor
+setMethod(
+  "minPxcor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(attr(world, "minPxcor"))
+  }
+)
+
 
 ################################################################################
 #' Minimum pycor
 #'
 #' Report the patches minimum pycor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -379,12 +413,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname minPycor
+setMethod(
+  "minPycor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(attr(world, "minPycor"))
+  }
+)
+
 
 ################################################################################
 #' World width
 #'
 #' Report the width of the \code{world} in patch number.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -423,12 +468,24 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname worldWidth
+setMethod(
+  "worldWidth",
+  signature = "NLworldMs",
+  definition = function(world) {
+    w_width <- maxPxcor(world) - minPxcor(world) + 1
+    return(w_width)
+  }
+)
+
 
 ################################################################################
 #' World height
 #'
 #' Report the height of the \code{world} in patch number.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -467,17 +524,29 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname worldHeight
+setMethod(
+  "worldHeight",
+  signature = "NLworldMs",
+  definition = function(world) {
+    w_height <- maxPycor(world) - minPycor(world) + 1
+    return(w_height)
+  }
+)
+
 
 ################################################################################
 #' Clear world's patches
 #'
 #' Reset all patches values to \code{NA}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
-#' @return NLworld object with \code{NA} values for all patches.
+#' @return NLworld or NLworldMatrix object with \code{NA} values for all patches.
 #'
-#' @details The name of the layer is set to \code{""}.
+#' @details The name of the layer for the NLWorld is set to \code{""}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-patches}
 #'
@@ -529,6 +598,29 @@ setMethod(
   definition = function(world) {
     world_l <- world[[1]]
     clearPatches(world = world_l)
+  }
+)
+
+#' @export
+#' @rdname clearPatches
+setMethod(
+  "clearPatches",
+  signature = c("NLworldMatrix"),
+  definition = function(world) {
+    world[] <- NA
+    return(world)
+  }
+)
+
+#' @export
+#' @rdname clearPatches
+setMethod(
+  "clearPatches",
+  signature = c("NLworldArray"),
+  definition = function(world) {
+    worldNA <- createNLworldMatrix(minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+                                   minPycor = minPycor(world), maxPycor = maxPycor(world))
+    return(worldNA)
   }
 )
 

@@ -4,6 +4,7 @@
 \name{minPycor}
 \alias{minPycor}
 \alias{minPycor,NLworld-method}
+\alias{minPycor,NLworldMs-method}
 \alias{minPycor,NLworldStack-method}
 \title{Minimum pycor}
 \usage{
@@ -12,9 +13,11 @@ minPycor(world)
 \S4method{minPycor}{NLworld}(world)
 
 \S4method{minPycor}{NLworldStack}(world)
+
+\S4method{minPycor}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 }
 \value{
 Integer.

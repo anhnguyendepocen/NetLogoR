@@ -11,10 +11,6 @@
 \S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, drop)
 
 \S4method{[}{NLworld,numeric,numeric,numeric}(x, i, j) <- value
-
-\S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j, drop)
-
-\S4method{[}{NLworldMatrix,numeric,numeric,numeric}(x, i, j) <- value
 }
 \description{
 A \code{NLworld} object is a grid composed of squared patches (i.e., pixels)

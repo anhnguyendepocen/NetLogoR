@@ -3,15 +3,18 @@
 \docType{methods}
 \name{PxcorPycorFromCell}
 \alias{PxcorPycorFromCell}
+\alias{PxcorPycorFromCell,NLworldMs,numeric-method}
 \alias{PxcorPycorFromCell,NLworlds,numeric-method}
 \title{Patches coordinates from cells numbers}
 \usage{
 PxcorPycorFromCell(world, cellNum)
 
 \S4method{PxcorPycorFromCell}{NLworlds,numeric}(world, cellNum)
+
+\S4method{PxcorPycorFromCell}{NLworldMs,numeric}(world, cellNum)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 
 \item{cellNum}{Integer. Vector of cells number.}
 }
