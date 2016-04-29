@@ -2595,7 +2595,6 @@ setMethod(
     pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
     pTurtles <- cbind(pTurtles, who = turtles@data$who)
 
-
     if(simplify == TRUE){
 
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
@@ -2640,9 +2639,20 @@ setMethod(
     #pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
     #pTurtles <- cbind(pTurtles, who = turtles@.Data[,"who"])
 
+
     pTurtles <- round(turtles@.Data[,c("xcor", "ycor","who")])
     colnames(pTurtles)[1:2] <- c("pxcor", "pycor")
 
+    # FASTER ALTERNATIVE TO THE MERGE pOn <- merge(agents, pTurtles)
+    # microbenchmark({
+    # a= matrix(ncol=ncol(world), nrow=nrow(world))
+    # a[agents+26] <- 1 # change this 26 to the dimensions of the world, and next line
+    # pOn2 <- na.omit(a[pTurtles[,1:2]+26] * pTurtles)
+    # },{
+    #   pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+    # })
+
+    browser()
 
     if(simplify == TRUE){
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
