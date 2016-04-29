@@ -4,6 +4,7 @@
 \name{NLwith}
 \alias{NLwith}
 \alias{NLwith,SpatialPointsDataFrame,missing,character-method}
+\alias{NLwith,agentMatrix,missing,character-method}
 \alias{NLwith,matrix,NLworld,missing-method}
 \alias{NLwith,matrix,NLworldArray,character-method}
 \alias{NLwith,matrix,NLworldMatrix,missing-method}
@@ -21,6 +22,8 @@ NLwith(agents, world, var, val)
 \S4method{NLwith}{matrix,NLworldStack,character}(agents, world, var, val)
 
 \S4method{NLwith}{SpatialPointsDataFrame,missing,character}(agents, var, val)
+
+\S4method{NLwith}{agentMatrix,missing,character}(agents, var, val)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

@@ -8,6 +8,7 @@
 \alias{set,NLworldMatrix,missing,matrix,missing-method}
 \alias{set,NLworldStack,missing,matrix,character-method}
 \alias{set,missing,SpatialPointsDataFrame,SpatialPointsDataFrame,character-method}
+\alias{set,missing,agentMatrix,agentMatrix,character-method}
 \title{Set an agents variable}
 \usage{
 set(world, turtles, agents, var, val)
@@ -19,6 +20,9 @@ set(world, turtles, agents, var, val)
 
   \S4method{set}{missing,SpatialPointsDataFrame,SpatialPointsDataFrame,character}(turtles,
   agents, var, val)
+
+\S4method{set}{missing,agentMatrix,agentMatrix,character}(turtles, agents, var,
+  val)
 
 \S4method{set}{NLworldMatrix,missing,matrix,missing}(world, agents, val)
 

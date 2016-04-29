@@ -56,7 +56,6 @@ setMethod(
   signature("NLworld", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
-    browser()
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     xValues <- values(x)
     cellValues <- xValues[cells]
@@ -309,6 +308,7 @@ setClassUnion(name="NLworlds",
 setClassUnion(name="NLworldMs",
               members=c("NLworldMatrix", "NLworldArray")
 )
+
 
 ################################################################################
 #' Create a NLworldStack

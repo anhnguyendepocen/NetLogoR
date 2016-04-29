@@ -147,6 +147,66 @@ setMethod(
 )
 
 
+
+#'
+#' @return If using createTurtlesAM, then an agentMatrix class object of length \code{n}
+#'         with the columns being: "pxcor", "pycor", "who", "heading", "prevX", "prevY",
+#'         "breed", and "color".
+#'
+#' @examples
+#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' t2 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#'
+#' library(SpaDES)
+#' clearPlot()
+#' Plot(w1)
+#' Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname createTurtles
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "createTurtlesAM",
+  function(n, coords, world, heading, breed, color, agent=FALSE) {
+    standardGeneric("createTurtlesAM")
+  })
+
+#' @export
+#' @rdname createTurtlesAM
+setMethod(
+  "createTurtlesAM",
+  signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
+  definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
+
+    if(missing(heading))
+      heading <- runif(n = n, min = 0, max = 360)
+
+    if(missing(breed))
+      breed <- "turtle"
+
+    if(missing(color))
+      color <- rainbow(n)
+
+    turtles<-new("agentMatrix",
+                 coords = coords,
+                 who = seq(from = 0, to = n - 1, by = 1),
+                 heading = heading,
+                 prevX = rep(NA, n),
+                 prevY = rep(NA, n),
+                 breed = breed,
+                 color = color)
+    return(turtles)
+  }
+)
+
+
+
 ################################################################################
 #' Create ordered turtles
 #'
@@ -338,21 +398,19 @@ setMethod(
 )
 
 
-#' @export
-#' @rdname fd
-#' @include Classes.R
 setMethod(
   "fd",
-  signature = c(turtles = "agentDataTable", dist = "numeric"),
+  signature = c(turtles = "agentMatrix", dist = "numeric"),
   definition = function(turtles, dist, world, torus, out) {
 
-    prevXcor <- turtles$xcor
-    prevYcor <- turtles$ycor
+    prevXcor <- turtles@x[,1]
+    prevYcor <- turtles@x[,2]
 
-    turtles[,`:=`(prevX = xcor, prevY=ycor)]
+    turtles@x[,"prevX"] <- prevXcor
+    turtles@x[,"prevY"] <- prevYcor
 
-    fdXcor <- turtles$xcor + sin(rad(turtles$heading)) * dist
-    fdYcor <- turtles$ycor + cos(rad(turtles$heading)) * dist
+    fdXcor <- prevXcor + sin(rad(turtles@x[,"heading"])) * dist
+    fdYcor <- prevYcor + cos(rad(turtles@x[,"heading"])) * dist
 
     if(torus == TRUE){
       if(missing(world)){
@@ -374,11 +432,11 @@ setMethod(
       fdYcor[outXY] <- prevYcor[outXY]
     }
 
-    turtles[,`:=`(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))]
-    turtles[]
+    turtles@x[,1:2] <- cbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
     return(turtles)
   }
 )
+
 
 ################################################################################
 #' Move backward
@@ -733,6 +791,19 @@ setMethod(
   definition = function(turtles, who) {
 
     newTurtles <- turtles[-na.omit(match(who, turtles@data$who)),]
+
+    return(newTurtles)
+  }
+)
+
+#' @export
+#' @rdname die
+setMethod(
+  "die",
+  signature = c("agentMatrix", "numeric"),
+  definition = function(turtles, who) {
+
+    newTurtles <- turtles[-na.omit(match(who, turtles@x[,"who"])),]
 
     return(newTurtles)
   }
@@ -1309,6 +1380,21 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname left
+setMethod(
+  "left",
+  signature = c("agentMatrix", "numeric"),
+  definition = function(turtles, angle) {
+    newHeading <- turtles@x[,"heading"] - angle
+    newHeading[newHeading < 0] <- newHeading[newHeading < 0] + 360
+    newHeading[newHeading >= 360] <- newHeading[newHeading >= 360] - 360
+
+    turtles@x[,"heading"] <- newHeading
+    return(turtles)
+  }
+)
+
 
 ################################################################################
 #' Rotate to the right
@@ -1354,6 +1440,16 @@ setGeneric(
 setMethod(
   "right",
   signature = c("SpatialPointsDataFrame", "numeric"),
+  definition = function(turtles, angle) {
+    left(turtles = turtles, angle = -angle)
+  }
+)
+
+#' @export
+#' @rdname right
+setMethod(
+  "right",
+  signature = c("agentMatrix", "numeric"),
   definition = function(turtles, angle) {
     left(turtles = turtles, angle = -angle)
   }
@@ -1688,6 +1784,20 @@ setMethod(
   definition = function(world, turtles) {
 
     pTurtles <- patch(world = world, x = turtles@coords[,1], y = turtles@coords[,2], duplicate = TRUE, out = TRUE)
+    return(pTurtles)
+
+  }
+)
+
+#' @export
+#' @rdname patchHere
+setMethod(
+  "patchHere",
+  signature = c("NLworldMs", "agentMatrix"),
+  definition = function(world, turtles) {
+
+    pTurtles <- patch(world = world, x = turtles@x[,1], y = turtles@x[,2],
+                      duplicate = TRUE, out = TRUE)
     return(pTurtles)
 
   }
@@ -2300,6 +2410,18 @@ setMethod(
 #' @rdname turtle
 setMethod(
   "turtle",
+  signature = c("agentMatrix", "numeric", "missing"),
+  definition = function(turtles, who) {
+
+    turtles[na.omit(match(who, turtles@x[,"who"])),] # %>% na.omit %>% sort
+
+  }
+)
+
+#' @export
+#' @rdname turtle
+setMethod(
+  "turtle",
   signature = c("SpatialPointsDataFrame", "numeric", "character"),
   definition = function(turtles, who, breed) {
 
@@ -2475,6 +2597,50 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c(world = "NLworldMs", turtles = "agentMatrix",
+                agents = "agentMatrix", breed = "missing"),
+  definition = function(world, turtles, agents, simplify) {
+    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), simplify = simplify)
+  }
+)
+
+
+
+#' @export
+#' @rdname turtlesOn
+setMethod(
+  "turtlesOn",
+  signature = c(world = "NLworldMs", turtles = "agentMatrix",
+                agents = "matrix", breed = "missing"),
+  definition = function(world, turtles, agents, simplify) {
+
+    pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
+    pTurtles <- cbind(pTurtles, who = turtles$who)
+
+
+    if(simplify == TRUE){
+
+      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+
+      if(nrow(pOn) == 0){
+        return(noTurtles())
+      } else {
+        return(turtle(turtles = turtles, who = pOn[,3]))
+      }
+
+    } else {
+      agents <- cbind(agents, id = 1:nrow(agents))
+      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+      pOn <- pOn[order(pOn[,"id"]),]
+      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
+      return(turtlesID)
+    }
+  }
+)
 
 ################################################################################
 #' No turtles
@@ -2730,9 +2896,9 @@ setMethod(
   "turtlesOwn",
   signature = c("SpatialPointsDataFrame", "character", "missing"),
   definition = function(turtles, tVar) {
-    newData <- cbind(turtles@data, rep(NA, length(turtles)))
-    colnames(newData)[ncol(turtles@data) + 1] <- tVar
-    turtles@data <- newData
+    #newData <- cbind(turtles@data, rep(NA, length(turtles))) # Not necessary
+    #colnames(newData)[ncol(turtles@data) + 1] <- tVar        # Not necessary
+    turtles@data[,tVar] <- NA
     return(turtles)
   }
 )
@@ -2743,9 +2909,94 @@ setMethod(
   "turtlesOwn",
   signature = c("SpatialPointsDataFrame", "character", "ANY"),
   definition = function(turtles, tVar, tVal) {
-    newTurtles <- turtlesOwn(turtles = turtles, tVar = tVar)
     turtles@data[,tVar] <- tVal
     return(turtles)
+  }
+)
+
+
+#' @export
+#' @rdname turtlesOwn
+setMethod(
+  "turtlesOwn",
+  signature = c("agentMatrix", "character", "missing"),
+  definition = function(turtles, tVar) {
+    a <- matrix(NA)
+    names(a) <- tVar
+    b <- agentMatrix(a)
+    cbind(turtles, b)
+
+  }
+)
+
+
+
+
+
+
+
+################################################################################
+#' Faster cbind for 2 matrices
+#'
+#' This is a drop-in replacement for cbind IF it is 2 matrices.
+#' It is at least 2x faster for small matrices. It becomes
+#' slower for larger matrices so should only be used for small
+#' matrices (smaller than 10,000 x 9)
+#'
+#' @inheritParams fargs
+#'
+#' @param a    matrix
+#'
+#' @param b    matrix
+#'
+#' @docType methods
+#' @author Eliot McIntire
+#' @export
+#' @rdname fastCbind
+fastCbind <- function(a,b){
+  colNamesA <- colnames(a)
+  colNamesB <- colnames(b)
+  newDim <- dim(a)+c(0,dim(b)[2])
+  len <- length(a)
+  newLen <- len+length(b)
+  length(a) <- newLen
+  dim(a) <- newDim
+  if(length(b)!=(newLen - len))
+    b <- rep_len(b, length.out = newLen - len)
+  a[(len+1):newLen] <- b
+  colnames(a) <- c(colNamesA, colNamesB)
+  a
+}
+
+#' @export
+#' @rdname turtlesOwn
+setMethod(
+  "turtlesOwn",
+  signature = c("agentMatrix", "character", "numeric"),
+  definition = function(turtles, tVar, tVal) {
+
+    tVal <- matrix(tVal, ncol=1)
+    colnames(tVal) <- tVar
+    turtles@x <- fastCbind(turtles@x, tVal)
+    turtles
+    #tVal <- matrix(tVal, ncol=1)
+    #colnames(tVal) <- tVar
+    #newCol <- agentMatrix(tVal)
+    #cbind(turtles, newCol)
+  }
+)
+
+#' @export
+#' @rdname turtlesOwn
+setMethod(
+  "turtlesOwn",
+  signature = c("agentMatrix", "character", "character"),
+  definition = function(turtles, tVar, tVal) {
+
+    tVal <- matrix(tVal, ncol=1)
+    colnames(tVal) <- tVar
+    newCol <- agentMatrix(tVal)
+    fastCbind(turtles@x, newCol@x[,-(1:2), drop=FALSE])
   }
 )
 
@@ -3104,6 +3355,30 @@ setMethod(
       }
     }
 })
+
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("missing", "agentMatrix", "character"),
+  definition = function(agents, var) {
+
+    if(length(var) == 1){
+      if(var == "xcor"){
+        return(agents@x[,1])
+      } else if(var == "ycor"){
+        return(agents@x[,2])
+      } else {
+        return(agents@x[,var])
+      }
+    } else {
+      if(any(var == "xcor" | var == "ycor")){
+        return(agents@x[,var])
+      } else {
+        agents@x[,var]
+      }
+    }
+  })
 
 #' @export
 #' @rdname of

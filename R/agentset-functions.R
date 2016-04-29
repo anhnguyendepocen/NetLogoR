@@ -155,6 +155,17 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname NLany
+setMethod(
+  "NLany",
+  signature = c("agentMatrix"),
+  definition = function(agents) {
+    anyAgents <- ifelse(NROW(agents) == 0, FALSE, TRUE)
+    return(anyAgents)
+  }
+)
+
 
 ################################################################################
 #' Count agents
@@ -443,6 +454,17 @@ setMethod(
   }
 )
 
+
+#' @export
+#' @rdname NLwith
+setMethod(
+  "NLwith",
+  signature = c("agentMatrix", "missing", "character", "ANY"),
+  definition = function(agents, var, val) {
+    turtlesWith <- agents@x[agents@x[,var] %in% val, , drop=FALSE]
+    turtle(agents, turtlesWith[,"who"])
+  }
+)
 
 ################################################################################
 #' Agents with maximum
@@ -1945,6 +1967,65 @@ setMethod(
 
     return(turtles)
 })
+
+
+#' @export
+#' @rdname set
+setMethod(
+  "set",
+  signature = c(world = "missing", turtles = "agentMatrix", agents = "agentMatrix",
+                var = "character", val = "ANY"),
+  definition = function(turtles, agents, var, val) {
+
+    if(count(agents) != 0){
+
+      if(identical(agents, turtles)){ # NOT DONE YET Eliot April 28
+
+        if(length(var) == 1){
+
+          if(var == "xcor"){
+            turtles@coords[, 1] <- val
+          } else if(var == "ycor"){
+            turtles@coords[, 2] <- val
+          } else {
+            turtles@data[, var] <- val
+          }
+
+        } else {
+
+          if(any(var == "xor" | var == "ycor")){
+
+            turtlesData <- cbind(turtles@coords, turtles@data)
+            turtlesData[, var] <- val
+            turtles@coords <- turtlesData[,c(1,2)]
+            turtles@data <- turtlesData[,3:ncol(turtlesData)]
+
+          } else {
+
+            turtles@data[, var] <- val
+
+          }
+        }
+
+      } else {
+
+        iAgents <- match(agents@x[,"who"], turtles@x[,"who"])
+
+        if(length(var) == 1){
+          turtles@x[iAgents, var] <- val
+        }
+      }
+
+      if(any(var == "who")){ # if the who numbers have been modified, check for duplicates
+        if(anyDuplicated(turtles@data$who) != 0){
+          warning("Duplicated who numbers among the resulting turtles. Please, reassign who numbers to keep them unique inside the agentset.")
+        }
+      }
+
+    }
+
+    return(turtles)
+  })
 
 
 #' @export

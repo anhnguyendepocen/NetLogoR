@@ -4,16 +4,12 @@
 \name{fd}
 \alias{fd}
 \alias{fd,SpatialPointsDataFrame,numeric-method}
-\alias{fd,agentDataTable,numeric-method}
 \title{Move forward}
 \usage{
 fd(turtles, dist, world, torus = FALSE, out = TRUE)
 
 \S4method{fd}{SpatialPointsDataFrame,numeric}(turtles, dist, world,
   torus = FALSE, out = TRUE)
-
-\S4method{fd}{agentDataTable,numeric}(turtles, dist, world, torus = FALSE,
-  out = TRUE)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

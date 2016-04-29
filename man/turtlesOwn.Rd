@@ -5,6 +5,9 @@
 \alias{turtlesOwn}
 \alias{turtlesOwn,SpatialPointsDataFrame,character,ANY-method}
 \alias{turtlesOwn,SpatialPointsDataFrame,character,missing-method}
+\alias{turtlesOwn,agentMatrix,character,character-method}
+\alias{turtlesOwn,agentMatrix,character,missing-method}
+\alias{turtlesOwn,agentMatrix,character,numeric-method}
 \title{New turtles variable}
 \usage{
 turtlesOwn(turtles, tVar, tVal)
@@ -12,6 +15,12 @@ turtlesOwn(turtles, tVar, tVal)
 \S4method{turtlesOwn}{SpatialPointsDataFrame,character,missing}(turtles, tVar)
 
 \S4method{turtlesOwn}{SpatialPointsDataFrame,character,ANY}(turtles, tVar, tVal)
+
+\S4method{turtlesOwn}{agentMatrix,character,missing}(turtles, tVar)
+
+\S4method{turtlesOwn}{agentMatrix,character,numeric}(turtles, tVar, tVal)
+
+\S4method{turtlesOwn}{agentMatrix,character,character}(turtles, tVar, tVal)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

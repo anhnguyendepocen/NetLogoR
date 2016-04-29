@@ -1,5 +1,5 @@
 a <- Sys.time()
-useNLworldMatrix <- FALSE
+useNLworldMatrix <- TRUE
 plot.it <- FALSE
 maxTime <- 50
 ################################################################################
@@ -70,14 +70,23 @@ if(grassOn == TRUE){
 # When field is updated, the values on the individual NLworld grass and countdown are not updated, only the layers in field are
 
 # Create the sheep
-sheep <- createTurtles(n = nSheep, coords = randomXYcor(world = grass, n = nSheep), breed = "aSheep", color = rep("red", nSheep))
+ranCor <- randomXYcor(world = grass, n = nSheep)
+ranHead <- runif(nSheep, 0, 360)
+sheep <- createTurtles(n = nSheep, coords = ranCor, breed = "aSheep", color = rep("red", nSheep),
+                       heading = ranHead)
+sheepAM <- createTurtlesAM(n = nSheep, coords = ranCor, breed = "aSheep", color = rep("red", nSheep),
+                           heading = ranHead)
 # Add the energy variable
-sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = runif(n = nSheep, min = 0, max = 2 * gainFoodSheep))
+newVals <- runif(n = nSheep, min = 0, max = 2 * gainFoodSheep)
+sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = newVals)
+sheepAM <- turtlesOwn(turtles = sheepAM, tVar = "energy", tVal = newVals)
 
 # Create the wolves
 wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+wolvesAM <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
 # Add the energy variable
 wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
+wolvesAM <- turtlesOwn(turtles = wolvesAM, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 
 # Initialize the count of grass
 if(grassOn == TRUE){
@@ -110,9 +119,13 @@ move <- function(turtles){ # sheep and wolves
   # turtles <- right(turtles, angle = runif(n = count(turtles), min = 0, max = 50))
   # turtles <- left(turtles, angle = runif(n = count(turtles), min = 0, max = 50))
   # The two above functions can be replaced by this next one, as a negative value to turn right will turn left
-  turtles <- right(turtles, angle = runif(n = count(turtles), min = -50, max = 50))
+  newAngles <- runif(n = count(turtles), min = -50, max = 50)
+  turtles <- right(turtles, angle = newAngles)
+  turtlesAM <- right(turtlesAM, angle = newAngles)
+
   turtles <- fd(world = grass, turtles = turtles, dist = 1, torus = TRUE)
-  return(turtles)
+  turtlesAM <- fd(world = grass, turtles = turtlesAM, dist = 1, torus = TRUE)
+  return(turtlesAM)
 }
 
 # # Test move()
@@ -126,15 +139,25 @@ move <- function(turtles){ # sheep and wolves
 eatGrass <- function(){ # only sheep
   pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches with grass equal to 1 (green)
   sheepOnGreen <- turtlesOn(world = field, turtles = sheep, agents = pGreen) # sheep on green patches
+  sheepOnGreenAM <- turtlesOn(world = field, turtles = sheepAM, agents = pGreen) # sheep on green patches
+
 
   if(count(sheepOnGreen) != 0){
     # These sheep gain energy by eating
     energySheep <- of(agents = sheepOnGreen, var = "energy") # energy before eating
-    sheep <- set(turtles = sheep, agents = sheepOnGreen, var = "energy", val = energySheep + gainFoodSheep) # update energy
+    energySheepAM <- of(agents = sheepOnGreenAM, var = "energy") # energy before eating
+
+    sheep1 <- set(turtles = sheep, agents = sheepOnGreen, var = "energy",
+                 val = energySheep + gainFoodSheep) # update energy
+    sheepAM1 <- set(turtles = sheepAM, agents = sheepOnGreenAM, var = "energy",
+                 val = energySheepAM + gainFoodSheep) # update energy
 
     # If a sheep is on a green patch (value equal to 1), it eats the grass and turns it to brown (value to 0)
     pHere <- patchHere(world = field, turtles = sheepOnGreen)
+    pHereAM <- patchHere(world = field, turtles = sheepOnGreenAM)
+
     field <- set(world = field, agents = pHere, var = "grass", val = 0)
+    field <- set(world = field, agents = pHereAM, var = "grass", val = 0)
 
   }
 
@@ -161,10 +184,13 @@ eatGrass <- function(){ # only sheep
 death <- function(turtles){ # sheep and wolves
   # When energy dips below 0, die
   whoEnergy <- of(agents = turtles, var = c("who", "energy"))
+  whoEnergyAM <- of(agents = turtlesAM, var = c("who", "energy"))
+
   who0 <- whoEnergy[which(whoEnergy$energy < 0), "who"] # "who" numbers of the turtles with their energy value below 0
+  who0AM <- whoEnergyAM[which(whoEnergyAM[,"energy"] < 0), "who"] # "who" numbers of the turtles with their energy value below 0
 
   if(length(who0) != 0){
-    turtles <- die(turtles = turtles, who = who0)
+    turtlesAM <- die(turtles = turtlesAM, who = who0AM)
   }
 
   return(turtles)
