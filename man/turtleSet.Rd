@@ -15,14 +15,14 @@ turtleSet(...)
 by \code{createOTurtles()} representing the moving agents.}
 }
 \value{
-SpatialPointsDataFrame with all the turtles provided in the inputs.
+SpatialPointsDataFrame.
 }
 \description{
 Report a turtle agentset containing all unique turtles provided in the inputs.
 }
 \details{
 Duplicated turtles are identified based only on their who numbers.
-         The choice of unique turtle per who number is random.
+         The turtle chosen for a who number is the first one given in the inputs.
          To keep all turtles from the inputs, use set() to
          reassign who numbers in some of the inputs, prior using
          turtleSet(), to avoid turtles with duplicated who numbers.

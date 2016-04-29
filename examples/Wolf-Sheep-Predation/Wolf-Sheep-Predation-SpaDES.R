@@ -18,7 +18,6 @@ wolfSheepSim <- simInit(
   paths = list(modulePath = paste(getwd(), "/examples/Wolf-Sheep-Predation", sep = ""))
 )
 # Run the model
-dev() # open a new plot window
 # spades(wolfSheepSim, debug = TRUE) # helpful for debuging
 wolfSheepRun <- spades(wolfSheepSim)
 

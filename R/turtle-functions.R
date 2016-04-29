@@ -2804,10 +2804,10 @@ setMethod(
 #' @param ... SpatialPointsDataFrame objects created by \code{createTurtles()} or
 #'            by \code{createOTurtles()} representing the moving agents.
 #'
-#' @return SpatialPointsDataFrame with all the turtles provided in the inputs.
+#' @return SpatialPointsDataFrame.
 #'
 #' @details Duplicated turtles are identified based only on their who numbers.
-#'          The choice of unique turtle per who number is random.
+#'          The turtle chosen for a who number is the first one given in the inputs.
 #'          To keep all turtles from the inputs, use set() to
 #'          reassign who numbers in some of the inputs, prior using
 #'          turtleSet(), to avoid turtles with duplicated who numbers.
@@ -2851,21 +2851,38 @@ setMethod(
   signature = "SpatialPointsDataFrame",
   definition = function(...) {
 
+    # dots <-list(...)
+    # allList <- lapply(dots, function(x){cbind(x@coords, x@data)})
+    # allDf <- as.data.frame(rbindlist(allList))
+    #
+    # if(anyDuplicated(allDf$who) != 0){
+    #   warning("Duplicated turtles based on who numbers are present among the inputs.")
+    #   allDf <- allDf[!duplicated(allDf$who), ]
+    # }
+    #
+    # if(nrow(allDf) == 0){
+    #   allTurtles <- noTurtles()
+    # } else {
+    #   allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
+    # }
+
     dots <-list(...)
-    allList <- lapply(dots, function(x){cbind(x@coords, x@data)})
-    allDf <- as.data.frame(rbindlist(allList))
+    nTurtles <- lapply(dots, function(x){length(x)})
 
-    if(anyDuplicated(allDf$who) != 0){
-      warning("Duplicated turtles based on who numbers are present among the inputs.")
-      allDf <- allDf[!duplicated(allDf$who), ]
-    }
-
-    if(nrow(allDf) == 0){
-      allTurtles <- noTurtles()
+    if(sum(unlist(nTurtles)) == 0){
+      return(noTurtles())
     } else {
-      allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
+
+      allTurtles <- rbind(...)
+
+      if(anyDuplicated(allTurtles@data$who) != 0){
+        warning("Duplicated turtles based on who numbers are present among the inputs.")
+        allTurtles <- turtle(allTurtles, who = unique(allTurtles@data$who))
+      }
+
+      return(allTurtles)
+
     }
-    return(allTurtles)
   }
 )
 

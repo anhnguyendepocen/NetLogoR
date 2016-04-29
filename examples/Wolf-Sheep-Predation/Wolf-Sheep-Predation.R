@@ -1,5 +1,5 @@
 a <- Sys.time()
-useNLworldMatrix <- TRUE
+useNLworldMatrix <- FALSE
 plot.it <- FALSE
 maxTime <- 50
 ################################################################################
@@ -13,9 +13,9 @@ maxTime <- 50
 #
 
 ## Packages required
-library(NetLogoR)
+#library(NetLogoR)
 library(SpaDES)
-library(profvis) # test the speed of the different functions
+#library(profvis) # test the speed of the different functions
 
 
 ## Global variables (some represent the model buttons)
@@ -197,6 +197,7 @@ death <- function(turtles){ # sheep and wolves
 }
 
 # # Test death()
+# wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
 # count1 <- count(wolves)
 # count2 <- count(wolves)
 # for(i in 1:100){
@@ -266,12 +267,14 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
 }
 
 # # Test reproduce()
+# wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+# wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 # count1 <- count(wolves)
 # count2 <- count(wolves)
 # for(i in 1:100){
-#   count1<-c(count1,count(wolves) + count(wolves) * reproWolf / 100)
+#   count1 <- c(count1,count(wolves) + count(wolves) * reproWolf / 100)
 #   wolves <- reproduce(wolves, reproWolf)
-#   count2<-c(count2, count(wolves))
+#   count2 <- c(count2, count(wolves))
 # }
 # plot(1:length(count1), count1, pch = 16)
 # points(1:length(count2), count2, pch = 16, col = "red")
@@ -350,7 +353,7 @@ growGrass <- function(){ # only patches
 
 
 ## Go
-profvisWolfSheep <- profvis({
+#profvisWolfSheep <- profvis({
 time <- 0
 while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
@@ -415,6 +418,7 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
     Plot(sheep, addTo="grassRas")
     dev(curDev+1, xpos = -10)
     timeStep <- 1:length(numSheep)
+  }
 
     if(grassOn == TRUE){
 
@@ -438,8 +442,8 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
       legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
     }
   }
-}
-})
+
+#})
 
 # ## Plot outputs
 # dev()
@@ -465,6 +469,6 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
 # }
 
 
-profvisWolfSheep
 b <- Sys.time()
 print(paste("time =",time, "in", format(b-a, digits = 2), "wolves", NROW(wolves), "sheep", NROW(sheep)))
+#profvisWolfSheep
