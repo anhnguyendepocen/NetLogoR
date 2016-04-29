@@ -461,6 +461,7 @@ setMethod(
 #'
 #' Report the coordinates of the patches at the given \code{[x, y]} locations.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @param x          Numeric. Vector of x coordinates. Must be of same
@@ -567,23 +568,25 @@ setMethod(
     pycor_ <- round(y)
 
     if(torus == TRUE){
-      pCoords <- wrap(cbind(x = pxcor_, y = pycor_), extent(world))
+      pCoords <- wrap(cbind(x = pxcor_, y = pycor_), attr(world, "extent"))
       pxcor_ <- pCoords[,1]
       pycor_ <- pCoords[,2]
     }
 
-    pxcor_[pxcor_ < attr(world,"xmin") | pxcor_ > attr(world,"xmax")] <- NA
-    pycor_[pycor_ < attr(world,"ymin") | pxcor_ > attr(world,"ymax")] <- NA
-    pxcor_[is.na(pycor_)] <- NA
-    pycor_[is.na(pxcor_)] <- NA
+    pxcorNA <- ifelse(pxcor_ < minPxcor(world) | pxcor_ > maxPxcor(world), NA, pxcor_)
+    pycorNA <- ifelse(pycor_ < minPycor(world) | pycor_ > maxPycor(world), NA, pycor_)
+    pxcorNA[is.na(pycorNA)] <- NA
+    pycorNA[is.na(pxcorNA)] <- NA
 
     if(out == FALSE){
-      pxcor_ = pxcor_[!is.na(pxcor_)]
-      pycor_ = pycor_[!is.na(pycor_)]
+      pxcor = pxcorNA[!is.na(pxcorNA)]
+      pycor = pycorNA[!is.na(pycorNA)]
+    } else {
+      pxcor = pxcorNA
+      pycor = pycorNA
     }
 
-    pCoords <- matrix(data = cbind(pxcor_, pycor_), ncol = 2, nrow = length(pxcor_),
-                      dimnames = list(NULL, c("pxcor", "pycor")))
+    pCoords <- matrix(data = cbind(pxcor, pycor), ncol = 2, nrow = length(pxcor), dimnames = list(NULL, c("pxcor", "pycor")))
 
     if(duplicate == FALSE){
       pCoords <- unique(pCoords)

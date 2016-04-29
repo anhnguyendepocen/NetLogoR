@@ -510,6 +510,27 @@ test_that("patch works", {
   expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
   expect_identical(patch(world = ws, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = ws, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
+
+  # NLworldMs
+  w1 <- createNLworldMatrix(data = 1:100, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  expect_identical(patch(world = w1, x = 0.1, y = -0.4), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, x = c(1, 0), y = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), out = TRUE), cbind(pxcor = c(0,NA), pycor = c(0,NA)))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
+  w2 <- createNLworldMatrix(data = 100:1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  ws <- NLworldArray(w1, w2)
+  expect_identical(patch(world = ws, x = 0.1, y = -0.4), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, x = c(1, 0), y = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), out = TRUE), cbind(pxcor = c(0,NA), pycor = c(0,NA)))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), torus = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
+  expect_identical(patch(world = ws, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
+  expect_identical(patch(world = ws, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
 })
 
 test_that("noPatches works", {
