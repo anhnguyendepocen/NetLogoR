@@ -250,7 +250,11 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
 }
 
 # # Test reproduce()
-# wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+# if(useFastClasses){
+#   wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+# } else {
+#   wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+# }
 # wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 # count1 <- count(wolves)
 # count2 <- count(wolves)
