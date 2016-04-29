@@ -18,6 +18,7 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
 #'
 #' @importFrom matrixStats colRanges
 .bboxCoords <- function(coords) {
+
     stopifnot(nrow(coords) > 0)
     bbox = colRanges(coords)
     dimnames(bbox)[[2]] = c("min", "max")
@@ -30,8 +31,7 @@ setMethod(
   "extent",
   signature("NLworldMs"),
   definition = function (x, ...) {
-    extent(cbind(c(attr(x, "xmin"), attr(x, "ymin")),
-          c(attr(x, "xmax"), attr(x, "ymax"))))
+    attr(x, "extent")
   })
 
 #' agentDataTable class
@@ -156,6 +156,7 @@ setMethod("initialize",
         .Object@levels <- rep(list(NULL), ncol(.Object@.Data))
         names(.Object@levels) <- colnames(otherCols)
         if(Coords) {
+          browser()
           .Object@bbox <- NetLogoR:::.bboxCoords(coords)
         } else {
           .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
@@ -291,7 +292,8 @@ setMethod(
 
     x@.Data <- x@.Data[i,unique(c(1:2,j)),...,drop=drop]
     x@levels <- x@levels[j-2]
-    x@bbox <- .bboxCoords(x@.Data[i,1:2])
+    browser()
+    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[i,1:2])
     x
 
 
@@ -345,7 +347,7 @@ setMethod(
     } else {
       x@levels <- x@levels[colNames]
     }
-    x@bbox <- .bboxCoords(x@.Data[,1:2])
+    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2])
     x
 
   }
@@ -362,7 +364,9 @@ setMethod(
   definition = function(x, i, ..., drop) {
 
     x@.Data <- x@.Data[i,,drop=FALSE]
-    x@bbox <- .bboxCoords(x@.Data[,1:2,drop=FALSE])
+    #browser(expr=nrow(x@.Data[,1:2,drop=FALSE])==0)
+    if(NROW(x@.Data)>0)
+    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
     x
 
   }

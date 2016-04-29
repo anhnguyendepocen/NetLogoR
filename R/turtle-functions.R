@@ -3405,13 +3405,13 @@ setMethod(
       } else if(var == "ycor"){
         return(agents@.Data[,2])
       } else {
-        return(agents@.Data[,var])
+        return(agents@.Data[,var, drop=FALSE])
       }
     } else {
       if(any(var == "xcor" | var == "ycor")){
-        return(agents@.Data[,var])
+        return(agents@.Data[,var, drop=FALSE])
       } else {
-        agents@.Data[,var]
+        agents@.Data[,var, drop=FALSE]
       }
     }
   })

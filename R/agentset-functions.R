@@ -1999,32 +1999,33 @@ setMethod(
     if(count(agents) != 0){
 
       if(identical(agents, turtles)){ # NOT DONE YET Eliot April 28
+        turtles@.Data[, var] <- val
 
-        if(length(var) == 1){
-
-          if(var == "xcor"){
-            turtles@coords[, 1] <- val
-          } else if(var == "ycor"){
-            turtles@coords[, 2] <- val
-          } else {
-            turtles@data[, var] <- val
-          }
-
-        } else {
-
-          if(any(var == "xor" | var == "ycor")){
-
-            turtlesData <- cbind(turtles@coords, turtles@data)
-            turtlesData[, var] <- val
-            turtles@coords <- turtlesData[,c(1,2)]
-            turtles@data <- turtlesData[,3:ncol(turtlesData)]
-
-          } else {
-
-            turtles@data[, var] <- val
-
-          }
-        }
+        # if(length(var) == 1){
+        #
+        #   if(var == "xcor"){
+        #     turtles@.Data[, 1] <- val
+        #   } else if(var == "ycor"){
+        #     turtles@.Data[, 2] <- val
+        #   } else {
+        #     turtles@.Data[, var] <- val
+        #   }
+        #
+        # } else {
+        #
+        #   if(any(var == "xcor" | var == "ycor")){
+        #
+        #     #turtlesData <- cbind(turtles@coords, turtles@data)
+        #     #turtlesData[, var] <- val
+        #     #turtles@coords <- turtlesData[,c(1,2)]
+        #     turtles@.Data[, var] <- val
+        #
+        #   } else {
+        #
+        #     turtles@.Data[, var] <- val
+        #
+        #   }
+        # }
 
       } else {
 
