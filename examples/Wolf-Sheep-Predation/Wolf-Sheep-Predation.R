@@ -122,10 +122,18 @@ move <- function(turtles){ # sheep and wolves
 }
 
 # # Test move()
-# plot(wolves, col = rainbow(count(wolves)), pch = 16)
-# for(i in 1:15){
-#   wolves <- move(wolves)
-#   points(wolves, col = rainbow(count(wolves)), pch = 16)
+# if(useFastClasses){
+#   plot(wolves@.Data[, "xcor"], wolves@.Data[, "ycor"], col = rainbow(count(wolves)), pch = 16)
+#   for(i in 1:15){
+#     wolves <- move(wolves)
+#     points(wolves@.Data[, "xcor"], wolves@.Data[, "ycor"], col = rainbow(count(wolves)), pch = 16)
+#   }
+# } else {
+#   plot(wolves, col = rainbow(count(wolves)), pch = 16)
+#   for(i in 1:15){
+#     wolves <- move(wolves)
+#     points(wolves, col = rainbow(count(wolves)), pch = 16)
+#   }
 # }
 # #
 
