@@ -3445,7 +3445,9 @@ setMethod(
 
     if(identical(patches(world), agents)){
       return(valuesW[,var])
+
     } else {
+
       cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
       if(length(cells) != 1 | length(var) == 1){
         return(valuesW[cells, var])
@@ -3454,6 +3456,8 @@ setMethod(
         cellVatMat <- matrix(cellVal, ncol = length(var), dimnames = list(NULL, var))
         return(cellVatMat)
       }
+
+      #return(world[agents - c(attr(world, "minPxcor"), attr(world, "minPycor")) + 1])
     }
 })
 
@@ -3472,6 +3476,8 @@ setMethod(
       allValues <- as.numeric(t(world)) # t() to retrieve the values by rows
       cellValues <- allValues[cellNum]
       return(cellValues)
+
+      #return(world[cbind(agents - c(attr(world, "minPxcor"), attr(world, "minPycor")) + 1,colNum)])
     }
   })
 

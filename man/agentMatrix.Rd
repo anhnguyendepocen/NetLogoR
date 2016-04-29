@@ -3,6 +3,7 @@
 \docType{class}
 \name{agentMatrix}
 \alias{[}
+\alias{[<-}
 \alias{agentMatrix}
 \alias{agentMatrix,matrix-method}
 \alias{agentMatrix,missing-method}
@@ -26,6 +27,22 @@ agentMatrix(..., coords)
 \S4method{[}{agentMatrix,numeric,character,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{agentMatrix,missing,numeric,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{agentMatrix,numeric,numeric,numeric}(x, i, j) <- value
+
+\S4method{[}{agentMatrix,missing,numeric,numeric}(x, j) <- value
+
+\S4method{[}{agentMatrix,numeric,missing,numeric}(x, i) <- value
+
+\S4method{[}{agentMatrix,numeric,numeric,character}(x, i, j) <- value
+
+\S4method{[}{agentMatrix,missing,numeric,character}(x, j) <- value
+
+\S4method{[}{agentMatrix,missing,character,character}(x, j) <- value
+
+\S4method{[}{agentMatrix,numeric,character,character}(x, i, j) <- value
+
+\S4method{==}{agentMatrix,character}(e1, e2)
 
 \S4method{[}{agentMatrix,numeric,missing,ANY}(x, i, j, ..., drop = TRUE)
 

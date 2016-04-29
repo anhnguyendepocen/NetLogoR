@@ -413,17 +413,6 @@ setMethod(
     pVal <- which(agentsValues %in% val)
     return(agents[pVal, , drop = FALSE])
 
-    # xmin <- attr(world, "xmin")
-    # xmax <- attr(world, "xmax")
-    # ymin <- attr(world, "ymin")
-    # ymax <- attr(world, "ymax")
-    # pxcor <- agents[,1] - xmin + 1
-    # pycor <- agents[,2] - ymin + 1
-    # values <- world[cbind(pxcor, rev(pycor))]
-    # pVal <- which(values %in% val)
-    # pxcorVal <- pxcor[pVal]
-    # pycorVal <- pycor[pVal]
-    # return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
   }
 )
 
@@ -440,18 +429,6 @@ setMethod(
     pVal <- which(agentsValues %in% val)
     return(agents[pVal, , drop = FALSE])
 
-    # xmin <- attr(world, "xmin")
-    # xmax <- attr(world, "xmax")
-    # ymin <- attr(world, "ymin")
-    # ymax <- attr(world, "ymax")
-    # pxcor <- agents[,1] - xmin + 1
-    # pycor <- agents[,2] - ymin + 1
-    # arrayCol <- match(var, dimnames(world)[[3]])
-    # values <- world[cbind(pxcor, rev(pycor), arrayCol)]
-    # pVal <- which(values %in% val)
-    # pxcorVal <- pxcor[pVal]
-    # pycorVal <- pycor[pVal]
-    # return(cbind(pxcor = pxcorVal + xmin - 1, pycor = pycorVal + ymin - 1))
   }
 )
 
@@ -2074,7 +2051,7 @@ setMethod(
       if(identical(patches(world), agents)){
         world[] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
       } else {
-        #cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+        #cells <- agents-c(attr(world, "minPxcor"), attr(world, "minPycor"))+1
         #world[cells] <- val
         matj <- agents[,1] - attr(world, "minPxcor") + 1
         mati <- attr(world, "maxPycor") - agents[,2] + 1
@@ -2100,7 +2077,7 @@ setMethod(
                 var = "character", val = "ANY"),
   definition = function(world, agents, var, val) {
 
-     # cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+    # cells <- agents-c(attr(world, "minPxcor"), attr(world, "minPycor"))+1
     # arrayDim <- match(var, dimnames(world)[[3]])
     # if(length(arrayDim)>1) {
     #   ind <- rep_len(seq_len(NROW(cells)), length.out = length(cells))
@@ -2130,10 +2107,12 @@ setMethod(
         }
 
       } else {
+
         if(identical(patches(world), agents)){
           for(i in 1:length(var)){
             world[,,var[i]] <- matrix(val[,var[i]], ncol = dim(world)[2], byrow = TRUE)
           }
+
         } else {
           matj <- agents[,1] - attr(world, "minPxcor") + 1
           mati <- attr(world, "maxPycor") - agents[,2] + 1
