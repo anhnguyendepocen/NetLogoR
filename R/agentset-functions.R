@@ -1769,6 +1769,8 @@ setMethod(
 #'
 #' Assign values to the \code{agents} for their selected variables.
 #'
+#' @param world NLworlds or NLworldMs object.
+#'
 #' @inheritParams of
 #'
 #' @inheritParams fargs
@@ -1807,7 +1809,6 @@ setMethod(
 #'
 #'
 #' @export
-#' @importFrom prodlim row.match
 #' @docType methods
 #' @rdname set
 #'
@@ -2071,10 +2072,18 @@ setMethod(
     if(NROW(agents) != 0){
 
       if(identical(patches(world), agents)){
-        world[] <- matrix(val,ncol=dim(world)[2],byrow=TRUE)
+        world[] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
       } else {
-        cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
-        world[cells] <- val
+        #cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+        #world[cells] <- val
+        matj <- agents[,1] - attr(world, "minPxcor") + 1
+        mati <- attr(world, "maxPycor") - agents[,2] + 1
+
+        val <- val[!is.na(matj)]
+        matj <- matj[!is.na(matj)]
+        mati <- mati[!is.na(mati)]
+
+        world[cbind(mati, matj)] <- val
       }
     }
     return(world)
@@ -2088,21 +2097,50 @@ setMethod(
                 var = "character", val = "ANY"),
   definition = function(world, agents, var, val) {
 
+     # cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
+    # arrayDim <- match(var, dimnames(world)[[3]])
+    # if(length(arrayDim)>1) {
+    #   ind <- rep_len(seq_len(NROW(cells)), length.out = length(cells))
+    #   arrayDim <- rep(arrayDim,each=NROW(cells))
+    #   world[cbind(cells[ind,],arrayDim)] <- val
+    # } else {
+    #   world[cbind(cells,arrayDim)] <- val
+    # }
+
     if(NROW(agents) != 0){
 
-      if(identical(patches(world), agents)){
-        world[] <- matrix(val,ncol=dim(world)[2],byrow=TRUE)
-      } else {
-        cells <- agents-c(attr(world, "xmin"), attr(world, "ymin"))+1
-        arrayDim <- match(var, dimnames(world)[[3]])
-        if(length(arrayDim)>1) {
-          ind <- rep_len(seq_len(NROW(cells)), length.out = length(cells))
-          arrayDim <- rep(arrayDim,each=NROW(cells))
-          world[cbind(cells[ind,],arrayDim)] <- val
+      if(length(var) == 1){
+        if(identical(patches(world), agents)){
+          world[,,var] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
         } else {
-          world[cbind(cells,arrayDim)] <- val
+          matj <- agents[,1] - attr(world, "minPxcor") + 1
+          mati <- attr(world, "maxPycor") - agents[,2] + 1
+
+          val <- val[!is.na(matj)]
+          matj <- matj[!is.na(matj)]
+          mati <- mati[!is.na(mati)]
+
+          world[,,var][cbind(mati, matj)] <- val
+        }
+
+      } else {
+        if(identical(patches(world), agents)){
+          for(i in 1:length(var)){
+            world[,,var[i]] <- matrix(val[,var[i]], ncol = dim(world)[2], byrow = TRUE)
+          }
+        } else {
+          matj <- agents[,1] - attr(world, "minPxcor") + 1
+          mati <- attr(world, "maxPycor") - agents[,2] + 1
+
+          val <- val[!is.na(matj),, drop = FALSE]
+          matj <- matj[!is.na(matj)]
+          mati <- mati[!is.na(mati)]
+
+          for(i in 1:length(var)){
+            world[,,var[i]][cbind(mati, matj)] <- val[,var[i]]
+          }
         }
       }
     }
     return(world)
-  })
+})
