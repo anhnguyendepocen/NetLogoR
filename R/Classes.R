@@ -156,7 +156,6 @@ setMethod("initialize",
         .Object@levels <- rep(list(NULL), ncol(.Object@.Data))
         names(.Object@levels) <- colnames(otherCols)
         if(Coords) {
-          browser()
           .Object@bbox <- NetLogoR:::.bboxCoords(coords)
         } else {
           .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
@@ -290,9 +289,14 @@ setMethod(
   signature(x="agentMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, ..., drop) {
 
+    colNames <- colnames(x@.Data)[j]
+    levelInd <- match(colNames, names(x@levels))
     x@.Data <- x@.Data[i,unique(c(1:2,j)),...,drop=drop]
-    x@levels <- x@levels[j-2]
-    browser()
+    if(all(is.na(levelInd))) {
+      x@levels <- list(NULL)
+    } else {
+      x@levels <- x@levels[colNames]
+    }
     x@bbox <- NetLogoR:::.bboxCoords(x@.Data[i,1:2])
     x
 
@@ -343,13 +347,148 @@ setMethod(
     levelInd <- match(colNames, names(x@levels))
     x@.Data <- x@.Data[,unique(c(1:2,j)),...,drop=drop]
     if(all(is.na(levelInd))) {
-      x@levels <- NULL
+      x@levels <- list(NULL)
     } else {
+      #x@levels[[levelInd]][x@.Data[,j]]
       x@levels <- x@levels[colNames]
     }
     x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2])
     x
 
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","numeric","numeric","numeric"),
+  definition = function(x, i, j, value) {
+    x@.Data[i,j] <- value
+    validObject(x)
+    return(x)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","missing","numeric","numeric"),
+  definition = function(x, j, value) {
+    x@.Data[,j] <- value
+    validObject(x)
+    return(x)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","numeric","missing","numeric"),
+  definition = function(x, i, value) {
+    x@.Data[i,] <- value
+    validObject(x)
+    return(x)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","numeric","numeric","character"),
+  definition = function(x, i, j, value) {
+    colNames <- colnames(x@.Data)[j]
+    levelInd <- match(colNames, names(x@levels))
+    levelExists <- all(value %in% x@levels[[levelInd]])
+    if(!levelExists) {
+      uniqueLevels <- unique(c(x@levels[[levelInd]], value))
+      x@levels[[levelInd]] <- as.character(factor(x = uniqueLevels,
+                                                  levels = uniqueLevels))
+    }
+    rmLevels <- c(unique(x@.Data[,j]),match(value, x@levels[[levelInd]]))
+    if(length(unique(rmLevels))<length(x@levels[[levelInd]])) {
+      uniqueLevels <- x@levels[[levelInd]][unique(rmLevels)]
+      x@levels[[levelInd]] <- as.character(factor(x = uniqueLevels,
+                                                  levels = uniqueLevels))
+    }
+
+    x@.Data[i,j] <- match(value, x@levels[[levelInd]])
+    validObject(x)
+    return(x)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","missing","numeric","character"),
+  definition = function(x, j, value) {
+    x[seq_len(NROW(x)),j] <- value
+    return(x)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","missing","character","character"),
+  definition = function(x, j, value) {
+    cols <- match(j, colnames(x@.Data))
+    x[seq_len(NROW(x)),cols] <- value
+    return(x)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","numeric","character","character"),
+  definition = function(x, i, j, value) {
+    cols <- match(j, colnames(x@.Data))
+    x[i,cols] <- value
+    return(x)
+  }
+)
+
+#' @export
+#' @name [
+#' @docType methods
+#' @rdname agentMatrix
+setMethod(
+  "==",
+  signature("agentMatrix", "character"),
+  definition = function(e1, e2) {
+
+    colNames <- colnames(e1@.Data)
+    if(length(colNames)<3) {
+      warning("Coordinates are not characters, returning test for both coordinates")
+      return(matrix(rep(FALSE, length(e1)), ncol = 2))
+    }
+    levelInd <- match(colNames, names(e1@levels))
+    levelIndNoNA <- na.omit(levelInd)
+    whInd <- which(!is.na(levelInd))
+    if(all(is.na(levelInd))) {
+      (e1@.Data == e2)[,-(1:2)]
+    } else {
+      logic <- e1@.Data == e2
+      logic[,whInd] <- sapply(levelIndNoNA, function(x) {
+        e1@levels[[x]][e1@.Data[,whInd[x]]]
+      }) == e2
+      logic[,-(1:2)]
+    }
   }
 )
 
@@ -364,7 +503,6 @@ setMethod(
   definition = function(x, i, ..., drop) {
 
     x@.Data <- x@.Data[i,,drop=FALSE]
-    #browser(expr=nrow(x@.Data[,1:2,drop=FALSE])==0)
     if(NROW(x@.Data)>0)
     x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
     x
@@ -381,7 +519,6 @@ setMethod(
   signature(x="agentMatrix"),
   definition = function(x, name) {
     x[,name]
-
   }
 )
 
@@ -407,7 +544,7 @@ setMethod(
     } else {
       tmp <- object@.Data
     }
-    show(tmp)
+    show(tmp[,-(1:2)])
 
   }
 )
