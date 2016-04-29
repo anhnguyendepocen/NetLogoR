@@ -2637,12 +2637,14 @@ setMethod(
                 agents = "matrix", breed = "missing"),
   definition = function(world, turtles, agents, simplify) {
 
-    pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    pTurtles <- cbind(pTurtles, who = turtles@.Data[,"who"])
+    #pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
+    #pTurtles <- cbind(pTurtles, who = turtles@.Data[,"who"])
+
+    pTurtles <- round(turtles@.Data[,c("xcor", "ycor","who")])
+    colnames(pTurtles)[1:2] <- c("pxcor", "pycor")
 
 
     if(simplify == TRUE){
-
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
 
       if(nrow(pOn) == 0){
