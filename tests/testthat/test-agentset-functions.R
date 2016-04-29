@@ -370,6 +370,19 @@ test_that("nOf works",{
   expect_error(nOf(agents = t4, n = 2))
   t5 <- nOf(agents = t4, n = 1)
   expect_equivalent(nrow(merge(as.data.frame(t5), t4, by.x = "t5", by.y = "whoTurtles")), length(unique(t4[,"id"])))
+
+  # With agentMatrix
+  AM1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+  AM2 <- nOf(agents = AM1, n = 2)
+  expect_equivalent(nrow(AM2), 2)
+  AM2coords <- merge(AM2@.Data[,c("xcor", "ycor")], AM1@.Data[,c("xcor", "ycor")])
+  expect_equivalent(nrow(AM2coords), 2)
+  expect_equivalent(nrow(unique(AM2coords)), 2)
+  AM2data <- merge(AM2@.Data[,3:ncol(AM2@.Data)], AM1@.Data[,3:ncol(AM1@.Data)])
+  expect_equivalent(nrow(AM2data), 2)
+  expect_equivalent(nrow(unique(AM2data)), 2)
+  AM3 <- nOf(agents = AM1, n = 10)
+  expect_identical(nrow(merge(AM1@.Data, AM3@.Data)), nrow(AM1@.Data))
 })
 
 test_that("oneOf works",{
@@ -403,6 +416,18 @@ test_that("oneOf works",{
   t5 <- oneOf(agents = t4)
   expect_equivalent(length(t5), length(unique(t4[,"id"])))
   expect_equivalent(nrow(merge(as.data.frame(t5), t4, by.x = "t5", by.y = "whoTurtles")), length(unique(t4[,"id"])))
+
+  # With agentMatrix
+  AM1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+  AM2 <- oneOf(agents = AM1)
+  expect_equivalent(nrow(AM2), 1)
+  AM2coords <- merge(AM2@.Data[,c("xcor", "ycor"), drop = FALSE], AM1@.Data[,c("xcor", "ycor")])
+  expect_equivalent(nrow(AM2coords), 1)
+  AM2data <- merge(AM2@.Data[,3:ncol(AM2@.Data), drop = FALSE], AM1@.Data[,3:ncol(AM1@.Data)])
+  expect_equivalent(nrow(AM2data), 1)
+  AM3 <- nOf(agents = turtle(AM1, who = 0), n = 1)
+  AM4 <- oneOf(agents = turtle(AM1, who = 0))
+  expect_identical(AM3, AM4)
 })
 
 test_that("maxNof works",{

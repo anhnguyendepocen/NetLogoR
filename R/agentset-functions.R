@@ -985,6 +985,9 @@ setMethod(
 #'         SpatialPointsDataFrame of length \code{n} representing the turtles
 #'         selected from \code{agents},
 #'
+#'         AgentMatrix (nrow = \code{n}) representing the turtles
+#'         selected from \code{agents},
+#'
 #'         Integer. Vector of "who" numbers for the selected turtles from
 #'         \code{agents}, \code{n} per individual "id".
 #'
@@ -1034,40 +1037,47 @@ setMethod(
   signature = c("matrix", "numeric"),
   definition = function(agents, n) {
 
-    if(ncol(agents) == 2 & colnames(agents)[1] == "pxcor"){
+
+    if(class(agents) == "agentMatrix"){ # agentMatrix
+
       row <- sample(1:nrow(agents), size = n, replace = FALSE)
       row <- row[order(row)]
-      patches <- agents[row,]
-
-      if(length(row) == 1){ # to keep the class = matrix
-        patches <- cbind(pxcor = patches[1], pycor = patches[2])
-      }
-      return(patches)
+      turtles <- agents[row,, drop = FALSE]
+      return(turtles)
 
     } else {
 
-      if(min(table(agents[, "id"])) < n){
-        stop("n is larger than the number of agents per id")
-      } else {
+      if(ncol(agents) == 2 & colnames(agents)[1] == "pxcor"){ # patches
+        row <- sample(1:nrow(agents), size = n, replace = FALSE)
+        row <- row[order(row)]
+        patches <- agents[row,, drop = FALSE]
+        return(patches)
 
-        if(ncol(agents) == 3){
+      } else { # patcges
 
-          row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
-                        FUN = function(x){sample(x, size = n, replace = FALSE)})
-          patches <- agents[unlist(row), c("pxcor", "pycor")]
-          return(patches)
-
+        if(min(table(agents[, "id"])) < n){
+          stop("n is larger than the number of agents per id")
         } else {
 
-          row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
-                        FUN = function(x){sample(x, size = n, replace = FALSE)})
-          turtles <- agents[unlist(row), "whoTurtles"]
-          return(turtles)
+          if(ncol(agents) == 3){ # patches with id
+
+            row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
+                          FUN = function(x){sample(x, size = n, replace = FALSE)})
+            patches <- agents[unlist(row), c("pxcor", "pycor")]
+            return(patches)
+
+          } else { # whoNUmbers of turtles with id
+
+            row <- tapply(X = 1:nrow(agents), INDEX = as.factor(agents[, "id"]),
+                          FUN = function(x){sample(x, size = n, replace = FALSE)})
+            turtles <- agents[unlist(row), "whoTurtles"]
+            return(turtles)
+          }
         }
       }
+
     }
-  }
-)
+})
 
 #' @export
 #' @rdname nOf
@@ -1079,8 +1089,7 @@ setMethod(
     newTurtles <- agents[ind, ]
 
     return(newTurtles)
-  }
-)
+})
 
 
 ################################################################################
@@ -1098,6 +1107,9 @@ setMethod(
 #'               SpatialPointsDataFrame created by \code{createTurtles()} or
 #'               by \code{createOTurtles()} representing the moving agents, or
 #'
+#'               AgentMatrix created by \code{createTurtlesAM()} or
+#'               by \code{createOTurtlesAM()} representing the moving agents, or
+#'
 #'               Matrix (ncol = 2) with the first column "whoTurtles" and the
 #'               second column "id".
 #'
@@ -1110,6 +1122,9 @@ setMethod(
 #'         selected patches from \code{agents}, one per individual "id", or
 #'
 #'         SpatialPointsDataFrame of length 1 representing the turtle
+#'         selected from \code{agents}, or
+#'
+#'         AgentMatrix (nrow = 1) representing the turtle
 #'         selected from \code{agents}, or
 #'
 #'         Integer. Vector of "who" numbers for the selected turtles from
@@ -1159,18 +1174,26 @@ setMethod(
   signature = c("matrix"),
   definition = function(agents) {
 
-    if(ncol(agents) == 2 & colnames(agents)[1] == "pxcor"){
+    if(class(agents) == "agentMatrix"){ # agentMatrix
+
       nOf(agents = agents, n = 1)
-    } else if(ncol(agents) == 3){
-      mApply(X = agents[, c("pxcor", "pycor")], INDEX = as.factor(agents[, "id"]), FUN = oneOf, keepmatrix = TRUE)
+
     } else {
-      # Not working
-      whoRow <- sample(seq_len(NROW(agents)), size = 1)
-      whoTurtles <- agents[whoRow,"whoTurtles"]
-      #whoTurtles <- tapply(X = agents[,"whoTurtles"], INDEX = as.factor(agents[, "id"]),
-      #                     FUN = function(x){ifelse(length(x) == 1, x, sample(x, size = 1))})
-      return(as.numeric(whoTurtles))
+
+      if(ncol(agents) == 2 & colnames(agents)[1] == "pxcor"){ # patches
+        nOf(agents = agents, n = 1)
+
+      } else if(ncol(agents) == 3){ # patches with id
+        mApply(X = agents[, c("pxcor", "pycor")], INDEX = as.factor(agents[, "id"]), FUN = oneOf, keepmatrix = TRUE)
+
+      } else { # whoNUmbers of turtles with id
+        whoTurtles <- tapply(X = agents[,"whoTurtles"], INDEX = as.factor(agents[, "id"]),
+                             FUN = function(x){ifelse(length(x) == 1, x, sample(x, size = 1))})
+        return(as.numeric(whoTurtles))
+      }
+
     }
+
   }
 )
 
