@@ -186,7 +186,7 @@ eatGrass <- function(){ # only sheep
 # of(agents = sheepEat, var = "energy")[6:10] == (6:10 + gainFoodSheep)
 # #
 
-whoEnergy <- numeric()
+#whoEnergy <- numeric()
 death <- function(turtles){ # sheep and wolves
   # When energy dips below 0, die
   whoEnergy <- of(agents = turtles, var = c("who", "energy"))
@@ -203,7 +203,12 @@ death <- function(turtles){ # sheep and wolves
 }
 
 # # Test death()
-# wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+# if(useFastClasses){
+#   wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+# } else {
+#   wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
+# }
+# wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 # count1 <- count(wolves)
 # count2 <- count(wolves)
 # for(i in 1:100){
