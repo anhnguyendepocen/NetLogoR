@@ -2638,7 +2638,7 @@ setMethod(
   definition = function(world, turtles, agents, simplify) {
 
     pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    pTurtles <- cbind(pTurtles, who = turtles$who)
+    pTurtles <- cbind(pTurtles, who = turtles@.Data[,"who"])
 
 
     if(simplify == TRUE){
@@ -2652,7 +2652,7 @@ setMethod(
       }
 
     } else {
-      agents <- cbind(agents, id = 1:nrow(agents))
+      agents <- cbind(agents, id = 1:NROW(agents))
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
       pOn <- pOn[order(pOn[,"id"]),]
       turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
