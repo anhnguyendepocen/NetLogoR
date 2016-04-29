@@ -20,6 +20,14 @@ test_that("diffuse works for NLworld with 4 neighbors", {
   expect_identical(sum(values(w1)), sum(values(w3)))
   val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 4) + (6 * 0.5 / 4) + (3 * 0.5 / 4) + (2 * 0.5 / 4)
   expect_identical(as.numeric(w3[0,2]),val03)
+
+  # With NLworldMatrix
+  w4 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
+  w5 <- diffuse(world = w4, share = 0.6, nNeighbors = 4)
+  expect_identical(sum(w4), sum(w5))
+  expect_equivalent(values(w2), as.numeric(t(w5)))
+  w6 <- diffuse(world = w4, share = 0.5, nNeighbors = 4, torus = TRUE)
+  expect_equivalent(values(w3), as.numeric(t(w6)))
 })
 
 test_that("diffuse works for NLworldStack with 4 neighbors", {
@@ -47,6 +55,16 @@ test_that("diffuse works for NLworldStack with 4 neighbors", {
   expect_identical(sum(values(w1)), sum(values(w3$w1)))
   val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 4) + (6 * 0.5 / 4) + (3 * 0.5 / 4) + (2 * 0.5 / 4)
   expect_identical(as.numeric(w3[0,2][1]),val03)
+
+  # With NLworldArray
+  w4 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
+  w5 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = runif(9))
+  w6 <- NLworldArray(w4, w5)
+  w7 <- diffuse(world = w6, pVar = "w4", share = 0.6, nNeighbors = 4)
+  expect_identical(sum(w4), sum(w7[,,"w4"]))
+  expect_equivalent(values(ws2$w1), as.numeric(t(w7[,,"w4"])))
+  w8 <- diffuse(world = w6, pVar = "w4", share = 0.5, nNeighbors = 4, torus = TRUE)
+  expect_equivalent(values(w3$w1), as.numeric(t(w8[,,"w4"])))
 })
 
 test_that("diffuse works for NLworld with 8 neighbors", {
@@ -72,6 +90,13 @@ test_that("diffuse works for NLworld with 8 neighbors", {
   val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 8) + (6 * 0.5 / 8) + (3 * 0.5 / 8) + (2 * 0.5 / 8) + (2 * 0.5 / 8) + (8 * 0.5 / 8) + (10 * 0.5 / 8) + (8 * 0.5 / 8)
   expect_identical(as.numeric(w3[0,2]),val03)
 
+  # With NLworldMatrix
+  w4 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
+  w5 <- diffuse(world = w4, share = 0.6, nNeighbors = 8)
+  expect_identical(sum(w4), sum(w5))
+  expect_equivalent(values(w2), as.numeric(t(w5)))
+  w6 <- diffuse(world = w4, share = 0.5, nNeighbors = 8, torus = TRUE)
+  expect_equivalent(values(w3), as.numeric(t(w6)))
 })
 
 test_that("diffuse works for NLworldStack with 8 neighbors", {
@@ -99,6 +124,16 @@ test_that("diffuse works for NLworldStack with 8 neighbors", {
   expect_identical(sum(values(w1)), sum(values(w3$w1)))
   val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 8) + (6 * 0.5 / 8) + (3 * 0.5 / 8) + (2 * 0.5 / 8) + (2 * 0.5 / 8) + (8 * 0.5 / 8) + (10 * 0.5 / 8) + (8 * 0.5 / 8)
   expect_identical(as.numeric(w3[0,2][1]),val03)
+
+  # With NLworldArray
+  w4 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
+  w5 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = runif(9))
+  w6 <- NLworldArray(w4, w5)
+  w7 <- diffuse(world = w6, pVar = "w4", share = 0.6, nNeighbors = 8)
+  expect_identical(sum(w4), sum(w7[,,"w4"]))
+  expect_equivalent(values(ws2$w1), as.numeric(t(w7[,,"w4"])))
+  w8 <- diffuse(world = w6, pVar = "w4", share = 0.5, nNeighbors = 8, torus = TRUE)
+  expect_equivalent(values(w3$w1), as.numeric(t(w8[,,"w4"])))
 })
 
 test_that("distance works for patches", {

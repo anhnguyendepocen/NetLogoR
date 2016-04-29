@@ -4,6 +4,8 @@
 \name{diffuse}
 \alias{diffuse}
 \alias{diffuse,NLworld,missing,numeric,numeric-method}
+\alias{diffuse,NLworldArray,character,numeric,numeric-method}
+\alias{diffuse,NLworldMatrix,missing,numeric,numeric-method}
 \alias{diffuse,NLworldStack,character,numeric,numeric-method}
 \title{Diffuse values in a world}
 \usage{
@@ -14,9 +16,15 @@ diffuse(world, pVar, share, nNeighbors, torus = FALSE)
 
 \S4method{diffuse}{NLworldStack,character,numeric,numeric}(world, pVar, share,
   nNeighbors, torus = FALSE)
+
+\S4method{diffuse}{NLworldMatrix,missing,numeric,numeric}(world, share,
+  nNeighbors, torus)
+
+\S4method{diffuse}{NLworldArray,character,numeric,numeric}(world, pVar, share,
+  nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 
 \item{pVar}{Character. If the \code{world} is a NLworldStack object, \code{pVar}
 is the name of the layer to use to define the patches values.
@@ -32,7 +40,7 @@ considered.}
 \code{torus = FALSE}.}
 }
 \value{
-NLworlds object with patches values updated.
+NLworlds or NLworldMs object with patches values updated.
 }
 \description{
 Each patch gives an equal share of a portion of its value to its neighbor patches.

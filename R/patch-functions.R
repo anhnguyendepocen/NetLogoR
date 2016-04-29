@@ -3,12 +3,13 @@
 #'
 #' Each patch gives an equal share of a portion of its value to its neighbor patches.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @param share      Numeric. Value between 0 and 1 representing the portion of
 #'                   the patches values to be diffused among the neighbors.
 #'
-#' @return NLworlds object with patches values updated.
+#' @return NLworlds or NLworldMs object with patches values updated.
 #'
 #' @details What is given is lost for the patches.
 #'
@@ -98,6 +99,51 @@ setMethod(
     world_l <- world[[pos_l]]
     newWorld <- diffuse(world = world_l, share = share, nNeighbors = nNeighbors, torus = torus)
     world[[pos_l]]@data@values <- values(newWorld)
+    return(world)
+  }
+)
+
+#' @export
+#' @rdname diffuse
+setMethod(
+  "diffuse",
+  signature = c(world = "NLworldMatrix", pVar = "missing", share = "numeric", nNeighbors = "numeric"),
+  definition = function(world, share, nNeighbors, torus) {
+
+    val <- as.numeric(t(world))
+    cellNum <- 1:length(val)
+    toGive <- (val * share) / nNeighbors
+
+    df <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+    nNeigh <- plyr::count(df[,"from"])
+    toGiveNeigh <- rep(toGive, nNeigh$freq)
+    df <- df[order(df[, "from"]),]
+    DT <- data.table(df, toGiveNeigh)
+    setkey(DT, from)
+    DT <- DT[ , loose := sum(toGiveNeigh), by = from] # how much each patch give
+    loose <- unique(DT[,c(1, 4), with = FALSE]) # from and loose
+    setkey(DT, to)
+    DT <- DT[ , win := sum(toGiveNeigh), by = to] # how much each patch receive
+    win <- unique(DT[,c(2, 5), with = FALSE]) # to and win
+
+    newVal <- val - loose[,loose] + win[,win]
+    newWorld <- createNLworldMatrix(data = newVal, minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+                                    minPycor = minPycor(world), maxPycor = maxPycor(world))
+    return(newWorld)
+
+  }
+)
+
+#' @export
+#' @rdname diffuse
+setMethod(
+  "diffuse",
+  signature = c(world = "NLworldArray", pVar = "character", share = "numeric", nNeighbors = "numeric"),
+  definition = function(world, pVar, share, nNeighbors, torus) {
+    worldMat <- createNLworldMatrix(data = t(world[,,pVar]), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+                                    minPycor = minPycor(world), maxPycor = maxPycor(world))
+    newWorld <- diffuse(world = worldMat, share = share, nNeighbors = nNeighbors, torus = torus)
+    world[,,pVar] <- newWorld
     return(world)
   }
 )
