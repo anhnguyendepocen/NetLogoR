@@ -139,6 +139,8 @@ move <- function(turtles){ # sheep and wolves
 
 eatGrass <- function(){ # only sheep
   pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches with grass equal to 1 (green)
+  pGreen <- which(field[,,"grass"] == 1, arr.ind=TRUE)-26 # patches with grass equal to 1 (green)
+
   sheepOnGreen <- turtlesOn(world = field, turtles = sheep, agents = pGreen) # sheep on green patches
 
   if(count(sheepOnGreen) != 0){

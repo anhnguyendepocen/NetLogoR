@@ -2652,8 +2652,6 @@ setMethod(
     #   pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
     # })
 
-    browser()
-
     if(simplify == TRUE){
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
 
