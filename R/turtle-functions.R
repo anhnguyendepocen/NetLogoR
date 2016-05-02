@@ -1147,6 +1147,20 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname canMove
+setMethod(
+  "canMove",
+  signature = c("NLworlds", "agentMatrix", "numeric"),
+  definition = function(world, turtles, dist) {
+    wrapFalse <- fd(world = world, turtles = turtles, dist = dist, torus = FALSE)
+    wrapTrue <- fd(world = world, turtles = turtles, dist = dist, torus = TRUE)
+    testX <- wrapFalse@.Data[,"xcor"] == wrapTrue@.Data[,"xcor"]
+    testY <- wrapFalse@.Data[,"ycor"] == wrapTrue@.Data[,"ycor"]
+    return(testX & testY)
+  }
+)
+
 
 ################################################################################
 #' Random xcor

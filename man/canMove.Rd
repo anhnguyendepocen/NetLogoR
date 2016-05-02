@@ -4,12 +4,15 @@
 \name{canMove}
 \alias{canMove}
 \alias{canMove,NLworlds,SpatialPointsDataFrame,numeric-method}
+\alias{canMove,NLworlds,agentMatrix,numeric-method}
 \title{Can the turtles move?}
 \usage{
 canMove(world, turtles, dist)
 
 \S4method{canMove}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles,
   dist)
+
+\S4method{canMove}{NLworlds,agentMatrix,numeric}(world, turtles, dist)
 }
 \arguments{
 \item{world}{NLworlds object.}

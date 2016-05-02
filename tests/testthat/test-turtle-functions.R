@@ -547,6 +547,15 @@ test_that("canMove works",{
   expect_identical(canMove(world = ws, turtles = t1, dist = c(1,4,6,4)), c(TRUE, TRUE, FALSE, TRUE))
 })
 
+test_that("canMove works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+  t1 <- createTurtlesAM(world = w1, n = 4)
+  expect_identical(canMove(world = w1, turtles = t1, dist = 1), rep(TRUE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, dist = 4), rep(TRUE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, dist = 6), rep(FALSE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, dist = c(1,4,6,4)), c(TRUE, TRUE, FALSE, TRUE))
+})
+
 test_that("randomXcor and randomYcor works",{
   w1 <- createNLworld(minPxcor = 1, maxPxcor = 100, minPycor = -100, maxPycor = -1)
   t1 <- createTurtles(n = 10000,
