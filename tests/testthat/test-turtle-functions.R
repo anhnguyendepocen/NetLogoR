@@ -1159,6 +1159,24 @@ test_that("tExist works",{
   expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = c("sheep", "wolf")), c(TRUE, FALSE, TRUE))
 })
 
+test_that("tExist works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
+  expect_identical(tExist(turtles = t1, who = 3), TRUE)
+  expect_identical(tExist(turtles = t1, who = 3, breed = "sheep"), TRUE)
+  expect_identical(tExist(turtles = t1, who = 9, breed = "sheep"), FALSE)
+  expect_identical(tExist(turtles = t1, who = 9, breed = "moose"), FALSE)
+  expect_identical(tExist(turtles = t1, who = c(3, 9)), c(TRUE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = "sheep"), c(TRUE, FALSE))
+  expect_identical(tExist(turtles = t1, who = c(9, 3), breed = "sheep"), c(FALSE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("wolf", "sheep")), c(TRUE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = "wolf"), c(FALSE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3, 9), breed = c("sheep", "wolf")), c(TRUE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3,11, 9)), c(TRUE, FALSE, TRUE))
+  expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = "sheep"), c(TRUE, FALSE, FALSE))
+  expect_identical(tExist(turtles = t1, who = c(3,11, 9), breed = c("sheep", "wolf")), c(TRUE, FALSE, TRUE))
+})
+
 test_that("turtle works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))

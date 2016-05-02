@@ -2727,6 +2727,33 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname tExist
+setMethod(
+  "tExist",
+  signature = c("agentMatrix", "numeric", "missing"),
+  definition = function(turtles, who) {
+
+    tExist <- who %in% turtles@.Data[,"who"]
+    return(tExist)
+
+  }
+)
+
+#' @export
+#' @rdname tExist
+setMethod(
+  "tExist",
+  signature = c("agentMatrix", "numeric", "character"),
+  definition = function(turtles, who, breed) {
+
+    breedFactor <- match(breed, turtles@levels$breed)
+    tExist <- who %in% turtles@.Data[turtles@.Data[,"breed"] %in% breedFactor, "who"]
+    return(tExist)
+
+  }
+)
+
 
 ################################################################################
 #' Select turtles
