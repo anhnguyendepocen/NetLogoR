@@ -299,6 +299,9 @@ createNLworldMatrix <- function(data = NA, minPxcor, maxPxcor, minPycor, maxPyco
   attr(world, "maxPycor") <- maxPycor
   attr(world, "extent") <- extent(minPxcor - 0.5, maxPxcor + 0.5, minPycor - 0.5, maxPycor + 0.5)
   attr(world, "res") <- 1
+  attr(world, "pCoords") <- cbind(pxcor = rep_len(minPxcor:maxPxcor, length.out = numX * numY),
+                                  pycor = rep(maxPycor:minPycor, each = numX))
+  attr(world, "cellNum") <- 1:(numX * numY)
   class(world) <- c("NLworldMatrix", "matrix", "array", "mMatrix", "structure", "vector")
   return(world)
 }

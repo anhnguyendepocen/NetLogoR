@@ -61,6 +61,32 @@ test_that("createTurtles works with different missing inputs",{
   expect_equivalent(length(t1), 10)
 })
 
+test_that("createTurtlesAM",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+
+  t1 <- createTurtlesAM(world = w1, n = 10)
+  expect_equivalent(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), of(agents = t1, var = c("xcor", "ycor")))
+  t1head <- of(agents = t1, var = "heading") >= 0 & of(agents = t1, var = "heading") <= 360
+  expect_equivalent(t1head, rep(TRUE, 10))
+  expect_equivalent(of(agents = t1, var = "breed"), rep("turtle", 10))
+  expect_equivalent(length(unique(of(agents = t1, var = "color"))), 10)
+  expect_equivalent(of(agents = t1, var = "who"), 0:9)
+  expect_equivalent(of(agents = t1, var = "prevX"), as.numeric(rep(NA, 10)))
+  expect_equivalent(of(agents = t1, var = "prevY"), as.numeric(rep(NA, 10)))
+  expect_equivalent(count(t1), 10)
+
+  t2 <- createTurtlesAM(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)))
+  expect_equivalent(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- createTurtlesAM(world = w1, n = 10, heading = 0)
+  expect_equivalent(rep(0, 10), of(agents = t3, var = "heading"))
+  t4 <- createTurtlesAM(world = w1, n = 10, heading = 1:10)
+  expect_equivalent(1:10, of(agents = t4, var = "heading"))
+  t5 <- createTurtlesAM(world = w1, n = 10, breed = "caribou")
+  expect_equivalent(rep("caribou", 10), of(agents = t5, var = "breed"))
+  t6 <- createTurtlesAM(world = w1, n = 10, breed = c(rep("caribou", 5), rep("moose", 5)))
+  expect_equivalent(c(rep("caribou", 5), rep("moose", 5)), of(agents = t6, var = "breed"))
+})
+
 test_that("createOTurtles works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 
@@ -108,6 +134,29 @@ test_that("createOTurtles works",{
   t7 <- createOTurtles(world = w1, n = 1)
   expect_identical(t7@data$heading, 0)
   expect_identical(cbind(xcor = 2, ycor = 2), t7@coords)
+})
+
+test_that("createOTurtlesAM",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+
+  t1 <- createOTurtlesAM(world = w1, n = 10)
+  expect_equivalent(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), of(agents = t1, var = c("xcor", "ycor")))
+  expect_equivalent(seq(0, 360 - (360 / 10), by = 360 /10), of(agents = t1, var = "heading"))
+  expect_equivalent(of(agents = t1, var = "breed"), rep("turtle", 10))
+  expect_equivalent(length(unique(of(agents = t1, var = "color"))), 10)
+  expect_equivalent(of(agents = t1, var = "who"), 0:9)
+  expect_equivalent(of(agents = t1, var = "prevX"), as.numeric(rep(NA, 10)))
+  expect_equivalent(of(agents = t1, var = "prevY"), as.numeric(rep(NA, 10)))
+  expect_equivalent(count(t1), 10)
+
+  t2 <- createOTurtlesAM(world = w1, n = 10, breed = "caribou")
+  expect_equivalent(rep("caribou", 10), of(agents = t2, var = "breed"))
+  t3 <- createOTurtlesAM(world = w1, n = 10, breed = c(rep("caribou", 5), rep("moose", 5)))
+  expect_equivalent(c(rep("caribou", 5), rep("moose", 5)), of(agents = t3, var = "breed"))
+
+  t4 <- createOTurtles(world = w1, n = 1)
+  expect_equivalent(of(agents = t4, var = "heading"), 0)
+  expect_equivalent(cbind(xcor = 2, ycor = 2), of(agents = t4, var = c("xcor", "ycor")))
 })
 
 test_that("fd works",{
@@ -177,6 +226,50 @@ test_that("fd works",{
   expect_error(fd(wturtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
 })
 
+test_that("fd works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t2 <- fd(world = w1, turtles = t1, dist = 1)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 1, ycor = of(agents = t1, var = "ycor")), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- fd(world = w1, turtles = t1, dist = 5, torus = FALSE, out = TRUE)
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 5, ycor = of(agents = t1, var = "ycor")), of(agents = t3, var = c("xcor", "ycor")))
+  t4 <- fd(world = w1, turtles = t1, dist = 5, torus = TRUE)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t4, var = c("xcor", "ycor")))
+  t5 <- fd(world = w1, turtles = t1, dist = -1, torus = TRUE)
+  expect_equivalent(cbind(xcor = rep(4, 10), ycor = of(agents = t1, var = "ycor")), of(agents = t5, var = c("xcor", "ycor")))
+
+  # Argument out
+  t3out <- fd(world = w1, turtles = t1, dist = 5, torus = FALSE, out = FALSE)
+  expect_equivalent(of(agents = t3out, var = c("xcor", "ycor")), of(agents = t1, var = c("xcor", "ycor")))
+
+  t6 <- createTurtlesAM(n = 2, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  t7.1 <- fd(world = w1, turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  t7.2 <- fd(world = w1, turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE)
+  t7.3 <- fd(world = w1, turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE)
+  t7.4 <- fd(world = w1, turtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE)
+  expect_equivalent(of(agents = t7.1, var = c("xcor", "ycor")), cbind(xcor = c(5, 1), ycor = c(0, 0)))
+  expect_equivalent(of(agents = t7.2, var = c("xcor", "ycor")), cbind(xcor = c(0, 1), ycor = c(0, 0)))
+  expect_equivalent(of(agents = t7.3, var = c("xcor", "ycor")), cbind(xcor = c(0, 1), ycor = c(0, 0)))
+  expect_equivalent(of(agents = t7.4, var = c("xcor", "ycor")), cbind(xcor = c(0, 1), ycor = c(0, 0)))
+
+  # Work without world provided when torus = FALSE and out = TRUE
+  t2 <- fd(turtles = t1, dist = 1)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 1, ycor = of(agents = t1, var = "ycor")), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- fd(turtles = t1, dist = 5, torus = FALSE, out = TRUE)
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 5, ycor = of(agents = t1, var = "ycor")), of(agents = t3, var = c("xcor", "ycor")))
+  expect_error(fd(turtles = t1, dist = 5, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = -1, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = 5, torus = TRUE))
+  expect_error(fd(turtles = t1, dist = 5, torus = FALSE, out = FALSE))
+  t7.1 <- fd(turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  expect_equivalent(of(agents = t7.1, var = c("xcor", "ycor")), cbind(xcor = c(5, 1), ycor = c(0, 0)))
+  expect_error(fd(turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE))
+  expect_error(fd(turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE))
+  expect_error(fd(wturtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
+})
+
 test_that("bk works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 90)
@@ -237,6 +330,49 @@ test_that("bk works",{
   expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
 })
 
+test_that("bk works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)), heading = 90)
+  t2 <- bk(world = w1, turtles = t1, dist = -1)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 1, ycor = of(agents = t1, var = "ycor")), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- bk(world = w1, turtles = t1, dist = -5, torus = FALSE)
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 5, ycor = of(agents = t1, var = "ycor")), of(agents = t3, var = c("xcor", "ycor")))
+  t4 <- bk(world = w1, turtles = t1, dist = -5, torus = TRUE)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t4, var = c("xcor", "ycor")))
+  t5 <- bk(world = w1, turtles = t1, dist = 1, torus = TRUE)
+  expect_equivalent(cbind(xcor = rep(4, 10), ycor = of(agents = t1, var = "ycor")), of(agents = t5, var = c("xcor", "ycor")))
+
+  # Argument out
+  t3out <- bk(world = w1, turtles = t1, dist = -5, torus = FALSE, out = FALSE)
+  expect_equivalent(of(agents = t3out, var = c("xcor", "ycor")), of(agents = t1, var = c("xcor", "ycor")))
+
+  t6 <- createTurtlesAM(n = 2, coords = cbind(xcor = 4, ycor = 0), heading = 90)
+  t7.1 <- bk(world = w1, turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  t7.2 <- bk(world = w1, turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE)
+  t7.3 <- bk(world = w1, turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE)
+  t7.4 <- bk(world = w1, turtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE)
+  expect_identical(of(agents = t7.1, var = c("xcor", "ycor")), cbind(xcor = c(-1, 3), ycor = c(0, 0)))
+  expect_identical(of(agents = t7.2, var = c("xcor", "ycor")), cbind(xcor = c(4, 3), ycor = c(0, 0)))
+  expect_identical(of(agents = t7.3, var = c("xcor", "ycor")), cbind(xcor = c(4, 3), ycor = c(0, 0)))
+  expect_identical(of(agents = t7.4, var = c("xcor", "ycor")), cbind(xcor = c(4, 3), ycor = c(0, 0)))
+
+  # Works without world provided when torus = FALSE and out = TRUE
+  t2 <- bk(turtles = t1, dist = -1)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 1, ycor = of(agents = t1, var = "ycor")), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- bk(turtles = t1, dist = -5, torus = FALSE)
+  expect_equivalent(cbind(xcor = of(agents = t1, var = "xcor") + 5, ycor = of(agents = t1, var = "ycor")), of(agents = t3, var = c("xcor", "ycor")))
+  expect_error(bk(turtles = t1, dist = -5, torus = TRUE))
+  expect_error(bk(turtles = t1, dist = 1, torus = TRUE))
+  expect_error(bk(turtles = t1, dist = -5, torus = FALSE, out = FALSE))
+  t7.1 <- bk(turtles = t6, dist = c(5, 1), torus = FALSE, out = TRUE)
+  expect_identical(of(agents = t7.1, var = c("xcor", "ycor")), cbind(xcor = c(-1, 3), ycor = c(0, 0)))
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = FALSE, out = FALSE))
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = TRUE))
+  expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
+})
+
 test_that("home works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
@@ -269,8 +405,23 @@ test_that("home works",{
   expect_error(home(world = w3, turtles = t1, home = "home0"))
 })
 
-test_that("dx and dy works",{
+test_that("home works with agentMatrix",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+  t2 <- home(world = w1, turtles = t1, home = "home0")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- home(world = w1, turtles = t1, home = "center")
+  expect_identical(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), of(agents = t3, var = c("xcor", "ycor")))
+  t4 <- home(world = w1, turtles = t1, home = "pCorner")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), of(agents = t4, var = c("xcor", "ycor")))
+  t5 <- home(world = w1, turtles = t1, home = "corner")
+  expect_identical(cbind(xcor = rep(-0.5, 10), ycor = rep(-0.5, 10)), of(agents = t5, var = c("xcor", "ycor")))
+
+  w3 <- createNLworld(minPxcor = -5, maxPxcor = -1, minPycor = -10, maxPycor = -5)
+  expect_error(home(world = w3, turtles = t1, home = "home0"))
+})
+
+test_that("dx and dy works",{
   t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   expect_equivalent(dx(turtles = t1), 1)
   expect_equivalent(dx(turtles = t1, dist = 2), 2)
@@ -286,8 +437,23 @@ test_that("dx and dy works",{
   expect_equivalent(dy(turtles = t3, dist = sqrt(2)), -1)
 })
 
+test_that("dx and dy works with agentMatrix",{
+  t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  expect_equivalent(dx(turtles = t1), 1)
+  expect_equivalent(dx(turtles = t1, dist = 2), 2)
+  expect_equivalent(dy(turtles = t1), 0)
+  expect_equivalent(dy(turtles = t1, dist = 2), 0)
+  t2 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 0)
+  expect_equivalent(dx(turtles = t2), 0)
+  expect_equivalent(dx(turtles = t2, dist = 2), 0)
+  expect_equivalent(dy(turtles = t2), 1)
+  expect_equivalent(dy(turtles = t2, dist = 2), 2)
+  t3 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 225)
+  expect_equivalent(dx(turtles = t3, dist = sqrt(2)), -1)
+  expect_equivalent(dy(turtles = t3, dist = sqrt(2)), -1)
+})
+
 test_that("die works",{
-  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
   t2 <- die(turtles = t1, who = 1:9)
   expect_equivalent(length(t2), 1)
@@ -299,8 +465,19 @@ test_that("die works",{
   expect_equivalent(t3@data$who, 1:9)
 })
 
+test_that("die works with agentMatrix",{
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
+  t2 <- die(turtles = t1, who = 1:9)
+  expect_equivalent(count(t2), 1)
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = 1, ycor = 10))
+  expect_equivalent(of(agents = t2, var = "who"), 0)
+  t3 <- die(turtles = t1, who = 0)
+  expect_equivalent(count(t3), 9)
+  expect_equivalent(of(agents = t3, var = c("xcor", "ycor")), cbind(xcor = 2:10, ycor = 9:1))
+  expect_equivalent(of(agents = t3, var = "who"), 1:9)
+})
+
 test_that("hatch works",{
-  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
   t2 <- hatch(turtles = t1, who = 1, n = 1)
   expect_equivalent(length(t2), length(t1) + 1)
@@ -326,6 +503,32 @@ test_that("hatch works",{
   expect_equivalent(t5@data$breed[11:14], rep("young", 4))
 })
 
+test_that("hatch works with agentMatrix",{
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
+  t2 <- hatch(turtles = t1, who = 1, n = 1)
+  expect_equivalent(count(t2), count(t1) + 1)
+  expect_equivalent(of(agents = turtle(t2, 10), var = c("xcor", "ycor")), cbind(2, 9))
+  expect_equivalent(of(agents = turtle(t2, 10), var = "heading"), of(agents = turtle(t1, 1), var = "heading"))
+  expect_identical(of(agents = turtle(t2, 10), var = "breed"), "turtle")
+  t3 <- hatch(turtles = t1, who = 4, n = 2, breed = "young")
+  expect_equivalent(count(t3), count(t1) + 2)
+  expect_equivalent(of(agents = turtle(t3, c(10,11)), var = c("xcor", "ycor")), cbind(xcor = c(5, 5), ycor = c(6, 6)))
+  expect_equivalent(of(agents = turtle(t3, c(10,11)), var = "heading"), rep(of(agents = turtle(t1, 4), var = "heading"), 2))
+  expect_identical(of(agents = turtle(t3, c(10,11)), var = "breed"), c("young", "young"))
+
+  # Several turtle parents
+  t4 <- hatch(turtles = t1, who = c(1,4), n = 2)
+  expect_equivalent(count(t4), 14)
+  expect_equivalent(of(agents = t4, var = "who"), 0:13)
+  expect_equivalent(of(agents = turtle(t4, c(10:13)), var = c("xcor", "ycor")), cbind(xcor = c(2,2,5,5), ycor = c(9,9,6,6)))
+  expect_equivalent(of(agents = turtle(t4, c(10:13)), var = "breed"), rep("turtle", 4))
+  t5 <- hatch(turtles = t1, who = c(1,4), n = 2, breed = "young")
+  expect_equivalent(count(t5), 14)
+  expect_equivalent(of(agents = t5, var = "who"), 0:13)
+  expect_equivalent(of(agents = turtle(t5, c(10:13)), var = c("xcor", "ycor")), cbind(xcor = c(2,2,5,5), ycor = c(9,9,6,6)))
+  expect_equivalent(of(agents = turtle(t5, c(10:13)), var = "breed"), rep("young", 4))
+})
+
 test_that("canMove works",{
   w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
   t1 <- createOTurtles(world = w1, n = 4)
@@ -342,6 +545,15 @@ test_that("canMove works",{
   expect_identical(canMove(world = ws, turtles = t1, dist = 4), rep(TRUE, 4))
   expect_identical(canMove(world = ws, turtles = t1, dist = 6), rep(FALSE, 4))
   expect_identical(canMove(world = ws, turtles = t1, dist = c(1,4,6,4)), c(TRUE, TRUE, FALSE, TRUE))
+})
+
+test_that("canMove works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+  t1 <- createTurtlesAM(world = w1, n = 4, heading = c(0, 90, 180, 270))
+  expect_identical(canMove(world = w1, turtles = t1, dist = 1), rep(TRUE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, dist = 4), rep(TRUE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, dist = 6), rep(FALSE, 4))
+  expect_identical(canMove(world = w1, turtles = t1, dist = c(1,4,6,4)), c(TRUE, TRUE, FALSE, TRUE))
 })
 
 test_that("randomXcor and randomYcor works",{
@@ -678,6 +890,20 @@ test_that("setXY works",{
   t3 <- setXY(world = w1, turtles = t1, xcor = c(1, 1, 1, 1, 5), ycor = rep(1, 5), torus = TRUE)
   expect_identical(t1@coords, cbind(xcor = t3@data$prevX, ycor = t3@data$prevY))
   expect_identical(t3@coords, cbind(xcor = c(1, 1, 1, 1, 0), ycor = rep(1, 5)))
+})
+
+test_that("setXY works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
+  t2 <- setXY(turtles = t1, xcor = 1, ycor = 1, torus = FALSE)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = rep(1, 5), ycor = rep(1, 5)))
+  t2 <- setXY(turtles = t1, xcor = 1, ycor = 1)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = rep(1, 5), ycor = rep(1, 5)))
+  t3 <- setXY(world = w1, turtles = t1, xcor = c(1, 1, 1, 1, 5), ycor = rep(1, 5), torus = TRUE)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t3, var = c("prevX", "prevY")))
+  expect_equivalent(of(agents = t3, var = c("xcor", "ycor")), cbind(xcor = c(1, 1, 1, 1, 0), ycor = rep(1, 5)))
 })
 
 test_that("sprout works",{
@@ -1159,7 +1385,7 @@ test_that("of works with NLworldMs",{
   expect_equivalent(p2, cbind(1:25,rep(0, 25)))
 })
 
-thest_that("of works with agentMatrix",{
+test_that("of works with agentMatrix",{
   t <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), breed = "sheep", heading = 21:30, color = c(rep("blue", 5), rep("red", 5)))
   twho <- of(agents = t, var = "who")
   expect_equivalent(twho, 0:9)
@@ -1170,9 +1396,9 @@ thest_that("of works with agentMatrix",{
   tcolor <- of(agents = t, var = "color")
   expect_equivalent(tcolor, c(rep("blue", 5), rep("red", 5)))
   tprevX <- of(agents = t, var = "prevX")
-  expect_equivalent(tprevX, rep(NA, 10))
+  expect_equivalent(tprevX, as.numeric(rep(NA, 10)))
   tprevY <- of(agents = t, var = "prevY")
-  expect_equivalent(tprevY, rep(NA, 10))
+  expect_equivalent(tprevY, as.numeric(rep(NA, 10)))
   txcor <- of(agents = t, var = "xcor")
   expect_equivalent(txcor, 1:10)
   tycor <- of(agents = t, var = "ycor")
@@ -1191,9 +1417,9 @@ thest_that("of works with agentMatrix",{
   t2color <- of(agents = turtle(turtles = t1, who = 0), var = "color")
   expect_equivalent(t2color, "blue")
   t2prevX <- of(agents = turtle(turtles = t1, who = 0), var = "prevX")
-  expect_equivalent(t2prevX, NA)
+  expect_equivalent(t2prevX, as.numeric(NA))
   t2prevY <- of(agents = turtle(turtles = t1, who = 0), var = "prevY")
-  expect_equivalent(t2prevY, NA)
+  expect_equivalent(t2prevY, as.numeric(NA))
   t2xcor <- of(agents = turtle(turtles = t1, who = 0), var = "xcor")
   expect_equivalent(t2xcor, 1)
   t2ycor <- of(agents = turtle(turtles = t1, who = 0), var = "ycor")
@@ -1203,10 +1429,11 @@ thest_that("of works with agentMatrix",{
 
   # With multiple var
   t3 <- of(agents = turtle(turtles = t1, who = 0), var = c("who", "heading"))
-  expect_equivalent(cbind.data.frame(who = 0, heading = 21), t3)
+  expect_equivalent(cbind(who = 0, heading = 21), t3)
   t4 <- of(agents = turtle(turtles = t1, who = 0), var = c("who", "xcor"))
-  expect_equivalent(cbind.data.frame(who = 0, xcor = 1), t4)
+  expect_equivalent(cbind(who = 0, xcor = 1), t4)
   t5 <- of(agents = t1, var = c("who", "xcor", "age"))
-  expect_equivalent(cbind.data.frame(who = 0:9, xcor = 1:10, age = c(2, 3, 4, 5, 2, 4, 6, 6, 3, 5)), t5)
-
+  expect_equivalent(cbind(who = 0:9, xcor = 1:10, age = c(2, 3, 4, 5, 2, 4, 6, 6, 3, 5)), t5)
+  t6 <- of(agents = t1, var = c("who", "xcor", "age", "breed"))
+  expect_equivalent(data.frame(who = 0:9, xcor = 1:10, age = c(2, 3, 4, 5, 2, 4, 6, 6, 3, 5), breed = rep("sheep", 10), stringsAsFactors = FALSE), t6)
 })

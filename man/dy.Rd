@@ -5,6 +5,8 @@
 \alias{dy}
 \alias{dy,SpatialPointsDataFrame,missing-method}
 \alias{dy,SpatialPointsDataFrame,numeric-method}
+\alias{dy,agentMatrix,missing-method}
+\alias{dy,agentMatrix,numeric-method}
 \title{y-increment}
 \usage{
 dy(turtles, dist = 1)
@@ -12,6 +14,10 @@ dy(turtles, dist = 1)
 \S4method{dy}{SpatialPointsDataFrame,numeric}(turtles, dist = 1)
 
 \S4method{dy}{SpatialPointsDataFrame,missing}(turtles)
+
+\S4method{dy}{agentMatrix,numeric}(turtles, dist = 1)
+
+\S4method{dy}{agentMatrix,missing}(turtles)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

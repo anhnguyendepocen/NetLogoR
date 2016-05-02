@@ -5,6 +5,8 @@
 \alias{dx}
 \alias{dx,SpatialPointsDataFrame,missing-method}
 \alias{dx,SpatialPointsDataFrame,numeric-method}
+\alias{dx,agentMatrix,missing-method}
+\alias{dx,agentMatrix,numeric-method}
 \title{x-increment}
 \usage{
 dx(turtles, dist = 1)
@@ -12,6 +14,10 @@ dx(turtles, dist = 1)
 \S4method{dx}{SpatialPointsDataFrame,numeric}(turtles, dist = 1)
 
 \S4method{dx}{SpatialPointsDataFrame,missing}(turtles)
+
+\S4method{dx}{agentMatrix,numeric}(turtles, dist = 1)
+
+\S4method{dx}{agentMatrix,missing}(turtles)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

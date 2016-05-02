@@ -205,6 +205,36 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname createTurtlesAM
+setMethod(
+  "createTurtlesAM",
+  signature = c("numeric", "missing", "ANY", "ANY", "ANY", "ANY"),
+  definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
+
+    coords <- cbind(xcor = rep(((maxPxcor(world) - minPxcor(world)) / 2) + minPxcor(world), n),
+                    ycor = rep(((maxPycor(world) - minPycor(world)) / 2) + minPycor(world), n))
+
+    if(missing(heading))
+      heading <- runif(n = n, min = 0, max = 360)
+
+    if(missing(breed))
+      breed <- "turtle"
+
+    if(missing(color))
+      color <- rainbow(n)
+
+    turtles<-new("agentMatrix",
+                 coords = coords,
+                 who = seq(from = 0, to = n - 1, by = 1),
+                 heading = heading,
+                 prevX = rep(NA, n),
+                 prevY = rep(NA, n),
+                 breed = breed,
+                 color = color)
+    return(turtles)
+  }
+)
 
 
 ################################################################################
@@ -283,6 +313,73 @@ setMethod(
       li$color <- rainbow(n)
 
     createTurtles(n = n, world = world, heading = heading, breed = li$breed, color = li$color)
+  }
+)
+
+
+################################################################################
+#' Create ordered turtles (AM)
+#'
+#' Create \code{n} turtles at the center of the \code{world} with their headings evenly
+#' distributed.
+#'
+#' @inheritParams createTurtlesAM
+#'
+#' @return AgentMatrix of length \code{n} with the columns for the
+#'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
+#'
+#' @details The identity of the turtles is defined by their "who" number. This
+#'          numbering starts at 0 and increments by 1.
+#'
+#'          The coordinates from the previous time step are stored in "prevX" and
+#'          "prevY". The initial values are \code{NA}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#create-ordered-turtles}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname createOTurtlesAM
+#'
+#' @author Sarah Bauduin and Eliot McIntire
+#'
+setGeneric(
+  "createOTurtlesAM",
+  function(n, world, heading, breed, color) {
+    standardGeneric("createOTurtlesAM")
+  })
+
+#' @export
+#' @rdname createOTurtlesAM
+setMethod(
+  "createOTurtlesAM",
+  signature = c(n = "numeric", world = "ANY"),
+  definition = function(n, world, breed, color) {
+
+    heading <- numeric(n)
+    heading[1] <- 0
+    if(n > 1) {
+      heading[2:n] <- heading[1:(n-1)] + (360 / n) * (1:(n - 1))
+    }
+
+    li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
+    names(li) <- names(match.call())[-1]
+
+    if(missing(breed))
+      li$breed <- rep("turtle", n)
+
+    if(length(li$breed) == 1){
+      li$breed <- rep(li$breed, n)
+    }
+
+    if(missing(color))
+      li$color <- rainbow(n)
+
+    createTurtlesAM(n = n, world = world, heading = heading, breed = li$breed, color = li$color)
   }
 )
 
@@ -522,6 +619,18 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname bk
+setMethod(
+  "bk",
+  signature = c(turtles = "agentMatrix", dist = "numeric"),
+  definition = function(turtles, dist, world, torus, out) {
+
+    fd(turtles = turtles, dist = -dist, world = world, torus = torus, out = out)
+
+  }
+)
+
 
 ################################################################################
 #' Return home
@@ -586,6 +695,39 @@ setGeneric(
 setMethod(
   "home",
   signature = c("NLworlds", "SpatialPointsDataFrame", "character"),
+  definition = function(world, turtles, home) {
+
+    if(home == "home0"){
+      if(world@extent@xmin <= 0 & world@extent@xmax >= 0 & world@extent@ymin <= 0 & world@extent@ymax >= 0){
+        newTurtles<- setXY(turtles = turtles, xcor = 0, ycor = 0, world = world, torus = FALSE)
+      } else {
+        stop("The world provided does not contain the location [x = 0, y = 0]")
+      }
+    }
+
+    if(home == "center"){
+      newTurtles<- setXY(turtles = turtles, xcor = (((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin),
+                         ycor = (((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin),
+                         world = world, torus = FALSE)
+    }
+
+    if(home == "pCorner"){
+      newTurtles<- setXY(turtles = turtles, xcor = minPxcor(world), ycor = minPycor(world), world = world, torus = FALSE)
+    }
+
+    if(home == "corner"){
+      newTurtles<- setXY(turtles = turtles, xcor = world@extent@xmin, ycor = world@extent@ymin, world = world, torus = FALSE)
+    }
+
+    return(newTurtles)
+  }
+)
+
+#' @export
+#' @rdname home
+setMethod(
+  "home",
+  signature = c("NLworlds", "agentMatrix", "character"),
   definition = function(world, turtles, home) {
 
     if(home == "home0"){
@@ -681,6 +823,27 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname dx
+setMethod(
+  "dx",
+  signature = c("agentMatrix", "numeric"),
+  definition = function(turtles, dist) {
+    xIncr <- round(sin(rad(turtles@.Data[,"heading"])) * dist, digits = 5)
+    return(xIncr)
+  }
+)
+
+#' @export
+#' @rdname dx
+setMethod(
+  "dx",
+  signature = c("agentMatrix", "missing"),
+  definition = function(turtles) {
+    dx(turtles = turtles, dist = 1)
+  }
+)
+
 
 ################################################################################
 #' y-increment
@@ -740,6 +903,27 @@ setMethod(
 setMethod(
   "dy",
   signature = c("SpatialPointsDataFrame", "missing"),
+  definition = function(turtles) {
+    dy(turtles = turtles, dist = 1)
+  }
+)
+
+#' @export
+#' @rdname dy
+setMethod(
+  "dy",
+  signature = c("agentMatrix", "numeric"),
+  definition = function(turtles, dist) {
+    yIncr <- round(cos(rad(turtles@.Data[,"heading"])) * dist, digits = 5)
+    return(yIncr)
+  }
+)
+
+#' @export
+#' @rdname dy
+setMethod(
+  "dy",
+  signature = c("agentMatrix", "missing"),
   definition = function(turtles) {
     dy(turtles = turtles, dist = 1)
   }
@@ -889,7 +1073,6 @@ setMethod(
   }
 )
 
-
 #' @export
 #' @rdname hatch
 setMethod(
@@ -898,16 +1081,25 @@ setMethod(
   definition = function(turtles, who, n, breed) {
 
     iTurtle <- match(who, turtles@.Data[,"who"])
-    newData <- turtles@.Data[iTurtle,,drop=FALSE]
-    newData[,"who"] <- seq_len(length(iTurtle)) + (max(turtles@.Data[,"who"]))
+    newData <- turtles@.Data[iTurtle,,drop = FALSE]
+    if(n != 1){
+      newData <- newData[rep(seq_len(nrow(newData)), each = n),]
+    }
+
+    newData[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(max(turtles@.Data[,"who"]) + (n * length(iTurtle)))
     if(!missing(breed)){
+      if(!breed %in% turtles@levels$breed){
+        turtles@levels$breed <- c(turtles@levels$breed, breed)
+      }
       newData[, "breed"] <- match(breed, turtles@levels$breed)
     }
 
     turtles@.Data <- rbind(turtles@.Data, newData)
+
     return(turtles)
   }
 )
+
 
 ################################################################################
 #' Can the turtles move?
@@ -955,6 +1147,20 @@ setMethod(
     wrapTrue <- fd(world = world, turtles = turtles, dist = dist, torus = TRUE)
     test <- wrapFalse@coords == wrapTrue@coords
     return(test[,1] & test[,2])
+  }
+)
+
+#' @export
+#' @rdname canMove
+setMethod(
+  "canMove",
+  signature = c("NLworlds", "agentMatrix", "numeric"),
+  definition = function(world, turtles, dist) {
+    wrapFalse <- fd(world = world, turtles = turtles, dist = dist, torus = FALSE)
+    wrapTrue <- fd(world = world, turtles = turtles, dist = dist, torus = TRUE)
+    testX <- wrapFalse@.Data[,"xcor"] == wrapTrue@.Data[,"xcor"]
+    testY <- wrapFalse@.Data[,"ycor"] == wrapTrue@.Data[,"ycor"]
+    return(testX & testY)
   }
 )
 
@@ -2042,6 +2248,42 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname setXY
+setMethod(
+  "setXY",
+  signature = c("agentMatrix", "numeric", "numeric", "missing", "ANY"),
+  definition = function(turtles, xcor, ycor, torus) {
+
+    turtles@.Data[,"prevX"] <- turtles@.Data[,"xcor"]
+    turtles@.Data[,"prevY"] <- turtles@.Data[,"ycor"]
+
+    if(length(xcor) == 1 & NROW(turtles) != 1){
+      xcor <- as.numeric(rep(xcor, NROW(turtles)))
+    }
+    if(length(ycor) == 1 & NROW(turtles) != 1){
+      ycor <- as.numeric(rep(ycor, NROW(turtles)))
+    }
+    turtles@.Data[,"xcor"] <- xcor
+    turtles@.Data[,"ycor"] <- ycor
+
+    return(turtles)
+  }
+)
+
+#' @export
+#' @importFrom SpaDES wrap
+#' @rdname setXY
+setMethod(
+  "setXY",
+  signature = c("agentMatrix", "numeric", "numeric", "NLworlds", "logical"),
+  definition = function(turtles, xcor, ycor, world, torus) {
+
+    wrapCoords <- wrap(cbind(x = xcor, y = ycor), extent(world))
+    setXY(turtles = turtles, xcor = wrapCoords[,1], ycor = wrapCoords[,2], torus = FALSE)
+
+  }
+)
 
 ################################################################################
 #' Sprout new turtles
@@ -3451,17 +3693,24 @@ setMethod(
 
     if(any(names(agents@levels) %in% var)){
 
-      agentsData <- as.data.frame(agents@.Data)
-      # Recode the factors with the characters
-      # Not working
-      agentsData[,names(agents@levels)] <- do.call(cbind,lapply(1:length(agents@levels),
-                                                                function(x){mapvalues(as.factor(agentsData[,names(agents@levels)[x]]),
-                                                                                      from = unique(agentsData[,names(agents@levels)[x]]),
-                                                                                      to = agents@levels[names(agents@levels)[x]])}))
-      return(agentsData[,var])
+      agentsData <- as.data.frame(agents@.Data) # characters data as factors
+      agentsData[,names(agents@levels)] <- do.call(cbind,lapply(1:length(agents@levels),function(x){
+        unlist(mapvalues(agentsData[,names(agents@levels)[x]],
+                         from = unique(agentsData[,names(agents@levels)[x]]),
+                         to = agents@levels[names(agents@levels)[x]][[1]][unique(agentsData[,names(agents@levels)[x]])]))}))
+      if(length(var) == 1){
+        return(agentsData[,var])
+      } else {
+        return(agentsData[,var, drop = FALSE])
+      }
 
     } else {
-      return(agents@.Data[,var])
+      if(length(var) == 1){
+        return(agents@.Data[,var])
+      } else {
+        return(agents@.Data[,var, drop = FALSE])
+      }
+
     }
   })
 
