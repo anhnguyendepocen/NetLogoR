@@ -422,7 +422,6 @@ test_that("home works with agentMatrix",{
 })
 
 test_that("dx and dy works",{
-  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   expect_equivalent(dx(turtles = t1), 1)
   expect_equivalent(dx(turtles = t1, dist = 2), 2)
@@ -439,7 +438,6 @@ test_that("dx and dy works",{
 })
 
 test_that("dx and dy works with agentMatrix",{
-  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 90)
   expect_equivalent(dx(turtles = t1), 1)
   expect_equivalent(dx(turtles = t1, dist = 2), 2)
@@ -456,7 +454,6 @@ test_that("dx and dy works with agentMatrix",{
 })
 
 test_that("die works",{
-  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
   t2 <- die(turtles = t1, who = 1:9)
   expect_equivalent(length(t2), 1)
@@ -466,6 +463,18 @@ test_that("die works",{
   expect_equivalent(length(t3), 9)
   expect_equivalent(t3@coords, cbind(xcor = 2:10, ycor = 9:1))
   expect_equivalent(t3@data$who, 1:9)
+})
+
+test_that("die works with agentMatrix",{
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))
+  t2 <- die(turtles = t1, who = 1:9)
+  expect_equivalent(count(t2), 1)
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = 1, ycor = 10))
+  expect_equivalent(of(agents = t2, var = "who"), 0)
+  t3 <- die(turtles = t1, who = 0)
+  expect_equivalent(count(t3), 9)
+  expect_equivalent(of(agents = t3, var = c("xcor", "ycor")), cbind(xcor = 2:10, ycor = 9:1))
+  expect_equivalent(of(agents = t3, var = "who"), 1:9)
 })
 
 test_that("hatch works",{
