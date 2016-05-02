@@ -5,6 +5,7 @@
 \alias{moveTo}
 \alias{moveTo,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
 \alias{moveTo,SpatialPointsDataFrame,matrix-method}
+\alias{moveTo,agentMatrix,matrix-method}
 \title{Move to}
 \usage{
 moveTo(turtles, agents)
@@ -13,6 +14,8 @@ moveTo(turtles, agents)
 
 \S4method{moveTo}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles,
   agents)
+
+\S4method{moveTo}{agentMatrix,matrix}(turtles, agents)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

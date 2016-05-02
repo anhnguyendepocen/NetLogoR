@@ -1105,6 +1105,29 @@ test_that("moveTo works to move to patches location",{
   expect_identical(t3@data[,c("who", "heading", "breed", "color")], t1@data[,c("who", "heading", "breed", "color")])
 })
 
+test_that("moveTo works with agentMatrix",{
+  t1 <- createTurtlesAM(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
+  t2 <- moveTo(turtles = t1, agents = turtle(t1, who = 3))
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = c(4, 4, 4, 4), ycor = c(4, 4, 4, 4)))
+  expect_equivalent(of(agents = t2, var = c("prevX", "prevY")), of(agents = t1, var = c("xcor", "ycor")))
+  expect_equivalent(of(agents = t2, var = c("who", "heading", "breed", "color")), of(agents = t1, var = c("who", "heading", "breed", "color")))
+  t3 <- moveTo(turtles = t1, agents = t1)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t3, var = c("xcor", "ycor")))
+  expect_equivalent(of(agents = t3, var = c("prevX", "prevY")), of(agents = t1, var = c("xcor", "ycor")))
+  expect_equivalent(of(agents = t3, var = c("who", "heading", "breed", "color")), of(agents = t1, var = c("who", "heading", "breed", "color")))
+
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
+  t2 <- moveTo(turtles = t1, agents = patch(world = w1, x = 4, y = 4))
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = c(4, 4, 4, 4), ycor = c(4, 4, 4, 4)))
+  expect_equivalent(of(agents = t2, var = c("prevX", "prevY")), of(agents = t1, var = c("xcor", "ycor")))
+  expect_equivalent(of(agents = t2, var = c("who", "heading", "breed", "color")), of(agents = t1, var = c("who", "heading", "breed", "color")))
+  t3 <- moveTo(turtles = t1, agents = patch(world = w1, x = c(1, 2, 3, 4), y = c(1, 2, 3, 4)))
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t3, var = c("xcor", "ycor")))
+  expect_equivalent(of(agents = t3, var = c("prevX", "prevY")), of(agents = t1, var = c("xcor", "ycor")))
+  expect_equivalent(of(agents = t3, var = c("who", "heading", "breed", "color")), of(agents = t1, var = c("who", "heading", "breed", "color")))
+})
+
 test_that("randomXYcor works",{
   w1 <- createNLworld(minPxcor = 1, maxPxcor = 100, minPycor = -100, maxPycor = -1)
   t1 <- createTurtles(n = 10000, coords = randomXYcor(world = w1, n = 10000))

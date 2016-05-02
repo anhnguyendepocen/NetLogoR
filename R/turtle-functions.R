@@ -2591,6 +2591,22 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname moveTo
+setMethod(
+  "moveTo",
+  signature = c("agentMatrix", "matrix"),
+  definition = function(turtles, agents) {
+    if(class(agents) != "agentMatrix"){
+      setXY(turtles = turtles, xcor = as.numeric(agents[,1]), ycor = as.numeric(agents[,2]), torus = FALSE)
+
+    } else{
+      setXY(turtles = turtles, xcor = agents@.Data[,"xcor"], ycor = agents@.Data[,"ycor"], torus = FALSE)
+
+    }
+  }
+)
+
 
 ################################################################################
 #' Random turtles coordinates
