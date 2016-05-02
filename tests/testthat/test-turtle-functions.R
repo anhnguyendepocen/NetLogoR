@@ -786,6 +786,15 @@ test_that("left and right work",{
   expect_identical(t3@data$heading, t1@data$heading)
 })
 
+test_that("left and right work with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(world = w1, n = 4, heading = c(0, 90, 180, 270))
+  t2 <- left(turtles = t1, angle = 45)
+  expect_identical(of(agents = t2, var = "heading"), c(315, 45, 135, 225))
+  t3 <- right(turtles = t2, angle = 45)
+  expect_identical(of(agents = t3, var = "heading"), of(agents = t1, var = "heading"))
+})
+
 test_that("downhill works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w1[] <- 1:25
