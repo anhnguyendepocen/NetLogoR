@@ -4,12 +4,16 @@
 \name{patchRight}
 \alias{patchRight}
 \alias{patchRight,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
+\alias{patchRight,NLworlds,agentMatrix,numeric,numeric-method}
 \title{Patches on the right}
 \usage{
 patchRight(world, turtles, dist, angle, torus = FALSE)
 
 \S4method{patchRight}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
   turtles, dist, angle, torus = FALSE)
+
+\S4method{patchRight}{NLworlds,agentMatrix,numeric,numeric}(world, turtles,
+  dist, angle, torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}

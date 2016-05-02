@@ -2153,6 +2153,21 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname patchLeft
+setMethod(
+  "patchLeft",
+  signature = c(world = "NLworlds", turtles = "agentMatrix", dist = "numeric", angle = "numeric"),
+  definition = function(world, turtles, dist, angle, torus) {
+
+    tLeft <- left(turtles = turtles, angle = angle)
+    tFd <- fd(world = world, turtles = tLeft, dist = dist, torus = torus)
+    pLeftFd <- patchHere(world = world, turtles = tFd)
+
+    return(pLeftFd)
+  }
+)
+
 
 ################################################################################
 #' Patches on the right
@@ -2206,6 +2221,16 @@ setGeneric(
 setMethod(
   "patchRight",
   signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", angle = "numeric"),
+  definition = function(world, turtles, dist, angle, torus) {
+    patchLeft(world = world, turtles = turtles, dist = dist, angle = -angle, torus = torus)
+  }
+)
+
+#' @export
+#' @rdname patchRight
+setMethod(
+  "patchRight",
+  signature = c(world = "NLworlds", turtles = "agentMatrix", dist = "numeric", angle = "numeric"),
   definition = function(world, turtles, dist, angle, torus) {
     patchLeft(world = world, turtles = turtles, dist = dist, angle = -angle, torus = torus)
   }
@@ -2455,6 +2480,7 @@ setMethod(
 #'
 #'
 #' @export
+#' @importFrom plyr mapvalues
 #' @docType methods
 #' @rdname inspect
 #'
@@ -2477,6 +2503,21 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname inspect
+setMethod(
+  "inspect",
+  signature = c("agentMatrix", "numeric"),
+  definition = function(turtles, who) {
+    tData <- as.data.frame(turtles[turtles@.Data[,"who"] %in% who,,drop = FALSE])
+    tData[,names(turtles@levels)] <- do.call(cbind,lapply(1:length(turtles@levels),function(x){
+      unlist(mapvalues(tData[,names(turtles@levels)[x]],
+                       from = unique(tData[,names(turtles@levels)[x]]),
+                       to = turtles@levels[names(turtles@levels)[x]][[1]][unique(tData[,names(turtles@levels)[x]])]))}))
+
+    return(tData)
+  }
+)
 
 ################################################################################
 #' Move to

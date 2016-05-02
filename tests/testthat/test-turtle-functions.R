@@ -986,6 +986,29 @@ test_that("patchLeft and patchRight work",{
   expect_identical(pRight, cbind(pxcor = c(0, 3), pycor = c(2, 2)))
 })
 
+# test_that("patchLeft and patchRight work with NLworldMs and agentMatrix",{
+#   w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#   t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = 0)
+#   pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, angle = 45, torus = FALSE)
+#   expect_identical(pLeft, cbind(pxcor = c(NA, 0, 1, 2, NA), pycor = c(NA, 2, 3, 4, NA)))
+#   pLeft <- patchLeft(world = w1, turtles = t1, dist = 1, angle = 45, torus = TRUE)
+#   expect_identical(pLeft, cbind(pxcor = c(4, 0, 1, 2, 3), pycor = c(1, 2, 3, 4, 0)))
+#
+#   pRight <- patchRight(world = w1, turtles = t1, dist = 1, angle = 45, torus = FALSE)
+#   expect_identical(pRight, cbind(pxcor = c(1, 2, 3, 4, NA), pycor = c(1, 2, 3, 4, NA)))
+#   pRight <- patchRight(world = w1, turtles = t1, dist = 1, angle = 45, torus = TRUE)
+#   expect_identical(pRight, cbind(pxcor = c(1, 2, 3, 4, 0), pycor = c(1, 2, 3, 4, 0)))
+#
+#   pRight <- patchRight(world = w1, turtles = t1, dist = 1, angle = -45, torus = TRUE)
+#   expect_identical(pLeft, pRight)
+#
+#   t2 <- createTurtlesAM(n = 2, coords = cbind(xcor = 2, ycor = 2), heading = 180)
+#   pLeft <- patchLeft(world = w1, turtles = t2, dist = c(2, 0.8), angle = c(90, -90))
+#   expect_identical(pLeft, cbind(pxcor = c(4, 1), pycor = c(2, 2)))
+#   pRight <- patchRight(world = w1, turtles = t2, dist = c(2, 0.8), angle = c(90, -90))
+#   expect_identical(pRight, cbind(pxcor = c(0, 3), pycor = c(2, 2)))
+# })
+
 test_that("setXY works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
@@ -1041,6 +1064,19 @@ test_that("inspect works",{
   inspect_t1.12 <- inspect(turtles = t1, who = c(1,2))
   df_t1.12 <- cbind.data.frame(who = c(1, 2), heading = c(90, 180), prevX = c(NA, NA),
                               prevY = c(NA, NA), xcor = c(2, 2), ycor = c(2, 2))
+  expect_equivalent(df_t1.12, inspect_t1.12[, c("who", "heading", "prevX", "prevY", "xcor", "ycor")]) # color removed b/c unknown
+})
+
+test_that("inspect works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(world = w1, n = 4, heading = c(0,90,180,270))
+  inspect_t1.1 <- inspect(turtles = t1, who = 1)
+  df_t1.1 <- cbind.data.frame(who = 1, heading = 90, prevX = as.numeric(NA), prevY = as.numeric(NA), xcor = 2, ycor = 2)
+  expect_equivalent(df_t1.1, inspect_t1.1[, c("who", "heading", "prevX", "prevY", "xcor", "ycor")]) # color removed b/c unknown
+
+  inspect_t1.12 <- inspect(turtles = t1, who = c(1,2))
+  df_t1.12 <- cbind.data.frame(who = c(1, 2), heading = c(90, 180), prevX = as.numeric(c(NA, NA)),
+                               prevY = as.numeric(c(NA, NA)), xcor = c(2, 2), ycor = c(2, 2))
   expect_equivalent(df_t1.12, inspect_t1.12[, c("who", "heading", "prevX", "prevY", "xcor", "ycor")]) # color removed b/c unknown
 })
 
