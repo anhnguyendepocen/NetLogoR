@@ -1,10 +1,24 @@
 ---
 title: "Brainstorm"
 author: "Sarah Bauduin, Eliot McIntire"
-date: "4 février 2016"
+date: ""
 output: html_document
 ---
 
+
+#### May 2016
+
+To do:
+
+* NLworldMs and agentMatrix to finish
+
+* Add these new class as methods in the functions + unit tests.
+
+* (Choose one way of defining the world/patches and the turtles, i.e., remove NLworlds and SPDF)
+
+* Update functions documentation (e.g., input and output classes) + Programming guide and Dictionary
+
+* Define plot functions for NLworldMs and agentMatrix
 
 
 
