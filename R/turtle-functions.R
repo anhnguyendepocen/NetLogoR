@@ -318,6 +318,73 @@ setMethod(
 
 
 ################################################################################
+#' Create ordered turtles (AM)
+#'
+#' Create \code{n} turtles at the center of the \code{world} with their headings evenly
+#' distributed.
+#'
+#' @inheritParams createTurtlesAM
+#'
+#' @return AgentMatrix of length \code{n} with the columns for the
+#'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
+#'
+#' @details The identity of the turtles is defined by their "who" number. This
+#'          numbering starts at 0 and increments by 1.
+#'
+#'          The coordinates from the previous time step are stored in "prevX" and
+#'          "prevY". The initial values are \code{NA}.
+#'
+#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#create-ordered-turtles}
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname createOTurtlesAM
+#'
+#' @author Sarah Bauduin and Eliot McIntire
+#'
+setGeneric(
+  "createOTurtlesAM",
+  function(n, world, heading, breed, color) {
+    standardGeneric("createOTurtlesAM")
+  })
+
+#' @export
+#' @rdname createOTurtlesAM
+setMethod(
+  "createOTurtlesAM",
+  signature = c(n = "numeric", world = "ANY"),
+  definition = function(n, world, breed, color) {
+
+    heading <- numeric(n)
+    heading[1] <- 0
+    if(n > 1) {
+      heading[2:n] <- heading[1:(n-1)] + (360 / n) * (1:(n - 1))
+    }
+
+    li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
+    names(li) <- names(match.call())[-1]
+
+    if(missing(breed))
+      li$breed <- rep("turtle", n)
+
+    if(length(li$breed) == 1){
+      li$breed <- rep(li$breed, n)
+    }
+
+    if(missing(color))
+      li$color <- rainbow(n)
+
+    createTurtlesAM(n = n, world = world, heading = heading, breed = li$breed, color = li$color)
+  }
+)
+
+
+################################################################################
 #' Move forward
 #'
 #' Move the \code{turtles} forward with their headings as directions.
