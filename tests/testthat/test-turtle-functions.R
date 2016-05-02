@@ -951,6 +951,18 @@ test_that("patchHere works",{
   expect_identical(pTurtles, patch(world = w1, x = 4:6, y = 4:6, duplicate = TRUE, out = TRUE))
 })
 
+test_that("patchHere works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
+  pTurtles <- patchHere(world = w1, turtles = t1)
+  expect_identical(pTurtles, cbind(pxcor = c(0, 1, 2, 3, 4), pycor = c(0, 1, 2, 3, 4)))
+  expect_identical(pTurtles, patch(world = w1, x = 0:4, y = 0:4, duplicate = TRUE, out = TRUE))
+  t2 <- createTurtlesAM(n = 3, coords = cbind(xcor = 4:6, ycor = 4:6))
+  pTurtles <- patchHere(world = w1, turtles = t2)
+  expect_identical(pTurtles, cbind(pxcor = c(4, NA, NA), pycor = c(4, NA, NA)))
+  expect_identical(pTurtles, patch(world = w1, x = 4:6, y = 4:6, duplicate = TRUE, out = TRUE))
+})
+
 test_that("patchLeft and patchRight work",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = 0)
