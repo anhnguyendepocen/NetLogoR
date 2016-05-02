@@ -438,6 +438,23 @@ test_that("dx and dy works",{
   expect_equivalent(dy(turtles = t3, dist = sqrt(2)), -1)
 })
 
+test_that("dx and dy works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 90)
+  expect_equivalent(dx(turtles = t1), 1)
+  expect_equivalent(dx(turtles = t1, dist = 2), 2)
+  expect_equivalent(dy(turtles = t1), 0)
+  expect_equivalent(dy(turtles = t1, dist = 2), 0)
+  t2 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 0)
+  expect_equivalent(dx(turtles = t2), 0)
+  expect_equivalent(dx(turtles = t2, dist = 2), 0)
+  expect_equivalent(dy(turtles = t2), 1)
+  expect_equivalent(dy(turtles = t2, dist = 2), 2)
+  t3 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 225)
+  expect_equivalent(dx(turtles = t3, dist = sqrt(2)), -1)
+  expect_equivalent(dy(turtles = t3, dist = sqrt(2)), -1)
+})
+
 test_that("die works",{
   w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1))

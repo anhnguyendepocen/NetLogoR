@@ -820,6 +820,27 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname dx
+setMethod(
+  "dx",
+  signature = c("agentMatrix", "numeric"),
+  definition = function(turtles, dist) {
+    xIncr <- round(sin(rad(turtles@.Data[,"heading"])) * dist, digits = 5)
+    return(xIncr)
+  }
+)
+
+#' @export
+#' @rdname dx
+setMethod(
+  "dx",
+  signature = c("agentMatrix", "missing"),
+  definition = function(turtles) {
+    dx(turtles = turtles, dist = 1)
+  }
+)
+
 
 ################################################################################
 #' y-increment
@@ -879,6 +900,27 @@ setMethod(
 setMethod(
   "dy",
   signature = c("SpatialPointsDataFrame", "missing"),
+  definition = function(turtles) {
+    dy(turtles = turtles, dist = 1)
+  }
+)
+
+#' @export
+#' @rdname dy
+setMethod(
+  "dy",
+  signature = c("agentMatrix", "numeric"),
+  definition = function(turtles, dist) {
+    yIncr <- round(cos(rad(turtles@.Data[,"heading"])) * dist, digits = 5)
+    return(yIncr)
+  }
+)
+
+#' @export
+#' @rdname dy
+setMethod(
+  "dy",
+  signature = c("agentMatrix", "missing"),
   definition = function(turtles) {
     dy(turtles = turtles, dist = 1)
   }
