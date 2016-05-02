@@ -4,6 +4,7 @@ maxTime <- 500
 seed <- sample(1e5, 1)
 seed <- 22242
 set.seed(seed)
+
 ################################################################################
 # Wolf sheep predation
 # by Wilensky (1997) NetLogo Wolf Sheep Predation model.
@@ -48,6 +49,12 @@ if(useFastClasses){
 } else {
   grass <- createNLworld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
 }
+
+worldCoords <- cbind(pxcor=rep_len(attr(grass, "minPxcor"):attr(grass, "maxPxcor"),
+                                   length.out=length(grass)),
+                     pycor = rep(attr(grass, "maxPycor"):attr(grass, "minPycor"), each = ncol(grass)))
+assign("worldCoords", worldCoords, envir=.GlobalEnv)
+
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
 # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat

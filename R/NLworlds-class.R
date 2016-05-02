@@ -495,12 +495,14 @@ setMethod(
   "PxcorPycorFromCell",
   signature = c("NLworldMs", "numeric"),
   definition = function(world, cellNum) {
-    pxcor <- rep(attr(world, "minPxcor"):attr(world, "maxPxcor"), nrow(world))
-    pycor <- rep(attr(world, "maxPycor"):attr(world, "minPycor"), each = ncol(world))
-    pCoords <- cbind(pxcor = pxcor[cellNum], pycor = pycor[cellNum])
-    return(pCoords)
+    pCoords <- worldCoords[cellNum,]
+    #pCoords <- cbind(pxcor=rep_len(attr(world, "minPxcor"):attr(world, "maxPxcor"),
+    #                                length.out=length(world))[cellNum],
+    #                  pycor = rep(attr(world, "maxPycor"):attr(world, "minPycor"), each = ncol(world))[cellNum])
+
   }
 )
+
 
 #' @aliases NLworlds
 #' @name NLworlds-class
