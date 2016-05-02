@@ -668,6 +668,53 @@ test_that("towards works",{
   expect_equivalent(tTOt[4], 315)
 })
 
+test_that("towards works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
+
+  # Patches to turtle
+  t1 <- createTurtlesAM(world = w1, n = 1)
+  pTOt <- towards(world = w1, agents = patches(world = w1), agents2 = t1, torus = FALSE)
+  expect_equivalent(pTOt[100], 315)
+  t2 <- createTurtlesAM(n = 1, coord = cbind(xcor = 5.5, ycor = 10.5))
+  pTOt <- towards(world = w1, agents = patches(world = w1), agents2 = t2, torus = TRUE)
+  expect_equivalent(pTOt[95], 135)
+
+  # Turtles to patch
+  t3 <- createTurtlesAM(n = 4, coords = cbind(xcor = c(2,5,6,7), ycor = c(4,6,2,9)))
+  tTOp <- towards(world = w1, agents = t3, agents2 = patch(world = w1, x = 5, y = 4), torus = FALSE)
+  expect_equivalent(tTOp[1], 90)
+  tTOp <- towards(world = w1, agents = t3, agents2 = patch(world = w1, x = 7, y = 2), torus = TRUE)
+  expect_equivalent(tTOp[4], 0)
+
+  # Turtles to location
+  tTOl <- towards(world = w1, agents = t3, agents2 = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOl[1], 90)
+  tTOl <- towards(world = w1, agents = t3, agents2 = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOl[3], 45)
+  tTOl <- towards(world = w1, agents = t3, agents2 = cbind(x = 8, y = 4), torus = TRUE)
+  expect_equivalent(tTOl[1], 270)
+
+  # Turtles to turtle
+  tTOt <- towards(world = w1, agents = t3, agents2 = t3, torus = FALSE)
+  expect_equivalent(tTOt, of(agents = t3, var = "heading"))
+  tTOt <- towards(world = w1, agents = t3, agents2 = t2, torus = FALSE)
+  expect_equivalent(tTOt[4], 315)
+
+  # Works without world provided when torus = FALSE
+  expect_error(towards(agents = patches(world = w1), agents2 = t2, torus = TRUE))
+  tTOp <- towards(agents = t3, agents2 = patch(world = w1, x = 5, y = 4), torus = FALSE)
+  expect_equivalent(tTOp[1], 90)
+  expect_error(towards(agents = t3, agents2 = patch(world = w1, x = 7, y = 2), torus = TRUE))
+  tTOl <- towards(agents = t3, agents2 = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOl[1], 90)
+  expect_equivalent(tTOl[3], 45)
+  expect_error(towards(agents = t3, agents2 = cbind(x = 8, y = 4), torus = TRUE))
+  tTOt <- towards(agents = t3, agents2 = t3, torus = FALSE)
+  expect_equivalent(tTOt, of(agents = t3, var = "heading"))
+  tTOt <- towards(agents = t3, agents2 = t2, torus = FALSE)
+  expect_equivalent(tTOt[4], 315)
+})
+
 test_that("face works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(world = w1, n = 5)

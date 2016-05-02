@@ -1374,61 +1374,88 @@ setMethod(
   signature = c(agents = "matrix", agents2 = "matrix"),
   definition = function(agents, agents2, world, torus) {
 
-    if(torus == FALSE){
+    if(class(agents) != "agentMatrix" & class(agents2) != "agentMatrix"){ # patches to patches
 
-      heading <- deg(atan2(agents2[,1] - agents[,1], agents2[,2] - agents[,2])) # angles between -180 and 180
-      heading[heading < 0] <- heading[heading < 0] + 360
+      if(torus == FALSE){
 
-    } else {
+        heading <- deg(atan2(agents2[,1] - agents[,1], agents2[,2] - agents[,2])) # angles between -180 and 180
+        heading[heading < 0] <- heading[heading < 0] + 360
 
-      if(missing(world)){
-        stop("A world must be provided as torus = TRUE")
+      } else {
+
+        if(missing(world)){
+          stop("A world must be provided as torus = TRUE")
+        }
+
+        if(NROW(agents2) == 1 & NROW(agents) != 1){
+          #agents2 <- cbind(x = rep(agents2[,1], NROW(agents)), y = rep(agents2[,2], NROW(agents)))
+          agents2 <- c(rep(agents2[,1], NROW(agents)), rep(agents2[,2], NROW(agents)))
+          dim(agents2) <- c(NROW(agents), 2L)
+        }
+        if(NROW(agents) == 1 & NROW(agents2) != 1){
+          #agents <- cbind(x = rep(agents[,1], NROW(agents2)), y = rep(agents[,2], NROW(agents2)))
+          agents <- c(rep(agents[,1], NROW(agents2)),rep(agents[,2], NROW(agents2)))
+          dim(agents) <- c(NROW(agents), 2L)
+        }
+
+        # Need to create coordinates for "agents2" in a wrapped world
+        # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
+        # Find the smallest distances across or around the world
+
+        to1 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
+        to2 <- cbind(agents2[,1], agents2[,2] + (world@extent@ymax - world@extent@ymin))
+        to3 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
+        to4 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2])
+        to5 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2])
+        to6 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
+        to7 <- cbind(agents2[,1], agents2[,2] - (world@extent@ymax - world@extent@ymin))
+        to8 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
+
+        # All distances in a wrapped world
+        dist_agents2 <- pointDistance(p1 = agents, p2 = agents2, lonlat = FALSE, allpairs = FALSE)
+        dist_to1 <- pointDistance(p1 = agents, p2 = to1, lonlat = FALSE, allpairs = FALSE)
+        dist_to2 <- pointDistance(p1 = agents, p2 = to2, lonlat = FALSE, allpairs = FALSE)
+        dist_to3 <- pointDistance(p1 = agents, p2 = to3, lonlat = FALSE, allpairs = FALSE)
+        dist_to4 <- pointDistance(p1 = agents, p2 = to4, lonlat = FALSE, allpairs = FALSE)
+        dist_to5 <- pointDistance(p1 = agents, p2 = to5, lonlat = FALSE, allpairs = FALSE)
+        dist_to6 <- pointDistance(p1 = agents, p2 = to6, lonlat = FALSE, allpairs = FALSE)
+        dist_to7 <- pointDistance(p1 = agents, p2 = to7, lonlat = FALSE, allpairs = FALSE)
+        dist_to8 <- pointDistance(p1 = agents, p2 = to8, lonlat = FALSE, allpairs = FALSE)
+
+        # Which distance is the minimum
+        allDist <- cbind(dist_agents2, dist_to1, dist_to2, dist_to3, dist_to4, dist_to5, dist_to6, dist_to7, dist_to8)
+        distMin <- apply(allDist, 1, min)
+
+        toShortest <- agents2
+        for(i in 1:NROW(agents)){
+          # All the possibilities for each agents (i.e., agents2 and the wrapped agents2)
+          allToCoords <- rbind(agents2[i,], to1[i,], to2[i,], to3[i,], to4[i,], to5[i,], to6[i,], to7[i,], to8[i,])
+          toShortest[i,] <- allToCoords[match(distMin[i], allDist[i,]),] # if ties, take the first match (good because favor the non wrapped distances)
+        }
+
+        heading <- deg(atan2(toShortest[,1] - agents[,1], toShortest[,2] - agents[,2])) # angles between -180 and 180
+        heading[heading < 0] <- heading[heading < 0] + 360
       }
 
-      if(nrow(agents2) == 1 & nrow(agents) != 1){
-        agents2 <- cbind(x = rep(agents2[,1], nrow(agents)), y = rep(agents2[,2], nrow(agents)))
-      }
-      if(nrow(agents) == 1 & nrow(agents2) != 1){
-        agents <- cbind(x = rep(agents[,1], nrow(agents2)), y = rep(agents[,2], nrow(agents2)))
-      }
+    } else if(class(agents) == "agentMatrix" & class(agents2) != "agentMatrix"){ # turtles to patches
 
-      # Need to create coordinates for "agents2" in a wrapped world
-      # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
-      # Find the smallest distances across or around the world
+      tCoords <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
+      heading <- towards(agents = tCoords, agents2 = agents2, world = world, torus = torus)
+      sameLoc <- tCoords[,1] == agents2[,1] & tCoords[,2] == agents2[,2]
+      heading[sameLoc] <- agents@.Data[,"heading", drop = FALSE][sameLoc]
 
-      to1 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
-      to2 <- cbind(agents2[,1], agents2[,2] + (world@extent@ymax - world@extent@ymin))
-      to3 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
-      to4 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2])
-      to5 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2])
-      to6 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
-      to7 <- cbind(agents2[,1], agents2[,2] - (world@extent@ymax - world@extent@ymin))
-      to8 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
+    } else if(class(agents) != "agentMatrix" & class(agents2) == "agentMatrix"){ # patches to turtles
 
-      # All distances in a wrapped world
-      dist_agents2 <- pointDistance(p1 = agents, p2 = agents2, lonlat = FALSE, allpairs = FALSE)
-      dist_to1 <- pointDistance(p1 = agents, p2 = to1, lonlat = FALSE, allpairs = FALSE)
-      dist_to2 <- pointDistance(p1 = agents, p2 = to2, lonlat = FALSE, allpairs = FALSE)
-      dist_to3 <- pointDistance(p1 = agents, p2 = to3, lonlat = FALSE, allpairs = FALSE)
-      dist_to4 <- pointDistance(p1 = agents, p2 = to4, lonlat = FALSE, allpairs = FALSE)
-      dist_to5 <- pointDistance(p1 = agents, p2 = to5, lonlat = FALSE, allpairs = FALSE)
-      dist_to6 <- pointDistance(p1 = agents, p2 = to6, lonlat = FALSE, allpairs = FALSE)
-      dist_to7 <- pointDistance(p1 = agents, p2 = to7, lonlat = FALSE, allpairs = FALSE)
-      dist_to8 <- pointDistance(p1 = agents, p2 = to8, lonlat = FALSE, allpairs = FALSE)
+      heading <- towards(agents = agents, agents2 = agents2@.Data[,c("xcor", "ycor"), drop = FALSE], world = world, torus = torus)
 
-      # Which distance is the minimum
-      allDist <- cbind(dist_agents2, dist_to1, dist_to2, dist_to3, dist_to4, dist_to5, dist_to6, dist_to7, dist_to8)
-      distMin <- apply(allDist, 1, min)
+    } else if(class(agents) == "agentMatrix" & class(agents2) == "agentMatrix"){ # turtles to turtles
 
-      toShortest <- agents2
-      for(i in 1:nrow(agents)){
-        # All the possibilities for each agents (i.e., agents2 and the wrapped agents2)
-        allToCoords <- rbind(agents2[i,], to1[i,], to2[i,], to3[i,], to4[i,], to5[i,], to6[i,], to7[i,], to8[i,])
-        toShortest[i,] <- allToCoords[match(distMin[i], allDist[i,]),] # if ties, take the first match (good because favor the non wrapped distances)
-      }
+      t1Coords <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
+      t2Coords <- agents2@.Data[,c("xcor", "ycor"), drop = FALSE]
+      heading <- towards(agents = t1Coords, agents2 = t2Coords, world = world, torus = torus)
+      sameLoc <- t1Coords[,1] == t2Coords[,1] & t1Coords[,2] == t2Coords[,2]
+      heading[sameLoc] <- agents@.Data[,"heading", drop = FALSE][sameLoc]
 
-      heading <- deg(atan2(toShortest[,1] - agents[,1], toShortest[,2] - agents[,2])) # angles between -180 and 180
-      heading[heading < 0] <- heading[heading < 0] + 360
     }
 
     return(heading)
