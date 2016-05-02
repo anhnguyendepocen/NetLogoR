@@ -1,9 +1,6 @@
 a = Sys.time()
 useFastClasses <- TRUE
 maxTime <- 500
-seed <- sample(1e5, 1)
-seed <- 22242
-set.seed(seed)
 
 ################################################################################
 # Wolf sheep predation
@@ -366,7 +363,7 @@ growGrass <- function(){ # only patches
 
 
 ## Go
-profvisWolfSheep <- profvis({
+#profvisWolfSheep <- profvis({
 time <- 0
 while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
@@ -415,7 +412,7 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
   # # Help for checking the model is working
   #print(time)
 }
-}) # end profvis
+#}) # end profvis
 
 ## Plot outputs
 dev()
@@ -443,4 +440,4 @@ if(grassOn == TRUE){
 b = Sys.time()
 print(paste(sum(numSheep+numWolves)/as.numeric(b-a), "sheep and wolves per second"))
 print(b-a)
-profvisWolfSheep
+#profvisWolfSheep
