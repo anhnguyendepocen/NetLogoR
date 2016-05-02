@@ -746,6 +746,37 @@ test_that("face works",{
   expect_identical(t8@data$heading, t1@data$heading)
 })
 
+test_that("face works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(world = w1, n = 5)
+  t2 <- face(world = w1, turtles = t1, agents2 = cbind(x = 2, y = 0))
+  expect_identical(of(agents = t2, var = "heading"), rep(180, 5))
+  t3 <- face(world = w1, turtles = t1, agents2 = patch(world = w1, x = 0, y = 2))
+  expect_identical(of(agents = t3, var = "heading"), rep(270, 5))
+  t4 <-createTurtlesAM(n = 1, coords = cbind(xcor = 1, ycor = 3))
+  t5 <- face(world = w1, turtles = t1, agents2 = t4)
+  expect_identical(of(agents = t5, var = "heading"), rep(315, 5))
+  t6 <- face(world = w1, turtles = t4, agents2 = cbind(x = 1, y = 0), torus = FALSE)
+  expect_identical(of(agents = t6, var = "heading"), 180)
+  t7 <- face(world = w1, turtles = t4, agents2 = cbind(x = 1, y = 0), torus = TRUE)
+  expect_identical(of(agents = t7, var = "heading"), 0)
+  t8 <- face(world = w1, turtles = t1, agents2 = t1)
+  expect_identical(of(agents = t8, var = "heading"), of(agents = t1, var = "heading"))
+
+  # Works without world provided when torus = FALSE
+  t2 <- face(turtles = t1, agents2 = cbind(x = 2, y = 0))
+  expect_identical(of(agents = t2, var = "heading"), rep(180, 5))
+  t3 <- face(turtles = t1, agents2 = patch(world = w1, x = 0, y = 2))
+  expect_identical(of(agents = t3, var = "heading"), rep(270, 5))
+  t5 <- face(turtles = t1, agents2 = t4)
+  expect_identical(of(agents = t5, var = "heading"), rep(315, 5))
+  t6 <- face(turtles = t4, agents2 = cbind(x = 1, y = 0), torus = FALSE)
+  expect_error(face(turtles = t4, agents2 = cbind(x = 1, y = 0), torus = TRUE))
+  expect_identical(of(agents = t6, var = "heading"), 180)
+  t8 <- face(turtles = t1, agents2 = t1)
+  expect_identical(of(agents = t8, var = "heading"), of(agents = t1, var = "heading"))
+})
+
 test_that("left and right work",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createOTurtles(world = w1, n = 4)

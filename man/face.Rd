@@ -5,6 +5,7 @@
 \alias{face}
 \alias{face,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
 \alias{face,SpatialPointsDataFrame,matrix-method}
+\alias{face,agentMatrix,matrix-method}
 \title{Face something}
 \usage{
 face(turtles, agents2, world, torus = FALSE)
@@ -14,6 +15,8 @@ face(turtles, agents2, world, torus = FALSE)
 
 \S4method{face}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles, agents2,
   world, torus = FALSE)
+
+\S4method{face}{agentMatrix,matrix}(turtles, agents2, world, torus = FALSE)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

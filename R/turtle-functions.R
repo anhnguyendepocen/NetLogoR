@@ -1579,6 +1579,19 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname face
+setMethod(
+  "face",
+  signature = c(turtles = "agentMatrix", agents2 = "matrix"),
+  definition = function(turtles, agents2, world, torus) {
+    newHeading <- towards(agents = turtles, agents2 = agents2, world = world, torus = torus)
+    turtles@.Data[,"heading"] <- newHeading
+    return(turtles)
+
+  }
+)
+
 
 ################################################################################
 #' Rotate to the left
