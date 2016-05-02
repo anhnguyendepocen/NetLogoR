@@ -1,5 +1,5 @@
 a = Sys.time()
-useFastClasses <- TRUE
+useFastClasses <- FALSE
 ################################################################################
 # Wolf sheep predation
 # by Wilensky (1997) NetLogo Wolf Sheep Predation model.
@@ -138,8 +138,11 @@ move <- function(turtles){ # sheep and wolves
 # #
 
 eatGrass <- function(){ # only sheep
+
+  #microbenchmark(times = 10,
   pGreen <- NLwith(world = field, var = "grass", agents = patches(field), val = 1) # patches with grass equal to 1 (green)
-  pGreen <- which(field[,,"grass"] == 1, arr.ind=TRUE)-26 # patches with grass equal to 1 (green)
+  #pGreen1 <- which(field[,,"grass"] == 1, arr.ind=TRUE)-26 # patches with grass equal to 1 (green)
+  #)
 
   sheepOnGreen <- turtlesOn(world = field, turtles = sheep, agents = pGreen) # sheep on green patches
 
@@ -399,7 +402,7 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
 
   time <- time + 1
   # # Help for checking the model is working
-  #print(time)
+  print(time)
 }
 #})
 
