@@ -1070,7 +1070,6 @@ setMethod(
   }
 )
 
-
 #' @export
 #' @rdname hatch
 setMethod(
@@ -1079,16 +1078,25 @@ setMethod(
   definition = function(turtles, who, n, breed) {
 
     iTurtle <- match(who, turtles@.Data[,"who"])
-    newData <- turtles@.Data[iTurtle,,drop=FALSE]
-    newData[,"who"] <- seq_len(length(iTurtle)) + (max(turtles@.Data[,"who"]))
+    newData <- turtles@.Data[iTurtle,,drop = FALSE]
+    if(n != 1){
+      newData <- newData[rep(seq_len(nrow(newData)), each = n),]
+    }
+
+    newData[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(max(turtles@.Data[,"who"]) + (n * length(iTurtle)))
     if(!missing(breed)){
+      if(!breed %in% turtles@levels$breed){
+        turtles@levels$breed <- c(turtles@levels$breed, breed)
+      }
       newData[, "breed"] <- match(breed, turtles@levels$breed)
     }
 
     turtles@.Data <- rbind(turtles@.Data, newData)
+
     return(turtles)
   }
 )
+
 
 ################################################################################
 #' Can the turtles move?
