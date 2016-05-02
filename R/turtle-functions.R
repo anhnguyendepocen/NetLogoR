@@ -720,6 +720,39 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname home
+setMethod(
+  "home",
+  signature = c("NLworlds", "agentMatrix", "character"),
+  definition = function(world, turtles, home) {
+
+    if(home == "home0"){
+      if(world@extent@xmin <= 0 & world@extent@xmax >= 0 & world@extent@ymin <= 0 & world@extent@ymax >= 0){
+        newTurtles<- setXY(turtles = turtles, xcor = 0, ycor = 0, world = world, torus = FALSE)
+      } else {
+        stop("The world provided does not contain the location [x = 0, y = 0]")
+      }
+    }
+
+    if(home == "center"){
+      newTurtles<- setXY(turtles = turtles, xcor = (((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin),
+                         ycor = (((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin),
+                         world = world, torus = FALSE)
+    }
+
+    if(home == "pCorner"){
+      newTurtles<- setXY(turtles = turtles, xcor = minPxcor(world), ycor = minPycor(world), world = world, torus = FALSE)
+    }
+
+    if(home == "corner"){
+      newTurtles<- setXY(turtles = turtles, xcor = world@extent@xmin, ycor = world@extent@ymin, world = world, torus = FALSE)
+    }
+
+    return(newTurtles)
+  }
+)
+
 
 ################################################################################
 #' x-increment
@@ -2148,6 +2181,42 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname setXY
+setMethod(
+  "setXY",
+  signature = c("agentMatrix", "numeric", "numeric", "missing", "ANY"),
+  definition = function(turtles, xcor, ycor, torus) {
+
+    turtles@.Data[,"prevX"] <- turtles@.Data[,"xcor"]
+    turtles@.Data[,"prevY"] <- turtles@.Data[,"ycor"]
+
+    if(length(xcor) == 1 & NROW(turtles) != 1){
+      xcor <- as.numeric(rep(xcor, NROW(turtles)))
+    }
+    if(length(ycor) == 1 & NROW(turtles) != 1){
+      ycor <- as.numeric(rep(ycor, NROW(turtles)))
+    }
+    turtles@.Data[,"xcor"] <- xcor
+    turtles@.Data[,"ycor"] <- ycor
+
+    return(turtles)
+  }
+)
+
+#' @export
+#' @importFrom SpaDES wrap
+#' @rdname setXY
+setMethod(
+  "setXY",
+  signature = c("agentMatrix", "numeric", "numeric", "NLworlds", "logical"),
+  definition = function(turtles, xcor, ycor, world, torus) {
+
+    wrapCoords <- wrap(cbind(x = xcor, y = ycor), extent(world))
+    setXY(turtles = turtles, xcor = wrapCoords[,1], ycor = wrapCoords[,2], torus = FALSE)
+
+  }
+)
 
 ################################################################################
 #' Sprout new turtles

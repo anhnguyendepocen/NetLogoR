@@ -373,7 +373,6 @@ test_that("bk works with agentMatrix",{
   expect_error(bk(turtles = t6, dist = c(5, 1), torus = TRUE, out = FALSE))
 })
 
-
 test_that("home works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
@@ -401,6 +400,22 @@ test_that("home works",{
   expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), t4@coords)
   t5 <- home(world = ws, turtles = t1, home = "corner")
   expect_identical(cbind(xcor = rep(-0.5, 10), ycor = rep(-0.5, 10)), t5@coords)
+
+  w3 <- createNLworld(minPxcor = -5, maxPxcor = -1, minPycor = -10, maxPycor = -5)
+  expect_error(home(world = w3, turtles = t1, home = "home0"))
+})
+
+test_that("home works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = runif(10, 0, 4), ycor = runif(10, 0, 4)))
+  t2 <- home(world = w1, turtles = t1, home = "home0")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- home(world = w1, turtles = t1, home = "center")
+  expect_identical(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), of(agents = t3, var = c("xcor", "ycor")))
+  t4 <- home(world = w1, turtles = t1, home = "pCorner")
+  expect_identical(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), of(agents = t4, var = c("xcor", "ycor")))
+  t5 <- home(world = w1, turtles = t1, home = "corner")
+  expect_identical(cbind(xcor = rep(-0.5, 10), ycor = rep(-0.5, 10)), of(agents = t5, var = c("xcor", "ycor")))
 
   w3 <- createNLworld(minPxcor = -5, maxPxcor = -1, minPycor = -10, maxPycor = -5)
   expect_error(home(world = w3, turtles = t1, home = "home0"))
@@ -815,6 +830,20 @@ test_that("setXY works",{
   t3 <- setXY(world = w1, turtles = t1, xcor = c(1, 1, 1, 1, 5), ycor = rep(1, 5), torus = TRUE)
   expect_identical(t1@coords, cbind(xcor = t3@data$prevX, ycor = t3@data$prevY))
   expect_identical(t3@coords, cbind(xcor = c(1, 1, 1, 1, 0), ycor = rep(1, 5)))
+})
+
+test_that("setXY works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
+  t2 <- setXY(turtles = t1, xcor = 1, ycor = 1, torus = FALSE)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = rep(1, 5), ycor = rep(1, 5)))
+  t2 <- setXY(turtles = t1, xcor = 1, ycor = 1)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t2, var = c("prevX", "prevY")))
+  expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = rep(1, 5), ycor = rep(1, 5)))
+  t3 <- setXY(world = w1, turtles = t1, xcor = c(1, 1, 1, 1, 5), ycor = rep(1, 5), torus = TRUE)
+  expect_equivalent(of(agents = t1, var = c("xcor", "ycor")), of(agents = t3, var = c("prevX", "prevY")))
+  expect_equivalent(of(agents = t3, var = c("xcor", "ycor")), cbind(xcor = c(1, 1, 1, 1, 0), ycor = rep(1, 5)))
 })
 
 test_that("sprout works",{

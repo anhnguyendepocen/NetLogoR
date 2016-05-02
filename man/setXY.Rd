@@ -5,6 +5,8 @@
 \alias{setXY}
 \alias{setXY,SpatialPointsDataFrame,numeric,numeric,NLworlds,logical-method}
 \alias{setXY,SpatialPointsDataFrame,numeric,numeric,missing,ANY-method}
+\alias{setXY,agentMatrix,numeric,numeric,NLworlds,logical-method}
+\alias{setXY,agentMatrix,numeric,numeric,missing,ANY-method}
 \title{Set turtles' locations}
 \usage{
 setXY(turtles, xcor, ycor, world, torus = FALSE)
@@ -15,6 +17,12 @@ setXY(turtles, xcor, ycor, world, torus = FALSE)
 
   \S4method{setXY}{SpatialPointsDataFrame,numeric,numeric,NLworlds,logical}(turtles,
   xcor, ycor, world, torus = FALSE)
+
+\S4method{setXY}{agentMatrix,numeric,numeric,missing,ANY}(turtles, xcor, ycor,
+  torus)
+
+\S4method{setXY}{agentMatrix,numeric,numeric,NLworlds,logical}(turtles, xcor,
+  ycor, world, torus = FALSE)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
