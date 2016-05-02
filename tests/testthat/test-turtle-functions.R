@@ -1159,7 +1159,7 @@ test_that("of works with NLworldMs",{
   expect_equivalent(p2, cbind(1:25,rep(0, 25)))
 })
 
-thest_that("of works with agentMatrix",{
+test_that("of works with agentMatrix",{
   t <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), breed = "sheep", heading = 21:30, color = c(rep("blue", 5), rep("red", 5)))
   twho <- of(agents = t, var = "who")
   expect_equivalent(twho, 0:9)
@@ -1170,9 +1170,9 @@ thest_that("of works with agentMatrix",{
   tcolor <- of(agents = t, var = "color")
   expect_equivalent(tcolor, c(rep("blue", 5), rep("red", 5)))
   tprevX <- of(agents = t, var = "prevX")
-  expect_equivalent(tprevX, rep(NA, 10))
+  expect_equivalent(tprevX, as.numeric(rep(NA, 10)))
   tprevY <- of(agents = t, var = "prevY")
-  expect_equivalent(tprevY, rep(NA, 10))
+  expect_equivalent(tprevY, as.numeric(rep(NA, 10)))
   txcor <- of(agents = t, var = "xcor")
   expect_equivalent(txcor, 1:10)
   tycor <- of(agents = t, var = "ycor")
@@ -1191,9 +1191,9 @@ thest_that("of works with agentMatrix",{
   t2color <- of(agents = turtle(turtles = t1, who = 0), var = "color")
   expect_equivalent(t2color, "blue")
   t2prevX <- of(agents = turtle(turtles = t1, who = 0), var = "prevX")
-  expect_equivalent(t2prevX, NA)
+  expect_equivalent(t2prevX, as.numeric(NA))
   t2prevY <- of(agents = turtle(turtles = t1, who = 0), var = "prevY")
-  expect_equivalent(t2prevY, NA)
+  expect_equivalent(t2prevY, as.numeric(NA))
   t2xcor <- of(agents = turtle(turtles = t1, who = 0), var = "xcor")
   expect_equivalent(t2xcor, 1)
   t2ycor <- of(agents = turtle(turtles = t1, who = 0), var = "ycor")
@@ -1203,10 +1203,11 @@ thest_that("of works with agentMatrix",{
 
   # With multiple var
   t3 <- of(agents = turtle(turtles = t1, who = 0), var = c("who", "heading"))
-  expect_equivalent(cbind.data.frame(who = 0, heading = 21), t3)
+  expect_equivalent(cbind(who = 0, heading = 21), t3)
   t4 <- of(agents = turtle(turtles = t1, who = 0), var = c("who", "xcor"))
-  expect_equivalent(cbind.data.frame(who = 0, xcor = 1), t4)
+  expect_equivalent(cbind(who = 0, xcor = 1), t4)
   t5 <- of(agents = t1, var = c("who", "xcor", "age"))
-  expect_equivalent(cbind.data.frame(who = 0:9, xcor = 1:10, age = c(2, 3, 4, 5, 2, 4, 6, 6, 3, 5)), t5)
-
+  expect_equivalent(cbind(who = 0:9, xcor = 1:10, age = c(2, 3, 4, 5, 2, 4, 6, 6, 3, 5)), t5)
+  t6 <- of(agents = t1, var = c("who", "xcor", "age", "breed"))
+  expect_equivalent(data.frame(who = 0:9, xcor = 1:10, age = c(2, 3, 4, 5, 2, 4, 6, 6, 3, 5), breed = rep("sheep", 10), stringsAsFactors = FALSE), t6)
 })

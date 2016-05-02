@@ -3447,17 +3447,24 @@ setMethod(
 
     if(any(names(agents@levels) %in% var)){
 
-      agentsData <- as.data.frame(agents@.Data)
-      # Recode the factors with the characters
-      # Not working
-      agentsData[,names(agents@levels)] <- do.call(cbind,lapply(1:length(agents@levels),
-                                                                function(x){mapvalues(as.factor(agentsData[,names(agents@levels)[x]]),
-                                                                                      from = unique(agentsData[,names(agents@levels)[x]]),
-                                                                                      to = agents@levels[names(agents@levels)[x]])}))
-      return(agentsData[,var])
+      agentsData <- as.data.frame(agents@.Data) # characters data as factors
+      agentsData[,names(agents@levels)] <- do.call(cbind,lapply(1:length(agents@levels),function(x){
+        unlist(mapvalues(agentsData[,names(agents@levels)[x]],
+                         from = unique(agentsData[,names(agents@levels)[x]]),
+                         to = agents@levels[names(agents@levels)[x]][[1]][unique(agentsData[,names(agents@levels)[x]])]))}))
+      if(length(var) == 1){
+        return(agentsData[,var])
+      } else {
+        return(agentsData[,var, drop = FALSE])
+      }
 
     } else {
-      return(agents@.Data[,var])
+      if(length(var) == 1){
+        return(agents@.Data[,var])
+      } else {
+        return(agents@.Data[,var, drop = FALSE])
+      }
+
     }
   })
 
