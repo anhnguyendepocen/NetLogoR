@@ -19,7 +19,7 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
 #' @importFrom matrixStats colRanges
 .bboxCoords <- function(coords) {
 
-    stopifnot(nrow(coords) > 0)
+    stopifnot(length(coords) > 0)
     bbox = colRanges(coords)
     dimnames(bbox)[[2]] = c("min", "max")
     as.matrix(bbox)
@@ -503,8 +503,8 @@ setMethod(
   definition = function(x, i, ..., drop) {
 
     x@.Data <- x@.Data[i,,drop=FALSE]
-    if(NROW(x@.Data)>0)
-    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
+    if(length(x@.Data)>0)
+      x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
     x
 
   }

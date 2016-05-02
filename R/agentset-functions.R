@@ -211,7 +211,7 @@ setMethod(
   "count",
   signature = c("matrix"),
   definition = function(agents) {
-    return(nrow(agents))
+    return(NROW(agents))
   }
 )
 
@@ -2010,9 +2010,9 @@ setMethod(
                 var = "character", val = "ANY"),
   definition = function(turtles, agents, var, val) {
 
-    if(count(agents) != 0){
+    if(NROW(agents) != 0){
 
-      if(identical(agents, turtles)){ # NOT DONE YET Eliot April 28
+      if(identical(agents, turtles)){
         turtles@.Data[, var] <- val
 
         # if(length(var) == 1){
@@ -2044,11 +2044,12 @@ setMethod(
       } else {
 
         iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
-
         if(length(var) == 1){
           turtles@.Data[iAgents, var] <- val
         }
       }
+
+
 
       if(any(var == "who")){ # if the who numbers have been modified, check for duplicates
         if(anyDuplicated(turtles@data$who) != 0){
@@ -2122,11 +2123,18 @@ setMethod(
           if(length(val) == 1 & length(matj) != 1){
             val <- rep(val, length(matj))
           }
-          val <- val[!is.na(matj)]
-          matj <- matj[!is.na(matj)]
-          mati <- mati[!is.na(mati)]
+          noNA <- !is.na(matj)
+          val <- val[noNA]
+          colNum <- match(var, dimnames(world)[[3]])
+          len <- length(mati)
+          ind <- c(mati, matj, rep_len(colNum, length.out = len))
+          dim(ind) <- c(len, 3)
+          ind <- ind[!is.na(noNA),,drop=FALSE]
+          # matj <- matj[!is.na(matj)]
+          # mati <- mati[!is.na(mati)]
 
-          world[,,var][cbind(mati, matj)] <- val
+          world[ind] <- val
+
         }
 
       } else {
@@ -2152,7 +2160,9 @@ setMethod(
           mati <- mati[!is.na(mati)]
 
           for(i in 1:length(var)){
-            world[,,var[i]][cbind(mati, matj)] <- val[,var[i]]
+            ind <- c(mati, matj)
+            dim(ind) <- c(length(mati), 2L)
+            world[,,var[i]][ind] <- val[,var[i]]
           }
         }
       }

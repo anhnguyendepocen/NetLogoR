@@ -573,20 +573,23 @@ setMethod(
       pycor_ <- pCoords[,2]
     }
 
-    pxcorNA <- ifelse(pxcor_ < minPxcor(world) | pxcor_ > maxPxcor(world), NA, pxcor_)
-    pycorNA <- ifelse(pycor_ < minPycor(world) | pycor_ > maxPycor(world), NA, pycor_)
-    pxcorNA[is.na(pycorNA)] <- NA
-    pycorNA[is.na(pxcorNA)] <- NA
+    pxcor_[pxcor_ < minPxcor(world) | pxcor_ > maxPxcor(world)] <- NA
+    pycor_[pycor_ < minPycor(world) | pycor_ > maxPycor(world)] <- NA
+    pxcor_[is.na(pycor_)] <- NA
+    pycor_[is.na(pxcor_)] <- NA
+
+    # pxcorNA <- ifelse(pxcor_ < minPxcor(world) | pxcor_ > maxPxcor(world), NA, pxcor_)
+    # pycorNA <- ifelse(pycor_ < minPycor(world) | pycor_ > maxPycor(world), NA, pycor_)
+    # pxcorNA[is.na(pycorNA)] <- NA
+    # pycorNA[is.na(pxcorNA)] <- NA
 
     if(out == FALSE){
-      pxcor = pxcorNA[!is.na(pxcorNA)]
-      pycor = pycorNA[!is.na(pycorNA)]
-    } else {
-      pxcor = pxcorNA
-      pycor = pycorNA
+      pxcor_ = pxcor_[!is.na(pxcor_)]
+      pycor_ = pycor_[!is.na(pycor_)]
     }
 
-    pCoords <- matrix(data = cbind(pxcor, pycor), ncol = 2, nrow = length(pxcor), dimnames = list(NULL, c("pxcor", "pycor")))
+    pCoords <- matrix(data = c(pxcor_, pycor_), ncol = 2,
+                      nrow = length(pxcor_), dimnames = list(NULL, c("pxcor", "pycor")))
 
     if(duplicate == FALSE){
       pCoords <- unique(pCoords)

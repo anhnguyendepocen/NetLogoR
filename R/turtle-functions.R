@@ -403,20 +403,20 @@ setMethod(
   signature = c(turtles = "agentMatrix", dist = "numeric"),
   definition = function(turtles, dist, world, torus, out) {
 
-    prevXcor <- turtles@.Data[,1]
-    prevYcor <- turtles@.Data[,2]
+    turtles@.Data[,c("prevX", "prevY")] <- turtles@.Data[,1:2]
 
-    turtles@.Data[,"prevX"] <- prevXcor
-    turtles@.Data[,"prevY"] <- prevYcor
-
-    fdXcor <- prevXcor + sin(rad(turtles@.Data[,"heading"])) * dist
-    fdYcor <- prevYcor + cos(rad(turtles@.Data[,"heading"])) * dist
+    inRads <- rad(turtles@.Data[,"heading"])
+    fdXcor <- turtles@.Data[,"prevX"] + sin(inRads) * dist
+    fdYcor <- turtles@.Data[,"prevY"] + cos(inRads) * dist
 
     if(torus == TRUE){
       if(missing(world)){
         stop("A world must be provided as torus = TRUE")
       }
-      tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
+      coords <- c(fdXcor, fdYcor)
+      dim(coords) <- c(length(fdXcor), 2L)
+      colnames(coords) <- c("x","y")
+      tCoords <- wrap(coords, extent(world))
       fdXcor <- tCoords[,1]
       fdYcor <- tCoords[,2]
     }
@@ -428,11 +428,14 @@ setMethod(
       outX <- fdXcor < world@extent@xmin | fdXcor > world@extent@xmax
       outY <- fdYcor < world@extent@ymin | fdYcor > world@extent@ymax
       outXY <- which(outX | outY) # position of turtles out of the world's extent
-      fdXcor[outXY] <- prevXcor[outXY]
-      fdYcor[outXY] <- prevYcor[outXY]
+      fdXcor[outXY] <- turtles@.Data[,"prevX"][outXY]
+      fdYcor[outXY] <- turtles@.Data[,"prevY"][outXY]
     }
 
-    turtles@.Data[,1:2] <- cbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
+    turtles@.Data[,1:2] <- c(round(fdXcor, digits = 5),
+                             round(fdYcor, digits = 5))
+
+
     return(turtles)
   }
 )
@@ -3022,6 +3025,7 @@ fastCbind <- function(a,b){
   colNamesB <- colnames(b)
   newDim <- dim(a)+c(0,dim(b)[2])
   len <- length(a)
+  if(length(newDim)==0) newDim <- c(len, 2L)
   newLen <- len+length(b)
   length(a) <- newLen
   dim(a) <- newDim
