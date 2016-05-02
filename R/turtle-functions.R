@@ -2641,19 +2641,22 @@ setMethod(
 
 
     pTurtles <- round(turtles@.Data[,c("xcor", "ycor","who")])
-    colnames(pTurtles)[1:2] <- c("pxcor", "pycor")
+    colnames(pTurtles)[1:2] <- c("pxcor", "pycor") # awkward column name change
 
+    #browser()
     # FASTER ALTERNATIVE TO THE MERGE pOn <- merge(agents, pTurtles)
     # microbenchmark({
-    # a= matrix(ncol=ncol(world), nrow=nrow(world))
-    # a[agents+26] <- 1 # change this 26 to the dimensions of the world, and next line
-    # pOn2 <- na.omit(a[pTurtles[,1:2]+26] * pTurtles)
     # },{
     #   pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
     # })
 
     if(simplify == TRUE){
-      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+      #pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+      # Instead of merge, which is slow, make an empty matrix (of NAs) and use the agents coordinates
+      #   directly
+      a = matrix(ncol=ncol(world), nrow=nrow(world))
+      a[agents-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- 1 # change this 26 to the dimensions of the world, and next line
+      pOn <- na.omit(a[pTurtles[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] * pTurtles)
 
       if(nrow(pOn) == 0){
         return(noTurtles())
@@ -2662,10 +2665,25 @@ setMethod(
       }
 
     } else {
-      agents <- cbind(agents, id = 1:NROW(agents))
-      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-      pOn <- pOn[order(pOn[,"id"]),]
-      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
+      if(any(is.na(agents)))
+        agents <- na.omit(agents) # There shouldn't be any NAs passed in here, probably
+      agents <- cbind(agents, id = 1:dim(agents)[1])
+
+      b <- a <- matrix(ncol=ncol(world), nrow=nrow(world))
+      a[agents[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- 1 # change this 26 to the dimensions of the world, and next line
+      b[agents[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- agents[,3] # change this 26 to the dimensions of the world, and next line
+      pOn <- na.omit(a[pTurtles[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] * pTurtles)
+      dims <- c(nrow(pOn), ncol(pOn))
+      colNames <- colnames(pOn)
+      length(pOn) <- length(pOn) + dims[1]
+      dim(pOn) <- dims+c(0,1)
+      colnames(pOn) <- c(colNames, "id")
+      pOn[,"id"] <- na.omit(b[pTurtles[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)])
+
+      #pOn2 <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
+      pOn <- pOn[order(pOn[,"id"]),,drop=FALSE]
+      turtlesID <- pOn[,c("who","id"), drop=FALSE]
+      colnames(turtlesID)[1] <- "whoTurtles"
       return(turtlesID)
     }
   }

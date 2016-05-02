@@ -1,5 +1,9 @@
 a = Sys.time()
-useFastClasses <- FALSE
+useFastClasses <- TRUE
+maxTime <- 500
+seed <- sample(1e5, 1)
+seed <- 22242
+set.seed(seed)
 ################################################################################
 # Wolf sheep predation
 # by Wilensky (1997) NetLogo Wolf Sheep Predation model.
@@ -13,7 +17,7 @@ useFastClasses <- FALSE
 ## Packages required
 #library(NetLogoR)
 library(SpaDES)
-#library(profvis) # test the speed of the different functions
+library(profvis) # test the speed of the different functions
 
 
 ## Global variables (some represent the model buttons)
@@ -355,9 +359,9 @@ growGrass <- function(){ # only patches
 
 
 ## Go
-#profvisWolfSheep <- profvis({
+profvisWolfSheep <- profvis({
 time <- 0
-while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
+while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
   # Ask sheep
   if(count(sheep) != 0){
@@ -402,9 +406,9 @@ while((NLany(sheep) | NLany(wolves)) & time < 500 ){ # as long as there are shee
 
   time <- time + 1
   # # Help for checking the model is working
-  print(time)
+  #print(time)
 }
-#})
+}) # end profvis
 
 ## Plot outputs
 dev()
@@ -430,5 +434,6 @@ if(grassOn == TRUE){
 }
 
 b = Sys.time()
-b-a
-#profvisWolfSheep
+print(paste(sum(numSheep+numWolves)/as.numeric(b-a), "sheep and wolves per second"))
+print(b-a)
+profvisWolfSheep
