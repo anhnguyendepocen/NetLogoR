@@ -930,6 +930,15 @@ test_that("patchAhead works",{
   expect_identical(pAhead, cbind(pxcor = c(0, 1, 2, 3, 4), pycor = c(2, 3, 4, 0, 1)))
 })
 
+test_that("patchAhead works with agentMatrix",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = 0)
+  pAhead <- patchAhead(world = w1, turtles = t1, dist = 2, torus = FALSE)
+  expect_identical(pAhead, cbind(pxcor = c(0, 1, 2, NA, NA), pycor = c(2, 3, 4, NA, NA)))
+  pAhead <- patchAhead(world = w1, turtles = t1, dist = 2, torus = TRUE)
+  expect_identical(pAhead, cbind(pxcor = c(0, 1, 2, 3, 4), pycor = c(2, 3, 4, 0, 1)))
+})
+
 test_that("patchHere works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))

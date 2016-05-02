@@ -1991,6 +1991,22 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname patchAhead
+setMethod(
+  "patchAhead",
+  signature = c(world = "NLworlds", turtles = "agentMatrix", dist = "numeric"),
+  definition = function(world, turtles, dist, torus) {
+
+    radHeading <- rad(turtles@.Data[,"heading"])
+    xcor <- round(turtles@.Data[,"xcor"] + sin(radHeading) * dist, digits = 5)
+    ycor <- round(turtles@.Data[,"ycor"] + cos(radHeading) * dist, digits = 5)
+    pAhead <- patch(world = world, x = xcor, y = ycor, duplicate = TRUE, torus = torus, out = TRUE)
+    return(pAhead)
+
+  }
+)
+
 
 ################################################################################
 #' Patches here

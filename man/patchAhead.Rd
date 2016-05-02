@@ -4,12 +4,16 @@
 \name{patchAhead}
 \alias{patchAhead}
 \alias{patchAhead,NLworlds,SpatialPointsDataFrame,numeric-method}
+\alias{patchAhead,NLworlds,agentMatrix,numeric-method}
 \title{Patches ahead}
 \usage{
 patchAhead(world, turtles, dist, torus = FALSE)
 
 \S4method{patchAhead}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles,
   dist, torus = FALSE)
+
+\S4method{patchAhead}{NLworlds,agentMatrix,numeric}(world, turtles, dist,
+  torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}
