@@ -205,6 +205,36 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname createTurtlesAM
+setMethod(
+  "createTurtlesAM",
+  signature = c("numeric", "missing", "ANY", "ANY", "ANY", "ANY"),
+  definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
+
+    coords <- cbind(xcor = rep(((maxPxcor(world) - minPxcor(world)) / 2) + minPxcor(world), n),
+                    ycor = rep(((maxPycor(world) - minPycor(world)) / 2) + minPycor(world), n))
+
+    if(missing(heading))
+      heading <- runif(n = n, min = 0, max = 360)
+
+    if(missing(breed))
+      breed <- "turtle"
+
+    if(missing(color))
+      color <- rainbow(n)
+
+    turtles<-new("agentMatrix",
+                 coords = coords,
+                 who = seq(from = 0, to = n - 1, by = 1),
+                 heading = heading,
+                 prevX = rep(NA, n),
+                 prevY = rep(NA, n),
+                 breed = breed,
+                 color = color)
+    return(turtles)
+  }
+)
 
 
 ################################################################################

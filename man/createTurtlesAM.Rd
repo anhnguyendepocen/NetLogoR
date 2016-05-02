@@ -3,8 +3,12 @@
 \docType{methods}
 \name{createTurtlesAM,numeric,matrix,missing-method}
 \alias{createTurtlesAM,numeric,matrix,missing-method}
+\alias{createTurtlesAM,numeric,missing,ANY-method}
 \usage{
 \S4method{createTurtlesAM}{numeric,matrix,missing}(n, coords, world, heading,
+  breed, color, agent = FALSE)
+
+\S4method{createTurtlesAM}{numeric,missing,ANY}(n, coords, world, heading,
   breed, color, agent = FALSE)
 }
 

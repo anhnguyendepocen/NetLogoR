@@ -61,6 +61,32 @@ test_that("createTurtles works with different missing inputs",{
   expect_equivalent(length(t1), 10)
 })
 
+test_that("createTurtlesAM",{
+  w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+
+  t1 <- createTurtlesAM(world = w1, n = 10)
+  expect_equivalent(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), of(agents = t1, var = c("xcor", "ycor")))
+  t1head <- of(agents = t1, var = "heading") >= 0 & of(agents = t1, var = "heading") <= 360
+  expect_equivalent(t1head, rep(TRUE, 10))
+  expect_equivalent(of(agents = t1, var = "breed"), rep("turtle", 10))
+  expect_equivalent(length(unique(of(agents = t1, var = "color"))), 10)
+  expect_equivalent(of(agents = t1, var = "who"), 0:9)
+  expect_equivalent(of(agents = t1, var = "prevX"), as.numeric(rep(NA, 10)))
+  expect_equivalent(of(agents = t1, var = "prevY"), as.numeric(rep(NA, 10)))
+  expect_equivalent(count(t1), 10)
+
+  t2 <- createTurtlesAM(n = 10, coords = cbind(xcor = rep(0, 10), ycor = rep(0, 10)))
+  expect_equivalent(cbind(xcor = rep(0, 10), ycor = rep(0, 10)), of(agents = t2, var = c("xcor", "ycor")))
+  t3 <- createTurtlesAM(world = w1, n = 10, heading = 0)
+  expect_equivalent(rep(0, 10), of(agents = t3, var = "heading"))
+  t4 <- createTurtlesAM(world = w1, n = 10, heading = 1:10)
+  expect_equivalent(1:10, of(agents = t4, var = "heading"))
+  t5 <- createTurtlesAM(world = w1, n = 10, breed = "caribou")
+  expect_equivalent(rep("caribou", 10), of(agents = t5, var = "breed"))
+  t6 <- createTurtlesAM(world = w1, n = 10, breed = c(rep("caribou", 5), rep("moose", 5)))
+  expect_equivalent(c(rep("caribou", 5), rep("moose", 5)), of(agents = t6, var = "breed"))
+})
+
 test_that("createOTurtles works",{
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 
