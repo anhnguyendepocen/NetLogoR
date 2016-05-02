@@ -438,9 +438,11 @@ setMethod(
   definition = function(world, pxcor, pycor) {
     j <- pxcor - attr(world, "minPxcor") + 1
     i <- attr(world, "maxPycor") - pycor + 1
-    matCellNum <- matrix(data = 1:(ncol(world) * nrow(world)), ncol = ncol(world), byrow = TRUE)
-    cellNum <- matCellNum[cbind(i, j)]
-    return(cellNum)
+    (i-1)*ncol(world)+j # Faster
+    #ncolW <- ncol(world)
+    #matCellNum <- matrix(data = 1:(ncolW * nrow(world)), ncol = ncolW, byrow = TRUE)
+    #cellNum <- matCellNum[cbind(i, j)]
+    #return(cellNum)
   }
 )
 
