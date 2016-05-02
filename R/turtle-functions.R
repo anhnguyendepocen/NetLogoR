@@ -616,6 +616,18 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname bk
+setMethod(
+  "bk",
+  signature = c(turtles = "agentMatrix", dist = "numeric"),
+  definition = function(turtles, dist, world, torus, out) {
+
+    fd(turtles = turtles, dist = -dist, world = world, torus = torus, out = out)
+
+  }
+)
+
 
 ################################################################################
 #' Return home

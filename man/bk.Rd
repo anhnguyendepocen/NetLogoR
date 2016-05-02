@@ -4,12 +4,16 @@
 \name{bk}
 \alias{bk}
 \alias{bk,SpatialPointsDataFrame,numeric-method}
+\alias{bk,agentMatrix,numeric-method}
 \title{Move backward}
 \usage{
 bk(turtles, dist, world, torus = FALSE, out = TRUE)
 
 \S4method{bk}{SpatialPointsDataFrame,numeric}(turtles, dist, world,
   torus = FALSE, out = TRUE)
+
+\S4method{bk}{agentMatrix,numeric}(turtles, dist, world, torus = FALSE,
+  out = TRUE)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
