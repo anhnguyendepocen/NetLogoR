@@ -3,6 +3,7 @@
 \docType{methods}
 \name{patchDistDir}
 \alias{patchDistDir}
+\alias{patchDistDir,NLworldMs,matrix,numeric,numeric-method}
 \alias{patchDistDir,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
 \alias{patchDistDir,NLworlds,matrix,numeric,numeric-method}
 \title{Patches at certain distances and certain directions}
@@ -14,6 +15,9 @@ patchDistDir(world, agents, dist, angle, torus = FALSE)
 
 \S4method{patchDistDir}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
   agents, dist, angle, torus = FALSE)
+
+\S4method{patchDistDir}{NLworldMs,matrix,numeric,numeric}(world, agents, dist,
+  angle, torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{patchAt}
 \alias{patchAt}
+\alias{patchAt,NLworldMs,matrix,numeric,numeric-method}
 \alias{patchAt,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
 \alias{patchAt,NLworlds,matrix,numeric,numeric-method}
 \title{Patches at}
@@ -14,6 +15,9 @@ patchAt(world, agents, dx, dy, torus = FALSE)
 
 \S4method{patchAt}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
   agents, dx, dy, torus = FALSE)
+
+\S4method{patchAt}{NLworldMs,matrix,numeric,numeric}(world, agents, dx, dy,
+  torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}

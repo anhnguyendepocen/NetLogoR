@@ -3,12 +3,15 @@
 \docType{methods}
 \name{randomPycor}
 \alias{randomPycor}
+\alias{randomPycor,NLworldMs,numeric-method}
 \alias{randomPycor,NLworlds,numeric-method}
 \title{Random pycor}
 \usage{
 randomPycor(world, n)
 
 \S4method{randomPycor}{NLworlds,numeric}(world, n)
+
+\S4method{randomPycor}{NLworldMs,numeric}(world, n)
 }
 \arguments{
 \item{world}{NLworlds object.}

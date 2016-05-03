@@ -3,8 +3,8 @@
 \docType{methods}
 \name{neighbors}
 \alias{neighbors}
+\alias{neighbors,NLworldMs,matrix,numeric-method}
 \alias{neighbors,NLworlds,SpatialPointsDataFrame,numeric-method}
-\alias{neighbors,NLworlds,agentDataTable,numeric-method}
 \alias{neighbors,NLworlds,matrix,numeric-method}
 \title{Neighbors patches}
 \usage{
@@ -16,7 +16,7 @@ neighbors(world, agents, nNeighbors, torus = FALSE)
 \S4method{neighbors}{NLworlds,SpatialPointsDataFrame,numeric}(world, agents,
   nNeighbors, torus = FALSE)
 
-\S4method{neighbors}{NLworlds,agentDataTable,numeric}(world, agents, nNeighbors,
+\S4method{neighbors}{NLworldMs,matrix,numeric}(world, agents, nNeighbors,
   torus = FALSE)
 }
 \arguments{
