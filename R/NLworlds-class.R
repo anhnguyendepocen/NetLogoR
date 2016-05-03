@@ -369,6 +369,10 @@ setReplaceMethod(
   signature("NLworldMatrix","missing","missing","numeric"),
   definition = function(x, value) {
 
+    nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
+    if(length(value) != nCell){
+      value <- rep(value, nCell)
+    }
     x@.Data <- matrix(data = value, ncol = dim(x@.Data)[2], byrow = TRUE)
     validObject(x)
     return(x)
@@ -532,7 +536,11 @@ setReplaceMethod(
   signature("NLworldArray","missing","missing","matrix"),
   definition = function(x, value) {
 
-    browser()
+    nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
+    if(NROW(value) != nCell){ # assuming value has one row
+      value <- value[rep(1, nCell),]
+    }
+
     for(k in 1:dim(x)[3]){
       x@.Data[,,k] <- matrix(data = value[,k], ncol = dim(x@.Data)[2], byrow = TRUE)
     }
