@@ -3028,7 +3028,6 @@ setMethod(
     pTurtles <- round(turtles@.Data[,c("xcor", "ycor","who")])
     colnames(pTurtles)[1:2] <- c("pxcor", "pycor") # awkward column name change
 
-    #browser()
     # FASTER ALTERNATIVE TO THE MERGE pOn <- merge(agents, pTurtles)
     # microbenchmark({
     # },{

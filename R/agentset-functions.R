@@ -424,7 +424,7 @@ setMethod(
   definition = function(agents, world, var, val) {
 
     agentsCell <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    allVal <- as.numeric(t(world[,,var])) # t() to retrieve the values by rows
+    allVal <- as.numeric(t(world@.Data[,,var])) # t() to retrieve the values by rows
     agentsValues <- allVal[agentsCell]
     pVal <- which(agentsValues %in% val)
     return(agents[pVal, , drop = FALSE])
