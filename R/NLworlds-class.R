@@ -485,7 +485,6 @@ setMethod(
 )
 
 #' @export
-#' @importFrom data.table rbindlist
 #' @name [
 #' @docType methods
 #' @rdname NLworldArray-class
@@ -658,13 +657,9 @@ setMethod(
   "cellFromPxcorPycor",
   signature = c("NLworldMs", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
-    j <- pxcor - attr(world, "minPxcor") + 1
-    i <- attr(world, "maxPycor") - pycor + 1
-    (i-1)*ncol(world)+j # Faster
-    #ncolW <- ncol(world)
-    #matCellNum <- matrix(data = 1:(ncolW * nrow(world)), ncol = ncolW, byrow = TRUE)
-    #cellNum <- matCellNum[cbind(i, j)]
-    #return(cellNum)
+    j <- pxcor - world@minPxcor + 1
+    i <- world@maxPycor - pycor + 1
+    (i-1)*ncol(world@.Data)+j # Faster
   }
 )
 
@@ -717,21 +712,7 @@ setMethod(
   "PxcorPycorFromCell",
   signature = c("NLworldMs", "numeric"),
   definition = function(world, cellNum) {
-    pCoords <- worldCoords[cellNum,]
-    #pCoords <- cbind(pxcor=rep_len(attr(world, "minPxcor"):attr(world, "maxPxcor"),
-    #                                length.out=length(world))[cellNum],
-    #                  pycor = rep(attr(world, "maxPycor"):attr(world, "minPycor"), each = ncol(world))[cellNum])
-
+    pCoords <- world@pCoords[cellNum,,drop = FALSE]
+    return(pCoords)
   }
 )
-
-
-#' @aliases NLworlds
-#' @name NLworlds-class
-#' @rdname NLworlds-class
-#' @author Sarah Bauduin
-#' @exportClass NLworlds
-setClassUnion(name="NLworldMs",
-              members=c("NLworldMatrix", "NLworldArray")
-)
-

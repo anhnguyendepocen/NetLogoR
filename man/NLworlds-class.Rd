@@ -22,7 +22,5 @@ classes. Mostly used for building function purposes.
 Sarah Bauduin
 
 Sarah Bauduin
-
-Sarah Bauduin
 }
 

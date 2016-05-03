@@ -187,4 +187,3 @@ test_that("clearPatches works", {
   w10 <- clearPatches(w9)
   expect_equivalent(w10, w6)
 })
-
