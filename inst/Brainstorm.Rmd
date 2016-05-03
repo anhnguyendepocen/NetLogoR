@@ -20,6 +20,8 @@ To do:
 
 * Define plot functions for NLworldMs and agentMatrix
 
+* Define convert functions, raster <-> NLworldMs and SPDF <-> agentMatrix
+
 
 
 #### April 2016
