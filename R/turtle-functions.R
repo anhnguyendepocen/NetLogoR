@@ -69,7 +69,7 @@ setMethod(
     names(li) <- names(match.call())[-1]
 
     if(nrow(li$coords) == 1){
-      li$coords <- cbind(xcor = as.numeric(rep(li$coords[,1], n)), ycor = as.numeric(rep(li$coords[,2], n)))
+      li$coords <- fastCbind(xcor = as.numeric(rep(li$coords[,1], n)), ycor = as.numeric(rep(li$coords[,2], n)))
     }
 
     if(missing(heading))
@@ -138,7 +138,7 @@ setMethod(
     if(missing(color))
       li$color <- rainbow(n)
 
-    coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
+    coords <- fastCbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
                     ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), n))
 
     out <- createTurtles(n = n, coords = coords, heading = li$heading, breed = li$breed, color = li$color, agent = agent)
@@ -212,7 +212,7 @@ setMethod(
   signature = c("numeric", "missing", "ANY", "ANY", "ANY", "ANY"),
   definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
 
-    coords <- cbind(xcor = rep(((maxPxcor(world) - minPxcor(world)) / 2) + minPxcor(world), n),
+    coords <- fastCbind(xcor = rep(((maxPxcor(world) - minPxcor(world)) / 2) + minPxcor(world), n),
                     ycor = rep(((maxPycor(world) - minPycor(world)) / 2) + minPycor(world), n))
 
     if(missing(heading))
@@ -473,7 +473,7 @@ setMethod(
       if(missing(world)){
         stop("A world must be provided as torus = TRUE")
       }
-      tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
+      tCoords <- wrap(fastCbind(x = fdXcor, y = fdYcor), extent(world))
       fdXcor <- tCoords[,1]
       fdYcor <- tCoords[,2]
     }
@@ -489,7 +489,7 @@ setMethod(
       fdYcor[outXY] <- prevYcor[outXY]
     }
 
-    turtles@coords <- cbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
+    turtles@coords <- fastCbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
     return(turtles)
   }
 )
@@ -1055,9 +1055,9 @@ setMethod(
     parentData <- turtles@data[iTurtle,]
 
     if(length(iTurtle) == 1){ # parentCoords is numeric
-      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
+      newCoords <- rbind(turtles@coords, fastCbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
     } else { # parentCoords is a matrix
-      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[,1]), each = n), ycor = rep(as.numeric(parentCoords[,2]), each = n)))
+      newCoords <- rbind(turtles@coords, fastCbind(xcor = rep(as.numeric(parentCoords[,1]), each = n), ycor = rep(as.numeric(parentCoords[,2]), each = n)))
     }
     newData <- rbind(turtles@data, parentData[rep(seq_len(nrow(parentData)), each = n),])
     rownames(newData) <- seq_len(nrow(newData))
@@ -1402,14 +1402,14 @@ setMethod(
         # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
         # Find the smallest distances across or around the world
 
-        to1 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
-        to2 <- cbind(agents2[,1], agents2[,2] + (world@extent@ymax - world@extent@ymin))
-        to3 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
-        to4 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2])
-        to5 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2])
-        to6 <- cbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
-        to7 <- cbind(agents2[,1], agents2[,2] - (world@extent@ymax - world@extent@ymin))
-        to8 <- cbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
+        to1 <- fastCbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
+        to2 <- fastCbind(agents2[,1], agents2[,2] + (world@extent@ymax - world@extent@ymin))
+        to3 <- fastCbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] + (world@extent@ymax - world@extent@ymin))
+        to4 <- fastCbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2])
+        to5 <- fastCbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2])
+        to6 <- fastCbind(agents2[,1] - (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
+        to7 <- fastCbind(agents2[,1], agents2[,2] - (world@extent@ymax - world@extent@ymin))
+        to8 <- fastCbind(agents2[,1] + (world@extent@xmax - world@extent@xmin), agents2[,2] - (world@extent@ymax - world@extent@ymin))
 
         # All distances in a wrapped world
         dist_agents2 <- pointDistance(p1 = agents, p2 = agents2, lonlat = FALSE, allpairs = FALSE)
@@ -1423,7 +1423,7 @@ setMethod(
         dist_to8 <- pointDistance(p1 = agents, p2 = to8, lonlat = FALSE, allpairs = FALSE)
 
         # Which distance is the minimum
-        allDist <- cbind(dist_agents2, dist_to1, dist_to2, dist_to3, dist_to4, dist_to5, dist_to6, dist_to7, dist_to8)
+        allDist <- fastCbind(dist_agents2, dist_to1, dist_to2, dist_to3, dist_to4, dist_to5, dist_to6, dist_to7, dist_to8)
         distMin <- apply(allDist, 1, min)
 
         toShortest <- agents2
@@ -1825,7 +1825,7 @@ setMethod(
     pMinCoords <- allPatches[rowMin,]
     pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 3),] # select randomly one row per id
     pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
-    pMinCoords2 <- cbind(pxcor = pMinCoords1[,1], pycor = pMinCoords1[,2])
+    pMinCoords2 <- fastCbind(pxcor = pMinCoords1[,1], pycor = pMinCoords1[,2])
 
     newTurtles <- face(world = world, turtles = turtles, agents2 = pMinCoords2, torus = torus)
     newTurtles <- moveTo(turtles = newTurtles, agents = pMinCoords2)
@@ -2309,7 +2309,7 @@ setMethod(
     if(length(ycor) == 1 & length(turtles) != 1){
       ycor <- as.numeric(rep(ycor, length(turtles)))
     }
-    turtles@coords <- cbind(xcor, ycor)
+    turtles@coords <- fastCbind(xcor, ycor)
 
     return(turtles)
   }
@@ -2323,7 +2323,7 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric", "numeric", "NLworlds", "logical"),
   definition = function(turtles, xcor, ycor, world, torus) {
 
-    wrapCoords <- wrap(cbind(x = xcor, y = ycor), extent(world))
+    wrapCoords <- wrap(fastCbind(x = xcor, y = ycor), extent(world))
     setXY(turtles = turtles, xcor = wrapCoords[,1], ycor = wrapCoords[,2], torus = FALSE)
 
   }
@@ -2360,7 +2360,7 @@ setMethod(
   signature = c("agentMatrix", "numeric", "numeric", "NLworlds", "logical"),
   definition = function(turtles, xcor, ycor, world, torus) {
 
-    wrapCoords <- wrap(cbind(x = xcor, y = ycor), extent(world))
+    wrapCoords <- wrap(fastCbind(x = xcor, y = ycor), extent(world))
     setXY(turtles = turtles, xcor = wrapCoords[,1], ycor = wrapCoords[,2], torus = FALSE)
 
   }
@@ -2420,7 +2420,7 @@ setMethod(
     names(li) <- names(match.call())[-1]
 
     if(nrow(li$patches) == 1 & n != 1){
-      li$patches <- cbind(as.numeric(rep(li$patches[,1], n)), as.numeric(rep(li$patches[,2], n)))
+      li$patches <- fastCbind(as.numeric(rep(li$patches[,1], n)), as.numeric(rep(li$patches[,2], n)))
     }
     colnames(li$patches) <- c("xcor", "ycor")
 
@@ -2498,7 +2498,7 @@ setMethod(
   "inspect",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
-    tData <- cbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
+    tData <- fastCbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
     return(tData)
   }
 )
@@ -2510,7 +2510,7 @@ setMethod(
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
     tData <- as.data.frame(turtles[turtles@.Data[,"who"] %in% who,,drop = FALSE])
-    tData[,names(turtles@levels)] <- do.call(cbind,lapply(1:length(turtles@levels),function(x){
+    tData[,names(turtles@levels)] <- do.call(fastCbind,lapply(1:length(turtles@levels),function(x){
       unlist(mapvalues(tData[,names(turtles@levels)[x]],
                        from = unique(tData[,names(turtles@levels)[x]]),
                        to = turtles@levels[names(turtles@levels)[x]][[1]][unique(tData[,names(turtles@levels)[x]])]))}))
@@ -2647,7 +2647,7 @@ setMethod(
   "randomXYcor",
   signature = c("NLworlds", "numeric"),
   definition = function(world, n) {
-    xycor <- cbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
+    xycor <- fastCbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
     return(xycor)
   }
 )
@@ -2658,7 +2658,7 @@ setMethod(
   "randomXYcor",
   signature = c("NLworldMs", "numeric"),
   definition = function(world, n) {
-    xycor <- cbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
+    xycor <- fastCbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
     return(xycor)
   }
 )
@@ -2900,7 +2900,7 @@ setMethod(
                 agents = "matrix", breed = "missing"),
   definition = function(world, turtles, agents, simplify) {
     pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    pTurtles <- cbind(pTurtles, who = turtles@data$who)
+    pTurtles <- fastCbind(pTurtles, who = turtles@data$who)
 
 
     if(simplify == TRUE){
@@ -2914,10 +2914,10 @@ setMethod(
       }
 
     } else {
-      agents <- cbind(agents, id = 1:nrow(agents))
+      agents <- fastCbind(agents, id = 1:nrow(agents))
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
       pOn <- pOn[order(pOn[,"id"]),]
-      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
+      turtlesID <- fastCbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
       return(turtlesID)
     }
   }
@@ -2978,7 +2978,7 @@ setMethod(
   definition = function(world, turtles, agents, simplify) {
 
     pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    pTurtles <- cbind(pTurtles, who = turtles@data$who)
+    pTurtles <- fastCbind(pTurtles, who = turtles@data$who)
 
     if(simplify == TRUE){
 
@@ -2991,10 +2991,10 @@ setMethod(
       }
 
     } else {
-      agents <- cbind(agents, id = 1:nrow(agents))
+      agents <- fastCbind(agents, id = 1:nrow(agents))
       pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
       pOn <- pOn[order(pOn[,"id"]),]
-      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
+      turtlesID <- fastCbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
       return(turtlesID)
     }
   }
@@ -3051,7 +3051,7 @@ setMethod(
     } else {
       if(any(is.na(agents)))
         agents <- na.omit(agents) # There shouldn't be any NAs passed in here, probably
-      agents <- cbind(agents, id = 1:dim(agents)[1])
+      agents <- fastCbind(agents, id = 1:dim(agents)[1])
 
       b <- a <- matrix(ncol=ncol(world), nrow=nrow(world))
       a[agents[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- 1 # change this 26 to the dimensions of the world, and next line
@@ -3111,7 +3111,7 @@ setMethod(
   "noTurtles",
   signature = "missing",
   definition = function() {
-    t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
+    t0 <- createTurtles(n = 1, coords = fastCbind(xcor = 0, ycor = 0))
     return(t0[t0@data$who == 1,])
   }
 )
@@ -3372,7 +3372,7 @@ setMethod(
     a <- matrix(NA)
     names(a) <- tVar
     b <- agentMatrix(a)
-    cbind(turtles, b)
+    fastCbind(turtles, b)
 
   }
 )
@@ -3402,16 +3402,41 @@ setMethod(
 fastCbind <- function(...){
 
   x <- list(...)
+  dims <- unlist(lapply(x, function(z) {
+    if(is.null(dim(z))) {
+      c(length(z),1)
+    } else {
+      dim(z)
+    }
+    }))
+
+  len <- max(dims)
+  colNames <- unlist(lapply(seq_along(x), function(z) {
+    if(is.null(dimnames(x[[z]]))) {
+      ""
+    } else {
+      dimnames(x[[z]])[[2]]
+    }
+    }))
+
+  if(any(colNames=="")) {
+    empty <- names(x)!=""
+    if(length(empty)>0)
+      colNames[colNames==""] <- names(x)[empty]
+  }
+
+  inds <- seq_len(length(dims)*0.5)*2
+  notMaxRows <- dims[inds-1] != len
+  if(any(notMaxRows)){
+    x[notMaxRows] <- lapply(x[notMaxRows], function(z) rep_len(z, len))
+  }
+
   y <- do.call(c, x)
-  len <- dim(x[[1]])[1]
-  if(is.null(len)) len <- length(x[[1]])
-  dims <- unlist(lapply(x, function(z) dim(z)[2]))
-  if(is.null(dims)) dims <- length(x)
-  colNames <- unlist(lapply(x, function(z) dimnames(z)[[2]]))
-  dim(y) <- c(len, sum(dims))
+  #if(is.null(len)) len <- length(x[[1]])
+
+  dim(y) <- c(len, sum(dims[inds]))
   dimnames(y)[[2]] <- colNames
   y
-
 }
 
 
@@ -3817,7 +3842,7 @@ setMethod(
       }
     } else {
       if(any(var == "xcor" | var == "ycor")){
-        agentsData <- cbind(agents@coords, agents@data)
+        agentsData <- fastCbind(agents@coords, agents@data)
         return(agentsData[,var])
       } else {
         agents@data[,var]
@@ -3851,7 +3876,7 @@ setMethod(
     if(any(names(agents@levels) %in% var)){
 
       agentsData <- as.data.frame(agents@.Data) # characters data as factors
-      agentsData[,names(agents@levels)] <- do.call(cbind,lapply(1:length(agents@levels),function(x){
+      agentsData[,names(agents@levels)] <- do.call(fastCbind,lapply(1:length(agents@levels),function(x){
         unlist(mapvalues(agentsData[,names(agents@levels)[x]],
                          from = unique(agentsData[,names(agents@levels)[x]]),
                          to = agents@levels[names(agents@levels)[x]][[1]][unique(agentsData[,names(agents@levels)[x]])]))}))
@@ -3944,19 +3969,19 @@ setMethod(
 
     #colNum <- match(var, dimnames(world)[[3]])
     if(length(var) == 1){
-      world_l <- createNLworldMatrix(data = as.numeric(t(world[,,var])), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+      world_l <- createNLworldMatrix(data = as.numeric(t(world@.Data[,,var])), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
                                      minPycor = minPycor(world), maxPycor = maxPycor(world))
       of(world = world_l, agents = agents)
     } else {
       if(identical(patches(world), agents)){
         listVar <- lapply(var, function(x){as.numeric(t(world[,,x]))})
-        matVar <- do.call(cbind,listVar)
+        matVar <- do.call(fastCbind,listVar)
         colnames(matVar) <- var
         return(matVar)
       } else {
         cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
         listVar <- lapply(var, function(x){as.numeric(t(world[,,x]))})
-        matVar <- do.call(cbind,listVar)
+        matVar <- do.call(fastCbind,listVar)
         colnames(matVar) <- var
         return(matVar[cellNum,, drop = FALSE])
       }

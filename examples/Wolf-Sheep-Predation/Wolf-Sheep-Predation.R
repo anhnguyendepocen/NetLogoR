@@ -47,7 +47,7 @@ if(useFastClasses){
   grass <- createNLworld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
 }
 
-worldCoords <- cbind(pxcor=rep_len(attr(grass, "minPxcor"):attr(grass, "maxPxcor"),
+worldCoords <- fastCbind(pxcor=rep_len(attr(grass, "minPxcor"):attr(grass, "maxPxcor"),
                                    length.out=length(grass)),
                      pycor = rep(attr(grass, "maxPycor"):attr(grass, "minPycor"), each = ncol(grass)))
 assign("worldCoords", worldCoords, envir=.GlobalEnv)
@@ -337,7 +337,7 @@ growGrass <- function(){ # only patches
     pGrow <- pBrown[pBrownCountdown0, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
     # Grow some grass on these patches and reset the countdown
     field <- set(world = field, var = c("grass", "countdown"), agents = pGrow,
-                 val = cbind(grass = rep(1, count(pGrow)), countdown = rep(grassTGrowth, count(pGrow))))
+                 val = fastCbind(grass = rep(1, count(pGrow)), countdown = rep(grassTGrowth, count(pGrow))))
   }
 
   pBrownCountdown1 <- which(!pBrownCountdown <= 0) # patches with a countdown > 0

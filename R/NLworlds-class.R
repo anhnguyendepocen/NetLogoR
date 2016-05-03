@@ -322,7 +322,7 @@ setMethod(
     # cellValues <- allValues[cellNum]
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
-    cellValues <- x@.Data[cbind(rowMat, colMat)]
+    cellValues <- x@.Data[fastCbind(rowMat, colMat)]
 
     return(cellValues)
   }
@@ -350,10 +350,10 @@ setReplaceMethod(
 
     # matj <- i - attr(x, "minPxcor") + 1
     # mati <- attr(x, "maxPycor") - j + 1
-    # x[cbind(mati, matj)] <- value
+    # x[fastCbind(mati, matj)] <- value
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
-    x@.Data[cbind(rowMat, colMat)] <- value
+    x@.Data[fastCbind(rowMat, colMat)] <- value
 
 
     validObject(x)
@@ -418,7 +418,7 @@ setMethod(
                  minPxcor = minPxcor, maxPxcor = maxPxcor, minPycor = minPycor, maxPycor = maxPycor,
                  extent = extent(minPxcor - 0.5, maxPxcor + 0.5, minPycor - 0.5, maxPycor + 0.5),
                  res = c(1, 1),
-                 pCoords = cbind(pxcor = rep_len(minPxcor:maxPxcor, length.out = numX * numY),
+                 pCoords = fastCbind(pxcor = rep_len(minPxcor:maxPxcor, length.out = numX * numY),
                                  pycor = rep(maxPycor:minPycor, each = numX))
                  )
 
@@ -473,10 +473,11 @@ setMethod(
   signature("NLworldArray", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
+    browser()
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
-    pCoords <- cbind(rowMat, colMat)
-    cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[cbind(pCoords, z)]))}))
+    pCoords <- fastCbind(rowMat, colMat)
+    cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[fastCbind(pCoords, z)]))}))
     dim(cellValues) <- c(NROW(pCoords), 2L)
     colnames(cellValues) <- dimnames(x@.Data)[[3]]
 
@@ -493,6 +494,7 @@ setMethod(
   signature("NLworldArray", "missing", "missing", "ANY"),
   definition = function(x, drop) {
 
+    browser()
     cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[,,z]))}))
     dim(cellValues) <- c(dim(x)[1] * dim(x)[2], 2L)
     colnames(cellValues) <- dimnames(x@.Data)[[3]]
@@ -509,11 +511,12 @@ setReplaceMethod(
   signature("NLworldArray","numeric","numeric","matrix"),
   definition = function(x, i, j, value) {
 
+    browser()
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
-    coords <- cbind(rowMat, colMat)
+    coords <- fastCbind(rowMat, colMat)
     for(k in 1:dim(x)[3]){
-      x@.Data[cbind(coords, k)] <- value[,k]
+      x@.Data[fastCbind(coords, k)] <- value[,k]
     }
 
     validObject(x)
@@ -529,6 +532,7 @@ setReplaceMethod(
   signature("NLworldArray","missing","missing","matrix"),
   definition = function(x, value) {
 
+    browser()
     for(k in 1:dim(x)[3]){
       x@.Data[,,k] <- matrix(data = value[,k], ncol = dim(x@.Data)[2], byrow = TRUE)
     }
@@ -646,7 +650,7 @@ setMethod(
   "cellFromPxcorPycor",
   signature = c("NLworlds", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
-    cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
+    cellNum <- cellFromXY(world, fastCbind(x = pxcor, y = pycor))
     return(cellNum)
   }
 )
@@ -701,7 +705,7 @@ setMethod(
   signature = c("NLworlds", "numeric"),
   definition = function(world, cellNum) {
     XY <- xyFromCell(world, cellNum)
-    pCoords <- cbind(pxcor = XY[,1], pycor = XY[,2])
+    pCoords <- fastCbind(pxcor = XY[,1], pycor = XY[,2])
     return(pCoords)
   }
 )

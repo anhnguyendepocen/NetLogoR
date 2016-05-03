@@ -254,14 +254,14 @@ setMethod(
 
       # Need to create coordinates for "agents2" in a wrapped world
       # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
-      to1 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
-      to2 <- cbind(pxcor = agents2[,1], pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
-      to3 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
-      to4 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
-      to5 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
-      to6 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
-      to7 <- cbind(pxcor = agents2[,1], pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
-      to8 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
+      to1 <- fastCbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to2 <- fastCbind(pxcor = agents2[,1], pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to3 <- fastCbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to4 <- fastCbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
+      to5 <- fastCbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
+      to6 <- fastCbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
+      to7 <- fastCbind(pxcor = agents2[,1], pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
+      to8 <- fastCbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
 
       dist1 <- pointDistance(p1 = agents, p2 = to1, lonlat = FALSE, allpairs = allPairs)
       dist2 <- pointDistance(p1 = agents, p2 = to2, lonlat = FALSE, allpairs = allPairs)
@@ -457,7 +457,7 @@ setMethod(
 
        # Output as a matrix
        neighbors_df <- neighbors_df[order(neighbors_df$id),]
-       neighborsID <- cbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
+       neighborsID <- fastCbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
 
     } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
@@ -467,7 +467,7 @@ setMethod(
       pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,to])
       neighbors[,`:=`(pxcor = pCoords[,1], pycor = pCoords[,2])]
       setkey(neighbors, id)
-      neighborsID <- cbind(pxcor = neighbors$pxcor,
+      neighborsID <- fastCbind(pxcor = neighbors$pxcor,
                            pycor = neighbors$pycor,
                            id = neighbors$id) # %>% as.factor %>% as.numeric)
     }
@@ -514,7 +514,7 @@ setMethod(
 
       # Output as a matrix
       neighbors_df <- neighbors_df[order(neighbors_df$id),]
-      neighborsID <- cbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
+      neighborsID <- fastCbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
 
     } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
@@ -524,7 +524,7 @@ setMethod(
       pCoords <- PxcorPycorFromCell(world = world, cellNum = neighbors[,to])
       neighbors[,`:=`(pxcor = pCoords[,1], pycor = pCoords[,2])]
       setkey(neighbors, id)
-      neighborsID <- cbind(pxcor = neighbors$pxcor,
+      neighborsID <- fastCbind(pxcor = neighbors$pxcor,
                            pycor = neighbors$pycor,
                            id = neighbors$id) # %>% as.factor %>% as.numeric)
     }
@@ -607,7 +607,7 @@ setMethod(
     pycor_ <- round(y)
 
     if(torus == TRUE){
-      pCoords <- wrap(cbind(x = pxcor_, y = pycor_), extent(world))
+      pCoords <- wrap(fastCbind(x = pxcor_, y = pycor_), extent(world))
       pxcor_ <- pCoords[,1]
       pycor_ <- pCoords[,2]
     }
@@ -625,7 +625,7 @@ setMethod(
       pycor = pycorNA
     }
 
-    pCoords <- matrix(data = cbind(pxcor, pycor), ncol = 2, nrow = length(pxcor), dimnames = list(NULL, c("pxcor", "pycor")))
+    pCoords <- matrix(data = fastCbind(pxcor, pycor), ncol = 2, nrow = length(pxcor), dimnames = list(NULL, c("pxcor", "pycor")))
 
     if(duplicate == FALSE){
       pCoords <- unique(pCoords)
@@ -646,7 +646,7 @@ setMethod(
     pycor_ <- round(y)
 
     if(torus == TRUE){
-      pCoords <- wrap(cbind(x = pxcor_, y = pycor_), world@extent)
+      pCoords <- wrap(fastCbind(x = pxcor_, y = pycor_), world@extent)
       pxcor_ <- pCoords[,1]
       pycor_ <- pCoords[,2]
     }
@@ -957,7 +957,7 @@ setMethod(
   "patches",
   signature = "NLworld",
   definition = function(world) {
-    return(cbind(pxcor = world@pxcor, pycor = world@pycor))
+    return(fastCbind(pxcor = world@pxcor, pycor = world@pycor))
   }
 )
 

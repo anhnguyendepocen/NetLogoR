@@ -185,7 +185,7 @@ setMethod("initialize",
         })
 
       if(length(otherCols)>0) {
-        .Object@.Data <- do.call(cbind,otherCols)
+        .Object@.Data <- do.call(fastCbind,otherCols)
         .Object@levels <- lapply(otherCols[charCols], function(x) if(is.factor(x)) levels(x) else NULL)
         if(Coords) {
           .Object@bbox <- NetLogoR:::.bboxCoords(coords)
@@ -622,7 +622,7 @@ setMethod(
     if(any(colnames(tmp[[1]]@.Data)[-(1:2)] %in% colnames(tmp[[2]]@.Data)[-(1:2)])) {
       stop("There are duplicate columns in the two agentMatrix objects. Please remove duplicates.")
     }
-    newMat <- cbind(tmp[[1]]@.Data, tmp[[2]]@.Data[,-(1:2),drop=FALSE])
+    newMat <- fastCbind(tmp[[1]]@.Data, tmp[[2]]@.Data[,-(1:2),drop=FALSE])
     tmp[[1]]@.Data <- newMat
     colnames(newMat)
     tmp[[1]]@levels <- SpaDES::updateList(tmp[[2]]@levels, tmp[[1]]@levels)
