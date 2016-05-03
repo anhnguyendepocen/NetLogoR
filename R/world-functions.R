@@ -224,7 +224,7 @@ setMethod(
   "maxPxcor",
   signature = "NLworldMs",
   definition = function(world) {
-    return(attr(world, "maxPxcor"))
+    return(world@maxPxcor)
   }
 )
 
@@ -289,7 +289,7 @@ setMethod(
   "maxPycor",
   signature = "NLworldMs",
   definition = function(world) {
-    return(attr(world, "maxPycor"))
+    return(world@maxPycor)
   }
 )
 
@@ -354,7 +354,7 @@ setMethod(
   "minPxcor",
   signature = "NLworldMs",
   definition = function(world) {
-    return(attr(world, "minPxcor"))
+    return(world@minPxcor)
   }
 )
 
@@ -419,7 +419,7 @@ setMethod(
   "minPycor",
   signature = "NLworldMs",
   definition = function(world) {
-    return(attr(world, "minPycor"))
+    return(world@minPycor)
   }
 )
 
@@ -607,7 +607,7 @@ setMethod(
   "clearPatches",
   signature = c("NLworldMatrix"),
   definition = function(world) {
-    world[] <- NA
+    world@.Data[] <- NA
     return(world)
   }
 )
