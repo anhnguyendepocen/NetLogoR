@@ -110,11 +110,11 @@ setMethod(
   signature = c(world = "NLworldMatrix", pVar = "missing", share = "numeric", nNeighbors = "numeric"),
   definition = function(world, share, nNeighbors, torus) {
 
-    val <- as.numeric(t(world))
+    val <- as.numeric(t(world@.Data))
     cellNum <- 1:length(val)
     toGive <- (val * share) / nNeighbors
 
-    df <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
+    df <- adj(world@.Data, cells = cellNum, directions = nNeighbors, torus = torus)
     nNeigh <- plyr::count(df[,"from"])
     toGiveNeigh <- rep(toGive, nNeigh$freq)
     df <- df[order(df[, "from"]),]
@@ -127,9 +127,10 @@ setMethod(
     win <- unique(DT[,c(2, 5), with = FALSE]) # to and win
 
     newVal <- val - loose[,loose] + win[,win]
-    newWorld <- createNLworldMatrix(data = newVal, minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
-                                    minPycor = minPycor(world), maxPycor = maxPycor(world))
-    return(newWorld)
+    # newWorld <- createNLworldMatrix(data = newVal, minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+    #                                 minPycor = minPycor(world), maxPycor = maxPycor(world))
+    world[] <- newVal
+    return(world)
 
   }
 )
@@ -140,10 +141,31 @@ setMethod(
   "diffuse",
   signature = c(world = "NLworldArray", pVar = "character", share = "numeric", nNeighbors = "numeric"),
   definition = function(world, pVar, share, nNeighbors, torus) {
-    worldMat <- createNLworldMatrix(data = t(world[,,pVar]), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
-                                    minPycor = minPycor(world), maxPycor = maxPycor(world))
-    newWorld <- diffuse(world = worldMat, share = share, nNeighbors = nNeighbors, torus = torus)
-    world[,,pVar] <- newWorld
+    # worldMat <- createNLworldMatrix(data = t(world[,,pVar]), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+    #                                 minPycor = minPycor(world), maxPycor = maxPycor(world))
+    # newWorld <- diffuse(world = worldMat, share = share, nNeighbors = nNeighbors, torus = torus)
+    # world[,,pVar] <- newWorld
+
+    layer <- match(pVar, dimnames(world)[[3]])
+    val <- as.numeric(t(world@.Data[,,layer]))
+    cellNum <- 1:length(val)
+    toGive <- (val * share) / nNeighbors
+
+    df <- adj(world@.Data[,,layer], cells = cellNum, directions = nNeighbors, torus = torus)
+    nNeigh <- plyr::count(df[,"from"])
+    toGiveNeigh <- rep(toGive, nNeigh$freq)
+    df <- df[order(df[, "from"]),]
+    DT <- data.table(df, toGiveNeigh)
+    setkey(DT, from)
+    DT <- DT[ , loose := sum(toGiveNeigh), by = from] # how much each patch give
+    loose <- unique(DT[,c(1, 4), with = FALSE]) # from and loose
+    setkey(DT, to)
+    DT <- DT[ , win := sum(toGiveNeigh), by = to] # how much each patch receive
+    win <- unique(DT[,c(2, 5), with = FALSE]) # to and win
+
+    newVal <- val - loose[,loose] + win[,win]
+    world@.Data[,,layer] <- matrix(newVal, ncol = dim(world)[2], byrow = TRUE)
+
     return(world)
   }
 )
@@ -214,6 +236,14 @@ setMethod(
   signature = c(agents = "matrix", agents2 = "matrix"),
   definition = function(agents, agents2, world, torus, allPairs) {
 
+    if(class(agents) == "agentMatrix"){
+      agents <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
+    }
+
+    if(class(agents2) == "agentMatrix"){
+      agents2 <- agents2@.Data[,c("xcor", "ycor"), drop = FALSE]
+    }
+
     dist <- pointDistance(p1 = agents, p2 = agents2, lonlat = FALSE, allpairs = allPairs)
 
     if(torus == TRUE){
@@ -279,6 +309,7 @@ setMethod(
 )
 
 
+
 ################################################################################
 #' Do the patches exist?
 #'
@@ -333,6 +364,28 @@ setMethod(
 
     pxcorIn <- pxcor >= pxmin & pxcor <= pxmax
     pycorIn <- pycor >= pymin & pycor <= pymax
+    pExist <- pxcorIn & pycorIn
+
+    return(pExist)
+  }
+)
+
+#' @export
+#' @rdname pExist
+setMethod(
+  "pExist",
+  signature = c("NLworldMs", "numeric", "numeric"),
+  definition = function(world, pxcor, pycor) {
+
+    if(length(pxcor) == 1 & length(pycor) != 1){
+      pxcor <- rep(pxcor, length(pycor))
+    }
+    if(length(pycor) == 1 & length(pxcor) != 1){
+      pycor <- rep(pycor, length(pxcor))
+    }
+
+    pxcorIn <- pxcor >= world@minPxcor & pxcor <= world@maxPxcor
+    pycorIn <- pycor >= world@minPycor & pycor <= world@maxPycor
     pExist <- pxcorIn & pycorIn
 
     return(pExist)

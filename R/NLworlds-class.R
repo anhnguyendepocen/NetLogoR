@@ -485,7 +485,6 @@ setMethod(
 )
 
 #' @export
-#' @importFrom data.table rbindlist
 #' @name [
 #' @docType methods
 #' @rdname NLworldArray-class

@@ -25,9 +25,9 @@ test_that("diffuse works for NLworld with 4 neighbors", {
   w4 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
   w5 <- diffuse(world = w4, share = 0.6, nNeighbors = 4)
   expect_identical(sum(w4), sum(w5))
-  expect_equivalent(values(w2), as.numeric(t(w5)))
+  expect_equivalent(values(w2), w5[])
   w6 <- diffuse(world = w4, share = 0.5, nNeighbors = 4, torus = TRUE)
-  expect_equivalent(values(w3), as.numeric(t(w6)))
+  expect_equivalent(values(w3), w6[])
 })
 
 test_that("diffuse works for NLworldStack with 4 neighbors", {
@@ -61,10 +61,11 @@ test_that("diffuse works for NLworldStack with 4 neighbors", {
   w5 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = runif(9))
   w6 <- NLworldArray(w4, w5)
   w7 <- diffuse(world = w6, pVar = "w4", share = 0.6, nNeighbors = 4)
-  expect_identical(sum(w4), sum(w7[,,"w4"]))
-  expect_equivalent(values(ws2$w1), as.numeric(t(w7[,,"w4"])))
+  expect_identical(sum(w4), sum(w7[][,"w4"]))
+  expect_equivalent(values(ws2$w1), w7[][,"w4"])
   w8 <- diffuse(world = w6, pVar = "w4", share = 0.5, nNeighbors = 4, torus = TRUE)
-  expect_equivalent(values(w3$w1), as.numeric(t(w8[,,"w4"])))
+  expect_equivalent(values(w3$w1), w8[][,"w4"])
+  expect_equivalent(w5[], w8[][,"w5"])
 })
 
 test_that("diffuse works for NLworld with 8 neighbors", {
@@ -93,10 +94,10 @@ test_that("diffuse works for NLworld with 8 neighbors", {
   # With NLworldMatrix
   w4 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
   w5 <- diffuse(world = w4, share = 0.6, nNeighbors = 8)
-  expect_identical(sum(w4), sum(w5))
-  expect_equivalent(values(w2), as.numeric(t(w5)))
+  expect_identical(sum(w4[]), sum(w5[]))
+  expect_equivalent(values(w2), w5[])
   w6 <- diffuse(world = w4, share = 0.5, nNeighbors = 8, torus = TRUE)
-  expect_equivalent(values(w3), as.numeric(t(w6)))
+  expect_equivalent(values(w3), w6[])
 })
 
 test_that("diffuse works for NLworldStack with 8 neighbors", {
@@ -130,13 +131,14 @@ test_that("diffuse works for NLworldStack with 8 neighbors", {
   w5 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = runif(9))
   w6 <- NLworldArray(w4, w5)
   w7 <- diffuse(world = w6, pVar = "w4", share = 0.6, nNeighbors = 8)
-  expect_identical(sum(w4), sum(w7[,,"w4"]))
-  expect_equivalent(values(ws2$w1), as.numeric(t(w7[,,"w4"])))
+  expect_identical(sum(w4), sum(w7[][,"w4"]))
+  expect_equivalent(values(ws2$w1), w7[][,"w4"])
   w8 <- diffuse(world = w6, pVar = "w4", share = 0.5, nNeighbors = 8, torus = TRUE)
-  expect_equivalent(values(w3$w1), as.numeric(t(w8[,,"w4"])))
+  expect_equivalent(values(w3$w1), w8[][,"w4"])
+  expect_equivalent(w5[], w8[][,"w5"])
 })
 
-test_that("distance works for patches", {
+test_that("NLdist works for patches", {
   w1 <- createNLworld(0, 9, 0, 9)
   dist <- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1))
   expect_identical(as.numeric(dist), sqrt(1^2+1^2))
@@ -200,7 +202,7 @@ test_that("distance works for patches", {
   expect_error(NLdist(agents = cbind(pxcor = -2, pycor = -5), agents2 = cbind(pxcor = c(-1,5), pycor = c(-5, -5)), torus = TRUE))
 })
 
-test_that("distance works with turtles", {
+test_that("NLdist works with turtles", {
   w1 <- createNLworld(0, 9, 0, 9)
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
   # Patches to turtles
@@ -255,6 +257,118 @@ test_that("distance works with turtles", {
   expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
 })
 
+test_that("NLdist works with NLworldMs and agentMatrix", {
+  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  dist <- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1))
+  expect_identical(as.numeric(dist), sqrt(1^2+1^2))
+  dist <- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)))
+  expect_identical(dist, c(1, 9))
+  dist <- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE)
+  expect_identical(dist, c(1, 1))
+  dist <- NLdist(world = w1, agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)))
+  expect_identical(dist, c(2, 8))
+  dist <- NLdist(world = w1, agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)), allPairs = TRUE)
+  expect_identical(dist[,1], c(2, 1))
+  expect_identical(dist[,2], c(9, 8))
+
+  w1[] <- runif(100)
+  w2 <- w1
+  w2[] <- runif(100)
+  ws <- NLworldArray(w1, w2)
+  dist <- NLdist(world = ws, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1))
+  expect_identical(as.numeric(dist), sqrt(1^2+1^2))
+  dist <- NLdist(world = ws, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)))
+  expect_identical(dist, c(1, 9))
+  dist <- NLdist(world = ws, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE)
+  expect_identical(dist, c(1, 1))
+  dist <- NLdist(world = ws, agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)))
+  expect_identical(dist, c(2, 8))
+  dist <- NLdist(world = ws, agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)), allPairs = TRUE)
+  expect_identical(dist[,1], c(2, 1))
+  expect_identical(dist[,2], c(9, 8))
+
+  w3 <- createNLworldMatrix(-5, 5, -10, -2)
+  dist <- NLdist(world = w3, agents = cbind(pxcor = -2, pycor = -5), agents2 = cbind(pxcor = c(-1,5), pycor = c(-5, -5)), torus = TRUE)
+  expect_identical(dist, c(1, 4))
+
+  # work without world provided when torus = false
+  dist <- NLdist(agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1))
+  expect_identical(as.numeric(dist), sqrt(1^2+1^2))
+  dist <- NLdist(agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)))
+  expect_identical(dist, c(1, 9))
+  dist <- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE)
+  expect_identical(dist, c(1, 1))
+  expect_error(NLdist(agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE))
+  dist <- NLdist(agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)))
+  expect_identical(dist, c(2, 8))
+  dist <- NLdist(agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)), allPairs = TRUE)
+  expect_identical(dist[,1], c(2, 1))
+  expect_identical(dist[,2], c(9, 8))
+  dist <- NLdist(agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1))
+  expect_identical(as.numeric(dist), sqrt(1^2+1^2))
+  dist <- NLdist(agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)))
+  expect_identical(dist, c(1, 9))
+  dist <- NLdist(world = ws, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE)
+  expect_identical(dist, c(1, 1))
+  expect_error(NLdist(agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)), torus = TRUE))
+  dist <- NLdist(agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)))
+  expect_identical(dist, c(2, 8))
+  dist <- NLdist(agents = cbind(pxcor = c(0,0), pycor = c(0,1)), agents2 = cbind(pxcor = c(0,0), pycor = c(2,9)), allPairs = TRUE)
+  expect_identical(dist[,1], c(2, 1))
+  expect_identical(dist[,2], c(9, 8))
+  dist <- NLdist(world = w3, agents = cbind(pxcor = -2, pycor = -5), agents2 = cbind(pxcor = c(-1,5), pycor = c(-5, -5)), torus = TRUE)
+  expect_identical(dist, c(1, 4))
+  expect_error(NLdist(agents = cbind(pxcor = -2, pycor = -5), agents2 = cbind(pxcor = c(-1,5), pycor = c(-5, -5)), torus = TRUE))
+
+  t1 <- createTurtlesAM(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
+  # Patches to turtles
+  distPT <- NLdist(world = w1, agents = cbind(pxcor = 2, pycor = 3), agents2 = t1)
+  expect_identical(distPT, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+  distPT <- NLdist(world = w1, agents = cbind(pxcor = 8, pycor = 1), agents2 = t1)
+  expect_identical(distPT[1], 7)
+  distPT <- NLdist(world = w1, agents = cbind(pxcor = 8, pycor = 1), agents2 = t1, torus = TRUE)
+  expect_identical(distPT[1], 3)
+
+  # Turtles to patches
+  distTP <- NLdist(world = w1, agents = t1, agents2 = cbind(pxcor = 2, pycor = 3))
+  expect_identical(distTP, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+
+  # Turtles to turtles
+  distTT <- NLdist(world = w1, agents = t1, agents2 = t1)
+  expect_equivalent(distTT, rep(0, 4))
+  distTT <- NLdist(world = w1, agents = t1, agents2 = t1, allPairs = TRUE)
+  expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
+
+  distPT <- NLdist(world = ws, agents = cbind(pxcor = 8, pycor = 1), agents2 = t1, torus = TRUE)
+  expect_identical(distPT[1], 3)
+  distTP <- NLdist(world = ws, agents = t1, agents2 = cbind(pxcor = 2, pycor = 3))
+  expect_identical(distTP, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+  distTT <- NLdist(world = ws, agents = t1, agents2 = t1, allPairs = TRUE)
+  expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
+
+  # work without world provided when torus = false
+  distPT <- NLdist(agents = cbind(pxcor = 2, pycor = 3), agents2 = t1)
+  expect_identical(distPT, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+  distPT <- NLdist(agents = cbind(pxcor = 8, pycor = 1), agents2 = t1)
+  expect_identical(distPT[1], 7)
+  distPT <- NLdist(world = w1, agents = cbind(pxcor = 8, pycor = 1), agents2 = t1, torus = TRUE)
+  expect_identical(distPT[1], 3)
+  expect_error(NLdist(agents = cbind(pxcor = 8, pycor = 1), agents2 = t1, torus = TRUE))
+  distTP <- NLdist(agents = t1, agents2 = cbind(pxcor = 2, pycor = 3))
+  expect_identical(distTP, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+  distTT <- NLdist(agents = t1, agents2 = t1)
+  expect_equivalent(distTT, rep(0, 4))
+  distTT <- NLdist(world = w1, agents = t1, agents2 = t1, allPairs = TRUE)
+  expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
+  distPT <- NLdist(world = ws, agents = cbind(pxcor = 8, pycor = 1), agents2 = t1, torus = TRUE)
+  expect_identical(distPT[1], 3)
+  expect_error(NLdist(agents = cbind(pxcor = 8, pycor = 1), agents2 = t1, torus = TRUE))
+  distTP <- NLdist(agents = t1, agents2 = cbind(pxcor = 2, pycor = 3))
+  expect_identical(distTP, c(sqrt(1^2+2^2), 1, 1, sqrt(1^2+2^2)))
+  distTT <- NLdist(agents = t1, agents2 = t1, allPairs = TRUE)
+  expect_equivalent(distTT[1,2], sqrt(1^1+1^1))
+})
+
 test_that("pExist works", {
   w1 <- createNLworld(0, 2, 0, 2)
   expect_false(pExist(w1, 1, 3))
@@ -266,6 +380,28 @@ test_that("pExist works", {
   w2 <- createNLworld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- NLstack(w1, w2)
+
+  # Same as for w1
+  expect_false(pExist(ws, 1, 3))
+  expect_true(pExist(ws, 1, 1))
+  expect_identical(pExist(ws, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+
+  # With different length of inputs
+  expect_equivalent(c(FALSE, TRUE), pExist(w1, c(1, 1), c(3, 1)))
+  expect_equivalent(c(FALSE, TRUE), pExist(w1, 1, c(3, 1)))
+})
+
+test_that("pExist works with NLworldMs", {
+  w1 <- createNLworldMatrix(0, 2, 0, 2)
+  expect_false(pExist(w1, 1, 3))
+  expect_true(pExist(w1, 1, 1))
+
+  w1[] <- c(1,3,6,2,8,10,3,8,2)
+  expect_identical(pExist(w1, c(0, 1), c(3, 1)), c(FALSE, TRUE))
+
+  w2 <- createNLworldMatrix(0, 2, 0, 2)
+  w2[] <- runif(9)
+  ws <- NLworldArray(w1, w2)
 
   # Same as for w1
   expect_false(pExist(ws, 1, 3))
