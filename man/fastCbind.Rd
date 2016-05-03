@@ -5,16 +5,14 @@
 \alias{fastCbind}
 \title{Faster cbind for 2 matrices}
 \usage{
-fastCbind(a, b)
+fastCbind(...)
 }
 \arguments{
-\item{a}{matrix}
-
-\item{b}{matrix}
+\item{...}{a set of at least 2 matrices or vectors}
 }
 \description{
-This is a drop-in replacement for cbind IF it is 2 matrices.
-It is at least 2x faster for small matrices. It becomes
+This is a drop-in replacement for cbind.
+It is at least 3-4x faster for small matrices. It becomes
 slower for larger matrices so should only be used for small
 matrices (smaller than 10,000 x 9)
 }

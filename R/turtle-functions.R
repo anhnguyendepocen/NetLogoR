@@ -3387,36 +3387,54 @@ setMethod(
 ################################################################################
 #' Faster cbind for 2 matrices
 #'
-#' This is a drop-in replacement for cbind IF it is 2 matrices.
-#' It is at least 2x faster for small matrices. It becomes
+#' This is a drop-in replacement for cbind.
+#' It is at least 3-4x faster for small matrices. It becomes
 #' slower for larger matrices so should only be used for small
 #' matrices (smaller than 10,000 x 9)
 #'
 #' @inheritParams fargs
 #'
-#' @param a    matrix
-#'
-#' @param b    matrix
+#' @param ...    a set of at least 2 matrices or vectors
 #'
 #' @docType methods
 #' @author Eliot McIntire
 #' @export
 #' @rdname fastCbind
-fastCbind <- function(a,b){
-  colNamesA <- colnames(a)
-  colNamesB <- colnames(b)
-  newDim <- dim(a)+c(0,dim(b)[2])
-  len <- length(a)
-  if(length(newDim)==0) newDim <- c(len, 2L)
-  newLen <- len+length(b)
-  length(a) <- newLen
-  dim(a) <- newDim
-  if(length(b)!=(newLen - len))
-    b <- rep_len(b, length.out = newLen - len)
-  a[(len+1):newLen] <- b
-  colnames(a) <- c(colNamesA, colNamesB)
-  a
+fastCbind <- function(...){
+
+  x <- list(...)
+  y <- do.call(c, x)
+  len <- dim(x[[1]])[1]
+  if(is.null(len)) len <- length(x[[1]])
+  dims <- unlist(lapply(x, function(z) dim(z)[2]))
+  if(is.null(dims)) dims <- length(x)
+  colNames <- unlist(lapply(x, function(z) dimnames(z)[[2]]))
+  dim(y) <- c(len, sum(dims))
+  dimnames(y)[[2]] <- colNames
+  y
+
 }
+
+
+#   colNames <- as.vector(do.call(c,lapply(1:2, function(y) attr(x[[y]], "dimnames")[[2]])))
+#   newDim <- unlist(lapply(x, dim))
+#   NewDimSeq <- seq_along(newDim)
+#   len <- prod(newDim[1:2])
+#   newDim <- c(newDim[[1]][1], sum(NewDimSeq))
+#   if(length(newDim)==0) newDim <- c(len, 2L)
+#   newLen <- prod(newDim)
+#
+#   length(x[[1]]) <- newLen
+#   dim(x[[1]]) <- newDim
+#
+#   # account for filling of unfull matrices
+#   if(length(x[[2]])!=(newLen - len))
+#     x[[2]] <- rep_len(x[[2]], length.out = newLen - len)
+#
+#   x[[1]][(len+1):newLen] <- do.call(c, x[-1])
+#   colnames(x[[1]]) <- colNames
+#   x[[1]]
+# }
 
 #' @export
 #' @rdname turtlesOwn
