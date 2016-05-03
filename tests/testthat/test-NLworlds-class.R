@@ -159,6 +159,8 @@ test_that("[] works for NLworldMatrix",{
   expect_identical(as.numeric(t(w1@.Data))[c(2, 4)], c(100, 200))
   w1[] <- c(10, 20, 30, 40)
   expect_equivalent(w1[], c(10, 20, 30, 40))
+  w1[] <- -1
+  expect_equivalent(w1[], c(-1, -1, -1, -1))
 })
 
 test_that("[] works with NLworldArray",{
@@ -180,6 +182,8 @@ test_that("[] works with NLworldArray",{
   ws[] <- cbind(c(15, 25, 35, 45), c(-1, -2, -3, -4))
   expect_equivalent(ws[], cbind(c(15, 25, 35, 45), c(-1, -2, -3, -4)))
   expect_equivalent(as.numeric(t(ws@.Data[,,1])), c(15, 25, 35, 45))
+  ws[] <- cbind(-1, -2)
+  expect_equivalent(ws[], cbind(c(-1, -1, -1, -1), c(-2, -2, -2, -2)))
 })
 
 test_that("cellFromPxcorPycor works for NLworldMs",{

@@ -3,8 +3,8 @@
 \docType{methods}
 \name{patchAhead}
 \alias{patchAhead}
+\alias{patchAhead,NLworldMs,agentMatrix,numeric-method}
 \alias{patchAhead,NLworlds,SpatialPointsDataFrame,numeric-method}
-\alias{patchAhead,NLworlds,agentMatrix,numeric-method}
 \title{Patches ahead}
 \usage{
 patchAhead(world, turtles, dist, torus = FALSE)
@@ -12,7 +12,7 @@ patchAhead(world, turtles, dist, torus = FALSE)
 \S4method{patchAhead}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles,
   dist, torus = FALSE)
 
-\S4method{patchAhead}{NLworlds,agentMatrix,numeric}(world, turtles, dist,
+\S4method{patchAhead}{NLworldMs,agentMatrix,numeric}(world, turtles, dist,
   torus = FALSE)
 }
 \arguments{
