@@ -17,6 +17,7 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
 #' This is a drop in replacement for .bboxCoords in raster package.
 #'
 #' @importFrom matrixStats colRanges
+#' @rdname bboxCoords
 .bboxCoords <- function(coords) {
 
     stopifnot(length(coords) > 0)
