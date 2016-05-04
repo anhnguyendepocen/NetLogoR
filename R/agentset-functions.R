@@ -27,7 +27,7 @@
 #' NLall(agents = patches(w2), world = w2, val = 5)
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 5, coords = fastCbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
+#' t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
 #' NLall(agents = t1, var = "xcor", val = 1)
 #' NLall(agents = t1, var = "heading", val = 2)
 #'
@@ -313,7 +313,7 @@ setMethod(
     turtles <- fastCbind(agents@coords, agents@data)
     sortData <- turtles[order(turtles[,var]),]
 
-    agents@coords <- fastCbind(xcor = sortData[,1], ycor = sortData[,2])
+    agents@coords <- cbind(xcor = sortData[,1], ycor = sortData[,2])
     agents@data = sortData[,3:ncol(sortData)]
     return(agents)
   }
@@ -383,7 +383,7 @@ setMethod(
     pVal <- which(values %in% val)
     pxcorVal <- pxcor[pVal]
     pycorVal <- pycor[pVal]
-    return(fastCbind(pxcor = pxcorVal, pycor = pycorVal))
+    return(cbind(pxcor = pxcorVal, pycor = pycorVal))
   }
 )
 
@@ -719,7 +719,7 @@ setMethod(
     maxAgents <- withMax(world = world, agents = agents)
     row <- sample(1:nrow(maxAgents), size = 1)
     maxAgent <- maxAgents[row,]
-    return(fastCbind(pxcor = maxAgent[1], pycor = maxAgent[2]))
+    return(cbind(pxcor = maxAgent[1], pycor = maxAgent[2]))
   }
 )
 
@@ -818,7 +818,7 @@ setMethod(
     minAgents <- withMin(world = world, agents = agents)
     row <- sample(1:nrow(minAgents), size = 1)
     minAgent <- minAgents[row,]
-    return(fastCbind(pxcor = minAgent[1], minAgent[2]))
+    return(cbind(pxcor = minAgent[1], minAgent[2]))
   }
 )
 
@@ -1277,7 +1277,7 @@ setMethod(
     } else {
 
       val <- of(world = world, agents = agents)
-      agentsVal <- fastCbind(val, agents)
+      agentsVal <- cbind(val, agents)
       agentsVal <- agentsVal[order(-agentsVal[,"val"]),] # decreasing order
 
       minVal <- min(agentsVal[1:n, "val"], na.rm = TRUE)
@@ -1291,7 +1291,7 @@ setMethod(
         maxAgents <- rbind(maxAgents[maxAgents[,"val"] > minVal,], maxAgents[maxAgents[,"val"] == minVal,][toKeep,])
       }
 
-      return(fastCbind(pxcor = maxAgents[,"pxcor"], pycor = maxAgents[,"pycor"]))
+      return(cbind(pxcor = maxAgents[,"pxcor"], pycor = maxAgents[,"pycor"]))
     }
   }
 )
@@ -1559,7 +1559,7 @@ setMethod(
       # Extract the locations of agents2 under the buffers
       pOver <- over(pBuffer, SpatialPoints(coords = pAllWrap), returnList = TRUE)
       list_agentsXY <- lapply(pOver, function(z){
-        wrap(fastCbind(x = pAllWrap[as.numeric(z), 1], y = pAllWrap[as.numeric(z), 2]), extent(world))
+        wrap(cbind(x = pAllWrap[as.numeric(z), 1], y = pAllWrap[as.numeric(z), 2]), extent(world))
       })
       colnames(agents2) <- c("pxcor", "pycor")
       list_agents <- lapply(list_agentsXY, function(x){
@@ -1571,7 +1571,7 @@ setMethod(
       # Extract the locations of agents2 under the buffers
       pOver <- over(pBuffer, SpatialPoints(coords = agents2), returnList = TRUE)
       list_agents <- lapply(pOver, function(x){
-        fastCbind(pxcor = agents2[as.numeric(x), 1], pycor = agents2[as.numeric(x), 2])
+        cbind(pxcor = agents2[as.numeric(x), 1], pycor = agents2[as.numeric(x), 2])
       })
     }
 
@@ -1595,20 +1595,20 @@ setMethod(
       }
 
       agents2c <- agents2@coords
-      agents2c1 <- fastCbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
-      agents2c2 <- fastCbind(agents2c[,1], agents2c[,2] + (world@extent@ymax - world@extent@ymin))
-      agents2c3 <- fastCbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
-      agents2c4 <- fastCbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2])
-      agents2c5 <- fastCbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2])
-      agents2c6 <- fastCbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] - (world@extent@ymax - world@extent@ymin))
-      agents2c7 <- fastCbind(agents2c[,1], agents2c[,2] - (world@extent@ymax - world@extent@ymin))
-      agents2c8 <- fastCbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2] - (world@extent@ymax - world@extent@ymin))
+      agents2c1 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
+      agents2c2 <- cbind(agents2c[,1], agents2c[,2] + (world@extent@ymax - world@extent@ymin))
+      agents2c3 <- cbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2] + (world@extent@ymax - world@extent@ymin))
+      agents2c4 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2])
+      agents2c5 <- cbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2])
+      agents2c6 <- cbind(agents2c[,1] - (world@extent@xmax - world@extent@xmin), agents2c[,2] - (world@extent@ymax - world@extent@ymin))
+      agents2c7 <- cbind(agents2c[,1], agents2c[,2] - (world@extent@ymax - world@extent@ymin))
+      agents2c8 <- cbind(agents2c[,1] + (world@extent@xmax - world@extent@xmin), agents2c[,2] - (world@extent@ymax - world@extent@ymin))
       agents2cAll <- rbind(agents2c, agents2c1, agents2c2, agents2c3, agents2c4, agents2c5, agents2c6, agents2c7, agents2c8)
 
       # Extract the locations of agents2 under the buffers
       pOver <- over(pBuffer, SpatialPoints(coords = agents2cAll), returnList = TRUE)
       list_agentsXY <- lapply(pOver, function(z){
-        unique(wrap(fastCbind(x = agents2cAll[as.numeric(z), 1], y = agents2cAll[as.numeric(z), 2]), extent(world)))
+        unique(wrap(cbind(x = agents2cAll[as.numeric(z), 1], y = agents2cAll[as.numeric(z), 2]), extent(world)))
       })
       list_agents <- lapply(list_agentsXY, function(x){
         tWho <- merge(x, fastCbind(agents2@coords, agents2@data), by.x = c("x", "y"), by.y = c("xcor", "ycor"))
@@ -1735,7 +1735,7 @@ setMethod(
         if(length(x) == 0){
           noPatches()
         } else {
-          fastCbind(pxcor = y[x, 1], pycor = y[x, 2])
+          cbind(pxcor = y[x, 1], pycor = y[x, 2])
         }
       }, pWithin, agentsNoEmpty, SIMPLIFY = FALSE)
 
@@ -1979,7 +1979,7 @@ setMethod(
 
             turtlesData <- fastCbind(turtles@coords, turtles@data)
             turtlesData[iAgents, var] <- val
-            turtles@coords <- fastCbind(xcor = turtlesData[,1], ycor = turtlesData[,2])
+            turtles@coords <- cbind(xcor = turtlesData[,1], ycor = turtlesData[,2])
             turtles@data <- turtlesData[,3:ncol(turtlesData)]
 
           } else {
@@ -2087,7 +2087,7 @@ setMethod(
         matj <- matj[!is.na(matj)]
         mati <- mati[!is.na(mati)]
 
-        world[fastCbind(mati, matj)] <- val
+        world[cbind(mati, matj)] <- val
       }
     }
     return(world)
@@ -2106,9 +2106,9 @@ setMethod(
     # if(length(arrayDim)>1) {
     #   ind <- rep_len(seq_len(NROW(cells)), length.out = length(cells))
     #   arrayDim <- rep(arrayDim,each=NROW(cells))
-    #   world[fastCbind(cells[ind,],arrayDim)] <- val
+    #   world[cbind(cells[ind,],arrayDim)] <- val
     # } else {
-    #   world[fastCbind(cells,arrayDim)] <- val
+    #   world[cbind(cells,arrayDim)] <- val
     # }
 
     if(NROW(agents) != 0){

@@ -596,21 +596,16 @@ tail.agentMatrix <- function(x, n = 6L, ...) {
 }
 
 
-#' @export
-#' @name cbind
-#' @docType methods
-#' @rdname agentMatrix
-setGeneric("cbind", signature="...")
 
 #' @export
 #' @name cbind
 #' @docType methods
 #' @rdname agentMatrix
-setMethod(
-  "cbind",
-  "agentMatrix",
-  definition = function(..., deparse.level) {
-
+#setMethod(
+#  "cbind",
+#  "agentMatrix",
+#  definition = function(..., deparse.level) {
+cbind.agentMatrix <- function(..., deparse.level) {
     tmp <- list(...)
     if(length(tmp) != 2) stop("cbind for agentMatrix is only defined for 2 agentMatrices")
     notAM <- sapply(tmp, function(x) all(is.na(x@.Data[,1:2])))
@@ -630,7 +625,7 @@ setMethod(
     tmp[[1]]
 
   }
-)
+
 
 #' @export
 #' @name [
