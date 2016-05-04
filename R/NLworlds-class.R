@@ -477,6 +477,7 @@ setMethod(
   signature("NLworldArray", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
+    browser()
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     pCoords <- cbind(rowMat, colMat)
@@ -497,6 +498,7 @@ setMethod(
   signature("NLworldArray", "missing", "missing", "ANY"),
   definition = function(x, drop) {
 
+    browser()
     cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[,,z]))}))
     dim(cellValues) <- c(dim(x)[1] * dim(x)[2], 2L)
     colnames(cellValues) <- dimnames(x@.Data)[[3]]
@@ -513,6 +515,7 @@ setReplaceMethod(
   signature("NLworldArray","numeric","numeric","matrix"),
   definition = function(x, i, j, value) {
 
+    browser()
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     coords <- cbind(rowMat, colMat)

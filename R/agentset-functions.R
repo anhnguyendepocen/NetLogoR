@@ -310,7 +310,7 @@ setMethod(
   "sortOn",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, var) {
-    turtles <- cbind(agents@coords, agents@data)
+    turtles <- fastCbind(agents@coords, agents@data)
     sortData <- turtles[order(turtles[,var]),]
 
     agents@coords <- cbind(xcor = sortData[,1], ycor = sortData[,2])
@@ -438,7 +438,7 @@ setMethod(
   "NLwith",
   signature = c("SpatialPointsDataFrame", "missing", "character", "ANY"),
   definition = function(agents, var, val) {
-    turtles <- cbind(agents@coords, agents@data)
+    turtles <- fastCbind(agents@coords, agents@data)
     turtlesWith <- turtles[turtles[,var] %in% val, ]
     turtle(agents, turtlesWith$who)
   }
@@ -1611,7 +1611,7 @@ setMethod(
         unique(wrap(cbind(x = agents2cAll[as.numeric(z), 1], y = agents2cAll[as.numeric(z), 2]), extent(world)))
       })
       list_agents <- lapply(list_agentsXY, function(x){
-        tWho <- merge(x, cbind(agents2@coords, agents2@data), by.x = c("x", "y"), by.y = c("xcor", "ycor"))
+        tWho <- merge(x, fastCbind(agents2@coords, agents2@data), by.x = c("x", "y"), by.y = c("xcor", "ycor"))
         turtle(turtles = agents2, who = tWho[,"who"])
       })
 
@@ -1757,7 +1757,7 @@ setMethod(
   definition = function(turtles, radius, angle, agents, world, torus) {
     pCoords <- inCone(turtles = turtles, radius = radius, angle = angle, agents = agents@coords, world = world, torus = torus)
     # Merge the coordinates within the cone to the turtles data
-    tWho <- lapply(pCoords, function(x){merge(x, cbind(agents@coords, agents@data), by.x = c("pxcor", "pycor"), by.y = c("xcor", "ycor"))})
+    tWho <- lapply(pCoords, function(x){merge(x, fastCbind(agents@coords, agents@data), by.x = c("pxcor", "pycor"), by.y = c("xcor", "ycor"))})
     list_agents <- lapply(tWho, function(x){turtle(turtles = agents, who = x$who)})
     return(list_agents)
   }
@@ -1947,7 +1947,7 @@ setMethod(
 
           if(any(var == "xor" | var == "ycor")){
 
-            turtlesData <- cbind(turtles@coords, turtles@data)
+            turtlesData <- fastCbind(turtles@coords, turtles@data)
             turtlesData[, var] <- val
             turtles@coords <- turtlesData[,c(1,2)]
             turtles@data <- turtlesData[,3:ncol(turtlesData)]
@@ -1977,7 +1977,7 @@ setMethod(
 
           if(any(var == "xcor" | var == "ycor")){
 
-            turtlesData <- cbind(turtles@coords, turtles@data)
+            turtlesData <- fastCbind(turtles@coords, turtles@data)
             turtlesData[iAgents, var] <- val
             turtles@coords <- cbind(xcor = turtlesData[,1], ycor = turtlesData[,2])
             turtles@data <- turtlesData[,3:ncol(turtlesData)]
@@ -2029,7 +2029,7 @@ setMethod(
         #
         #   if(any(var == "xcor" | var == "ycor")){
         #
-        #     #turtlesData <- cbind(turtles@coords, turtles@data)
+        #     #turtlesData <- fastCbind(turtles@coords, turtles@data)
         #     #turtlesData[, var] <- val
         #     #turtles@coords <- turtlesData[,c(1,2)]
         #     turtles@.Data[, var] <- val
@@ -2162,7 +2162,7 @@ setMethod(
           for(i in 1:length(var)){
             ind <- c(mati, matj)
             dim(ind) <- c(length(mati), 2L)
-            world[,,var[i]][ind] <- val[,var[i]]
+            world@.Data[,,var[i]][ind] <- val[,var[i]]
           }
         }
       }

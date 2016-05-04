@@ -8,6 +8,7 @@
 \alias{agentMatrix,matrix-method}
 \alias{agentMatrix,missing-method}
 \alias{cbind}
+\alias{cbind.agentMatrix}
 \alias{head}
 \alias{head.agentMatrix}
 \alias{tail}
@@ -56,9 +57,7 @@ head.agentMatrix(x, n = 6L, ...)
 
 tail.agentMatrix(x, n = 6L, ...)
 
-cbind(..., deparse.level = 1)
-
-\S4method{cbind}{agentMatrix}(..., deparse.level = 1)
+cbind.agentMatrix(..., deparse.level)
 
 \S4method{length}{agentMatrix}(x)
 }

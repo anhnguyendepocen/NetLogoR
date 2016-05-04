@@ -2682,7 +2682,7 @@ setMethod(
   "inspect",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
-    tData <- cbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
+    tData <- fastCbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
     return(tData)
   }
 )
@@ -2694,7 +2694,7 @@ setMethod(
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
     tData <- as.data.frame(turtles[turtles@.Data[,"who"] %in% who,,drop = FALSE])
-    tData[,names(turtles@levels)] <- do.call(cbind,lapply(1:length(turtles@levels),function(x){
+    tData[,names(turtles@levels)] <- do.call(fastCbind,lapply(1:length(turtles@levels),function(x){
       unlist(mapvalues(tData[,names(turtles@levels)[x]],
                        from = unique(tData[,names(turtles@levels)[x]]),
                        to = turtles@levels[names(turtles@levels)[x]][[1]][unique(tData[,names(turtles@levels)[x]])]))}))
@@ -3770,18 +3770,64 @@ setMethod(
 fastCbind <- function(...){
 
   x <- list(...)
+  dims <- unlist(lapply(x, function(z) {
+    if(is.null(dim(z))) {
+      c(length(z),1)
+    } else {
+      dim(z)
+    }
+    }))
+
+  len <- max(dims)
+  colNames <- unlist(lapply(seq_along(x), function(z) {
+    if(is.null(dimnames(x[[z]]))) {
+      ""
+    } else {
+      dimnames(x[[z]])[[2]]
+    }
+    }))
+
+  if(any(colNames=="")) {
+    empty <- names(x)!=""
+    if(length(empty)>0)
+      colNames[colNames==""] <- names(x)[empty]
+  }
+
+  inds <- seq_len(length(dims)*0.5)*2
+  notMaxRows <- dims[inds-1] != len
+  if(any(notMaxRows)){
+    x[notMaxRows] <- lapply(x[notMaxRows], function(z) rep_len(z, len))
+  }
+
   y <- do.call(c, x)
-  len <- dim(x[[1]])[1]
-  if(is.null(len)) len <- length(x[[1]])
-  dims <- unlist(lapply(x, function(z) dim(z)[2]))
-  if(is.null(dims)) dims <- length(x)
-  colNames <- unlist(lapply(x, function(z) dimnames(z)[[2]]))
-  dim(y) <- c(len, sum(dims))
+  #if(is.null(len)) len <- length(x[[1]])
+
+  dim(y) <- c(len, sum(dims[inds]))
   dimnames(y)[[2]] <- colNames
   y
-
 }
 
+
+
+#   colNames <- as.vector(do.call(c,lapply(1:2, function(y) attr(x[[y]], "dimnames")[[2]])))
+#   newDim <- unlist(lapply(x, dim))
+#   NewDimSeq <- seq_along(newDim)
+#   len <- prod(newDim[1:2])
+#   newDim <- c(newDim[[1]][1], sum(NewDimSeq))
+#   if(length(newDim)==0) newDim <- c(len, 2L)
+#   newLen <- prod(newDim)
+#
+#   length(x[[1]]) <- newLen
+#   dim(x[[1]]) <- newDim
+#
+#   # account for filling of unfull matrices
+#   if(length(x[[2]])!=(newLen - len))
+#     x[[2]] <- rep_len(x[[2]], length.out = newLen - len)
+#
+#   x[[1]][(len+1):newLen] <- do.call(c, x[-1])
+#   colnames(x[[1]]) <- colNames
+#   x[[1]]
+# }
 
 ################################################################################
 #' Substract headings
@@ -4177,7 +4223,7 @@ setMethod(
       }
     } else {
       if(any(var == "xcor" | var == "ycor")){
-        agentsData <- cbind(agents@coords, agents@data)
+        agentsData <- fastCbind(agents@coords, agents@data)
         return(agentsData[,var])
       } else {
         agents@data[,var]
@@ -4211,7 +4257,7 @@ setMethod(
     if(any(names(agents@levels) %in% var)){
 
       agentsData <- as.data.frame(agents@.Data) # characters data as factors
-      agentsData[,names(agents@levels)] <- do.call(cbind,lapply(1:length(agents@levels),function(x){
+      agentsData[,names(agents@levels)] <- do.call(fastCbind,lapply(1:length(agents@levels),function(x){
         unlist(mapvalues(agentsData[,names(agents@levels)[x]],
                          from = unique(agentsData[,names(agents@levels)[x]]),
                          to = agents@levels[names(agents@levels)[x]][[1]][unique(agentsData[,names(agents@levels)[x]])]))}))
@@ -4303,6 +4349,7 @@ setMethod(
   signature = c("NLworldArray", "matrix", "character"),
   definition = function(world, agents, var) {
 
+
     # #colNum <- match(var, dimnames(world)[[3]])
     # if(length(var) == 1){
     #   world_l <- createNLworldMatrix(data = as.numeric(t(world[,,var])), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
@@ -4329,5 +4376,24 @@ setMethod(
         } else {
           return(allValues[cellNum,var, drop= FALSE])
         }
-      }
-  })
+
+    # if(length(var) == 1){
+    #   world_l <- createNLworldMatrix(data = as.numeric(t(world@.Data[,,var])), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+    #                                  minPycor = minPycor(world), maxPycor = maxPycor(world))
+    #   of(world = world_l, agents = agents)
+    # } else {
+    #   if(identical(patches(world), agents)){
+    #     listVar <- lapply(var, function(x){as.numeric(t(world[,,x]))})
+    #     matVar <- do.call(fastCbind,listVar)
+    #     colnames(matVar) <- var
+    #     return(matVar)
+    #   } else {
+    #     cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    #     listVar <- lapply(var, function(x){as.numeric(t(world[,,x]))})
+    #     matVar <- do.call(fastCbind,listVar)
+    #     colnames(matVar) <- var
+    #     return(matVar[cellNum,, drop = FALSE])
+    #
+    #
+    }
+})
