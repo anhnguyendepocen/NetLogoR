@@ -81,6 +81,42 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname NLall
+setMethod(
+  "NLall",
+  signature = c("matrix", "NLworldMatrix", "missing", "ANY"),
+  definition = function(agents, world, val) {
+    withVal <- NLwith(agents = agents, world = world, val = val)
+    allTrue <- ifelse(nrow(agents) == nrow(withVal), TRUE, FALSE)
+    return(allTrue)
+  }
+)
+
+#' @export
+#' @rdname NLall
+setMethod(
+  "NLall",
+  signature = c("matrix", "NLworldArray", "character", "ANY"),
+  definition = function(agents, world, var, val) {
+    withVal <- NLwith(agents = agents, world = world, var = var, val = val)
+    allTrue <- ifelse(nrow(agents) == nrow(withVal), TRUE, FALSE)
+    return(allTrue)
+  }
+)
+
+#' @export
+#' @rdname NLall
+setMethod(
+  "NLall",
+  signature = c("agentMatrix", "missing", "character", "ANY"),
+  definition = function(agents, var, val) {
+    withVal <- NLwith(agents = agents, var = var, val = val)
+    allTrue <- ifelse(length(agents) == length(withVal), TRUE, FALSE)
+    return(allTrue)
+  }
+)
+
 
 ################################################################################
 #' Any agents?
@@ -131,12 +167,19 @@ setMethod(
   "NLany",
   signature = c("matrix"),
   definition = function(agents) {
-    anyAgents <- ifelse(nrow(agents) == 0, FALSE, TRUE)
 
-    if(anyAgents == TRUE){
-      nonNAs <- apply(agents, 2, function(x) length(which(!is.na(x))))
-      if(sum(nonNAs) == 0){
-        anyAgents <- FALSE
+    if(class(agents) == "agentMatrix"){
+      anyAgents <- ifelse(NROW(agents) == 0, FALSE, TRUE)
+
+    } else {
+
+      anyAgents <- ifelse(NROW(agents) == 0, FALSE, TRUE)
+
+      if(anyAgents == TRUE){
+        nonNAs <- apply(agents, 2, function(x) length(which(!is.na(x))))
+        if(sum(nonNAs) == 0){
+          anyAgents <- FALSE
+        }
       }
     }
 
@@ -155,16 +198,6 @@ setMethod(
   }
 )
 
-#' @export
-#' @rdname NLany
-setMethod(
-  "NLany",
-  signature = c("agentMatrix"),
-  definition = function(agents) {
-    anyAgents <- ifelse(NROW(agents) == 0, FALSE, TRUE)
-    return(anyAgents)
-  }
-)
 
 
 ################################################################################
@@ -310,11 +343,50 @@ setMethod(
   "sortOn",
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, var) {
-    turtles <- fastCbind(agents@coords, agents@data)
+    turtles <- cbind(agents@coords, agents@data)
     sortData <- turtles[order(turtles[,var]),]
 
     agents@coords <- cbind(xcor = sortData[,1], ycor = sortData[,2])
     agents@data = sortData[,3:ncol(sortData)]
+    return(agents)
+  }
+)
+
+#' @export
+#' @rdname sortOn
+setMethod(
+  "sortOn",
+  signature = c("matrix", "NLworldMatrix", "missing"),
+  definition = function(agents, world) {
+    agentsVal <- world[agents[,1], agents[,2]]
+    pCoords <- agents[order(agentsVal),]
+    return(pCoords)
+  }
+)
+
+#' @export
+#' @rdname sortOn
+setMethod(
+  "sortOn",
+  signature = c("matrix", "NLworldArray", "character"),
+  definition = function(agents, world, var) {
+
+    agentsVal <- world[agents[,1], agents[,2]]
+    pCoords <- agents[order(agentsVal[,var]),]
+    return(pCoords)
+  }
+)
+
+#' @export
+#' @rdname sortOn
+setMethod(
+  "sortOn",
+  signature = c("agentMatrix", "missing", "character"),
+  definition = function(agents, var) {
+
+    if(NROW(agents) > 1){
+      agents@.Data <- agents@.Data[order(agents@.Data[,var]),]
+    }
     return(agents)
   }
 )
@@ -407,9 +479,10 @@ setMethod(
   signature = c("matrix", "NLworldMatrix", "missing", "ANY"),
   definition = function(agents, world, val) {
 
-    agentsCell <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    allVal <- as.numeric(t(world)) # t() to retrieve the values by rows
-    agentsValues <- allVal[agentsCell]
+    # agentsCell <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+    # allVal <- as.numeric(t(world)) # t() to retrieve the values by rows
+    # agentsValues <- allVal[agentsCell]
+    agentsValues <- world[agents[,1], agents[,2]]
     pVal <- which(agentsValues %in% val)
     return(agents[pVal, , drop = FALSE])
 
@@ -438,7 +511,7 @@ setMethod(
   "NLwith",
   signature = c("SpatialPointsDataFrame", "missing", "character", "ANY"),
   definition = function(agents, var, val) {
-    turtles <- fastCbind(agents@coords, agents@data)
+    turtles <- cbind(agents@coords, agents@data)
     turtlesWith <- turtles[turtles[,var] %in% val, ]
     turtle(agents, turtlesWith$who)
   }
@@ -451,7 +524,7 @@ setMethod(
   "NLwith",
   signature = c("agentMatrix", "missing", "character", "ANY"),
   definition = function(agents, var, val) {
-    turtlesWith <- agents@.Data[agents@.Data[,var] %in% val, , drop=FALSE]
+    turtlesWith <- agents@.Data[of(agents = agents, var = var) %in% val, , drop=FALSE]
     turtle(agents, turtlesWith[,"who"])
   }
 )

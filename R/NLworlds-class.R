@@ -477,7 +477,7 @@ setMethod(
   signature("NLworldArray", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, drop) {
 
-    browser()
+    #browser()
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     pCoords <- cbind(rowMat, colMat)

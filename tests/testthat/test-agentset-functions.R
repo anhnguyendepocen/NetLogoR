@@ -23,6 +23,29 @@ test_that("NLall works with turtles",{
   expect_identical(NLall(agents = t1, var = "xcor", val = 2), FALSE)
 })
 
+test_that("NLall works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
+  expect_identical(NLall(world = w1, agents = patches(world = w1), val = 5), FALSE)
+  w2 <- w1
+  w2[] <- 5
+  expect_identical(NLall(world = w2, agents = patches(world = w2), val = 5), TRUE)
+  w3 <- w2
+  w3[0,0] <- 4
+  expect_identical(NLall(world = w2, agents = patch(world = w2, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), val = 5), TRUE)
+
+  ws <- NLworldArray(w1, w2, w3)
+  expect_identical(NLall(world = ws, agents = patches(world = ws), var = "w1", val = 5), FALSE)
+  expect_identical(NLall(world = ws, agents = patches(world = ws), var = "w2", val = 5), TRUE)
+  expect_identical(NLall(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w3", val = 5), TRUE)
+
+  # Turtles
+  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
+  expect_identical(NLall(agents = t1, var = "xcor", val = 1), TRUE)
+  expect_identical(NLall(agents = t1, var = "heading", val = 2), FALSE)
+  expect_identical(NLall(agents = turtle(t1, who = c(1, 2, 4)), var = "heading", val = 2), TRUE)
+  expect_identical(NLall(agents = t1, var = "xcor", val = 2), FALSE)
+})
+
 test_that("NLany works with patches",{
   w1 <- createNLworld(0, 4, 0, 4)
   p1 <- noPatches()
@@ -41,6 +64,30 @@ test_that("NLany works with turtles",{
   w1 <- createNLworld(0, 4, 0, 4)
   t1 <- createTurtles(n = 10, coords = randomXYcor(world= w1, n = 10))
   t2 <- noTurtles()
+  t3 <- NLwith(agents = t1, var = "xcor", val = 10)
+  t4 <- turtle(t1, who = 0)
+  expect_identical(NLany(t1), TRUE)
+  expect_identical(NLany(t2), FALSE)
+  expect_identical(NLany(t3), FALSE)
+  expect_identical(NLany(t4), TRUE)
+})
+
+test_that("NLany works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  p1 <- noPatches()
+  p2 <- patch(world = w1, x = 0, y = 0)
+  p3 <- patch(world = w1, x = -1, y = -1)
+  p4 <- patches(world = w1)
+  p5 <- patch(world = w1, x = c(-1, 0), y = c(-1, 0))
+  expect_identical(NLany(p1), FALSE)
+  expect_identical(NLany(p2), TRUE)
+  expect_identical(NLany(p3), FALSE)
+  expect_identical(NLany(p4), TRUE)
+  expect_identical(NLany(p5), TRUE)
+
+  # Turtles
+  t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world= w1, n = 10))
+  t2 <- noTurtlesAM()
   t3 <- NLwith(agents = t1, var = "xcor", val = 10)
   t4 <- turtle(t1, who = 0)
   expect_identical(NLany(t1), TRUE)
@@ -75,6 +122,17 @@ test_that("count works with turtles",{
   expect_equivalent(count(t3), 3)
 })
 
+test_that("count works with agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  t1 <- noTurtlesAM()
+  t2 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+  t3 <- turtle(turtles = t2, who = c(1, 2, 3))
+  expect_equivalent(count(t1), 0)
+  expect_equivalent(count(t2), 10)
+  expect_equivalent(count(t3), 3)
+})
+
+
 test_that("sortOn works with patches",{
   w1 <- createNLworld(0, 4, 0, 4)
   w1[] <- 25:1
@@ -103,6 +161,36 @@ test_that("sortOn works with turtles",{
   t5 <- sortOn(agents = turtle(turtles = t1, who = 0), var = "heading")
   expect_equivalent(t5@data$who, 0)
   t6 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = 1)
+  t7 <- sortOn(agents = t6, var = "xcor")
+  expect_equivalent(t6, t7)
+})
+
+test_that("sortOn works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4, data = 25:1)
+  p1 <- sortOn(world = w1, agents = patches(world = w1))
+  expect_equivalent(cbind(p1[1,1], p1[1,2]), patch(w1, x = 4, y = 0))
+  expect_equivalent(cbind(p1[25,1],p1[25,2]), patch(w1, x = 0, y = 4))
+
+  w2 <- w1
+  w2[] <- 1:25
+  ws <- NLworldArray(w1, w2)
+  p1 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w1")
+  p2 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w2")
+  expect_equivalent(p1, cbind(pxcor = c(4,3,2,1,0), pycor = c(4,4,4,4,4)))
+  expect_equivalent(p2, cbind(pxcor = c(0,1,2,3,4), pycor = c(4,4,4,4,4)))
+
+  #Turtles
+  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1:5, ycor = 5:1), heading = c(4,5,1,3,2))
+  t2 <- sortOn(agents = t1, var = "xcor")
+  t3 <- sortOn(agents = t1, var = "ycor")
+  t4 <- sortOn(agents = t1, var = "heading")
+  expect_equivalent(t2@.Data[,"who"], c(0,1,2,3,4))
+  expect_equivalent(t3@.Data[,"who"], c(4,3,2,1,0))
+  expect_equivalent(t4@.Data[,"who"], c(2, 4, 3, 0, 1))
+
+  t5 <- sortOn(agents = turtle(turtles = t1, who = 0), var = "heading")
+  expect_equivalent(t5@.Data[,"who"], 0)
+  t6 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = 1)
   t7 <- sortOn(agents = t6, var = "xcor")
   expect_equivalent(t6, t7)
 })
@@ -172,6 +260,23 @@ test_that("NLwith works with turtles",{
   expect_identical(t6, turtle(turtles = t1, who = c(0, 1, 2, 3)))
   t7 <- NLwith(agents = t1, var = "breed", val = "moose")
   expect_equivalent(t7, noTurtles())
+})
+
+test_that("NLwith works with agentMatrix",{
+  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = c(1,1,1,2,3), ycor = c(2,3,4,4,5)), heading = 0,
+                      breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+  t2 <- NLwith(agents = t1, var = "xcor", val = 1)
+  expect_identical(t2, turtle(turtles = t1, who = c(0, 1, 2)))
+  t3 <- NLwith(agents = t1, var = "ycor", val = c(2, 3))
+  expect_identical(t3, turtle(turtles = t1, who = c(0, 1)))
+  t4 <- NLwith(agents = t1, var = "heading", val = 0)
+  expect_identical(t4, t1)
+  t5 <- NLwith(agents = t1, var = "breed", val = "sheep")
+  expect_identical(t5, turtle(turtles = t1, who = c(0, 1, 3)))
+  t6 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
+  expect_identical(t6, turtle(turtles = t1, who = c(0, 1, 2, 3)))
+  t7 <- NLwith(agents = t1, var = "breed", val = "moose")
+  expect_equivalent(t7, noTurtlesAM())
 })
 
 test_that("withMax works with patches",{

@@ -4,7 +4,6 @@
 \name{NLany}
 \alias{NLany}
 \alias{NLany,SpatialPointsDataFrame-method}
-\alias{NLany,agentMatrix-method}
 \alias{NLany,matrix-method}
 \title{Any agents?}
 \usage{
@@ -13,8 +12,6 @@ NLany(agents)
 \S4method{NLany}{matrix}(agents)
 
 \S4method{NLany}{SpatialPointsDataFrame}(agents)
-
-\S4method{NLany}{agentMatrix}(agents)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

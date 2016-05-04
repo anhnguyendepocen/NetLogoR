@@ -4,7 +4,10 @@
 \name{sortOn}
 \alias{sortOn}
 \alias{sortOn,SpatialPointsDataFrame,missing,character-method}
+\alias{sortOn,agentMatrix,missing,character-method}
 \alias{sortOn,matrix,NLworld,missing-method}
+\alias{sortOn,matrix,NLworldArray,character-method}
+\alias{sortOn,matrix,NLworldMatrix,missing-method}
 \alias{sortOn,matrix,NLworldStack,character-method}
 \title{Sort agents}
 \usage{
@@ -15,6 +18,12 @@ sortOn(agents, world, var)
 \S4method{sortOn}{matrix,NLworldStack,character}(agents, world, var)
 
 \S4method{sortOn}{SpatialPointsDataFrame,missing,character}(agents, var)
+
+\S4method{sortOn}{matrix,NLworldMatrix,missing}(agents, world)
+
+\S4method{sortOn}{matrix,NLworldArray,character}(agents, world, var)
+
+\S4method{sortOn}{agentMatrix,missing,character}(agents, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
