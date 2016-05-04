@@ -498,7 +498,7 @@ setMethod(
   signature("NLworldArray", "missing", "missing", "ANY"),
   definition = function(x, drop) {
 
-    browser()
+    #browser()
     cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[,,z]))}))
     dim(cellValues) <- c(dim(x)[1] * dim(x)[2], 2L)
     colnames(cellValues) <- dimnames(x@.Data)[[3]]

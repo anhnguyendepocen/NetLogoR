@@ -2682,7 +2682,8 @@ setMethod(
   "inspect",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
-    tData <- fastCbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
+    #tData <- fastCbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
+    tData <- cbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
     return(tData)
   }
 )
@@ -4223,7 +4224,8 @@ setMethod(
       }
     } else {
       if(any(var == "xcor" | var == "ycor")){
-        agentsData <- fastCbind(agents@coords, agents@data)
+        #agentsData <- fastCbind(agents@coords, agents@data)
+        agentsData <- cbind(agents@coords, agents@data)
         return(agentsData[,var])
       } else {
         agents@data[,var]
