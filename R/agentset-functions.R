@@ -2052,7 +2052,7 @@ setMethod(
 
 
       if(any(var == "who")){ # if the who numbers have been modified, check for duplicates
-        if(anyDuplicated(turtles@data$who) != 0){
+        if(anyDuplicated(turtles@.Data[,"who"]) != 0){
           warning("Duplicated who numbers among the resulting turtles. Please, reassign who numbers to keep them unique inside the agentset.")
         }
       }

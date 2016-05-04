@@ -5,7 +5,10 @@
 \alias{subHeadings}
 \alias{subHeadings,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
 \alias{subHeadings,SpatialPointsDataFrame,numeric-method}
+\alias{subHeadings,agentMatrix,agentMatrix-method}
+\alias{subHeadings,agentMatrix,numeric-method}
 \alias{subHeadings,numeric,SpatialPointsDataFrame-method}
+\alias{subHeadings,numeric,agentMatrix-method}
 \alias{subHeadings,numeric,numeric-method}
 \title{Substract headings}
 \usage{
@@ -21,6 +24,13 @@ subHeadings(angle1, angle2, range360 = FALSE)
 
 \S4method{subHeadings}{SpatialPointsDataFrame,SpatialPointsDataFrame}(angle1,
   angle2, range360 = FALSE)
+
+\S4method{subHeadings}{agentMatrix,numeric}(angle1, angle2, range360 = FALSE)
+
+\S4method{subHeadings}{numeric,agentMatrix}(angle1, angle2, range360 = FALSE)
+
+\S4method{subHeadings}{agentMatrix,agentMatrix}(angle1, angle2,
+  range360 = FALSE)
 }
 \arguments{
 \item{angle1}{SpatialPointsDataFrame created by \code{createTurtles()} or

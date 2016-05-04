@@ -5,7 +5,7 @@
 \alias{turtlesOn}
 \alias{turtlesOn,NLworldMs,SpatialPointsDataFrame,SpatialPointsDataFrame,missing-method}
 \alias{turtlesOn,NLworldMs,SpatialPointsDataFrame,matrix,missing-method}
-\alias{turtlesOn,NLworldMs,agentMatrix,agentMatrix,missing-method}
+\alias{turtlesOn,NLworldMs,agentMatrix,matrix,character-method}
 \alias{turtlesOn,NLworldMs,agentMatrix,matrix,missing-method}
 \alias{turtlesOn,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,character-method}
 \alias{turtlesOn,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,missing-method}
@@ -36,11 +36,11 @@ turtlesOn(world, turtles, agents, breed, simplify = TRUE)
 \S4method{turtlesOn}{NLworldMs,SpatialPointsDataFrame,matrix,missing}(world,
   turtles, agents, simplify)
 
-\S4method{turtlesOn}{NLworldMs,agentMatrix,agentMatrix,missing}(world, turtles,
-  agents, simplify)
-
 \S4method{turtlesOn}{NLworldMs,agentMatrix,matrix,missing}(world, turtles,
   agents, simplify)
+
+\S4method{turtlesOn}{NLworldMs,agentMatrix,matrix,character}(world, turtles,
+  agents, breed, simplify = TRUE)
 }
 \arguments{
 \item{world}{NLworlds object.}
