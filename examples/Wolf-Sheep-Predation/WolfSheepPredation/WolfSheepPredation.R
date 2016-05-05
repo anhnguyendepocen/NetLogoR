@@ -95,7 +95,7 @@ doEvent.WolfSheepPredation = function(sim, eventTime, eventType, debug = FALSE) 
 WolfSheepPredationInit <- function(sim) {
 
   # Create the world
-  grass <- createNLworld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
+  grass <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
   if(params(sim)$WolfSheepPredation$grassOn == FALSE){
     grass <- set(world = grass, agents = patches(grass), val = 1) # cannot plot an empty world
   }
@@ -109,7 +109,7 @@ WolfSheepPredationInit <- function(sim) {
     countdown <- grass # countdown is a new NLworld with the same extent as grass
     countdownVal <- runif(n = count(patches(grass)), min = 0, max = params(sim)$WolfSheepPredation$grassTGrowth) # grass grow clock
     countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
-    field <- NLstack(grass, countdown)
+    sim$field <- NLworldArray(grass, countdown)
   }
   # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
   # because they all have the same extent and number of patches
@@ -120,11 +120,11 @@ WolfSheepPredationInit <- function(sim) {
   # Assign the created world to the sim object
   sim$grass <- grass
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
-    sim$field <- field
+    sim$field <- sim$field
   }
 
   # Create the sheep
-  sheep <- createTurtles(n = params(sim)$WolfSheepPredation$nSheep,
+  sheep <- createTurtlesAM(n = params(sim)$WolfSheepPredation$nSheep,
                          coords = randomXYcor(world = grass, n = params(sim)$WolfSheepPredation$nSheep),
                          breed = "aSheep", color = rep("red", params(sim)$WolfSheepPredation$nSheep))
   # Add the energy variable
@@ -133,7 +133,7 @@ WolfSheepPredationInit <- function(sim) {
   sim$sheep <- sheep # assign the created sheep to the sim object
 
   # Create the wolves
-  wolves <- createTurtles(n = params(sim)$WolfSheepPredation$nWolf,
+  wolves <- createTurtlesAM(n = params(sim)$WolfSheepPredation$nWolf,
                           coords = randomXYcor(world = grass, n = params(sim)$WolfSheepPredation$nWolf),
                           breed = "wolf", color = rep("black", params(sim)$WolfSheepPredation$nWolf))
   # Add the energy variable
@@ -171,11 +171,15 @@ WolfSheepPredationPosition <- function(sim) { # Plot the positions
   if(time(sim) == start(sim)) clearPlot()
 
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
-    Plot(sim$field$grass, na.color = "white")
+    grassRas <- raster(sim$field@.Data[,,"grass"])
+    extent(grassRas) <- extent(sim$field)
+    Plot(grassRas, na.color = "white")
     if(count(sim$sheep)>0)
-      Plot(sim$sheep, addTo = "sim$field$grass")
+      sheep <- SpatialPoints(coordinates(sim$sheep))
+      Plot(sheep, addTo = "grassRas", cols = "red")
     if(count(sim$wolves)>0)
-      Plot(sim$wolves, addTo = "sim$field$grass")
+      wolves <- SpatialPoints(coordinates(sim$wolves))
+      Plot(wolves, addTo = "grassRas", cols = "black")
   } else {
     Plot(sim$grass)
     Plot(sim$sheep, addTo = "sim$grass")
@@ -308,7 +312,7 @@ move <- function(turtles){ # sheep and wolves
 death <- function(turtles){ # sheep and wolves
   # When energy dips below 0, die
   whoEnergy <- of(agents = turtles, var = c("who", "energy"))
-  who0 <- whoEnergy[which(whoEnergy$energy < 0), "who"] # "who" numbers of the turtles with their energy value below 0
+  who0 <- whoEnergy[which(whoEnergy[,"energy"] < 0), "who"] # "who" numbers of the turtles with their energy value below 0
 
   if(length(who0) != 0){
     turtles <- die(turtles = turtles, who = who0)
