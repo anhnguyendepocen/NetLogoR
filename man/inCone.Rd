@@ -5,6 +5,7 @@
 \alias{inCone}
 \alias{inCone,SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame-method}
 \alias{inCone,SpatialPointsDataFrame,numeric,numeric,matrix-method}
+\alias{inCone,agentMatrix,numeric,numeric,matrix-method}
 \title{Agents in cone}
 \usage{
 inCone(turtles, radius, angle, agents, world, torus = FALSE)
@@ -15,6 +16,9 @@ inCone(turtles, radius, angle, agents, world, torus = FALSE)
 
   \S4method{inCone}{SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame}(turtles,
   radius, angle, agents, world, torus = FALSE)
+
+\S4method{inCone}{agentMatrix,numeric,numeric,matrix}(turtles, radius, angle,
+  agents, world, torus = FALSE)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

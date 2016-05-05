@@ -4,7 +4,10 @@
 \name{maxNof}
 \alias{maxNof}
 \alias{maxNof,SpatialPointsDataFrame,numeric,missing,character-method}
+\alias{maxNof,agentMatrix,numeric,missing,character-method}
 \alias{maxNof,matrix,numeric,NLworld,missing-method}
+\alias{maxNof,matrix,numeric,NLworldArray,character-method}
+\alias{maxNof,matrix,numeric,NLworldMatrix,missing-method}
 \alias{maxNof,matrix,numeric,NLworldStack,character-method}
 \title{N agents with maximum}
 \usage{
@@ -16,6 +19,12 @@ maxNof(agents, n, world, var)
 
 \S4method{maxNof}{SpatialPointsDataFrame,numeric,missing,character}(agents, n,
   var)
+
+\S4method{maxNof}{matrix,numeric,NLworldMatrix,missing}(agents, n, world)
+
+\S4method{maxNof}{matrix,numeric,NLworldArray,character}(agents, n, world, var)
+
+\S4method{maxNof}{agentMatrix,numeric,missing,character}(agents, n, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

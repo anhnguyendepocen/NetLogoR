@@ -1391,7 +1391,7 @@ setMethod(
         if(NROW(agents) == 1 & NROW(agents2) != 1){
           #agents <- cbind(x = rep(agents[,1], NROW(agents2)), y = rep(agents[,2], NROW(agents2)))
           agents <- c(rep(agents[,1], NROW(agents2)),rep(agents[,2], NROW(agents2)))
-          dim(agents) <- c(NROW(agents), 2L)
+          dim(agents) <- c(NROW(agents2), 2L)
         }
 
         # Need to create coordinates for "agents2" in a wrapped world
@@ -1438,7 +1438,11 @@ setMethod(
       tCoords <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
       heading <- towards(agents = tCoords, agents2 = agents2, world = world, torus = torus)
       sameLoc <- tCoords[,1] == agents2[,1] & tCoords[,2] == agents2[,2]
-      heading[sameLoc] <- agents@.Data[,"heading", drop = FALSE][sameLoc]
+      if(NROW(tCoords) == 1){
+        heading[sameLoc] <- agents@.Data[,"heading"]
+      } else {
+        heading[sameLoc] <- agents@.Data[,"heading"][sameLoc]
+      }
 
     } else if(class(agents) != "agentMatrix" & class(agents2) == "agentMatrix"){ # patches to turtles
 
@@ -1450,7 +1454,11 @@ setMethod(
       t2Coords <- agents2@.Data[,c("xcor", "ycor"), drop = FALSE]
       heading <- towards(agents = t1Coords, agents2 = t2Coords, world = world, torus = torus)
       sameLoc <- t1Coords[,1] == t2Coords[,1] & t1Coords[,2] == t2Coords[,2]
-      heading[sameLoc] <- agents@.Data[,"heading", drop = FALSE][sameLoc]
+      if(NROW(t1Coords) == 1){
+        heading[sameLoc] <- agents@.Data[,"heading"]
+      } else {
+        heading[sameLoc] <- agents@.Data[,"heading"][sameLoc]
+      }
 
     }
 
