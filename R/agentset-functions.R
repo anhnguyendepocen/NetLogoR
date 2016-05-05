@@ -627,6 +627,63 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname withMax
+setMethod(
+  "withMax",
+  signature = c("matrix", "NLworldMatrix", "missing"),
+  definition = function(agents, world) {
+
+    val <- of(world = world, agents = agents)
+
+    if(length(val[is.na(val)]) == length(val)){
+      stop("patches' values are all NAs")
+    } else {
+      maxVal <- max(val, na.rm = TRUE)
+      posMax <- which(val %in% maxVal)
+      return(agents[posMax, , drop = FALSE])
+    }
+  }
+)
+
+#' @export
+#' @rdname withMax
+setMethod(
+  "withMax",
+  signature = c("matrix", "NLworldArray", "character"),
+  definition = function(agents, world, var) {
+
+    val <- of(world = world, agents = agents, var = var)
+
+    if(length(val[is.na(val)]) == length(val)){
+      stop("patches' values are all NAs")
+    } else {
+      maxVal <- max(val, na.rm = TRUE)
+      posMax <- which(val %in% maxVal)
+      return(agents[posMax, , drop = FALSE])
+    }
+  }
+)
+
+#' @export
+#' @rdname withMax
+setMethod(
+  "withMax",
+  signature = c("agentMatrix", "missing", "character"),
+  definition = function(agents, var) {
+
+    val <- of(agents = agents, var = var)
+
+    if(length(val[is.na(val)]) == length(val)){
+      stop("patches' values are all NAs")
+    } else {
+      maxVal <- max(val, na.rm = TRUE)
+      posMax <- which(val %in% maxVal)
+      return(agents[posMax, , drop = FALSE])
+    }
+  }
+)
+
 
 ################################################################################
 #' Agents with minimum
@@ -721,6 +778,63 @@ setMethod(
     } else {
       minVal = min(val_var, na.rm = TRUE)
       NLwith(agents = agents, var = var, val = minVal)
+    }
+  }
+)
+
+#' @export
+#' @rdname withMin
+setMethod(
+  "withMin",
+  signature = c("matrix", "NLworldMatrix", "missing"),
+  definition = function(agents, world) {
+
+    val <- of(world = world, agents = agents)
+
+    if(length(val[is.na(val)]) == length(val)){
+      stop("patches' values are all NAs")
+    } else {
+      minVal <- min(val, na.rm = TRUE)
+      posMin <- which(val %in% minVal)
+      return(agents[posMin, , drop = FALSE])
+    }
+  }
+)
+
+#' @export
+#' @rdname withMin
+setMethod(
+  "withMin",
+  signature = c("matrix", "NLworldArray", "character"),
+  definition = function(agents, world, var) {
+
+    val <- of(world = world, agents = agents, var = var)
+
+    if(length(val[is.na(val)]) == length(val)){
+      stop("patches' values are all NAs")
+    } else {
+      minVal <- min(val, na.rm = TRUE)
+      posMin <- which(val %in% minVal)
+      return(agents[posMin, , drop = FALSE])
+    }
+  }
+)
+
+#' @export
+#' @rdname withMin
+setMethod(
+  "withMin",
+  signature = c("agentMatrix", "missing", "character"),
+  definition = function(agents, var) {
+
+    val <- of(agents = agents, var = var)
+
+    if(length(val[is.na(val)]) == length(val)){
+      stop("patches' values are all NAs")
+    } else {
+      minVal <- min(val, na.rm = TRUE)
+      posMin <- which(val %in% minVal)
+      return(agents[posMin, , drop = FALSE])
     }
   }
 )
@@ -824,6 +938,42 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname maxOneOf
+setMethod(
+  "maxOneOf",
+  signature = c("matrix", "NLworldMatrix", "missing"),
+  definition = function(agents, world) {
+    maxAgents <- withMax(world = world, agents = agents)
+    row <- sample(1:NROW(maxAgents), size = 1)
+    return(maxAgents[row,,drop = FALSE])
+  }
+)
+
+#' @export
+#' @rdname maxOneOf
+setMethod(
+  "maxOneOf",
+  signature = c("matrix", "NLworldArray", "character"),
+  definition = function(agents, world, var) {
+    maxAgents <- withMax(world = world, agents = agents, var = var)
+    row <- sample(1:NROW(maxAgents), size = 1)
+    return(maxAgents[row,,drop = FALSE])
+  }
+)
+
+#' @export
+#' @rdname maxOneOf
+setMethod(
+  "maxOneOf",
+  signature = c("agentMatrix", "missing", "character"),
+  definition = function(agents, var) {
+    maxAgents <- withMax(agents = agents, var = var)
+    row <- sample(1:count(maxAgents), size = 1)
+    return(maxAgents[row,])
+  }
+)
+
 
 ################################################################################
 #' One agent with minimum
@@ -923,6 +1073,42 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname minOneOf
+setMethod(
+  "minOneOf",
+  signature = c("matrix", "NLworldMatrix", "missing"),
+  definition = function(agents, world) {
+    minAgents <- withMin(world = world, agents = agents)
+    row <- sample(1:NROW(minAgents), size = 1)
+    return(minAgents[row,,drop = FALSE])
+  }
+)
+
+#' @export
+#' @rdname minOneOf
+setMethod(
+  "minOneOf",
+  signature = c("matrix", "NLworldArray", "character"),
+  definition = function(agents, world, var) {
+    minAgents <- withMin(world = world, agents = agents, var = var)
+    row <- sample(1:NROW(minAgents), size = 1)
+    return(minAgents[row,,drop = FALSE])
+  }
+)
+
+#' @export
+#' @rdname minOneOf
+setMethod(
+  "minOneOf",
+  signature = c("agentMatrix", "missing", "character"),
+  definition = function(agents, var) {
+    minAgents <- withMin(agents = agents, var = var)
+    row <- sample(1:count(minAgents), size = 1)
+    return(minAgents[row,])
+  }
+)
+
 
 ################################################################################
 #' Type of object
@@ -987,26 +1173,53 @@ setMethod(
   "isNLclass",
   signature = c("matrix", "character"),
   definition = function(agents, class) {
-    # If it is this signature, it is a matrix, therefore patch or patches
-    if(class == "agent"){
-      class <- "patch"
-    }
-    if(class == "agentset"){
-      class <- "patchset"
-    }
 
-    if((colnames(agents) == c("pxcor", "pycor") && nrow(agents) != 0)){
-      if(nrow(agents) == 1){
-        agentsClass <- "patch"
-      } else {
-        agentsClass <- "patchset"
+    if(class(agents) == "agentMatrix"){ # turtles
+
+      if(class == "agent"){
+        class <- "turtle"
       }
-    } else {
-      agentsClass <- "nothing"
-    }
+      if(class == "agentset"){
+        class <- "turtleset"
+      }
 
-    matchClass <- ifelse(class == agentsClass, TRUE, FALSE)
-    return(matchClass)
+      if(colnames(agents@.Data)[1:8] == c("xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", "color") && count(agents) != 0){
+        if(count(agents) == 1){
+          agentsClass <- "turtle"
+        } else {
+          agentsClass <- "turtleset"
+        }
+      } else {
+        agentsClass <- "nothing"
+      }
+
+      matchClass <- ifelse(class == agentsClass, TRUE, FALSE)
+      return(matchClass)
+
+
+    } else {
+
+      # If it is this signature, it is a matrix, therefore patch or patches
+      if(class == "agent"){
+        class <- "patch"
+      }
+      if(class == "agentset"){
+        class <- "patchset"
+      }
+
+      if((colnames(agents) == c("pxcor", "pycor") && nrow(agents) != 0)){
+        if(nrow(agents) == 1){
+          agentsClass <- "patch"
+        } else {
+          agentsClass <- "patchset"
+        }
+      } else {
+        agentsClass <- "nothing"
+      }
+
+      matchClass <- ifelse(class == agentsClass, TRUE, FALSE)
+      return(matchClass)
+    }
   }
 )
 

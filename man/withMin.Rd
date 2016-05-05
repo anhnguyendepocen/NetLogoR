@@ -4,7 +4,10 @@
 \name{withMin}
 \alias{withMin}
 \alias{withMin,SpatialPointsDataFrame,missing,character-method}
+\alias{withMin,agentMatrix,missing,character-method}
 \alias{withMin,matrix,NLworld,missing-method}
+\alias{withMin,matrix,NLworldArray,character-method}
+\alias{withMin,matrix,NLworldMatrix,missing-method}
 \alias{withMin,matrix,NLworldStack,character-method}
 \title{Agents with minimum}
 \usage{
@@ -15,6 +18,12 @@ withMin(agents, world, var)
 \S4method{withMin}{matrix,NLworldStack,character}(agents, world, var)
 
 \S4method{withMin}{SpatialPointsDataFrame,missing,character}(agents, var)
+
+\S4method{withMin}{matrix,NLworldMatrix,missing}(agents, world)
+
+\S4method{withMin}{matrix,NLworldArray,character}(agents, world, var)
+
+\S4method{withMin}{agentMatrix,missing,character}(agents, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

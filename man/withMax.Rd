@@ -4,7 +4,10 @@
 \name{withMax}
 \alias{withMax}
 \alias{withMax,SpatialPointsDataFrame,missing,character-method}
+\alias{withMax,agentMatrix,missing,character-method}
 \alias{withMax,matrix,NLworld,missing-method}
+\alias{withMax,matrix,NLworldArray,character-method}
+\alias{withMax,matrix,NLworldMatrix,missing-method}
 \alias{withMax,matrix,NLworldStack,character-method}
 \title{Agents with maximum}
 \usage{
@@ -15,6 +18,12 @@ withMax(agents, world, var)
 \S4method{withMax}{matrix,NLworldStack,character}(agents, world, var)
 
 \S4method{withMax}{SpatialPointsDataFrame,missing,character}(agents, var)
+
+\S4method{withMax}{matrix,NLworldMatrix,missing}(agents, world)
+
+\S4method{withMax}{matrix,NLworldArray,character}(agents, world, var)
+
+\S4method{withMax}{agentMatrix,missing,character}(agents, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

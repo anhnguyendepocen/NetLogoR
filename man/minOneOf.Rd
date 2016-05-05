@@ -4,7 +4,10 @@
 \name{minOneOf}
 \alias{minOneOf}
 \alias{minOneOf,SpatialPointsDataFrame,missing,character-method}
+\alias{minOneOf,agentMatrix,missing,character-method}
 \alias{minOneOf,matrix,NLworld,missing-method}
+\alias{minOneOf,matrix,NLworldArray,character-method}
+\alias{minOneOf,matrix,NLworldMatrix,missing-method}
 \alias{minOneOf,matrix,NLworldStack,character-method}
 \title{One agent with minimum}
 \usage{
@@ -15,6 +18,12 @@ minOneOf(agents, world, var)
 \S4method{minOneOf}{matrix,NLworldStack,character}(agents, world, var)
 
 \S4method{minOneOf}{SpatialPointsDataFrame,missing,character}(agents, var)
+
+\S4method{minOneOf}{matrix,NLworldMatrix,missing}(agents, world)
+
+\S4method{minOneOf}{matrix,NLworldArray,character}(agents, world, var)
+
+\S4method{minOneOf}{agentMatrix,missing,character}(agents, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

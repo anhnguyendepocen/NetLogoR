@@ -312,6 +312,38 @@ test_that("withMax works with turtles",{
   expect_error(withMax(agents = t1, var = "prevX"))
 })
 
+test_that("withMax works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  expect_error(withMax(agents = patches(world = w1), world = w1))
+  w1[] <- 1
+  expect_equivalent(withMax(agents = patches(w1), world = w1), patches(w1))
+  w1[] <- runif(25)
+  w1[1,c(1,4)] <- c(2,2)
+  pMax <- withMax(world = w1, agents = patches(world = w1))
+  expect_equivalent(pMax, patch(w1, x = c(1,1), y = c(4,1)))
+
+  w2 <- w1
+  w2[] <- runif(25)
+  w2[2,c(2,4)] <- c(2,2)
+  ws <- NLworldArray(w1, w2)
+  pMaxw1 <- withMax(world = ws, agents = patches(world = ws), var = "w1")
+  pMaxw2 <- withMax(world = ws, agents = patches(world = ws), var = "w2")
+  expect_equivalent(pMaxw1, patch(ws, x = c(1,1), y = c(4,1)))
+  expect_equivalent(pMaxw2, patch(ws, x = c(2,2), y = c(4,2)))
+
+  w1[1,1] <- 0
+  pMax <- withMax(world = w1, agents = patches(world = w1))
+  expect_equivalent(pMax, patch(w1, x = 1, y = 4))
+
+  #Turtles
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
+  maxXcor <- withMax(agents = t1, var = "xcor")
+  expect_equivalent(maxXcor, turtle(t1, who = 9))
+  maxHeading <- withMax(agents = t1, var = "heading")
+  expect_equivalent(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
+  expect_error(withMax(agents = t1, var = "prevX"))
+})
+
 test_that("withMin works with patches",{
   w1 <- createNLworld(0, 4, 0, 4)
   expect_error(withMin(agents = patches(world = w1), world = w1))
@@ -338,6 +370,38 @@ test_that("withMin works with patches",{
 
 test_that("withMin works with turtles",{
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 10:1, ycor = 10:1), heading = c(1,2,3,0,0,2,3,0,0,3))
+  maxXcor <- withMin(agents = t1, var = "xcor")
+  expect_equivalent(maxXcor, turtle(t1, who = 9))
+  maxHeading <- withMin(agents = t1, var = "heading")
+  expect_equivalent(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
+  expect_error(withMin(agents = t1, var = "prevX"))
+})
+
+test_that("withMin works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  expect_error(withMin(agents = patches(world = w1), world = w1))
+  w1[] <- 1
+  expect_equivalent(withMin(agents = patches(w1), world = w1), patches(w1))
+  w1[] <- runif(25)
+  w1[1,c(1,4)] <- c(-1,-1)
+  pMin <- withMin(world = w1, agents = patches(world = w1))
+  expect_equivalent(pMin, patch(w1, x = c(1,1), y = c(4,1)))
+
+  w2 <- w1
+  w2[] <- runif(25)
+  w2[2,c(2,4)] <- c(-1,-1)
+  ws <- NLworldArray(w1, w2)
+  pMinw1 <- withMin(world = ws, agents = patches(world = ws), var = "w1")
+  pMinw2 <- withMin(world = ws, agents = patches(world = ws), var = "w2")
+  expect_equivalent(pMinw1, patch(ws, x = c(1,1), y = c(4,1)))
+  expect_equivalent(pMinw2, patch(ws, x = c(2,2), y = c(4,2)))
+
+  w1[1,1] <- 0
+  pMin <- withMin(world = w1, agents = patches(world = w1))
+  expect_equivalent(pMin, patch(w1, x = 1, y = 4))
+
+  # Turtles
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 10:1, ycor = 10:1), heading = c(1,2,3,0,0,2,3,0,0,3))
   maxXcor <- withMin(agents = t1, var = "xcor")
   expect_equivalent(maxXcor, turtle(t1, who = 9))
   maxHeading <- withMin(agents = t1, var = "heading")
@@ -379,6 +443,38 @@ test_that("maxOneOf works with turtles",{
   expect_error(maxOneOf(agents = t1, var = "prevX"))
 })
 
+test_that("maxOneOf works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
+  allpMax <- withMax(world = w1, agents = patches(world = w1))
+  onepMax <- maxOneOf(world = w1, agents = patches(world = w1))
+  compare <- cbind(a = as.numeric(allpMax[,1])==as.numeric(onepMax[1]),b = as.numeric(allpMax[,2])==as.numeric(onepMax[2]))
+  rowTRUE <- compare[compare[,1] == TRUE & compare[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+
+  w2 <- w1
+  w2[] <- 1 / w1[]
+  ws <- NLworldArray(w1, w2)
+  onepMax1 <- maxOneOf(world = ws, agents = patches(world = w1), var = "w1")
+  onepMax2 <- maxOneOf(world = ws, agents = patches(world = w1), var = "w2")
+  compare1 <- cbind(a = as.numeric(allpMax[,1])==as.numeric(onepMax1[1]),b = as.numeric(allpMax[,2])==as.numeric(onepMax1[2]))
+  rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+  compare2 <- onepMax2 == onepMax1
+  expect_less_than(length(compare2[compare2 == TRUE]), 2)
+
+  # Turtles
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
+  maxXcor1 <- withMax(agents = t1, var = "xcor")
+  maxXcor2 <- maxOneOf(agents = t1, var = "xcor")
+  expect_equivalent(maxXcor1, maxXcor2)
+  maxHeading1 <- withMax(agents = t1, var = "heading")
+  maxHeading2 <- maxOneOf(agents = t1, var = "heading")
+  expect_equivalent(count(maxHeading2), 1)
+  maxH12 <- merge(maxHeading1@.Data, maxHeading2@.Data)
+  expect_equivalent(nrow(maxH12), 1)
+  expect_error(maxOneOf(agents = t1, var = "prevX"))
+})
+
 test_that("minOneOf works with patches",{
   w1 <- createNLworld(0, 4, 0, 4)
   w1[] <- sample(1:5, size = 25, replace = TRUE)
@@ -413,9 +509,67 @@ test_that("minOneOf works with turtles",{
   expect_error(minOneOf(agents = t1, var = "prevX"))
 })
 
+test_that("minOneOf works with NLworldMs and agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
+  allpMin <- withMin(world = w1, agents = patches(world = w1))
+  onepMin <- minOneOf(world = w1, agents = patches(world = w1))
+  compare <- cbind(a = as.numeric(allpMin[,1])==as.numeric(onepMin[1]),b = as.numeric(allpMin[,2])==as.numeric(onepMin[2]))
+  rowTRUE <- compare[compare[,1] == TRUE & compare[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+
+  w2 <- w1
+  w2[] <- 1 / w1[]
+  ws <- NLworldArray(w1, w2)
+  onepMin1 <- minOneOf(world = ws, agents = patches(world = w1), var = "w1")
+  onepMin2 <- minOneOf(world = ws, agents = patches(world = w1), var = "w2")
+  compare1 <- cbind(a = as.numeric(allpMin[,1])==as.numeric(onepMin1[1]),b = as.numeric(allpMin[,2])==as.numeric(onepMin1[2]))
+  rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
+  expect_equivalent(nrow(rowTRUE),1)
+  compare2 <- onepMin2 == onepMin1
+  expect_less_than(length(compare2[compare2 == TRUE]), 2)
+
+  # Turtles
+  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
+  minXcor1 <- withMin(agents = t1, var = "xcor")
+  minXcor2 <- minOneOf(agents = t1, var = "xcor")
+  expect_equivalent(minXcor1, minXcor2)
+  minHeading1 <- withMin(agents = t1, var = "heading")
+  minHeading2 <- minOneOf(agents = t1, var = "heading")
+  expect_equivalent(count(minHeading2), 1)
+  minH12 <- merge(minHeading1@.Data, minHeading2@.Data)
+  expect_equivalent(nrow(minH12), 1)
+  expect_error(minOneOf(agents = t1, var = "prevX"))
+})
+
 test_that("isNLclass works",{
   w1 <- createNLworld(0, 4, 0, 4)
   t1 <- createTurtles(n = 10, randomXYcor(w1, n = 10))
+  expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "patch"), TRUE)
+  expect_identical(isNLclass(agents = patches(w1), class = "patchset"), TRUE)
+  expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "turtle"), TRUE)
+  expect_identical(isNLclass(agents = t1, class = "turtleset"), TRUE)
+  expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "agent"), TRUE)
+  expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "agent"), TRUE)
+  expect_identical(isNLclass(agents = patches(w1), class = "agentset"), TRUE)
+  expect_identical(isNLclass(agents = t1, class = "agentset"), TRUE)
+
+  expect_identical(isNLclass(agents = patch(w1, x = c(0,2), y = c(1,0)), class = "patch"), FALSE)
+  expect_identical(isNLclass(agents = noPatches(), class = "patchset"), FALSE)
+  expect_identical(isNLclass(agents = turtle(t1, who = c(0,2)), class = "turtle"), FALSE)
+  expect_identical(isNLclass(agents = noTurtles(), class = "turtleset"), FALSE)
+  expect_identical(isNLclass(agents = cbind(xcor = 2, ycor = 3), class = "agent"), FALSE)
+  expect_identical(isNLclass(agents = patches(w1), class = "agent"), FALSE)
+  expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "agentset"), FALSE)
+  expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "agentset"), FALSE)
+
+  t2 <- turtlesOwn(turtles = t1, tVar = "age")
+  expect_identical(isNLclass(agents = t2, class = "agentset"), TRUE)
+  expect_identical(isNLclass(agents = t2, class = "turtleset"), TRUE)
+})
+
+test_that("isNLclass works with agentMatrix",{
+  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  t1 <- createTurtlesAM(n = 10, randomXYcor(w1, n = 10))
   expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "patch"), TRUE)
   expect_identical(isNLclass(agents = patches(w1), class = "patchset"), TRUE)
   expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "turtle"), TRUE)
