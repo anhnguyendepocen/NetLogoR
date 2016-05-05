@@ -2741,44 +2741,54 @@ setMethod(
 
     if(NROW(agents) != 0){
 
-      if(identical(agents, turtles)){
-        turtles@.Data[, var] <- val
+      if("xcor" %in% var | "ycor" %in% var){
 
-        # if(length(var) == 1){
-        #
-        #   if(var == "xcor"){
-        #     turtles@.Data[, 1] <- val
-        #   } else if(var == "ycor"){
-        #     turtles@.Data[, 2] <- val
-        #   } else {
-        #     turtles@.Data[, var] <- val
-        #   }
-        #
-        # } else {
-        #
-        #   if(any(var == "xcor" | var == "ycor")){
-        #
-        #     #turtlesData <- fastCbind(turtles@coords, turtles@data)
-        #     #turtlesData[, var] <- val
-        #     #turtles@coords <- turtlesData[,c(1,2)]
-        #     turtles@.Data[, var] <- val
-        #
-        #   } else {
-        #
-        #     turtles@.Data[, var] <- val
-        #
-        #   }
-        # }
+        posXcor <- match("xcor", var)
+        posYcor <- match("ycor", var)
+        posXYcor <- c(posXcor, posYcor)
+        posXYcor <- posXYcor[!is.na(posXYcor)]
+        if(length(var[!posXYcor]) != 0){
+          turtles <- set(turtles = turtles, agents = agents, var = var[!posXYcor], val = val[,!posXYcor])
+        }
+
+        if(length(var[posXYcor]) == 1){
+
+          if(identical(agents, turtles)){
+            turtles@.Data[, var] <- val
+
+          } else {
+
+            iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+            turtles@.Data[iAgents, var] <- val
+          }
+
+        } else {
+          if(identical(agents, turtles)){
+            turtles@.Data[, var[posXYcor]] <- val[,posXYcor]
+
+          } else {
+
+            iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+            turtles@.Data[iAgents, var[posXYcor]] <- val[,posXYcor]
+          }
+
+        }
+
+
 
       } else {
 
-        iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
-        if(length(var) == 1){
-          turtles@.Data[iAgents, var] <- val
+        if(identical(agents, turtles)){
+          turtles[, var] <- val
+
+        } else {
+
+          iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+          turtles[iAgents, var] <- val
+
         }
+
       }
-
-
 
       if(any(var == "who")){ # if the who numbers have been modified, check for duplicates
         if(anyDuplicated(turtles@.Data[,"who"]) != 0){
@@ -2801,22 +2811,27 @@ setMethod(
 
     if(NROW(agents) != 0){
 
+      if(length(val) == 1 & NROW(agents) != 1){
+        val <- rep(val, NROW(agents))
+      }
+
       if(identical(patches(world), agents)){
-        world[] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
+
+        world@.Data[] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
       } else {
         #cells <- agents-c(attr(world, "minPxcor"), attr(world, "minPycor"))+1
         #world[cells] <- val
-        matj <- agents[,1] - attr(world, "minPxcor") + 1
-        mati <- attr(world, "maxPycor") - agents[,2] + 1
+        # matj <- agents[,1] - world@minPxcor + 1
+        # mati <- world@maxPycor- agents[,2] + 1
 
-        if(length(val) == 1 & length(matj) != 1){
-          val <- rep(val, length(matj))
-        }
-        val <- val[!is.na(matj)]
-        matj <- matj[!is.na(matj)]
-        mati <- mati[!is.na(mati)]
+        agents[is.na(agents[,1]),2] <- NA
+        agents[is.na(agents[,2]),1] <- NA
 
-        world[cbind(mati, matj)] <- val
+        val <- val[!agents[,1]]
+        i <- agents[!agents[,1], 1]
+        j <- agents[!agents[,1], 2]
+
+        world[i, j] <- val
       }
     }
     return(world)
@@ -2842,27 +2857,44 @@ setMethod(
 
     if(NROW(agents) != 0){
 
-      if(length(var) == 1){
-        if(identical(patches(world), agents)){
-          world[,,var] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
-        } else {
-          matj <- agents[,1] - attr(world, "minPxcor") + 1
-          mati <- attr(world, "maxPycor") - agents[,2] + 1
 
-          if(length(val) == 1 & length(matj) != 1){
-            val <- rep(val, length(matj))
-          }
-          noNA <- !is.na(matj)
-          val <- val[noNA]
-          colNum <- match(var, dimnames(world)[[3]])
-          len <- length(mati)
-          ind <- c(mati, matj, rep_len(colNum, length.out = len))
-          dim(ind) <- c(len, 3)
-          ind <- ind[!is.na(noNA),,drop=FALSE]
+
+      if(length(var) == 1){
+
+        if(length(val) == 1 & NROW(agents) != 1){
+          val <- rep(val, NROW(agents))
+        }
+
+
+        if(identical(patches(world), agents)){
+          world@.Data[,,var] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
+        } else {
+          # matj <- agents[,1] - world@minPxcor + 1
+          # mati <- world@maxPycor - agents[,2] + 1
+
+          # noNA <- !is.na(matj)
+          # val <- val[noNA]
+          # colNum <- match(var, dimnames(world)[[3]])
+          # len <- length(mati)
+          # ind <- c(mati, matj, rep_len(colNum, length.out = len))
+          # dim(ind) <- c(len, 3)
+          # ind <- ind[!is.na(noNA),,drop=FALSE]
+
           # matj <- matj[!is.na(matj)]
           # mati <- mati[!is.na(mati)]
 
-          world[ind] <- val
+          agents[is.na(agents[,1]),2] <- NA
+          agents[is.na(agents[,2]),1] <- NA
+
+          val <- val[!agents[,1]]
+          pxcor <- agents[!agents[,1], 1]
+          pycor <- agents[!agents[,1], 2]
+
+          matj <- pxcor - world@minPxcor + 1
+          mati <- world@maxPycor - pycor + 1
+
+          var_k <- match(var, dimnames(world@.Data)[[3]])
+          world@.Data[cbind(mati, matj,var_k)] <- val
 
         }
 
@@ -2870,12 +2902,21 @@ setMethod(
 
         if(identical(patches(world), agents)){
           for(i in 1:length(var)){
-            world[,,var[i]] <- matrix(val[,var[i]], ncol = dim(world)[2], byrow = TRUE)
+
+            val_i <- val[,var[i]]
+
+            if(length(val_i) == 1){
+              val_i <- rep(val_i, NROW(agents))
+            }
+            world@.Data[,,var[i]] <- matrix(val_i, ncol = dim(world)[2], byrow = TRUE)
           }
 
         } else {
-          matj <- agents[,1] - attr(world, "minPxcor") + 1
-          mati <- attr(world, "maxPycor") - agents[,2] + 1
+          matj <- agents[,1] - world@minPxcor + 1
+          mati <- world@maxPycor - agents[,2] + 1
+
+          mati[is.na(matj)] <- NA
+          matj[is.na(mati)] <- NA
 
           if(nrow(val) == 1 & length(matj) != 1){
             val <- val[rep(1, length(matj)),]
@@ -2889,9 +2930,11 @@ setMethod(
           mati <- mati[!is.na(mati)]
 
           for(i in 1:length(var)){
-            ind <- c(mati, matj)
-            dim(ind) <- c(length(mati), 2L)
-            world@.Data[,,var[i]][ind] <- val[,var[i]]
+            #ind <- c(mati, matj)
+            #dim(ind) <- c(length(mati), 2L)
+            #world@.Data[,,var[i]][ind] <- val[,var[i]]
+            var_k <- match(var[i], dimnames(world@.Data)[[3]])
+            world@.Data[cbind(mati, matj, var_k)] <- val[,var[i]]
           }
         }
       }

@@ -1253,9 +1253,9 @@ test_that("set works with NLworldMs",{
   w2 <- createNLworldMatrix(data = 25:1, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w3 <- NLworldArray(w1, w2)
   w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 0)
-  expect_equivalent(as.numeric(t(w3[,,"w1"])), rep(0, length(w1)))
+  expect_equivalent(as.numeric(t(w3@.Data[,,"w1"])), rep(0, length(w1)))
   w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 1:25)
-  expect_equivalent(as.numeric(t(w3[,,"w1"])), 1:25)
+  expect_equivalent(as.numeric(t(w3@.Data[,,"w1"])), 1:25)
   w3 <- set(world = w3, agents = patch(w3, 0, 0), var = "w1", val = 100)
   expect_equivalent(of(world = w3, var = "w1", agents = patch(w3, 0, 0)), 100)
 
@@ -1298,7 +1298,7 @@ test_that("set works with agentMatrix",{
   # With multiple values
   t5 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("xcor", "heading"), val = cbind(xcor = c(100,100), heading = c(33, 66)))
   expect_equivalent(t5@.Data[,"xcor"], c(100,100,2,3,4))
-  expect_equivalent(t5@data$heading, c(33,66,180,270,0))
+  expect_equivalent(t5@.Data[,"heading"], c(33,66,180,270,0))
   t6 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
   expect_identical(t5, t6)
 
@@ -1307,4 +1307,13 @@ test_that("set works with agentMatrix",{
   expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 0, heading = 0)))
   t7 <- set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 100) # no warning because no duplicates who numbers
   t8 <- set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 100, heading = 0))
+
+  # Non numeric value
+  t9 <- set(turtles = t1, agents = turtle(t1, 0), var = "breed", val = "dog")
+  expect_equivalent(of(agents = t9, var = "breed"), c("dog", rep("turtle", 4)))
+  t10 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = "breed", val = c("dog", "cat"))
+  expect_equivalent(of(agents = t10, var = "breed"), c("dog", "cat", rep("turtle", 3)))
+  t11 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = c("breed", "xcor"),
+             val = cbind(breed = c("fish", "fish"), xcor = c(1,1)))
+  expect_equivalent(of(agents = t11, var = c("breed", "xcor")), cbind(breed = c("fish", "fish", rep("turtle", 3)), xcor = c(1,1,2,3,4)))
 })
