@@ -4,11 +4,14 @@
 \name{left}
 \alias{left}
 \alias{left,SpatialPointsDataFrame,numeric-method}
+\alias{left,agentMatrix,numeric-method}
 \title{Rotate to the left}
 \usage{
 left(turtles, angle)
 
 \S4method{left}{SpatialPointsDataFrame,numeric}(turtles, angle)
+
+\S4method{left}{agentMatrix,numeric}(turtles, angle)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

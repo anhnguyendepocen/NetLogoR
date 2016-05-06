@@ -7,13 +7,20 @@
 \description{
 The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
 classes. Mostly used for building function purposes.
+
+The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
+classes. Mostly used for building function purposes.
 }
 \section{Slots}{
 
 \describe{
 \item{\code{members}}{NLworld, NLworldStack}
+
+\item{\code{members}}{NLworld, NLworldStack}
 }}
 \author{
+Sarah Bauduin
+
 Sarah Bauduin
 }
 

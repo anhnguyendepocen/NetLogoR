@@ -24,6 +24,9 @@ nOf(agents, n)
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents, or
 
+              AgentMatrix created by \code{createTurtlesAM()} or
+              by \code{createOTurtlesAM()} representing the moving agents, or
+
               Matrix (ncol = 2) with the first column "whoTurtles" and the
               second column "id".}
 }
@@ -37,6 +40,9 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
         selected patches from \code{agents}, \code{n} per individual "id", or
 
         SpatialPointsDataFrame of length \code{n} representing the turtles
+        selected from \code{agents},
+
+        AgentMatrix (nrow = \code{n}) representing the turtles
         selected from \code{agents},
 
         Integer. Vector of "who" numbers for the selected turtles from

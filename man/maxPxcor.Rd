@@ -4,6 +4,7 @@
 \name{maxPxcor}
 \alias{maxPxcor}
 \alias{maxPxcor,NLworld-method}
+\alias{maxPxcor,NLworldMs-method}
 \alias{maxPxcor,NLworldStack-method}
 \title{Maximum pxcor}
 \usage{
@@ -12,9 +13,11 @@ maxPxcor(world)
 \S4method{maxPxcor}{NLworld}(world)
 
 \S4method{maxPxcor}{NLworldStack}(world)
+
+\S4method{maxPxcor}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 }
 \value{
 Integer.

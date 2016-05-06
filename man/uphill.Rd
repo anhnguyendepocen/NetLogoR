@@ -4,6 +4,8 @@
 \name{uphill}
 \alias{uphill}
 \alias{uphill,NLworld,missing,SpatialPointsDataFrame,numeric-method}
+\alias{uphill,NLworldArray,character,agentMatrix,numeric-method}
+\alias{uphill,NLworldMatrix,missing,agentMatrix,numeric-method}
 \alias{uphill,NLworldStack,character,SpatialPointsDataFrame,numeric-method}
 \title{Move uphill}
 \usage{
@@ -14,6 +16,12 @@ uphill(world, pVar, turtles, nNeighbors, torus = FALSE)
 
 \S4method{uphill}{NLworldStack,character,SpatialPointsDataFrame,numeric}(world,
   pVar, turtles, nNeighbors, torus = FALSE)
+
+\S4method{uphill}{NLworldMatrix,missing,agentMatrix,numeric}(world, turtles,
+  nNeighbors, torus)
+
+\S4method{uphill}{NLworldArray,character,agentMatrix,numeric}(world, pVar,
+  turtles, nNeighbors, torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}

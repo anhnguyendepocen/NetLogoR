@@ -3,6 +3,8 @@
 \docType{methods}
 \name{turtlesAt}
 \alias{turtlesAt}
+\alias{turtlesAt,NLworldMs,agentMatrix,matrix,numeric,numeric,character-method}
+\alias{turtlesAt,NLworldMs,agentMatrix,matrix,numeric,numeric,missing-method}
 \alias{turtlesAt,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,numeric,numeric,character-method}
 \alias{turtlesAt,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,numeric,numeric,missing-method}
 \alias{turtlesAt,NLworlds,SpatialPointsDataFrame,matrix,numeric,numeric,character-method}
@@ -25,6 +27,14 @@ turtlesAt(world, turtles, agents, dx, dy, breed, torus = FALSE)
 
 
   \S4method{turtlesAt}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,numeric,numeric,character}(world,
+  turtles, agents, dx, dy, breed, torus = FALSE)
+
+
+  \S4method{turtlesAt}{NLworldMs,agentMatrix,matrix,numeric,numeric,missing}(world,
+  turtles, agents, dx, dy, torus)
+
+
+  \S4method{turtlesAt}{NLworldMs,agentMatrix,matrix,numeric,numeric,character}(world,
   turtles, agents, dx, dy, breed, torus = FALSE)
 }
 \arguments{

@@ -3,12 +3,18 @@
 \docType{methods}
 \name{patchHere}
 \alias{patchHere}
+\alias{patchHere,NLworldMs,SpatialPointsDataFrame-method}
+\alias{patchHere,NLworldMs,agentMatrix-method}
 \alias{patchHere,NLworlds,SpatialPointsDataFrame-method}
 \title{Patches here}
 \usage{
 patchHere(world, turtles)
 
 \S4method{patchHere}{NLworlds,SpatialPointsDataFrame}(world, turtles)
+
+\S4method{patchHere}{NLworldMs,SpatialPointsDataFrame}(world, turtles)
+
+\S4method{patchHere}{NLworldMs,agentMatrix}(world, turtles)
 }
 \arguments{
 \item{world}{NLworlds object.}

@@ -4,12 +4,16 @@
 \name{layoutCircle}
 \alias{layoutCircle}
 \alias{layoutCircle,NLworld,SpatialPointsDataFrame,numeric-method}
+\alias{layoutCircle,NLworldMs,agentMatrix,numeric-method}
 \title{Layout turtles on a circle}
 \usage{
 layoutCircle(world, turtles, radius, torus = FALSE)
 
 \S4method{layoutCircle}{NLworld,SpatialPointsDataFrame,numeric}(world, turtles,
   radius, torus = FALSE)
+
+\S4method{layoutCircle}{NLworldMs,agentMatrix,numeric}(world, turtles, radius,
+  torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}

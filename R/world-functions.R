@@ -169,6 +169,7 @@ setMethod(
 #'
 #' Report the patches maximum pxcor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -217,12 +218,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname maxPxcor
+setMethod(
+  "maxPxcor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(world@maxPxcor)
+  }
+)
+
 
 ################################################################################
 #' Maximum pycor
 #'
 #' Report the patches maximum pycor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -271,12 +283,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname maxPycor
+setMethod(
+  "maxPycor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(world@maxPycor)
+  }
+)
+
 
 ################################################################################
 #' Minimum pxcor
 #'
 #' Report the patches minimum pxcor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -325,12 +348,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname minPxcor
+setMethod(
+  "minPxcor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(world@minPxcor)
+  }
+)
+
 
 ################################################################################
 #' Minimum pycor
 #'
 #' Report the patches minimum pycor in the \code{world}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -379,12 +413,23 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname minPycor
+setMethod(
+  "minPycor",
+  signature = "NLworldMs",
+  definition = function(world) {
+    return(world@minPycor)
+  }
+)
+
 
 ################################################################################
 #' World width
 #'
 #' Report the width of the \code{world} in patch number.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -423,12 +468,24 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname worldWidth
+setMethod(
+  "worldWidth",
+  signature = "NLworldMs",
+  definition = function(world) {
+    w_width <- maxPxcor(world) - minPxcor(world) + 1
+    return(w_width)
+  }
+)
+
 
 ################################################################################
 #' World height
 #'
 #' Report the height of the \code{world} in patch number.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Integer.
@@ -467,17 +524,29 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname worldHeight
+setMethod(
+  "worldHeight",
+  signature = "NLworldMs",
+  definition = function(world) {
+    w_height <- maxPycor(world) - minPycor(world) + 1
+    return(w_height)
+  }
+)
+
 
 ################################################################################
 #' Clear world's patches
 #'
 #' Reset all patches values to \code{NA}.
 #'
+#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
-#' @return NLworld object with \code{NA} values for all patches.
+#' @return NLworld or NLworldMatrix object with \code{NA} values for all patches.
 #'
-#' @details The name of the layer is set to \code{""}.
+#' @details The name of the layer for the NLWorld is set to \code{""}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-patches}
 #'
@@ -532,3 +601,296 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname clearPatches
+setMethod(
+  "clearPatches",
+  signature = c("NLworldMatrix"),
+  definition = function(world) {
+    world@.Data[] <- NA
+    return(world)
+  }
+)
+
+#' @export
+#' @rdname clearPatches
+setMethod(
+  "clearPatches",
+  signature = c("NLworldArray"),
+  definition = function(world) {
+    worldNA <- createNLworldMatrix(minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+                                   minPycor = minPycor(world), maxPycor = maxPycor(world))
+    return(worldNA)
+  }
+)
+
+
+################################################################################
+#' Convert a Raster* object into a NLworldMs object
+#'
+#' Convert a RasterLayer object into a NLworldMatrix object or a RasterStack object
+#' into a NLworldArray object.
+#'
+#' @param raster RasterLayer or RasterStack object.
+#'
+#' @param method "ngb" or "bilinear" for the resample method
+#'
+#' @return NLworldMatrix or NLworldArray object depending on the input.
+#'         Patches value are retained from the Raster* object.
+#'
+#' @details See \code{help("NLworldMs-class")} for more details on the NLworlds
+#'          classes.
+#'
+#'          The \code{raster} is resampled to match the coordinates system and
+#'          resolution of a NLworldMs using the nearest neighbor method. The
+#'          extent will be bigger by 1 on the width and on the height.
+#'
+#'
+#' @export
+#' @importFrom abind abind
+#' @docType methods
+#' @rdname raster2world
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "raster2world",
+  function(raster, method) {
+    standardGeneric("raster2world")
+  })
+
+
+#' @export
+#' @rdname raster2world
+setMethod(
+  "raster2world",
+  signature = c("RasterLayer", "character"),
+  definition = function(raster, method) {
+
+    minPxcor <- round(raster@extent@xmin)
+    maxPxcor <- round(raster@extent@xmax)
+    minPycor <- round(raster@extent@ymin)
+    maxPycor <- round(raster@extent@ymax)
+    world <- createNLworldMatrix(minPxcor = minPxcor, maxPxcor = maxPxcor, minPycor = minPycor, maxPycor = maxPycor)
+    worldRaster <- raster(world@extent)
+    res(worldRaster) <- c(1, 1)
+
+    worldR <- resample(raster, worldRaster, method = method)
+
+    world[] <- values(worldR)
+
+    return(world)
+  })
+
+
+#' @export
+#' @rdname raster2world
+setMethod(
+  "raster2world",
+  signature = c("RasterStack", "character"),
+  definition = function(raster, method) {
+
+    minPxcor <- round(raster@extent@xmin)
+    maxPxcor <- round(raster@extent@xmax)
+    minPycor <- round(raster@extent@ymin)
+    maxPycor <- round(raster@extent@ymax)
+    world <- createNLworldMatrix(minPxcor = minPxcor, maxPxcor = maxPxcor, minPycor = minPycor, maxPycor = maxPycor)
+    worldRaster <- raster(world@extent)
+    res(worldRaster) <- c(1, 1)
+
+    worldR <- lapply(1:nlayers(raster), function(x) {
+      layer <- resample(raster[[x]], worldRaster, method = method)
+      matrix(values(layer), ncol = dim(world)[2], byrow = TRUE)
+    })
+
+    out <- abind::abind(worldR, along = 3)
+    dimnames(out) <- list(NULL, NULL, names(raster))
+
+    worldArray <- new("NLworldArray",
+                      .Data = out,
+                      minPxcor = minPxcor, maxPxcor = maxPxcor,
+                      minPycor = minPycor, maxPycor = maxPycor,
+                      extent = world@extent,
+                      res = c(1, 1),
+                      pCoords = world@pCoords
+    )
+
+    return(worldArray)
+  })
+
+################################################################################
+#' Convert a NLworldMs object into a Raster* object
+#'
+#' Convert a NLworldMatrix object into a RasterLayer object or a
+#' NLworldArray object into a RasterStack object
+#'
+#' @param world NLworldMatrix or NLworldArray object
+#'
+#' @return RasterLayer or RasterStack object depending on the input.
+#'         Patches value are retained from the NLworldMs object.
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname world2raster
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "world2raster",
+  function(world) {
+    standardGeneric("world2raster")
+  })
+
+
+#' @export
+#' @rdname world2raster
+setMethod(
+  "world2raster",
+  signature = c("NLworldMatrix"),
+  definition = function(world) {
+
+    raster <- raster(world@.Data, xmn = world@extent@xmin, xmx = world@extent@xmax,
+                     ymn = world@extent@ymin, ymx = world@extent@ymax)
+
+    return(raster)
+  })
+
+
+#' @export
+#' @rdname world2raster
+setMethod(
+  "world2raster",
+  signature = c("NLworldArray"),
+  definition = function(world) {
+
+    listRaster <- lapply(1:dim(world)[3],function(x){
+      raster(world@.Data[,,x], xmn = world@extent@xmin, xmx = world@extent@xmax,
+             ymn = world@extent@ymin, ymx = world@extent@ymax)
+    })
+    rasterStack <- stack(listRaster)
+    return(rasterStack)
+})
+
+
+################################################################################
+#' Convert a SPDF object into a agentMatrix object
+#'
+#'
+#' @param spdf
+#'
+#' @return agentMatrix
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname spdf2turtles
+#'
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "spdf2turtles",
+  function(spdf) {
+    standardGeneric("spdf2turtles")
+  })
+
+
+#' @export
+#' @rdname spdf2turtles
+setMethod(
+  "spdf2turtles",
+  signature = c("SpatialPointsDataFrame"),
+  definition = function(spdf) {
+
+    spdfData <- spdf@data
+    n <- length(spdf)
+
+    if(!is.na(match("who", names(spdfData)))){
+      who <- spdfData$who
+    } else {
+      who <- seq(from = 0, to = n - 1, by = 1)
+    }
+
+    if(!is.na(match("heading", names(spdfData)))){
+      heading <- spdfData$heading
+    } else {
+      heading <- runif(n = n, min = 0, max = 360)
+    }
+
+    if(!is.na(match("prevX", names(spdfData)))){
+      prevX <- spdfData$prevX
+    } else {
+      prevX <- rep(NA, n)
+    }
+
+    if(!is.na(match("prevY", names(spdfData)))){
+      prevY <- spdfData$prevY
+    } else {
+      prevY <- rep(NA, n)
+    }
+
+    if(!is.na(match("breed", names(spdfData)))){
+      breed <- spdfData$breed
+    } else {
+      breed <- rep("turtle", n)
+    }
+
+    if(!is.na(match("color", names(spdfData)))){
+      color <- spdfData$color
+    } else {
+      color <- rainbow(n)
+    }
+
+    turtles <- new("agentMatrix",
+                 coords = cbind(xcor = spdf@coords[,1], ycor = spdf@coords[,2]),
+                 who = who,
+                 heading = heading,
+                 prevX = prevX,
+                 prevY = prevY,
+                 breed = breed,
+                 color = color)
+
+    for(i in which(!names(spdfData) %in% c("who", "heading", "prevX", "prevY", "breed", "color", "stringsAsFactors"))){
+      turtles <- turtlesOwn(turtles = turtles, tVar = names(spdfData)[i], tVal = spdfData[,i])
+    }
+
+    return(turtles)
+})
+
+
+################################################################################
+#' Convert an agentMatrix object into a SPDF
+#'
+#'
+#' @param turtles
+#'
+#' @return SpatialPointsDataFrame
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname turtles2spdf
+#'
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "turtles2spdf",
+  function(turtles) {
+    standardGeneric("turtles2spdf")
+  })
+
+
+#' @export
+#' @rdname turtles2spdf
+setMethod(
+  "turtles2spdf",
+  signature = c("agentMatrix"),
+  definition = function(turtles) {
+
+    spdf <- SpatialPointsDataFrame(coords = turtles@.Data[,c("xcor", "ycor"), drop = FALSE],
+                                   data = inspect(turtles, who = turtles@.Data[,"who"])[3:ncol(turtles@.Data)])
+    return(spdf)
+
+  })

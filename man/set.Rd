@@ -4,8 +4,11 @@
 \name{set}
 \alias{set}
 \alias{set,NLworld,missing,matrix,missing-method}
+\alias{set,NLworldArray,missing,matrix,character-method}
+\alias{set,NLworldMatrix,missing,matrix,missing-method}
 \alias{set,NLworldStack,missing,matrix,character-method}
 \alias{set,missing,SpatialPointsDataFrame,SpatialPointsDataFrame,character-method}
+\alias{set,missing,agentMatrix,agentMatrix,character-method}
 \title{Set an agents variable}
 \usage{
 set(world, turtles, agents, var, val)
@@ -17,9 +20,16 @@ set(world, turtles, agents, var, val)
 
   \S4method{set}{missing,SpatialPointsDataFrame,SpatialPointsDataFrame,character}(turtles,
   agents, var, val)
+
+\S4method{set}{missing,agentMatrix,agentMatrix,character}(turtles, agents, var,
+  val)
+
+\S4method{set}{NLworldMatrix,missing,matrix,missing}(world, agents, val)
+
+\S4method{set}{NLworldArray,missing,matrix,character}(world, agents, var, val)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
 by \code{createOTurtles()} representing the moving agents.}
@@ -32,9 +42,9 @@ by \code{createOTurtles()} representing the moving agents.}
 
 \item{var}{Character. Vector of the name of the selected \code{agents} variables.
 If \code{agents} are patches and the \code{world} is a
-\code{NLworld} object, \code{var} must not be provided. If
+\code{NLworld} or \code{NLworldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-object, \code{var} is the name of the layers to use to define the patches
+or \code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
 the turtles' variable and can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,

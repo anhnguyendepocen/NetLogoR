@@ -3,6 +3,7 @@
 \docType{methods}
 \name{patch}
 \alias{patch}
+\alias{patch,NLworldMs,numeric,numeric-method}
 \alias{patch,NLworlds,numeric,numeric-method}
 \title{Patches coordinates}
 \usage{
@@ -10,9 +11,12 @@ patch(world, x, y, duplicate = FALSE, torus = FALSE, out = FALSE)
 
 \S4method{patch}{NLworlds,numeric,numeric}(world, x, y, duplicate = FALSE,
   torus = FALSE, out = FALSE)
+
+\S4method{patch}{NLworldMs,numeric,numeric}(world, x, y, duplicate = FALSE,
+  torus = FALSE, out = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 
 \item{x}{Numeric. Vector of x coordinates. Must be of same
 length as \code{y}.}

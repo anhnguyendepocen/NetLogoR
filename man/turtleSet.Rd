@@ -4,11 +4,14 @@
 \name{turtleSet}
 \alias{turtleSet}
 \alias{turtleSet,SpatialPointsDataFrame-method}
+\alias{turtleSet,agentMatrix-method}
 \title{Create a turtle agenset}
 \usage{
 turtleSet(...)
 
 \S4method{turtleSet}{SpatialPointsDataFrame}(...)
+
+\S4method{turtleSet}{agentMatrix}(...)
 }
 \arguments{
 \item{...}{SpatialPointsDataFrame objects created by \code{createTurtles()} or

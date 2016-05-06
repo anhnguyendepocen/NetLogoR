@@ -1,6 +1,6 @@
 Package: NetLogoR
 Title: A port of NetLogo functions and language to R
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: c(
     person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr",
     role = c("aut")),
@@ -28,3 +28,13 @@ VignetteBuilder: knitr
 ByteCompile: yes
 LazyData: true
 RoxygenNote: 5.0.1
+Collate:
+    'NLworlds-class.R'
+    'Classes.R'
+    'ClassesUnused.R'
+    'NetLogoR-package.R'
+    'agentset-functions.R'
+    'function-arguments.R'
+    'patch-functions.R'
+    'turtle-functions.R'
+    'world-functions.R'

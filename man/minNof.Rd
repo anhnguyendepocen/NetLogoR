@@ -4,7 +4,10 @@
 \name{minNof}
 \alias{minNof}
 \alias{minNof,SpatialPointsDataFrame,numeric,missing,character-method}
+\alias{minNof,agentMatrix,numeric,missing,character-method}
 \alias{minNof,matrix,numeric,NLworld,missing-method}
+\alias{minNof,matrix,numeric,NLworldArray,character-method}
+\alias{minNof,matrix,numeric,NLworldMatrix,missing-method}
 \alias{minNof,matrix,numeric,NLworldStack,character-method}
 \title{N agents with minimum}
 \usage{
@@ -16,6 +19,12 @@ minNof(agents, n, world, var)
 
 \S4method{minNof}{SpatialPointsDataFrame,numeric,missing,character}(agents, n,
   var)
+
+\S4method{minNof}{matrix,numeric,NLworldMatrix,missing}(agents, n, world)
+
+\S4method{minNof}{matrix,numeric,NLworldArray,character}(agents, n, world, var)
+
+\S4method{minNof}{agentMatrix,numeric,missing,character}(agents, n, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

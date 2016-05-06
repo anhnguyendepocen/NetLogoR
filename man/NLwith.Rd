@@ -4,7 +4,10 @@
 \name{NLwith}
 \alias{NLwith}
 \alias{NLwith,SpatialPointsDataFrame,missing,character-method}
+\alias{NLwith,agentMatrix,missing,character-method}
 \alias{NLwith,matrix,NLworld,missing-method}
+\alias{NLwith,matrix,NLworldArray,character-method}
+\alias{NLwith,matrix,NLworldMatrix,missing-method}
 \alias{NLwith,matrix,NLworldStack,character-method}
 \title{Agents with}
 \usage{
@@ -14,7 +17,13 @@ NLwith(agents, world, var, val)
 
 \S4method{NLwith}{matrix,NLworldStack,character}(agents, world, var, val)
 
+\S4method{NLwith}{matrix,NLworldMatrix,missing}(agents, world, val)
+
+\S4method{NLwith}{matrix,NLworldArray,character}(agents, world, var, val)
+
 \S4method{NLwith}{SpatialPointsDataFrame,missing,character}(agents, var, val)
+
+\S4method{NLwith}{agentMatrix,missing,character}(agents, var, val)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
@@ -23,7 +32,7 @@ NLwith(agents, world, var, val)
               SpatialPointsDataFrame created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworlds or NLworldMs object.}
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a

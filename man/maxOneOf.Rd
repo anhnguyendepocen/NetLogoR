@@ -4,7 +4,10 @@
 \name{maxOneOf}
 \alias{maxOneOf}
 \alias{maxOneOf,SpatialPointsDataFrame,missing,character-method}
+\alias{maxOneOf,agentMatrix,missing,character-method}
 \alias{maxOneOf,matrix,NLworld,missing-method}
+\alias{maxOneOf,matrix,NLworldArray,character-method}
+\alias{maxOneOf,matrix,NLworldMatrix,missing-method}
 \alias{maxOneOf,matrix,NLworldStack,character-method}
 \title{One agent with maximum}
 \usage{
@@ -15,6 +18,12 @@ maxOneOf(agents, world, var)
 \S4method{maxOneOf}{matrix,NLworldStack,character}(agents, world, var)
 
 \S4method{maxOneOf}{SpatialPointsDataFrame,missing,character}(agents, var)
+
+\S4method{maxOneOf}{matrix,NLworldMatrix,missing}(agents, world)
+
+\S4method{maxOneOf}{matrix,NLworldArray,character}(agents, world, var)
+
+\S4method{maxOneOf}{agentMatrix,missing,character}(agents, var)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

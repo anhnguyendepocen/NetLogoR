@@ -42,13 +42,15 @@ setGeneric(
 
 #' @export
 #' @rdname clearTurtles
+#' @include NLworlds-class.R
 setMethod(
   "clearTurtles",
-  signature = c("SpatialPointsDataFrame"),
+  signature = c("agentClasses"),
   definition = function(turtles, envir) {
     rm(list = deparse(substitute(turtles)), envir = envir)
   }
 )
+
 
 
 ## Test

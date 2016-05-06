@@ -4,7 +4,10 @@
 \name{NLall}
 \alias{NLall}
 \alias{NLall,SpatialPointsDataFrame,missing,character-method}
+\alias{NLall,agentMatrix,missing,character-method}
 \alias{NLall,matrix,NLworld,missing-method}
+\alias{NLall,matrix,NLworldArray,character-method}
+\alias{NLall,matrix,NLworldMatrix,missing-method}
 \alias{NLall,matrix,NLworldStack,character-method}
 \title{All agents?}
 \usage{
@@ -15,6 +18,12 @@ NLall(agents, world, var, val)
 \S4method{NLall}{matrix,NLworldStack,character}(agents, world, var, val)
 
 \S4method{NLall}{SpatialPointsDataFrame,missing,character}(agents, var, val)
+
+\S4method{NLall}{matrix,NLworldMatrix,missing}(agents, world, val)
+
+\S4method{NLall}{matrix,NLworldArray,character}(agents, world, var, val)
+
+\S4method{NLall}{agentMatrix,missing,character}(agents, var, val)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

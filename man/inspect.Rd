@@ -4,11 +4,14 @@
 \name{inspect}
 \alias{inspect}
 \alias{inspect,SpatialPointsDataFrame,numeric-method}
+\alias{inspect,agentMatrix,numeric-method}
 \title{Inspect turtles}
 \usage{
 inspect(turtles, who)
 
 \S4method{inspect}{SpatialPointsDataFrame,numeric}(turtles, who)
+
+\S4method{inspect}{agentMatrix,numeric}(turtles, who)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

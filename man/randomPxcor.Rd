@@ -3,12 +3,15 @@
 \docType{methods}
 \name{randomPxcor}
 \alias{randomPxcor}
+\alias{randomPxcor,NLworldMs,numeric-method}
 \alias{randomPxcor,NLworlds,numeric-method}
 \title{Random pxcor}
 \usage{
 randomPxcor(world, n)
 
 \S4method{randomPxcor}{NLworlds,numeric}(world, n)
+
+\S4method{randomPxcor}{NLworldMs,numeric}(world, n)
 }
 \arguments{
 \item{world}{NLworlds object.}

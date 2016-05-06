@@ -4,11 +4,14 @@
 \name{die}
 \alias{die}
 \alias{die,SpatialPointsDataFrame,numeric-method}
+\alias{die,agentMatrix,numeric-method}
 \title{Kill turtles}
 \usage{
 die(turtles, who)
 
 \S4method{die}{SpatialPointsDataFrame,numeric}(turtles, who)
+
+\S4method{die}{agentMatrix,numeric}(turtles, who)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

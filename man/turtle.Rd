@@ -5,6 +5,8 @@
 \alias{turtle}
 \alias{turtle,SpatialPointsDataFrame,numeric,character-method}
 \alias{turtle,SpatialPointsDataFrame,numeric,missing-method}
+\alias{turtle,agentMatrix,numeric,character-method}
+\alias{turtle,agentMatrix,numeric,missing-method}
 \title{Select turtles}
 \usage{
 turtle(turtles, who, breed)
@@ -12,6 +14,10 @@ turtle(turtles, who, breed)
 \S4method{turtle}{SpatialPointsDataFrame,numeric,missing}(turtles, who)
 
 \S4method{turtle}{SpatialPointsDataFrame,numeric,character}(turtles, who, breed)
+
+\S4method{turtle}{agentMatrix,numeric,missing}(turtles, who)
+
+\S4method{turtle}{agentMatrix,numeric,character}(turtles, who, breed)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or

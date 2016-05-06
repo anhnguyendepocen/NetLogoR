@@ -3,6 +3,7 @@
 \docType{methods}
 \name{patchLeft}
 \alias{patchLeft}
+\alias{patchLeft,NLworldMs,agentMatrix,numeric,numeric-method}
 \alias{patchLeft,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
 \title{Patches on the left}
 \usage{
@@ -10,6 +11,9 @@ patchLeft(world, turtles, dist, angle, torus = FALSE)
 
 \S4method{patchLeft}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
   turtles, dist, angle, torus = FALSE)
+
+\S4method{patchLeft}{NLworldMs,agentMatrix,numeric,numeric}(world, turtles,
+  dist, angle, torus = FALSE)
 }
 \arguments{
 \item{world}{NLworlds object.}

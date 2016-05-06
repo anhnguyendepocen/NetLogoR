@@ -5,6 +5,8 @@
 \alias{tExist}
 \alias{tExist,SpatialPointsDataFrame,numeric,character-method}
 \alias{tExist,SpatialPointsDataFrame,numeric,missing-method}
+\alias{tExist,agentMatrix,numeric,character-method}
+\alias{tExist,agentMatrix,numeric,missing-method}
 \title{Do the turtles exist?}
 \usage{
 tExist(turtles, who, breed)
@@ -12,6 +14,10 @@ tExist(turtles, who, breed)
 \S4method{tExist}{SpatialPointsDataFrame,numeric,missing}(turtles, who)
 
 \S4method{tExist}{SpatialPointsDataFrame,numeric,character}(turtles, who, breed)
+
+\S4method{tExist}{agentMatrix,numeric,missing}(turtles, who)
+
+\S4method{tExist}{agentMatrix,numeric,character}(turtles, who, breed)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
