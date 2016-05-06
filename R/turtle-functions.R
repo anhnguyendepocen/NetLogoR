@@ -4041,12 +4041,21 @@ setMethod(
   definition = function(agents, except) {
 
     if(class(agents) == "agentMatrix" & class(except) == "agentMatrix"){
-      turtles <- agents[which(!duplicated(rbind(except@.Data, agents@.Data))[-(1:nrow(except@.Data))]),]
-      return(turtles)
+      # turtles <- agents[which(!duplicated(rbind(except@.Data, agents@.Data))[-(1:nrow(except@.Data))]),]
+      matchWho <- match(except@.Data[,"who"], agents@.Data[,"who"])
+      matchWho <- matchWho[!is.na(matchWho)]
+      matchBreed <- which(agents@.Data[matchWho, "breed"] == except@.Data[except@.Data[,"who"] == agents@.Data[matchWho, "who"], "breed"])
+      if(length(matchBreed) != 0){
+        agents <- agents[-matchWho[matchBreed],]
+      }
+      return(agents)
+
+    } else {
+      pCoords <- agents[!duplicated(rbind(except, agents))[-(1:nrow(except))],]
+      return(pCoords)
+
     }
 
-    pCoords <- agents[!duplicated(rbind(except, agents))[-(1:nrow(except))],]
-    return(pCoords)
   }
 )
 

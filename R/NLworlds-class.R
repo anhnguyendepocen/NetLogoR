@@ -500,7 +500,7 @@ setMethod(
 
     #browser()
     cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[,,z]))}))
-    dim(cellValues) <- c(dim(x)[1] * dim(x)[2], 2L)
+    dim(cellValues) <- c(dim(x)[1] * dim(x)[2], dim(x)[3])
     colnames(cellValues) <- dimnames(x@.Data)[[3]]
 
     return(cellValues)

@@ -1,3 +1,6 @@
+a = Sys.time()
+useFastClasses <- TRUE
+
 ################################################################################
 # Ants
 # by Wilensky (1997) NetLogo Ants model.
@@ -9,7 +12,7 @@
 #
 
 ## Packages required
-library(NetLogoR)
+#library(NetLogoR)
 library(SpaDES)
 #library(testthat) # for testing
 #library(profvis) # to test function speed
@@ -28,7 +31,11 @@ rEvap <- 10 # varies from 0 to 99 in the NetLogo model
 # Patch values must be assigned to each world before stacking them
 
 # Chemical
-chemical <- createNLworld(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35) # amount of chemical on the patches
+if(useFastClasses){
+  chemical <- createNLworldMatrix(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35) # amount of chemical on the patches
+} else {
+  chemical <- createNLworld(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35) # amount of chemical on the patches
+}
 chemical <- set(world = chemical, agents = patches(chemical), val = 0)
 
 # Nest
@@ -57,10 +64,18 @@ food <- set(world = food, agents = patches(food), val = 0)
 patchFood123 <- PxcorPycorFromCell(world = food, cellNum = c(patchFood1, patchFood2, patchFood3))
 food <- set(world = food, agents = patchFood123, val = sample(c(1,2), size = count(patchFood123), replace = TRUE)) # set "food" at sources to either 1 or 2, randomly
 
-world <- NLstack(chemical, nest, nestScent, foodSource, food)
+if(useFastClasses){
+  world <- NLworldArray(chemical, nest, nestScent, foodSource, food)
+} else {
+  world <- NLstack(chemical, nest, nestScent, foodSource, food)
+}
 
 # Ants
-ants <- createTurtles(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
+if(useFastClasses){
+  ants <- createTurtlesAM(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
+} else {
+  ants <- createTurtles(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
+}
 
 # # Visualize the world
 # dev() # open a new plotting window
@@ -252,7 +267,7 @@ while(sum(f_fS_world[, "food"]) != 0){ # as long as there is food in the world
   # Plot(world)
   # Plot(ants, addTo = "world$foodSource")
   #
-  # expect_equivalent(count(ants), nAnts)
+  expect_equivalent(count(ants), nAnts)
 }
 
 #}) # to test function speed
@@ -270,4 +285,7 @@ lines(timeStep, food3, col = "green", lwd = 2)
 legend("topright", legend = c("food1", "food2", "food3"), lwd = c(2, 2, 2), col = c("coral", "yellow", "green"),
        bg = "white")
 
+
+b = Sys.time()
+print(b-a)
 

@@ -10,9 +10,9 @@ output: html_document
 
 To do:
 
-* NLworldMs and agentMatrix to finish
+* (Done) NLworldMs and agentMatrix to finish
 
-* Add these new class as methods in the functions + unit tests.
+* (Done) Add these new class as methods in the functions + unit tests.
 
 * (Choose one way of defining the world/patches and the turtles, i.e., remove NLworlds and SPDF)
 
@@ -20,7 +20,8 @@ To do:
 
 * Define plot functions for NLworldMs and agentMatrix
 
-* Define convert functions, raster <-> NLworldMs and SPDF <-> agentMatrix
+* (Done) Define convert functions, raster <-> NLworldMs and SPDF <-> agentMatrix. 
+*Maybe need stronger unit tests, especially for raster2world() and world2raster()*
 
 
 
