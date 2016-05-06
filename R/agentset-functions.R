@@ -2846,39 +2846,39 @@ setMethod(
 
           } else {
 
-            # if(identical(agents, turtles)){
-            #   if(class(val[,var_num]) == "data.frame"){
-            #     turtles@.Data[,var[var_num]] <- val[,var_num]
-            #
-            #   } else if(class(val[,var_num]) == "matrix"){
-            #     turtles@.Data[,var[var_num]] <- matrix(as.numeric(val[,var_num]), ncol = length(var_num))
-            #   }
-            #
-            # } else {
-            #
-            #   iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
-            #   if(class(val[,var_num]) == "data.frame"){
-            #     turtles@.Data[iAgents,var[var_num]] <- val[,var_num]
-            #
-            #   } else if(class(val[,var_num]) == "matrix"){
-            #     turtles@.Data[iAgents,var[var_num]] <- matrix(as.numeric(val[,var_num]), ncol = length(var_num))
-            #
-            #   }
-            # }
-
             if(identical(agents, turtles)){
+              if(class(val[,var_num]) == "data.frame"){
+                turtles@.Data[,var[var_num]] <- as.matrix(val[,var_num])
 
-              for(i in var_num){
-                turtles@.Data[,var[i]] <- as.numeric(val[,i])
+              } else if(class(val[,var_num, drop = FALSE]) == "matrix"){
+                turtles@.Data[,var[var_num]] <- matrix(as.numeric(val[,var_num]), ncol = length(var_num))
               }
 
             } else {
 
               iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
-              for(i in var_num){
-                turtles[iAgents,var[i]] <- as.numeric(val[,i])
+              if(class(val[,var_num]) == "data.frame"){
+                turtles@.Data[iAgents,var[var_num]] <- as.matrix(val[,var_num])
+
+              } else if(class(val[,var_num, drop = FALSE]) == "matrix"){
+                turtles@.Data[iAgents,var[var_num]] <- matrix(as.numeric(val[,var_num]), ncol = length(var_num))
+
               }
             }
+
+            # if(identical(agents, turtles)){
+            #
+            #   for(i in var_num){
+            #     turtles@.Data[,var[i]] <- as.numeric(val[,i])
+            #   }
+            #
+            # } else {
+            #
+            #   iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+            #   for(i in var_num){
+            #     turtles[iAgents,var[i]] <- as.numeric(val[,i])
+            #   }
+            # }
 
 
           }
