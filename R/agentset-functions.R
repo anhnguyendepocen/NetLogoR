@@ -2922,9 +2922,9 @@ setMethod(
         agents[is.na(agents[,1]),2] <- NA
         agents[is.na(agents[,2]),1] <- NA
 
-        val <- val[!agents[,1]]
-        i <- agents[!agents[,1], 1]
-        j <- agents[!agents[,1], 2]
+        val <- val[!is.na(agents[,1])]
+        i <- agents[!is.na(agents[,1]), 1]
+        j <- agents[!is.na(agents[,1]), 2]
 
         world[i, j] <- val
       }
@@ -2981,9 +2981,9 @@ setMethod(
           agents[is.na(agents[,1]),2] <- NA
           agents[is.na(agents[,2]),1] <- NA
 
-          val <- val[!agents[,1]]
-          pxcor <- agents[!agents[,1], 1]
-          pycor <- agents[!agents[,1], 2]
+          val <- val[!is.na(agents[,1])]
+          pxcor <- agents[!is.na(agents[,1]), 1]
+          pycor <- agents[!is.na(agents[,1]), 2]
 
           matj <- pxcor - world@minPxcor + 1
           mati <- world@maxPycor - pycor + 1
