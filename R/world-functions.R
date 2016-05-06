@@ -624,3 +624,152 @@ setMethod(
   }
 )
 
+
+################################################################################
+#' Convert a Raster* object into a NLworldMs object
+#'
+#' Convert a RasterLayer object into a NLworldMatrix object or a RasterStack object
+#' into a NLworldArray object.
+#'
+#' @param raster RasterLayer or RasterStack object.
+#'
+#' @param method "ngb" or "bilinear" for the resample method
+#'
+#' @return NLworldMatrix or NLworldArray object depending on the input.
+#'         Patches value are retained from the Raster* object.
+#'
+#' @details See \code{help("NLworldMs-class")} for more details on the NLworlds
+#'          classes.
+#'
+#'          The \code{raster} is resampled to match the coordinates system and
+#'          resolution of a NLworldMs using the nearest neighbor method. The
+#'          extent will be bigger by 1 on the width and on the height.
+#'
+#'
+#' @export
+#' @importFrom abind abind
+#' @docType methods
+#' @rdname raster2world
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "raster2world",
+  function(raster, method) {
+    standardGeneric("raster2world")
+  })
+
+
+#' @export
+#' @rdname raster2world
+setMethod(
+  "raster2world",
+  signature = c("RasterLayer", "character"),
+  definition = function(raster, method) {
+
+    minPxcor <- round(raster@extent@xmin)
+    maxPxcor <- round(raster@extent@xmax)
+    minPycor <- round(raster@extent@ymin)
+    maxPycor <- round(raster@extent@ymax)
+    world <- createNLworldMatrix(minPxcor = minPxcor, maxPxcor = maxPxcor, minPycor = minPycor, maxPycor = maxPycor)
+    worldRaster <- raster(world@extent)
+    res(worldRaster) <- c(1, 1)
+
+    worldR <- resample(raster, worldRaster, method = method)
+
+    world[] <- values(worldR)
+
+    return(world)
+  })
+
+
+#' @export
+#' @rdname raster2world
+setMethod(
+  "raster2world",
+  signature = c("RasterStack", "character"),
+  definition = function(raster, method) {
+
+    minPxcor <- round(raster@extent@xmin)
+    maxPxcor <- round(raster@extent@xmax)
+    minPycor <- round(raster@extent@ymin)
+    maxPycor <- round(raster@extent@ymax)
+    world <- createNLworldMatrix(minPxcor = minPxcor, maxPxcor = maxPxcor, minPycor = minPycor, maxPycor = maxPycor)
+    worldRaster <- raster(world@extent)
+    res(worldRaster) <- c(1, 1)
+
+    worldR <- lapply(1:nlayers(raster), function(x) {
+      layer <- resample(raster[[x]], worldRaster, method = method)
+      matrix(values(layer), ncol = dim(world)[2], byrow = TRUE)
+    })
+
+    out <- abind::abind(worldR, along = 3)
+    dimnames(out) <- list(NULL, NULL, names(raster))
+
+    worldArray <- new("NLworldArray",
+                      .Data = out,
+                      minPxcor = minPxcor, maxPxcor = maxPxcor,
+                      minPycor = minPycor, maxPycor = maxPycor,
+                      extent = world@extent,
+                      res = c(1, 1),
+                      pCoords = world@pCoords
+    )
+
+    return(worldArray)
+  })
+
+################################################################################
+#' Convert a NLworldMs object into a Raster* object
+#'
+#' Convert a NLworldMatrix object into a RasterLayer object or a
+#' NLworldArray object into a RasterStack object
+#'
+#' @param world NLworldMatrix or NLworldArray object
+#'
+#' @return RasterLayer or RasterStack object depending on the input.
+#'         Patches value are retained from the NLworldMs object.
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname world2raster
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "world2raster",
+  function(world) {
+    standardGeneric("world2raster")
+  })
+
+
+#' @export
+#' @rdname world2raster
+setMethod(
+  "world2raster",
+  signature = c("NLworldMatrix"),
+  definition = function(world) {
+
+    raster <- raster(world@.Data, xmn = world@extent@xmin, xmx = world@extent@xmax,
+                     ymn = world@extent@ymin, ymx = world@extent@ymax)
+
+    return(raster)
+  })
+
+
+#' @export
+#' @rdname world2raster
+setMethod(
+  "world2raster",
+  signature = c("NLworldArray"),
+  definition = function(world) {
+
+    listRaster <- lapply(1:dim(world)[3],function(x){
+      raster(world@.Data[,,x], xmn = world@extent@xmin, xmx = world@extent@xmax,
+             ymn = world@extent@ymin, ymx = world@extent@ymax)
+    })
+    rasterStack <- stack(listRaster)
+    return(rasterStack)
+})
+
+
