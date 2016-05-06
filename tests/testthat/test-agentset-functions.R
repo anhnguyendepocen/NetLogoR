@@ -1311,9 +1311,28 @@ test_that("set works with agentMatrix",{
   # Non numeric value
   t9 <- set(turtles = t1, agents = turtle(t1, 0), var = "breed", val = "dog")
   expect_equivalent(of(agents = t9, var = "breed"), c("dog", rep("turtle", 4)))
+  expect_equivalent(t9@levels$breed, c("turtle", "dog"))
   t10 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = "breed", val = c("dog", "cat"))
   expect_equivalent(of(agents = t10, var = "breed"), c("dog", "cat", rep("turtle", 3)))
+  expect_equivalent(t10@levels$breed, c("turtle", "dog", "cat"))
+  t11 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = c("breed", "xcor"),
+             val = cbind.data.frame(breed = c("fish", "fish"), xcor = c(1,1)))
+  expect_equivalent(of(agents = t11, var = "breed"), c("fish", "fish", rep("turtle", 3)))
+  expect_equivalent(of(agents = t11, var = "xcor"), c(1,1,2,3,4))
   t11 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = c("breed", "xcor"),
              val = cbind(breed = c("fish", "fish"), xcor = c(1,1)))
-  expect_equivalent(of(agents = t11, var = c("breed", "xcor")), cbind(breed = c("fish", "fish", rep("turtle", 3)), xcor = c(1,1,2,3,4)))
+  expect_equivalent(of(agents = t11, var = "breed"), c("fish", "fish", rep("turtle", 3)))
+  expect_equivalent(of(agents = t11, var = "xcor"), c(1,1,2,3,4))
+  t12 <- set(turtles = t1, agents = turtle(t1, c(0, 1, 3)), var = c("breed", "xcor", "color", "heading"),
+             val = cbind.data.frame(breed = c("aa", "aa", "bb"), xcor = c(10,10, 12), color = "red", heading = 222))
+  expect_equivalent(of(agents = t12, var = "breed"), c("aa", "aa","turtle", "bb", "turtle"))
+  expect_equivalent(of(agents = t12, var = "xcor"), c(10,10,2,12,4))
+  expect_equivalent(of(agents = t12, var = "color")[c(1,2,4)], rep("red",3))
+  expect_equivalent(of(agents = t12, var = "heading"), c(222,222,180,222,0))
+  t12 <- set(turtles = t1, agents = turtle(t1, c(0, 1, 3)), var = c("breed", "xcor", "color", "heading"),
+             val = cbind(breed = c("aa", "aa", "bb"), xcor = c(10,10, 12), color = "red", heading = 222))
+  expect_equivalent(of(agents = t12, var = "breed"), c("aa", "aa","turtle", "bb", "turtle"))
+  expect_equivalent(of(agents = t12, var = "xcor"), c(10,10,2,12,4))
+  expect_equivalent(of(agents = t12, var = "color")[c(1,2,4)], rep("red",3))
+  expect_equivalent(of(agents = t12, var = "heading"), c(222,222,180,222,0))
 })

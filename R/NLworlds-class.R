@@ -515,7 +515,6 @@ setReplaceMethod(
   signature("NLworldArray","numeric","numeric","matrix"),
   definition = function(x, i, j, value) {
 
-    browser()
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     coords <- cbind(rowMat, colMat)

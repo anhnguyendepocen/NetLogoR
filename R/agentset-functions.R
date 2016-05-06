@@ -2741,53 +2741,149 @@ setMethod(
 
     if(NROW(agents) != 0){
 
-      if("xcor" %in% var | "ycor" %in% var){
-
-        posXcor <- match("xcor", var)
-        posYcor <- match("ycor", var)
-        posXYcor <- c(posXcor, posYcor)
-        posXYcor <- posXYcor[!is.na(posXYcor)]
-        if(length(var[!posXYcor]) != 0){
-          turtles <- set(turtles = turtles, agents = agents, var = var[!posXYcor], val = val[,!posXYcor])
-        }
-
-        if(length(var[posXYcor]) == 1){
+      if(length(var) == 1){
+        if(!is.na(match(var, names(turtles@levels)))){
 
           if(identical(agents, turtles)){
-            turtles@.Data[, var] <- val
+            turtles[,var] <- as.character(val)
 
           } else {
 
             iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
-            turtles@.Data[iAgents, var] <- val
+            turtles[iAgents,var] <- as.character(val)
           }
 
         } else {
+
           if(identical(agents, turtles)){
-            turtles@.Data[, var[posXYcor]] <- val[,posXYcor]
+            turtles@.Data[,var] <- as.numeric(val)
 
           } else {
 
             iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
-            turtles@.Data[iAgents, var[posXYcor]] <- val[,posXYcor]
+            turtles@.Data[iAgents,var] <- as.numeric(val)
           }
 
         }
-
-
 
       } else {
 
-        if(identical(agents, turtles)){
-          turtles[, var] <- val
-
+        var_levels <- which(var %in% names(turtles@levels))
+        if(length(var_levels) != 0){
+          var_num <- (1:length(var))[! (1:length(var)) %in% var_levels]
         } else {
+          var_num <- 1:length(var)
+        }
 
-          iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
-          turtles[iAgents, var] <- val
+
+        if(length(var_levels) != 0){
+          if(length(var_levels) == 1){
+
+            if(identical(agents, turtles)){
+              turtles[,var[var_levels]] <- as.character(val[,var_levels])
+
+            } else {
+
+              iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+              turtles[iAgents,var[var_levels]] <- as.character(val[,var_levels])
+            }
+
+          } else {
+
+            if(identical(agents, turtles)){
+
+              for(i in var_levels){
+                turtles[,var[var_levels[i]]] <- as.character(val[,var_levels[i]])
+              }
+
+            } else {
+
+              iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+              for(i in var_levels){
+                turtles[iAgents,var[i]] <- as.character(val[,i])
+              }
+            }
+
+
+            # if(class(val[,var_levels]) == "data.frame"){
+            #
+            #   if(identical(agents, turtles)){
+            #     turtles[,var[var_levels]] <- val[,var_levels]
+            #
+            #   } else {
+            #
+            #     iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+            #     turtles[iAgents,var[var_levels]] <- val[,var_levels]
+            #   }
+            #
+            # } else if(class(val[,var_levels]) == "matrix"){
+            #
+            #   if(identical(agents, turtles)){
+            #     turtles[,var[var_levels]] <- matrix(as.character(val[,var_levels]), ncol = length(var_levels))
+            #
+            #   } else {
+            #
+            #     iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+            #     turtles[iAgents,var[var_levels]] <- matrix(as.character(val[,var_levels]), ncol = length(var_levels))
+            #   }
+            #
+            # }
+          }
 
         }
 
+        if(length(var_num) != 0){
+          if(length(var_num) == 1){
+
+            if(identical(agents, turtles)){
+              turtles@.Data[,var[var_num]] <- as.numeric(val[,var_num])
+
+            } else {
+
+              iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+              turtles@.Data[iAgents,var[var_num]] <- as.numeric(val[,var_num])
+            }
+
+          } else {
+
+            # if(identical(agents, turtles)){
+            #   if(class(val[,var_num]) == "data.frame"){
+            #     turtles@.Data[,var[var_num]] <- val[,var_num]
+            #
+            #   } else if(class(val[,var_num]) == "matrix"){
+            #     turtles@.Data[,var[var_num]] <- matrix(as.numeric(val[,var_num]), ncol = length(var_num))
+            #   }
+            #
+            # } else {
+            #
+            #   iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+            #   if(class(val[,var_num]) == "data.frame"){
+            #     turtles@.Data[iAgents,var[var_num]] <- val[,var_num]
+            #
+            #   } else if(class(val[,var_num]) == "matrix"){
+            #     turtles@.Data[iAgents,var[var_num]] <- matrix(as.numeric(val[,var_num]), ncol = length(var_num))
+            #
+            #   }
+            # }
+
+            if(identical(agents, turtles)){
+
+              for(i in var_num){
+                turtles@.Data[,var[i]] <- as.numeric(val[,i])
+              }
+
+            } else {
+
+              iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
+              for(i in var_num){
+                turtles[iAgents,var[i]] <- as.numeric(val[,i])
+              }
+            }
+
+
+          }
+
+        }
       }
 
       if(any(var == "who")){ # if the who numbers have been modified, check for duplicates
@@ -2797,7 +2893,6 @@ setMethod(
       }
 
     }
-
     return(turtles)
   })
 
