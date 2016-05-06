@@ -2702,12 +2702,11 @@ setMethod(
   "inspect",
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
-    tData <- as.data.frame(turtles[turtles@.Data[,"who"] %in% who,,drop = FALSE])
+    tData <- as.data.frame(turtles[turtles@.Data[,"who"] %in% who,,drop = FALSE], stringsAsFactors = FALSE)
     tData[,names(turtles@levels)] <- do.call(fastCbind,lapply(1:length(turtles@levels),function(x){
       unlist(mapvalues(tData[,names(turtles@levels)[x]],
                        from = unique(tData[,names(turtles@levels)[x]]),
                        to = turtles@levels[names(turtles@levels)[x]][[1]][unique(tData[,names(turtles@levels)[x]])]))}))
-
     return(tData)
   }
 )
@@ -3725,7 +3724,7 @@ setMethod(
   definition = function(turtles, tVar, tVal) {
 
   #turtles <- turtlesOwn(turtles = turtles, tVar = tVar)
-    if(class(tVal) == "numeric"){
+    if(class(tVal) == "numeric" | class(tVal) == "integer"){
       #turtles@.Data[,tVar] <- tVal
 
       # tVal <- matrix(tVal, ncol=1)
