@@ -148,15 +148,16 @@ setMethod(
 
 
 
+#' \code{createTurtlesAM} is an alternative to \code{createTurtles}, with returned
+#' object of class \code{agentMatrix}.
 #'
 #' @return If using createTurtlesAM, then an agentMatrix class object of length \code{n}
 #'         with the columns being: "pxcor", "pycor", "who", "heading", "prevX", "prevY",
 #'         "breed", and "color".
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' t2 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' library(SpaDES)
@@ -170,7 +171,6 @@ setMethod(
 #' @rdname createTurtles
 #'
 #' @author Sarah Bauduin
-#'
 setGeneric(
   "createTurtlesAM",
   function(n, coords, world, heading, breed, color, agent=FALSE) {
@@ -178,7 +178,7 @@ setGeneric(
   })
 
 #' @export
-#' @rdname createTurtlesAM
+#' @rdname createTurtles
 setMethod(
   "createTurtlesAM",
   signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
@@ -206,7 +206,7 @@ setMethod(
 )
 
 #' @export
-#' @rdname createTurtlesAM
+#' @rdname createTurtles
 setMethod(
   "createTurtlesAM",
   signature = c("numeric", "missing", "ANY", "ANY", "ANY", "ANY"),

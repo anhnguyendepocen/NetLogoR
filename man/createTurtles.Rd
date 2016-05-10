@@ -6,6 +6,8 @@
 \alias{createTurtles,numeric,matrix,missing-method}
 \alias{createTurtles,numeric,missing,NLworlds-method}
 \alias{createTurtlesAM}
+\alias{createTurtlesAM,numeric,matrix,missing-method}
+\alias{createTurtlesAM,numeric,missing,ANY-method}
 \title{Create turtles}
 \usage{
 createTurtles(n, coords, world, heading, breed, color, agent = FALSE)
@@ -17,6 +19,12 @@ createTurtles(n, coords, world, heading, breed, color, agent = FALSE)
   breed, color, agent = FALSE)
 
 createTurtlesAM(n, coords, world, heading, breed, color, agent = FALSE)
+
+\S4method{createTurtlesAM}{numeric,matrix,missing}(n, coords, world, heading,
+  breed, color, agent = FALSE)
+
+\S4method{createTurtlesAM}{numeric,missing,ANY}(n, coords, world, heading,
+  breed, color, agent = FALSE)
 }
 \arguments{
 \item{n}{Integer.}
@@ -49,6 +57,9 @@ If using createTurtlesAM, then an agentMatrix class object of length \code{n}
 }
 \description{
 Create \code{n} turtles with a set of defined variables.
+
+\code{createTurtlesAM} is an alternative to \code{createTurtles}, with returned
+object of class \code{agentMatrix}.
 }
 \details{
 If \code{coords} is provided, \code{world} must not be provided.
@@ -70,9 +81,6 @@ Plot(w1)
 Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 
 
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 t2 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 
 library(SpaDES)
