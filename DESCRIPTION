@@ -1,6 +1,6 @@
 Package: NetLogoR
 Title: A port of NetLogo functions and language to R
-Version: 0.0.0.9001
+Version: 0.0.0.9003
 Authors@R: c(
     person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr",
     role = c("aut")),
@@ -22,6 +22,7 @@ Suggests:
     testthat
 Imports:
     methods,
+    NetLogoRClasses,
     sp
 License: GPL-3
 VignetteBuilder: knitr
