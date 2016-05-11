@@ -169,6 +169,7 @@ setMethod(
 #' @export
 #' @docType methods
 #' @rdname createTurtles
+#' @importClassesFrom NetLogoRClasses agentMatrix
 #'
 #' @author Sarah Bauduin
 setGeneric(

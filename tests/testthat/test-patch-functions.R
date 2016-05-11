@@ -427,7 +427,7 @@ test_that("neighbors works with output as a matrix with id", {
 
   # Too simple a test for the data.table version of the
   numAgents <- 200
-  agents <- sample(0:9, replace = TRUE, size = numAgents*2) %>% matrix(ncol=2)
+  agents <- matrix(sample(0:9, replace = TRUE, size = numAgents*2), ncol=2)
   n4 <- neighbors(world = w1, agents = agents, nNeighbors = 4)
   expect_true(all(unique(n4[,"id"]) == 1:nrow(agents)))
 
@@ -549,7 +549,7 @@ test_that("neighbors works with NLworldMs and agentMatrix", {
 
   # Too simple a test for the data.table version of the
   numAgents <- 200
-  agents <- sample(0:9, replace = TRUE, size = numAgents*2) %>% matrix(ncol=2)
+  agents <- matrix(sample(0:9, replace = TRUE, size = numAgents*2), ncol=2)
   n4 <- neighbors(world = w1, agents = agents, nNeighbors = 4)
   expect_true(all(unique(n4[,"id"]) == 1:nrow(agents)))
 

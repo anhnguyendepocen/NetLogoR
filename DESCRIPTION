@@ -1,6 +1,6 @@
 Package: NetLogoR
 Title: A port of NetLogo functions and language to R
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Authors@R: c(
     person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr",
     role = c("aut")),
