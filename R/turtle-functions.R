@@ -1000,9 +1000,12 @@ setMethod(
 ################################################################################
 #' Hatch new turtles
 #'
-#' Create \code{n} new turtles for each parent turtle.
+#' Create new turtles from parent turtles.
 #'
 #' @inheritParams fargs
+#'
+#' @param n Integer. Vector of length 1 or of length \code{who}. Number of new turtles
+#'          to create for each parent.
 #'
 #' @param breed   Character. One "breed" name. If missing,
 #'                the created turtles are of the same "breed" as their parent turtle.
@@ -1051,19 +1054,30 @@ setMethod(
   definition = function(turtles, who, n, breed) {
 
     iTurtle <- match(who, turtles@data$who)
-    parentCoords <- turtles@coords[iTurtle,]
-    parentData <- turtles@data[iTurtle,]
+    parentCoords <- turtles@coords[iTurtle, , drop = FALSE]
+    parentData <- turtles@data[iTurtle, , drop = FALSE]
 
-    if(length(iTurtle) == 1){ # parentCoords is numeric
-      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
-    } else { # parentCoords is a matrix
-      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[,1]), each = n), ycor = rep(as.numeric(parentCoords[,2]), each = n)))
+    if(length(n) != length(iTurtle)){
+      n <- rep(n, length(iTurtle))
     }
-    newData <- rbind(turtles@data, parentData[rep(seq_len(nrow(parentData)), each = n),])
+    if(any(n == 0)){
+      iTurtle <- iTurtle[n != 0]
+      parentCoords <- parentCoords[n != 0, , drop = FALSE]
+      parentData <- parentData[n != 0, , drop = FALSE]
+      n <- n[n != 0]
+    }
+
+
+    # if(length(iTurtle) == 1){ # parentCoords is numeric
+    #   newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
+    # } else { # parentCoords is a matrix
+      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[,1]), n), ycor = rep(as.numeric(parentCoords[,2]), n)))
+    # }
+    newData <- rbind(turtles@data, parentData[rep(seq_len(nrow(parentData)), n),])
     rownames(newData) <- seq_len(nrow(newData))
 
     # Update the who numbers and breed
-    newData[(nrow(turtles) + 1):nrow(newData), "who"] <- (max(turtles@data$who) + 1):(max(turtles@data$who) + (n * length(iTurtle)))
+    newData[(nrow(turtles) + 1):nrow(newData), "who"] <- (max(turtles@data$who) + 1):(max(turtles@data$who) + sum(n))
     if(!missing(breed)){
       newData[(nrow(turtles) + 1):nrow(newData), "breed"] <- breed
     }
@@ -1082,11 +1096,25 @@ setMethod(
 
     iTurtle <- match(who, turtles@.Data[,"who"])
     newData <- turtles@.Data[iTurtle,,drop = FALSE]
-    if(n != 1){
-      newData <- newData[rep(seq_len(nrow(newData)), each = n),]
+    # if(n != 1){
+    #   newData <- newData[rep(seq_len(nrow(newData)), each = n),]
+    # }
+    #
+    # newData[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(max(turtles@.Data[,"who"]) + (n * length(iTurtle)))
+    #
+    # Allow n to be different
+    if(length(n) != length(iTurtle)){
+      n <- rep(n, length(iTurtle))
+    }
+    if(any(n == 0)){
+      iTurtle <- iTurtle[n != 0]
+      newData <- newData[n != 0, , drop = FALSE]
+      n <- n[n != 0]
     }
 
-    newData[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(max(turtles@.Data[,"who"]) + (n * length(iTurtle)))
+    newData <- newData[rep(seq_len(nrow(newData)), n), , drop = FALSE]
+    newData[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(max(turtles@.Data[,"who"]) + sum(n))
+
     if(!missing(breed)){
       if(!breed %in% turtles@levels$breed){
         turtles@levels$breed <- c(turtles@levels$breed, breed)

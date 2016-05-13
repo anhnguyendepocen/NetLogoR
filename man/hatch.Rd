@@ -19,7 +19,8 @@ by \code{createOTurtles()} representing the moving agents.}
 
 \item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 
-\item{n}{Integer.}
+\item{n}{Integer. Vector of length 1 or of length \code{who}. Number of new turtles
+to create for each parent.}
 
 \item{breed}{Character. One "breed" name. If missing,
 the created turtles are of the same "breed" as their parent turtle.}
@@ -29,7 +30,7 @@ SpatialPointsDataFrame representing the \code{turtles} with the new
         hatched ones.
 }
 \description{
-Create \code{n} new turtles for each parent turtle.
+Create new turtles from parent turtles.
 }
 \details{
 The parent turtle must be contained in the \code{turtles}.

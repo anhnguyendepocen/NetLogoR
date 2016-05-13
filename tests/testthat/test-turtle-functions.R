@@ -502,6 +502,18 @@ test_that("hatch works",{
   expect_equivalent(t5@data$who, 0:13)
   expect_equivalent(t5@coords[11:14,], cbind(xcor = c(2,2,5,5), ycor = c(9,9,6,6)))
   expect_equivalent(t5@data$breed[11:14], rep("young", 4))
+
+  # Different numbers of young
+  t6 <- hatch(turtles = t1, who = c(1,4), n = c(2, 3))
+  expect_equivalent(count(t6), 15)
+  expect_equivalent(of(agents = t6, var = "who"), 0:14)
+  expect_equivalent(of(agents = turtle(t6, c(10:14)), var = c("xcor", "ycor")), cbind.data.frame(xcor = c(2,2,5,5,5), ycor = c(9,9,6,6,6)))
+  expect_equivalent(of(agents = turtle(t6, c(10:14)), var = "breed"), rep("turtle", 5))
+  t7 <- hatch(turtles = t1, who = c(1,4), n = c(2, 0), breed = "young")
+  expect_equivalent(count(t7), 12)
+  expect_equivalent(of(agents = t7, var = "who"), 0:11)
+  expect_equivalent(of(agents = turtle(t7, c(10:11)), var = c("xcor", "ycor")), cbind.data.frame(xcor = c(2,2), ycor = c(9,9)))
+  expect_equivalent(of(agents = turtle(t7, c(10:11)), var = "breed"), rep("young", 2))
 })
 
 test_that("hatch works with agentMatrix",{
@@ -528,6 +540,18 @@ test_that("hatch works with agentMatrix",{
   expect_equivalent(of(agents = t5, var = "who"), 0:13)
   expect_equivalent(of(agents = turtle(t5, c(10:13)), var = c("xcor", "ycor")), cbind(xcor = c(2,2,5,5), ycor = c(9,9,6,6)))
   expect_equivalent(of(agents = turtle(t5, c(10:13)), var = "breed"), rep("young", 4))
+
+  # Different numbers of young
+  t6 <- hatch(turtles = t1, who = c(1,4), n = c(2, 3))
+  expect_equivalent(count(t6), 15)
+  expect_equivalent(of(agents = t6, var = "who"), 0:14)
+  expect_equivalent(of(agents = turtle(t6, c(10:14)), var = c("xcor", "ycor")), cbind(xcor = c(2,2,5,5,5), ycor = c(9,9,6,6,6)))
+  expect_equivalent(of(agents = turtle(t6, c(10:14)), var = "breed"), rep("turtle", 5))
+  t7 <- hatch(turtles = t1, who = c(1,4), n = c(2, 0), breed = "young")
+  expect_equivalent(count(t7), 12)
+  expect_equivalent(of(agents = t7, var = "who"), 0:11)
+  expect_equivalent(of(agents = turtle(t7, c(10:11)), var = c("xcor", "ycor")), cbind(xcor = c(2,2), ycor = c(9,9)))
+  expect_equivalent(of(agents = turtle(t7, c(10:11)), var = "breed"), rep("young", 2))
 })
 
 test_that("canMove works",{
