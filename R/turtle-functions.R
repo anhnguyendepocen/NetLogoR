@@ -977,9 +977,11 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
 
-    newTurtles <- turtles[-na.omit(match(who, turtles@data$who)),]
+    if(length(who) != 0){
+      turtles <- turtles[-na.omit(match(who, turtles@data$who)),]
+    }
 
-    return(newTurtles)
+    return(turtles)
   }
 )
 
@@ -990,9 +992,11 @@ setMethod(
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
 
-    newTurtles <- turtles[-na.omit(match(who, turtles@.Data[,"who"])),]
+    if(length(who) != 0){
+      turtles <- turtles[-na.omit(match(who, turtles@.Data[,"who"])),]
+    }
 
-    return(newTurtles)
+    return(turtles)
   }
 )
 

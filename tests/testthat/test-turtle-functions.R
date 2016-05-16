@@ -464,6 +464,8 @@ test_that("die works",{
   expect_equivalent(length(t3), 9)
   expect_equivalent(t3@coords, cbind(xcor = 2:10, ycor = 9:1))
   expect_equivalent(t3@data$who, 1:9)
+  t4 <- die(turtles = t1, who = numeric(0))
+  expect_identical(t4, t1)
 })
 
 test_that("die works with agentMatrix",{
@@ -476,6 +478,8 @@ test_that("die works with agentMatrix",{
   expect_equivalent(count(t3), 9)
   expect_equivalent(of(agents = t3, var = c("xcor", "ycor")), cbind(xcor = 2:10, ycor = 9:1))
   expect_equivalent(of(agents = t3, var = "who"), 1:9)
+  t4 <- die(turtles = t1, who = numeric(0))
+  expect_identical(t4, t1)
 })
 
 test_that("hatch works",{
