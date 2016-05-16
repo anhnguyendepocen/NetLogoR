@@ -3642,8 +3642,8 @@ setMethod(
       allAgentMat@.Data[,"who"] <- allTurtles[,"who"]
       if(ncol(allTurtles) > 8){ # there were new turtle variables added
         for(j in 9:ncol(allTurtles)){
-          allAgentMat@.Data <- cbind(allAgentMat@.Data, allTurtles[,j])
-          colnames(allAgentMat@.Data)[j] <- colnames(allTurtles)[j]
+
+          allAgentMat <- turtlesOwn(turtles = allAgentMat, tVar = colnames(allTurtles)[j], tVal = allTurtles[,j])
         }
       }
 
