@@ -31,6 +31,9 @@ test_that("[] works with NLworld and pxcor and pycor",{
 
   w1[1,c(0,1)] <- c(10, 20)
   expect_identical(values(w1)[c(2, 4)], c(10, 20))
+
+  w1[1,c(0,1)] <- c(NA, NA)
+  expect_identical(values(w1)[c(2, 4)], as.numeric(c(NA, NA)))
 })
 
 test_that("[] works with NLworldStack and pxcor and pycor",{
@@ -49,8 +52,11 @@ test_that("[] works with NLworldStack and pxcor and pycor",{
   ws[1,c(0,1)] <- cbind(c(10, 20), c(100, 200)) # signature matrix for value
   expect_identical(values(ws)[c(2, 4),], cbind(w1 = c(10, 20), w2 = c(100, 200)))
 
-  ws[1,1] <- c(-1, -4) # signature numeric for value
+  ws[1,1] <- cbind(-1, -4)
   expect_identical(as.numeric(values(ws)[2,]), c(-1, -4))
+
+  ws[1,1] <- cbind(NA, NA)
+  expect_equivalent(as.numeric(values(ws)[2,]), as.numeric(c(NA, NA)))
 })
 
 test_that("cellFromPxcorPycor works",{
@@ -155,12 +161,18 @@ test_that("[] works for NLworldMatrix",{
 
   w1[1,c(0,1)] <- c(10, 20)
   expect_identical(as.numeric(t(w1@.Data))[c(2, 4)], c(20, 10))
+  w1[1,c(0,1)] <- c(NA, NA)
+  expect_identical(as.numeric(t(w1@.Data))[c(2, 4)], as.numeric(c(NA, NA)))
+  w1[1,c(0,1)] <- c(NA, 20)
+  expect_identical(as.numeric(t(w1@.Data))[c(2, 4)], c(20, NA))
   w1[1,c(1,0)] <- c(100, 200)
   expect_identical(as.numeric(t(w1@.Data))[c(2, 4)], c(100, 200))
   w1[] <- c(10, 20, 30, 40)
   expect_equivalent(w1[], c(10, 20, 30, 40))
   w1[] <- -1
   expect_equivalent(w1[], c(-1, -1, -1, -1))
+  w1[] <- NA
+  expect_equivalent(w1[], as.numeric(c(NA,NA,NA,NA)))
 })
 
 test_that("[] works with NLworldArray",{
@@ -184,6 +196,8 @@ test_that("[] works with NLworldArray",{
   expect_equivalent(as.numeric(t(ws@.Data[,,1])), c(15, 25, 35, 45))
   ws[] <- cbind(-1, -2)
   expect_equivalent(ws[], cbind(c(-1, -1, -1, -1), c(-2, -2, -2, -2)))
+  ws[] <- cbind(NA, NA)
+  expect_equivalent(ws[], cbind(c(NA,NA,NA,NA), c(NA,NA,NA,NA)))
 })
 
 test_that("cellFromPxcorPycor works for NLworldMs",{

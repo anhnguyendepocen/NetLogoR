@@ -11,9 +11,9 @@
 
 \S4method{[}{NLworldMatrix,missing,missing,ANY}(x, drop)
 
-\S4method{[}{NLworldMatrix,numeric,numeric,numeric}(x, i, j) <- value
+\S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j) <- value
 
-\S4method{[}{NLworldMatrix,missing,missing,numeric}(x) <- value
+\S4method{[}{NLworldMatrix,missing,missing,ANY}(x) <- value
 }
 \description{
 This is similar to \code{NLworld}, but it is an s3 class extension of

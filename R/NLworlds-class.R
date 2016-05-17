@@ -69,7 +69,7 @@ setMethod(
 #' @rdname NLworld-class
 setReplaceMethod(
   "[",
-  signature("NLworld","numeric","numeric","numeric"),
+  signature("NLworld","numeric","numeric","ANY"),
   definition = function(x, i, j, value) {
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     x@data@values[cells] <- value
@@ -144,36 +144,36 @@ setReplaceMethod(
   }
 )
 
-#' @export
-#' @name [<-
-#' @rdname NLworldStack-class
-setReplaceMethod(
-  "[",
-  signature("NLworldStack","numeric","numeric","numeric"),
-  definition = function(x, i, j, value) {
-
-    value <- matrix(data = value, nrow = 1, ncol = length(value))
-
-    # Copy/paste of above. Putting :
-    # x[i,j] <- value
-    # did not work
-
-    x_l <- x[[1]]
-    cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
-    xValues <- values(x)
-    xValues[cells,] <- value
-
-    for(k in 1:nlayers(x)){
-      x <- setValues(x, values = xValues[,k], layer = k) # replace values of each layer
-    }
-
-    validObject(x)
-    return(x)
-
-    # end copy/paste from above
-
-  }
-)
+#' #' @export
+#' #' @name [<-
+#' #' @rdname NLworldStack-class
+#' setReplaceMethod(
+#'   "[",
+#'   signature("NLworldStack","numeric","numeric","numeric"),
+#'   definition = function(x, i, j, value) {
+#'
+#'     value <- matrix(data = value, nrow = 1, ncol = length(value))
+#'
+#'     # Copy/paste of above. Putting :
+#'     # x[i,j] <- value
+#'     # did not work
+#'
+#'     x_l <- x[[1]]
+#'     cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
+#'     xValues <- values(x)
+#'     xValues[cells,] <- value
+#'
+#'     for(k in 1:nlayers(x)){
+#'       x <- setValues(x, values = xValues[,k], layer = k) # replace values of each layer
+#'     }
+#'
+#'     validObject(x)
+#'     return(x)
+#'
+#'     # end copy/paste from above
+#'
+#'   }
+#' )
 
 
 ################################################################################
@@ -345,7 +345,7 @@ setMethod(
 #' @rdname NLworldMatrix-class
 setReplaceMethod(
   "[",
-  signature("NLworldMatrix","numeric","numeric","numeric"),
+  signature("NLworldMatrix","numeric","numeric","ANY"),
   definition = function(x, i, j, value) {
 
     # matj <- i - attr(x, "minPxcor") + 1
@@ -354,7 +354,6 @@ setReplaceMethod(
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     x@.Data[cbind(rowMat, colMat)] <- value
-
 
     validObject(x)
     return(x)
@@ -366,7 +365,7 @@ setReplaceMethod(
 #' @rdname NLworldMatrix-class
 setReplaceMethod(
   "[",
-  signature("NLworldMatrix","missing","missing","numeric"),
+  signature("NLworldMatrix","missing","missing","ANY"),
   definition = function(x, value) {
 
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]

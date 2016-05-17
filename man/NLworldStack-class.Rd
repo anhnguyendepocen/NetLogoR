@@ -11,8 +11,6 @@
 \S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, drop)
 
 \S4method{[}{NLworldStack,numeric,numeric,matrix}(x, i, j) <- value
-
-\S4method{[}{NLworldStack,numeric,numeric,numeric}(x, i, j) <- value
 }
 \description{
 A \code{NLworldStack} object is similar to a \code{RasterStack} object, it is
