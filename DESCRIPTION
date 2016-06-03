@@ -18,11 +18,19 @@ Depends:
     raster
 Suggests:
     knitr,
-    SpaDES,
     testthat
 Imports:
+    abind,
+    car,
+    CircStats,
+    data.table,
+    Hmisc,
+    matrixStats,
     methods,
-    sp
+    plyr,
+    sp,
+    SpaDES,
+    rgeos
 License: GPL-3
 VignetteBuilder: knitr
 ByteCompile: yes

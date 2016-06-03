@@ -524,8 +524,13 @@ setMethod(
   "NLwith",
   signature = c("agentMatrix", "missing", "character", "ANY"),
   definition = function(agents, var, val) {
-    turtlesWith <- agents@.Data[of(agents = agents, var = var) %in% val, , drop=FALSE]
-    turtle(agents, turtlesWith[,"who"])
+    #browser()
+    #if(any(names(agents@levels)==var))
+    if(!is.numeric(val))
+      return(agents[which(agents@levels[[var]][agents@.Data[,var]] %in% val),])
+    agents[which(agents@.Data[,var] %in% val),]
+    #turtlesWith <- agents@.Data[of(agents = agents, var = var) %in% val, , drop=FALSE]
+    #turtle(agents, turtlesWith[,"who"])
   }
 )
 
@@ -2230,7 +2235,9 @@ setMethod(
       agentsSP <- SpatialPoints(coords = agents)
 
       # Create buffers around the locations of agents
-      pBuffer <- gBuffer(agentsSP, byid = TRUE, id = 1:NROW(agents), width = radius, quadsegs = 50)
+      #browser()
+      #pBuffer <- gBuffer(agentsSP, byid = TRUE, id = 1:NROW(agents), width = radius, quadsegs = 50)
+      pBuffer <- raster::buffer(agentsSP, dissolve = FALSE, width = radius)
 
       if(torus == TRUE){
         if(missing(world)){
@@ -2252,11 +2259,14 @@ setMethod(
         return(agentsXY)
 
       } else {
-        pOverL <- over(pBuffer, SpatialPoints(coords = agents2), returnList = TRUE)
+        sp1 <- SpatialPoints(coords = agents2)
+        pOverL <- over(pBuffer, sp1, returnList = TRUE)
         pOver <- unlist(pOverL)
         lengthID <- unlist(lapply(pOverL, length))
-        agentsXY <- unique(cbind(agents2[pOver,, drop = FALSE],
-                                 id = rep(as.numeric(names(pOverL)),lengthID)))
+        agentsXY <- cbind(agents2[pOver,, drop = FALSE],
+              id = rep(as.numeric(names(pOverL)),lengthID))
+        #agentsXY2 <- unique(agentsXY)
+        #print(all.equal(agentsXY, agentsXY2))
 
         return(agentsXY)
       }

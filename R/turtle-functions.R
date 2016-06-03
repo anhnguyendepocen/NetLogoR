@@ -4306,16 +4306,34 @@ setMethod(
 
     if(any(names(agents@levels) %in% var)){
 
-      agentsData <- as.data.frame(agents@.Data) # characters data as factors
-      agentsData[,names(agents@levels)] <- do.call(fastCbind,lapply(1:length(agents@levels),function(x){
-        unlist(mapvalues(agentsData[,names(agents@levels)[x]],
-                         from = unique(agentsData[,names(agents@levels)[x]]),
-                         to = agents@levels[names(agents@levels)[x]][[1]][unique(agentsData[,names(agents@levels)[x]])]))}))
-      if(length(var) == 1){
-        return(agentsData[,var])
+      #browser()
+      wh <- var %in% names(agents@levels)
+      if(any(wh)) {
+        newNames <- var[wh]
+        df <- do.call(data.frame, args = append(list(stringsAsFactors = FALSE), 
+                                                lapply(which(wh), function(w)
+            agents@levels[[var[w]]][agents@.Data[,var[w]]])))
+        if (!all(wh))  {
+          df <- data.frame(agents@.Data[,var[!wh]], df)
+          newNames <- c(var[!wh],newNames)
+        } 
+        colnames(df) <- newNames
+        return(df[,match(newNames, var)])
       } else {
-        return(agentsData[,var, drop = FALSE])
+        return(data.frame(agents@.Data[,var]))
       }
+
+      #
+      # agentsData <- as.data.frame(agents@.Data) # characters data as factors
+      # agentsData[,names(agents@levels)] <- do.call(fastCbind,lapply(1:length(agents@levels),function(x){
+      #   unlist(mapvalues(agentsData[,names(agents@levels)[x]],
+      #                    from = unique(agentsData[,names(agents@levels)[x]]),
+      #                    to = agents@levels[names(agents@levels)[x]][[1]][unique(agentsData[,names(agents@levels)[x]])]))}))
+      # if(length(var) == 1){
+      #   return(agentsData[,var])
+      # } else {
+      #   return(agentsData[,var, drop = FALSE])
+      # }
 
     } else {
       if(length(var) == 1){
