@@ -270,7 +270,7 @@ setMethod(
   "coordinates",
   signature("agentMatrix"),
   definition = function (obj, ...) {
-    obj@.Data[,1:2]
+    obj@.Data[,1:2,drop=FALSE]
   })
 
 
