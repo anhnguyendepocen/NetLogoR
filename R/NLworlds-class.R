@@ -322,7 +322,7 @@ setMethod(
     # cellValues <- allValues[cellNum]
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
-    cellValues <- x@.Data[cbind(rowMat, colMat)]
+    cellValues <- x[cbind(rowMat, colMat)]
 
     return(cellValues)
   }
@@ -336,9 +336,12 @@ setMethod(
   "[",
   signature("NLworldMatrix", "missing", "missing", "ANY"),
   definition = function(x, drop) {
-    return(as.numeric(t(x)))
+    #browser()
+    return(as.numeric(t(x@.Data)))
   }
 )
+
+
 
 #' @export
 #' @name [<-
@@ -667,9 +670,10 @@ setMethod(
   "cellFromPxcorPycor",
   signature = c("NLworldMs", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
+    #browser()
     j <- pxcor - world@minPxcor + 1
     i <- world@maxPycor - pycor + 1
-    (i-1)*ncol(world@.Data)+j # Faster
+    (i-1)*ncol(world)+j # Faster
   }
 )
 
@@ -724,5 +728,56 @@ setMethod(
   definition = function(world, cellNum) {
     pCoords <- world@pCoords[cellNum,,drop = FALSE]
     return(pCoords)
+  }
+)
+
+
+################################################################################
+#' Convert NLWorldMatrix indices to vector indices
+#'
+#' This can be used to convert indices that would work with an R \code{RasterLayer},
+#' \code{matrix}, or \code{vector} to NLWorldMatrix indices.
+#'
+#' @param world NLworldMatrix object.
+#'
+#' @param cellNum Integer. Vector of cells number.
+#'
+#' @return Numeric vector with indices that will work with an NLWorldMatrix.
+#'
+#' @examples
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1[] <- 1:100
+#' w1Ras <- world2raster(w1)
+#' index <- 24
+#' pxpy <- PxcorPycorFromCell(world = w1, cellNum = index)
+#'
+#' rasValue <- as.integer(unname(w1Ras[index]))
+#' # Not correct index:
+#' identical(w1[index], rasValue)
+#'
+#' # Correct index
+#' identical(w1[NLWorldIndex(w1, index)], rasValue)
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname conversions
+#'
+#' @author Eliot McIntire
+#'
+setGeneric(
+  "NLWorldIndex",
+  function(world, cellNum) {
+    standardGeneric("NLWorldIndex")
+  })
+
+#' @export
+#' @rdname NLWorldIndex
+setMethod(
+  "NLWorldIndex",
+  signature = c("NLworldMatrix", "numeric"),
+  definition = function(world, cellNum) {
+    b <- dim(world)
+    floor((cellNum-1)/b[2])  + seq.int(from = 1, to = prod(b), by = b[1])[(cellNum-1) %% b[2] + 1]
   }
 )

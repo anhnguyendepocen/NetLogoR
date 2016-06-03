@@ -396,7 +396,7 @@ setMethod(
 #' Agents with
 #'
 #' Report the patches or the turtles among \code{agents} which have their variable
-#' equals to a specific value.
+#' equals to a specific value. This is equivalent in R to subsetting.
 #'
 #' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
@@ -429,6 +429,11 @@ setMethod(
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 #' t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
 #' t3 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
+#'
+#' # R equivalent
+#' t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+#' t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
+#' t2R <- t1[t1$breed=="sheep"]
 #'
 #'
 #' @export
@@ -524,13 +529,15 @@ setMethod(
   "NLwith",
   signature = c("agentMatrix", "missing", "character", "ANY"),
   definition = function(agents, var, val) {
-    #browser()
-    #if(any(names(agents@levels)==var))
-    if(!is.numeric(val))
-      return(agents[which(agents@levels[[var]][agents@.Data[,var]] %in% val),])
-    agents[which(agents@.Data[,var] %in% val),]
-    #turtlesWith <- agents@.Data[of(agents = agents, var = var) %in% val, , drop=FALSE]
-    #turtle(agents, turtlesWith[,"who"])
+    if(length(val)==1) { # simpler for speed if only 1 val
+      if(!is.numeric(val))
+        return(agents[agents@levels[[var]][agents@.Data[,var]] == val,])
+      agents[agents@.Data[,var] == val,]
+    } else {
+      if(!is.numeric(val))
+        return(agents[agents@levels[[var]][agents@.Data[,var]] %in% val,])
+      agents[agents@.Data[,var] %in% val,]
+    }
   }
 )
 
@@ -683,7 +690,7 @@ setMethod(
       stop("patches' values are all NAs")
     } else {
       maxVal <- max(val, na.rm = TRUE)
-      posMax <- which(val %in% maxVal)
+      posMax <- val %in% maxVal
       return(agents[posMax, , drop = FALSE])
     }
   }
@@ -2937,6 +2944,29 @@ setMethod(
         j <- agents[!is.na(agents[,1]), 2]
 
         world[i, j] <- val
+      }
+    }
+    return(world)
+  })
+
+#' @export
+#' @rdname set
+setMethod(
+  "set",
+  signature = c(world = "NLworldMatrix", turtles = "missing", agents = "numeric", var = "missing", val = "ANY"),
+  definition = function(world, agents, val) {
+
+    if(length(agents) != 0){
+
+      if(length(val) == 1 & length(agents) != 1){
+        val <- rep(val, length(na.omit(agents)))
+      }
+
+      if(identical(patches(world), agents)){
+
+        world@.Data[] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
+      } else {
+        world[na.omit(agents)] <- val
       }
     }
     return(world)

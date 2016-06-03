@@ -2735,7 +2735,7 @@ setMethod(
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
     tData <- as.data.frame(turtles[turtles@.Data[,"who"] %in% who,,drop = FALSE], stringsAsFactors = FALSE)
-    tData[,names(turtles@levels)] <- do.call(fastCbind,lapply(1:length(turtles@levels),function(x){
+    tData[,names(turtles@levels)] <- do.call(cbind,lapply(1:length(turtles@levels),function(x){
       unlist(mapvalues(tData[,names(turtles@levels)[x]],
                        from = unique(tData[,names(turtles@levels)[x]]),
                        to = turtles@levels[names(turtles@levels)[x]][[1]][unique(tData[,names(turtles@levels)[x]])]))}))
@@ -3628,30 +3628,36 @@ setMethod(
     if(sum(unlist(nTurtles)) == 0){
       return(noTurtlesAM())
     } else {
-      dots <- dots[which(unlist(nTurtles) != 0)]
-      allTurtles <- as.data.frame(rbindlist(lapply(dots, function(x){inspect(x, who = of(agents = x, var = "who"))}), fill = TRUE))
+      #dots <- dots[which(unlist(nTurtles) != 0)]
+      if(do.call(all.equal, lapply(dots, colnames))) {
+        allTurtles <- do.call(rbind, lapply(dots, function(x){x}))
+      } else {
+        allTurtles <- as.data.frame(rbindlist(lapply(dots, function(x){inspect(x, who = of(agents = x, var = "who"))}), fill = TRUE))
+      }
 
       if(anyDuplicated(allTurtles$who) != 0){
         warning("Duplicated turtles based on who numbers are present among the inputs.")
         allTurtles <- allTurtles[match(unique(allTurtles$who), allTurtles$who),]
       }
 
-      allAgentMat <- createTurtlesAM(n = NROW(allTurtles),
-                                     coords = cbind(xcor = allTurtles[,"xcor"], ycor =  allTurtles[,"ycor"]),
-                                     heading = allTurtles[,"heading"], breed = allTurtles[,"breed"],
-                                     color = allTurtles[,"color"])
+      if(!is(allTurtles, "agentMatrix"))
+        allTurtles <- as(allTurtles, "agentMatrix")
+      # allAgentMat <- createTurtlesAM(n = NROW(allTurtles),
+      #                                coords = cbind(xcor = allTurtles[,"xcor"], ycor =  allTurtles[,"ycor"]),
+      #                                heading = allTurtles[,"heading"], breed = allTurtles[,"breed"],
+      #                                color = allTurtles[,"color"])
+      #
+      # allAgentMat@.Data[,"prevX"] <- allTurtles[,"prevX"]
+      # allAgentMat@.Data[,"prevY"] <- allTurtles[,"prevY"]
+      # allAgentMat@.Data[,"who"] <- allTurtles[,"who"]
+      # if(ncol(allTurtles) > 8){ # there were new turtle variables added
+      #   for(j in 9:ncol(allTurtles)){
+      #
+      #     allAgentMat <- turtlesOwn(turtles = allAgentMat, tVar = colnames(allTurtles)[j], tVal = allTurtles[,j])
+      #   }
+      # }
 
-      allAgentMat@.Data[,"prevX"] <- allTurtles[,"prevX"]
-      allAgentMat@.Data[,"prevY"] <- allTurtles[,"prevY"]
-      allAgentMat@.Data[,"who"] <- allTurtles[,"who"]
-      if(ncol(allTurtles) > 8){ # there were new turtle variables added
-        for(j in 9:ncol(allTurtles)){
-
-          allAgentMat <- turtlesOwn(turtles = allAgentMat, tVar = colnames(allTurtles)[j], tVal = allTurtles[,j])
-        }
-      }
-
-      return(allAgentMat)
+      return(allTurtles)
 
     }
   }
@@ -4310,13 +4316,13 @@ setMethod(
       wh <- var %in% names(agents@levels)
       if(any(wh)) {
         newNames <- var[wh]
-        df <- do.call(data.frame, args = append(list(stringsAsFactors = FALSE), 
+        df <- do.call(data.frame, args = append(list(stringsAsFactors = FALSE),
                                                 lapply(which(wh), function(w)
             agents@levels[[var[w]]][agents@.Data[,var[w]]])))
         if (!all(wh))  {
           df <- data.frame(agents@.Data[,var[!wh]], df)
           newNames <- c(var[!wh],newNames)
-        } 
+        }
         colnames(df) <- newNames
         return(df[,match(newNames, var)])
       } else {
@@ -4400,13 +4406,22 @@ setMethod(
       return(as.numeric(t(world@.Data))) # values must be returned by row
     } else {
 
-      # cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-      # allValues <- as.numeric(t(world)) # t() to retrieve the values by rows
-      # cellValues <- allValues[cellNum]
-      # return(cellValues)
       return(world[agents[,1], agents[,2]])
+    }
+  })
 
-      #return(world[cbind(agents - c(attr(world, "minPxcor"), attr(world, "minPycor")) + 1,colNum)])
+#' @export
+#' @rdname of
+setMethod(
+  "of",
+  signature = c("NLworldMatrix", "numeric", "missing"),
+  definition = function(world, agents) {
+
+    if(identical(patches(world), agents)){
+      return(as.numeric(world[agents])) # values must be returned by row
+    } else {
+
+      return(world[agents])
     }
   })
 

@@ -132,7 +132,7 @@ setClassUnion(name="agentClasses",
 #if(getRversion() >= "3.2.0") {
 setMethod("initialize",
           "agentMatrix",
-          function(.Object="agentMatrix", coords, ...)
+          function(.Object="agentMatrix", coords, ..., levelsAM)
   {
 
     Coords <- TRUE
@@ -143,55 +143,73 @@ setMethod("initialize",
       coords <- matrix(c(NA, NA), ncol=2)
       Coords <- FALSE
     }
+    if(is.data.frame(coords)) {
+      coords <- as.matrix(coords)
+    }
     dotCols <- list(...)
 
-    if(all(sapply(dotCols, is.numeric))) {
-      if(sapply(dotCols, is.matrix)) {
-        otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
-        names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
-      } else {
-        otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
-      }
-      if(length(otherCols)>0) {
-        .Object@.Data <- otherCols
-        .Object@levels <- rep(list(NULL), ncol(.Object@.Data))
-        names(.Object@levels) <- colnames(otherCols)
-        if(Coords) {
-          .Object@bbox <- NetLogoR:::.bboxCoords(coords)
+    if(missing(levelsAM)) {
+
+      if(all(sapply(dotCols, is.numeric))) {
+        if(sapply(dotCols, is.matrix)) {
+          otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
+          names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
         } else {
-          .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
+          otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
+        }
+        if(length(otherCols)>0) {
+          .Object@.Data <- otherCols
+          .Object@levels <- rep(list(NULL), ncol(.Object@.Data))
+          names(.Object@levels) <- colnames(otherCols)
+          if(Coords) {
+            .Object@bbox <- NetLogoR:::.bboxCoords(coords)
+          } else {
+            .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
+          }
+        }
+      } else {
+
+        isDF <- sapply(dotCols, function(x) is(x, "data.frame"))
+        if(any(isDF))
+          dotCols <- unlist(lapply(dotCols, as.list), recursive=FALSE)
+        if(any(names(dotCols)=="stringsAsFactors"))
+          dotCols$stringsAsFactors <- NULL
+
+        if(all(sapply(dotCols, is.matrix))) {
+          otherCols <- list(xcor=coords[,1],ycor=coords[,2], dotCols[[1]][,1])
+          names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
+        } else {
+          otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
+        }
+        charCols <- sapply(otherCols, is.character)
+        charCols <- names(charCols)[charCols]
+        numCols <- sapply(otherCols, is.numeric)
+        facCols <- sapply(otherCols, is.factor)
+        otherCols[charCols] <- lapply(otherCols[charCols], function(x) {
+            factor(x, levels = sort(unique(x)))
+          })
+
+        if(length(otherCols)>0) {
+          .Object@.Data <- do.call(cbind,otherCols)
+          .Object@levels <- lapply(otherCols[charCols], function(x) if(is.factor(x)) levels(x) else NULL)
+          if(Coords) {
+            .Object@bbox <- NetLogoR:::.bboxCoords(coords)
+          } else {
+            .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
+          }
         }
       }
     } else {
 
-      isDF <- sapply(dotCols, function(x) is(x, "data.frame"))
-      if(any(isDF))
-        dotCols <- unlist(lapply(dotCols, as.list), recursive=FALSE)
-      if(any(names(dotCols)=="stringsAsFactors"))
-        dotCols$stringsAsFactors <- NULL
-
-      if(all(sapply(dotCols, is.matrix))) {
-        otherCols <- list(xcor=coords[,1],ycor=coords[,2], dotCols[[1]][,1])
-        names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
+      if(is.matrix(dotCols[[1]]) & is.numeric(dotCols[[1]]))
+        .Object@.Data <- cbind(coords, dotCols[[1]])
+      else
+        stop("if passing levelsAM, then ... must be a numeric matrix")
+      .Object@levels <- levelsAM
+      if(Coords) {
+        .Object@bbox <- NetLogoR:::.bboxCoords(coords)
       } else {
-        otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
-      }
-      charCols <- sapply(otherCols, is.character)
-      charCols <- names(charCols)[charCols]
-      numCols <- sapply(otherCols, is.numeric)
-      facCols <- sapply(otherCols, is.factor)
-      otherCols[charCols] <- lapply(otherCols[charCols], function(x) {
-          factor(x, levels = sort(unique(x)))
-        })
-
-      if(length(otherCols)>0) {
-        .Object@.Data <- do.call(fastCbind,otherCols)
-        .Object@levels <- lapply(otherCols[charCols], function(x) if(is.factor(x)) levels(x) else NULL)
-        if(Coords) {
-          .Object@bbox <- NetLogoR:::.bboxCoords(coords)
-        } else {
-          .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
-        }
+        .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
       }
     }
     .Object
@@ -274,13 +292,33 @@ setMethod(
   })
 
 
+#' @export
 setAs("matrix", "agentMatrix",
       function(from) {
         tmp <- new("agentMatrix", coords = from[,1:2,drop=FALSE], from[,-(1:2), drop = FALSE])
         tmp
       })
 
+#' @export
+setAs("data.frame", "agentMatrix",
+      function(from) {
+        tmp <- new("agentMatrix", coords = from[,1:2,drop=FALSE], from[,-(1:2), drop = FALSE])
+        tmp
+      })
 
+#' @export
+setAs("agentMatrix","data.frame",
+      function(from) {
+        tmp <- data.frame(from@.Data)
+        nam <- names(from@levels)
+        tmp[,nam] <- lapply(nam, function(n) from@levels[[n]][tmp[,n]])
+        tmp
+      })
+
+#' Extract methods for agentMatrix class will generally maintain the \code{agentMatrix}
+#' class. This means that there will still be coordinates, character columns represented
+#' as numerics etc.
+#'
 #' @export
 #' @name [
 #' @docType methods
@@ -290,20 +328,68 @@ setMethod(
   signature(x="agentMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, ..., drop) {
 
+    #browser()
     colNames <- colnames(x@.Data)[j]
     levelInd <- match(colNames, names(x@levels))
-    x@.Data <- x@.Data[i,unique(c(1:2,j)),...,drop=drop]
+    x@.Data <- x@.Data[i,unique(c(1:2,j)),...,drop=FALSE]
     if(all(is.na(levelInd))) {
       x@levels <- list(NULL)
     } else {
       x@levels <- x@levels[colNames]
     }
-    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[i,1:2])
+    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
     x
 
 
   }
 )
+
+#' @export
+#' @name [
+#' @docType methods
+#' @rdname agentMatrix
+setMethod(
+  "[",
+  signature(x="agentMatrix", "logical", "missing", "ANY"),
+  definition = function(x, i, ..., drop) {
+
+    x@.Data <- x@.Data[i,,drop=FALSE]
+    if(length(x@.Data)>0)
+      x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
+    x
+
+  }
+)
+
+#' @export
+#' @name [
+#' @docType methods
+#' @rdname agentMatrix
+setMethod(
+  "[",
+  signature(x="agentMatrix", "numeric", "missing", "ANY"),
+  definition = function(x, i, ..., drop) {
+
+    x@.Data <- x@.Data[i,,drop=FALSE]
+    if(length(x@.Data)>0)
+      x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
+    x
+
+  }
+)
+
+#' @export
+#' @name [
+#' @docType methods
+#' @rdname agentMatrix
+setMethod(
+  "[",
+  signature(x="agentMatrix", "missing", "missing", "missing"),
+  definition = function(x) {
+    x@.Data
+  }
+)
+
 
 #' @export
 #' @name [
@@ -344,6 +430,7 @@ setMethod(
   signature(x="agentMatrix", "missing", "numeric", "ANY"),
   definition = function(x, j, ..., drop) {
 
+    #browser()
     colNames <- colnames(x@.Data)[j]
     levelInd <- match(colNames, names(x@levels))
     x@.Data <- x@.Data[,unique(c(1:2,j)),...,drop=drop]
@@ -353,7 +440,7 @@ setMethod(
       #x@levels[[levelInd]][x@.Data[,j]]
       x@levels <- x@levels[colNames]
     }
-    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2])
+    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
     x
 
   }
@@ -393,6 +480,22 @@ setReplaceMethod(
   signature("agentMatrix","numeric","missing","numeric"),
   definition = function(x, i, value) {
     x@.Data[i,] <- value
+    validObject(x)
+    return(x)
+  }
+)
+
+#' @export
+#' @name [<-
+#' @rdname agentMatrix
+setReplaceMethod(
+  "[",
+  signature("agentMatrix","numeric","character","data.frame"),
+  definition = function(x, i, j, value) {
+    browser()
+    colNums <- match(j, colnames(x))
+    x[i,colNums] <- value
+    x@.Data[i,colNums] <- value
     validObject(x)
     return(x)
   }
@@ -494,23 +597,9 @@ setMethod(
 )
 
 
-#' @export
-#' @name [
-#' @docType methods
-#' @rdname agentMatrix
-setMethod(
-  "[",
-  signature(x="agentMatrix", "numeric", "missing", "ANY"),
-  definition = function(x, i, ..., drop) {
 
-    x@.Data <- x@.Data[i,,drop=FALSE]
-    if(length(x@.Data)>0)
-      x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
-    x
-
-  }
-)
-
+#' $ is for extracting the raw columns and does not maintain the agentMatrix class.
+#'
 #' @export
 #' @name [
 #' @docType methods
@@ -519,7 +608,11 @@ setMethod(
   "$",
   signature(x="agentMatrix"),
   definition = function(x, name) {
-    x[,name]
+    if(name %in% names(x@levels)) {
+      x@levels[[name]][x@.Data[,name]]
+    } else {
+      x@.Data[,name]
+    }
   }
 )
 
@@ -665,6 +758,25 @@ setMethod(
     #cbind(x=obj$x, y=obj$y)
     obj[,list(xcor,ycor)]
   })
+
+#' @export
+rbind.agentMatrix <-
+  function (..., deparse.level = 1) {
+    dots <- list(...)
+    levelsSame <- do.call(all.equal,lapply(dots, function(x) x@levels))
+    if(levelsSame) { # if same, then faster rbind of the matrices
+      mat <- do.call(rbind, lapply(dots, function(x) x@.Data))
+      levels <- dots[[1]]@levels
+    } else { # if levels are not the same, then need to take the "slow" option: convert to data.frame
+      do.call(rbind, lapply(dots, function(x) as(x,"data.frame")))
+    }
+
+    new("agentMatrix", coords = mat[,1:2],
+        mat[,-(1:2)],
+        levelsAM = levels)
+
+  }
+
 
 #' @importFrom data.table ':='
 setReplaceMethod(
