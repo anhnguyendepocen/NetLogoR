@@ -23,6 +23,12 @@ agentMatrix(..., coords)
 
 \S4method{[}{agentMatrix,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
+\S4method{[}{agentMatrix,logical,missing,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{agentMatrix,numeric,missing,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{agentMatrix,missing,missing,missing}(x)
+
 \S4method{[}{agentMatrix,missing,character,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{agentMatrix,numeric,character,ANY}(x, i, j, ..., drop = TRUE)
@@ -35,6 +41,8 @@ agentMatrix(..., coords)
 
 \S4method{[}{agentMatrix,numeric,missing,numeric}(x, i) <- value
 
+\S4method{[}{agentMatrix,numeric,character,data.frame}(x, i, j) <- value
+
 \S4method{[}{agentMatrix,numeric,numeric,character}(x, i, j) <- value
 
 \S4method{[}{agentMatrix,missing,numeric,character}(x, j) <- value
@@ -44,8 +52,6 @@ agentMatrix(..., coords)
 \S4method{[}{agentMatrix,numeric,character,character}(x, i, j) <- value
 
 \S4method{==}{agentMatrix,character}(e1, e2)
-
-\S4method{[}{agentMatrix,numeric,missing,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{$}{agentMatrix}(x, name)
 
@@ -74,6 +80,12 @@ that functionality, though there are not as many methods (yet). The object is pr
 a numeric matrix. Any character column passed to ... will be converted to a numeric,
 using \code{as.factor} internally, and stored as a numeric. Methods using this class
 will automatically convert character queries to the correct numeric alternative.
+
+Extract methods for agentMatrix class will generally maintain the \code{agentMatrix}
+class. This means that there will still be coordinates, character columns represented
+as numerics etc.
+
+$ is for extracting the raw columns and does not maintain the agentMatrix class.
 }
 \examples{
 newAgent <- new("agentMatrix",

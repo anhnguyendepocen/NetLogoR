@@ -6,6 +6,7 @@
 \alias{of,NLworld,matrix,missing-method}
 \alias{of,NLworldArray,matrix,character-method}
 \alias{of,NLworldMatrix,matrix,missing-method}
+\alias{of,NLworldMatrix,numeric,missing-method}
 \alias{of,NLworldStack,matrix,character-method}
 \alias{of,missing,SpatialPointsDataFrame,character-method}
 \alias{of,missing,agentMatrix,character-method}
@@ -22,6 +23,8 @@ of(world, agents, var)
 \S4method{of}{NLworldStack,matrix,character}(world, agents, var)
 
 \S4method{of}{NLworldMatrix,matrix,missing}(world, agents)
+
+\S4method{of}{NLworldMatrix,numeric,missing}(world, agents)
 
 \S4method{of}{NLworldArray,matrix,character}(world, agents, var)
 }

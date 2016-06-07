@@ -2734,11 +2734,12 @@ setMethod(
   "inspect",
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
-    tData <- as.data.frame(turtles[turtles@.Data[,"who"] %in% who,,drop = FALSE], stringsAsFactors = FALSE)
+    tData <- as.data.frame(turtles@.Data[turtles@.Data[,"who"] %in% who,,drop = FALSE], stringsAsFactors = FALSE)
     tData[,names(turtles@levels)] <- do.call(cbind,lapply(1:length(turtles@levels),function(x){
       unlist(mapvalues(tData[,names(turtles@levels)[x]],
                        from = unique(tData[,names(turtles@levels)[x]]),
                        to = turtles@levels[names(turtles@levels)[x]][[1]][unique(tData[,names(turtles@levels)[x]])]))}))
+
     return(tData)
   }
 )

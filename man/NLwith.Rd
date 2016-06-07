@@ -58,7 +58,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
 }
 \description{
 Report the patches or the turtles among \code{agents} which have their variable
-equals to a specific value.
+equals to a specific value. This is equivalent in R to subsetting.
 }
 \details{
 \code{world} must not be provided if \code{agents} are turtles.
@@ -74,6 +74,11 @@ p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
 t3 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
+
+# R equivalent
+t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
+t2R <- t1[t1$breed=="sheep"]
 
 
 }
