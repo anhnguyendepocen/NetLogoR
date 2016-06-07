@@ -20,10 +20,11 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
 #' @rdname bboxCoords
 .bboxCoords <- function(coords) {
 
-    stopifnot(length(coords) > 0)
+    #stopifnot(length(coords) > 0)
     bbox = colRanges(coords)
     dimnames(bbox)[[2]] = c("min", "max")
-    as.matrix(bbox)
+    bbox
+
 }
 
 #' @include NLworlds-class.R
