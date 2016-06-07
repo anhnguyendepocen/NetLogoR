@@ -4207,7 +4207,8 @@ setMethod(
 ################################################################################
 #' Values of an agents variable
 #'
-#' Report the \code{agents} values for the requested variable.
+#' Report the \code{agents} values for the requested variable. This is equivalent to
+#' subsetting in R via $ or [,var].
 #'
 #' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
