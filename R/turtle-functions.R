@@ -3941,20 +3941,25 @@ setMethod(
   signature = c(angle1 = "numeric", angle2 = "numeric"),
   definition = function(angle1, angle2, range360) {
 
-    if(length(angle2) != length(angle1)){
-      if(length(angle2) == 1){
-        angle2 <- rep(angle2, length(angle1))
-      } else if(length(angle1) == 1){
-        angle1 <- rep(angle1, length(angle2))
+    len2 <- length(angle2)
+    len1 <- length(angle1)
+    if(len2 != len1){
+      if(len2 == 1){
+        angle2 <- rep(angle2, len1)
+      } else if(len1 == 1){
+        angle1 <- rep(angle1, len2)
       } else {
         stop("angle1 and angle2 must be of the same length or one must be of length 1")
       }
     }
-
-    angles <- deg(atan2(sin(rad(angle2) - rad(angle1)), cos(rad(angle2) - rad(angle1))))
-
+    rad2 <- rad(angle2)
+    rad1 <- rad(angle1)
+    rads <- rad2-rad1
+    angles <- deg(atan2(sin(rads), cos(rads)))
+    
     if(range360 == TRUE){
-      angles[angles < 0] <- angles[angles < 0] + 360
+      anglesNeg <- angles < 0
+      angles[anglesNeg] <- angles[anglesNeg] + 360
     }
 
     return(angles)
