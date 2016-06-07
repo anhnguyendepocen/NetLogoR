@@ -58,7 +58,8 @@ Vector of values for the \code{agents} if one variable is requested. The class d
         of the returned matrix follws the order of the \code{agents}.
 }
 \description{
-Report the \code{agents} values for the requested variable.
+Report the \code{agents} values for the requested variable. This is equivalent to
+subsetting in R via $ or [,var].
 }
 \details{
 If \code{agents} are patches, \code{world} must be provided.

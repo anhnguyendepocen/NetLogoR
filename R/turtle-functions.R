@@ -193,12 +193,13 @@ setMethod(
     if(missing(color))
       color <- rainbow(n)
 
+    repNA <- rep(NA, n)
     turtles<-new("agentMatrix",
                  coords = coords,
-                 who = seq(from = 0, to = n - 1, by = 1),
+                 who = seq_len(n)-1,
                  heading = heading,
-                 prevX = rep(NA, n),
-                 prevY = rep(NA, n),
+                 prevX = repNA,
+                 prevY = repNA,
                  breed = breed,
                  color = color)
     return(turtles)

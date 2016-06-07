@@ -189,6 +189,7 @@ setMethod("initialize",
             factor(x, levels = sort(unique(x)))
           })
 
+        if(length(otherCols[[1]]) == 1) names(otherCols[[1]]) <- 1
         if(length(otherCols)>0) {
           .Object@.Data <- do.call(cbind,otherCols)
           .Object@levels <- lapply(otherCols[charCols], function(x) if(is.factor(x)) levels(x) else NULL)
@@ -201,7 +202,7 @@ setMethod("initialize",
       }
     } else {
 
-      if(is.matrix(dotCols[[1]]) & is.numeric(dotCols[[1]]))
+      if( (is.matrix(dotCols[[1]]) & is.numeric(dotCols[[1]])) | is(dotCols[[1]], "agentMatrix"))
         .Object@.Data <- cbind(coords, dotCols[[1]])
       else
         stop("if passing levelsAM, then ... must be a numeric matrix")
@@ -760,20 +761,29 @@ setMethod(
   })
 
 #' @export
+#' @importFrom data.table rbindlist
 rbind.agentMatrix <-
   function (..., deparse.level = 1) {
     dots <- list(...)
-    levelsSame <- do.call(all.equal,lapply(dots, function(x) x@levels))
+    levelsSame <- isTRUE(do.call(all.equal,lapply(dots, function(x) x@levels)))
     if(levelsSame) { # if same, then faster rbind of the matrices
-      mat <- do.call(rbind, lapply(dots, function(x) x@.Data))
+      if(do.call(all.equal, lapply(dots, colnames))) {
+        mat <- do.call(rbind, lapply(dots, function(x) x@.Data)) # Fastest option...
+        #i.e., pass agentMatrix with known levels
+      } else {
+        mat <- as.matrix(do.call(rbindlist, args=list(lapply(dots, function(x) as(x,"data.frame")),
+                                                      fill = TRUE)))
+      }
       levels <- dots[[1]]@levels
+      new("agentMatrix", coords = mat[,1:2],
+          mat[,-(1:2)],
+          levelsAM = levels)
     } else { # if levels are not the same, then need to take the "slow" option: convert to data.frame
-      do.call(rbind, lapply(dots, function(x) as(x,"data.frame")))
+      mat <- as.data.frame(do.call(rbindlist, args=list(lapply(dots, function(x) as(x,"data.frame")), fill = TRUE)))
+      new("agentMatrix", coords = mat[,1:2],
+          mat[,-(1:2)])
     }
 
-    new("agentMatrix", coords = mat[,1:2],
-        mat[,-(1:2)],
-        levelsAM = levels)
 
   }
 
