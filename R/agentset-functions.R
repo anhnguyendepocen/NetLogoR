@@ -530,14 +530,20 @@ setMethod(
   signature = c("agentMatrix", "missing", "character", "ANY"),
   definition = function(agents, var, val) {
     if(length(val)==1) { # simpler for speed if only 1 val
-      if(!is.numeric(val))
-        return(agents[agents@levels[[var]][agents@.Data[,var]] == val,])
-      agents[agents@.Data[,var] == val,]
+      if(!is.numeric(val)){
+        toReturn <- (agents[agents@levels[[var]][agents@.Data[,var]] == val,])
+      } else {
+        toReturn <- agents[agents@.Data[,var] == val,]
+      }
     } else {
-      if(!is.numeric(val))
-        return(agents[agents@levels[[var]][agents@.Data[,var]] %in% val,])
-      agents[agents@.Data[,var] %in% val,]
+      if(!is.numeric(val)){
+        toReturn <- (agents[agents@levels[[var]][agents@.Data[,var]] %in% val,])
+      } else {
+        toReturn <- agents[agents@.Data[,var] %in% val,]
+      }
     }
+
+    return(toReturn[!is.na(toReturn@.Data[,"who"]),])
   }
 )
 
