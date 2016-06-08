@@ -3,9 +3,10 @@
 \name{NLworlds-class}
 \alias{NLworlds}
 \alias{NLworlds-class}
-\title{The NLworlds class}
+\title{The \code{NLworlds} class}
 \description{
-value <- matrix(data = value, nrow = 1, ncol = length(value))
+The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
+classes. Mostly used for building function purposes.
 
 The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
 classes. Mostly used for building function purposes.
