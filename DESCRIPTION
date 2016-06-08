@@ -28,18 +28,22 @@ Depends:
     raster
 Suggests:
     knitr,
+    magrittr,
+    microbenchmark,
     testthat
 Imports:
     abind,
     car,
     CircStats,
     data.table,
+    grDevices,
     Hmisc,
     matrixStats,
     methods,
     plyr,
     sp,
     SpaDES,
+    stats,
     rgeos
 License: GPL-3
 VignetteBuilder: knitr

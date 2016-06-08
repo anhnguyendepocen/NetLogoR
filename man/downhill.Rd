@@ -69,14 +69,12 @@ w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-library(SpaDES)
-clearPlot()
-Plot(w1)
-Plot(t1, addTo = "w1")
+#clearPlot()
+#Plot(w1)
+#Plot(t1, addTo = "w1")
 
 t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
-Plot(t1, addTo = "w1")
-
+#Plot(t1, addTo = "w1")
 
 }
 \author{

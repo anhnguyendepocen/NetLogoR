@@ -10,6 +10,9 @@ noTurtlesAM(x)
 
 \S4method{noTurtlesAM}{missing}()
 }
+\arguments{
+\item{x}{documentation needed}
+}
 \value{
 AgentMatrix with the turtle variables defined
         as when using \code{createTurtles()} or \code{createOTurtles()} but

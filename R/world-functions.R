@@ -155,7 +155,7 @@ setMethod(
 
     worldStack <- new("NLworldStack")
 
-    for(i in 1:nlayers(raster)){
+    for(i in 1:nlayers(raster)) {
       world <- convertNLworld(raster = raster[[i]])
       worldStack <- addLayer(worldStack, world)
     }
@@ -764,7 +764,7 @@ setMethod(
   signature = c("NLworldArray"),
   definition = function(world) {
 
-    listRaster <- lapply(1:dim(world)[3],function(x){
+    listRaster <- lapply(1:dim(world)[3],function(x) {
       raster(world@.Data[,,x], xmn = world@extent@xmin, xmx = world@extent@xmax,
              ymn = world@extent@ymin, ymx = world@extent@ymax)
     })
@@ -777,7 +777,7 @@ setMethod(
 #' Convert a SPDF object into a agentMatrix object
 #'
 #'
-#' @param spdf
+#' @param spdf  description needed
 #'
 #' @return agentMatrix
 #'
@@ -793,10 +793,12 @@ setGeneric(
   "spdf2turtles",
   function(spdf) {
     standardGeneric("spdf2turtles")
-  })
+})
 
 
 #' @export
+#' @importFrom grDevices rainbow
+#' @importFrom stats runif
 #' @rdname spdf2turtles
 setMethod(
   "spdf2turtles",
@@ -806,37 +808,37 @@ setMethod(
     spdfData <- spdf@data
     n <- length(spdf)
 
-    if(!is.na(match("who", names(spdfData)))){
+    if (!is.na(match("who", names(spdfData)))) {
       who <- spdfData$who
     } else {
       who <- seq(from = 0, to = n - 1, by = 1)
     }
 
-    if(!is.na(match("heading", names(spdfData)))){
+    if (!is.na(match("heading", names(spdfData)))) {
       heading <- spdfData$heading
     } else {
       heading <- runif(n = n, min = 0, max = 360)
     }
 
-    if(!is.na(match("prevX", names(spdfData)))){
+    if (!is.na(match("prevX", names(spdfData)))) {
       prevX <- spdfData$prevX
     } else {
       prevX <- rep(NA, n)
     }
 
-    if(!is.na(match("prevY", names(spdfData)))){
+    if (!is.na(match("prevY", names(spdfData)))) {
       prevY <- spdfData$prevY
     } else {
       prevY <- rep(NA, n)
     }
 
-    if(!is.na(match("breed", names(spdfData)))){
+    if (!is.na(match("breed", names(spdfData)))) {
       breed <- spdfData$breed
     } else {
       breed <- rep("turtle", n)
     }
 
-    if(!is.na(match("color", names(spdfData)))){
+    if (!is.na(match("color", names(spdfData)))) {
       color <- spdfData$color
     } else {
       color <- rainbow(n)
@@ -851,19 +853,18 @@ setMethod(
                  breed = breed,
                  color = color)
 
-    for(i in which(!names(spdfData) %in% c("who", "heading", "prevX", "prevY", "breed", "color", "stringsAsFactors"))){
+    for(i in which(!names(spdfData) %in% c("who", "heading", "prevX", "prevY", "breed", "color", "stringsAsFactors"))) {
       turtles <- turtlesOwn(turtles = turtles, tVar = names(spdfData)[i], tVal = spdfData[,i])
     }
 
     return(turtles)
 })
 
-
 ################################################################################
 #' Convert an agentMatrix object into a SPDF
 #'
 #'
-#' @param turtles
+#' @param turtles  description needed
 #'
 #' @return SpatialPointsDataFrame
 #'
@@ -879,18 +880,16 @@ setGeneric(
   "turtles2spdf",
   function(turtles) {
     standardGeneric("turtles2spdf")
-  })
-
+})
 
 #' @export
+#' @importFrom sp SpatialPointsDataFrame
 #' @rdname turtles2spdf
 setMethod(
   "turtles2spdf",
   signature = c("agentMatrix"),
   definition = function(turtles) {
-
     spdf <- SpatialPointsDataFrame(coords = turtles@.Data[,c("xcor", "ycor"), drop = FALSE],
                                    data = inspect(turtles, who = turtles@.Data[,"who"])[3:ncol(turtles@.Data)])
     return(spdf)
-
-  })
+})

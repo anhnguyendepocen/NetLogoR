@@ -6,6 +6,9 @@
 \usage{
 .bboxCoords(coords)
 }
+\arguments{
+\item{coords}{documentation needed}
+}
 \description{
 This is a drop in replacement for .bboxCoords in raster package.
 }

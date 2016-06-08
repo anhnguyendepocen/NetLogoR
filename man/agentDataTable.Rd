@@ -2,19 +2,32 @@
 % Please edit documentation in R/Classes.R
 \name{agentDataTable}
 \alias{agentDataTable}
-\title{agentDataTable class}
+\title{Create an agentDataTable object}
 \usage{
 agentDataTable(coords, ..., coords.nrs = numeric(0),
-  proj4string = CRS(as.character(NA)), match.ID, bbox = NULL)
+  proj4string = CRS(NA_character_), match.ID, bbox = NULL)
+}
+\arguments{
+\item{coords}{description needed}
+
+\item{...}{description needed}
+
+\item{coords.nrs}{description needed}
+
+\item{proj4string}{description needed}
+
+\item{match.ID}{description needed}
+
+\item{bbox}{description needed}
 }
 \description{
-This is incomplete.
+description needed
 }
 \examples{
+library(microbenchmark)
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(world = w1, n = 10, agent = TRUE)
 
-library(microbenchmark)
 N = 1e5
 microbenchmark(createTurtles(world = w1, n = N, agent = TRUE),
               createTurtles(world = w1, n = N, agent = FALSE))

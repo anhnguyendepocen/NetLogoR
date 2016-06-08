@@ -3,8 +3,9 @@
 #' This is incomplete.
 #'
 #' @importClassesFrom sp SpatialPoints SpatialPointsDataFrame
-#' @name SpatialPointsDataTable
-#' @rdname SpatialPointsDataTable
+#' @importFrom data.table data.table
+#' @name SpatialPointsDataTable-class
+#' @rdname SpatialPointsDataTable-class
 #' @author Eliot McIntire
 #' @exportClass SpatialPointsDataTable
 setClass("SpatialPointsDataTable",
@@ -13,27 +14,41 @@ setClass("SpatialPointsDataTable",
          prototype = list(data = data.table())
 )
 
-setGeneric("SpatialPointsDataTable", function(coords, data,
-                                              coords.nrs = numeric(0), proj4string = CRS(as.character(NA)),
-                                              match.ID, bbox = NULL) {
+#' Create a SpatialPointsDataTable
+#'
+#' Description needed
+#'
+#' @param coords       description needed
+#' @param data         description needed
+#' @param coords.nrs   description needed
+#' @param proj4string  description needed
+#' @param match.ID     description needed
+#' @param bbox         description needed
+#'
+#' @importFrom sp CRS
+#' @export
+setGeneric("SpatialPointsDataTable",
+           function(coords, data, coords.nrs = numeric(0),
+                    proj4string = CRS(NA_character_), match.ID, bbox = NULL) {
   standardGeneric("SpatialPointsDataTable")
 })
 
 #' @export
+#' @importFrom sp CRS
 #' @rdname SpatialPointsDataTable
 setMethod(
   "SpatialPointsDataTable",
   signature(),
-  definition = function (coords, data, coords.nrs = numeric(0), proj4string = CRS(as.character(NA)),
-                         match.ID, bbox = NULL) {
+  definition = function(coords, data, coords.nrs = numeric(0),
+                        proj4string = CRS(NA_character_), match.ID, bbox = NULL) {
     #if (!is(coords, "SpatialPoints"))
     #  coords = coordinates(coords)
     mtch = NULL
     cc.ID = row.names(coords)
     if (missing(match.ID)) {
-      if (is.null(cc.ID))
+      if (is.null(cc.ID)) {
         match.ID = FALSE
-      else {
+      } else {
         mtch = match(cc.ID, row.names(data))
         match.ID = !any(is.na(mtch))
         if (match.ID && any(mtch != 1:nrow(data)))
@@ -60,6 +75,6 @@ setMethod(
                               bbox = bbox)
     if (is.character(attr(data, "row.names")))
       dimnames(coords@coords)[[1]] = row.names(data)
-    if(!is(data, "data.table")) data <- data.table(data)
+    if (!is(data, "data.table")) data <- data.table(data)
     new("SpatialPointsDataTable", coords, data = data, coords.nrs = coords.nrs)
-  })
+})

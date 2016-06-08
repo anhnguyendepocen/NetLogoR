@@ -55,7 +55,6 @@ t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
 t2 <- other(agents = t1, except = turtle(t1, who = 0))
 count(t2) # 9 turtles
 
-
 }
 \author{
 Sarah Bauduin

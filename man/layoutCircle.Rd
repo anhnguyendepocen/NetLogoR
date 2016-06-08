@@ -50,14 +50,12 @@ w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-library(SpaDES)
-clearPlot()
-Plot(w1)
-Plot(t1, addTo = "w1")
+#clearPlot()
+#Plot(w1)
+#Plot(t1, addTo = "w1")
 
 t2 <- layoutCircle(world = w1, turtles = t1, radius = 3)
-Plot(t2, addTo = "w1")
-
+#Plot(t2, addTo = "w1")
 
 }
 \author{

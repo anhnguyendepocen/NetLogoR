@@ -46,6 +46,8 @@ each turtle.}
 
 \item{color}{Character. Vector of color names. Must be of length \code{n}.
 If missing, colors are assigned using the function \code{rainbow(n)}.}
+
+\item{agent}{description required}
 }
 \value{
 SpatialPointsDataFrame of length \code{n} with the columns for the
@@ -75,21 +77,17 @@ w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
-library(SpaDES)
-clearPlot()
-Plot(w1)
-Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
-
+#clearPlot()
+#Plot(w1)
+#Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t2 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 
-library(SpaDES)
-clearPlot()
-Plot(w1)
-Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
-
+#clearPlot()
+#Plot(w1)
+#Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 
 }
 \author{

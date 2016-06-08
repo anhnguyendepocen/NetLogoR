@@ -1,4 +1,4 @@
-test_that("NLall works with patches",{
+test_that("NLall works with patches", {
   w1 <- createNLworld(0, 4, 0, 4)
   w1[] <- sample(1:5, size = 25, replace = TRUE)
   expect_identical(NLall(world = w1, agents = patches(world = w1), val = 5), FALSE)
@@ -62,7 +62,7 @@ test_that("NLany works with patches",{
 
 test_that("NLany works with turtles",{
   w1 <- createNLworld(0, 4, 0, 4)
-  t1 <- createTurtles(n = 10, coords = randomXYcor(world= w1, n = 10))
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
   t2 <- noTurtles()
   t3 <- NLwith(agents = t1, var = "xcor", val = 10)
   t4 <- turtle(t1, who = 0)
