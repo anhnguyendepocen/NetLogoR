@@ -10,6 +10,9 @@ noTurtles(x)
 
 \S4method{noTurtles}{missing}()
 }
+\arguments{
+\item{x}{documentation needed}
+}
 \value{
 SpatialPointsDataFrame with the turtle variables defined
         as when using \code{createTurtles()} or \code{createOTurtles()} but

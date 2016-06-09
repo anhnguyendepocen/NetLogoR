@@ -1,4 +1,3 @@
-library(testthat)
 library(magrittr)
-test_package("NetLogoR")
-
+library(testthat)
+test_check("NetLogoR")

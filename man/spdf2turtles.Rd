@@ -11,7 +11,7 @@ spdf2turtles(spdf)
 \S4method{spdf2turtles}{SpatialPointsDataFrame}(spdf)
 }
 \arguments{
-\item{spdf}{}
+\item{spdf}{description needed}
 }
 \value{
 agentMatrix

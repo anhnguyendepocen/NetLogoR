@@ -1,7 +1,6 @@
 ################################################################################
 #' The NLworld class
 #'
-#'
 #' A \code{NLworld} object is a grid composed of squared patches (i.e., pixels)
 #' that behaves mostly the same as a \code{RasterLayer} object.
 #' Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
@@ -37,7 +36,7 @@
 setClass(
   "NLworld",
   contains = c("RasterLayer"),
-  representation (
+  representation(
     minPxcor = "numeric",
     maxPxcor = "numeric",
     minPycor = "numeric",
@@ -47,38 +46,35 @@ setClass(
   )
 )
 
+#' @include Classes.R
 #' @export
 #' @name [
+#' @aliases [,NLworld,numeric,numeric,ANY-method
 #' @docType methods
-#' @rdname NLworld-class
+#' @rdname extract-methods
 setMethod(
   "[",
   signature("NLworld", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
-
+  definition = function(x, i, j, ..., drop) {
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     xValues <- values(x)
     cellValues <- xValues[cells]
-
     return(cellValues)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname NLworld-class
+#' @aliases [<-,NLworld,numeric,numeric,ANY-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworld","numeric","numeric","ANY"),
+  signature("NLworld", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, value) {
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     x@data@values[cells] <- value
-
     validObject(x)
     return(x)
-  }
-)
-
+})
 
 ################################################################################
 #' The NLworldStack class
@@ -102,20 +98,21 @@ setClass(
 
 #' @export
 #' @name [
+#' @aliases [,NLworldStack,numeric,numeric,ANY-method
 #' @docType methods
-#' @rdname NLworldStack-class
+#' @rdname extract-methods
 setMethod(
   "[",
   signature("NLworldStack", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
-
+  definition = function(x, i, j, ..., drop) {
     x_l <- x[[1]]
     cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
     xValues <- values(x)
     cellValues <- xValues[cells,]
 
-    if(class(cellValues) != "matrix"){
-      cellValues <- matrix(cellValues, ncol = nlayers(x), byrow = TRUE, dimnames = list(NULL, names(cellValues)))
+    if (class(cellValues) != "matrix") {
+      cellValues <- matrix(cellValues, ncol = nlayers(x), byrow = TRUE,
+                           dimnames = list(NULL, names(cellValues)))
     }
 
     return(cellValues)
@@ -124,10 +121,11 @@ setMethod(
 
 #' @export
 #' @name [<-
-#' @rdname NLworldStack-class
+#' @aliases [<-,NLworldStack,numeric,numeric,matrix-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldStack","numeric","numeric","matrix"),
+  signature("NLworldStack", "numeric", "numeric", "matrix"),
   definition = function(x, i, j, value) {
 
     x_l <- x[[1]]
@@ -135,7 +133,7 @@ setReplaceMethod(
     xValues <- values(x)
     xValues[cells,] <- value
 
-    for(k in 1:nlayers(x)){
+    for (k in 1:nlayers(x)) {
       x <- setValues(x, values = xValues[,k], layer = k) # replace values of each layer
     }
 
@@ -144,37 +142,37 @@ setReplaceMethod(
   }
 )
 
-#' #' @export
-#' #' @name [<-
-#' #' @rdname NLworldStack-class
-#' setReplaceMethod(
-#'   "[",
-#'   signature("NLworldStack","numeric","numeric","numeric"),
-#'   definition = function(x, i, j, value) {
-#'
-#'     value <- matrix(data = value, nrow = 1, ncol = length(value))
-#'
-#'     # Copy/paste of above. Putting :
-#'     # x[i,j] <- value
-#'     # did not work
-#'
-#'     x_l <- x[[1]]
-#'     cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
-#'     xValues <- values(x)
-#'     xValues[cells,] <- value
-#'
-#'     for(k in 1:nlayers(x)){
-#'       x <- setValues(x, values = xValues[,k], layer = k) # replace values of each layer
-#'     }
-#'
-#'     validObject(x)
-#'     return(x)
-#'
-#'     # end copy/paste from above
-#'
-#'   }
-#' )
-
+# #' @export
+# #' @name [<-
+# #' @aliases [<-,NLworldStack,numeric,numeric,numeric-method
+# #' @rdname extract-methods
+# setReplaceMethod(
+#   "[",
+#   signature("NLworldStack", "numeric", "numeric", "numeric"),
+#   definition = function(x, i, j, value) {
+#
+#     value <- matrix(data = value, nrow = 1, ncol = length(value))
+#
+#     # Copy/paste of above. Putting :
+#     # x[i,j] <- value
+#     # did not work
+#
+#     x_l <- x[[1]]
+#     cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
+#     xValues <- values(x)
+#     xValues[cells,] <- value
+#
+#     for (k in 1:nlayers(x)) {
+#       x <- setValues(x, values = xValues[,k], layer = k) # replace values of each layer
+#     }
+#
+#     validObject(x)
+#     return(x)
+#
+#     # end copy/paste from above
+#
+#   }
+# )
 
 ################################################################################
 #' The \code{NLworlds} class
@@ -190,10 +188,9 @@ setReplaceMethod(
 #' @rdname NLworlds-class
 #' @author Sarah Bauduin
 #' @exportClass NLworlds
-setClassUnion(name="NLworlds",
-              members=c("NLworld", "NLworldStack")
+setClassUnion(name = "NLworlds",
+              members = c("NLworld", "NLworldStack")
 )
-
 
 ################################################################################
 #' Create a NLworldStack
@@ -214,10 +211,8 @@ setClassUnion(name="NLworlds",
 #' w2 <- set(world = w2, agents = patches(w2), val = runif(count(patches(w2))))
 #' w3 <- NLstack(w1, w2)
 #'
-#' library(SpaDES)
-#' clearPlot()
-#' Plot(w3)
-#'
+#' #clearPlot()
+#' #Plot(w3)
 #'
 #' @export
 #' @importFrom raster addLayer
@@ -232,7 +227,7 @@ setGeneric(
   signature = "...",
   function(...) {
     standardGeneric("NLstack")
-  })
+})
 
 #' @export
 #' @rdname NLstack
@@ -249,9 +244,7 @@ setMethod(
     worldStack <- as(rasterS, "NLworldStack")
 
     return(worldStack)
-  }
-)
-
+})
 
 ################################################################################
 #' The NLworlds class
@@ -267,10 +260,9 @@ setMethod(
 #' @rdname NLworlds-class
 #' @author Sarah Bauduin
 #' @exportClass NLworlds
-setClassUnion(name="NLworlds",
-              members=c("NLworld", "NLworldStack")
+setClassUnion(name = "NLworlds",
+              members = c("NLworld", "NLworldStack")
 )
-
 
 ################################################################################
 #' The NLworldMatrix class
@@ -288,7 +280,7 @@ setClassUnion(name="NLworlds",
 #'
 #' @aliases NLworldMatrix
 #' @seealso NLworld
-#' @name NLworldMatrix
+#' @name NLworldMatrix-class
 #' @rdname NLworldMatrix-class
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
 #' @exportClass NLworldMatrix
@@ -296,7 +288,7 @@ setClassUnion(name="NLworlds",
 #'
 setClass(
   "NLworldMatrix",
-  representation (
+  representation(
     .Data = "matrix",
     minPxcor = "numeric",
     maxPxcor = "numeric",
@@ -310,12 +302,13 @@ setClass(
 
 #' @export
 #' @name [
+#' @aliases [,NLworldMatrix,numeric,numeric,ANY-method
 #' @docType methods
-#' @rdname NLworldMatrix-class
+#' @rdname extract-methods
 setMethod(
   "[",
   signature("NLworldMatrix", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
+  definition = function(x, i, j, ..., drop) {
 
     # cellNum <- cellFromPxcorPycor(world = x, pxcor = i, pycor = j)
     # allValues <- as.numeric(t(x)) # t() to retrieve the values by rows
@@ -325,32 +318,27 @@ setMethod(
     cellValues <- x[cbind(rowMat, colMat)]
 
     return(cellValues)
-  }
-)
+})
 
 #' @export
 #' @name [
-#' @docType methods
-#' @rdname NLworldMatrix-class
+#' @aliases [,NLworldMatrix,missing,missing,ANY-method
+#' @rdname extract-methods
 setMethod(
   "[",
   signature("NLworldMatrix", "missing", "missing", "ANY"),
-  definition = function(x, drop) {
-    #browser()
+  definition = function(x, ..., drop) {
     return(as.numeric(t(x@.Data)))
-  }
-)
-
-
+})
 
 #' @export
 #' @name [<-
-#' @rdname NLworldMatrix-class
+#' @aliases [<-,NLworldMatrix,numeric,numeric,ANY-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldMatrix","numeric","numeric","ANY"),
+  signature("NLworldMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, value) {
-
     # matj <- i - attr(x, "minPxcor") + 1
     # mati <- attr(x, "maxPycor") - j + 1
     # x[cbind(mati, matj)] <- value
@@ -360,27 +348,24 @@ setReplaceMethod(
 
     validObject(x)
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname NLworldMatrix-class
+#' @aliases [<-,NLworldMatrix,missing,missing,ANY-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldMatrix","missing","missing","ANY"),
-  definition = function(x, value) {
-
+  signature("NLworldMatrix", "missing", "missing", "ANY"),
+  definition = function(x, i, j, value) {
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
-    if(length(value) != nCell){
+    if (length(value) != nCell) {
       value <- rep(value, nCell)
     }
     x@.Data <- matrix(data = value, ncol = dim(x@.Data)[2], byrow = TRUE)
     validObject(x)
     return(x)
-  }
-)
-
+})
 
 ################################################################################
 #' Create a world
@@ -405,7 +390,7 @@ setGeneric(
   "createNLworldMatrix",
   function(minPxcor, maxPxcor, minPycor, maxPycor, data = NA) {
     standardGeneric("createNLworldMatrix")
-  })
+})
 
 #' @export
 #' @rdname createNLworldMatrix
@@ -438,9 +423,7 @@ setMethod(
   signature = c("missing", "missing", "missing", "missing", "missing"),
   definition = function() {
     createNLworldMatrix(-16, 16, -16, 16, data = NA)
-  }
-)
-
+})
 
 ################################################################################
 #' The NLworldArray class
@@ -448,9 +431,8 @@ setMethod(
 #' This is similar to \code{NLworldStack}, but it is an s4 class extension of
 #' \code{array}.
 #'
-#' @aliases NLworldArray
 #' @seealso NLworldStack
-#' @name NLworldArray
+#' @name NLworldArray-class
 #' @rdname NLworldArray-class
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
 #' @exportClass NLworldArray
@@ -458,7 +440,7 @@ setMethod(
 #'
 setClass(
   "NLworldArray",
-  representation (
+  representation(
     .Data = "array",
     minPxcor = "numeric",
     maxPxcor = "numeric",
@@ -472,85 +454,75 @@ setClass(
 
 #' @export
 #' @name [
+#' @aliases [,NLworldArray,numeric,numeric,ANY-method
 #' @docType methods
-#' @rdname NLworldArray-class
+#' @rdname extract-methods
 setMethod(
   "[",
   signature("NLworldArray", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
-
-    #browser()
+  definition = function(x, i, j, ..., drop) {
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     pCoords <- cbind(rowMat, colMat)
-    cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[cbind(pCoords, z)]))}))
+    cellValues <- unlist(lapply(1:dim(x)[3], function(z){
+      as.numeric(t(x@.Data[cbind(pCoords, z)]))
+    }))
     dim(cellValues) <- c(NROW(pCoords), 2L)
     colnames(cellValues) <- dimnames(x@.Data)[[3]]
-
     return(cellValues)
-  }
-)
+})
 
 #' @export
 #' @name [
+#' @aliases [,NLworldArray,missing,missing,ANY-method
 #' @docType methods
-#' @rdname NLworldArray-class
+#' @rdname extract-methods
 setMethod(
   "[",
   signature("NLworldArray", "missing", "missing", "ANY"),
-  definition = function(x, drop) {
-
-    #browser()
+  definition = function(x, ..., drop) {
     cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[,,z]))}))
     dim(cellValues) <- c(dim(x)[1] * dim(x)[2], dim(x)[3])
     colnames(cellValues) <- dimnames(x@.Data)[[3]]
-
     return(cellValues)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname NLworldArray-class
+#' @aliases [<-,NLworldArray,numeric,numeric,matrix-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldArray","numeric","numeric","matrix"),
+  signature("NLworldArray", "numeric", "numeric", "matrix"),
   definition = function(x, i, j, value) {
-
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     coords <- cbind(rowMat, colMat)
-    for(k in 1:dim(x)[3]){
+    for (k in 1:dim(x)[3]) {
       x@.Data[cbind(coords, k)] <- value[,k]
     }
-
     validObject(x)
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname NLworldArray-class
+#' @aliases [<-,NLworldArray,missing,missing,matrix-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldArray","missing","missing","matrix"),
-  definition = function(x, value) {
-
+  signature("NLworldArray", "missing", "missing", "matrix"),
+  definition = function(x, i, j, value) {
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
-    if(NROW(value) != nCell){ # assuming value has one row
+    if (NROW(value) != nCell) { # assuming value has one row
       value <- value[rep(1, nCell),]
     }
-
-    for(k in 1:dim(x)[3]){
-      x@.Data[,,k] <- matrix(data = value[,k], ncol = dim(x@.Data)[2], byrow = TRUE)
+    for (k in 1:dim(x)[3]) {
+      x@.Data[,,k] <- matrix(data = value[, k], ncol = dim(x@.Data)[2], byrow = TRUE)
     }
-
     validObject(x)
     return(x)
-  }
-)
-
+})
 
 ################################################################################
 #' Create a NLworldArray
@@ -574,7 +546,7 @@ setGeneric(
   signature = "...",
   function(...) {
     standardGeneric("NLworldArray")
-  })
+})
 
 #' @export
 #' @rdname NLworldArray
@@ -582,10 +554,9 @@ setMethod(
   "NLworldArray",
   signature = "NLworldMatrix",
   definition = function(...) {
-
     NLwMs <- list(...)
-
-    if(length(unique(lapply(NLwMs, FUN = function(x){x@extent}))) == 1) { # similar dimensions can have different extent
+    # similar dimensions can have different extent
+    if (length(unique(lapply(NLwMs, FUN = function(x){x@extent}))) == 1) {
       out <- abind::abind(NLwMs@.Data, along = 3)
     } else {
       stop("NLworldMatrix extents must all be equal")
@@ -605,7 +576,6 @@ setMethod(
     return(world)
 })
 
-
 ################################################################################
 #' The NLworldMs class
 #'
@@ -616,14 +586,13 @@ setMethod(
 #' @slot members  NLworldMatrix, NLworldArray
 #'
 #' @aliases NLworldMs
-#' @name NLworldMs
+#' @name NLworldMs-class
 #' @rdname NLworldMs-class
 #' @author Sarah Bauduin, and Eliot McIntire
 #' @exportClass NLworldMs
-setClassUnion(name="NLworldMs",
-              members=c("NLworldMatrix", "NLworldArray")
+setClassUnion(name = "NLworldMs",
+              members = c("NLworldMatrix", "NLworldArray")
 )
-
 
 ################################################################################
 #' Cells numbers from patches coordinates
@@ -651,7 +620,7 @@ setGeneric(
   "cellFromPxcorPycor",
   function(world, pxcor, pycor) {
     standardGeneric("cellFromPxcorPycor")
-  })
+})
 
 #' @export
 #' @rdname cellFromPxcorPycor
@@ -661,8 +630,7 @@ setMethod(
   definition = function(world, pxcor, pycor) {
     cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
     return(cellNum)
-  }
-)
+})
 
 #' @export
 #' @rdname cellFromPxcorPycor
@@ -673,9 +641,8 @@ setMethod(
     #browser()
     j <- pxcor - world@minPxcor + 1
     i <- world@maxPycor - pycor + 1
-    (i-1)*ncol(world)+j # Faster
-  }
-)
+    (i - 1) * ncol(world) + j # Faster
+})
 
 ################################################################################
 #' Patches coordinates from cells numbers
@@ -706,7 +673,7 @@ setGeneric(
   "PxcorPycorFromCell",
   function(world, cellNum) {
     standardGeneric("PxcorPycorFromCell")
-  })
+})
 
 #' @export
 #' @rdname PxcorPycorFromCell
@@ -717,8 +684,7 @@ setMethod(
     XY <- xyFromCell(world, cellNum)
     pCoords <- cbind(pxcor = XY[,1], pycor = XY[,2])
     return(pCoords)
-  }
-)
+})
 
 #' @export
 #' @rdname PxcorPycorFromCell
@@ -731,7 +697,6 @@ setMethod(
   }
 )
 
-
 ################################################################################
 #' Convert NLWorldMatrix indices to vector indices
 #'
@@ -743,6 +708,12 @@ setMethod(
 #' @param cellNum Integer. Vector of cells number.
 #'
 #' @return Numeric vector with indices that will work with an NLWorldMatrix.
+#'
+#' @export
+#' @docType methods
+#' @rdname NLWorldIndex
+#'
+#' @author Eliot McIntire
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
@@ -758,18 +729,11 @@ setMethod(
 #' # Correct index
 #' identical(w1[NLWorldIndex(w1, index)], rasValue)
 #'
-#'
-#' @export
-#' @docType methods
-#' @rdname conversions
-#'
-#' @author Eliot McIntire
-#'
 setGeneric(
   "NLWorldIndex",
   function(world, cellNum) {
     standardGeneric("NLWorldIndex")
-  })
+})
 
 #' @export
 #' @rdname NLWorldIndex
@@ -778,6 +742,6 @@ setMethod(
   signature = c("NLworldMatrix", "numeric"),
   definition = function(world, cellNum) {
     b <- dim(world)
-    floor((cellNum-1)/b[2])  + seq.int(from = 1, to = prod(b), by = b[1])[(cellNum-1) %% b[2] + 1]
+    floor((cellNum - 1) / b[2])  + seq.int(from = 1, to = prod(b), by = b[1])[(cellNum - 1) %% b[2] + 1]
   }
 )

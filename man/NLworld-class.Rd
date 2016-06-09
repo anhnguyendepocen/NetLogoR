@@ -4,14 +4,7 @@
 \name{NLworld-class}
 \alias{NLworld}
 \alias{NLworld-class}
-\alias{[}
-\alias{[<-}
 \title{The NLworld class}
-\usage{
-\S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, drop)
-
-\S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j) <- value
-}
 \description{
 A \code{NLworld} object is a grid composed of squared patches (i.e., pixels)
 that behaves mostly the same as a \code{RasterLayer} object.

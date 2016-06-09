@@ -1,3 +1,7 @@
+if (getRversion() >= "3.1.0") {
+  utils::globalVariables(c("from", "id", "to"))
+}
+
 ################################################################################
 #' Diffuse values in a world
 #'
@@ -50,7 +54,7 @@ setGeneric(
   "diffuse",
   function(world, pVar, share, nNeighbors, torus = FALSE) {
     standardGeneric("diffuse")
-  })
+})
 
 #' @export
 #' @rdname diffuse
@@ -71,18 +75,18 @@ setMethod(
     #newWorld <- setValues(world, as.numeric(newVal))
 
     df <- adj(world, cells = cellNum, directions = nNeighbors, torus = torus)
-    nNeigh <- plyr::count(df[,"from"])
+    nNeigh <- plyr::count(df[, "from"])
     toGiveNeigh <- rep(toGive, nNeigh$freq)
     df <- df[order(df[, "from"]),]
     DT <- data.table(df, toGiveNeigh)
     setkey(DT, from)
     DT <- DT[ , loose := sum(toGiveNeigh), by = from] # how much each patch give
-    loose <- unique(DT[,c(1, 4), with = FALSE]) # from and loose
+    loose <- unique(DT[, c(1, 4), with = FALSE]) # from and loose
     setkey(DT, to)
     DT <- DT[ , win := sum(toGiveNeigh), by = to] # how much each patch receive
     win <- unique(DT[,c(2, 5), with = FALSE]) # to and win
 
-    newVal <- val - loose[,loose] + win[,win]
+    newVal <- val - loose[, loose] + win[, win]
     newWorld <- setValues(world, newVal)
 
     return(newWorld)
@@ -439,16 +443,17 @@ setGeneric(
   "neighbors",
   function(world, agents, nNeighbors, torus = FALSE) {
     standardGeneric("neighbors")
-  })
+})
 
 #' @export
+#' @importFrom data.table data.table
 #' @rdname neighbors
 setMethod(
   "neighbors",
   signature = c(world = "NLworlds", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
-    if(nrow(agents) < 100000) { # data.frame is faster below 100 agents, data.table faster above
+    if (nrow(agents) < 100000) { # data.frame is faster below 100 agents, data.table faster above
        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
        neighbors <- adj(world, cells = cellNum, directions = nNeighbors,
                         torus = torus, id = seq_along(cellNum))
@@ -578,9 +583,12 @@ setMethod(
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4))
-#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), duplicate = TRUE)
-#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE)
-#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4), torus = TRUE, duplicate = TRUE)
+#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4),
+#'       duplicate = TRUE)
+#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4),
+#'       torus = TRUE)
+#' patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4),
+#'       torus = TRUE, duplicate = TRUE)
 #'
 #'
 #' @export
@@ -682,6 +690,8 @@ setMethod(
 #'
 #' Report an empty patch agentset.
 #'
+#' @param x  documentation needed
+#'
 #' @return Matrix (ncol = 2, nrow = 0) with the first column "pxcor" and the
 #'         second column "pycor".
 #'
@@ -706,7 +716,7 @@ setGeneric(
   "noPatches",
   function(x) {
     standardGeneric("noPatches")
-  })
+})
 
 #' @export
 #' @rdname noPatches
@@ -714,9 +724,8 @@ setMethod(
   "noPatches",
   signature = "missing",
   definition = function() {
-    return(matrix(, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
-  }
-)
+    return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
+})
 
 
 ################################################################################

@@ -4,12 +4,16 @@
 \name{fd}
 \alias{fd}
 \alias{fd,SpatialPointsDataFrame,numeric-method}
+\alias{fd,agentMatrix,numeric-method}
 \title{Move forward}
 \usage{
 fd(turtles, dist, world, torus = FALSE, out = TRUE)
 
 \S4method{fd}{SpatialPointsDataFrame,numeric}(turtles, dist, world,
   torus = FALSE, out = TRUE)
+
+\S4method{fd}{agentMatrix,numeric}(turtles, dist, world, torus = FALSE,
+  out = TRUE)
 }
 \arguments{
 \item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
@@ -56,14 +60,12 @@ w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
 t1 <- createOTurtles(world = w1, n = 10)
 
-library(SpaDES)
-clearPlot()
-Plot(w1)
-Plot(t1, addTo ="w1")
+#clearPlot()
+#Plot(w1)
+#Plot(t1, addTo ="w1")
 
 t1 <- fd(turtles = t1, dist = 1)
-Plot(t1, addTo ="w1")
-
+#Plot(t1, addTo ="w1")
 
 }
 \author{

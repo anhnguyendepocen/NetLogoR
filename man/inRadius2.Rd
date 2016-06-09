@@ -11,6 +11,17 @@ inRadius2(agents, radius, agents2, world, torus = FALSE)
 \S4method{inRadius2}{matrix,numeric,matrix}(agents, radius, agents2, world,
   torus = FALSE)
 }
+\arguments{
+\item{agents}{description needed}
+
+\item{radius}{description needed}
+
+\item{agents2}{description needed}
+
+\item{world}{description needed}
+
+\item{torus}{description needed}
+}
 \description{
 Report the patches or turtles among \code{agents2} within given distances of
 each of the \code{agents}.

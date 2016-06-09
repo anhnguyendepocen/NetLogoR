@@ -4,14 +4,7 @@
 \name{NLworldStack-class}
 \alias{NLworldStack}
 \alias{NLworldStack-class}
-\alias{[}
-\alias{[<-}
 \title{The NLworldStack class}
-\usage{
-\S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, drop)
-
-\S4method{[}{NLworldStack,numeric,numeric,matrix}(x, i, j) <- value
-}
 \description{
 A \code{NLworldStack} object is similar to a \code{RasterStack} object, it is
 a collection of \code{NLworld} objects with the same extent.

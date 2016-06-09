@@ -43,8 +43,10 @@ subHeadings(angle1, angle2, range360 = FALSE)
 
               Numeric. Vector of angles.}
 
-\item{range360}{Logical. If \code{range360 = TRUE}, returned values are between 0° and
-360°; if \code{range360 = FALSE}, returned values are between -180° and 180°.
+\item{range360}{Logical. If \code{range360 = TRUE}, returned values are
+between 0 and 360 degrees;
+if \code{range360 = FALSE}, returned values are between
+-180 and 180 degrees.
 Default is \code{range360 = FALSE}.}
 }
 \value{
@@ -68,7 +70,6 @@ This function does the opposite as the one in NetLogo where
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createOTurtles(n = 10, world = w1)
 subHeadings(angle1 = t1, angle2 = 0)
-
 
 }
 \author{

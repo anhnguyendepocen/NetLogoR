@@ -30,10 +30,8 @@ w2 <- createNLworld()
 w2 <- set(world = w2, agents = patches(w2), val = runif(count(patches(w2))))
 w3 <- NLstack(w1, w2)
 
-library(SpaDES)
-clearPlot()
-Plot(w3)
-
+#clearPlot()
+#Plot(w3)
 
 }
 \author{

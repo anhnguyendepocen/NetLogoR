@@ -29,6 +29,8 @@ nOf(agents, n)
 
               Matrix (ncol = 2) with the first column "whoTurtles" and the
               second column "id".}
+
+\item{n}{documentation needed}
 }
 \value{
 Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"

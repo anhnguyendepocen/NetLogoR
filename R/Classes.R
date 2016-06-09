@@ -1,14 +1,26 @@
+if (getRversion() >= "3.1.0") {
+  utils::globalVariables(c("xcor", "ycor"))
+}
+
+#' SpatialPoints2
+#'
+#' needs documentation
+#'
+#' @param coords       needs documentation
+#' @param proj4string  needs documentation
+#' @param bbox         needs documentation
+#'
+#' @importFrom sp CRS
 #' @export
-SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = NULL)
-{
-  #coords = coordinates(coords)
+SpatialPoints2 <- function(coords, proj4string = CRS(as.character(NA)), bbox = NULL) {
+  #coords = sp::coordinates(coords)
   colNames = dimnames(coords)[[2]]
   if (is.null(colNames))
     colNames = paste("coords.x", 1:(dim(coords)[2]), sep = "")
   rowNames = dimnames(coords)[[1]]
   dimnames(coords) = list(rowNames, colNames)
   if (is.null(bbox))
-    bbox <- NetLogoR::.bboxCoords(coords)
+    bbox <- .bboxCoords(coords)
   new("SpatialPoints", coords = coords, bbox = bbox, proj4string = proj4string)
 }
 
@@ -16,11 +28,17 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
 #'
 #' This is a drop in replacement for .bboxCoords in raster package.
 #'
+#' @param coords documentation needed
+#'
 #' @importFrom matrixStats colRanges
 #' @rdname bboxCoords
 .bboxCoords <- function(coords) {
+<<<<<<< HEAD
 
     #stopifnot(length(coords) > 0)
+=======
+    stopifnot(length(coords) > 0)
+>>>>>>> master
     bbox = colRanges(coords)
     dimnames(bbox)[[2]] = c("min", "max")
     bbox
@@ -32,30 +50,45 @@ SpatialPoints2 <- function (coords, proj4string = CRS(as.character(NA)), bbox = 
 setMethod(
   "extent",
   signature("NLworldMs"),
-  definition = function (x, ...) {
+  definition = function(x, ...) {
     attr(x, "extent")
-  })
+})
 
 #' agentDataTable class
 #'
-#' This is incomplete.
+#' Documentation needed
 #'
+#' @name agentDataTable-class
+#' @rdname agentDataTable-class
+setOldClass("agentDataTable")
+
+#' Create an agentDataTable object
+#'
+#' description needed
+#'
+#' @param coords       description needed
+#' @param ...          description needed
+#' @param coords.nrs   description needed
+#' @param proj4string  description needed
+#' @param match.ID     description needed
+#' @param bbox         description needed
 #'
 #' @importClassesFrom data.table data.table
+#' @importFrom sp CRS
 #' @name agentDataTable
 #' @rdname agentDataTable
 #' @author Eliot McIntire
 #' @exportClass agentDataTable
 #' @examples
+#' library(microbenchmark)
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(world = w1, n = 10, agent = TRUE)
 #'
-#' library(microbenchmark)
 #' N = 1e5
 #' microbenchmark(createTurtles(world = w1, n = N, agent = TRUE),
 #'               createTurtles(world = w1, n = N, agent = FALSE))
-agentDataTable <- function(coords, ..., coords.nrs = numeric(0), proj4string = CRS(as.character(NA)),
-                           match.ID, bbox = NULL) {
+agentDataTable <- function(coords, ..., coords.nrs = numeric(0),
+                           proj4string = CRS(NA_character_), match.ID, bbox = NULL) {
   dt <- data.table(coords, ...)
   attr(dt, "proj4string") <- proj4string
   attr(dt, "bbox") <- bbox
@@ -64,123 +97,114 @@ agentDataTable <- function(coords, ..., coords.nrs = numeric(0), proj4string = C
   dt
 }
 
-setOldClass("agentDataTable")
-
-
-
-#' agentMatrix class
+#' The agentMatrix class
 #'
-#' This is incomplete.
+#' Documentation needed.
 #'
-#'
-#' @name agentMatrix
-#' @rdname agentMatrix
+#' @name agentMatrix-class
+#' @rdname agentMatrix-class
 #' @author Eliot McIntire
 #' @exportClass agentMatrix
 #' @examples
 #' newAgent <- new("agentMatrix",
-#'       coords=cbind(pxcor=c(1,2,5),pycor=c(3,4,6)),
-#'       char = letters[c(1,2,6)],
+#'       coords = cbind(pxcor = c(1, 2, 5), pycor = c(3, 4, 6)),
+#'       char = letters[c(1, 2, 6)],
 #'       nums2 = c(4.5, 2.6, 2343),
-#'       char2 = LETTERS[c(4,24,3)],
+#'       char2 = LETTERS[c(4, 24, 3)],
 #'       nums = 5:7)
 #'
 #' # compare speeds -- about 5x faster
+#' library(microbenchmark)
 #' microbenchmark(times = 499,
-#'   spdf={
-#'      SpatialPointsDataFrame(coords=cbind(pxcor=c(1,2,5),pycor=c(3,4,6)),
-#'      data = data.frame(
-#'        char = letters[c(1,2,6)],
-#'        nums2 = c(4.5, 2.6, 2343),
-#'        char2 = LETTERS[c(4,24,3)],
-#'        nums = 5:7))},
-#'   agentMat = { agentMatrix(
-#'      coords=cbind(pxcor=c(1,2,5),
-#'      pycor=c(3,4,6)),
-#'      char = letters[c(1,2,6)],
+#'  spdf = {SpatialPointsDataFrame(
+#'    coords = cbind(pxcor = c(1, 2, 5), pycor = c(3, 4, 6)),
+#'    data = data.frame(
+#'      char = letters[c(1, 2, 6)],
 #'      nums2 = c(4.5, 2.6, 2343),
-#'      char2 = LETTERS[c(4,24,3)],
-#'      nums = 5:7)},
-#'   agentMatDirect = { new("agentMatrix",
-#'      coords=cbind(pxcor=c(1,2,5),
-#'      pycor=c(3,4,6)),
-#'      char = letters[c(1,2,6)],
+#'      char2 = LETTERS[c(4, 24, 3)],
+#'      nums = 5:7))},
+#'   agentMat = {agentMatrix(
+#'     coords = cbind(pxcor = c(1, 2, 5),
+#'     pycor = c(3, 4, 6)),
+#'     char = letters[c(1, 2, 6)],
+#'     nums2 = c(4.5, 2.6, 2343),
+#'     char2 = LETTERS[c(4, 24, 3)],
+#'     nums = 5:7)},
+#'   agentMatDirect = {new("agentMatrix",
+#'      coords = cbind(pxcor = c(1, 2, 5),
+#'      pycor = c(3, 4, 6)),
+#'      char = letters[c(1, 2, 6)],
 #'      nums2 = c(4.5, 2.6, 2343),
-#'      char2 = LETTERS[c(4,24,3)],
+#'      char2 = LETTERS[c(4, 24, 3)],
 #'      nums = 5:7)})
 #'
 setClass("agentMatrix", contains = "matrix",
-         slots = c(x = "matrix", levels = "list",
-                   bbox = "matrix"),
-         prototype = prototype(x = matrix(numeric()), levels = list(),
-                               bbox = matrix(numeric()))
+         slots = c(x = "matrix", levels = "list", bbox = "matrix"),
+         prototype = prototype(
+           x = matrix(numeric()), levels = list(), bbox = matrix(numeric())
          )
+)
 
 #' A meta class for agentMatrix and SpatialPointsDataFrame
 #'
 #' Both these types can be used by NetLogoR to describe turtle agents.
 #'
 #' @aliases agentClasses
-#' @name agentClasses
-#' @rdname agentClasses
+#' @name agentClasses-class
+#' @rdname agentClasses-class
 #' @author Eliot McIntire
-#' @importClassesFrom sp SpatialPointsDataFrame SpatialPixelsDataFrame
+#' @importClassesFrom sp SpatialPixelsDataFrame SpatialPointsDataFrame
 #' @exportClass agentClasses
-setClassUnion(name="agentClasses",
-              members=c("SpatialPointsDataFrame", "agentMatrix", "SpatialPixelsDataFrame")
+setClassUnion(name = "agentClasses",
+              members = c("agentMatrix", "SpatialPointsDataFrame", "SpatialPixelsDataFrame")
 )
 
-#if(getRversion() >= "3.2.0") {
-setMethod("initialize",
-          "agentMatrix",
-          function(.Object="agentMatrix", coords, ..., levelsAM)
-  {
-
+setMethod(
+  "initialize",
+  "agentMatrix",
+  function(.Object="agentMatrix", coords, ..., levelsAM) {
     Coords <- TRUE
-    if(missing(coords)) {
+    if (missing(coords)) {
       coords <- NULL
     }
-    if(is.null(coords)) {
-      coords <- matrix(c(NA, NA), ncol=2)
+    if (is.null(coords)) {
+      coords <- matrix(c(NA, NA), ncol = 2)
       Coords <- FALSE
     }
-    if(is.data.frame(coords)) {
+    if (is.data.frame(coords)) {
       coords <- as.matrix(coords)
     }
     dotCols <- list(...)
 
-    if(missing(levelsAM)) {
-
-      if(all(sapply(dotCols, is.numeric))) {
-        if(sapply(dotCols, is.matrix)) {
-          otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
+    if (missing(levelsAM)) {
+      if (all(sapply(dotCols, is.numeric))) {
+        if (sapply(dotCols, is.matrix)) {
+          otherCols <- append(list(xcor = coords[,1],ycor = coords[,2]), dotCols)
           names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
         } else {
-          otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
+          otherCols <- append(list(xcor = coords[,1],ycor = coords[,2]), dotCols)
         }
-        if(length(otherCols)>0) {
+        if (length(otherCols) > 0) {
           .Object@.Data <- otherCols
           .Object@levels <- rep(list(NULL), ncol(.Object@.Data))
           names(.Object@levels) <- colnames(otherCols)
-          if(Coords) {
-            .Object@bbox <- NetLogoR:::.bboxCoords(coords)
+          if (Coords) {
+            .Object@bbox <- .bboxCoords(coords)
           } else {
-            .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
+            .Object@bbox <- matrix(rep(NA_real_, 4), ncol = 2)
           }
         }
       } else {
-
         isDF <- sapply(dotCols, function(x) is(x, "data.frame"))
-        if(any(isDF))
-          dotCols <- unlist(lapply(dotCols, as.list), recursive=FALSE)
-        if(any(names(dotCols)=="stringsAsFactors"))
+        if (any(isDF))
+          dotCols <- unlist(lapply(dotCols, as.list), recursive = FALSE)
+        if (any(names(dotCols) == "stringsAsFactors"))
           dotCols$stringsAsFactors <- NULL
-
-        if(all(sapply(dotCols, is.matrix))) {
-          otherCols <- list(xcor=coords[,1],ycor=coords[,2], dotCols[[1]][,1])
+        if (all(sapply(dotCols, is.matrix))) {
+          otherCols <- list(xcor = coords[,1],ycor = coords[,2], dotCols[[1]][,1])
           names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
         } else {
-          otherCols <- append(list(xcor=coords[,1],ycor=coords[,2]), dotCols)
+          otherCols <- append(list(xcor = coords[,1],ycor = coords[,2]), dotCols)
         }
         charCols <- sapply(otherCols, is.character)
         charCols <- names(charCols)[charCols]
@@ -190,34 +214,31 @@ setMethod("initialize",
             factor(x, levels = sort(unique(x)))
           })
 
-        if(length(otherCols[[1]]) == 1) names(otherCols[[1]]) <- 1
-        if(length(otherCols)>0) {
+        if (length(otherCols[[1]]) == 1) names(otherCols[[1]]) <- 1
+        if (length(otherCols) > 0) {
           .Object@.Data <- do.call(cbind,otherCols)
-          .Object@levels <- lapply(otherCols[charCols], function(x) if(is.factor(x)) levels(x) else NULL)
-          if(Coords) {
-            .Object@bbox <- NetLogoR:::.bboxCoords(coords)
+          .Object@levels <- lapply(otherCols[charCols], function(x) if (is.factor(x)) levels(x) else NULL)
+          if (Coords) {
+            .Object@bbox <- .bboxCoords(coords)
           } else {
-            .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
+            .Object@bbox <- matrix(rep(NA_real_, 4), ncol = 2)
           }
         }
       }
     } else {
-
-      if( (is.matrix(dotCols[[1]]) & is.numeric(dotCols[[1]])) | is(dotCols[[1]], "agentMatrix"))
+      if ( (is.matrix(dotCols[[1]]) & is.numeric(dotCols[[1]])) | is(dotCols[[1]], "agentMatrix"))
         .Object@.Data <- cbind(coords, dotCols[[1]])
       else
         stop("if passing levelsAM, then ... must be a numeric matrix")
       .Object@levels <- levelsAM
-      if(Coords) {
-        .Object@bbox <- NetLogoR:::.bboxCoords(coords)
+      if (Coords) {
+        .Object@bbox <- .bboxCoords(coords)
       } else {
-        .Object@bbox <- matrix(rep(NA_real_, 4), ncol=2)
+        .Object@bbox <- matrix(rep(NA_real_, 4), ncol = 2)
       }
     }
     .Object
-
 })
-
 
 ################################################################################
 #' Create a new agentMatrix object
@@ -234,16 +255,15 @@ setMethod("initialize",
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-turtles}
 #'
 #' @examples
-#' agentMatrix()
 #' newAgent <- agentMatrix(
-#'       coords=cbind(pxcor=c(1,2,5),pycor=c(3,4,6)),
-#'       char = letters[c(1,2,6)],
+#'       coords = cbind(pxcor = c(1, 2, 5), pycor = c(3, 4, 6)),
+#'       char = letters[c(1, 2, 6)],
 #'       nums2 = c(4.5, 2.6, 2343),
-#'       char2 = LETTERS[c(4,24,3)],
+#'       char2 = LETTERS[c(4, 24, 3)],
 #'       nums = 5:7)
 #'
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif (count(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #'
@@ -264,235 +284,243 @@ setGeneric(
 #' @rdname agentMatrix
 setMethod(
   "agentMatrix",
-  signature = c(coords="matrix"),
+  signature = c(coords = "matrix"),
   definition = function(..., coords) {
     new("agentMatrix", coords = coords, ...)
   }
 )
 
 #' @export
+#' @importFrom sp coordinates
 #' @rdname agentMatrix
 setMethod(
   "agentMatrix",
-  signature = c(coords="missing"),
+  signature = c(coords = "missing"),
   definition = function(...) {
-    if(is(..., "SpatialPointsDataFrame")) {
+    if (is(..., "SpatialPointsDataFrame")) {
       dots <- list(...)
-      new("agentMatrix", coords = coordinates(dots[[1]]), dots[[1]]@data)
+      new("agentMatrix", coords = sp::coordinates(dots[[1]]), dots[[1]]@data)
     } else {
       new("agentMatrix", coords = NULL, ...)
     }
-
   }
 )
 
+#' Set spatial coordinates
+#'
+#' @param obj  documentation needed
+#' @param ...  additional arguments that may be used by particular methods
+#'
+#'  description needed
+#'
+#' @export
+#' @rdname coordinates
 setMethod(
   "coordinates",
   signature("agentMatrix"),
-  definition = function (obj, ...) {
-    obj@.Data[,1:2,drop=FALSE]
-  })
-
+  definition = function(obj, ...) {
+    obj@.Data[, 1:2, drop = FALSE]
+})
 
 #' @export
 setAs("matrix", "agentMatrix",
       function(from) {
-        tmp <- new("agentMatrix", coords = from[,1:2,drop=FALSE], from[,-(1:2), drop = FALSE])
+        tmp <- new("agentMatrix", coords = from[, 1:2, drop = FALSE], from[, -(1:2), drop = FALSE])
         tmp
-      })
+})
 
 #' @export
 setAs("data.frame", "agentMatrix",
       function(from) {
-        tmp <- new("agentMatrix", coords = from[,1:2,drop=FALSE], from[,-(1:2), drop = FALSE])
+        tmp <- new("agentMatrix", coords = from[, 1:2, drop = FALSE], from[, -(1:2), drop = FALSE])
         tmp
-      })
+})
 
 #' @export
-setAs("agentMatrix","data.frame",
+setAs("agentMatrix", "data.frame",
       function(from) {
         tmp <- data.frame(from@.Data)
         nam <- names(from@levels)
         tmp[,nam] <- lapply(nam, function(n) from@levels[[n]][tmp[,n]])
         tmp
-      })
+})
 
-#' Extract methods for agentMatrix class will generally maintain the \code{agentMatrix}
-#' class. This means that there will still be coordinates, character columns represented
-#' as numerics etc.
+#' Extract or Replace Parts of an Object
+#'
+#' Operators acting on vectors, matrices, arrays and lists to extract or replace parts.
+#'
+#' @note Extract methods for agentMatrix class will generally maintain the \code{agentMatrix} class.
+#' This means that there will still be coordinates, character columns represented as numerics etc.
+#' \code{$} is for extracting the raw columns and does not maintain the \code{agentMatrix} class.
+#'
+#' @param x     A \code{NLworld} object from which to extract element(s) or
+#'                in which to replace element(s).
+#' @param i     Indices specifying elements to extract or replace.
+#' @param j     see \code{i}.
+#' @param ...   other named arguments
+#' @param drop  not implemented
 #'
 #' @export
 #' @name [
+#' @aliases [,agentMatrix,numeric,numeric,ANY-method
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname extract-methods
 setMethod(
   "[",
-  signature(x="agentMatrix", "numeric", "numeric", "ANY"),
+  signature(x = "agentMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, ..., drop) {
-
-    #browser()
     colNames <- colnames(x@.Data)[j]
     levelInd <- match(colNames, names(x@levels))
-    x@.Data <- x@.Data[i,unique(c(1:2,j)),...,drop=FALSE]
-    if(all(is.na(levelInd))) {
+    x@.Data <- x@.Data[i,unique(c(1:2, j)), ..., drop = FALSE]
+    if (all(is.na(levelInd))) {
       x@levels <- list(NULL)
     } else {
       x@levels <- x@levels[colNames]
     }
-    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
+    x@bbox <- .bboxCoords(x@.Data[, 1:2, drop = FALSE])
     x
-
-
   }
 )
 
 #' @export
 #' @name [
+#' @aliases [,agentMatrix,logical,missing,ANY-method
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname extract-methods
 setMethod(
   "[",
-  signature(x="agentMatrix", "logical", "missing", "ANY"),
+  signature(x = "agentMatrix", "logical", "missing", "ANY"),
   definition = function(x, i, ..., drop) {
-
-    x@.Data <- x@.Data[i,,drop=FALSE]
-    if(length(x@.Data)>0)
-      x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
+    x@.Data <- x@.Data[i, , drop = FALSE]
+    if (length(x@.Data) > 0)
+      x@bbox <- .bboxCoords(x@.Data[, 1:2, drop = FALSE])
     x
-
-  }
-)
+})
 
 #' @export
 #' @name [
 #' @docType methods
-#' @rdname agentMatrix
+#' @aliases [,agentMatrix,numeric,missing,ANY-method
+#' @rdname extract-methods
 setMethod(
   "[",
-  signature(x="agentMatrix", "numeric", "missing", "ANY"),
+  signature(x = "agentMatrix", "numeric", "missing", "ANY"),
   definition = function(x, i, ..., drop) {
-
-    x@.Data <- x@.Data[i,,drop=FALSE]
-    if(length(x@.Data)>0)
-      x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
+    x@.Data <- x@.Data[i, , drop = FALSE]
+    if (length(x@.Data) > 0) {
+      x@bbox <- .bboxCoords(x@.Data[, 1:2, drop = FALSE])
+    }
     x
-
-  }
-)
+})
 
 #' @export
 #' @name [
+#' @aliases [,agentMatrix,missing,missing,missing-method
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname extract-methods
 setMethod(
   "[",
-  signature(x="agentMatrix", "missing", "missing", "missing"),
-  definition = function(x) {
-    x@.Data
-  }
-)
-
-
-#' @export
-#' @name [
-#' @docType methods
-#' @rdname agentMatrix
-setMethod(
-  "[",
-  signature(x="agentMatrix", "missing", "character", "ANY"),
-  definition = function(x, j, ..., drop) {
-
-    cols <- match(j, colnames(x@.Data))
-    x[,cols,...,drop=FALSE]
-
-  }
-)
-
-#' @export
-#' @name [
-#' @docType methods
-#' @rdname agentMatrix
-setMethod(
-  "[",
-  signature(x="agentMatrix", "numeric", "character", "ANY"),
+  signature(x = "agentMatrix", "missing", "missing", "missing"),
   definition = function(x, i, j, ..., drop) {
-
-    cols <- match(j, colnames(x@.Data))
-    x[i,cols,...,drop=FALSE]
-
-  }
-)
+    x@.Data
+})
 
 #' @export
 #' @name [
+#' @aliases [,agentMatrix,missing,character,ANY-method
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname extract-methods
 setMethod(
   "[",
-  signature(x="agentMatrix", "missing", "numeric", "ANY"),
+  signature(x = "agentMatrix", "missing", "character", "ANY"),
   definition = function(x, j, ..., drop) {
+    cols <- match(j, colnames(x@.Data))
+    x[, cols, ..., drop = FALSE]
+})
 
-    #browser()
+#' @export
+#' @name [
+#' @aliases [,agentMatrix,numeric,character,ANY-method
+#' @docType methods
+#' @rdname extract-methods
+setMethod(
+  "[",
+  signature(x = "agentMatrix", "numeric", "character", "ANY"),
+  definition = function(x, i, j, ..., drop) {
+    cols <- match(j, colnames(x@.Data))
+    x[i, cols, ..., drop = FALSE]
+})
+
+#' @export
+#' @name [
+#' @aliases [,agentMatrix,missing,numeric,ANY-method
+#' @docType methods
+#' @rdname extract-methods
+setMethod(
+  "[",
+  signature(x = "agentMatrix", "missing", "numeric", "ANY"),
+  definition = function(x, i, j, ..., drop) {
     colNames <- colnames(x@.Data)[j]
     levelInd <- match(colNames, names(x@levels))
-    x@.Data <- x@.Data[,unique(c(1:2,j)),...,drop=drop]
-    if(all(is.na(levelInd))) {
+    x@.Data <- x@.Data[, unique(c(1:2, j)), ..., drop = drop]
+    if (all(is.na(levelInd))) {
       x@levels <- list(NULL)
     } else {
       #x@levels[[levelInd]][x@.Data[,j]]
       x@levels <- x@levels[colNames]
     }
-    x@bbox <- NetLogoR:::.bboxCoords(x@.Data[,1:2,drop=FALSE])
+    x@bbox <- .bboxCoords(x@.Data[, 1:2, drop = FALSE])
     x
+})
 
-  }
-)
-
+#' @param value  Any R object
+#'
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,numeric,numeric,numeric-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","numeric","numeric","numeric"),
+  signature("agentMatrix", "numeric", "numeric", "numeric"),
   definition = function(x, i, j, value) {
     x@.Data[i,j] <- value
     validObject(x)
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,missing,numeric,numeric-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","missing","numeric","numeric"),
-  definition = function(x, j, value) {
+  signature("agentMatrix", "missing", "numeric", "numeric"),
+  definition = function(x, i, j, value) {
     x@.Data[,j] <- value
     validObject(x)
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,numeric,missing,numeric-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","numeric","missing","numeric"),
-  definition = function(x, i, value) {
+  signature("agentMatrix", "numeric", "missing", "numeric"),
+  definition = function(x, i, j, value) {
     x@.Data[i,] <- value
     validObject(x)
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,numeric,character,data.frame-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","numeric","character","data.frame"),
+  signature("agentMatrix", "numeric", "character", "data.frame"),
   definition = function(x, i, j, value) {
     browser()
     colNums <- match(j, colnames(x))
@@ -500,26 +528,26 @@ setReplaceMethod(
     x@.Data[i,colNums] <- value
     validObject(x)
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,numeric,numeric,character-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","numeric","numeric","character"),
+  signature("agentMatrix", "numeric", "numeric", "character"),
   definition = function(x, i, j, value) {
     colNames <- colnames(x@.Data)[j]
     levelInd <- match(colNames, names(x@levels))
     levelExists <- all(value %in% x@levels[[levelInd]])
-    if(!levelExists) {
+    if (!levelExists) {
       uniqueLevels <- unique(c(x@levels[[levelInd]], value))
       x@levels[[levelInd]] <- as.character(factor(x = uniqueLevels,
                                                   levels = uniqueLevels))
     }
     rmLevels <- c(unique(x@.Data[,j]),match(value, x@levels[[levelInd]]))
-    if(length(unique(rmLevels))<length(x@levels[[levelInd]])) {
+    if (length(unique(rmLevels)) < length(x@levels[[levelInd]])) {
       uniqueLevels <- x@levels[[levelInd]][unique(rmLevels)]
       x@levels[[levelInd]] <- as.character(factor(x = uniqueLevels,
                                                   levels = uniqueLevels))
@@ -528,108 +556,112 @@ setReplaceMethod(
     x@.Data[i,j] <- match(value, x@levels[[levelInd]])
     validObject(x)
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,missing,numeric,character-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","missing","numeric","character"),
-  definition = function(x, j, value) {
+  signature("agentMatrix", "missing", "numeric", "character"),
+  definition = function(x, i, j, value) {
     x[seq_len(NROW(x)),j] <- value
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,missing,character,character-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","missing","character","character"),
-  definition = function(x, j, value) {
+  signature("agentMatrix", "missing", "character", "character"),
+  definition = function(x, i, j, value) {
     cols <- match(j, colnames(x@.Data))
     x[seq_len(NROW(x)),cols] <- value
     return(x)
-  }
-)
+})
 
 #' @export
 #' @name [<-
-#' @rdname agentMatrix
+#' @aliases [<-,agentMatrix,numeric,character,character-method
+#' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("agentMatrix","numeric","character","character"),
+  signature("agentMatrix", "numeric", "character", "character"),
   definition = function(x, i, j, value) {
     cols <- match(j, colnames(x@.Data))
     x[i,cols] <- value
     return(x)
-  }
-)
+})
 
+#' @param name  documentation needed
+#'
 #' @export
-#' @name [
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname extract-methods
+setMethod(
+  "$",
+  signature(x = "agentMatrix"),
+  definition = function(x, name) {
+    if (name %in% names(x@levels)) {
+      x@levels[[name]][x@.Data[,name]]
+    } else {
+      x@.Data[,name]
+    }
+})
+
+#' Relational Operators
+#'
+#' Binary operators which allow the comparison of values in an agentMatrix.
+#'
+#' @param e1  An \code{agentMatrix} object.
+#' @param e2  atomic vector, symbol, call, or other object for which methods have been written.
+#'
+#' @export
+#' @importFrom stats na.omit
+#' @docType methods
+#' @rdname agentMatrix-compare-methods
 setMethod(
   "==",
   signature("agentMatrix", "character"),
   definition = function(e1, e2) {
-
     colNames <- colnames(e1@.Data)
-    if(length(colNames)<3) {
+    if (length(colNames) < 3) {
       warning("Coordinates are not characters, returning test for both coordinates")
       return(matrix(rep(FALSE, length(e1)), ncol = 2))
     }
     levelInd <- match(colNames, names(e1@levels))
     levelIndNoNA <- na.omit(levelInd)
     whInd <- which(!is.na(levelInd))
-    if(all(is.na(levelInd))) {
+    if (all(is.na(levelInd))) {
       (e1@.Data == e2)[,-(1:2)]
     } else {
       logic <- e1@.Data == e2
-      logic[,whInd] <- sapply(levelIndNoNA, function(x) {
-        e1@levels[[x]][e1@.Data[,whInd[x]]]
+      logic[,whInd] <- sapply(levelIndNoNA, function(z) {
+        e1@levels[[z]][e1@.Data[, whInd[z]]]
       }) == e2
-      logic[,-(1:2)]
+      logic[, -(1:2)]
     }
-  }
-)
+})
 
-
-
-#' $ is for extracting the raw columns and does not maintain the agentMatrix class.
+#' Show an object or get information about the object
+#'
+#' description needed
+#'
+#' @param object  An \code{agentMatrix} object.
 #'
 #' @export
-#' @name [
 #' @docType methods
-#' @rdname agentMatrix
-setMethod(
-  "$",
-  signature(x="agentMatrix"),
-  definition = function(x, name) {
-    if(name %in% names(x@levels)) {
-      x@levels[[name]][x@.Data[,name]]
-    } else {
-      x@.Data[,name]
-    }
-  }
-)
-
-#' @export
-#' @name [
-#' @docType methods
-#' @rdname agentMatrix
+#' @rdname agentMatrix-show-methods
 setMethod(
   "show",
-  signature(object="agentMatrix"),
+  signature(object = "agentMatrix"),
   definition = function(object) {
-
-    if(NROW(object@.Data)>0) {
+    if (NROW(object@.Data) > 0) {
       tmp <- data.frame(object@.Data)
-      colNames <- colnames(tmp[,names(object@levels),drop=FALSE])
+      colNames <- colnames(tmp[, names(object@levels), drop = FALSE])
       tmp[,names(object@levels)] <-
         sapply(seq_along(names(object@levels)), function(x) {
           curLevels <- sort(unique(tmp[,names(object@levels)[x]]))
@@ -641,14 +673,12 @@ setMethod(
       tmp <- object@.Data
     }
     show(tmp[,-(1:2)])
-
-  }
-)
+})
 
 # @export
 # @name [
 # @docType methods
-# @rdname agentMatrix
+# @rdname agentMatrix-show-methods
 # setMethod(
 #   "NROW",
 #   signature(x="agentMatrix"),
@@ -657,87 +687,115 @@ setMethod(
 #   }
 # )
 
+#' @param x  An \code{agentMatrix} object.
+#'
 #' @export
-#' @name [
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname agentMatrix-show-methods
+setMethod(
+  "length",
+  signature(x = "agentMatrix"),
+  definition = function(x) {
+    length(x@.Data)
+})
+
+#' @export
+#' @docType methods
+#' @rdname agentMatrix-show-methods
 setMethod(
   "nrow",
-  signature(x="agentMatrix"),
+  signature(x = "agentMatrix"),
   definition = function(x) {
     nrow(x@.Data)
-  }
-)
+})
 
-#' @export
+#' @param n  documentation needed
+#' @param ...  documentation needed
+#'
+#' @method head agentMatrix
+#' @export head agentMatrix
 #' @name head
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname agentMatrix-show-methods
 head.agentMatrix <- function(x, n = 6L, ...) {
-  x[seq_len(n),,drop=FALSE]
+  x[seq_len(n), , drop = FALSE]
 }
 
-#' @export
+#' @method tail agentMatrix
+#' @export tail agentMatrix
 #' @name tail
 #' @docType methods
-#' @rdname agentMatrix
+#' @rdname agentMatrix-show-methods
 tail.agentMatrix <- function(x, n = 6L, ...) {
   len <- NROW(x@.Data)
   ind <- (len - n + 1):len
-  out <- x[ind,,drop=FALSE]
+  out <- x[ind, , drop = FALSE]
   rownames(out@.Data) <- ind
   out
-
 }
 
-
-
+#' Combine R Objects by Rows or Columns
+#'
+#' Take a sequence of agentMatrix arguments and combine by columns or rows, respectively.
+#'
+#' @param deparse.level  description needed
+#' @param ... description needed
+#'
+#' @method cbind agentMatrix
 #' @export
 #' @name cbind
 #' @docType methods
-#' @rdname agentMatrix
-#setMethod(
-#  "cbind",
-#  "agentMatrix",
-#  definition = function(..., deparse.level) {
+#' @rdname agentMatrix-bind-methods
 cbind.agentMatrix <- function(..., deparse.level) {
     tmp <- list(...)
-    if(length(tmp) != 2) stop("cbind for agentMatrix is only defined for 2 agentMatrices")
+    if (length(tmp) != 2) stop("cbind for agentMatrix is only defined for 2 agentMatrices")
     notAM <- sapply(tmp, function(x) all(is.na(x@.Data[,1:2])))
 
-    if(NROW(tmp[[2]]@.Data) == 1) {
-      tmp[[2]]@.Data <- tmp[[2]]@.Data[rep_len(1, length.out=NROW(tmp[[1]]@.Data)),]
+    if (NROW(tmp[[2]]@.Data) == 1) {
+      tmp[[2]]@.Data <- tmp[[2]]@.Data[rep_len(1, length.out = NROW(tmp[[1]]@.Data)),]
     }
 
-    if(any(colnames(tmp[[1]]@.Data)[-(1:2)] %in% colnames(tmp[[2]]@.Data)[-(1:2)])) {
+    if (any(colnames(tmp[[1]]@.Data)[-(1:2)] %in% colnames(tmp[[2]]@.Data)[-(1:2)])) {
       stop("There are duplicate columns in the two agentMatrix objects. Please remove duplicates.")
     }
-    newMat <- fastCbind(tmp[[1]]@.Data, tmp[[2]]@.Data[,-(1:2),drop=FALSE])
+    newMat <- fastCbind(tmp[[1]]@.Data, tmp[[2]]@.Data[, -(1:2), drop = FALSE])
     tmp[[1]]@.Data <- newMat
     colnames(newMat)
     tmp[[1]]@levels <- SpaDES::updateList(tmp[[2]]@levels, tmp[[1]]@levels)
 
     tmp[[1]]
+}
 
-  }
-
-
+#' @method rbind agentMatrix
 #' @export
-#' @name [
+#' @importFrom data.table rbindlist
+#' @export
+#' @name rbind
 #' @docType methods
-#' @rdname agentMatrix
-setMethod(
-  "length",
-  signature(x="agentMatrix"),
-  definition = function(x) {
-    length(x@.Data)
+#' @rdname agentMatrix-bind-methods
+rbind.agentMatrix <- function(..., deparse.level = 1) {
+  dots <- list(...)
+  levelsSame <- isTRUE(do.call(all.equal,lapply(dots, function(x) x@levels)))
+  if (levelsSame) { # if same, then faster rbind of the matrices
+    if (do.call(all.equal, lapply(dots, colnames))) {
+      mat <- do.call(rbind, lapply(dots, function(x) x@.Data)) # Fastest option...
+      #i.e., pass agentMatrix with known levels
+    } else {
+      mat <- as.matrix(do.call(rbindlist,
+                               args = list(lapply(dots, function(x) as(x, "data.frame")),
+                                           fill = TRUE)))
+    }
+    levels <- dots[[1]]@levels
+    new("agentMatrix", coords = mat[,1:2],
+        mat[,-(1:2)],
+        levelsAM = levels)
+  } else {
+    # if levels are not the same, then need to take the "slow" option: convert to data.frame
+    mat <- as.data.frame(do.call(rbindlist, args = list(lapply(dots, function(x) as(x, "data.frame")), fill = TRUE)))
+    new("agentMatrix", coords = mat[,1:2], mat[,-(1:2)])
   }
-)
+}
 
-#' Extract coordinates from agentDataTable
-#'
-#' This is incomplete
-#'
 #' @export
 #' @rdname coordinates
 #' @examples
@@ -747,8 +805,8 @@ setMethod(
 #'
 #' library(microbenchmark)
 #' N = 1e4
-#' coords <-  cbind(xcor=runif(N, xmin(w1), xmax(w1)),
-#'                  ycor = runif(N, ymin(w1), ymax(w1)))
+#' coords <-  cbind(xcor = runif (N, xmin(w1), xmax(w1)),
+#'                  ycor = runif (N, ymin(w1), ymax(w1)))
 #' turtlesDT <- createTurtles(coords = coords, n = N, agent = TRUE)
 #' turtlesDF <- createTurtles(coords = coords, n = N, agent = FALSE)
 #' microbenchmark(coordinates(turtlesDT), coordinates(turtlesDF))
@@ -756,44 +814,22 @@ setMethod(
 setMethod(
   "coordinates",
   signature("agentDataTable"),
-  definition = function (obj, ...) {
+  definition = function(obj, ...) {
     #cbind(x=obj$x, y=obj$y)
     obj[,list(xcor,ycor)]
-  })
+})
 
-#' @export
-#' @importFrom data.table rbindlist
-rbind.agentMatrix <-
-  function (..., deparse.level = 1) {
-    dots <- list(...)
-    levelsSame <- isTRUE(do.call(all.equal,lapply(dots, function(x) x@levels)))
-    if(levelsSame) { # if same, then faster rbind of the matrices
-      if(do.call(all.equal, lapply(dots, colnames))) {
-        mat <- do.call(rbind, lapply(dots, function(x) x@.Data)) # Fastest option...
-        #i.e., pass agentMatrix with known levels
-      } else {
-        mat <- as.matrix(do.call(rbindlist, args=list(lapply(dots, function(x) as(x,"data.frame")),
-                                                      fill = TRUE)))
-      }
-      levels <- dots[[1]]@levels
-      new("agentMatrix", coords = mat[,1:2],
-          mat[,-(1:2)],
-          levelsAM = levels)
-    } else { # if levels are not the same, then need to take the "slow" option: convert to data.frame
-      mat <- as.data.frame(do.call(rbindlist, args=list(lapply(dots, function(x) as(x,"data.frame")), fill = TRUE)))
-      new("agentMatrix", coords = mat[,1:2],
-          mat[,-(1:2)])
-    }
-
-
-  }
-
-
+#' @param object  documentation needed
+#' @param value  documentation needed
+#'
 #' @importFrom data.table ':='
+#' @importFrom sp 'coordinates<-'
+#' @export
+#' @rdname coordinates
 setReplaceMethod(
   "coordinates",
   signature("agentDataTable"),
-  definition = function (object, value) {
+  definition = function(object, value) {
     #cbind(x=obj$x, y=obj$y)
-    object[,`:=`(xcor=value[,"xcor"],ycor=value[,"ycor"])]
-  })
+    object[,`:=`(xcor = value[, "xcor"], ycor = value[, "ycor"])]
+})

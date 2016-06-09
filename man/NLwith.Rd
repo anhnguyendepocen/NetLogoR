@@ -66,17 +66,20 @@ equals to a specific value. This is equivalent in R to subsetting.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+w1 <- set(world = w1, agents = patches(w1),
+          val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 plot(w1)
 p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 
 # Turtles
-t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5),
+                    breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
 t3 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
 
 # R equivalent
-t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5), breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
+t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5),
+                      breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
 t2R <- t1[t1$breed=="sheep"]
 
