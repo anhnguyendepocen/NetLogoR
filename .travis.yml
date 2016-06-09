@@ -23,7 +23,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 after_success:
-  - Rscript -e 'covr::coveralls(coverage = print(package_coverage(quiet = FALSE)))'
+  - Rscript -e 'covr::coveralls(coverage = print(covr::package_coverage(quiet = FALSE)))'
 
 notifications:
   email:
