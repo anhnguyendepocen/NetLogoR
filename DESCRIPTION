@@ -1,15 +1,15 @@
 Package: NetLogoR
 Title: A port of NetLogo functions and language to R
-Description: This package is under active development and therefore function errors
-    and documentation mismatches may occur.
-    `NetLogoR` aims to help translate agent-based models built in `NetLogo`
-    ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)) into R.
-    It provides functions to build a world with agents, similarly as in `NetLogo`,
-    as well as the necessary [`NetLogo` primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html)
-    to build agent-based models. A programming guide derived from
-    [`NetLogo`'s Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html)
-    is also available. NOTE: there is no support for 'time' in this package -- it
-    is currently intended to be used with `SpaDES`.
+Description: This package is under active development and therefore function
+    errors and documentation mismatches may occur. `NetLogoR` aims to help
+    translate agent-based models built in `NetLogo` ([Wilensky, 1999](http://
+    ccl.northwestern.edu/netlogo/)) into R. It provides functions to build a world
+    with agents, similarly as in `NetLogo`, as well as the necessary [`NetLogo`
+    primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) to build
+    agent-based models. A programming guide derived from [`NetLogo`'s Programming
+    Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html) is also
+    available. NOTE: there is no support for 'time' in this package -- it is
+    currently intended to be used with `SpaDES`.
 URL: https://github.com/PredictiveEcology/NetLogoR
 Version: 0.0.0.9002
 Date: 2016-06-08
@@ -53,7 +53,6 @@ RoxygenNote: 5.0.1
 Collate:
     'NLworlds-class.R'
     'Classes.R'
-    'ClassesUnused.R'
     'NetLogoR-package.R'
     'agentset-functions.R'
     'function-arguments.R'

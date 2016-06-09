@@ -2,16 +2,10 @@
 % Please edit documentation in R/Classes.R
 \docType{methods}
 \name{coordinates,agentMatrix-method}
-\alias{coordinates,agentDataTable-method}
 \alias{coordinates,agentMatrix-method}
-\alias{coordinates<-,agentDataTable-method}
 \title{Set spatial coordinates}
 \usage{
 \S4method{coordinates}{agentMatrix}(obj, ...)
-
-\S4method{coordinates}{agentDataTable}(obj, ...)
-
-\S4method{coordinates}{agentDataTable}(object) <- value
 }
 \arguments{
 \item{obj}{documentation needed}
@@ -19,26 +13,8 @@
 \item{...}{additional arguments that may be used by particular methods
 
  description needed}
-
-\item{object}{documentation needed}
-
-\item{value}{documentation needed}
 }
 \description{
 Set spatial coordinates
-}
-\examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(world = w1, n = 10, agent = TRUE)
-coordinates(t1)
-
-library(microbenchmark)
-N = 1e4
-coords <-  cbind(xcor = runif (N, xmin(w1), xmax(w1)),
-                 ycor = runif (N, ymin(w1), ymax(w1)))
-turtlesDT <- createTurtles(coords = coords, n = N, agent = TRUE)
-turtlesDF <- createTurtles(coords = coords, n = N, agent = FALSE)
-microbenchmark(coordinates(turtlesDT), coordinates(turtlesDF))
-microbenchmark(coordinates(turtlesDT) <- coords)
 }
 
