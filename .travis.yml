@@ -6,6 +6,12 @@ r:
 
 cache: packages
 
+addons:
+  apt:
+    packages:
+    - tcl8.5-dev
+    - tk8.5-dev
+
 warnings_are_errors: true
 
 before_install:
