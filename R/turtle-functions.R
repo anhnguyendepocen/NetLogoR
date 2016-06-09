@@ -99,16 +99,7 @@ setMethod(
                                               prevY = rep(NA, n),
                                               breed = li$breed,
                                               color = li$color, stringsAsFactors=FALSE))
-    } else {
-    turtles<-agentDataTable(coords = li$coords,
-                                    who = seq(from = 0, to = n - 1, by = 1),
-                                                      heading = li$heading,
-                                                      prevX = rep(NA, n),
-                                                      prevY = rep(NA, n),
-                                                      breed = li$breed,
-                                                      color = li$color)#,
-
-    }                                   #stringsAsFactors=FALSE))
+    }
     return(turtles)
   }
 )

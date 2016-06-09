@@ -48,48 +48,6 @@ setMethod(
     attr(x, "extent")
 })
 
-#' agentDataTable class
-#'
-#' Documentation needed
-#'
-#' @name agentDataTable-class
-#' @rdname agentDataTable-class
-setOldClass("agentDataTable")
-
-#' Create an agentDataTable object
-#'
-#' description needed
-#'
-#' @param coords       description needed
-#' @param ...          description needed
-#' @param coords.nrs   description needed
-#' @param proj4string  description needed
-#' @param match.ID     description needed
-#' @param bbox         description needed
-#'
-#' @importClassesFrom data.table data.table
-#' @importFrom sp CRS
-#' @name agentDataTable
-#' @rdname agentDataTable
-#' @author Eliot McIntire
-#' @exportClass agentDataTable
-#' @examples
-#' library(microbenchmark)
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(world = w1, n = 10, agent = TRUE)
-#'
-#' N = 1e5
-#' microbenchmark(createTurtles(world = w1, n = N, agent = TRUE),
-#'               createTurtles(world = w1, n = N, agent = FALSE))
-agentDataTable <- function(coords, ..., coords.nrs = numeric(0),
-                           proj4string = CRS(NA_character_), match.ID, bbox = NULL) {
-  dt <- data.table(coords, ...)
-  attr(dt, "proj4string") <- proj4string
-  attr(dt, "bbox") <- bbox
-  attr(dt, "coords.nrs") <- coords.nrs
-  class(dt) <- c("agentDataTable", "data.table", "data.frame", "list", "oldClass", "vector")
-  dt
-}
 
 #' The agentMatrix class
 #'
@@ -790,40 +748,3 @@ rbind.agentMatrix <- function(..., deparse.level = 1) {
   }
 }
 
-#' @export
-#' @rdname coordinates
-#' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(world = w1, n = 10, agent = TRUE)
-#' coordinates(t1)
-#'
-#' library(microbenchmark)
-#' N = 1e4
-#' coords <-  cbind(xcor = runif (N, xmin(w1), xmax(w1)),
-#'                  ycor = runif (N, ymin(w1), ymax(w1)))
-#' turtlesDT <- createTurtles(coords = coords, n = N, agent = TRUE)
-#' turtlesDF <- createTurtles(coords = coords, n = N, agent = FALSE)
-#' microbenchmark(coordinates(turtlesDT), coordinates(turtlesDF))
-#' microbenchmark(coordinates(turtlesDT) <- coords)
-setMethod(
-  "coordinates",
-  signature("agentDataTable"),
-  definition = function(obj, ...) {
-    #cbind(x=obj$x, y=obj$y)
-    obj[,list(xcor,ycor)]
-})
-
-#' @param object  documentation needed
-#' @param value  documentation needed
-#'
-#' @importFrom data.table ':='
-#' @importFrom sp 'coordinates<-'
-#' @export
-#' @rdname coordinates
-setReplaceMethod(
-  "coordinates",
-  signature("agentDataTable"),
-  definition = function(object, value) {
-    #cbind(x=obj$x, y=obj$y)
-    object[,`:=`(xcor = value[, "xcor"], ycor = value[, "ycor"])]
-})
