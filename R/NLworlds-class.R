@@ -55,7 +55,7 @@ setClass(
 setMethod(
   "[",
   signature("NLworld", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
+  definition = function(x, i, j, ..., drop) {
     cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
     xValues <- values(x)
     cellValues <- xValues[cells]
@@ -104,7 +104,7 @@ setClass(
 setMethod(
   "[",
   signature("NLworldStack", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
+  definition = function(x, i, j, ..., drop) {
     x_l <- x[[1]]
     cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
     xValues <- values(x)
@@ -308,7 +308,7 @@ setClass(
 setMethod(
   "[",
   signature("NLworldMatrix", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
+  definition = function(x, i, j, ..., drop) {
 
     # cellNum <- cellFromPxcorPycor(world = x, pxcor = i, pycor = j)
     # allValues <- as.numeric(t(x)) # t() to retrieve the values by rows
@@ -327,7 +327,7 @@ setMethod(
 setMethod(
   "[",
   signature("NLworldMatrix", "missing", "missing", "ANY"),
-  definition = function(x, drop) {
+  definition = function(x, ..., drop) {
     return(as.numeric(t(x@.Data)))
 })
 
@@ -357,8 +357,7 @@ setReplaceMethod(
 setReplaceMethod(
   "[",
   signature("NLworldMatrix", "missing", "missing", "ANY"),
-  definition = function(x, value) {
-
+  definition = function(x, i, j, value) {
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
     if (length(value) != nCell) {
       value <- rep(value, nCell)
@@ -461,7 +460,7 @@ setClass(
 setMethod(
   "[",
   signature("NLworldArray", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, drop) {
+  definition = function(x, i, j, ..., drop) {
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     pCoords <- cbind(rowMat, colMat)
@@ -481,7 +480,7 @@ setMethod(
 setMethod(
   "[",
   signature("NLworldArray", "missing", "missing", "ANY"),
-  definition = function(x, drop) {
+  definition = function(x, ..., drop) {
     cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[,,z]))}))
     dim(cellValues) <- c(dim(x)[1] * dim(x)[2], dim(x)[3])
     colnames(cellValues) <- dimnames(x@.Data)[[3]]
@@ -513,17 +512,14 @@ setReplaceMethod(
 setReplaceMethod(
   "[",
   signature("NLworldArray", "missing", "missing", "matrix"),
-  definition = function(x, value) {
-
+  definition = function(x, i, j, value) {
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
     if (NROW(value) != nCell) { # assuming value has one row
       value <- value[rep(1, nCell),]
     }
-
     for (k in 1:dim(x)[3]) {
-      x@.Data[,,k] <- matrix(data = value[,k], ncol = dim(x@.Data)[2], byrow = TRUE)
+      x@.Data[,,k] <- matrix(data = value[, k], ncol = dim(x@.Data)[2], byrow = TRUE)
     }
-
     validObject(x)
     return(x)
 })

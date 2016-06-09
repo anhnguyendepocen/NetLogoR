@@ -39,7 +39,8 @@ Report \code{TRUE} if a turtle exists inside the \code{turtles} agentset, report
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+                    breed = c(rep("sheep", 5), rep("wolf", 5)))
 tExist(turtles = t1, who = 3, breed = "sheep")
 tExist(turtles = t1, who = 9, breed = "sheep")
 tExist(turtles = t1, who = c(3, 9))

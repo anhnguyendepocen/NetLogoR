@@ -81,7 +81,8 @@ w1 <- set(world = w1, agents = patch(w1, 0, 4), val = 0) # set the patch[0,0] to
 of(world = w1, agents = patches(w1))
 
 t1 <- createTurtles(n = 3, world = w1, heading = 0)
-t2 <- set(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180) # set the heading of the turtle 0 to 180
+# set the heading of turtle 0 to 180
+t2 <- set(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180)
 of(agents = t2, var = "heading") # c(180, 0, 0)
 
 

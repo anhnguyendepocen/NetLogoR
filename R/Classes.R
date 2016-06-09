@@ -415,7 +415,7 @@ setMethod(
 setMethod(
   "[",
   signature(x = "agentMatrix", "missing", "missing", "missing"),
-  definition = function(x) {
+  definition = function(x, i, j, ..., drop) {
     x@.Data
 })
 
@@ -453,7 +453,7 @@ setMethod(
 setMethod(
   "[",
   signature(x = "agentMatrix", "missing", "numeric", "ANY"),
-  definition = function(x, j, ..., drop) {
+  definition = function(x, i, j, ..., drop) {
     colNames <- colnames(x@.Data)[j]
     levelInd <- match(colNames, names(x@levels))
     x@.Data <- x@.Data[, unique(c(1:2, j)), ..., drop = drop]
@@ -489,7 +489,7 @@ setReplaceMethod(
 setReplaceMethod(
   "[",
   signature("agentMatrix", "missing", "numeric", "numeric"),
-  definition = function(x, j, value) {
+  definition = function(x, i, j, value) {
     x@.Data[,j] <- value
     validObject(x)
     return(x)
@@ -502,7 +502,7 @@ setReplaceMethod(
 setReplaceMethod(
   "[",
   signature("agentMatrix", "numeric", "missing", "numeric"),
-  definition = function(x, i, value) {
+  definition = function(x, i, j, value) {
     x@.Data[i,] <- value
     validObject(x)
     return(x)
@@ -559,7 +559,7 @@ setReplaceMethod(
 setReplaceMethod(
   "[",
   signature("agentMatrix", "missing", "numeric", "character"),
-  definition = function(x, j, value) {
+  definition = function(x, i, j, value) {
     x[seq_len(NROW(x)),j] <- value
     return(x)
 })
@@ -571,7 +571,7 @@ setReplaceMethod(
 setReplaceMethod(
   "[",
   signature("agentMatrix", "missing", "character", "character"),
-  definition = function(x, j, value) {
+  definition = function(x, i, j, value) {
     cols <- match(j, colnames(x@.Data))
     x[seq_len(NROW(x)),cols] <- value
     return(x)

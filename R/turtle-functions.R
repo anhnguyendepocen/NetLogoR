@@ -2875,7 +2875,8 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = c(rep("sheep", 5), rep("wolf", 5)))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+#'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 #' tExist(turtles = t1, who = 3, breed = "sheep")
 #' tExist(turtles = t1, who = 9, breed = "sheep")
 #' tExist(turtles = t1, who = c(3, 9))
@@ -3407,9 +3408,13 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9), breed = c(rep("sheep", 5), rep("wolf", 5)))
-#' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0), dx = 1, dy = 1)
-#' t3 <- turtlesAt(world = w1, turtles = t1, agents = patch(w1, c(3,4,5), c(3,4,5)), dx = 1, dy = 1, breed = "sheep")
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
+#'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
+#' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0),
+#'                 dx = 1, dy = 1)
+#' t3 <- turtlesAt(world = w1, turtles = t1,
+#'                 agents = patch(w1, c(3,4,5), c(3,4,5)), dx = 1, dy = 1,
+#'                 breed = "sheep")
 #'
 #'
 #' @export
@@ -3428,7 +3433,8 @@ setGeneric(
 #' @rdname turtlesAt
 setMethod(
   "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric", "numeric", "missing", "ANY"),
+  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric",
+                "numeric", "missing", "ANY"),
   definition = function(world, turtles, agents, dx, dy, torus) {
     pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
     turtlesOn(world = world, turtles = turtles, agents = pAt)
@@ -3439,7 +3445,8 @@ setMethod(
 #' @rdname turtlesAt
 setMethod(
   "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "numeric", "numeric", "missing", "ANY"),
+  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame",
+                "numeric", "numeric", "missing", "ANY"),
   definition = function(world, turtles, agents, dx, dy, torus) {
     pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
     turtlesOn(world = world, turtles = turtles, agents = pAt)
@@ -3450,7 +3457,8 @@ setMethod(
 #' @rdname turtlesAt
 setMethod(
   "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric", "numeric", "character", "ANY"),
+  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric",
+                "numeric", "character", "ANY"),
   definition = function(world, turtles, agents, dx, dy, breed, torus) {
     pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
     turtlesOn(world = world, turtles = turtles, agents = pAt, breed = breed)
@@ -3461,7 +3469,8 @@ setMethod(
 #' @rdname turtlesAt
 setMethod(
   "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame", "numeric", "numeric", "character", "ANY"),
+  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame",
+                "numeric", "numeric", "character", "ANY"),
   definition = function(world, turtles, agents, dx, dy, breed, torus) {
     pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
     turtlesOn(world = world, turtles = turtles, agents = pAt, breed = breed)

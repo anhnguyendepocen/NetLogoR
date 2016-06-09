@@ -34,29 +34,29 @@
 \alias{[<-,agentMatrix,numeric,numeric,numeric-method}
 \title{Extract or Replace Parts of an Object}
 \usage{
-\S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, drop)
+\S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j) <- value
 
-\S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, drop)
+\S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{NLworldStack,numeric,numeric,matrix}(x, i, j) <- value
 
-\S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j, drop)
+\S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{NLworldMatrix,missing,missing,ANY}(x, drop)
+\S4method{[}{NLworldMatrix,missing,missing,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j) <- value
 
-\S4method{[}{NLworldMatrix,missing,missing,ANY}(x) <- value
+\S4method{[}{NLworldMatrix,missing,missing,ANY}(x, i, j) <- value
 
-\S4method{[}{NLworldArray,numeric,numeric,ANY}(x, i, j, drop)
+\S4method{[}{NLworldArray,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{NLworldArray,missing,missing,ANY}(x, drop)
+\S4method{[}{NLworldArray,missing,missing,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{NLworldArray,numeric,numeric,matrix}(x, i, j) <- value
 
-\S4method{[}{NLworldArray,missing,missing,matrix}(x) <- value
+\S4method{[}{NLworldArray,missing,missing,matrix}(x, i, j) <- value
 
 \S4method{[}{agentMatrix,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
@@ -64,7 +64,7 @@
 
 \S4method{[}{agentMatrix,numeric,missing,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{agentMatrix,missing,missing,missing}(x)
+\S4method{[}{agentMatrix,missing,missing,missing}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{agentMatrix,missing,character,ANY}(x, i, j, ..., drop = TRUE)
 
@@ -74,17 +74,17 @@
 
 \S4method{[}{agentMatrix,numeric,numeric,numeric}(x, i, j) <- value
 
-\S4method{[}{agentMatrix,missing,numeric,numeric}(x, j) <- value
+\S4method{[}{agentMatrix,missing,numeric,numeric}(x, i, j) <- value
 
-\S4method{[}{agentMatrix,numeric,missing,numeric}(x, i) <- value
+\S4method{[}{agentMatrix,numeric,missing,numeric}(x, i, j) <- value
 
 \S4method{[}{agentMatrix,numeric,character,data.frame}(x, i, j) <- value
 
 \S4method{[}{agentMatrix,numeric,numeric,character}(x, i, j) <- value
 
-\S4method{[}{agentMatrix,missing,numeric,character}(x, j) <- value
+\S4method{[}{agentMatrix,missing,numeric,character}(x, i, j) <- value
 
-\S4method{[}{agentMatrix,missing,character,character}(x, j) <- value
+\S4method{[}{agentMatrix,missing,character,character}(x, i, j) <- value
 
 \S4method{[}{agentMatrix,numeric,character,character}(x, i, j) <- value
 
@@ -98,11 +98,11 @@ in which to replace element(s).}
 
 \item{j}{see \code{i}.}
 
+\item{...}{other named arguments}
+
 \item{drop}{not implemented}
 
 \item{value}{Any R object}
-
-\item{...}{other named arguments}
 
 \item{name}{documentation needed}
 }

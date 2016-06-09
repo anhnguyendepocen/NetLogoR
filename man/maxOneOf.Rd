@@ -72,12 +72,14 @@ to the maximum value.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1), val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+w1 <- set(world = w1, agents = patches(w1),
+          val = sample(1:5, size = count(patches(w1)), replace = TRUE))
 plot(w1)
 p1 <- maxOneOf(agents = patches(w1), world = w1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), heading = sample(1:3, size = 10, replace= TRUE))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+                    heading = sample(1:3, size = 10, replace= TRUE))
 t2 <- maxOneOf(agents = t1, var = "heading")
 
 
