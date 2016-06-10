@@ -7,7 +7,7 @@ output: html_document
 
 This document is based on the [NetLogo Dictionary](https://ccl.northwestern.edu/netlogo/docs/dictionary.html). It lists all the entries in the NetLogo Dictionary and informs the best replacements to use in R. Are listed, functions from the NetLogoR package, as well as functions from the R software and of other packages (indicated as "nameFunction from namePackage"). In general, only the name of the functions are provided; to find how to use them, please refers to their documentation by using `help("nameFunction")`.
 
-When no NeLogoR function was built to translate a NetLogo primitive and that, to our knowledge, no R function (or from other packages) could easily recreate it, we indicated "not implemented". The NetLogo primitives not implemented sould not prevent the users from building individual-based models involving patches or turtles.
+When no NeLogoR function was built to translate a NetLogo primitive and that, to our knowledge, no R function (or from other packages) could easily recreate it, we indicated "not implemented". The NetLogo primitives not implemented should not prevent the users from building individual-based models involving patches or turtles.
 
 For the inverse dictionary (i.e., to find the NetLogo equivalents of the NetLogoR functions) please look at the NetLogoR documentation as the links to NetLogo Dictionnary entries for the equivalent primitives are provided in the "See Also" section of each NetLogoR function.
 
