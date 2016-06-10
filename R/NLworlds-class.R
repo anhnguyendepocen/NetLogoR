@@ -638,7 +638,6 @@ setMethod(
   "cellFromPxcorPycor",
   signature = c("NLworldMs", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
-    #browser()
     j <- pxcor - world@minPxcor + 1
     i <- world@maxPycor - pycor + 1
     (i - 1) * ncol(world) + j # Faster

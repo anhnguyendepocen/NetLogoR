@@ -14,7 +14,8 @@ agentMatrix(..., coords)
 \S4method{agentMatrix}{missing}(..., coords)
 }
 \arguments{
-\item{...}{Vectors or a data.frame or a matrix of extra columns to add to the coordinates}
+\item{...}{Vectors, a data.frame, or a matrix of extra columns to add to the coordinates,
+or a SpatialPointsDataFrame.}
 
 \item{coords}{A matrix with 2 columns representing x and y coordinates}
 }

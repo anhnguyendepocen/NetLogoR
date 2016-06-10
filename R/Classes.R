@@ -122,6 +122,8 @@ setMethod(
     if (is.null(coords)) {
       coords <- matrix(c(NA, NA), ncol = 2)
       Coords <- FALSE
+    } else {
+      coords <- unname(coords)
     }
     if (is.data.frame(coords)) {
       coords <- as.matrix(coords)
@@ -130,16 +132,18 @@ setMethod(
 
     if (missing(levelsAM)) {
       if (all(sapply(dotCols, is.numeric))) {
-        if (sapply(dotCols, is.matrix)) {
-          otherCols <- append(list(xcor = coords[,1],ycor = coords[,2]), dotCols)
-          names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
+        isMatrix <- sapply(dotCols, is.matrix)
+        singleMatrix <- length(isMatrix)==1
+        if (singleMatrix) {
+          otherCols <- do.call(cbind, list(xcor = coords[,1],ycor = coords[,2], dotCols[[1]]))
         } else {
           otherCols <- append(list(xcor = coords[,1],ycor = coords[,2]), dotCols)
+          otherCols <- do.call(cbind, otherCols)
         }
         if (length(otherCols) > 0) {
           .Object@.Data <- otherCols
-          .Object@levels <- rep(list(NULL), ncol(.Object@.Data))
-          names(.Object@levels) <- colnames(otherCols)
+          .Object@levels <- list(NULL) #rep(list(NULL), ncol(.Object@.Data))
+          #names(.Object@levels) <- colnames(otherCols)
           if (Coords) {
             .Object@bbox <- .bboxCoords(coords)
           } else {
@@ -148,20 +152,30 @@ setMethod(
         }
       } else {
         isDF <- sapply(dotCols, function(x) is(x, "data.frame"))
-        if (any(isDF))
-          dotCols <- unlist(lapply(dotCols, as.list), recursive = FALSE)
         if (any(names(dotCols) == "stringsAsFactors"))
           dotCols$stringsAsFactors <- NULL
-        if (all(sapply(dotCols, is.matrix))) {
-          otherCols <- list(xcor = coords[,1],ycor = coords[,2], dotCols[[1]][,1])
-          names(otherCols) <- c("xcor", "ycor", colnames(dotCols[[1]]))
-        } else {
-          otherCols <- append(list(xcor = coords[,1],ycor = coords[,2]), dotCols)
+        if (any(isDF)) {
+          dotCols <- unlist(lapply(dotCols, as.list), recursive = FALSE)
+        } else { #if (all(sapply(dotCols, is.matrix))) {
+          # can't just do "do.call(cbind, dotCols)" because some may be numerics, others not... would coerce to all character
+          dotCols <- unlist(lapply(seq_len(length(dotCols)), function(x) {
+            isMat <- is.matrix(dotCols[[x]])
+            if(isMat)  {
+              innerMats <- lapply(seq_len(ncol(dotCols[[x]])), function(y) dotCols[[x]][,y])
+              names(innerMats) <- colnames(dotCols[[x]])
+            } else {
+              innerMats <- dotCols[x]
+            }
+            return(innerMats)
+          }), recursive = FALSE)
+
         }
+        otherCols <- append(list(xcor = coords[,1],ycor = coords[,2]), dotCols)
         charCols <- sapply(otherCols, is.character)
-        charCols <- names(charCols)[charCols]
+        #charCols <- names(charCols)[charCols]
         numCols <- sapply(otherCols, is.numeric)
         facCols <- sapply(otherCols, is.factor)
+        charCols <- facCols | charCols
         otherCols[charCols] <- lapply(otherCols[charCols], function(x) {
             factor(x, levels = sort(unique(x)))
           })
@@ -202,7 +216,8 @@ setMethod(
 #' will automatically convert character queries to the correct numeric alternative.
 #'
 #' @param coords  A matrix with 2 columns representing x and y coordinates
-#' @param ... Vectors or a data.frame or a matrix of extra columns to add to the coordinates
+#' @param ... Vectors, a data.frame, or a matrix of extra columns to add to the coordinates,
+#'            or a SpatialPointsDataFrame.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-turtles}
 #'
@@ -292,8 +307,10 @@ setAs("data.frame", "agentMatrix",
 setAs("agentMatrix", "data.frame",
       function(from) {
         tmp <- data.frame(from@.Data)
+        rownames(tmp) <- seq_len(NROW(tmp))
         nam <- names(from@levels)
         tmp[,nam] <- lapply(nam, function(n) from@levels[[n]][tmp[,n]])
+
         tmp
 })
 
@@ -474,7 +491,6 @@ setReplaceMethod(
   "[",
   signature("agentMatrix", "numeric", "character", "data.frame"),
   definition = function(x, i, j, value) {
-    browser()
     colNums <- match(j, colnames(x))
     x[i,colNums] <- value
     x@.Data[i,colNums] <- value
@@ -624,7 +640,7 @@ setMethod(
     } else {
       tmp <- object@.Data
     }
-    show(tmp[,-(1:2)])
+    show(tmp[,-(1:2),drop=FALSE])
 })
 
 # @export

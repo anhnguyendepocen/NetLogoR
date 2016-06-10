@@ -2274,7 +2274,6 @@ setMethod(
       agentsSP <- SpatialPoints(coords = agents)
 
       # Create buffers around the locations of agents
-      #browser()
       #pBuffer <- gBuffer(agentsSP, byid = TRUE, id = 1:NROW(agents), width = radius, quadsegs = 50)
       pBuffer <- raster::buffer(agentsSP, dissolve = FALSE, width = radius)
 
