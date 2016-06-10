@@ -42,7 +42,7 @@ if (getRversion() >= "3.1.0") {
 #'
 #' @export
 #' @importFrom SpaDES adj
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table ':='
 #' @importFrom data.table setkey
 #' @importFrom plyr count
 #' @docType methods
@@ -446,7 +446,7 @@ setGeneric(
 })
 
 #' @export
-#' @importFrom data.table data.table
+#' @importFrom data.table data.table ':='
 #' @rdname neighbors
 setMethod(
   "neighbors",
