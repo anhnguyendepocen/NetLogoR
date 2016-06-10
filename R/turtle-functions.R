@@ -1822,7 +1822,7 @@ setMethod(
     rows <- split(1:nrow(allPatches), allPatches$id)
     rowMin <- sapply(rows, function(rowi) {rowi[which.min(allPatches$pVal[rowi])]}) # minimum patch value per id
     pMinCoords <- allPatches[rowMin,]
-    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 3),] # select randomly one row per id
+    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
     pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
     pMinCoords2 <- cbind(pxcor = pMinCoords1[,1], pycor = pMinCoords1[,2])
 
@@ -1864,7 +1864,7 @@ setMethod(
     rows <- split(1:nrow(allPatches), allPatches$id)
     rowMin <- sapply(rows, function(rowi) {rowi[which.min(allPatches$pVal[rowi])]}) # minimum patch value per id
     pMinCoords <- allPatches[rowMin,]
-    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 3),] # select randomly one row per id
+    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
     pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
     pMinCoords2 <- cbind(pxcor = pMinCoords1[,1], pycor = pMinCoords1[,2])
 
@@ -1899,7 +1899,7 @@ setMethod(
     rows <- split(1:nrow(allPatches), allPatches$id)
     rowMin <- sapply(rows, function(rowi) {rowi[which.min(allPatches$pVal[rowi])]}) # minimum patch value per id
     pMinCoords <- allPatches[rowMin,]
-    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 3),] # select randomly one row per id
+    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
     pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
     pMinCoords2 <- cbind(pxcor = pMinCoords1[,1], pycor = pMinCoords1[,2])
 
@@ -4283,7 +4283,6 @@ setMethod(
 
     if (any(names(agents@levels) %in% var)) {
 
-      #browser()
       wh <- var %in% names(agents@levels)
       if (any(wh)) {
         newNames <- var[wh]
