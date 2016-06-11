@@ -2,28 +2,6 @@ if (getRversion() >= "3.1.0") {
   utils::globalVariables(c("xcor", "ycor"))
 }
 
-#' SpatialPoints2
-#'
-#' needs documentation
-#'
-#' @param coords       needs documentation
-#' @param proj4string  needs documentation
-#' @param bbox         needs documentation
-#'
-#' @importFrom sp CRS
-#' @export
-SpatialPoints2 <- function(coords, proj4string = CRS(as.character(NA)), bbox = NULL) {
-  #coords = sp::coordinates(coords)
-  colNames = dimnames(coords)[[2]]
-  if (is.null(colNames))
-    colNames = paste("coords.x", 1:(dim(coords)[2]), sep = "")
-  rowNames = dimnames(coords)[[1]]
-  dimnames(coords) = list(rowNames, colNames)
-  if (is.null(bbox))
-    bbox <- .bboxCoords(coords)
-  new("SpatialPoints", coords = coords, bbox = bbox, proj4string = proj4string)
-}
-
 #' Faster .bboxCoords
 #'
 #' This is a drop in replacement for .bboxCoords in raster package.
