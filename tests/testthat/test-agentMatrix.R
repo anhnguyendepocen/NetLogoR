@@ -183,5 +183,63 @@ test_that("create agentMatrix does not work", {
    expect_true(all.equal(tmpA, tmpB))
 
 
+   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+   newAgent <- as(mat, "agentMatrix")
+
+   expect_equal(1, sum(newAgent[,"tmp2"]=="f"))
+   expect_equal(1, sum(newAgent[,"tmp"]==2))
+
+   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp1=1:3, tmp2=c("e","f","g")))
+   newAgent <- as(mat, "agentMatrix")
+   expect_equal(2, sum(newAgent==2))
+
+   am <- agentMatrix(coords = matrix(1:6, ncol=2))
+   expect_warning(am==1)
+
+   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+   mat2 <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+   newAgent1 <- as(mat, "agentMatrix")
+   newAgent2 <- as(mat2, "agentMatrix")
+
+
+   newA <- rbind(newAgent1, newAgent2)
+   expect_true(NROW(newA)==6)
+   expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp", "tmp2")))
+
+   newA <- rbind(newAgent1[,3], newAgent2[,3])
+   expect_true(NROW(newA)==6)
+   expect_true(ncol(newA)==3)
+   expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp")))
+
+   newA <- rbind(newAgent, newAgent1)
+   expect_true(NROW(newA)==6)
+   expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp", "tmp1","tmp2")))
+
+   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp3=1:3, tmp4=c("e","f","g")))
+   mat2 <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+   newAgent1 <- as(mat, "agentMatrix")
+   newAgent2 <- as(mat2, "agentMatrix")
+
+   cbound <- cbind(newAgent1, newAgent2)
+   expect_is(cbound, "agentMatrix")
+   expect_true(ncol(cbound)==6)
+   expect_true(nrow(cbound)==3)
+   expect_true(all(colnames(cbound)==c("xcor", "ycor", "tmp3", "tmp4","tmp", "tmp2")))
+   expect_true(all(cbound$tmp2 == 1:3 ))
+   expect_true(all(cbound$tmp4 == c("e","f","g") ))
+
+   expect_error(cbound <- cbind(newAgent1, newAgent2, newAgent))
+   expect_error(cbound <- cbind(newAgent1, newAgent1))
+
+   # test tail and head
+   expect_true(nrow(tail(cbound, 1))==1)
+   expect_is(tail(cbound, 1), "agentMatrix")
+   expect_true(nrow(head(cbound, 1))==1)
+   expect_true(all.equal(dim(cbound)[2], dim(head(cbound,1))[2]))
+
+   # test nrow
+   expect_true(nrow(cbound)==nrow(cbound@.Data))
+   expect_true(length(cbound)==length(cbound@.Data))
+
 })
 

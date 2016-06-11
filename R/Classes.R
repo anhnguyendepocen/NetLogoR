@@ -171,7 +171,7 @@ setMethod(
       }
     } else {
       if ( (is.matrix(dotCols[[1]]) & is.numeric(dotCols[[1]])) | is(dotCols[[1]], "agentMatrix"))
-        .Object@.Data <- cbind(coords, dotCols[[1]])
+        .Object@.Data <- cbind(xcor = coords[,1],ycor = coords[,2], dotCols[[1]])
       else
         stop("if passing levelsAM, then ... must be a numeric matrix")
       .Object@levels <- levelsAM
@@ -592,6 +592,30 @@ setMethod(
     }
 })
 
+#' @export
+#' @importFrom stats na.omit
+#' @docType methods
+#' @rdname agentMatrix-compare-methods
+setMethod(
+  "==",
+  signature("agentMatrix", "numeric"),
+  definition = function(e1, e2) {
+    colNames <- colnames(e1@.Data)
+    if (length(colNames) < 3) {
+      warning("Coordinates are not characters, returning test for both coordinates")
+      return(matrix(rep(FALSE, length(e1)), ncol = 2))
+    }
+    levelInd <- match(colNames, names(e1@levels))
+    whInd <- which(!is.na(levelInd))
+
+    if(length(whInd))
+      ind <- c(1,2,whInd)
+    else
+      ind <- c(1,2)
+
+    (e1@.Data[,-ind] == e2)
+  })
+
 #' Show an object or get information about the object
 #'
 #' description needed
@@ -688,6 +712,7 @@ tail.agentMatrix <- function(x, n = 6L, ...) {
 #' @param ... description needed
 #'
 #' @method cbind agentMatrix
+#' @importFrom SpaDES updateList
 #' @export
 #' @name cbind
 #' @docType methods
@@ -704,11 +729,10 @@ cbind.agentMatrix <- function(..., deparse.level) {
     if (any(colnames(tmp[[1]]@.Data)[-(1:2)] %in% colnames(tmp[[2]]@.Data)[-(1:2)])) {
       stop("There are duplicate columns in the two agentMatrix objects. Please remove duplicates.")
     }
-    newMat <- fastCbind(tmp[[1]]@.Data, tmp[[2]]@.Data[, -(1:2), drop = FALSE])
+    newMat <- cbind(tmp[[1]]@.Data, tmp[[2]]@.Data[, -(1:2), drop = FALSE])
     tmp[[1]]@.Data <- newMat
     colnames(newMat)
     tmp[[1]]@levels <- SpaDES::updateList(tmp[[2]]@levels, tmp[[1]]@levels)
-
     tmp[[1]]
 }
 
@@ -723,18 +747,21 @@ rbind.agentMatrix <- function(..., deparse.level = 1) {
   dots <- list(...)
   levelsSame <- isTRUE(do.call(all.equal,lapply(dots, function(x) x@levels)))
   if (levelsSame) { # if same, then faster rbind of the matrices
-    if (do.call(all.equal, lapply(dots, colnames))) {
+    if (isTRUE(do.call(all.equal, lapply(dots, colnames)))) {
       mat <- do.call(rbind, lapply(dots, function(x) x@.Data)) # Fastest option...
       #i.e., pass agentMatrix with known levels
     } else {
-      mat <- as.matrix(do.call(rbindlist,
-                               args = list(lapply(dots, function(x) as(x, "data.frame")),
-                                           fill = TRUE)))
+      mat <- as.matrix(rbindlist(lapply(dots, function(x) data.frame(x@.Data)), fill=TRUE))
     }
     levels <- dots[[1]]@levels
-    new("agentMatrix", coords = mat[,1:2],
+    if(any(!unlist(lapply(levels, is.null)))) {
+      new("agentMatrix", coords = mat[,1:2,drop=FALSE],
         mat[,-(1:2)],
         levelsAM = levels)
+    } else {
+      new("agentMatrix", coords = mat[,1:2,drop=FALSE],
+          mat[,-(1:2),drop=FALSE])
+    }
   } else {
     # if levels are not the same, then need to take the "slow" option: convert to data.frame
     mat <- as.data.frame(do.call(rbindlist, args = list(lapply(dots, function(x) as(x, "data.frame")), fill = TRUE)))
