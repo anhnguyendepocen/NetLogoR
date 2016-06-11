@@ -712,7 +712,7 @@ tail.agentMatrix <- function(x, n = 6L, ...) {
 #' This will take the coordinates of the first argument and remove the coordinates
 #' of the second object.
 #'
-#' @param ... deparse.level See \code{\link[base]{cbind}}
+#' @param deparse.level See \code{\link[base]{cbind}}
 #' @param ... Two agentMatrix objects
 #'
 #' @method cbind agentMatrix
