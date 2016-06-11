@@ -3,9 +3,12 @@
 \docType{methods}
 \name{==,agentMatrix,character-method}
 \alias{==,agentMatrix,character-method}
+\alias{==,agentMatrix,numeric-method}
 \title{Relational Operators}
 \usage{
 \S4method{==}{agentMatrix,character}(e1, e2)
+
+\S4method{==}{agentMatrix,numeric}(e1, e2)
 }
 \arguments{
 \item{e1}{An \code{agentMatrix} object.}

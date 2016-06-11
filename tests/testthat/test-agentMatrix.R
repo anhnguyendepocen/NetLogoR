@@ -74,6 +74,10 @@ test_that("create agentMatrix does not work", {
    expect_equal(colnames(newAgent), c("xcor", "ycor", "char1", "char2", "nums1", "char3", "char4", "nums2"))
 
 
+})
+
+test_that("agentMatrix benchmarking", {
+
    # compare speeds -- if these fail, then should reconsider the need for agentMatrix
    if(require(microbenchmark)) {
      mb <- summary(microbenchmark(times = 50,
@@ -120,8 +124,13 @@ test_that("create agentMatrix does not work", {
                                                         nums2 = c(4.5, 2.6, 2343),
                                                         nums = 5:7)}))
    }
-   expect_gt(mb$median[1]/mb$median[3], 8) # expect it is 8 times faster
+   expect_gt(mb$median[1]/mb$median[3], 4) # expect it is 8 times faster, but use 4 for safety cushion in tests
+   if(interactive()) expect_gt(mb$median[1]/mb$median[3], 4) # expect it is 8 times faster, but use 4 for safety cushion in tests
 
+
+})
+
+test_that("agentMatrix coersion", {
 
    spdf1 <- SpatialPointsDataFrame(coords = matrix(1:6,ncol=2), data = data.frame(tmp=1:3, tmp2=c("e","f","g")))
    newAgent <- agentMatrix(spdf1)
@@ -149,8 +158,16 @@ test_that("create agentMatrix does not work", {
    expect_equal(dim(coordinates(newAgent)), c(3,2))
    expect_equal(colnames(newAgent), c("xcor", "ycor", "tmp", "tmp2"))
 
+
+})
+
+test_that("agentMatrix subsetting", {
+
    # subsetting keeps an agentMatrix, just like subsetting SPDF
    # character column
+   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+   newAgent <- as(mat, "agentMatrix")
+
    tmpA <- as(newAgent[2,4], "data.frame")
    tmpB <- as(agentMatrix(coords=coordinates(newAgent)[2,,drop=FALSE],
                           tmp2=cbind(tmp2=newAgent@levels[["tmp2"]][newAgent@.Data[2,4,drop=FALSE]])), "data.frame")
@@ -196,50 +213,60 @@ test_that("create agentMatrix does not work", {
    am <- agentMatrix(coords = matrix(1:6, ncol=2))
    expect_warning(am==1)
 
-   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
-   mat2 <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
-   newAgent1 <- as(mat, "agentMatrix")
-   newAgent2 <- as(mat2, "agentMatrix")
 
 
-   newA <- rbind(newAgent1, newAgent2)
-   expect_true(NROW(newA)==6)
-   expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp", "tmp2")))
 
-   newA <- rbind(newAgent1[,3], newAgent2[,3])
-   expect_true(NROW(newA)==6)
-   expect_true(ncol(newA)==3)
-   expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp")))
+})
 
-   newA <- rbind(newAgent, newAgent1)
-   expect_true(NROW(newA)==6)
-   expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp", "tmp1","tmp2")))
+test_that("agentMatrix rbind cbind, tail, head, nrow, length", {
 
-   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp3=1:3, tmp4=c("e","f","g")))
-   mat2 <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
-   newAgent1 <- as(mat, "agentMatrix")
-   newAgent2 <- as(mat2, "agentMatrix")
+  mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp1=1:3, tmp2=c("e","f","g")))
+  newAgent <- as(mat, "agentMatrix")
 
-   cbound <- cbind(newAgent1, newAgent2)
-   expect_is(cbound, "agentMatrix")
-   expect_true(ncol(cbound)==6)
-   expect_true(nrow(cbound)==3)
-   expect_true(all(colnames(cbound)==c("xcor", "ycor", "tmp3", "tmp4","tmp", "tmp2")))
-   expect_true(all(cbound$tmp2 == 1:3 ))
-   expect_true(all(cbound$tmp4 == c("e","f","g") ))
+  mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+  mat2 <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+  newAgent1 <- as(mat, "agentMatrix")
+  newAgent2 <- as(mat2, "agentMatrix")
 
-   expect_error(cbound <- cbind(newAgent1, newAgent2, newAgent))
-   expect_error(cbound <- cbind(newAgent1, newAgent1))
 
-   # test tail and head
-   expect_true(nrow(tail(cbound, 1))==1)
-   expect_is(tail(cbound, 1), "agentMatrix")
-   expect_true(nrow(head(cbound, 1))==1)
-   expect_true(all.equal(dim(cbound)[2], dim(head(cbound,1))[2]))
+  newA <- rbind(newAgent1, newAgent2)
+  expect_true(NROW(newA)==6)
+  expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp", "tmp2")))
 
-   # test nrow
-   expect_true(nrow(cbound)==nrow(cbound@.Data))
-   expect_true(length(cbound)==length(cbound@.Data))
+  newA <- rbind(newAgent1[,3], newAgent2[,3])
+  expect_true(NROW(newA)==6)
+  expect_true(ncol(newA)==3)
+  expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp")))
+
+  newA <- rbind(newAgent, newAgent1)
+  expect_true(NROW(newA)==6)
+  expect_true(all(colnames(newA)==c("xcor", "ycor", "tmp", "tmp1","tmp2")))
+
+  mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp3=1:3, tmp4=c("e","f","g")))
+  mat2 <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp2=c("e","f","g")))
+  newAgent1 <- as(mat, "agentMatrix")
+  newAgent2 <- as(mat2, "agentMatrix")
+
+  cbound <- cbind(newAgent1, newAgent2)
+  expect_is(cbound, "agentMatrix")
+  expect_true(ncol(cbound)==6)
+  expect_true(nrow(cbound)==3)
+  expect_true(all(colnames(cbound)==c("xcor", "ycor", "tmp3", "tmp4","tmp", "tmp2")))
+  expect_true(all(cbound$tmp2 == 1:3 ))
+  expect_true(all(cbound$tmp4 == c("e","f","g") ))
+
+  expect_error(cbound <- cbind(newAgent1, newAgent2, newAgent))
+  expect_error(cbound <- cbind(newAgent1, newAgent1))
+
+  # test tail and head
+  expect_true(nrow(tail(cbound, 1))==1)
+  expect_is(tail(cbound, 1), "agentMatrix")
+  expect_true(nrow(head(cbound, 1))==1)
+  expect_true(all.equal(dim(cbound)[2], dim(head(cbound,1))[2]))
+
+  # test nrow
+  expect_true(nrow(cbound)==nrow(cbound@.Data))
+  expect_true(length(cbound)==length(cbound@.Data))
 
 })
 
