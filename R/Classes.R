@@ -111,7 +111,8 @@ setMethod(
     if (missing(levelsAM)) {
       if (all(sapply(dotCols, is.numeric))) {
         isMatrix <- sapply(dotCols, is.matrix)
-        singleMatrix <- length(isMatrix)==1
+
+        singleMatrix <- if(length(isMatrix)>0) sum(isMatrix)==1 else FALSE
         if (singleMatrix) {
           otherCols <- do.call(cbind, list(xcor = coords[,1],ycor = coords[,2], dotCols[[1]]))
         } else {
@@ -242,7 +243,8 @@ setMethod(
   "agentMatrix",
   signature = c(coords = "missing"),
   definition = function(...) {
-    if (is(..., "SpatialPointsDataFrame")) {
+    dots <- list(...)
+    if (all(unlist(lapply(dots, is, "SpatialPointsDataFrame"))) & length(dots)==1)  {
       dots <- list(...)
       new("agentMatrix", coords = sp::coordinates(dots[[1]]), dots[[1]]@data)
     } else {
@@ -630,7 +632,7 @@ setMethod(
   signature(object = "agentMatrix"),
   definition = function(object) {
     if (NROW(object@.Data) > 0) {
-      tmp <- data.frame(object@.Data)
+      tmp <- data.frame(object@.Data, row.names = seq_len(NROW(object@.Data)))
       colNames <- colnames(tmp[, names(object@levels), drop = FALSE])
       tmp[,names(object@levels)] <-
         sapply(seq_along(names(object@levels)), function(x) {
@@ -707,9 +709,11 @@ tail.agentMatrix <- function(x, n = 6L, ...) {
 #' Combine R Objects by Rows or Columns
 #'
 #' Take a sequence of agentMatrix arguments and combine by columns or rows, respectively.
+#' This will take the coordinates of the first argument and remove the coordinates
+#' of the second object.
 #'
-#' @param deparse.level  description needed
-#' @param ... description needed
+#' @param ... deparse.level See \code{\link[base]{cbind}}
+#' @param ... Two agentMatrix objects
 #'
 #' @method cbind agentMatrix
 #' @importFrom SpaDES updateList

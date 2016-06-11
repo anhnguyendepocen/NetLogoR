@@ -8,6 +8,42 @@ test_that("create agentMatrix does not work", {
          nums = 5:7)
    expect_is(newAgent, "agentMatrix")
 
+   # test levelsAM, which should be faster
+   newAgent <- new("agentMatrix",
+                   mat=cbind(char = sample(1:3, replace = TRUE, size = 10),
+                             char2 = sample(1:2, replace = TRUE, size = 10),
+                             num2 = sample(1:10, replace = TRUE, size = 10)),
+                   levelsAM = list(char=c("a","b","f"),
+                                   char2=c("test", "fail")))
+   expect_is(newAgent, "agentMatrix")
+   expect_true(all(is.na(coordinates(newAgent))))
+   expect_is(coordinates(newAgent), "matrix")
+   expect_true(all(colnames(newAgent)==c("xcor", "ycor", "char", "char2", "num2")))
+
+   # test agentMatrix call with levelsAM
+   newAgent <- agentMatrix(
+                   mat=cbind(char = sample(1:3, replace = TRUE, size = 10),
+                             char2 = sample(1:2, replace = TRUE, size = 10),
+                             num2 = sample(1:10, replace = TRUE, size = 10)),
+                   levelsAM = list(char=c("a","b","f"),
+                                   char2=c("test", "fail")))
+   expect_is(newAgent, "agentMatrix")
+   expect_true(all(is.na(coordinates(newAgent))))
+   expect_is(coordinates(newAgent), "matrix")
+   expect_true(all(colnames(newAgent)==c("xcor", "ycor", "char", "char2", "num2")))
+
+   # test agentMatrix call with levelsAM
+   newAgent <- agentMatrix(coords = cbind(pxcor = 1:10, pycor = 1:10),
+     mat=cbind(char = sample(1:3, replace = TRUE, size = 10),
+               char2 = sample(1:2, replace = TRUE, size = 10),
+               num2 = sample(1:10, replace = TRUE, size = 10)),
+     levelsAM = list(char=c("a","b","f"),
+                     char2=c("test", "fail")))
+   expect_is(newAgent, "agentMatrix")
+   expect_true(all(!is.na(coordinates(newAgent))))
+   expect_is(coordinates(newAgent), "matrix")
+   expect_true(all(colnames(newAgent)==c("xcor", "ycor", "char", "char2", "num2")))
+
    # test coordinates missing
    newAgent <- new("agentMatrix",
                    char = letters[c(1, 2, 6)],
@@ -212,13 +248,19 @@ test_that("agentMatrix subsetting", {
 
    am <- agentMatrix(coords = matrix(1:6, ncol=2))
    expect_warning(am==1)
+   expect_warning(am=="test")
+
+   am <- agentMatrix(coords = matrix(1:6, ncol=2),
+                     mat = 1:3)
+   expect_false(all(am=="test"))
+
 
 
 
 
 })
 
-test_that("agentMatrix rbind cbind, tail, head, nrow, length", {
+test_that("agentMatrix rbind cbind, tail, head, nrow, length, show", {
 
   mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp1=1:3, tmp2=c("e","f","g")))
   newAgent <- as(mat, "agentMatrix")
@@ -258,6 +300,15 @@ test_that("agentMatrix rbind cbind, tail, head, nrow, length", {
   expect_error(cbound <- cbind(newAgent1, newAgent2, newAgent))
   expect_error(cbound <- cbind(newAgent1, newAgent1))
 
+
+  mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp3=1:3, tmp4=c("e","f","g")))
+  mat2 <- cbind(coords = matrix(1:2,ncol=2), data.frame(tmp=1, tmp2=c("e")))
+  newAgent1 <- as(mat, "agentMatrix")
+  newAgent2 <- as(mat2, "agentMatrix")
+
+  cbound <- cbind(newAgent1, newAgent2)
+  expect_is(cbound, "agentMatrix")
+
   # test tail and head
   expect_true(nrow(tail(cbound, 1))==1)
   expect_is(tail(cbound, 1), "agentMatrix")
@@ -267,6 +318,14 @@ test_that("agentMatrix rbind cbind, tail, head, nrow, length", {
   # test nrow
   expect_true(nrow(cbound)==nrow(cbound@.Data))
   expect_true(length(cbound)==length(cbound@.Data))
+
+  # test show
+  outShow <- capture.output(cbound)
+  expect_true(length(outShow)==4)
+  expect_true(grep(outShow, pattern = c("tmp3 tmp4 tmp tmp2"))==1)
+  expect_true(all(grep(outShow, pattern = c("1    1"))==c(2,3,4)))
+  expect_true(all(grep(outShow, pattern = c("e   1"))==c(2)))
+  expect_true(all(grep(outShow, pattern = c("f   1"))==3))
 
 })
 
