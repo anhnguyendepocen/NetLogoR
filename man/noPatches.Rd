@@ -22,7 +22,7 @@ Report an empty patch agentset.
 }
 \examples{
 p1 <- noPatches()
-count(p1)
+NLcount(p1)
 
 
 }

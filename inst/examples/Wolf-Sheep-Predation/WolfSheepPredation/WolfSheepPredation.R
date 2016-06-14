@@ -104,10 +104,10 @@ WolfSheepPredationInit <- function(sim) {
   # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
     # Initialize patch values (grass and countdown) at random
-    grassVal <- sample(c(0,1), size = count(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
+    grassVal <- sample(c(0,1), size = NLcount(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
     grass <- set(world = grass, agents = patches(grass), val = grassVal)
     countdown <- grass # countdown is a new NLworld with the same extent as grass
-    countdownVal <- runif(n = count(patches(grass)), min = 0, max = params(sim)$WolfSheepPredation$grassTGrowth) # grass grow clock
+    countdownVal <- runif(n = NLcount(patches(grass)), min = 0, max = params(sim)$WolfSheepPredation$grassTGrowth) # grass grow clock
     countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
     sim$field <- NLworldArray(grass, countdown)
   }
@@ -155,12 +155,12 @@ WolfSheepPredationInit <- function(sim) {
 ### template for save events
 WolfSheepPredationSave <- function(sim) {
 
-  sim$numSheep <- c(sim$numSheep, count(sim$sheep)) # add the new number of sheep
-  sim$numWolves <- c(sim$numWolves, count(sim$wolves)) # add the new numbr of wolves
+  sim$numSheep <- c(sim$numSheep, NLcount(sim$sheep)) # add the new number of sheep
+  sim$numWolves <- c(sim$numWolves, NLcount(sim$wolves)) # add the new numbr of wolves
 
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
     pGreen <- NLwith(world = sim$field, var = "grass", agents = patches(sim$field), val = 1) # patches equal to 1 (green)
-    sim$numGreen <- c(sim$numGreen, count(pGreen)) # add the new number of green patches
+    sim$numGreen <- c(sim$numGreen, NLcount(pGreen)) # add the new number of green patches
   }
 
   return(invisible(sim))
@@ -174,10 +174,10 @@ WolfSheepPredationPosition <- function(sim) { # Plot the positions
     grassRas <- raster(sim$field@.Data[,,"grass"])
     extent(grassRas) <- extent(sim$field)
     Plot(grassRas, na.color = "white")
-    if(count(sim$sheep)>0)
+    if(NLcount(sim$sheep)>0)
       sheep <- SpatialPoints(coordinates(sim$sheep))
       Plot(sheep, addTo = "grassRas", cols = "red")
-    if(count(sim$wolves)>0)
+    if(NLcount(sim$wolves)>0)
       wolves <- SpatialPoints(coordinates(sim$wolves))
       Plot(wolves, addTo = "grassRas", cols = "black")
   } else {
@@ -215,7 +215,7 @@ WolfSheepPredationEvent <- function(sim){
   if(NLany(sim$sheep) | NLany(sim$wolves)){
 
     # Ask sheep
-    if(count(sim$sheep) != 0){
+    if(NLcount(sim$sheep) != 0){
       moveSheep(sim)
       if(params(sim)$WolfSheepPredation$grassOn == TRUE){
         energySheep <- of(agents = sim$sheep, var = "energy")
@@ -223,19 +223,19 @@ WolfSheepPredationEvent <- function(sim){
         eatGrass(sim)
       }
       dieSheep(sim)
-      if(count(sim$sheep) != 0){
+      if(NLcount(sim$sheep) != 0){
         reproduceSheep(sim)
       }
     }
 
     # Ask wolves
-    if(count(sim$wolves) != 0){
+    if(NLcount(sim$wolves) != 0){
       moveWolves(sim)
       energyWolves <- of(agents = sim$wolves, var = "energy")
       sim$wolves <- set(turtles = sim$wolves, agents = sim$wolves, var = "energy", val = energyWolves - 1)
       catchSheep(sim)
       dieWolves(sim)
-      if(count(sim$wolves) != 0){
+      if(NLcount(sim$wolves) != 0){
         reproduceWolves(sim)
       }
     }
@@ -301,10 +301,10 @@ reproduceWolves <- function(sim) {
 #### Sheep and Wolves procedures
 
 move <- function(turtles){ # sheep and wolves
-  # turtles <- right(turtles, angle = runif(n = count(turtles), min = 0, max = 50))
-  # turtles <- left(turtles, angle = runif(n = count(turtles), min = 0, max = 50))
+  # turtles <- right(turtles, angle = runif(n = NLcount(turtles), min = 0, max = 50))
+  # turtles <- left(turtles, angle = runif(n = NLcount(turtles), min = 0, max = 50))
   # The two above functions can be replaced by this next one, as a negative value to turn right will turn left
-  turtles <- right(turtles, angle = runif(n = count(turtles), min = -50, max = 50))
+  turtles <- right(turtles, angle = runif(n = NLcount(turtles), min = -50, max = 50))
   turtles <- fd(world = grass, turtles = turtles, dist = 1, torus = TRUE)
   return(turtles)
 }
@@ -323,12 +323,12 @@ death <- function(turtles){ # sheep and wolves
 
 reproduce <- function(turtles, reproTurtles){ # sheep and wolves
   # Throw dice to see if the turtles will reproduce
-  repro <- runif(n = count(turtles), min = 0, max = 100) < reproTurtles
+  repro <- runif(n = NLcount(turtles), min = 0, max = 100) < reproTurtles
   whoTurtles <- of(agents = turtles, var = "who") # "who" of the turtles before they reproduce
   reproWho <- whoTurtles[repro] # "who" of turtles which reproduce
   reproInd <- turtle(turtles, who = reproWho) # turtles which reproduce
 
-  if(count(reproInd) != 0){ # if there is at least one turtle reproducing
+  if(NLcount(reproInd) != 0){ # if there is at least one turtle reproducing
     energyTurtles <- of(agents = reproInd, var = "energy")
     # Divide the energy between the parent and offspring
     turtles <- set(turtles = turtles, agents = reproInd, var = "energy", val = energyTurtles / 2)
@@ -338,7 +338,7 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
     whoNewTurtles <- of(agents = turtles, var = "who") # "who" of the turtles after they reproduced
     whoOffspring <- which(!whoNewTurtles %in% whoTurtles) # "who" of offspring
     offspring <- turtle(turtles = turtles, who = whoOffspring)
-    offspringMoved <- right(turtles = offspring, angle = runif(n = count(offspring), min = 0, max = 360))
+    offspringMoved <- right(turtles = offspring, angle = runif(n = NLcount(offspring), min = 0, max = 360))
     offspringMoved <- fd(world = grass, turtles = offspring, dist = 1, torus = TRUE)
     # Update the headings and coordinates of the offsprings inside the turtles
     valOffspring <- of(agents = offspringMoved, var = c("heading", "xcor", "ycor"))
@@ -355,7 +355,7 @@ eatGrass <- function(sim) {
   pGreen <- NLwith(world = sim$field, var = "grass", agents = patches(sim$field), val = 1) # patches with grass equal to 1 (green)
   sheepOnGreen <- turtlesOn(world = sim$field, turtles = sim$sheep, agents = pGreen) # sheep on green patches
 
-  if(count(sheepOnGreen) != 0){
+  if(NLcount(sheepOnGreen) != 0){
     # These sheep gain energy by eating
     energySheep <- of(agents = sheepOnGreen, var = "energy") # energy before eating
     sim$sheep <- set(turtles = sim$sheep, agents = sheepOnGreen, var = "energy",
@@ -405,7 +405,7 @@ growGrass <- function(sim) {
     pGrow <- pBrown[pBrownCountdown0, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
     # Grow some grass on these patches and reset the countdown
     sim$field <- set(world = sim$field, var = c("grass", "countdown"), agents = pGrow,
-                 val = cbind(grass = rep(1, count(pGrow)), countdown = rep(params(sim)$WolfSheepPredation$grassTGrowth, count(pGrow))))
+                 val = cbind(grass = rep(1, NLcount(pGrow)), countdown = rep(params(sim)$WolfSheepPredation$grassTGrowth, NLcount(pGrow))))
   }
 
   pBrownCountdown1 <- which(!pBrownCountdown <= 0) # patches with a countdown > 0

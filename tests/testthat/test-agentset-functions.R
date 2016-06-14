@@ -96,7 +96,7 @@ test_that("NLany works with NLworldMs and agentMatrix",{
   expect_identical(NLany(t4), TRUE)
 })
 
-test_that("count works with patches",{
+test_that("NLcount works with patches",{
   w1 <- createNLworld(0, 4, 0, 4)
   p1 <- noPatches()
   p2 <- patch(world = w1, x = 0, y = 0)
@@ -104,32 +104,32 @@ test_that("count works with patches",{
   p4 <- patches(world = w1)
   p5 <- patch(world = w1, x = c(-1, 0), y = c(-1, 0))
   p6 <- patch(world = w1, x = c(-1, 0), y = c(0, 0))
-  expect_equivalent(count(p1), 0)
-  expect_equivalent(count(p2), 1)
-  expect_equivalent(count(p3), 0)
-  expect_equivalent(count(p4), 25)
-  expect_equivalent(count(p5), 1)
-  expect_equivalent(count(p6), 1)
+  expect_equivalent(NLcount(p1), 0)
+  expect_equivalent(NLcount(p2), 1)
+  expect_equivalent(NLcount(p3), 0)
+  expect_equivalent(NLcount(p4), 25)
+  expect_equivalent(NLcount(p5), 1)
+  expect_equivalent(NLcount(p6), 1)
 })
 
-test_that("count works with turtles",{
+test_that("NLcount works with turtles",{
   w1 <- createNLworld(0, 4, 0, 4)
   t1 <- noTurtles()
   t2 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
   t3 <- turtle(turtles = t2, who = c(1, 2, 3))
-  expect_equivalent(count(t1), 0)
-  expect_equivalent(count(t2), 10)
-  expect_equivalent(count(t3), 3)
+  expect_equivalent(NLcount(t1), 0)
+  expect_equivalent(NLcount(t2), 10)
+  expect_equivalent(NLcount(t3), 3)
 })
 
-test_that("count works with agentMatrix",{
+test_that("NLcount works with agentMatrix",{
   w1 <- createNLworldMatrix(0, 4, 0, 4)
   t1 <- noTurtlesAM()
   t2 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
   t3 <- turtle(turtles = t2, who = c(1, 2, 3))
-  expect_equivalent(count(t1), 0)
-  expect_equivalent(count(t2), 10)
-  expect_equivalent(count(t3), 3)
+  expect_equivalent(NLcount(t1), 0)
+  expect_equivalent(NLcount(t2), 10)
+  expect_equivalent(NLcount(t3), 3)
 })
 
 
@@ -469,7 +469,7 @@ test_that("maxOneOf works with NLworldMs and agentMatrix",{
   expect_equivalent(maxXcor1, maxXcor2)
   maxHeading1 <- withMax(agents = t1, var = "heading")
   maxHeading2 <- maxOneOf(agents = t1, var = "heading")
-  expect_equivalent(count(maxHeading2), 1)
+  expect_equivalent(NLcount(maxHeading2), 1)
   maxH12 <- merge(maxHeading1@.Data, maxHeading2@.Data)
   expect_equivalent(nrow(maxH12), 1)
   expect_error(maxOneOf(agents = t1, var = "prevX"))
@@ -535,7 +535,7 @@ test_that("minOneOf works with NLworldMs and agentMatrix",{
   expect_equivalent(minXcor1, minXcor2)
   minHeading1 <- withMin(agents = t1, var = "heading")
   minHeading2 <- minOneOf(agents = t1, var = "heading")
-  expect_equivalent(count(minHeading2), 1)
+  expect_equivalent(NLcount(minHeading2), 1)
   minH12 <- merge(minHeading1@.Data, minHeading2@.Data)
   expect_equivalent(nrow(minH12), 1)
   expect_error(minOneOf(agents = t1, var = "prevX"))
@@ -645,7 +645,7 @@ test_that("nOf works with NLworldMs and agentMatrix",{
 
   t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
   t2 <- nOf(agents = t1, n = 2)
-  expect_equivalent(count(t2), 2)
+  expect_equivalent(NLcount(t2), 2)
   t2data <- merge(t2@.Data, t1@.Data)
   expect_equivalent(nrow(t2data), 2)
   expect_equivalent(nrow(unique(t2data)), 2)
@@ -655,9 +655,9 @@ test_that("nOf works with NLworldMs and agentMatrix",{
   # With matrix ncol = 3
   n4 <-neighbors(world = w1, agents = t1, nNeighbors = 8)
   p4 <- nOf(agents = n4, n = 1)
-  expect_equivalent(nrow(p4), count(t1))
+  expect_equivalent(nrow(p4), NLcount(t1))
   p5 <- nOf(agents = n4, n = 2)
-  expect_equivalent(nrow(p5), count(t1) * 2)
+  expect_equivalent(nrow(p5), NLcount(t1) * 2)
 
   # With matrix ncol = 2 "whoTurtles" and "id"
   t4 <- turtlesOn(world = w1, turtles = t1, agents = patches(w1), simplify = FALSE)
@@ -711,7 +711,7 @@ test_that("oneOf works with NLworldMs and agentMatrix",{
 
   t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
   t2 <- oneOf(agents = t1)
-  expect_equivalent(count(t2), 1)
+  expect_equivalent(NLcount(t2), 1)
   t2data <- merge(t2@.Data, t1@.Data)
   expect_equivalent(nrow(t2data), 1)
   t3 <- nOf(agents = turtle(t1, who = 0), n = 1)
@@ -721,7 +721,7 @@ test_that("oneOf works with NLworldMs and agentMatrix",{
   # With matrix ncol = 3
   n4 <-neighbors(world = w1, agents = t1, nNeighbors = 4)
   p4 <- oneOf(n4)
-  expect_equivalent(nrow(p4), count(t1))
+  expect_equivalent(nrow(p4), NLcount(t1))
 
   # With matrix ncol = 2 "whoTurtles" and "id"
   t4 <- turtlesOn(world = w1, turtles = t1, agents = patches(w1), simplify = FALSE)
@@ -787,10 +787,10 @@ test_that("maxNof works with NLworldMs and agentMatrix",{
   expect_equivalent(t4, t1)
   t5 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
   t6 <- maxNof(agents = t5, n = 5, var = "heading")
-  expect_equivalent(count(t6), 5)
+  expect_equivalent(NLcount(t6), 5)
   t7 <- maxNof(agents = t1, n = 0, var = "heading")
   expect_equivalent(t7, noTurtlesAM())
-  expect_equivalent(count(t7), 0)
+  expect_equivalent(NLcount(t7), 0)
 })
 
 test_that("minNof works",{
@@ -850,10 +850,10 @@ test_that("minNof works with NLworldMs and agentMatrix",{
   expect_equivalent(t4, t1)
   t5 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
   t6 <- minNof(agents = t5, n = 5, var = "heading")
-  expect_equivalent(count(t6), 5)
+  expect_equivalent(NLcount(t6), 5)
   t7 <- minNof(agents = t1, n = 0, var = "heading")
   expect_equivalent(t7, noTurtlesAM())
-  expect_equivalent(count(t7), 0)
+  expect_equivalent(NLcount(t7), 0)
 })
 
 test_that("inRadius works",{
@@ -1000,7 +1000,7 @@ test_that("inRadius2 works with NLworldMs and agentMatrix",{
   p5 <- inRadius2(agents = turtle(t1, 0), radius = 2, agents2 = patches(w1), world = w1)
   expect_equivalent(p5, p1)
   p6 <- inRadius2(agents = t1, radius = 0.5, agents2 = patches(w1), world = w1)
-  expect_equivalent(length(unique(p6[,"id"])), count(t1))
+  expect_equivalent(length(unique(p6[,"id"])), NLcount(t1))
   expect_equivalent(p6[p6[,"id"] == 1,c("pxcor", "pycor"), drop = FALSE], as.matrix(inspect(t1, 0)[,c("xcor", "ycor"), drop = FALSE]))
   p7 <- inRadius2(agents = turtle(t1, 0), radius = 1, agents2 = patches(w1), world = w1, torus = TRUE)
   expect_equivalent(nrow(merge(p7[p7[,"id"] == 1, c("pxcor", "pycor")], cbind(pxcor = c(0, 0, 0, 1, 4), pycor = c(4, 1, 0, 0, 0)))), nrow(p7))
@@ -1045,7 +1045,7 @@ test_that("inRadius2 works with NLworldMs and agentMatrix",{
   p5 <- inRadius2(agents = turtle(t1, 0), radius = 2, agents2 = patches(w1))
   expect_equivalent(p5, p1)
   p6 <- inRadius2(agents = t1, radius = 0.5, agents2 = patches(w1))
-  expect_equivalent(length(unique(p6[,"id"])), count(t1))
+  expect_equivalent(length(unique(p6[,"id"])), NLcount(t1))
   expect_equivalent(p6[p6[,"id"] == 1,c("pxcor", "pycor"), drop = FALSE], as.matrix(inspect(t1, 0)[,c("xcor", "ycor"), drop = FALSE]))
   p9 <- inRadius2(agents = turtle(t1, 0), radius = 1, agents2 = patch(w1, 4, 4))
   expect_equivalent(NROW(p9), 0)
@@ -1289,7 +1289,7 @@ test_that("set works with NLworldMs",{
 test_that("set works with agentMatrix",{
   t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
   t2 <- set(turtles = t1, agents = t1, var = "heading", val = 0)
-  expect_equivalent(t2@.Data[,"heading"], rep(0, count(t2)))
+  expect_equivalent(t2@.Data[,"heading"], rep(0, NLcount(t2)))
   t3 <- set(turtles = t1, agents = turtle(t1, 0), var = "xcor", val = 3)
   expect_equivalent(t3@.Data[,"xcor"], c(3, 1, 2, 3, 4))
   t4 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = "xcor", val = 3)

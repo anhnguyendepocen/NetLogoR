@@ -52,7 +52,7 @@ Vector of values for the \code{agents} if one variable is requested. The class d
         of the variable class. The order of the vector follows the order
         of the \code{agents}, or
 
-        Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{count(agents)})
+        Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{NLcount(agents)})
         if \code{agents} are patches or turtles, of the
         values for the requested variables for the \code{agents}. The row order
         of the returned matrix follws the order of the \code{agents}.

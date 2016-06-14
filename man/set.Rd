@@ -53,10 +53,10 @@ the turtles' variable and can be equal to \code{"xcor"},
 \code{"ycor"}, any of the variables created when turtles were created,
 as well as any variable created using \code{turtlesOwn()}.}
 
-\item{val}{Numeric or character. Vector of length 1 or length \code{count(agents)}
+\item{val}{Numeric or character. Vector of length 1 or length \code{NLcount(agents)}
            if \code{length(var) == 1}, or
 
-           Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{count(agents)}).
+           Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{NLcount(agents)}).
            Columns must be in the same order as \code{var}.}
 }
 \value{

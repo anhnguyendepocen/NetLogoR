@@ -38,7 +38,7 @@ If no parameters value are provided, default values are: \code{minPxcor = -16},
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
+w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 plot(w1)
 
 

@@ -34,9 +34,9 @@ The "who" numbers of the remaining \code{turtles} are unchanged.
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, world = w1)
-count(t1)
+NLcount(t1)
 t1 <- die(turtles = t1, who = c(2, 3, 4))
-count(t1)
+NLcount(t1)
 
 
 }

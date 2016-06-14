@@ -46,7 +46,7 @@ inRadius(agents, radius, agents2, world, torus = FALSE)
 \code{torus = FALSE}.}
 }
 \value{
-List of length equal to \code{count(agents)}.
+List of length equal to \code{NLcount(agents)}.
         List items are matrices (ncol = 2) with the first column "pxcor"
         and the second column "pycor" representing the coordinates of the
         patches among \code{agents2} within \code{radius} distances for each \code{agents}, if

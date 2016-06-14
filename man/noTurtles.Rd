@@ -23,7 +23,7 @@ Report an empty turtle agentset.
 }
 \examples{
 t1 <- noTurtles()
-count(t1)
+NLcount(t1)
 
 
 }

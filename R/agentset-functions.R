@@ -20,7 +20,7 @@
 #' @examples
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
+#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' NLall(agents = patches(w1), world = w1, val = 5)
 #' w2 <- w1
 #' w2 <- set(world = w1, agents = patches(w1), val = 5)
@@ -221,29 +221,30 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4) # 25 patches
 #' p1 <- patches(w1)
-#' count(p1) # 25
+#' NLcount(p1) # 25
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' count(t1) # 10
+#' NLcount(t1) # 10
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname count
+#' @rdname NLcount
+#' @aliases count
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "count",
+  "NLcount",
   function(agents) {
-    standardGeneric("count")
+    standardGeneric("NLcount")
   })
 
 #' @export
-#' @rdname count
+#' @rdname NLcount
 setMethod(
-  "count",
+  "NLcount",
   signature = c("matrix"),
   definition = function(agents) {
     return(NROW(agents))
@@ -251,9 +252,9 @@ setMethod(
 )
 
 #' @export
-#' @rdname count
+#' @rdname NLcount
 setMethod(
-  "count",
+  "NLcount",
   signature = c("SpatialPointsDataFrame"),
   definition = function(agents) {
     return(length(agents))
@@ -291,7 +292,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- sortOn(agents = patches(w1), world = w1)
 #'
@@ -425,7 +426,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 #'
@@ -583,7 +584,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- withMax(agents = patches(w1), world = w1)
 #'
@@ -741,7 +742,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- withMin(agents = patches(w1), world = w1)
 #'
@@ -906,7 +907,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- maxOneOf(agents = patches(w1), world = w1)
 #'
@@ -1000,7 +1001,7 @@ setMethod(
   signature = c("agentMatrix", "missing", "character"),
   definition = function(agents, var) {
     maxAgents <- withMax(agents = agents, var = var)
-    row <- sample(1:count(maxAgents), size = 1)
+    row <- sample(1:NLcount(maxAgents), size = 1)
     return(maxAgents[row,])
   }
 )
@@ -1043,7 +1044,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- minOneOf(agents = patches(w1), world = w1)
 #'
@@ -1137,7 +1138,7 @@ setMethod(
   signature = c("agentMatrix", "missing", "character"),
   definition = function(agents, var) {
     minAgents <- withMin(agents = agents, var = var)
-    row <- sample(1:count(minAgents), size = 1)
+    row <- sample(1:NLcount(minAgents), size = 1)
     return(minAgents[row,])
   }
 )
@@ -1217,8 +1218,8 @@ setMethod(
         class <- "turtleset"
       }
 
-      if (colnames(agents@.Data)[1:8] == c("xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", "color") && count(agents) != 0) {
-        if (count(agents) == 1) {
+      if (colnames(agents@.Data)[1:8] == c("xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", "color") && NLcount(agents) != 0) {
+        if (NLcount(agents) == 1) {
           agentsClass <- "turtle"
         } else {
           agentsClass <- "turtleset"
@@ -1563,7 +1564,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:10, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:10, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1753,7 +1754,7 @@ setMethod(
       maxOneOf(agents = agents, var = var)
     } else if (n == 0) {
       noTurtlesAM()
-    } else if (n == count(agents)) {
+    } else if (n == NLcount(agents)) {
       return(agents)
     } else {
 
@@ -1814,7 +1815,7 @@ setMethod(
 #' # Patches
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' w1 <- set(world = w1, agents = patches(w1),
-#'           val = sample(1:10, size = count(patches(w1)), replace = TRUE))
+#'           val = sample(1:10, size = NLcount(patches(w1)), replace = TRUE))
 #' plot(w1)
 #' p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 #'
@@ -1971,7 +1972,7 @@ setMethod(
       minOneOf(agents = agents, var = var)
     } else if (n == 0) {
       noTurtlesAM()
-    } else if (n == count(agents)) {
+    } else if (n == NLcount(agents)) {
       return(agents)
     } else {
 
@@ -2016,7 +2017,7 @@ setMethod(
 #'               SpatialPointsDataFrame created by \code{createTurtles()} or
 #'               by \code{createOTurtles()} representing the moving agents.
 #'
-#' @return List of length equal to \code{count(agents)}.
+#' @return List of length equal to \code{NLcount(agents)}.
 #'         List items are matrices (ncol = 2) with the first column "pxcor"
 #'         and the second column "pycor" representing the coordinates of the
 #'         patches among \code{agents2} within \code{radius} distances for each \code{agents}, if
@@ -2555,10 +2556,10 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param val Numeric or character. Vector of length 1 or length \code{count(agents)}
+#' @param val Numeric or character. Vector of length 1 or length \code{NLcount(agents)}
 #'            if \code{length(var) == 1}, or
 #'
-#'            Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{count(agents)}).
+#'            Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{NLcount(agents)}).
 #'            Columns must be in the same order as \code{var}.
 #'
 #' @return NLworlds object with the values \code{val} assigned to the patches variables \code{var}
@@ -2608,7 +2609,7 @@ setMethod(
   signature = c(world = "NLworld", turtles = "missing", agents = "matrix", var = "missing", val = "ANY"),
   definition = function(world, agents, val) {
 
-    if (count(agents) != 0) {
+    if (NLcount(agents) != 0) {
 
       if (identical(patches(world), agents)) {
         world[] <- val
@@ -2639,7 +2640,7 @@ setMethod(
                 var = "character", val = "ANY"),
   definition = function(world, agents, var, val) {
 
-    if (count(agents) != 0) {
+    if (NLcount(agents) != 0) {
 
       if (identical(patches(world), agents)) {
 
@@ -2710,7 +2711,7 @@ setMethod(
                 var = "character", val = "ANY"),
   definition = function(turtles, agents, var, val) {
 
-    if (count(agents) != 0) {
+    if (NLcount(agents) != 0) {
 
       if (identical(agents, turtles)) {
 

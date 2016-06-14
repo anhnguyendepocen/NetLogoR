@@ -33,7 +33,7 @@ The name of the layer for the NLWorld is set to \code{""}.
 }
 \examples{
 w1 <- createNLworld()
-w1 <- set(world = w1, agents = patches(w1), val = runif(count(patches(w1))))
+w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 w1Val <- of(world = w1, agents = patches(w1))
 summary(w1Val)
 

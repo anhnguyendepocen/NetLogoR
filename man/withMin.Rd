@@ -65,7 +65,7 @@ equals to the minimum value.
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- set(world = w1, agents = patches(w1),
-          val = sample(1:5, size = count(patches(w1)), replace = TRUE))
+          val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 plot(w1)
 p1 <- withMin(agents = patches(w1), world = w1)
 
