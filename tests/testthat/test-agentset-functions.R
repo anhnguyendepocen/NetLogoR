@@ -821,6 +821,22 @@ test_that("maxNof works with NLworldMs and agentMatrix",{
   t7 <- maxNof(agents = t1, n = 0, var = "heading")
   expect_equivalent(t7, noTurtlesAM())
   expect_equivalent(NLcount(t7), 0)
+
+  w2 <- w1
+  w2[] <- 25:1
+  ws <- NLworldArray(w1, w2)
+  p1 <- maxNof(agents = patches(world = ws), n = 5, world = ws, var = "w2")
+  expect_equivalent(p1, PxcorPycorFromCell(world = w2, 1:5))
+  p2 <- maxNof(agents = patches(world = ws), n = 1, world = ws, var = "w2")
+  expect_equivalent(p2, PxcorPycorFromCell(world = ws, 1))
+  p3 <- maxNof(agents = patches(world = ws), n = length(w1), world = ws, var = "w2")
+  expect_equivalent(nrow(p3), 25)
+  expect_equivalent(p3, patches(w1))
+  p4 <- maxNof(agents = patches(world = ws), n = 5, world = ws, var = "w1")
+  expect_equivalent(nrow(p4), 5)
+  p5 <- maxNof(agents = patches(world = ws), n = 0, world = ws, var = "w1")
+  expect_equivalent(nrow(p5), 0)
+  expect_equivalent(p5, noPatches())
 })
 
 test_that("minNof works",{
@@ -853,6 +869,17 @@ test_that("minNof works",{
   t7 <- minNof(agents = t1, n = 0, var = "heading")
   expect_equivalent(t7, noTurtles())
   expect_equivalent(length(t7), 0)
+
+  w2 <- w1
+  w2[] <- 1:25
+  ws <- NLstack(w1, w2)
+  p1 <- minNof(agents = patches(world = ws), n = 5, world = ws, var = "w2")
+  expect_identical(p1, PxcorPycorFromCell(world = ws, 1:5))
+  p2 <- minNof(agents = patches(world = ws), n = 1, world = ws, var = "w2")
+  expect_equivalent(p2, PxcorPycorFromCell(world = ws, 1))
+  p3 <- minNof(agents = patches(world = ws), n = length(w1), world = ws, var = "w2")
+  expect_equivalent(nrow(p3), 25)
+  expect_identical(p3, patches(w1))
 })
 
 test_that("minNof works with NLworldMs and agentMatrix",{
@@ -884,6 +911,22 @@ test_that("minNof works with NLworldMs and agentMatrix",{
   t7 <- minNof(agents = t1, n = 0, var = "heading")
   expect_equivalent(t7, noTurtlesAM())
   expect_equivalent(NLcount(t7), 0)
+
+  w2 <- w1
+  w2[] <- 1:25
+  ws <- NLworldArray(w1, w2)
+  p1 <- minNof(agents = patches(world = ws), n = 5, world = ws, var = "w2")
+  expect_equivalent(p1, PxcorPycorFromCell(world = w2, 1:5))
+  p2 <- minNof(agents = patches(world = ws), n = 1, world = ws, var = "w2")
+  expect_equivalent(p2, PxcorPycorFromCell(world = ws, 1))
+  p3 <- minNof(agents = patches(world = ws), n = length(w1), world = ws, var = "w2")
+  expect_equivalent(nrow(p3), 25)
+  expect_equivalent(p3, patches(w1))
+  p4 <- minNof(agents = patches(world = ws), n = 5, world = ws, var = "w1")
+  expect_equivalent(nrow(p4), 5)
+  p5 <- minNof(agents = patches(world = ws), n = 0, world = ws, var = "w1")
+  expect_equivalent(nrow(p5), 0)
+  expect_equivalent(p5, noPatches())
 })
 
 test_that("inRadius works",{

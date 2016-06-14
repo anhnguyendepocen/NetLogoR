@@ -1715,7 +1715,7 @@ setMethod(
   definition = function(agents, n, world, var) {
 
     if (n == 1) {
-      maxOneOf(agents = agents, world = world)
+      maxOneOf(agents = agents, world = world, var = var)
     } else if (n == 0) {
       noPatches()
     } else if (n == NROW(agents)) {
@@ -1934,7 +1934,7 @@ setMethod(
   definition = function(agents, n, world, var) {
 
     if (n == 1) {
-      maxOneOf(agents = agents, world = world)
+      minOneOf(agents = agents, world = world, var = var)
     } else if (n == 0) {
       noPatches()
     } else if (n == NROW(agents)) {
