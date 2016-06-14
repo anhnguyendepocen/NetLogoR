@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' plot(w1)
 #'
 #'
@@ -556,7 +556,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld()
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' w1Val <- of(world = w1, agents = patches(w1))
 #' summary(w1Val)
 #'

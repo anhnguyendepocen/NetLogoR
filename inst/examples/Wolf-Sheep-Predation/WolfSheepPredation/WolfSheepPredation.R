@@ -97,7 +97,7 @@ WolfSheepPredationInit <- function(sim) {
   # Create the world
   grass <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
   if(params(sim)$WolfSheepPredation$grassOn == FALSE){
-    grass <- set(world = grass, agents = patches(grass), val = 1) # cannot plot an empty world
+    grass <- NLset(world = grass, agents = patches(grass), val = 1) # cannot plot an empty world
   }
   # If grassOn is TRUE, assign grass and countdown values to patches
   # Because there are multiple patches variables, a NLworldStack is needed
@@ -105,10 +105,10 @@ WolfSheepPredationInit <- function(sim) {
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
     # Initialize patch values (grass and countdown) at random
     grassVal <- sample(c(0,1), size = NLcount(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
-    grass <- set(world = grass, agents = patches(grass), val = grassVal)
+    grass <- NLset(world = grass, agents = patches(grass), val = grassVal)
     countdown <- grass # countdown is a new NLworld with the same extent as grass
     countdownVal <- runif(n = NLcount(patches(grass)), min = 0, max = params(sim)$WolfSheepPredation$grassTGrowth) # grass grow clock
-    countdown <- set(world = countdown, agents = patches(countdown), val = countdownVal)
+    countdown <- NLset(world = countdown, agents = patches(countdown), val = countdownVal)
     sim$field <- NLworldArray(grass, countdown)
   }
   # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
@@ -219,7 +219,7 @@ WolfSheepPredationEvent <- function(sim){
       moveSheep(sim)
       if(params(sim)$WolfSheepPredation$grassOn == TRUE){
         energySheep <- of(agents = sim$sheep, var = "energy")
-        sim$sheep <- set(turtles = sim$sheep, agents = sim$sheep, var = "energy", val = energySheep - 1)
+        sim$sheep <- NLset(turtles = sim$sheep, agents = sim$sheep, var = "energy", val = energySheep - 1)
         eatGrass(sim)
       }
       dieSheep(sim)
@@ -232,7 +232,7 @@ WolfSheepPredationEvent <- function(sim){
     if(NLcount(sim$wolves) != 0){
       moveWolves(sim)
       energyWolves <- of(agents = sim$wolves, var = "energy")
-      sim$wolves <- set(turtles = sim$wolves, agents = sim$wolves, var = "energy", val = energyWolves - 1)
+      sim$wolves <- NLset(turtles = sim$wolves, agents = sim$wolves, var = "energy", val = energyWolves - 1)
       catchSheep(sim)
       dieWolves(sim)
       if(NLcount(sim$wolves) != 0){
@@ -331,7 +331,7 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
   if(NLcount(reproInd) != 0){ # if there is at least one turtle reproducing
     energyTurtles <- of(agents = reproInd, var = "energy")
     # Divide the energy between the parent and offspring
-    turtles <- set(turtles = turtles, agents = reproInd, var = "energy", val = energyTurtles / 2)
+    turtles <- NLset(turtles = turtles, agents = reproInd, var = "energy", val = energyTurtles / 2)
     turtles <- hatch(turtles = turtles, who = reproWho, n = 1) # hatch one offspring per parent
 
     # Move the offspring by 1 step
@@ -342,7 +342,7 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
     offspringMoved <- fd(world = grass, turtles = offspring, dist = 1, torus = TRUE)
     # Update the headings and coordinates of the offsprings inside the turtles
     valOffspring <- of(agents = offspringMoved, var = c("heading", "xcor", "ycor"))
-    turtles <- set(turtles = turtles, agents = offspring, var = c("heading", "xcor", "ycor"), val = valOffspring)
+    turtles <- NLset(turtles = turtles, agents = offspring, var = c("heading", "xcor", "ycor"), val = valOffspring)
   }
 
   return(turtles)
@@ -358,12 +358,12 @@ eatGrass <- function(sim) {
   if(NLcount(sheepOnGreen) != 0){
     # These sheep gain energy by eating
     energySheep <- of(agents = sheepOnGreen, var = "energy") # energy before eating
-    sim$sheep <- set(turtles = sim$sheep, agents = sheepOnGreen, var = "energy",
+    sim$sheep <- NLset(turtles = sim$sheep, agents = sheepOnGreen, var = "energy",
                      val = energySheep + params(sim)$WolfSheepPredation$gainFoodSheep) # update energy
 
     # If a sheep is on a green patch (value equal to 1), it eats the grass and turns it to brown (value to 0)
     pHere <- patchHere(world = sim$field, turtles = sheepOnGreen)
-    sim$field <- set(world = sim$field, agents = pHere, var = "grass", val = 0)
+    sim$field <- NLset(world = sim$field, agents = pHere, var = "grass", val = 0)
 
   }
 
@@ -386,7 +386,7 @@ catchSheep <- function(sim) {
     grabbingWolves <- turtle(turtles = sim$wolves, who = whoGrabbingWolves)
     energyGrabbingWolves <- of(agents = grabbingWolves, var = "energy")
     # Get energy from eating for the wolves who grabbed sheep
-    sim$wolves <- set(turtles = sim$wolves, agents = grabbingWolves, var = "energy",
+    sim$wolves <- NLset(turtles = sim$wolves, agents = grabbingWolves, var = "energy",
                       val = energyGrabbingWolves + params(sim)$WolfSheepPredation$gainFoodWolf)
   }
 
@@ -404,7 +404,7 @@ growGrass <- function(sim) {
   if(length(pBrownCountdown0) != 0){
     pGrow <- pBrown[pBrownCountdown0, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
     # Grow some grass on these patches and reset the countdown
-    sim$field <- set(world = sim$field, var = c("grass", "countdown"), agents = pGrow,
+    sim$field <- NLset(world = sim$field, var = c("grass", "countdown"), agents = pGrow,
                  val = cbind(grass = rep(1, NLcount(pGrow)), countdown = rep(params(sim)$WolfSheepPredation$grassTGrowth, NLcount(pGrow))))
   }
 
@@ -412,7 +412,7 @@ growGrass <- function(sim) {
   if(length(pBrownCountdown1) != 0){
     pWait <- pBrown[pBrownCountdown1, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown > 0
     # Decrease the countdown for the patches which wait
-    sim$field <- set(world = sim$field, var = "countdown", agents = pWait, val = pBrownCountdown[pBrownCountdown1] - 1)
+    sim$field <- NLset(world = sim$field, var = "countdown", agents = pWait, val = pBrownCountdown[pBrownCountdown1] - 1)
   }
 
   return(invisible(sim))

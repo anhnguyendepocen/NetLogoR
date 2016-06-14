@@ -1676,8 +1676,8 @@ test_that("turtleSet works",{
   # tAll <- turtleSet(t1, t2, t3) # cause warning
   # expect_equivalent(length(tAll), 10)
 
-  t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
-  t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
+  t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
+  t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
   tAll <- turtleSet(t1, t2, t3)
   expect_equivalent(length(tAll), 13)
 
@@ -1703,8 +1703,8 @@ test_that("turtleSet works with agentMatrix",{
   # tAll <- turtleSet(t1, t2, t3) # cause warning
   # expect_equivalent(NLcount(tAll), 10)
 
-  t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
-  t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
+  t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
+  t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
   tAll <- turtleSet(t1, t2, t3)
   expect_equivalent(NLcount(tAll), 13)
 

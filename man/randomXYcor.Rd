@@ -27,7 +27,7 @@ Report \code{n} random xcor and ycor coordinates within the \code{world}'s exten
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 
 #clearPlot()

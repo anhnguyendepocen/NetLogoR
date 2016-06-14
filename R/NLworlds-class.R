@@ -206,9 +206,9 @@ setClassUnion(name = "NLworlds",
 #'
 #' @examples
 #' w1 <- createNLworld()
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' w2 <- createNLworld()
-#' w2 <- set(world = w2, agents = patches(w2), val = runif(NLcount(patches(w2))))
+#' w2 <- NLset(world = w2, agents = patches(w2), val = runif(NLcount(patches(w2))))
 #' w3 <- NLstack(w1, w2)
 #'
 #' #clearPlot()

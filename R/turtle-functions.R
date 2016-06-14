@@ -39,7 +39,7 @@
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' #clearPlot()
@@ -148,7 +148,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t2 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' #clearPlot()
@@ -252,7 +252,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #'
 #' #clearPlot()
@@ -413,7 +413,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createOTurtles(world = w1, n = 10)
 #'
 #' #clearPlot()
@@ -565,7 +565,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createOTurtles(world = w1, n = 10)
 #'
 #' #clearPlot()
@@ -646,7 +646,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' #clearPlot()
@@ -1186,7 +1186,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                           ycor = randomYcor(world = w1, n = 10)))
 #' #clearPlot()
@@ -1255,7 +1255,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                            ycor = randomYcor(world = w1, n = 10)))
 #' #clearPlot()
@@ -1533,7 +1533,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' #clearPlot()
@@ -1759,7 +1759,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' #clearPlot()
@@ -1944,7 +1944,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' #clearPlot()
@@ -2354,7 +2354,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #'
 #' #clearPlot()
@@ -2732,7 +2732,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #'
 #' #clearPlot()
@@ -2805,7 +2805,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #'
 #' #clearPlot()
@@ -3064,7 +3064,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
 #'
 #' #clearPlot()
@@ -3503,7 +3503,7 @@ setMethod(
 #'
 #' @details Duplicated turtles are identified based only on their who numbers.
 #'          The turtle chosen for a who number is the first one given in the inputs.
-#'          To keep all turtles from the inputs, use set() to
+#'          To keep all turtles from the inputs, use NLset() to
 #'          reassign who numbers in some of the inputs, prior using
 #'          turtleSet(), to avoid turtles with duplicated who numbers.
 #'
@@ -3520,9 +3520,9 @@ setMethod(
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 #' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
-#' t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
+#' t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
 #' t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
-#' t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
+#' t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
 #' t4 <- turtleSet(t1, t2, t3)
 #'
 #'
@@ -4124,7 +4124,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' #clearPlot()
@@ -4212,7 +4212,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- set(world = w1, agents = patches(w1), val = 1:25)
+#' w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
 #' of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 #'
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))

@@ -67,7 +67,7 @@ equals to a specific value. This is equivalent in R to subsetting.
 \examples{
 # Patches
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1),
+w1 <- NLset(world = w1, agents = patches(w1),
           val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
 plot(w1)
 p2 <- NLwith(agents = patches(w1), world = w1, val = 2)

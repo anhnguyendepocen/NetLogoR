@@ -1164,42 +1164,42 @@ test_that("set works",{
   # Set work with patches
   w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w1[] <- 1:25
-  w1 <- set(world = w1, agents = patches(w1), val = 0)
+  w1 <- NLset(world = w1, agents = patches(w1), val = 0)
   expect_equivalent(values(w1), rep(0, length(w1)))
-  w1 <- set(world = w1, agents = patches(w1), val = 1:25)
+  w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
   expect_equivalent(values(w1), 1:25)
-  w1 <- set(world = w1, agents = patch(w1, 0, 0), val = 100)
+  w1 <- NLset(world = w1, agents = patch(w1, 0, 0), val = 100)
   expect_equivalent(w1[0,0], 100)
-  w1 <- set(world = w1, agents = patch(w1, c(-1, 0), c(-1, 0)), val = -10)
+  w1 <- NLset(world = w1, agents = patch(w1, c(-1, 0), c(-1, 0)), val = -10)
   expect_equivalent(w1[0,0], -10)
-  w1_ <- set(world = w1, agents = patch(w1, c(-1, -2), c(-1, 0)), val = -20)
+  w1_ <- NLset(world = w1, agents = patch(w1, c(-1, -2), c(-1, 0)), val = -20)
   expect_equivalent(w1, w1_)
 
   w1[] <- 1:25
   w2 <- w1
   w2[] <- 25:1
   w3 <- NLstack(w1, w2)
-  w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 0)
+  w3 <- NLset(world = w3, agents = patches(w3), var = "w1", val = 0)
   expect_equivalent(values(w3)[,"w1"], rep(0, length(w1)))
-  w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 1:25)
+  w3 <- NLset(world = w3, agents = patches(w3), var = "w1", val = 1:25)
   expect_equivalent(values(w3)[,"w1"], 1:25)
-  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = "w1", val = 100)
+  w3 <- NLset(world = w3, agents = patch(w3, 0, 0), var = "w1", val = 100)
   expect_equivalent(w3[0,0][1], 100)
 
   # With multiple values
-  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 100))
+  w3 <- NLset(world = w3, agents = patch(w3, 0, 0), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 100))
   expect_equivalent(w3[0,0], cbind(w1 = 0, w2 = 100))
-  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = c("w2", "w1"), val = cbind(w2 = 0, w1 = 100))
+  w3 <- NLset(world = w3, agents = patch(w3, 0, 0), var = c("w2", "w1"), val = cbind(w2 = 0, w1 = 100))
   expect_equivalent(w3[0,0], cbind(w1 = 100, w2 = 0))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101:125, w2 = 125:101))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101:125, w2 = 125:101))
   expect_equivalent(values(w3), cbind(w1 = 101:125, w2 = 125:101))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 101:125, w1 = 125:101))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 101:125, w1 = 125:101))
   expect_equivalent(values(w3), cbind(w1 = 125:101, w2 = 101:125))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101, w2 = 125))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101, w2 = 125))
   expect_equivalent(values(w3), cbind(w1 = rep(101, 25), w2 = rep(125, 25)))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 125, w1 = 101))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 125, w1 = 101))
   expect_equivalent(values(w3), cbind(w1 = rep(101, 25), w2 = rep(125, 25)))
-  w3 <- set(world = w3, agents = patch(w3,c(-1, 0), c(-1, 0)), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 1))
+  w3 <- NLset(world = w3, agents = patch(w3,c(-1, 0), c(-1, 0)), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 1))
   expect_equivalent(w3[0,0], cbind(w1 = 0, w2 = 1))
   valW3 <- values(w3)
   expect_equivalent(length(valW3[is.na(valW3[,1]),1]), 0)
@@ -1207,129 +1207,129 @@ test_that("set works",{
 
   # Set work with turtles
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
-  t2 <- set(turtles = t1, agents = t1, var = "heading", val = 0)
+  t2 <- NLset(turtles = t1, agents = t1, var = "heading", val = 0)
   expect_equivalent(t2@data$heading, rep(0, length(t2)))
-  t3 <- set(turtles = t1, agents = turtle(t1, 0), var = "xcor", val = 3)
+  t3 <- NLset(turtles = t1, agents = turtle(t1, 0), var = "xcor", val = 3)
   expect_equivalent(t3@coords[,1], c(3, 1, 2, 3, 4))
-  t4 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = "xcor", val = 3)
+  t4 <- NLset(turtles = t1, agents = turtle(t1, c(0,1)), var = "xcor", val = 3)
   expect_equivalent(t4@coords[,1], c(3, 3, 2, 3, 4))
 
   # With multiple values
-  t5 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("xcor", "heading"), val = cbind(xcor = c(100,100), heading = c(33, 66)))
+  t5 <- NLset(turtles = t1, agents = turtle(t1, c(0,1)), var = c("xcor", "heading"), val = cbind(xcor = c(100,100), heading = c(33, 66)))
   expect_equivalent(t5@coords[,1], c(100,100,2,3,4))
   expect_equivalent(t5@data$heading, c(33,66,180,270,0))
-  t6 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
+  t6 <- NLset(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
   expect_identical(t5, t6)
 
   # Warning with who numbers
-  expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 0))
-  expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 0, heading = 0)))
-  t7 <- set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 100) # no warning because no duplicates who numbers
-  t8 <- set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 100, heading = 0))
+  expect_warning(NLset(turtles = t1, agents = turtle(t1, 1), var = "who", val = 0))
+  expect_warning(NLset(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 0, heading = 0)))
+  t7 <- NLset(turtles = t1, agents = turtle(t1, 1), var = "who", val = 100) # no warning because no duplicates who numbers
+  t8 <- NLset(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 100, heading = 0))
 
   # With NAs
-  w4 <- set(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
-  w5 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = 2, w1 = 2))
+  w4 <- NLset(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
+  w5 <- NLset(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = 2, w1 = 2))
   expect_equivalent(w4, w5)
-  w6 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = NA, w1 = 2))
+  w6 <- NLset(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = NA, w1 = 2))
   expect_equivalent(w6[1,2][1,2], as.numeric(NA))
 })
 
 test_that("set works with NLworldMs",{
   # Set work with patches
   w1 <- createNLworldMatrix(data = 1:25, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-  w1 <- set(world = w1, agents = patches(w1), val = 0)
+  w1 <- NLset(world = w1, agents = patches(w1), val = 0)
   expect_equivalent(as.numeric(t(w1)), rep(0, length(w1)))
-  w1 <- set(world = w1, agents = patches(w1), val = 1:25)
+  w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
   expect_equivalent(as.numeric(t(w1)), 1:25)
-  w1 <- set(world = w1, agents = patch(w1, 0, 0), val = 100)
+  w1 <- NLset(world = w1, agents = patch(w1, 0, 0), val = 100)
   expect_equivalent(of(world = w1, agents = patch(w1, 0, 0)), 100)
-  w1 <- set(world = w1, agents = patch(w1, c(-1, 0), c(-1, 0)), val = -10)
+  w1 <- NLset(world = w1, agents = patch(w1, c(-1, 0), c(-1, 0)), val = -10)
   expect_equivalent(of(world = w1, agents = patch(w1, 0, 0)), -10)
-  w1_ <- set(world = w1, agents = patch(w1, c(-1, -2), c(-1, 0)), val = -20)
+  w1_ <- NLset(world = w1, agents = patch(w1, c(-1, -2), c(-1, 0)), val = -20)
   expect_equivalent(w1, w1_)
 
-  w1 <- set(world = w1, agents = patches(w1), val = 1:25)
+  w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
   w2 <- createNLworldMatrix(data = 25:1, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w3 <- NLworldArray(w1, w2)
-  w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 0)
+  w3 <- NLset(world = w3, agents = patches(w3), var = "w1", val = 0)
   expect_equivalent(as.numeric(t(w3@.Data[,,"w1"])), rep(0, length(w1)))
-  w3 <- set(world = w3, agents = patches(w3), var = "w1", val = 1:25)
+  w3 <- NLset(world = w3, agents = patches(w3), var = "w1", val = 1:25)
   expect_equivalent(as.numeric(t(w3@.Data[,,"w1"])), 1:25)
-  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = "w1", val = 100)
+  w3 <- NLset(world = w3, agents = patch(w3, 0, 0), var = "w1", val = 100)
   expect_equivalent(of(world = w3, var = "w1", agents = patch(w3, 0, 0)), 100)
 
   # With multiple values
-  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 100))
+  w3 <- NLset(world = w3, agents = patch(w3, 0, 0), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 100))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, 0, 0)), cbind(w1 = 0, w2 = 100))
-  w3 <- set(world = w3, agents = patch(w3, 0, 0), var = c("w2", "w1"), val = cbind(w2 = 0, w1 = 100))
+  w3 <- NLset(world = w3, agents = patch(w3, 0, 0), var = c("w2", "w1"), val = cbind(w2 = 0, w1 = 100))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, 0, 0)), cbind(w1 = 100, w2 = 0))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101:125, w2 = 125:101))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101:125, w2 = 125:101))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patches(w3)), cbind(w1 = 101:125, w2 = 125:101))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 101:125, w1 = 125:101))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 101:125, w1 = 125:101))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patches(w3)), cbind(w1 = 125:101, w2 = 101:125))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101, w2 = 125))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w1", "w2"), val = cbind(w1 = 101, w2 = 125))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patches(w3)), cbind(w1 = rep(101, 25), w2 = rep(125, 25)))
-  w3 <- set(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 125, w1 = 101))
+  w3 <- NLset(world = w3, agents = patches(w3), var = c("w2", "w1"), val = cbind(w2 = 125, w1 = 101))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patches(w3)), cbind(w1 = rep(101, 25), w2 = rep(125, 25)))
-  w3 <- set(world = w3, agents = patch(w3,c(-1, 0), c(-1, 0)), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 1))
+  w3 <- NLset(world = w3, agents = patch(w3,c(-1, 0), c(-1, 0)), var = c("w1", "w2"), val = cbind(w1 = 0, w2 = 1))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, 0, 0)), cbind(w1 = 0, w2 = 1))
   valW3 <- of(world = w3, var = c("w1", "w2"), agents = patches(w3))
   expect_equivalent(length(valW3[is.na(valW3[,1]),1]), 0)
   expect_equivalent(length(valW3[is.na(valW3[,2]),2]), 0)
 
   # With NAs
-  w4 <- set(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
-  w5 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = 2, w1 = 2))
+  w4 <- NLset(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
+  w5 <- NLset(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = 2, w1 = 2))
   expect_equivalent(w4, w5)
-  w6 <- set(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = NA, w1 = 2))
+  w6 <- NLset(world = w3, agents = cbind(pxcor = 1, pycor = 2), var = c("w2", "w1"), val = cbind(w2 = NA, w1 = 2))
   expect_equivalent(of(world = w6, var = "w2", agents = patch(w6, 1, 2)), as.numeric(NA))
 })
 
 test_that("set works with agentMatrix",{
   t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
-  t2 <- set(turtles = t1, agents = t1, var = "heading", val = 0)
+  t2 <- NLset(turtles = t1, agents = t1, var = "heading", val = 0)
   expect_equivalent(t2@.Data[,"heading"], rep(0, NLcount(t2)))
-  t3 <- set(turtles = t1, agents = turtle(t1, 0), var = "xcor", val = 3)
+  t3 <- NLset(turtles = t1, agents = turtle(t1, 0), var = "xcor", val = 3)
   expect_equivalent(t3@.Data[,"xcor"], c(3, 1, 2, 3, 4))
-  t4 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = "xcor", val = 3)
+  t4 <- NLset(turtles = t1, agents = turtle(t1, c(0,1)), var = "xcor", val = 3)
   expect_equivalent(t4@.Data[,"xcor"], c(3, 3, 2, 3, 4))
 
   # With multiple values
-  t5 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("xcor", "heading"), val = cbind(xcor = c(100,100), heading = c(33, 66)))
+  t5 <- NLset(turtles = t1, agents = turtle(t1, c(0,1)), var = c("xcor", "heading"), val = cbind(xcor = c(100,100), heading = c(33, 66)))
   expect_equivalent(t5@.Data[,"xcor"], c(100,100,2,3,4))
   expect_equivalent(t5@.Data[,"heading"], c(33,66,180,270,0))
-  t6 <- set(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
+  t6 <- NLset(turtles = t1, agents = turtle(t1, c(0,1)), var = c("heading", "xcor"), val = cbind(heading = c(33, 66), xcor = c(100,100)))
   expect_identical(t5, t6)
 
   # Warning with who numbers
-  expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 0))
-  expect_warning(set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 0, heading = 0)))
-  t7 <- set(turtles = t1, agents = turtle(t1, 1), var = "who", val = 100) # no warning because no duplicates who numbers
-  t8 <- set(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 100, heading = 0))
+  expect_warning(NLset(turtles = t1, agents = turtle(t1, 1), var = "who", val = 0))
+  expect_warning(NLset(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 0, heading = 0)))
+  t7 <- NLset(turtles = t1, agents = turtle(t1, 1), var = "who", val = 100) # no warning because no duplicates who numbers
+  t8 <- NLset(turtles = t1, agents = turtle(t1, 1), var = c("who", "heading"), val = cbind(who = 100, heading = 0))
 
   # Non numeric value
-  t9 <- set(turtles = t1, agents = turtle(t1, 0), var = "breed", val = "dog")
+  t9 <- NLset(turtles = t1, agents = turtle(t1, 0), var = "breed", val = "dog")
   expect_equivalent(of(agents = t9, var = "breed"), c("dog", rep("turtle", 4)))
   expect_equivalent(t9@levels$breed, c("turtle", "dog"))
-  t10 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = "breed", val = c("dog", "cat"))
+  t10 <- NLset(turtles = t1, agents = turtle(t1, c(0, 1)), var = "breed", val = c("dog", "cat"))
   expect_equivalent(of(agents = t10, var = "breed"), c("dog", "cat", rep("turtle", 3)))
   expect_equivalent(t10@levels$breed, c("turtle", "dog", "cat"))
-  t11 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = c("breed", "xcor"),
+  t11 <- NLset(turtles = t1, agents = turtle(t1, c(0, 1)), var = c("breed", "xcor"),
              val = cbind.data.frame(breed = c("fish", "fish"), xcor = c(1,1)))
   expect_equivalent(of(agents = t11, var = "breed"), c("fish", "fish", rep("turtle", 3)))
   expect_equivalent(of(agents = t11, var = "xcor"), c(1,1,2,3,4))
-  t11 <- set(turtles = t1, agents = turtle(t1, c(0, 1)), var = c("breed", "xcor"),
+  t11 <- NLset(turtles = t1, agents = turtle(t1, c(0, 1)), var = c("breed", "xcor"),
              val = cbind(breed = c("fish", "fish"), xcor = c(1,1)))
   expect_equivalent(of(agents = t11, var = "breed"), c("fish", "fish", rep("turtle", 3)))
   expect_equivalent(of(agents = t11, var = "xcor"), c(1,1,2,3,4))
-  t12 <- set(turtles = t1, agents = turtle(t1, c(0, 1, 3)), var = c("breed", "xcor", "color", "heading"),
+  t12 <- NLset(turtles = t1, agents = turtle(t1, c(0, 1, 3)), var = c("breed", "xcor", "color", "heading"),
              val = cbind.data.frame(breed = c("aa", "aa", "bb"), xcor = c(10,10, 12), color = "red", heading = 222))
   expect_equivalent(of(agents = t12, var = "breed"), c("aa", "aa","turtle", "bb", "turtle"))
   expect_equivalent(of(agents = t12, var = "xcor"), c(10,10,2,12,4))
   expect_equivalent(of(agents = t12, var = "color")[c(1,2,4)], rep("red",3))
   expect_equivalent(of(agents = t12, var = "heading"), c(222,222,180,222,0))
-  t12 <- set(turtles = t1, agents = turtle(t1, c(0, 1, 3)), var = c("breed", "xcor", "color", "heading"),
+  t12 <- NLset(turtles = t1, agents = turtle(t1, c(0, 1, 3)), var = c("breed", "xcor", "color", "heading"),
              val = cbind(breed = c("aa", "aa", "bb"), xcor = c(10,10, 12), color = "red", heading = 222))
   expect_equivalent(of(agents = t12, var = "breed"), c("aa", "aa","turtle", "bb", "turtle"))
   expect_equivalent(of(agents = t12, var = "xcor"), c(10,10,2,12,4))

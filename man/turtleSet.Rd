@@ -26,7 +26,7 @@ Report a turtle agentset containing all unique turtles provided in the inputs.
 \details{
 Duplicated turtles are identified based only on their who numbers.
          The turtle chosen for a who number is the first one given in the inputs.
-         To keep all turtles from the inputs, use set() to
+         To keep all turtles from the inputs, use NLset() to
          reassign who numbers in some of the inputs, prior using
          turtleSet(), to avoid turtles with duplicated who numbers.
 
@@ -37,9 +37,9 @@ Duplicated turtles are identified based only on their who numbers.
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
-t2 <- set(turtles = t2, agents = t2, var = "who", val = c(10, 11))
+t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
 t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
-t3 <- set(turtles = t3, agents = t3, var = "who", val = 12)
+t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
 t4 <- turtleSet(t1, t2, t3)
 
 

@@ -74,7 +74,7 @@ If \code{coords} is provided, \code{world} must not be provided.
 }
 \examples{
 w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
 #clearPlot()
@@ -82,7 +82,7 @@ t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- set(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 t2 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 
 #clearPlot()
