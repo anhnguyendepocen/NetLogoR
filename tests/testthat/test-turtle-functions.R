@@ -1231,14 +1231,18 @@ test_that("sprout works",{
   t4 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1)
   t5 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
                breed = "wolf", heading = c(0, 180))
-  expect_identical(t1@coords, cbind(xcor = c(2, 2, 2), ycor = c(2, 2, 2)))
-  expect_identical(t2@coords, cbind(xcor = c(1, 2, 3), ycor = c(1, 2, 3)))
-  expect_identical(t3@coords, cbind(xcor = c(2, 2, 2, 3, 3, 3), ycor = c(2, 2, 2, 3, 3, 3)))
-  expect_identical(t4@coords, cbind(xcor = c(2, 2, 2, 3, 2), ycor = c(2, 2, 2, 0, 3)))
-  expect_identical(t4@coords, t5@coords)
+  t6 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
+               breed = "wolf", heading = 90)
+  expect_equivalent(t1@coords, cbind(xcor = c(2, 2, 2), ycor = c(2, 2, 2)))
+  expect_equivalent(t2@coords, cbind(xcor = c(1, 2, 3), ycor = c(1, 2, 3)))
+  expect_equivalent(t3@coords, cbind(xcor = c(2, 2, 2, 3, 3, 3), ycor = c(2, 2, 2, 3, 3, 3)))
+  expect_equivalent(t4@coords, cbind(xcor = c(2, 2, 2, 3, 2), ycor = c(2, 2, 2, 0, 3)))
+  expect_equivalent(t4@coords, t5@coords)
   expect_equivalent(length(unique(t3@data$who)), 6)
   expect_equivalent(length(unique(t4@data$color)), 5)
-  expect_identical(t5@data$breed, c(t1@data$breed, "wolf", "wolf"))
+  expect_equivalent(t5@data$breed, c(t1@data$breed, "wolf", "wolf"))
+  expect_equivalent(t5@coords, t6@coords)
+  expect_equivalent(t6@data$heading[c(4,5)], c(90,90))
 })
 
 test_that("sproutAM works",{
@@ -1248,6 +1252,8 @@ test_that("sproutAM works",{
   t4 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1)
   t5 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
                breed = "wolf", heading = c(0, 180))
+  t6 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
+               breed = "wolf", heading = 90)
   expect_identical(of(agents = t1, var = c("xcor", "ycor")), cbind(xcor = c(2, 2, 2), ycor = c(2, 2, 2)))
   expect_identical(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = c(1, 2, 3), ycor = c(1, 2, 3)))
   expect_identical(of(agents = t3, var = c("xcor", "ycor")), cbind(xcor = c(2, 2, 2, 3, 3, 3), ycor = c(2, 2, 2, 3, 3, 3)))
@@ -1262,6 +1268,8 @@ test_that("sproutAM works",{
   expect_identical(of(agents = t5, var = "breed"), c(of(agents = t1, var = "breed"), "wolf", "wolf"))
   expect_equivalent(length(unique(t4@levels$breed)), 1)
   expect_equivalent(length(unique(t5@levels$breed)), 2)
+  expect_equivalent(of(agents = t5, var = c("xcor", "ycor")), of(agents = t6, var = c("xcor", "ycor")))
+  expect_equivalent(of(agents = t6, var = "heading")[c(4,5)], c(90,90))
 })
 
 test_that("inspect works",{
