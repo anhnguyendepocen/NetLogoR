@@ -1040,6 +1040,7 @@ test_that("inRadius2 works with NLworldMs and agentMatrix",{
   # Patches to patches
   w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   p1 <- inRadius2(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
+  expect_error(inRadius2(agents = patch(w1, x = 0, y = 0), radius = 2, agents2 = patches(w1), torus = TRUE))
   expect_equivalent(p1[p1[,"id"] == 1, c("pxcor", "pycor")], cbind(pxcor = c(0, 0, 1, 0, 1, 2), pycor = c(2, 1, 1, 0, 0, 0)))
   p2 <- inRadius2(agents = patches(w1), radius = 2, agents2 = patch(w1, 0, 0), world = w1)
   expect_equivalent(p2[p2[,"id"] == 11, c("pxcor", "pycor"), drop = FALSE], cbind(pxcor = 0, pycor = 0))
@@ -1057,6 +1058,7 @@ test_that("inRadius2 works with NLworldMs and agentMatrix",{
   expect_equivalent(t2[t2[,"id"] == 1, "who"], 0)
   t3 <- inRadius2(agents = patch(w1, x = 0, y = 0), radius = 2, agents2 = t1, world = w1)
   expect_equivalent(t3[t3[,"id"] == 1, "who"], c(0, 1))
+  expect_error(inRadius2(agents = patch(w1, x = 0, y = 0), radius = 2, agents2 = t1, torus = TRUE))
   t4 <- inRadius2(agents = patch(w1, x = 0, y = 0), radius = 2, agents2 = t1, world = w1, torus = TRUE)
   expect_equivalent(t4[t4[,"id"] == 1, "who"], c(0, 1, 4))
   t5 <- inRadius2(agents = patches(w1), radius = 1, agents2 = t1, world = w1)
