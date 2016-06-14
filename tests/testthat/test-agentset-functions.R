@@ -346,6 +346,9 @@ test_that("withMax works with NLworldMs and agentMatrix",{
   maxHeading <- withMax(agents = t1, var = "heading")
   expect_equivalent(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
   expect_error(withMax(agents = t1, var = "prevX"))
+
+  ws[] <- NA
+  expect_error(withMax(agents = patches(world = ws), world = ws))
 })
 
 test_that("withMin works with patches",{
@@ -411,6 +414,9 @@ test_that("withMin works with NLworldMs and agentMatrix",{
   maxHeading <- withMin(agents = t1, var = "heading")
   expect_equivalent(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
   expect_error(withMin(agents = t1, var = "prevX"))
+
+  ws[] <- NA
+  expect_error(withMax(agents = patches(world = ws), world = ws))
 })
 
 test_that("maxOneOf works with patches",{
