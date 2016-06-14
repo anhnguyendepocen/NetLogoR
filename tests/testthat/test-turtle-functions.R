@@ -748,6 +748,12 @@ test_that("towards works with agentMatrix and NLworldMs",{
   expect_equivalent(tTOt, of(agents = t3, var = "heading"))
   tTOt <- towards(world = w1, agents = t3, agents2 = t2, torus = FALSE)
   expect_equivalent(tTOt[4], 315)
+  t4 <- createTurtlesAM(n = 1, coords = cbind(xcor = 2, ycor = 4), heading = 25)
+  tTOt <- towards(world = w1, agents = t4, agents2 = t3, torus = FALSE)
+  expect_equivalent(tTOt[1], of(agents = t4, var = "heading"))
+  tTOt <- towards(world = w1, agents = t4, agents2 = cbind(x = 8, y = 4), torus = FALSE)
+  expect_equivalent(tTOt, 90)
+
 
   # Works without world provided when torus = FALSE
   expect_error(towards(agents = patches(world = w1), agents2 = t2, torus = TRUE))
