@@ -336,7 +336,7 @@ setMethod(
 #'
 setGeneric(
   "createOTurtlesAM",
-  function(n, world, heading, breed, color) {
+  function(n, world, breed, color) {
     standardGeneric("createOTurtlesAM")
 })
 
@@ -350,22 +350,24 @@ setMethod(
 
     heading <- numeric(n)
     heading[1] <- 0
-    if (n > 1) {
+    if(n > 1){
       heading[2:n] <- heading[1:(n - 1)] + (360 / n) * (1:(n - 1))
     }
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text = x)))
     names(li) <- names(match.call())[-1]
 
-    if (missing(breed))
+    if(missing(breed)){
       li$breed <- rep("turtle", n)
+    }
 
-    if (length(li$breed) == 1) {
+    if(length(li$breed) == 1) {
       li$breed <- rep(li$breed, n)
     }
 
-    if (missing(color))
+    if(missing(color)){
       li$color <- rainbow(n)
+    }
 
     createTurtlesAM(n = n, world = world, heading = heading, breed = li$breed, color = li$color)
 })

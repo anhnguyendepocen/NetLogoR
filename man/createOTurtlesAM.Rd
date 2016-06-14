@@ -6,7 +6,7 @@
 \alias{createOTurtlesAM,numeric-method}
 \title{Create ordered turtles (AM)}
 \usage{
-createOTurtlesAM(n, world, heading, breed, color)
+createOTurtlesAM(n, world, breed, color)
 
 \S4method{createOTurtlesAM}{numeric}(n, world, breed, color)
 }
@@ -14,10 +14,6 @@ createOTurtlesAM(n, world, heading, breed, color)
 \item{n}{Integer.}
 
 \item{world}{NLworlds object.}
-
-\item{heading}{Numeric. Vector of values between 0 and 360. Must be of length 1 or
-of length \code{n}. If missing, a random heading is assigned to
-each turtle.}
 
 \item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
 \code{n}. If missing, \code{breed = "turtle"} for all turtles.}
