@@ -53,11 +53,15 @@ test_that("NLany works with patches",{
   p3 <- patch(world = w1, x = -1, y = -1)
   p4 <- patches(world = w1)
   p5 <- patch(world = w1, x = c(-1, 0), y = c(-1, 0))
+  p6 <- cbind(pxcor = c(NA,NA), pycor = c(NA,NA))
+  p7 <- cbind(pxcor = c(NA,1), pycor = c(NA,1))
   expect_identical(NLany(p1), FALSE)
   expect_identical(NLany(p2), TRUE)
   expect_identical(NLany(p3), FALSE)
   expect_identical(NLany(p4), TRUE)
   expect_identical(NLany(p5), TRUE)
+  expect_identical(NLany(p6), FALSE)
+  expect_identical(NLany(p7), TRUE)
 })
 
 test_that("NLany works with turtles",{
