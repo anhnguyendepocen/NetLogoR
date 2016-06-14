@@ -1098,7 +1098,7 @@ setMethod(
   signature = c("SpatialPointsDataFrame", "missing", "character"),
   definition = function(agents, var) {
     minAgents <- withMin(agents = agents, var = var)
-    if (length(minAgents) == 1) {
+    if(NLcount(minAgents) == 1) {
       return(minAgents)
     } else {
       whoSample <- sample(minAgents@data$who, size = 1)

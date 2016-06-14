@@ -517,6 +517,11 @@ test_that("minOneOf works with turtles",{
   minH12 <- merge(minHeading1@data, minHeading2@data)
   expect_equivalent(nrow(minH12), 1)
   expect_error(minOneOf(agents = t1, var = "prevX"))
+
+  t2 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,1,3,4,4,2,3,4,4,3))
+  minHeading <- minOneOf(agents = t2, var = "heading")
+  expect_equivalent(NLcount(minHeading), 1)
+  expect_equivalent(of(agents = minHeading, var = "heading"), 1)
 })
 
 test_that("minOneOf works with NLworldMs and agentMatrix",{
