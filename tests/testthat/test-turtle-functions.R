@@ -597,6 +597,9 @@ test_that("randomXcor and randomYcor works",{
   t2 <- createTurtles(n = 10000,
                       coords = cbind(xcor = randomXcor(world = ws, n = 10000), ycor = randomYcor(world = ws, n = 10000)))
   expect_identical(canMove(world = ws, turtles = t2, dist = 0), rep(TRUE, length(t2)))
+
+  expect_equivalent(randomXcor(world = w1, n = 0), numeric())
+  expect_equivalent(randomYcor(world = w1, n = 0), numeric())
 })
 
 test_that("randomXcor and randomYcor work with NLworldMs",{
@@ -612,6 +615,9 @@ test_that("randomXcor and randomYcor work with NLworldMs",{
   t2 <- createTurtlesAM(n = 10000,
                       coords = cbind(xcor = randomXcor(world = ws, n = 10000), ycor = randomYcor(world = ws, n = 10000)))
   expect_identical(canMove(world = ws, turtles = t2, dist = 0), rep(TRUE, NLcount(t2)))
+
+  expect_equivalent(randomXcor(world = w1, n = 0), numeric())
+  expect_equivalent(randomYcor(world = w1, n = 0), numeric())
 })
 
 test_that("towards works",{
