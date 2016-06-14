@@ -389,6 +389,7 @@ test_that("pExist works", {
   # With different length of inputs
   expect_equivalent(c(FALSE, TRUE), pExist(w1, c(1, 1), c(3, 1)))
   expect_equivalent(c(FALSE, TRUE), pExist(w1, 1, c(3, 1)))
+  expect_equivalent(c(FALSE, TRUE), pExist(w1, c(3, 1), 1))
 })
 
 test_that("pExist works with NLworldMs", {
@@ -411,6 +412,7 @@ test_that("pExist works with NLworldMs", {
   # With different length of inputs
   expect_equivalent(c(FALSE, TRUE), pExist(w1, c(1, 1), c(3, 1)))
   expect_equivalent(c(FALSE, TRUE), pExist(w1, 1, c(3, 1)))
+  expect_equivalent(c(FALSE, TRUE), pExist(w1, c(3, 1), 1))
 })
 
 test_that("neighbors works with output as a matrix with id", {
