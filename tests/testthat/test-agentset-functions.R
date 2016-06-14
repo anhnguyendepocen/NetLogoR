@@ -606,6 +606,10 @@ test_that("isNLclass works with agentMatrix",{
   t2 <- turtlesOwn(turtles = t1, tVar = "age")
   expect_identical(isNLclass(agents = t2, class = "agentset"), TRUE)
   expect_identical(isNLclass(agents = t2, class = "turtleset"), TRUE)
+
+  t1@.Data <- t1@.Data[,c(1,2, 4:8)]
+  expect_identical(isNLclass(agents = t1, class = "turtleset"), FALSE)
+
 })
 
 test_that("nOf works",{

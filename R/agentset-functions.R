@@ -1218,7 +1218,7 @@ setMethod(
         class <- "turtleset"
       }
 
-      if (colnames(agents@.Data)[1:8] == c("xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", "color") && NLcount(agents) != 0) {
+      if (all(colnames(agents@.Data)[1:8] == c("xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", "color") & NLcount(agents) != 0)) {
         if (NLcount(agents) == 1) {
           agentsClass <- "turtle"
         } else {
@@ -1242,7 +1242,7 @@ setMethod(
         class <- "patchset"
       }
 
-      if ((colnames(agents) == c("pxcor", "pycor") && NROW(agents) != 0)) {
+      if (all(colnames(agents) == c("pxcor", "pycor") & NROW(agents) != 0)) {
         if (NROW(agents) == 1) {
           agentsClass <- "patch"
         } else {
@@ -1272,7 +1272,7 @@ setMethod(
       class <- "turtleset"
     }
 
-    if ((colnames(agents@data[1:6]) == c("who", "heading", "prevX", "prevY", "breed", "color") && length(agents) != 0)) {
+    if (all(colnames(agents@data[1:6]) == c("who", "heading", "prevX", "prevY", "breed", "color") & length(agents) != 0)) {
       if (length(agents) == 1) {
         agentsClass <- "turtle"
       } else {
