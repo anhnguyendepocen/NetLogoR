@@ -219,4 +219,13 @@ test_that("spdf2turtles and turtles2spdf work", {
   expect_equivalent(t2__, t2)
   t1__ <- turtles2spdf(t1_)
   expect_equivalent(t1__, SpatialPointsDataFrame(coords = t1@coords, data = t1@data[,c(1:6, 8,9)]))
+
+  sp1 <- SpatialPointsDataFrame(coords = cbind(x = c(1,2,3), y = c(1,2,3)),
+                                data = cbind.data.frame(age = c(0,0,3), sex = c("F", "F", "M")))
+  sp1Turtles <- spdf2turtles(sp1)
+  expect_equivalent(colnames(sp1Turtles@.Data), c("xcor", "ycor","who", "heading", "prevX", "prevY", "breed", "color", "age", "sex"))
+  expect_equivalent(of(agents = sp1Turtles, var = "age"), c(0,0,3))
+  expect_equivalent(of(agents = sp1Turtles, var = "sex"), c("F", "F", "M"))
+  expect_equivalent(of(agents = sp1Turtles, var = "who"), c(0,1,2))
+  expect_equivalent(of(agents = sp1Turtles, var = "xcor"), c(1,2,3))
 })
