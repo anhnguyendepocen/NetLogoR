@@ -701,7 +701,7 @@ setMethod(
 #' Convert NLWorldMatrix indices to vector indices
 #'
 #' This can be used to convert indices that would work with an R \code{RasterLayer},
-#' \code{matrix}, or \code{vector} to NLWorldMatrix indices.
+#' or \code{vector} to NLWorldMatrix indices.
 #'
 #' @param world NLworldMatrix object.
 #'

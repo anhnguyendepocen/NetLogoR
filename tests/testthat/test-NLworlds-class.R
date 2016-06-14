@@ -228,3 +228,11 @@ test_that("PxcorPycorFromCell works for NLworldMs",{
   expect_equivalent(cbind(pxcor, pycor), pCoords)
 })
 
+test_that("NLWorldIndex works",{
+  data <- 1:16
+  w1 <- createNLworldMatrix(minPxcor = -1, maxPxcor = 2, minPycor = 0, maxPycor = 3, data = data)
+  index <- sample(1:16, size = 1)
+  expect_equivalent(data[index], w1[NLWorldIndex(w1, index)])
+  index <- sample(1:16, size = 3)
+  expect_equivalent(data[index], w1[NLWorldIndex(w1, index)])
+})

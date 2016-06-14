@@ -20,7 +20,7 @@ Numeric vector with indices that will work with an NLWorldMatrix.
 }
 \description{
 This can be used to convert indices that would work with an R \code{RasterLayer},
-\code{matrix}, or \code{vector} to NLWorldMatrix indices.
+or \code{vector} to NLWorldMatrix indices.
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
