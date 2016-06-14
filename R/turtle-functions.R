@@ -2686,7 +2686,6 @@ setMethod(
   "inspect",
   signature = c("SpatialPointsDataFrame", "numeric"),
   definition = function(turtles, who) {
-    #tData <- fastCbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
     tData <- cbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
     return(tData)
   }
@@ -3713,13 +3712,6 @@ setMethod(
     turtles@.Data <- cbind(turtles@.Data, newCol = NA)
     colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
     return(turtles)
-
-
-    # tVal <- matrix(NA, ncol=1)
-    # colnames(tVal) <- tVar
-    # # turtles@.Data <- fastCbind(turtles@.Data, tVal)
-    # turtles@.Data <- cbind(turtles@.Data, tVal)
-    # return(turtles)
   }
 )
 
@@ -3732,22 +3724,11 @@ setMethod(
 
   #turtles <- turtlesOwn(turtles = turtles, tVar = tVar)
     if (class(tVal) == "numeric" | class(tVal) == "integer") {
-      #turtles@.Data[,tVar] <- tVal
-
-      # tVal <- matrix(tVal, ncol=1)
-      # colnames(tVal) <- tVar
-      # # turtles@.Data <- fastCbind(turtles@.Data, tVal)
-      # turtles@.Data <- cbind(turtles@.Data, tVal)
 
       turtles@.Data <- cbind(turtles@.Data, newCol = tVal)
       colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
 
     } else {
-
-      # tVal <- matrix(as.factor(tVal), ncol=1)
-      # colnames(tVal) <- tVar
-      # #turtles@.Data <- fastCbind(turtles@.Data, tVal)
-      # turtles@.Data <- cbind(turtles@.Data, tVal)
 
       turtles@.Data <- cbind(turtles@.Data, newCol = as.factor(tVal))
       colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
@@ -3755,94 +3736,12 @@ setMethod(
       listLevels <- c(turtles@levels, list(levels(as.factor(tVal))))
       names(listLevels) <- c(nameLevels, tVar)
       turtles@levels <- listLevels
-
-      # tVal <- matrix(tVal, ncol=1)
-      # colnames(tVal) <- tVar
-      # newCol <- agentMatrix(tVal)
-      # fastCbind(turtles@.Data, newCol@.Data[,-(1:2), drop=FALSE])
     }
   return(turtles)
 
   }
 )
 
-
-################################################################################
-#' Faster cbind for 2 matrices
-#'
-#' This is a drop-in replacement for cbind.
-#' It is at least 3-4x faster for small matrices. It becomes
-#' slower for larger matrices so should only be used for small
-#' matrices (smaller than 10,000 x 9)
-#'
-#'
-#' @param ...    a set of at least 2 matrices or vectors
-#'
-#' @docType methods
-#' @author Eliot McIntire
-#' @export
-#' @rdname fastCbind
-fastCbind <- function(...) {
-
-  x <- list(...)
-  dims <- unlist(lapply(x, function(z) {
-    if (is.null(dim(z))) {
-      c(length(z),1)
-    } else {
-      dim(z)
-    }
-    }))
-
-  len <- max(dims)
-  colNames <- unlist(lapply(seq_along(x), function(z) {
-    if (is.null(dimnames(x[[z]]))) {
-      ""
-    } else {
-      dimnames(x[[z]])[[2]]
-    }
-    }))
-
-  if (any(colNames=="")) {
-    empty <- names(x)!=""
-    if (length(empty)>0)
-      colNames[colNames==""] <- names(x)[empty]
-  }
-
-  inds <- seq_len(length(dims)*0.5)*2
-  notMaxRows <- dims[inds-1] != len
-  if (any(notMaxRows)) {
-    x[notMaxRows] <- lapply(x[notMaxRows], function(z) rep_len(z, len))
-  }
-
-  y <- do.call(c, x)
-  #if (is.null(len)) len <- length(x[[1]])
-
-  dim(y) <- c(len, sum(dims[inds]))
-  dimnames(y)[[2]] <- colNames
-  y
-}
-
-
-
-#   colNames <- as.vector(do.call(c,lapply(1:2, function(y) attr(x[[y]], "dimnames")[[2]])))
-#   newDim <- unlist(lapply(x, dim))
-#   NewDimSeq <- seq_along(newDim)
-#   len <- prod(newDim[1:2])
-#   newDim <- c(newDim[[1]][1], sum(NewDimSeq))
-#   if (length(newDim)==0) newDim <- c(len, 2L)
-#   newLen <- prod(newDim)
-#
-#   length(x[[1]]) <- newLen
-#   dim(x[[1]]) <- newDim
-#
-#   # account for filling of unfull matrices
-#   if (length(x[[2]])!=(newLen - len))
-#     x[[2]] <- rep_len(x[[2]], length.out = newLen - len)
-#
-#   x[[1]][(len+1):newLen] <- do.call(c, x[-1])
-#   colnames(x[[1]]) <- colNames
-#   x[[1]]
-# }
 
 ################################################################################
 #' Substract headings
@@ -4251,7 +4150,6 @@ setMethod(
       }
     } else {
       if (any(var == "xcor" | var == "ycor")) {
-        #agentsData <- fastCbind(agents@coords, agents@data)
         agentsData <- cbind(agents@coords, agents@data)
         return(agentsData[,var])
       } else {
@@ -4300,18 +4198,6 @@ setMethod(
       } else {
         return(data.frame(agents@.Data[,var]))
       }
-
-      #
-      # agentsData <- as.data.frame(agents@.Data) # characters data as factors
-      # agentsData[,names(agents@levels)] <- do.call(fastCbind,lapply(1:length(agents@levels),function(x) {
-      #   unlist(mapvalues(agentsData[,names(agents@levels)[x]],
-      #                    from = unique(agentsData[,names(agents@levels)[x]]),
-      #                    to = agents@levels[names(agents@levels)[x]][[1]][unique(agentsData[,names(agents@levels)[x]])]))}))
-      # if (length(var) == 1) {
-      #   return(agentsData[,var])
-      # } else {
-      #   return(agentsData[,var, drop = FALSE])
-      # }
 
     } else {
       if (length(var) == 1) {
@@ -4432,23 +4318,5 @@ setMethod(
           return(allValues[cellNum,var, drop= FALSE])
         }
 
-    # if (length(var) == 1) {
-    #   world_l <- createNLworldMatrix(data = as.numeric(t(world@.Data[,,var])), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
-    #                                  minPycor = minPycor(world), maxPycor = maxPycor(world))
-    #   of(world = world_l, agents = agents)
-    # } else {
-    #   if (identical(patches(world), agents)) {
-    #     listVar <- lapply(var, function(x) {as.numeric(t(world[,,x]))})
-    #     matVar <- do.call(fastCbind,listVar)
-    #     colnames(matVar) <- var
-    #     return(matVar)
-    #   } else {
-    #     cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-    #     listVar <- lapply(var, function(x) {as.numeric(t(world[,,x]))})
-    #     matVar <- do.call(fastCbind,listVar)
-    #     colnames(matVar) <- var
-    #     return(matVar[cellNum,, drop = FALSE])
-    #
-    #
     }
 })
