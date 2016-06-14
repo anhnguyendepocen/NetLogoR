@@ -1153,6 +1153,8 @@ test_that("inCone works",{
   expect_equivalent(length(t7),2)
   expect_equivalent(t7[[1]], noPatches())
   expect_equivalent(t7[[2]], patch(w1, x = 2, y = 2))
+  t8 <- inCone(turtles = turtle(t1, 0), radius = 1, angle = 5, agents = patch(w1, 4, 0), world = w1, torus = FALSE)
+  expect_equivalent(t8[[1]], noPatches())
 
   # Turtles to turtles
   t8 <- inCone(turtles = t1, radius = 3, angle = 360, agents = t1, world = w1, torus = FALSE)
