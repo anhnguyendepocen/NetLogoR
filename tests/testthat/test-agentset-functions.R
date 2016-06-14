@@ -779,6 +779,17 @@ test_that("maxNof works",{
   t7 <- maxNof(agents = t1, n = 0, var = "heading")
   expect_equivalent(t7, noTurtles())
   expect_equivalent(length(t7), 0)
+
+  w2 <- w1
+  w2[] <- 25:1
+  ws <- NLstack(w1, w2)
+  p1 <- maxNof(agents = patches(world = ws), n = 5, world = ws, var = "w2")
+  expect_identical(p1, PxcorPycorFromCell(world = w2, 1:5))
+  p2 <- maxNof(agents = patches(world = ws), n = 1, world = ws, var = "w2")
+  expect_equivalent(p2, PxcorPycorFromCell(world = ws, 1))
+  p3 <- maxNof(agents = patches(world = ws), n = length(w1), world = ws, var = "w2")
+  expect_equivalent(nrow(p3), 25)
+  expect_identical(p3, patches(w1))
 })
 
 test_that("maxNof works with NLworldMs and agentMatrix",{
