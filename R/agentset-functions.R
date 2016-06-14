@@ -35,6 +35,7 @@
 #' @export
 #' @docType methods
 #' @rdname NLall
+#' @aliases all
 #'
 #' @author Sarah Bauduin
 #'
@@ -152,6 +153,7 @@ setMethod(
 #' @export
 #' @docType methods
 #' @rdname NLany
+#' @aliases any
 #'
 #' @author Sarah Bauduin
 #'
@@ -443,6 +445,7 @@ setMethod(
 #' @export
 #' @docType methods
 #' @rdname NLwith
+#' @aliases with
 #'
 #' @author Sarah Bauduin
 #'

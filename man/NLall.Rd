@@ -9,6 +9,7 @@
 \alias{NLall,matrix,NLworldArray,character-method}
 \alias{NLall,matrix,NLworldMatrix,missing-method}
 \alias{NLall,matrix,NLworldStack,character-method}
+\alias{all}
 \title{All agents?}
 \usage{
 NLall(agents, world, var, val)

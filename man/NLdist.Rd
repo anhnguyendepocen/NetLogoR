@@ -7,6 +7,7 @@
 \alias{NLdist,SpatialPointsDataFrame,matrix-method}
 \alias{NLdist,matrix,SpatialPointsDataFrame-method}
 \alias{NLdist,matrix,matrix-method}
+\alias{dist}
 \title{Distances between agents}
 \usage{
 NLdist(agents, agents2, world, torus = FALSE, allPairs = FALSE)

@@ -4,6 +4,7 @@
 \name{NLstack}
 \alias{NLstack}
 \alias{NLstack,NLworld-method}
+\alias{stack}
 \title{Create a NLworldStack}
 \usage{
 NLstack(...)

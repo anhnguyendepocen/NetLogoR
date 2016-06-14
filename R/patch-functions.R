@@ -224,6 +224,7 @@ setMethod(
 #' @export
 #' @docType methods
 #' @rdname NLdist
+#' @aliases dist
 #'
 #' @author Sarah Bauduin
 #'

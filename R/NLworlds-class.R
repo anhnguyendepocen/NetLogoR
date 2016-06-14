@@ -219,6 +219,7 @@ setClassUnion(name = "NLworlds",
 #' @importFrom SpaDES objectNames
 #' @docType methods
 #' @rdname NLstack
+#' @aliases stack
 #'
 #' @author Sarah Bauduin
 #'

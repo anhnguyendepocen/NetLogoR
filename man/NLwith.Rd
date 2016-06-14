@@ -9,6 +9,7 @@
 \alias{NLwith,matrix,NLworldArray,character-method}
 \alias{NLwith,matrix,NLworldMatrix,missing-method}
 \alias{NLwith,matrix,NLworldStack,character-method}
+\alias{with}
 \title{Agents with}
 \usage{
 NLwith(agents, world, var, val)

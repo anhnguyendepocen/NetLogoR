@@ -5,6 +5,7 @@
 \alias{NLany}
 \alias{NLany,SpatialPointsDataFrame-method}
 \alias{NLany,matrix-method}
+\alias{any}
 \title{Any agents?}
 \usage{
 NLany(agents)
