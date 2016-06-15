@@ -14,15 +14,27 @@ world2raster(world)
 \S4method{world2raster}{NLworldArray}(world)
 }
 \arguments{
-\item{world}{NLworldMatrix or NLworldArray object}
+\item{world}{NLworldMs object.}
 }
 \value{
-RasterLayer or RasterStack object depending on the input.
-        Patches value are retained from the NLworldMs object.
+RasterLayer or RasterStack object depending on the input \code{world}.
+        Patches value are retained from the \code{world}.
 }
 \description{
 Convert a NLworldMatrix object into a RasterLayer object or a
 NLworldArray object into a RasterStack object
+}
+\details{
+The Raster* returned has the same extent and resolution as the \code{world}
+         with round coordinates at the center of the cells and coordinates \code{x.5}
+         at the edges of the cells.
+}
+\examples{
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+r1 <- world2raster(w1)
+plot(r1)
+
+
 }
 \author{
 Sarah Bauduin

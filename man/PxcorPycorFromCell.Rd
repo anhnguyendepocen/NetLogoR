@@ -4,17 +4,14 @@
 \name{PxcorPycorFromCell}
 \alias{PxcorPycorFromCell}
 \alias{PxcorPycorFromCell,NLworldMs,numeric-method}
-\alias{PxcorPycorFromCell,NLworlds,numeric-method}
 \title{Patches coordinates from cells numbers}
 \usage{
 PxcorPycorFromCell(world, cellNum)
 
-\S4method{PxcorPycorFromCell}{NLworlds,numeric}(world, cellNum)
-
 \S4method{PxcorPycorFromCell}{NLworldMs,numeric}(world, cellNum)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 
 \item{cellNum}{Integer. Vector of cells number.}
 }
@@ -23,11 +20,14 @@ Matrix (ncol = 2) with the first column "pxcor" and the second
         column "pycor" in the order of the given \code{cellNum}.
 }
 \description{
-Report the patches coordinates given the cells numbers as defined for a Raster* object.
+Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
+numbers as defined for a Raster* object.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 cellNum <- cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
+PxcorPycorFromCell(world = w1, cellNum = cellNum)
+cellNum <- cellFromPxcorPycor(world = w1, pxcor = c(0, 1, 2), pycor = 0)
 PxcorPycorFromCell(world = w1, cellNum = cellNum)
 
 

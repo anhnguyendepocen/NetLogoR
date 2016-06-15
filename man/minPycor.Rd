@@ -3,21 +3,15 @@
 \docType{methods}
 \name{minPycor}
 \alias{minPycor}
-\alias{minPycor,NLworld-method}
 \alias{minPycor,NLworldMs-method}
-\alias{minPycor,NLworldStack-method}
 \title{Minimum pycor}
 \usage{
 minPycor(world)
 
-\S4method{minPycor}{NLworld}(world)
-
-\S4method{minPycor}{NLworldStack}(world)
-
 \S4method{minPycor}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
 Integer.
@@ -26,7 +20,7 @@ Integer.
 Report the patches minimum pycor in the \code{world}.
 }
 \examples{
-w1 <- createNLworld()
+w1 <- createNLworldMatrix()
 minPycor(w1)
 
 

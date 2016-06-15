@@ -3,21 +3,15 @@
 \docType{methods}
 \name{maxPycor}
 \alias{maxPycor}
-\alias{maxPycor,NLworld-method}
 \alias{maxPycor,NLworldMs-method}
-\alias{maxPycor,NLworldStack-method}
 \title{Maximum pycor}
 \usage{
 maxPycor(world)
 
-\S4method{maxPycor}{NLworld}(world)
-
-\S4method{maxPycor}{NLworldStack}(world)
-
 \S4method{maxPycor}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
 Integer.
@@ -26,7 +20,7 @@ Integer.
 Report the patches maximum pycor in the \code{world}.
 }
 \examples{
-w1 <- createNLworld()
+w1 <- createNLworldMatrix()
 maxPycor(w1)
 
 

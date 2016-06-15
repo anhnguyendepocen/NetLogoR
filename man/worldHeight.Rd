@@ -4,17 +4,14 @@
 \name{worldHeight}
 \alias{worldHeight}
 \alias{worldHeight,NLworldMs-method}
-\alias{worldHeight,NLworlds-method}
 \title{World height}
 \usage{
 worldHeight(world)
 
-\S4method{worldHeight}{NLworlds}(world)
-
 \S4method{worldHeight}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
 Integer.
@@ -23,7 +20,7 @@ Integer.
 Report the height of the \code{world} in patch number.
 }
 \examples{
-w1 <- createNLworld()
+w1 <- createNLworldMatrix()
 worldHeight(w1)
 
 

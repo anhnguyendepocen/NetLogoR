@@ -16,11 +16,11 @@ raster2world(raster, method)
 \arguments{
 \item{raster}{RasterLayer or RasterStack object.}
 
-\item{method}{"ngb" or "bilinear" for the resample method}
+\item{method}{"ngb" or "bilinear" for the resample method.}
 }
 \value{
-NLworldMatrix or NLworldArray object depending on the input.
-        Patches value are retained from the Raster* object.
+NLworldMatrix or NLworldArray object depending on the input \code{raster}.
+        Patches value are retained from the \code{raster}.
 }
 \description{
 Convert a RasterLayer object into a NLworldMatrix object or a RasterStack object
@@ -31,8 +31,17 @@ See \code{help("NLworldMs-class")} for more details on the NLworlds
          classes.
 
          The \code{raster} is resampled to match the coordinates system and
-         resolution of a NLworldMs using the nearest neighbor method. The
+         resolution of a NLworldMs using the chosen \code{method}. The
          extent will be bigger by 1 on the width and on the height.
+}
+\examples{
+r1 <- raster(extent(c(0,10,0,10)), nrows=10, ncols=10)
+r1[]<-runif(100)
+w1 <- raster2world(r1, method = "ngb")
+plot(r1)
+plot(world2raster(w1))
+
+
 }
 \author{
 Sarah Bauduin

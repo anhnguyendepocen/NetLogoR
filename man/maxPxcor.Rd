@@ -3,21 +3,15 @@
 \docType{methods}
 \name{maxPxcor}
 \alias{maxPxcor}
-\alias{maxPxcor,NLworld-method}
 \alias{maxPxcor,NLworldMs-method}
-\alias{maxPxcor,NLworldStack-method}
 \title{Maximum pxcor}
 \usage{
 maxPxcor(world)
 
-\S4method{maxPxcor}{NLworld}(world)
-
-\S4method{maxPxcor}{NLworldStack}(world)
-
 \S4method{maxPxcor}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
 Integer.
@@ -26,7 +20,7 @@ Integer.
 Report the patches maximum pxcor in the \code{world}.
 }
 \examples{
-w1 <- createNLworld()
+w1 <- createNLworldMatrix()
 maxPxcor(w1)
 
 

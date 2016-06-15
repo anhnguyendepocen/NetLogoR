@@ -6,7 +6,7 @@
 \arguments{
 \item{n}{Integer.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
@@ -24,6 +24,8 @@ or of the same length as \code{pycor}.}
 
 \item{pycor}{Integer. Vector of patches pycor coordinates. Must be of length 1
 or of the same length as \code{pxcor}.}
+
+\item{cellNum}{Integer. Vector of cells number.}
 
 \item{pVar}{Character. If the \code{world} is a NLworldStack object, \code{pVar}
 is the name of the layer to use to define the patches values.

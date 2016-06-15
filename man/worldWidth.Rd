@@ -4,17 +4,14 @@
 \name{worldWidth}
 \alias{worldWidth}
 \alias{worldWidth,NLworldMs-method}
-\alias{worldWidth,NLworlds-method}
 \title{World width}
 \usage{
 worldWidth(world)
 
-\S4method{worldWidth}{NLworlds}(world)
-
 \S4method{worldWidth}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
 Integer.
@@ -23,7 +20,7 @@ Integer.
 Report the width of the \code{world} in patch number.
 }
 \examples{
-w1 <- createNLworld()
+w1 <- createNLworldMatrix()
 worldWidth(w1)
 
 

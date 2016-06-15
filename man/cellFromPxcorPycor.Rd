@@ -4,17 +4,14 @@
 \name{cellFromPxcorPycor}
 \alias{cellFromPxcorPycor}
 \alias{cellFromPxcorPycor,NLworldMs,numeric,numeric-method}
-\alias{cellFromPxcorPycor,NLworlds,numeric,numeric-method}
 \title{Cells numbers from patches coordinates}
 \usage{
 cellFromPxcorPycor(world, pxcor, pycor)
 
-\S4method{cellFromPxcorPycor}{NLworlds,numeric,numeric}(world, pxcor, pycor)
-
 \S4method{cellFromPxcorPycor}{NLworldMs,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 
 \item{pxcor}{Integer. Vector of patches pxcor coordinates. Must be of length 1
 or of the same length as \code{pycor}.}
@@ -30,9 +27,9 @@ Report the cells numbers as defined for a Raster* object given the patches
 coordinates \code{pxcor} and \code{pycor}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
-
+cellFromPxcorPycor(world = w1, pxcor = c(0, 1, 2), pycor = 0)
 
 }
 \author{

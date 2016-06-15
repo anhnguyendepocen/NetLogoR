@@ -121,7 +121,7 @@ setReplaceMethod(
 ################################################################################
 #' Create a world
 #'
-#' Create a world of patches of class \code{NLworldMatrix}.
+#' Create a world of patches of class NLworldMatrix.
 #'
 #' @inheritParams fargs
 #'
@@ -297,13 +297,13 @@ setReplaceMethod(
 ################################################################################
 #' Create a NLworldArray
 #'
-#' Stack multiple \code{NLworldMatrix} data in an array.
+#' Stack multiple NLworldMatrix data in an array.
 #'
 #' @param ... NLworldMatrix objects.
 #'
 #' @return NLworldArray object.
 #'
-#' @details The \code{NLworldMatrix} objects must all have the same extents.
+#' @details The NLworldMatrix objects must all have the same extents.
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
@@ -377,7 +377,7 @@ setClassUnion(name = "NLworldMs",
 ################################################################################
 #' Cells numbers from patches coordinates
 #'
-#' Report the cells numbers as defined for a \code{Raster*} object given the patches
+#' Report the cells numbers as defined for a Raster* object given the patches
 #' coordinates \code{pxcor} and \code{pycor}.
 #'
 #' @inheritParams fargs
@@ -417,7 +417,7 @@ setMethod(
 #' Patches coordinates from cells numbers
 #'
 #' Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
-#' numbers as defined for a \code{Raster*} object.
+#' numbers as defined for a Raster* object.
 #'
 #' @inheritParams fargs
 #'
@@ -459,12 +459,11 @@ setMethod(
 ################################################################################
 #' NLWorldMatrix indices from vector indices
 #'
-#' Convert \code{vector} indices or \code{RasterLayer} cellnumbers into
-#' \code{NLWorldMatrix} indices.
+#' Convert vector indices or Raster* cellnumbers into NLWorldMatrix indices.
 #'
 #' @inheritParams fargs
 #'
-#' @return Numeric. Vector of \code{NLWorldMatrix} indices.
+#' @return Numeric. Vector of NLWorldMatrix indices.
 #'
 #' @export
 #' @docType methods

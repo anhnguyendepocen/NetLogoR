@@ -3,21 +3,15 @@
 \docType{methods}
 \name{minPxcor}
 \alias{minPxcor}
-\alias{minPxcor,NLworld-method}
 \alias{minPxcor,NLworldMs-method}
-\alias{minPxcor,NLworldStack-method}
 \title{Minimum pxcor}
 \usage{
 minPxcor(world)
 
-\S4method{minPxcor}{NLworld}(world)
-
-\S4method{minPxcor}{NLworldStack}(world)
-
 \S4method{minPxcor}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
 Integer.
@@ -26,7 +20,7 @@ Integer.
 Report the patches minimum pxcor in the \code{world}.
 }
 \examples{
-w1 <- createNLworld()
+w1 <- createNLworldMatrix()
 minPxcor(w1)
 
 

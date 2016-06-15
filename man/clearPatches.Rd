@@ -3,36 +3,27 @@
 \docType{methods}
 \name{clearPatches}
 \alias{clearPatches}
-\alias{clearPatches,NLworld-method}
 \alias{clearPatches,NLworldArray-method}
 \alias{clearPatches,NLworldMatrix-method}
-\alias{clearPatches,NLworldStack-method}
 \title{Clear world's patches}
 \usage{
 clearPatches(world)
-
-\S4method{clearPatches}{NLworld}(world)
-
-\S4method{clearPatches}{NLworldStack}(world)
 
 \S4method{clearPatches}{NLworldMatrix}(world)
 
 \S4method{clearPatches}{NLworldArray}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
-NLworld or NLworldMatrix object with \code{NA} values for all patches.
+NLworldMatrix object with \code{NA} values for all patches.
 }
 \description{
 Reset all patches values to \code{NA}.
 }
-\details{
-The name of the layer for the NLWorld is set to \code{""}.
-}
 \examples{
-w1 <- createNLworld()
+w1 <- createNLworldMatrix()
 w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 w1Val <- of(world = w1, agents = patches(w1))
 summary(w1Val)
