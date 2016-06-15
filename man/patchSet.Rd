@@ -19,13 +19,13 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         "pycor" representing the patches coordinates.
 }
 \description{
-Report a patch agentset as the coordinates of all the patches contained in the inputs.
+Report the patch coordinates of all the unique patches contained in the inputs.
 }
 \details{
 Duplicate patches among the inputs are removed in the returned matrix.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 p1 <- patchAt(world = w1, agents = patch(w1, c(0,1,2), c(0,0,0)), dx = 1, dy = 1)
 p2 <- patchDistDir(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
 p3 <- patch(world = w1, x = 4.3, y = 8)

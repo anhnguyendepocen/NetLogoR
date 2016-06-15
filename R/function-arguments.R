@@ -29,12 +29,11 @@
 #'
 #' @param cellNum Integer. Vector of cells number.
 #'
-#' @param pVar Character. If the \code{world} is a NLworldStack object, \code{pVar}
+#' @param pVar Character. If the \code{world} is a NLworldArray object, \code{pVar}
 #'             is the name of the layer to use to define the patches values.
-#'             \code{pVar} must not be provided if the \code{world} is a NLworld object.
+#'             \code{pVar} must not be provided if the \code{world} is a NLworldMatrix object.
 #'
-#' @param turtles SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the moving agents.
+#' @param turtles AgentMatrix object representing the moving agents.
 #'
 #' @param patches Matrix (ncol = 2) with the first column "pxcor" and the second
 #'                column "pycor" representing the patches coordinates.
@@ -42,14 +41,12 @@
 #' @param agents Matrix (ncol = 2) with the first column "pxcor" and the second
 #'               column "pycor" representing the patches coordinates, or
 #'
-#'               SpatialPointsDataFrame created by \code{createTurtles()} or
-#'               by \code{createOTurtles()} representing the moving agents.
+#'               AgentMatrix object representing the moving agents.
 #'
 #' @param agents2 Matrix (ncol = 2) with the first column "pxcor" and the second
 #'                column "pycor" representing the patches coordinates, or
 #'
-#'                SpatialPointsDataFrame created by \code{createTurtles()} or
-#'                by \code{createOTurtles()} representing the moving agents, or
+#'                AgentMatrix object representing the moving agents, or
 #'
 #'                Matrix (ncol = 2) with the first column "x and the second column
 #'                "y" representing locations coordinates.

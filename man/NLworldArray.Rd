@@ -19,6 +19,16 @@ NLworldArray object.
 \description{
 Stack multiple NLworldMatrix data in an array.
 }
+\details{
+The NLworldMatrix objects must all have the same extents.
+}
+\examples{
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+w2 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
+w3 <- NLworldArray(w1, w2)
+plot(world2raster(w3))
+
+}
 \author{
 Sarah Bauduin
 }

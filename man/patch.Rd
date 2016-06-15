@@ -4,19 +4,15 @@
 \name{patch}
 \alias{patch}
 \alias{patch,NLworldMs,numeric,numeric-method}
-\alias{patch,NLworlds,numeric,numeric-method}
 \title{Patches coordinates}
 \usage{
 patch(world, x, y, duplicate = FALSE, torus = FALSE, out = FALSE)
-
-\S4method{patch}{NLworlds,numeric,numeric}(world, x, y, duplicate = FALSE,
-  torus = FALSE, out = FALSE)
 
 \S4method{patch}{NLworldMs,numeric,numeric}(world, x, y, duplicate = FALSE,
   torus = FALSE, out = FALSE)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 
 \item{x}{Numeric. Vector of x coordinates. Must be of same
 length as \code{y}.}
@@ -54,7 +50,7 @@ If a location \code{[x, y]} is outside the \code{world}'s extent and
          returned.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4))
 patch(world = w1, x = c(0, 9.1, 8.9, 5, 5.3), y = c(0, 0, -0.1, 12.4, 12.4),
       duplicate = TRUE)

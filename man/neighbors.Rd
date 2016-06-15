@@ -4,29 +4,20 @@
 \name{neighbors}
 \alias{neighbors}
 \alias{neighbors,NLworldMs,matrix,numeric-method}
-\alias{neighbors,NLworlds,SpatialPointsDataFrame,numeric-method}
-\alias{neighbors,NLworlds,matrix,numeric-method}
 \title{Neighbors patches}
 \usage{
 neighbors(world, agents, nNeighbors, torus = FALSE)
-
-\S4method{neighbors}{NLworlds,matrix,numeric}(world, agents, nNeighbors,
-  torus = FALSE)
-
-\S4method{neighbors}{NLworlds,SpatialPointsDataFrame,numeric}(world, agents,
-  nNeighbors, torus = FALSE)
 
 \S4method{neighbors}{NLworldMs,matrix,numeric}(world, agents, nNeighbors,
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{nNeighbors}{Integer: 4 or 8. Represents the number of neighbor patches
 considered.}
@@ -38,7 +29,7 @@ considered.}
 Matrix (ncol = 3) with the first column "pxcor"
         and the second column "pycor" representing the coordinates of the neighbors
         patches around the \code{agents} and the third column "id" representing
-        the \code{agents}.
+        the "id" of the \code{agents} in the order provided.
 }
 \description{
 Report the coordinates of the neighbors patches around the \code{agents}.
@@ -54,9 +45,9 @@ The patch around which the neighbors are identified, or the patch where
          some may be on the other sides of the \code{world}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 neighbors(world = w1, agents = patch(w1, c(0,9), c(0,7)), nNeighbors = 8)
-t1 <- createTurtles(n = 3, coords = randomXYcor(w1, n = 3))
+t1 <- createTurtlesAM(n = 3, coords = randomXYcor(w1, n = 3))
 neighbors(world = w1, agents = t1, nNeighbors = 4)
 
 

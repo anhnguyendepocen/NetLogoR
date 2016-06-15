@@ -4320,3 +4320,125 @@ setMethod(
 
     }
 })
+
+
+################################################################################
+#' Convert a SPDF object into a agentMatrix object
+#'
+#'
+#' @param spdf  description needed
+#'
+#' @return agentMatrix
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname spdf2turtles
+#'
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "spdf2turtles",
+  function(spdf) {
+    standardGeneric("spdf2turtles")
+  })
+
+
+#' @export
+#' @importFrom grDevices rainbow
+#' @importFrom stats runif
+#' @rdname spdf2turtles
+setMethod(
+  "spdf2turtles",
+  signature = c("SpatialPointsDataFrame"),
+  definition = function(spdf) {
+
+    spdfData <- spdf@data
+    n <- length(spdf)
+
+    if (!is.na(match("who", names(spdfData)))) {
+      who <- spdfData$who
+    } else {
+      who <- seq(from = 0, to = n - 1, by = 1)
+    }
+
+    if (!is.na(match("heading", names(spdfData)))) {
+      heading <- spdfData$heading
+    } else {
+      heading <- runif(n = n, min = 0, max = 360)
+    }
+
+    if (!is.na(match("prevX", names(spdfData)))) {
+      prevX <- spdfData$prevX
+    } else {
+      prevX <- rep(NA, n)
+    }
+
+    if (!is.na(match("prevY", names(spdfData)))) {
+      prevY <- spdfData$prevY
+    } else {
+      prevY <- rep(NA, n)
+    }
+
+    if (!is.na(match("breed", names(spdfData)))) {
+      breed <- spdfData$breed
+    } else {
+      breed <- rep("turtle", n)
+    }
+
+    if (!is.na(match("color", names(spdfData)))) {
+      color <- spdfData$color
+    } else {
+      color <- rainbow(n)
+    }
+
+    turtles <- new("agentMatrix",
+                   coords = cbind(xcor = spdf@coords[,1], ycor = spdf@coords[,2]),
+                   who = who,
+                   heading = heading,
+                   prevX = prevX,
+                   prevY = prevY,
+                   breed = breed,
+                   color = color)
+
+    for(i in which(!names(spdfData) %in% c("who", "heading", "prevX", "prevY", "breed", "color", "stringsAsFactors"))) {
+      turtles <- turtlesOwn(turtles = turtles, tVar = names(spdfData)[i], tVal = spdfData[,i])
+    }
+
+    return(turtles)
+  })
+
+################################################################################
+#' Convert an agentMatrix object into a SPDF
+#'
+#'
+#' @param turtles  description needed
+#'
+#' @return SpatialPointsDataFrame
+#'
+#'
+#' @export
+#' @docType methods
+#' @rdname turtles2spdf
+#'
+#'
+#' @author Sarah Bauduin
+#'
+setGeneric(
+  "turtles2spdf",
+  function(turtles) {
+    standardGeneric("turtles2spdf")
+  })
+
+#' @export
+#' @importFrom sp SpatialPointsDataFrame
+#' @rdname turtles2spdf
+setMethod(
+  "turtles2spdf",
+  signature = c("agentMatrix"),
+  definition = function(turtles) {
+    spdf <- SpatialPointsDataFrame(coords = turtles@.Data[,c("xcor", "ycor"), drop = FALSE],
+                                   data = inspect(turtles, who = turtles@.Data[,"who"])[3:ncol(turtles@.Data)])
+    return(spdf)
+  })

@@ -3,32 +3,26 @@
 \docType{methods}
 \name{patches}
 \alias{patches}
-\alias{patches,NLworld-method}
 \alias{patches,NLworldMs-method}
-\alias{patches,NLworldStack-method}
 \title{All the patches in a world}
 \usage{
 patches(world)
 
-\S4method{patches}{NLworld}(world)
-
-\S4method{patches}{NLworldStack}(world)
-
 \S4method{patches}{NLworldMs}(world)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 }
 \value{
 Matrix (ncol = 2) with the first column "pxcor" and the second column
         "pycor" representing the patches coordinates. The order of the patches
-        follows the order of the cells numbers as defined for a \code{Raster*}.
+        follows the order of the cells numbers as defined for a Raster* object.
 }
 \description{
 Report the coordinates of all the patches in the \code{world}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
 allPatches <- patches(world = w1)
 NLcount(allPatches)
 

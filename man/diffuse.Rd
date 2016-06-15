@@ -3,19 +3,11 @@
 \docType{methods}
 \name{diffuse}
 \alias{diffuse}
-\alias{diffuse,NLworld,missing,numeric,numeric-method}
 \alias{diffuse,NLworldArray,character,numeric,numeric-method}
 \alias{diffuse,NLworldMatrix,missing,numeric,numeric-method}
-\alias{diffuse,NLworldStack,character,numeric,numeric-method}
 \title{Diffuse values in a world}
 \usage{
 diffuse(world, pVar, share, nNeighbors, torus = FALSE)
-
-\S4method{diffuse}{NLworld,missing,numeric,numeric}(world, share, nNeighbors,
-  torus)
-
-\S4method{diffuse}{NLworldStack,character,numeric,numeric}(world, pVar, share,
-  nNeighbors, torus = FALSE)
 
 \S4method{diffuse}{NLworldMatrix,missing,numeric,numeric}(world, share,
   nNeighbors, torus)
@@ -24,11 +16,11 @@ diffuse(world, pVar, share, nNeighbors, torus = FALSE)
   nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 
-\item{pVar}{Character. If the \code{world} is a NLworldStack object, \code{pVar}
+\item{pVar}{Character. If the \code{world} is a NLworldArray object, \code{pVar}
 is the name of the layer to use to define the patches values.
-\code{pVar} must not be provided if the \code{world} is a NLworld object.}
+\code{pVar} must not be provided if the \code{world} is a NLworldMatrix object.}
 
 \item{share}{Numeric. Value between 0 and 1 representing the portion of
 the patches values to be diffused among the neighbors.}
@@ -40,7 +32,7 @@ considered.}
 \code{torus = FALSE}.}
 }
 \value{
-NLworlds or NLworldMs object with patches values updated.
+NLworldMs object with patches values updated.
 }
 \description{
 Each patch gives an equal share of a portion of its value to its neighbor patches.
@@ -55,12 +47,12 @@ What is given is lost for the patches.
          patch keeps the leftover.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-plot(w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- NLset(world = w1, agents = patches(w1), val = sample(c(1,2,3), size = NLcount(patches(w1)), replace = TRUE))
+plot(world2raster(w1))
 # Diffuse 50\% of each patch value to its 8 neighbors
 w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)
-plot(w2)
+plot(world2raster(w2))
 
 
 }

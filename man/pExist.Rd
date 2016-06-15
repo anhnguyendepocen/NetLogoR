@@ -4,17 +4,14 @@
 \name{pExist}
 \alias{pExist}
 \alias{pExist,NLworldMs,numeric,numeric-method}
-\alias{pExist,NLworlds,numeric,numeric-method}
 \title{Do the patches exist?}
 \usage{
 pExist(world, pxcor, pycor)
 
-\S4method{pExist}{NLworlds,numeric,numeric}(world, pxcor, pycor)
-
 \S4method{pExist}{NLworldMs,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{pxcor}{Integer. Vector of patches pxcor coordinates. Must be of length 1
 or of the same length as \code{pycor}.}
@@ -30,7 +27,7 @@ Report \code{TRUE} if a patch exists inside the \code{world}'s extent, report
 \code{FALSE} otherwise.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 pExist(world = w1, pxcor = -1, pycor = 2)
 
 

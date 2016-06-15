@@ -4,29 +4,20 @@
 \name{patchAt}
 \alias{patchAt}
 \alias{patchAt,NLworldMs,matrix,numeric,numeric-method}
-\alias{patchAt,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
-\alias{patchAt,NLworlds,matrix,numeric,numeric-method}
 \title{Patches at}
 \usage{
 patchAt(world, agents, dx, dy, torus = FALSE)
-
-\S4method{patchAt}{NLworlds,matrix,numeric,numeric}(world, agents, dx, dy,
-  torus = FALSE)
-
-\S4method{patchAt}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
-  agents, dx, dy, torus = FALSE)
 
 \S4method{patchAt}{NLworldMs,matrix,numeric,numeric}(world, agents, dx, dy,
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{dx}{Numeric. Vector of distances to the east (right) from the \code{agents}.
 If \code{dx} is negative, the distance to the west (left) is computed.
@@ -52,15 +43,16 @@ Report the coordinates of the patches at \code{(dx, dy)} distances of the \code{
 }
 \details{
 If the patch at distance \code{(dx, dy)}
-         of an agent is outside of the \code{world}'s extent and \code{torus = FALSE}, #code{NA} are returned
+         of an agent is outside of the \code{world}'s extent and \code{torus = FALSE},
+         \code{NA} are returned
          for the patch coordinates;
          if \code{torus = TRUE}, the patch coordinates from a wrapped \code{world} are
          returned.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 patchCorner <- patchAt(world = w1, agents = patch(w1, 0, 0), dx = 1, dy = 1)
-t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
+t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0))
 patchCorner <- patchAt(world = w1, agents = t1, dx = 1, dy = 1)
 
 

@@ -3,9 +3,6 @@
 \docType{methods}
 \name{NLdist}
 \alias{NLdist}
-\alias{NLdist,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
-\alias{NLdist,SpatialPointsDataFrame,matrix-method}
-\alias{NLdist,matrix,SpatialPointsDataFrame-method}
 \alias{NLdist,matrix,matrix-method}
 \alias{dist}
 \title{Distances between agents}
@@ -14,33 +11,22 @@ NLdist(agents, agents2, world, torus = FALSE, allPairs = FALSE)
 
 \S4method{NLdist}{matrix,matrix}(agents, agents2, world, torus = FALSE,
   allPairs = FALSE)
-
-\S4method{NLdist}{matrix,SpatialPointsDataFrame}(agents, agents2, world,
-  torus = FALSE, allPairs = FALSE)
-
-\S4method{NLdist}{SpatialPointsDataFrame,matrix}(agents, agents2, world,
-  torus = FALSE, allPairs = FALSE)
-
-\S4method{NLdist}{SpatialPointsDataFrame,SpatialPointsDataFrame}(agents,
-  agents2, world, torus = FALSE, allPairs = FALSE)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
                column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or
-               by \code{createOTurtles()} representing the moving agents, or
+               AgentMatrix object representing the moving agents, or
 
                Matrix (ncol = 2) with the first column "x and the second column
                "y" representing locations coordinates.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
@@ -70,14 +56,13 @@ Distances from/to a patch are measured from/to its center.
          If \code{torus = FALSE}, \code{world} does not need to be provided.
 
          If \code{torus = TRUE}, a distance around the sides of the \code{world} is
-         reported only if smaller than the one across the \code{world} (i.e., as calculated
-         with \code{torus = FALSE}).
+         reported only if smaller than the one across the \code{world}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
 NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)), world = w1, torus = TRUE)
-t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
+t1 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2))
 NLdist(agents = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 
 

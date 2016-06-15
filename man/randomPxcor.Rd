@@ -4,17 +4,14 @@
 \name{randomPxcor}
 \alias{randomPxcor}
 \alias{randomPxcor,NLworldMs,numeric-method}
-\alias{randomPxcor,NLworlds,numeric-method}
 \title{Random pxcor}
 \usage{
 randomPxcor(world, n)
 
-\S4method{randomPxcor}{NLworlds,numeric}(world, n)
-
 \S4method{randomPxcor}{NLworldMs,numeric}(world, n)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{n}{Integer.}
 }
@@ -25,7 +22,7 @@ Integer. Vector of length \code{n} of pxcor coordinates.
 Report \code{n} random pxcor coordinates within the \code{world}'s extent.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 pxcor <- randomPxcor(world = w1, n = 10)
 
 

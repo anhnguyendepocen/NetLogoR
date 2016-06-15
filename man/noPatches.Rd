@@ -10,9 +10,6 @@ noPatches(x)
 
 \S4method{noPatches}{missing}()
 }
-\arguments{
-\item{x}{documentation needed}
-}
 \value{
 Matrix (ncol = 2, nrow = 0) with the first column "pxcor" and the
         second column "pycor".

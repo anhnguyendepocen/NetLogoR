@@ -16,10 +16,9 @@ patchAhead(world, turtles, dist, torus = FALSE)
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{dist}{Numeric. Vector of distances from the \code{turtles}. \code{dist} must be
 of length 1 or of length \code{turtles}.}
