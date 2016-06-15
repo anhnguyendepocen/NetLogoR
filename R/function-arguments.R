@@ -8,7 +8,7 @@
 #'
 #' @param n Integer.
 #'
-#' @param world NLworlds object.
+#' @param world NLworldMs object.
 #'
 #' @param torus Logical to determine if the \code{world} is wrapped. Default is
 #'              \code{torus = FALSE}.
@@ -26,6 +26,8 @@
 #'
 #' @param pycor Integer. Vector of patches pycor coordinates. Must be of length 1
 #'              or of the same length as \code{pxcor}.
+#'
+#' @param cellNum Integer. Vector of cells number.
 #'
 #' @param pVar Character. If the \code{world} is a NLworldStack object, \code{pVar}
 #'             is the name of the layer to use to define the patches values.

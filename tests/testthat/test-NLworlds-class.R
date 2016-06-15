@@ -1,122 +1,29 @@
-test_that("NLstack() works similar as stack()",{
-  rl1 <- raster(nrows=108, ncols=21, xmn=0, xmx=10)
-  rl1[] <- runif(2268)
-  rl1@data@names <- "w1"
-  rl2 <- rl1
-  rl2[] <- runif(2268)
-  rl2@data@names <- "w2"
-  rl3 <- rl1
-  rl3[] <- runif(2268)
-  rl3@data@names <- "w3"
-  s <- stack(rl1, rl2, rl3)
-  sNL <- convertNLworld(s)
+test_that("createNLworldMatrix works",{
+  w1 <- createNLworldMatrix(minPxcor = -2, maxPxcor = 7, minPycor = -2, maxPycor = 5, data = 1:80)
+  expect_equivalent(1:80, as.numeric(t(w1@.Data)))
+  expect_equivalent(extent(c(-2.5, 7.5, -2.5, 5.5)), w1@extent)
+  expect_equivalent(-2, w1@minPxcor)
+  expect_equivalent(7, w1@maxPxcor)
+  expect_equivalent(-2, w1@minPycor)
+  expect_equivalent(5, w1@maxPycor)
+  expect_equivalent(c(1,1), w1@res)
+  expect_equivalent(cbind(pxcor = rep(-2:7, 8), pycor = rep(5:-2, each = 10)), w1@pCoords)
 
-  w1 <- convertNLworld(rl1)
-  w2 <- convertNLworld(rl2)
-  w3 <- convertNLworld(rl3)
-  ws <- NLstack(w1, w2, w3)
-
-  expect_identical(sNL, ws)
-})
-
-test_that("[] works with NLworld and pxcor and pycor",{
-  w1 <- createNLworld(minPxcor = 0, maxPxcor = 1, minPycor = 0, maxPycor = 1)
-  w1[] <- c(1, 2, 3, 4)
-
-  w1_00 <- w1[0,0]
-  expect_identical(w1_00, 3)
-
-  w1_01_11 <- w1[c(0, 1),1]
-  expect_identical(w1_01_11, c(1, 2))
-
-  w1[1,c(0,1)] <- c(10, 20)
-  expect_identical(values(w1)[c(2, 4)], c(10, 20))
-
-  w1[1,c(0,1)] <- c(NA, NA)
-  expect_identical(values(w1)[c(2, 4)], as.numeric(c(NA, NA)))
-})
-
-test_that("[] works with NLworldStack and pxcor and pycor",{
-  w1 <- createNLworld(minPxcor = 0, maxPxcor = 1, minPycor = 0, maxPycor = 1)
-  w1[] <- c(1, 2, 3, 4)
-  w2 <- w1
-  w2[] <- c(10, 20, 30, 40)
-  ws <- NLstack(w1, w2)
-
-  ws_00 <- ws[0,0]
-  expect_identical(ws_00, cbind(w1 = 3, w2 = 30))
-
-  ws_01_11 <- ws[c(0, 1),1]
-  expect_identical(ws_01_11, cbind(w1 = c(1, 2), w2 = c(10, 20)))
-
-  ws[1,c(0,1)] <- cbind(c(10, 20), c(100, 200)) # signature matrix for value
-  expect_identical(values(ws)[c(2, 4),], cbind(w1 = c(10, 20), w2 = c(100, 200)))
-
-  ws[1,1] <- cbind(-1, -4)
-  expect_identical(as.numeric(values(ws)[2,]), c(-1, -4))
-
-  ws[1,1] <- cbind(NA, NA)
-  expect_equivalent(as.numeric(values(ws)[2,]), as.numeric(c(NA, NA)))
-})
-
-test_that("cellFromPxcorPycor works",{
-  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-  cellNum <- cellFromPxcorPycor(world = w1, pxcor = c(9,0,1), pycor = c(0, 0, 9))
-  expect_identical(cellNum, c(100, 91, 2))
-
-  w1[] <- runif(100)
-  w2 <- w1
-  w2[] <- runif(100)
-  ws <- NLstack(w1, w2)
-  # Same as for w1
-  cellNum <- cellFromPxcorPycor(world = ws, pxcor = c(9,0,1), pycor = c(0, 0, 9))
-  expect_identical(cellNum, c(100, 91, 2))
-})
-
-test_that("PxcorPycorFromCell works",{
-  w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-  pCoords1 <- PxcorPycorFromCell(world = w1, cellNum = c(100, 91, 2))
-  pCoords2 <- cbind(pxcor = c(9,0,1), pycor = c(0, 0, 9))
-  expect_identical(pCoords1, pCoords2)
-
-  w1[] <- runif(100)
-  w2 <- w1
-  w2[] <- runif(100)
-  ws <- NLstack(w1, w2)
-  # Same as for w1
-  pCoords1 <- PxcorPycorFromCell(world = ws, cellNum = c(100, 91, 2))
-  expect_identical(pCoords1, pCoords2)
-})
-
-test_that("createNLworldMatrix works similarly as createNLworld",{
-  w1 <- createNLworld(minPxcor = -2, maxPxcor = 7, minPycor = -2, maxPycor = 5)
-  w1[] <- 1:80
-  w2 <- createNLworldMatrix(minPxcor = -2, maxPxcor = 7, minPycor = -2, maxPycor = 5, data = 1:80)
-  expect_equivalent(values(w1), as.numeric(t(w2@.Data)))
-  expect_identical(extent(w1), w2@extent)
-  expect_identical(minPxcor(w1), w2@minPxcor)
-  expect_identical(maxPxcor(w1), w2@maxPxcor)
-  expect_identical(minPycor(w1), w2@minPycor)
-  expect_identical(maxPycor(w1), w2@maxPycor)
-  expect_identical(res(w1), w2@res)
-  expect_equivalent(patches(w1), w2@pCoords)
+  w2 <- createNLworldMatrix()
+  expect_equivalent(as.numeric(rep(NA, 33*33)), as.numeric(t(w2@.Data)))
+  expect_equivalent(extent(c(-16.5, 16.5, -16.5, 16.5)), w2@extent)
+  expect_equivalent(-16, w2@minPxcor)
+  expect_equivalent(16, w2@maxPxcor)
+  expect_equivalent(-16, w2@minPycor)
+  expect_equivalent(16, w2@maxPycor)
+  expect_equivalent(c(1,1), w2@res)
+  expect_equivalent(cbind(pxcor = rep(-16:16, 33), pycor = rep(16:-16, each = 33)), w2@pCoords)
 
   w3 <- createNLworldMatrix(minPxcor = -2, maxPxcor = 7, minPycor = -2, maxPycor = 5)
   expect_equivalent(rep(as.numeric(NA), length(w1)), as.numeric(t(w3@.Data)))
-
-  w1 <- createNLworld()
-  w2 <- createNLworldMatrix()
-  expect_equivalent(as.numeric(values(w1)), as.numeric(t(w2@.Data)))
-  expect_identical(extent(w1), w2@extent)
-  expect_identical(minPxcor(w1), w2@minPxcor)
-  expect_identical(maxPxcor(w1), w2@maxPxcor)
-  expect_identical(minPycor(w1), w2@minPycor)
-  expect_identical(maxPycor(w1), w2@maxPycor)
-  expect_identical(res(w1), w2@res)
-  expect_equivalent(patches(w1), w2@pCoords)
 })
 
-test_that("NLworldArray works similarly as NLstack",{
+test_that("NLworldArray works",{
   w1 <- createNLworldMatrix(minPxcor = -2, maxPxcor = 7, minPycor = -4, maxPycor = 5, data = 1:100)
   w2 <- createNLworldMatrix(minPxcor = -2, maxPxcor = 7, minPycor = -4, maxPycor = 5, data = 101:200)
   w3 <- createNLworldMatrix(minPxcor = -3, maxPxcor = 6, minPycor = -4, maxPycor = 5, data = 1:100)
@@ -200,7 +107,7 @@ test_that("[] works with NLworldArray",{
   expect_equivalent(ws[], cbind(c(NA,NA,NA,NA), c(NA,NA,NA,NA)))
 })
 
-test_that("cellFromPxcorPycor works for NLworldMs",{
+test_that("cellFromPxcorPycor works",{
   w3 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   cellNum <- cellFromPxcorPycor(world = w3, pxcor = c(9,0,1), pycor = c(0, 0, 9))
   expect_equivalent(cellNum, c(100, 91, 2))
@@ -212,7 +119,7 @@ test_that("cellFromPxcorPycor works for NLworldMs",{
   expect_equivalent(cellNum, c(100, 91, 2))
 })
 
-test_that("PxcorPycorFromCell works for NLworldMs",{
+test_that("PxcorPycorFromCell works",{
   w3 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   pCoords1 <- PxcorPycorFromCell(world = w3, cellNum = c(100, 91, 2))
   pCoords2 <- cbind(pxcor = c(9,0,1), pycor = c(0, 0, 9))
@@ -228,11 +135,11 @@ test_that("PxcorPycorFromCell works for NLworldMs",{
   expect_equivalent(cbind(pxcor, pycor), pCoords)
 })
 
-test_that("NLWorldIndex works",{
+test_that("NLworldIndex works",{
   data <- 1:16
   w1 <- createNLworldMatrix(minPxcor = -1, maxPxcor = 2, minPycor = 0, maxPycor = 3, data = data)
   index <- sample(1:16, size = 1)
-  expect_equivalent(data[index], w1[NLWorldIndex(w1, index)])
+  expect_equivalent(data[index], w1[NLworldIndex(w1, index)])
   index <- sample(1:16, size = 3)
-  expect_equivalent(data[index], w1[NLWorldIndex(w1, index)])
+  expect_equivalent(data[index], w1[NLworldIndex(w1, index)])
 })

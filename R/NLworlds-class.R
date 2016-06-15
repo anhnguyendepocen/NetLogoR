@@ -1,286 +1,39 @@
 ################################################################################
-#' The NLworld class
+#' The NLworldMatrix class
 #'
-#' A \code{NLworld} object is a grid composed of squared patches (i.e., pixels)
-#' that behaves mostly the same as a \code{RasterLayer} object.
-#' Patches have two coordinates \code{pxcor} and \code{pycor}, representing the
-#' location of their center. \code{pxcor} and \code{pycor} are always integer
-#' and increment by 1. \code{pxcor} increases as you move right and \code{pycor}
-#' increases as you move up.  \code{pxcor} and \code{pycor} can be negative if
-#' there are patches to the left or below the patch \code{[pxcor = 0, pycor = 0]}.
+#' This is an s4 class extension of \code{matrix} with 7 additional slots.
+#' A \code{NLworldMatrix} object can be viewes as a grid composed of squared patches
+#' (i.e., matrix cells). Patches have two spatial coordinates \code{pxcor} and
+#' \code{pycor}, representing the location of their center. \code{pxcor} and
+#' \code{pycor} are always integer and increment by 1. \code{pxcor} increases as
+#' you move right and \code{pycor} increases as you move up.  \code{pxcor} and
+#' \code{pycor} can be negative if there are patches to the left or below the patch
+#' \code{[pxcor = 0, pycor = 0]}.
 #'
-#' When creating a \code{NLworld} object, its extent is equal to \code{xmin = minPxcor - 0.5},
-#' \code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5}, and \code{ymax = maxPycor + 0.5}.
-#' The number of patches created is then equal to
+#' The first four slots of the \code{NLworldMatrix} are: \code{minPxcor}, \code{maxPxcor},
+#' \code{minPycor}, \code{maxPycor} which represent the minimum and maximum patches
+#' coordinates in the \code{NLworldMatrix}.
+#' The slot \code{extext} is similar to a \code{Raster*} extent. Because \code{pxcor}
+#' and \code{pycor} represent the spatial location at the center of the patches and the
+#' resolution of them is 1, the extent of the \code{NLworldMatrix} is equal to
+#' \code{xmin = minPxcor - 0.5}, code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5},
+#' and \code{ymax = maxPycor + 0.5}.
+#' The number of patches in a \code{NLworldMatrix} is equal to
 #' \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
+#' The slot \code{res} is equal to \code{1} as it is the spatial resolution of the patches.
+#' The last slot \code{pCoords} is a \code{matrix} representing the patches coordinates
+#' of all the matrix cells in the order of cells in a \code{Raster*} (i.e., by rows).
 #'
-#' \code{[]} can be used to extract values from a \code{NLworld} object by using
-#' the patch coordinates \code{[pxcor, pyxor]}. When multiple coordinates are provided,
-#' the order of the values returned matches the order of the cell numbers as defined
-#' for a \code{RasterLayer}. \code{[] <-} can be used to replace patch values in a
-#' \code{NLworld} object. Similarly, when replacing values of several patches, the
-#' values should be given in the order of the cells numbers as defined for a \code{RasterLayer}.
-#'
-#' @inheritParams raster::RasterLayer
+#' Careful: The methods \code{[]} and \code{[] <-} retrieve or assign values for
+#' the patches in the given order of the patches coordinates provided.
+#' When no patches coordinates are provided, the values retrieved or assigned
+#' is done in the order of the cell numbers as defined in in \code{Raster*} objects.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
-#' @aliases NLworld
-#' @name NLworld-class
-#' @rdname NLworld-class
-#' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
-#' @exportClass NLworld
-#'
-setClass(
-  "NLworld",
-  contains = c("RasterLayer"),
-  representation(
-    minPxcor = "numeric",
-    maxPxcor = "numeric",
-    minPycor = "numeric",
-    maxPycor = "numeric",
-    pxcor = "numeric",
-    pycor = "numeric"
-  )
-)
-
-#' @include Classes.R
-#' @export
-#' @name [
-#' @aliases [,NLworld,numeric,numeric,ANY-method
-#' @docType methods
-#' @rdname extract-methods
-setMethod(
-  "[",
-  signature("NLworld", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, ..., drop) {
-    cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
-    xValues <- values(x)
-    cellValues <- xValues[cells]
-    return(cellValues)
-})
-
-#' @export
-#' @name [<-
-#' @aliases [<-,NLworld,numeric,numeric,ANY-method
-#' @rdname extract-methods
-setReplaceMethod(
-  "[",
-  signature("NLworld", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, value) {
-    cells <- which(x@pxcor %in% i & x@pycor %in% j, TRUE) # cell number(s)
-    x@data@values[cells] <- value
-    validObject(x)
-    return(x)
-})
-
-################################################################################
-#' The NLworldStack class
-#'
-#'
-#' A \code{NLworldStack} object is similar to a \code{RasterStack} object, it is
-#' a collection of \code{NLworld} objects with the same extent.
-#'
-#' @inheritParams raster::RasterStack
-#'
-#' @aliases NLworldStack
-#' @name NLworldStack-class
-#' @rdname NLworldStack-class
-#' @author Sarah Bauduin
-#' @exportClass NLworldStack
-#'
-setClass(
-  "NLworldStack",
-  contains = "RasterStack"
-)
-
-#' @export
-#' @name [
-#' @aliases [,NLworldStack,numeric,numeric,ANY-method
-#' @docType methods
-#' @rdname extract-methods
-setMethod(
-  "[",
-  signature("NLworldStack", "numeric", "numeric", "ANY"),
-  definition = function(x, i, j, ..., drop) {
-    x_l <- x[[1]]
-    cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
-    xValues <- values(x)
-    cellValues <- xValues[cells,]
-
-    if (class(cellValues) != "matrix") {
-      cellValues <- matrix(cellValues, ncol = nlayers(x), byrow = TRUE,
-                           dimnames = list(NULL, names(cellValues)))
-    }
-
-    return(cellValues)
-  }
-)
-
-#' @export
-#' @name [<-
-#' @aliases [<-,NLworldStack,numeric,numeric,matrix-method
-#' @rdname extract-methods
-setReplaceMethod(
-  "[",
-  signature("NLworldStack", "numeric", "numeric", "matrix"),
-  definition = function(x, i, j, value) {
-
-    x_l <- x[[1]]
-    cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
-    xValues <- values(x)
-    xValues[cells,] <- value
-
-    for (k in 1:nlayers(x)) {
-      x <- setValues(x, values = xValues[,k], layer = k) # replace values of each layer
-    }
-
-    validObject(x)
-    return(x)
-  }
-)
-
-# #' @export
-# #' @name [<-
-# #' @aliases [<-,NLworldStack,numeric,numeric,numeric-method
-# #' @rdname extract-methods
-# setReplaceMethod(
-#   "[",
-#   signature("NLworldStack", "numeric", "numeric", "numeric"),
-#   definition = function(x, i, j, value) {
-#
-#     value <- matrix(data = value, nrow = 1, ncol = length(value))
-#
-#     # Copy/paste of above. Putting :
-#     # x[i,j] <- value
-#     # did not work
-#
-#     x_l <- x[[1]]
-#     cells <- which(x_l@pxcor %in% i & x_l@pycor %in% j, TRUE) # same cell number(s) for all layers
-#     xValues <- values(x)
-#     xValues[cells,] <- value
-#
-#     for (k in 1:nlayers(x)) {
-#       x <- setValues(x, values = xValues[,k], layer = k) # replace values of each layer
-#     }
-#
-#     validObject(x)
-#     return(x)
-#
-#     # end copy/paste from above
-#
-#   }
-# )
-
-################################################################################
-#' The \code{NLworlds} class
-#'
-#'
-#' The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
-#' classes. Mostly used for building function purposes.
-#'
-#' @slot members  NLworld, NLworldStack
-#'
-#' @aliases NLworlds
-#' @name NLworlds-class
-#' @rdname NLworlds-class
-#' @author Sarah Bauduin
-#' @exportClass NLworlds
-setClassUnion(name = "NLworlds",
-              members = c("NLworld", "NLworldStack")
-)
-
-################################################################################
-#' Create a NLworldStack
-#'
-#' Stack multiple NLworld objects.
-#'
-#' @param ... NLworld objects.
-#'
-#' @return NLworldStack object with the NLworld stacked as layers.
-#'
-#' @details The NLworld objects must have the same extents and cannot be empty
-#'          (i.e., the patches values must be different than \code{NA}).
-#'
-#' @examples
-#' w1 <- createNLworld()
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' w2 <- createNLworld()
-#' w2 <- NLset(world = w2, agents = patches(w2), val = runif(NLcount(patches(w2))))
-#' w3 <- NLstack(w1, w2)
-#'
-#' #clearPlot()
-#' #Plot(w3)
-#'
-#' @export
-#' @importFrom raster addLayer
-#' @importFrom SpaDES objectNames
-#' @docType methods
-#' @rdname NLstack
-#' @aliases stack
-#'
-#' @author Sarah Bauduin
-#'
-setGeneric(
-  "NLstack",
-  signature = "...",
-  function(...) {
-    standardGeneric("NLstack")
-})
-
-#' @export
-#' @rdname NLstack
-setMethod(
-  "NLstack",
-  signature = "NLworld",
-  definition = function(...) {
-
-    rasterS <- stack(...)
-
-    layerNames <- objectNames("NLstack") # get object names
-    names(rasterS) <- sapply(layerNames, function(x) x$objs)
-
-    worldStack <- as(rasterS, "NLworldStack")
-
-    return(worldStack)
-})
-
-################################################################################
-#' The NLworlds class
-#'
-#'
-#' The \code{NLworlds} class is the union of the \code{NLworld} and \code{NLworldStack}
-#' classes. Mostly used for building function purposes.
-#'
-#' @slot members  NLworld, NLworldStack
-#'
-#' @aliases NLworlds
-#' @name NLworlds-class
-#' @rdname NLworlds-class
-#' @author Sarah Bauduin
-#' @exportClass NLworlds
-setClassUnion(name = "NLworlds",
-              members = c("NLworld", "NLworldStack")
-)
-
-################################################################################
-#' The NLworldMatrix class
-#'
-#' This is similar to \code{NLworld}, but it is an s3 class extension of
-#' \code{matrix}.
-#'
-#' Careful: The methods \code{[]} and \code{[] <-} retrieve or assign values for
-#' the patches (i.e., matrix cells) in the given order. When using \code{NLworlds}
-#' objects, these methods retrive or assign values for the patches in the order
-#' of the cell numbers as defined in \code{Raster*} objects, independently of the
-#' given order of the patches coordinates inside the brackets.
-#' When no patches coordinates are provided, the values retrieved or assigned
-#' is done in the order of the cell numbers as defined in in \code{Raster*} objects.
-#'
 #' @aliases NLworldMatrix
-#' @seealso NLworld
 #' @name NLworldMatrix-class
 #' @rdname NLworldMatrix-class
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
@@ -311,9 +64,6 @@ setMethod(
   signature("NLworldMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, ..., drop) {
 
-    # cellNum <- cellFromPxcorPycor(world = x, pxcor = i, pycor = j)
-    # allValues <- as.numeric(t(x)) # t() to retrieve the values by rows
-    # cellValues <- allValues[cellNum]
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     cellValues <- x[cbind(rowMat, colMat)]
@@ -340,9 +90,7 @@ setReplaceMethod(
   "[",
   signature("NLworldMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, value) {
-    # matj <- i - attr(x, "minPxcor") + 1
-    # mati <- attr(x, "maxPycor") - j + 1
-    # x[cbind(mati, matj)] <- value
+
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
     x@.Data[cbind(rowMat, colMat)] <- value
@@ -359,6 +107,7 @@ setReplaceMethod(
   "[",
   signature("NLworldMatrix", "missing", "missing", "ANY"),
   definition = function(x, i, j, value) {
+
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
     if (length(value) != nCell) {
       value <- rep(value, nCell)
@@ -368,17 +117,35 @@ setReplaceMethod(
     return(x)
 })
 
+
 ################################################################################
 #' Create a world
 #'
-#' Create a world of patches of class NLworldMatrix.
+#' Create a world of patches of class \code{NLworldMatrix}.
 #'
 #' @inheritParams fargs
 #'
-#' @param data Vector of length \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}.
+#' @param data Vector of length 1 or length \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}.
 #'             Default is \code{NA}.
 #'
-#' @return NLworldMatrix object.
+#' @return NLworldMatrix object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#'         patches (i.e., matrix cells).
+#'
+#' @details If \code{data} is provided, values are assigned by rows.
+#'
+#'          If no parameters value are provided, default values are: \code{minPxcor = -16},
+#'          \code{maxPxcor = 16}, \code{minPycor = -16}, and \code{maxPycor = 16}.
+#'
+#'          See \code{help("NLworldMatrix-class")} for more details on the NLworldMatrix class.
+#'
+#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+#'             Center for Connected Learning and Computer-Based Modeling,
+#'             Northwestern University. Evanston, IL.
+#'
+#' @examples
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+#' plot(world2raster(w1))
+#'
 #'
 #' @export
 #' @importFrom raster extent
@@ -426,13 +193,14 @@ setMethod(
     createNLworldMatrix(-16, 16, -16, 16, data = NA)
 })
 
+
 ################################################################################
 #' The NLworldArray class
 #'
-#' This is similar to \code{NLworldStack}, but it is an s4 class extension of
-#' \code{array}.
+#' This is an s4 class extension of \code{array}. It is a collection of several
+#' \code{NLworldMatrix} objects with the same extent (i.e., same values for all their
+#' slots) stacked together. It is used to keep more than one value per patch.
 #'
-#' @seealso NLworldStack
 #' @name NLworldArray-class
 #' @rdname NLworldArray-class
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
@@ -525,14 +293,23 @@ setReplaceMethod(
     return(x)
 })
 
+
 ################################################################################
 #' Create a NLworldArray
 #'
-#' Stack multiple NLworldMatrix data in an array.
+#' Stack multiple \code{NLworldMatrix} data in an array.
 #'
 #' @param ... NLworldMatrix objects.
 #'
 #' @return NLworldArray object.
+#'
+#' @details The \code{NLworldMatrix} objects must all have the same extents.
+#'
+#' @examples
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+#' w2 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
+#' w3 <- NLworldArray(w1, w2)
+#' plot(world2raster(w3))
 #'
 #' @export
 #' @importFrom SpaDES updateList
@@ -577,6 +354,7 @@ setMethod(
     return(world)
 })
 
+
 ################################################################################
 #' The NLworldMs class
 #'
@@ -595,21 +373,21 @@ setClassUnion(name = "NLworldMs",
               members = c("NLworldMatrix", "NLworldArray")
 )
 
+
 ################################################################################
 #' Cells numbers from patches coordinates
 #'
-#' Report the cells numbers as defined for a Raster* object given the patches
+#' Report the cells numbers as defined for a \code{Raster*} object given the patches
 #' coordinates \code{pxcor} and \code{pycor}.
 #'
-#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @return Numeric. Vector of cells number.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
-#'
+#' cellFromPxcorPycor(world = w1, pxcor = c(0, 1, 2), pycor = 0)
 #'
 #' @export
 #' @docType methods
@@ -627,16 +405,6 @@ setGeneric(
 #' @rdname cellFromPxcorPycor
 setMethod(
   "cellFromPxcorPycor",
-  signature = c("NLworlds", "numeric", "numeric"),
-  definition = function(world, pxcor, pycor) {
-    cellNum <- cellFromXY(world, cbind(x = pxcor, y = pycor))
-    return(cellNum)
-})
-
-#' @export
-#' @rdname cellFromPxcorPycor
-setMethod(
-  "cellFromPxcorPycor",
   signature = c("NLworldMs", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
     j <- pxcor - world@minPxcor + 1
@@ -644,22 +412,23 @@ setMethod(
     (i - 1) * ncol(world) + j # Faster
 })
 
+
 ################################################################################
 #' Patches coordinates from cells numbers
 #'
-#' Report the patches coordinates given the cells numbers as defined for a Raster* object.
+#' Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
+#' numbers as defined for a \code{Raster*} object.
 #'
-#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
-#'
-#' @param cellNum Integer. Vector of cells number.
 #'
 #' @return Matrix (ncol = 2) with the first column "pxcor" and the second
 #'         column "pycor" in the order of the given \code{cellNum}.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' cellNum <- cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
+#' PxcorPycorFromCell(world = w1, cellNum = cellNum)
+#' cellNum <- cellFromPxcorPycor(world = w1, pxcor = c(0, 1, 2), pycor = 0)
 #' PxcorPycorFromCell(world = w1, cellNum = cellNum)
 #'
 #'
@@ -679,17 +448,6 @@ setGeneric(
 #' @rdname PxcorPycorFromCell
 setMethod(
   "PxcorPycorFromCell",
-  signature = c("NLworlds", "numeric"),
-  definition = function(world, cellNum) {
-    XY <- xyFromCell(world, cellNum)
-    pCoords <- cbind(pxcor = XY[,1], pycor = XY[,2])
-    return(pCoords)
-})
-
-#' @export
-#' @rdname PxcorPycorFromCell
-setMethod(
-  "PxcorPycorFromCell",
   signature = c("NLworldMs", "numeric"),
   definition = function(world, cellNum) {
     pCoords <- world@pCoords[cellNum,,drop = FALSE]
@@ -697,27 +455,25 @@ setMethod(
   }
 )
 
+
 ################################################################################
-#' Convert NLWorldMatrix indices to vector indices
+#' NLWorldMatrix indices from vector indices
 #'
-#' This can be used to convert indices that would work with an R \code{RasterLayer},
-#' or \code{vector} to NLWorldMatrix indices.
+#' Convert \code{vector} indices or \code{RasterLayer} cellnumbers into
+#' \code{NLWorldMatrix} indices.
 #'
-#' @param world NLworldMatrix object.
+#' @inheritParams fargs
 #'
-#' @param cellNum Integer. Vector of cells number.
-#'
-#' @return Numeric vector with indices that will work with an NLWorldMatrix.
+#' @return Numeric. Vector of \code{NLWorldMatrix} indices.
 #'
 #' @export
 #' @docType methods
-#' @rdname NLWorldIndex
+#' @rdname NLworldIndex
 #'
 #' @author Eliot McIntire
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1[] <- 1:100
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = 1:100)
 #' w1Ras <- world2raster(w1)
 #' index <- 24
 #' pxpy <- PxcorPycorFromCell(world = w1, cellNum = index)
@@ -727,18 +483,19 @@ setMethod(
 #' identical(w1[index], rasValue)
 #'
 #' # Correct index
-#' identical(w1[NLWorldIndex(w1, index)], rasValue)
+#' identical(w1[NLworldIndex(w1, index)], rasValue)
+#'
 #'
 setGeneric(
-  "NLWorldIndex",
+  "NLworldIndex",
   function(world, cellNum) {
-    standardGeneric("NLWorldIndex")
+    standardGeneric("NLworldIndex")
 })
 
 #' @export
-#' @rdname NLWorldIndex
+#' @rdname NLworldIndex
 setMethod(
-  "NLWorldIndex",
+  "NLworldIndex",
   signature = c("NLworldMatrix", "numeric"),
   definition = function(world, cellNum) {
     b <- dim(world)
