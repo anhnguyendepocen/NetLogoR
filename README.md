@@ -3,11 +3,9 @@
 [![Build Status](https://travis-ci.org/PredictiveEcology/NetLogoR.svg?branch=master)](https://travis-ci.org/PredictiveEcology/NetLogoR)
 [![Coverage Status](https://coveralls.io/repos/github/PredictiveEcology/NetLogoR/badge.svg?branch=master)](https://coveralls.io/github/PredictiveEcology/NetLogoR?branch=master)
 
-`NetLogoR` is an R package which aims to help translate agent-based models built in NetLogo ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)) into R.
+`NetLogoR` is an R package which aims to help translating agent-based models built in NetLogo ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)) into R or help directly with creating new agent-based models in R following the NetLogo framework.
 
-`NetLogoR` provides functions to build a world with agents, similarly as in NetLogo, as well as the necessary [NetLogo's primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) to build agent-based models.
-A programming guide derived from the [NetLogo’s Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html) is also  available. 
-
-Models built with `NetLogoR` could interact with other models using a discrete event simulator, such as [`SpaDES`](https://cran.r-project.org/package=SpaDES).
+`NetLogoR` provides the necessary [NetLogo's primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) as well as complementary functions to build agent-based models.
+A programming guide derived from the [NetLogo’s Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html) is available. 
 
 This package is under construction and therefore function errors and mismatchs with the documentation may occur.
