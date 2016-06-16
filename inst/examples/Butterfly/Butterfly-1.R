@@ -1,6 +1,3 @@
-a = Sys.time()
-useFastClasses <- TRUE
-
 ################################################################################
 # Butterfly Hilltopping model (Butterfly-1.nlogo)
 # by Railsback and Grimm (2012), pages 47-59
@@ -10,15 +7,10 @@ useFastClasses <- TRUE
 #
 #
 
-library(NetLogoR)
-library(SpaDES) # useful for plotting
+#library(NetLogoR)
 
 # Create a world with the desired extent
-if(useFastClasses){
-  elevation <- createNLworldMatrix(minPxcor = 0, maxPxcor = 149, minPycor = 0, maxPycor = 149)
-} else {
-  elevation <- createNLworld(minPxcor = 0, maxPxcor = 149, minPycor = 0, maxPycor = 149)
-}
+elevation <- createNLworldMatrix(minPxcor = 0, maxPxcor = 149, minPycor = 0, maxPycor = 149)
 
 # Define the patches values
 # Elevation decreases linearly with distance from the center of the hill
@@ -31,19 +23,13 @@ pElevation <- ifelse(elev1 > elev2, elev1, elev2)
 elevation <- NLset(world = elevation, agents = patches(elevation), val = pElevation)
 
 # Visualize the world
-# dev()
-# clearPlot()
-# Plot(elevation) # plot function from SpaDES
+# plot(world2raster(elevation))
 
 # Create turtles (one butterfly in this model)
-if(useFastClasses){
-  t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 85, ycor = 95)) # the butterfly's initial location is [85, 95]
-} else {
-  t1 <- createTurtles(n = 1, coords = cbind(xcor = 85, ycor = 95)) # the butterfly's initial location is [85, 95]
-}
-# t1 <- createTurtles(n = 100, coords = cbind(xcor = 85, ycor = 95)) # can try with 100 butterflies
+t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 85, ycor = 95)) # the butterfly's initial location is [85, 95]
+# t1 <- createTurtlesAM(n = 100, coords = cbind(xcor = 85, ycor = 95)) # can try with 100 butterflies
 # Visualize the turtle
-# Plot(t1, addTo = "elevation") # need to add the turtle on the plotted world
+# points(turtles2spdf(t1), pch = 16)
 
 # Define the global variable needed
 q <- 0.4 # q is the probability to move directly to the highest surrounding patch
@@ -73,13 +59,9 @@ for(time in 1:1000){ # what is inside this loop will be iterated 1000 times
 
   # Visualize each new position for t1
   # Very slow, remove for speed
-  # Plot(t1, addTo = "elevation") # plot the new position of the turtle instead of its track
+  # points(turtles2spdf(t1), pch = 16)
 
   # Show the time step on the screen
   # Slow, remove for speed
   # print(time)
 }
-
-b = Sys.time()
-print(paste(sum(numSheep+numWolves)/as.numeric(b-a), "sheep and wolves per second"))
-print(b-a)
