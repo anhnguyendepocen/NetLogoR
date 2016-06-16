@@ -55,6 +55,7 @@ RoxygenNote: 5.0.1
 Collate:
     'NLworlds-class.R'
     'Classes.R'
+    'NetLogoR-classes.R'
     'NetLogoR-package.R'
     'agentset-functions.R'
     'function-arguments.R'

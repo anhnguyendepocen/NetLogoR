@@ -1495,10 +1495,10 @@ setMethod(
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 #'
-#' p1 <- inRadius2(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1))
-#' t2 <- inRadius2(agents = patch(w1, 0, 0), radius = 2, agents2 = t1)
-#' p2 <- inRadius2(agents = t1, radius = 2, agents2 = patches(w1))
-#' t3 <- inRadius2(agents = turtle(t1, who = 0), radius = 2, agents2 = t1)
+#' p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1))
+#' t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1)
+#' p2 <- inRadius(agents = t1, radius = 2, agents2 = patches(w1))
+#' t3 <- inRadius(agents = turtle(t1, who = 0), radius = 2, agents2 = t1)
 #'
 #'
 #' @export
@@ -1507,20 +1507,20 @@ setMethod(
 #' @importFrom sp SpatialPoints
 #' @importFrom SpaDES wrap
 #' @docType methods
-#' @rdname inRadius2
+#' @rdname inRadius
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "inRadius2",
+  "inRadius",
   function(agents, radius, agents2, world, torus = FALSE) {
-    standardGeneric("inRadius2")
+    standardGeneric("inRadius")
 })
 
 #' @export
-#' @rdname inRadius2
+#' @rdname inRadius
 setMethod(
-  "inRadius2",
+  "inRadius",
   signature = c(agents = "matrix", radius = "numeric", agents2 = "matrix"),
   definition = function(agents, radius, agents2, world, torus) {
 
@@ -1528,14 +1528,14 @@ setMethod(
 
       # Transform agent into a matrix
       agents <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
-      inRadius2(agents = agents, radius = radius, agents2 = agents2, world = world, torus = torus)
+      inRadius(agents = agents, radius = radius, agents2 = agents2, world = world, torus = torus)
 
 
     } else if (class(agents) == "agentMatrix" & class(agents2) != "agentMatrix") {
 
       # Transform agent into a matrix
       agents <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
-      inRadius2(agents = agents, radius = radius, agents2 = agents2, world = world, torus = torus)
+      inRadius(agents = agents, radius = radius, agents2 = agents2, world = world, torus = torus)
 
 
     } else if (class(agents) != "agentMatrix" & class(agents2) == "agentMatrix") {
@@ -1715,7 +1715,7 @@ setMethod(
     } else {
 
       # Find the patches within distances
-      agentsInRadius <- inRadius2(agents = turtles, radius = radius, agents2 = agents, world = world, torus = torus)
+      agentsInRadius <- inRadius(agents = turtles, radius = radius, agents2 = agents, world = world, torus = torus)
       if (NROW(agentsInRadius) == 0) { # No patches are within radius distances for any turtles
         return(agentsInRadius)
       } else {

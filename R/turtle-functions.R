@@ -56,7 +56,7 @@ setGeneric(
 #' @export
 #' @importFrom grDevices rainbow
 #' @importFrom stats runif
-#' @rdname createTurtles
+#' @rdname createTurtlesAM
 setMethod(
   "createTurtlesAM",
   signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
@@ -83,7 +83,7 @@ setMethod(
 #' @export
 #' @importFrom grDevices rainbow
 #' @importFrom stats runif
-#' @rdname createTurtles
+#' @rdname createTurtlesAM
 setMethod(
   "createTurtlesAM",
   signature = c("numeric", "missing", "ANY", "ANY", "ANY", "ANY"),
