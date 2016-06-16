@@ -17,7 +17,7 @@ if (getRversion() >= "3.1.0") {
     bbox
 }
 
-#' @include NLworlds-class.R
+#' @include NetLogoR-classes.R
 #' @importFrom raster extent
 setMethod(
   "extent",
@@ -25,7 +25,6 @@ setMethod(
   definition = function(x, ...) {
     attr(x, "extent")
 })
-
 
 #' The agentMatrix class
 #'

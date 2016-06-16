@@ -3,9 +3,17 @@
 \docType{methods}
 \name{createTurtlesAM}
 \alias{createTurtlesAM}
+\alias{createTurtlesAM,numeric,matrix,missing-method}
+\alias{createTurtlesAM,numeric,missing,ANY-method}
 \title{Create turtles}
 \usage{
 createTurtlesAM(n, coords, world, heading, breed, color)
+
+\S4method{createTurtlesAM}{numeric,matrix,missing}(n, coords, world, heading,
+  breed, color)
+
+\S4method{createTurtlesAM}{numeric,missing,ANY}(n, coords, world, heading,
+  breed, color)
 }
 \arguments{
 \item{n}{Integer.}
