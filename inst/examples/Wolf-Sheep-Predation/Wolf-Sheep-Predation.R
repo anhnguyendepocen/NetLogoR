@@ -1,7 +1,3 @@
-a = Sys.time()
-useFastClasses <- TRUE
-maxTime <- 500
-
 ################################################################################
 # Wolf sheep predation
 # by Wilensky (1997) NetLogo Wolf Sheep Predation model.
@@ -14,8 +10,6 @@ maxTime <- 500
 
 ## Packages required
 #library(NetLogoR)
-library(SpaDES)
-library(profvis) # test the speed of the different functions
 
 
 ## Global variables (some represent the model buttons)
@@ -41,16 +35,7 @@ numWolves <- nWolf # keep track of how many wolves there is
 
 ## Setup
 # Create the world
-if(useFastClasses){
-  grass <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
-} else {
-  grass <- createNLworld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
-}
-
-worldCoords <- fastCbind(pxcor=rep_len(attr(grass, "minPxcor"):attr(grass, "maxPxcor"),
-                                   length.out=length(grass)),
-                     pycor = rep(attr(grass, "maxPycor"):attr(grass, "minPycor"), each = ncol(grass)))
-assign("worldCoords", worldCoords, envir=.GlobalEnv)
+grass <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
 
 # If grassOn is TRUE, assign grass and countdown values to patches
 # Because there are multiple patches variables, a NLworldStack is needed
@@ -62,12 +47,8 @@ if(grassOn == TRUE){
   countdown <- grass # countdown is a new NLworld with the same extent as grass
   countdownVal <- runif(n = NLcount(patches(grass)), min = 0, max = grassTGrowth) # grass grow clock
   countdown <- NLset(world = countdown, agents = patches(countdown), val = countdownVal)
+  field <- NLworldArray(grass, countdown)
 
-  if(useFastClasses){
-    field <- NLworldArray(grass, countdown)
-  } else {
-    field <- NLstack(grass, countdown)
-  }
 }
 # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
 # because they all have the same extent and number of patches
@@ -76,20 +57,12 @@ if(grassOn == TRUE){
 # When field is updated, the values on the individual NLworld grass and countdown are not updated, only the layers in field are
 
 # Create the sheep
-if(useFastClasses){
-  sheep <- createTurtlesAM(n = nSheep, coords = randomXYcor(world = grass, n = nSheep), breed = "aSheep", color = rep("red", nSheep))
-} else {
-  sheep <- createTurtles(n = nSheep, coords = randomXYcor(world = grass, n = nSheep), breed = "aSheep", color = rep("red", nSheep))
-}
+sheep <- createTurtlesAM(n = nSheep, coords = randomXYcor(world = grass, n = nSheep), breed = "aSheep", color = rep("red", nSheep))
 # Add the energy variable
 sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = runif(n = nSheep, min = 0, max = 2 * gainFoodSheep))
 
 # Create the wolves
-if(useFastClasses){
-  wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
-} else {
-  wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
-}
+wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
 # Add the energy variable
 wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 
@@ -100,17 +73,15 @@ if(grassOn == TRUE){
 }
 
 # # Visualize the world
-# dev() # open a new plotting window
-# clearPlot()
 # if(grassOn == TRUE){
-#   Plot(field[[1]])
-#   Plot(sheep, addTo = "field$grass")
-#   Plot(wolves, addTo = "field$grass")
+#   plot(world2raster(field)[[1]])
+#   points(turtles2spdf(sheep), pch = 16, col = "red")
+#   points(turtles2spdf(wolves), pch = 16, col = "black")
 # } else {
 #   grass <- NLset(world = grass, agents = patches(grass), val = 0) # cannot plot an empty world
-#   Plot(grass)
-#   Plot(sheep, addTo = "grass")
-#   Plot(wolves, addTo = "grass")
+#   plot(world2raster(grass))
+#   points(turtles2spdf(sheep), pch = 16, col = "red")
+#   points(turtles2spdf(wolves), pch = 16, col = "black")
 # }
 
 
@@ -130,18 +101,10 @@ move <- function(turtles){ # sheep and wolves
 }
 
 # # Test move()
-# if(useFastClasses){
-#   plot(wolves@.Data[, "xcor"], wolves@.Data[, "ycor"], col = rainbow(NLcount(wolves)), pch = 16)
-#   for(i in 1:15){
-#     wolves <- move(wolves)
-#     points(wolves@.Data[, "xcor"], wolves@.Data[, "ycor"], col = rainbow(NLcount(wolves)), pch = 16)
-#   }
-# } else {
-#   plot(wolves, col = rainbow(NLcount(wolves)), pch = 16)
-#   for(i in 1:15){
-#     wolves <- move(wolves)
-#     points(wolves, col = rainbow(NLcount(wolves)), pch = 16)
-#   }
+# plot(wolves@.Data[, "xcor"], wolves@.Data[, "ycor"], col = rainbow(NLcount(wolves)), pch = 16)
+# for(i in 1:15){
+#   wolves <- move(wolves)
+#   points(wolves@.Data[, "xcor"], wolves@.Data[, "ycor"], col = rainbow(NLcount(wolves)), pch = 16)
 # }
 # #
 
@@ -169,45 +132,25 @@ eatGrass <- function(){ # only sheep
 }
 
 # # Test eatGrass()
-# if(useFastClasses){
-#   grass <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-# } else {
-#   grass <- createNLworld(1, 10, 1, 10)
-# }
+# grass <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 # grass <- NLset(world = grass, agents = patches(grass), val = c(rep(1, 50), rep(0, 50)))
 # countdown <- grass
 # countdown <- NLset(world = countdown, agents = patches(countdown), val = 0)
-# if(useFastClasses){
-#   field <- NLworldArray(grass, countdown)
-#   sheep <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
-# } else {
-#   field <- NLstack(grass, countdown)
-#   sheep <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
-# }
+# field <- NLworldArray(grass, countdown)
+# sheep <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
 # sheep <- turtlesOwn(turtles = sheep, tVar = "energy", tVal = 1:10)
-# if(useFastClasses == FALSE){
-#   plot(field$grass)
-#   points(sheep)
-# }
 # resultsEatGrass <- eatGrass()
 # fieldEat <- resultsEatGrass[[1]]
-# if(useFastClasses == FALSE){
-#   plot(fieldEat$grass)
-# }
 # of(world = fieldEat, var = "grass", agents = patches(grass)) == c(rep(1,9), 0, rep(1, 8), 0, rep(1, 8), 0 , rep(1, 8), 0, rep(1, 8), 0, rep(1, 4), rep(0, 50))
 # sheepEat <- resultsEatGrass[[2]]
 # of(agents = sheepEat, var = "energy")[6:10] == (6:10 + gainFoodSheep)
 # #
 
-#whoEnergy <- numeric()
 death <- function(turtles){ # sheep and wolves
   # When energy dips below 0, die
   whoEnergy <- of(agents = turtles, var = c("who", "energy"))
-  if(useFastClasses) {
-    who0 <- whoEnergy[which(whoEnergy[,"energy"] < 0), "who"] # "who" numbers of the turtles with their energy value below 0
-  } else {
-    who0 <- whoEnergy[which(whoEnergy$energy < 0), "who"] # "who" numbers of the turtles with their energy value below 0
-  }
+  who0 <- whoEnergy[which(whoEnergy[,"energy"] < 0), "who"] # "who" numbers of the turtles with their energy value below 0
+
   if(length(who0) != 0){
     turtles <- die(turtles = turtles, who = who0)
   }
@@ -216,11 +159,7 @@ death <- function(turtles){ # sheep and wolves
 }
 
 # # Test death()
-# if(useFastClasses){
-#   wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
-# } else {
-#   wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
-# }
+# wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
 # wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 # count1 <- NLcount(wolves)
 # count2 <- NLcount(wolves)
@@ -263,11 +202,7 @@ reproduce <- function(turtles, reproTurtles){ # sheep and wolves
 }
 
 # # Test reproduce()
-# if(useFastClasses){
-#   wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
-# } else {
-#   wolves <- createTurtles(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
-# }
+# wolves <- createTurtlesAM(n = nWolf, coords = randomXYcor(world = grass, n = nWolf), breed = "wolf", color = rep("black", nWolf))
 # wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = runif(n = nWolf, min = 0, max = 2 * gainFoodWolf))
 # count1 <- NLcount(wolves)
 # count2 <- NLcount(wolves)
@@ -301,23 +236,13 @@ catchSheep <- function(){ # only wolves
 }
 
 # # Test catchSheep()
-# if(useFastClasses){
-#   grass <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-# } else {
-#   grass <- createNLworld(1, 10, 1, 10)
-# }
+# grass <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
 # grass <- NLset(world = grass, agents = patches(grass), val = c(rep(1, 50), rep(0, 50)))
 # countdown <- grass
 # countdown <- NLset(world = countdown, agents = patches(countdown), val = 0)
-# if(useFastClasses){
-#   field <- NLworldArray(grass, countdown)
-#   sheep <- createTurtlesAM(n = 10, coords = cbind(xcor = c(1,1,2,2,3,4,5,6,7,8), ycor = c(1,1,2,2,3,4,5,6,7,8)))
-#   wolves <- createTurtlesAM(n = 5, coords = cbind(xcor = 1:5, ycor = 1:5))
-# } else {
-#   field <- NLstack(grass, countdown)
-#   sheep <- createTurtles(n = 10, coords = cbind(xcor = c(1,1,2,2,3,4,5,6,7,8), ycor = c(1,1,2,2,3,4,5,6,7,8)))
-#   wolves <- createTurtles(n = 5, coords = cbind(xcor = 1:5, ycor = 1:5))
-# }
+# field <- NLworldArray(grass, countdown)
+# sheep <- createTurtlesAM(n = 10, coords = cbind(xcor = c(1,1,2,2,3,4,5,6,7,8), ycor = c(1,1,2,2,3,4,5,6,7,8)))
+# wolves <- createTurtlesAM(n = 5, coords = cbind(xcor = 1:5, ycor = 1:5))
 # wolves <- turtlesOwn(turtles = wolves, tVar = "energy", tVal = 1:5)
 # catchSheepResults <- catchSheep()
 # sheepCatch <- catchSheepResults[[1]]
@@ -337,7 +262,7 @@ growGrass <- function(){ # only patches
     pGrow <- pBrown[pBrownCountdown0, , drop = FALSE] # patches with grass equal to 0 (brown) and countdown <= 0
     # Grow some grass on these patches and reset the countdown
     field <- NLset(world = field, var = c("grass", "countdown"), agents = pGrow,
-                 val = fastCbind(grass = rep(1, NLcount(pGrow)), countdown = rep(grassTGrowth, NLcount(pGrow))))
+                 val = cbind(grass = rep(1, NLcount(pGrow)), countdown = rep(grassTGrowth, NLcount(pGrow))))
   }
 
   pBrownCountdown1 <- which(!pBrownCountdown <= 0) # patches with a countdown > 0
@@ -363,8 +288,8 @@ growGrass <- function(){ # only patches
 
 
 ## Go
-#profvisWolfSheep <- profvis({
 time <- 0
+maxTime <- 5000
 while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are sheep or wolves in the world (time steps maximum at 500)
 
   # Ask sheep
@@ -410,9 +335,8 @@ while((NLany(sheep) | NLany(wolves)) & time < maxTime ){ # as long as there are 
 
   time <- time + 1
   # # Help for checking the model is working
-  #print(time)
+  # print(time)
 }
-#}) # end profvis
 
 ## Plot outputs
 dev()
@@ -437,7 +361,3 @@ if(grassOn == TRUE){
   legend("topleft", legend = c("Sheep", "Wolves"), lwd = c(2, 2), col = c("blue", "red"), bg = "white")
 }
 
-b = Sys.time()
-print(paste(sum(numSheep+numWolves)/as.numeric(b-a), "sheep and wolves per second"))
-print(b-a)
-#profvisWolfSheep
