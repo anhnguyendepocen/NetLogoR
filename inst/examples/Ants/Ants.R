@@ -10,7 +10,6 @@
 
 ## Packages required
 #library(NetLogoR)
-library(SpaDES)
 #library(testthat) # for testing
 
 ## Global variables (model parameters)
@@ -61,7 +60,7 @@ world <- NLworldArray(chemical, nest, nestScent, foodSource, food)
 ants <- createTurtlesAM(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
 
 # # Visualize the world
-# plot(world2raster(world)$layer.4) # foodSource
+# plot(world2raster(world)$layer.5) # food
 # points(turtles2spdf(ants), pch = 16)
 
 # Initialize the output objects
@@ -207,18 +206,16 @@ while(sum(f_fS_world[, "food"]) != 0){ # as long as there is food in the world
 
   # # Time
   # time <- time + 1
-  # #print(time)
+  # print(time)
   #
   # # Plots
-  plot(world2raster(world)$layer.4) # foodSource
-  points(turtles2spdf(ants), pch = 16)
+  # plot(world2raster(world)$layer.5) # food
+  # points(turtles2spdf(ants), pch = 16)
   #
-  #expect_equivalent(NLcount(ants), nAnts)
+  # expect_equivalent(NLcount(ants), nAnts)
 }
 
 ## Plot outputs
-dev()
-clearPlot()
 timeStep <- 1:length(food1)
 plot(timeStep, food1, type = "l", col = "coral", lwd = 2, ylab = "Food", xlab = "Time step",
      ylim = c(min = 0, max = max(c(max(food1), max(food2), max(food3)))))
@@ -227,8 +224,3 @@ lines(timeStep, food3, col = "green", lwd = 2)
 
 legend("topright", legend = c("food1", "food2", "food3"), lwd = c(2, 2, 2), col = c("coral", "yellow", "green"),
        bg = "white")
-
-
-b = Sys.time()
-print(b-a)
-
