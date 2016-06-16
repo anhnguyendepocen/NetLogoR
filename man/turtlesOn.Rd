@@ -3,38 +3,11 @@
 \docType{methods}
 \name{turtlesOn}
 \alias{turtlesOn}
-\alias{turtlesOn,NLworldMs,SpatialPointsDataFrame,SpatialPointsDataFrame,missing-method}
-\alias{turtlesOn,NLworldMs,SpatialPointsDataFrame,matrix,missing-method}
 \alias{turtlesOn,NLworldMs,agentMatrix,matrix,character-method}
 \alias{turtlesOn,NLworldMs,agentMatrix,matrix,missing-method}
-\alias{turtlesOn,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,character-method}
-\alias{turtlesOn,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,missing-method}
-\alias{turtlesOn,NLworlds,SpatialPointsDataFrame,matrix,character-method}
-\alias{turtlesOn,NLworlds,SpatialPointsDataFrame,matrix,missing-method}
 \title{Turtles on}
 \usage{
 turtlesOn(world, turtles, agents, breed, simplify = TRUE)
-
-\S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,matrix,missing}(world,
-  turtles, agents, simplify)
-
-\S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,matrix,character}(world,
-  turtles, agents, breed, simplify = TRUE)
-
-
-  \S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,missing}(world,
-  turtles, agents, simplify)
-
-
-  \S4method{turtlesOn}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,character}(world,
-  turtles, agents, breed, simplify = TRUE)
-
-
-  \S4method{turtlesOn}{NLworldMs,SpatialPointsDataFrame,SpatialPointsDataFrame,missing}(world,
-  turtles, agents, simplify)
-
-\S4method{turtlesOn}{NLworldMs,SpatialPointsDataFrame,matrix,missing}(world,
-  turtles, agents, simplify)
 
 \S4method{turtlesOn}{NLworldMs,agentMatrix,matrix,missing}(world, turtles,
   agents, simplify)
@@ -43,52 +16,48 @@ turtlesOn(world, turtles, agents, breed, simplify = TRUE)
   agents, breed, simplify = TRUE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{breed}{Characters. Vector of "breed" names for the selected \code{turtles}.
 If missing, there is no distinction based upon "breed".}
 
 \item{simplify}{Logical. If \code{simplify = TRUE}, all \code{turtles} on the same
-location as any \code{agents} are returned; if \code{simplify = FALSE},
-the \code{turtles} are evaluated on each \code{agents} locations
+patches as any \code{agents} are returned; if \code{simplify = FALSE},
+the \code{turtles} are evaluated for each \code{agents}'s patches
 individually.}
 }
 \value{
-SpatialPointsDataFrame representing any individuals from \code{turtles} of
+AgentMatrix representing any individuals from \code{turtles} of
         any of the given \code{breed}, if speficied,
-        located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
+        located on the same patches as any of the \code{agents}, if \code{simplify = TRUE}, or
 
         Matrix (ncol = 2) with the first column "whoTurtles" and the second column
         "id" showing which \code{turtles} are on the same
-        locations as which \code{agents} represented by "id", if \code{simplify = FALSE}.
-        "id" represents and follows the order of the \code{agents}, not the "who" numbers
+        patches as which \code{agents} represented by "id", if \code{simplify = FALSE}.
+        "id" represents and follows the order of the \code{agents}. "id" does not represent
+        the "who" numbers
         of the \code{agents} if \code{agents} are turtles.
 }
 \description{
-Report the individuals among \code{turtles} that are at the same locations as
-the \code{agents}' patches.
+Report the individuals among \code{turtles} that are on the same patches as
+the \code{agents}.
 }
 \details{
 The \code{agents} must be located inside the
          \code{world}'s extent.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
-
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo = "w1")
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, runif(100))
+t1 <- createTurtlesAM(n = 500, coords = randomXYcor(w1, n = 500))
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, 2, 2))
 

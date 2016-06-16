@@ -4,22 +4,17 @@
 \name{patchRight}
 \alias{patchRight}
 \alias{patchRight,NLworldMs,agentMatrix,numeric,numeric-method}
-\alias{patchRight,NLworlds,SpatialPointsDataFrame,numeric,numeric-method}
 \title{Patches on the right}
 \usage{
 patchRight(world, turtles, dist, angle, torus = FALSE)
-
-\S4method{patchRight}{NLworlds,SpatialPointsDataFrame,numeric,numeric}(world,
-  turtles, dist, angle, torus = FALSE)
 
 \S4method{patchRight}{NLworldMs,agentMatrix,numeric,numeric}(world, turtles,
   dist, angle, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{dist}{Numeric. Vector of distances from the \code{turtles}. \code{dist} must be
 of length 1 or of length \code{turtles}.}
@@ -51,8 +46,8 @@ If a given \code{dist} value is negative, then the turtle would move backward.
          coordinates from a wrapped \code{world} are returned.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 patchRight(world = w1, turtles = t1, dist = 2, angle = 90)
 
 

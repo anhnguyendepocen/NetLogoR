@@ -5,13 +5,11 @@
 \alias{NLworldArray-class}
 \title{The NLworldArray class}
 \description{
-This is similar to \code{NLworldStack}, but it is an s4 class extension of
-\code{array}.
+This is an s4 class extension of \code{array}. It is a collection of several
+\code{NLworldMatrix} objects with the same extent (i.e., same values for all their
+slots) stacked together. It is used to keep more than one value per patch.
 }
 \author{
 Sarah Bauduin, Eliot McIntire, and Alex Chubaty
-}
-\seealso{
-NLworldStack
 }
 

@@ -3,32 +3,23 @@
 \docType{methods}
 \name{moveTo}
 \alias{moveTo}
-\alias{moveTo,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
-\alias{moveTo,SpatialPointsDataFrame,matrix-method}
 \alias{moveTo,agentMatrix,matrix-method}
 \title{Move to}
 \usage{
 moveTo(turtles, agents)
 
-\S4method{moveTo}{SpatialPointsDataFrame,matrix}(turtles, agents)
-
-\S4method{moveTo}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles,
-  agents)
-
 \S4method{moveTo}{agentMatrix,matrix}(turtles, agents)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+AgentMatrix representing the \code{turtles} with updated coordinates
         and updated data for their previous coordinates "prevX" and "prevY".
 }
 \description{
@@ -44,18 +35,17 @@ The number of \code{agents} must be equal to 1 or to
          the patch center.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
-
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo ="w1")
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = "black", pch = 16)
 
 t1 <- moveTo(turtles = t1, agents = turtle(t1, who = 0))
-#Plot(t1, addTo ="w1")
+points(turtles2spdf(t1), col = "red", pch = 16)
+
 t1 <- moveTo(turtles = t1, agents = patch(w1, 9, 9))
-#Plot(t1, addTo ="w1")
+points(turtles2spdf(t1), col = "blue", pch = 16)
+
 
 }
 \author{

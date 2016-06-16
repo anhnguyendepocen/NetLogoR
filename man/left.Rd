@@ -3,25 +3,21 @@
 \docType{methods}
 \name{left}
 \alias{left}
-\alias{left,SpatialPointsDataFrame,numeric-method}
 \alias{left,agentMatrix,numeric-method}
 \title{Rotate to the left}
 \usage{
 left(turtles, angle)
 
-\S4method{left}{SpatialPointsDataFrame,numeric}(turtles, angle)
-
 \S4method{left}{agentMatrix,numeric}(turtles, angle)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{angle}{Numeric. Vector of angles in degrees by which to rotate the \code{turtles}'
 headings. Must be of length 1 or of length \code{turtles}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated "heading" values.
+AgentMatrix representing the \code{turtles} with updated "heading" values.
 }
 \description{
 Rotate the \code{turtles}'s headings to the left of \code{angle} degrees.
@@ -30,8 +26,8 @@ Rotate the \code{turtles}'s headings to the left of \code{angle} degrees.
 If a given \code{angle} value is negative, then the turtle rotates to the right.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, world = w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtlesAM(n = 10, world = w1)
 of(agents = t1, var = "heading")
 t1 <- left(turtles = t1, angle = 180)
 of(agents = t1, var = "heading")

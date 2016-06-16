@@ -3,42 +3,28 @@
 \docType{methods}
 \name{towards}
 \alias{towards}
-\alias{towards,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
-\alias{towards,SpatialPointsDataFrame,matrix-method}
-\alias{towards,matrix,SpatialPointsDataFrame-method}
 \alias{towards,matrix,matrix-method}
 \title{Directions towards}
 \usage{
 towards(agents, agents2, world, torus = FALSE)
 
 \S4method{towards}{matrix,matrix}(agents, agents2, world, torus = FALSE)
-
-\S4method{towards}{SpatialPointsDataFrame,matrix}(agents, agents2, world,
-  torus = FALSE)
-
-\S4method{towards}{matrix,SpatialPointsDataFrame}(agents, agents2, world,
-  torus = FALSE)
-
-\S4method{towards}{SpatialPointsDataFrame,SpatialPointsDataFrame}(agents,
-  agents2, world, torus = FALSE)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
                column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or
-               by \code{createOTurtles()} representing the moving agents, or
+               AgentMatrix object representing the moving agents, or
 
                Matrix (ncol = 2) with the first column "x and the second column
                "y" representing locations coordinates.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
@@ -55,7 +41,7 @@ Report the directions of each \code{agents} towards each corresponding \code{age
          or if different, one of them must have only one agent/location. If
          \code{agents} and \code{agents2} have the same number of agents/locations,
          the directions are calculated for each pair \code{agents[i]} and \code{agents2[i]}
-         and not for each \code{agents} towards all the \code{agents2}.
+         and not for each \code{agents} towards every single \code{agents2}.
 
          If \code{torus = FALSE}, \code{world} does not need to be provided.
 
@@ -68,9 +54,9 @@ Report the directions of each \code{agents} towards each corresponding \code{age
          a turtle to its location returns the turtle's heading.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
-t1 <- createTurtles(n = 10, world = w1)
+t1 <- createTurtlesAM(n = 10, world = w1)
 towards(agents = t1, agents2 = cbind(x = 0, y = 0))
 
 

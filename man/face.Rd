@@ -3,41 +3,31 @@
 \docType{methods}
 \name{face}
 \alias{face}
-\alias{face,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
-\alias{face,SpatialPointsDataFrame,matrix-method}
 \alias{face,agentMatrix,matrix-method}
 \title{Face something}
 \usage{
 face(turtles, agents2, world, torus = FALSE)
 
-\S4method{face}{SpatialPointsDataFrame,matrix}(turtles, agents2, world,
-  torus = FALSE)
-
-\S4method{face}{SpatialPointsDataFrame,SpatialPointsDataFrame}(turtles, agents2,
-  world, torus = FALSE)
-
 \S4method{face}{agentMatrix,matrix}(turtles, agents2, world, torus = FALSE)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
                column "pycor" representing the patches coordinates, or
 
-               SpatialPointsDataFrame created by \code{createTurtles()} or
-               by \code{createOTurtles()} representing the moving agents, or
+               AgentMatrix object representing the moving agents, or
 
                Matrix (ncol = 2) with the first column "x and the second column
                "y" representing locations coordinates.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated headings.
+AgentMatrix representing the \code{turtles} with updated headings.
 }
 \description{
 Set the \code{turtles}' heading towards \code{agents2}.
@@ -56,17 +46,15 @@ The number of agents/locations in \code{agents2} must be equal to 1 or
          If a turtle is facing its own location, its heading does not change.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo = "w1")
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
 t1 <- fd(turtles = t1, dist = 0.5)
-#Plot(t1, addTo = "w1")
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+
 
 }
 \author{

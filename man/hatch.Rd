@@ -3,19 +3,15 @@
 \docType{methods}
 \name{hatch}
 \alias{hatch}
-\alias{hatch,SpatialPointsDataFrame,numeric,numeric-method}
 \alias{hatch,agentMatrix,numeric,numeric-method}
 \title{Hatch new turtles}
 \usage{
 hatch(turtles, who, n, breed)
 
-\S4method{hatch}{SpatialPointsDataFrame,numeric,numeric}(turtles, who, n, breed)
-
 \S4method{hatch}{agentMatrix,numeric,numeric}(turtles, who, n, breed)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 
@@ -26,7 +22,7 @@ to create for each parent.}
 the created turtles are of the same "breed" as their parent turtle.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with the new
+AgentMatrix representing the \code{turtles} with the new
         hatched ones.
 }
 \description{
@@ -39,10 +35,12 @@ The parent turtle must be contained in the \code{turtles}.
          except for the "breed" if specified otherwise, and for the "who" numbers.
          The "who" numbers of the turtles created take on following the highest
          "who" number among the \code{turtles}.
+
+         All new hatched turtles are placed at the end of the agentMatrix object.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, world = w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtlesAM(n = 10, world = w1)
 NLcount(t1)
 t1 <- hatch(turtles = t1, who = 0, n = 2)
 NLcount(t1)

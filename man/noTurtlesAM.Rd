@@ -4,25 +4,22 @@
 \name{noTurtlesAM}
 \alias{noTurtlesAM}
 \alias{noTurtlesAM,missing-method}
-\title{No turtles (AM)}
+\title{No turtles}
 \usage{
 noTurtlesAM(x)
 
 \S4method{noTurtlesAM}{missing}()
 }
-\arguments{
-\item{x}{documentation needed}
-}
 \value{
 AgentMatrix with the turtle variables defined
-        as when using \code{createTurtles()} or \code{createOTurtles()} but
-        with 0 individual.
+        as when using \code{createTurtles()} but
+        with 0 turtle
 }
 \description{
 Report an empty turtle agentset.
 }
 \examples{
-t1 <- noTurtles()
+t1 <- noTurtlesAM()
 NLcount(t1)
 
 

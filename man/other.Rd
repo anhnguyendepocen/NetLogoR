@@ -3,35 +3,30 @@
 \docType{methods}
 \name{other}
 \alias{other}
-\alias{other,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
 \alias{other,matrix,matrix-method}
 \title{Others}
 \usage{
 other(agents, except)
 
 \S4method{other}{matrix,matrix}(agents, except)
-
-\S4method{other}{SpatialPointsDataFrame,SpatialPointsDataFrame}(agents, except)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{except}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 }
 \value{
 Matrix (ncol = 2) with the first column "pxcor" and the second
         column "pycor" representing the patches in \code{agents} without
         the ones in \code{except}, or
 
-        SpatialPointsDataFrame representing the turtles in \code{agents} without
+        AgentMatrix representing the turtles in \code{agents} without
         the ones in \code{except}.
 }
 \description{
@@ -46,14 +41,15 @@ Both \code{agents} and \code{except} must be of the same class (e.g., both
 }
 \examples{
 # Patches
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
 p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
 NLcount(p1) # 99 patches
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
+t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
 t2 <- other(agents = t1, except = turtle(t1, who = 0))
 NLcount(t2) # 9 turtles
+
 
 }
 \author{

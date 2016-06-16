@@ -3,23 +3,18 @@
 \docType{methods}
 \name{layoutCircle}
 \alias{layoutCircle}
-\alias{layoutCircle,NLworld,SpatialPointsDataFrame,numeric-method}
 \alias{layoutCircle,NLworldMs,agentMatrix,numeric-method}
 \title{Layout turtles on a circle}
 \usage{
 layoutCircle(world, turtles, radius, torus = FALSE)
 
-\S4method{layoutCircle}{NLworld,SpatialPointsDataFrame,numeric}(world, turtles,
-  radius, torus = FALSE)
-
 \S4method{layoutCircle}{NLworldMs,agentMatrix,numeric}(world, turtles, radius,
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{radius}{Numeric. Radius of the circle.}
 
@@ -27,7 +22,7 @@ by \code{createOTurtles()} representing the moving agents.}
 \code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated
+AgentMatrix representing the \code{turtles} with updated
         coordinates and updated data for their "heading" values and
         previous coordinates "prevX"
         and "prevY".
@@ -46,16 +41,14 @@ The \code{turtles} point outwards.
          the world's extent.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = "black", pch = 16)
 
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo = "w1")
+t1 <- layoutCircle(world = w1, turtles = t1, radius = 3)
+points(turtles2spdf(t1), col = "red", pch = 16)
 
-t2 <- layoutCircle(world = w1, turtles = t1, radius = 3)
-#Plot(t2, addTo = "w1")
 
 }
 \author{

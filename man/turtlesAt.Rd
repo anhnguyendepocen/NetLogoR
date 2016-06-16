@@ -5,29 +5,9 @@
 \alias{turtlesAt}
 \alias{turtlesAt,NLworldMs,agentMatrix,matrix,numeric,numeric,character-method}
 \alias{turtlesAt,NLworldMs,agentMatrix,matrix,numeric,numeric,missing-method}
-\alias{turtlesAt,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,numeric,numeric,character-method}
-\alias{turtlesAt,NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,numeric,numeric,missing-method}
-\alias{turtlesAt,NLworlds,SpatialPointsDataFrame,matrix,numeric,numeric,character-method}
-\alias{turtlesAt,NLworlds,SpatialPointsDataFrame,matrix,numeric,numeric,missing-method}
 \title{Turtles at}
 \usage{
 turtlesAt(world, turtles, agents, dx, dy, breed, torus = FALSE)
-
-
-  \S4method{turtlesAt}{NLworlds,SpatialPointsDataFrame,matrix,numeric,numeric,missing}(world,
-  turtles, agents, dx, dy, torus)
-
-
-  \S4method{turtlesAt}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,numeric,numeric,missing}(world,
-  turtles, agents, dx, dy, torus)
-
-
-  \S4method{turtlesAt}{NLworlds,SpatialPointsDataFrame,matrix,numeric,numeric,character}(world,
-  turtles, agents, dx, dy, breed, torus = FALSE)
-
-
-  \S4method{turtlesAt}{NLworlds,SpatialPointsDataFrame,SpatialPointsDataFrame,numeric,numeric,character}(world,
-  turtles, agents, dx, dy, breed, torus = FALSE)
 
 
   \S4method{turtlesAt}{NLworldMs,agentMatrix,matrix,numeric,numeric,missing}(world,
@@ -38,16 +18,14 @@ turtlesAt(world, turtles, agents, dx, dy, breed, torus = FALSE)
   turtles, agents, dx, dy, breed, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{dx}{Numeric. Vector of distances to the east (right) from the \code{agents}.
 If \code{dx} is negative, the distance to the west (left) is computed.
@@ -66,7 +44,7 @@ If missing, there is no distinction based upon "breed".}
 \code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the individuals among \code{turtles}
+AgentMatrix representing the individuals among \code{turtles}
         of any of the given \code{breed}, if specified,
         which are located on the patches at \code{(dx, dy)} distances of the
         \code{agents}.
@@ -83,8 +61,8 @@ If the patch at distance \code{(dx, dy)}
          are defined from the wrapped \code{world} is returned.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0),
                 dx = 1, dy = 1)

@@ -4,30 +4,33 @@
 \name{sproutAM}
 \alias{sproutAM}
 \alias{sproutAM,numeric,matrix-method}
-\title{Sprout new turtles (AM)}
+\title{Sprout new turtles}
 \usage{
 sproutAM(n, patches, breed, heading, color, turtles)
 
 \S4method{sproutAM}{numeric,matrix}(n, patches, breed, heading, color, turtles)
 }
 \arguments{
-\item{n}{Integer.}
+\item{n}{Integer. Vector of length 1 or of length the number of \code{patches}.
+Number of new turtles
+to create on each patch.}
 
 \item{patches}{Matrix (ncol = 2) with the first column "pxcor" and the second
 column "pycor" representing the patches coordinates.}
 
-\item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
-\code{n}. If missing, \code{breed = "turtle"} for all turtles.}
+\item{breed}{Character. Vector of "breed" names.
+Must be of length 1 or of length the number of \code{patches}.
+If missing, breed = "turtle" for all the sprouted turtles.}
 
-\item{heading}{Numeric. Vector of values between 0 and 360. Must be of length 1 or
-of length \code{n}. If missing, a random heading is assigned to
-each turtle.}
+\item{heading}{Numeric. Vector of values between 0 and 360.
+Must be of length 1 or of length the number of \code{patches}.
+If missing, a random heading is assigned to each sprouted turtle.}
 
-\item{color}{Character. Vector of color names. Must be of length \code{n}.
-If missing, colors are assigned using the function \code{rainbow(n)}.}
+\item{color}{Character. Vector of color names.
+Must be of length 1, of length the number of \code{patches} or of length \code{sum(n)}.
+If missing, colors are assigned using the function rainbow(n)}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 }
 \value{
 AgentMatrix including the new
@@ -41,7 +44,9 @@ Create \code{n} new turtles on specific \code{patches}.
 
          If \code{turtles} is provided, the new turtles are added to
          the \code{turtles} when returned. The who numbers of the sprouted turtles
-         therefore follow the ones from the \code{turtles}. If no \code{turtles}
+         therefore follow the ones from the \code{turtles}.
+         All new sprouted turtles are placed at the end of the agentMatrix object.
+         If no \code{turtles}
          is provided, a new agentMatrix is created and the who numbers
          start at 0.
 }

@@ -3,25 +3,18 @@
 \docType{methods}
 \name{dy}
 \alias{dy}
-\alias{dy,SpatialPointsDataFrame,missing-method}
-\alias{dy,SpatialPointsDataFrame,numeric-method}
 \alias{dy,agentMatrix,missing-method}
 \alias{dy,agentMatrix,numeric-method}
 \title{y-increment}
 \usage{
 dy(turtles, dist = 1)
 
-\S4method{dy}{SpatialPointsDataFrame,numeric}(turtles, dist = 1)
-
-\S4method{dy}{SpatialPointsDataFrame,missing}(turtles)
-
 \S4method{dy}{agentMatrix,numeric}(turtles, dist = 1)
 
 \S4method{dy}{agentMatrix,missing}(turtles)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{dist}{Numeric. Vector of distances the \code{turtles} would have to
 move forward to
@@ -42,8 +35,8 @@ Report the cosine of the \code{turtles}' heading multiplied by the \code{dist}
          clockwise manner.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createOTurtles(world = w1, n = 10)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createOTurtlesAM(world = w1, n = 10)
 dy(turtles = t1)
 
 

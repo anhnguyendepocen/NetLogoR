@@ -3,26 +3,21 @@
 \docType{methods}
 \name{bk}
 \alias{bk}
-\alias{bk,SpatialPointsDataFrame,numeric-method}
 \alias{bk,agentMatrix,numeric-method}
 \title{Move backward}
 \usage{
 bk(turtles, dist, world, torus = FALSE, out = TRUE)
 
-\S4method{bk}{SpatialPointsDataFrame,numeric}(turtles, dist, world,
-  torus = FALSE, out = TRUE)
-
 \S4method{bk}{agentMatrix,numeric}(turtles, dist, world, torus = FALSE,
   out = TRUE)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{dist}{Numeric. Vector of distances to move. Must
 be of length 1 or of length \code{turtles}.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
@@ -32,7 +27,7 @@ be of length 1 or of length \code{turtles}.}
 the \code{world}'s extent. Default is \code{out = TRUE}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated
+AgentMatrix representing the \code{turtles} with updated
         coordinates and updated data for their previous coordinates "prevX"
         and "prevY".
 }
@@ -59,20 +54,18 @@ If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
          \code{turtles} do not face backward).
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createOTurtles(world = w1, n = 10)
-
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo ="w1")
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+t1 <- createOTurtlesAM(n = 10, world = w1)
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 t1 <- fd(turtles = t1, dist = 2)
-#Plot(t1, addTo ="w1")
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 t1 <- bk(turtles = t1, dist = 1)
-#Plot(t1, addTo ="w1")
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 t1 <- fd(turtles = t1, dist = 0.5)
-#Plot(t1, addTo ="w1")
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+
 
 }
 \author{

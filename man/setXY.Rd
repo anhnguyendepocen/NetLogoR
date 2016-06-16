@@ -3,20 +3,11 @@
 \docType{methods}
 \name{setXY}
 \alias{setXY}
-\alias{setXY,SpatialPointsDataFrame,numeric,numeric,NLworlds,logical-method}
-\alias{setXY,SpatialPointsDataFrame,numeric,numeric,missing,ANY-method}
 \alias{setXY,agentMatrix,numeric,numeric,NLworldMs,logical-method}
 \alias{setXY,agentMatrix,numeric,numeric,missing,ANY-method}
 \title{Set turtles' locations}
 \usage{
 setXY(turtles, xcor, ycor, world, torus = FALSE)
-
-\S4method{setXY}{SpatialPointsDataFrame,numeric,numeric,missing,ANY}(turtles,
-  xcor, ycor, torus)
-
-
-  \S4method{setXY}{SpatialPointsDataFrame,numeric,numeric,NLworlds,logical}(turtles,
-  xcor, ycor, world, torus = FALSE)
 
 \S4method{setXY}{agentMatrix,numeric,numeric,missing,ANY}(turtles, xcor, ycor,
   torus)
@@ -25,8 +16,7 @@ setXY(turtles, xcor, ycor, world, torus = FALSE)
   ycor, world, torus = FALSE)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{xcor}{Numeric. Vector of x coordinates. Must be of length 1 or
 of length \code{turtles}.}
@@ -34,20 +24,20 @@ of length \code{turtles}.}
 \item{ycor}{Numeric. Vector of y coordinates. Must be of length 1 or
 of length \code{turtles}.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+AgentMatrix representing the \code{turtles} with updated coordinates
         and updated data for their previous coordinates "prevX" and "prevY"
 }
 \description{
 Set the turtles \code{xcor} and \code{ycor} coordinates.
 }
 \details{
-\code{world} must be provided if only if \code{torus = TRUE}.
+\code{world} must be provided only if \code{torus = TRUE}.
 
          If the given coordinates \code{[xcor, ycor]}
          are located outside of the \code{world}'s extent and \code{torus = TRUE},
@@ -56,16 +46,14 @@ Set the turtles \code{xcor} and \code{ycor} coordinates.
          is located outside of the \code{world}'s extent with the given coordinates.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
-
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo ="w1")
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 t1 <- setXY(turtles = t1, xcor = 1:5, ycor = 1:5)
-#Plot(t1, addTo ="w1")
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+
 
 }
 \author{

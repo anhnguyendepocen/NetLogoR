@@ -3,22 +3,18 @@
 \docType{methods}
 \name{turtleSet}
 \alias{turtleSet}
-\alias{turtleSet,SpatialPointsDataFrame-method}
 \alias{turtleSet,agentMatrix-method}
 \title{Create a turtle agenset}
 \usage{
 turtleSet(...)
 
-\S4method{turtleSet}{SpatialPointsDataFrame}(...)
-
 \S4method{turtleSet}{agentMatrix}(...)
 }
 \arguments{
-\item{...}{SpatialPointsDataFrame objects created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{...}{AgentMatrix objects representing the moving agents.}
 }
 \value{
-SpatialPointsDataFrame.
+AgentMatrix object containing all the unique turtles.
 }
 \description{
 Report a turtle agentset containing all unique turtles provided in the inputs.
@@ -29,16 +25,13 @@ Duplicated turtles are identified based only on their who numbers.
          To keep all turtles from the inputs, use NLset() to
          reassign who numbers in some of the inputs, prior using
          turtleSet(), to avoid turtles with duplicated who numbers.
-
-         Colors are not updated. Several turtles in the output may have the
-         same color.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
-t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
+t2 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
-t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+t3 <- createTurtlesAM(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
 t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
 t4 <- turtleSet(t1, t2, t3)
 

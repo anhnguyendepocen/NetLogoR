@@ -3,25 +3,18 @@
 \docType{methods}
 \name{turtlesOwn}
 \alias{turtlesOwn}
-\alias{turtlesOwn,SpatialPointsDataFrame,character,ANY-method}
-\alias{turtlesOwn,SpatialPointsDataFrame,character,missing-method}
 \alias{turtlesOwn,agentMatrix,character,ANY-method}
 \alias{turtlesOwn,agentMatrix,character,missing-method}
 \title{New turtles variable}
 \usage{
 turtlesOwn(turtles, tVar, tVal)
 
-\S4method{turtlesOwn}{SpatialPointsDataFrame,character,missing}(turtles, tVar)
-
-\S4method{turtlesOwn}{SpatialPointsDataFrame,character,ANY}(turtles, tVar, tVal)
-
 \S4method{turtlesOwn}{agentMatrix,character,missing}(turtles, tVar)
 
 \S4method{turtlesOwn}{agentMatrix,character,ANY}(turtles, tVar, tVal)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{tVar}{Character. the name of the \code{turtles} variable to create.}
 
@@ -30,14 +23,14 @@ Must be of length 1 or of length \code{turtles}.
 If missing, \code{NA} is given.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with the new
+AgentMatrix representing the \code{turtles} with the new
         variable \code{tVar} added.
 }
 \description{
-Create a new variable for the turtles.
+Create a new variable for the \code{turtles}.
 }
 \examples{
-t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
+t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0, ycor = 0))
 t1 <- turtlesOwn(turtles = t1, tVar = "sex", tVal = c("F", "F", "F", "M", "M"))
 
 

@@ -3,25 +3,18 @@
 \docType{methods}
 \name{tExist}
 \alias{tExist}
-\alias{tExist,SpatialPointsDataFrame,numeric,character-method}
-\alias{tExist,SpatialPointsDataFrame,numeric,missing-method}
 \alias{tExist,agentMatrix,numeric,character-method}
 \alias{tExist,agentMatrix,numeric,missing-method}
 \title{Do the turtles exist?}
 \usage{
 tExist(turtles, who, breed)
 
-\S4method{tExist}{SpatialPointsDataFrame,numeric,missing}(turtles, who)
-
-\S4method{tExist}{SpatialPointsDataFrame,numeric,character}(turtles, who, breed)
-
 \S4method{tExist}{agentMatrix,numeric,missing}(turtles, who)
 
 \S4method{tExist}{agentMatrix,numeric,character}(turtles, who, breed)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 
@@ -31,18 +24,19 @@ If missing, there is no distinction based upon "breed".}
 \value{
 Logical. Vector of \code{TRUE} or \code{FALSE} if the \code{who} numbers
         with any of the \code{breed}, if provided, exist or not
-        inside the \code{turtles} agentset.
+        inside the \code{turtles}.
 }
 \description{
-Report \code{TRUE} if a turtle exists inside the \code{turtles} agentset, report
+Report \code{TRUE} if a turtle exists inside the \code{turtles}, report
 \code{FALSE} otherwise.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 tExist(turtles = t1, who = 3, breed = "sheep")
 tExist(turtles = t1, who = 9, breed = "sheep")
+tExist(turtles = t1, who = 9, breed = c("sheep", "wolf"))
 tExist(turtles = t1, who = c(3, 9))
 
 

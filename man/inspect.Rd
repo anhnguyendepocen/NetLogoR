@@ -3,19 +3,15 @@
 \docType{methods}
 \name{inspect}
 \alias{inspect}
-\alias{inspect,SpatialPointsDataFrame,numeric-method}
 \alias{inspect,agentMatrix,numeric-method}
 \title{Inspect turtles}
 \usage{
 inspect(turtles, who)
 
-\S4method{inspect}{SpatialPointsDataFrame,numeric}(turtles, who)
-
 \S4method{inspect}{agentMatrix,numeric}(turtles, who)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 }
@@ -27,8 +23,8 @@ Dataframe (nrow = \code{length(who)}) with the variables for the selected
 Display the variables values for the selected individuals among the \code{turtles}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createOTurtles(world = w1, n = 10)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createOTurtlesAM(world = w1, n = 10)
 inspect(turtles = t1, who = c(2, 3))
 
 

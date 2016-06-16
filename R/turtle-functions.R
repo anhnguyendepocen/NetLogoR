@@ -1,7 +1,7 @@
 ################################################################################
 #' Create turtles
 #'
-#' Create \code{n} turtles with a set of defined variables.
+#' Create \code{n} moving agents with a set of defined variables.
 #'
 #' @inheritParams fargs
 #'
@@ -18,10 +18,8 @@
 #' @param breed   Character. Vector of "breed" names. Must be of length 1 or of length
 #'                \code{n}. If missing, \code{breed = "turtle"} for all turtles.
 #'
-#' @param agent   description required
-#'
-#' @return SpatialPointsDataFrame of length \code{n} with the columns for the
-#'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
+#' @return AgentMatrix object of length \code{n} with data for the
+#'         turtles being: "xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", and "color".
 #'
 #' @details If \code{coords} is provided, \code{world} must not be provided.
 #'
@@ -38,131 +36,20 @@
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
 #'
 #' @export
 #' @docType methods
-#' @rdname createTurtles
-#'
-#' @author Sarah Bauduin
-#'
-setGeneric(
-  "createTurtles",
-  function(n, coords, world, heading, breed, color, agent=FALSE) {
-    standardGeneric("createTurtles")
-})
-
-#' @export
-#' @importFrom grDevices rainbow
-#' @importFrom stats runif
-#' @rdname createTurtles
-setMethod(
-  "createTurtles",
-  signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
-  definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
-
-    li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
-    names(li) <- names(match.call())[-1]
-
-    if (nrow(li$coords) == 1) {
-      li$coords <- cbind(xcor = as.numeric(rep(li$coords[,1], n)), ycor = as.numeric(rep(li$coords[,2], n)))
-    }
-
-    if (missing(heading))
-      li$heading <- runif(n = n, min = 0, max = 360)
-
-    if (length(li$heading) == 1) {
-      li$heading <- rep(li$heading, n)
-    }
-
-    if (missing(breed))
-      li$breed <- rep("turtle", n)
-
-    if (length(li$breed) == 1) {
-      li$breed <- rep(li$breed, n)
-    }
-
-    if (missing(color))
-      li$color <- rainbow(n)
-
-    if (!agent) {
-    turtles<-SpatialPointsDataFrame(coords = li$coords,
-                            data = data.table(who = seq(from = 0, to = n - 1, by = 1),
-                                              heading = li$heading,
-                                              prevX = rep(NA, n),
-                                              prevY = rep(NA, n),
-                                              breed = li$breed,
-                                              color = li$color, stringsAsFactors=FALSE))
-    }
-    return(turtles)
-  }
-)
-
-#' @export
-#' @importFrom grDevices rainbow
-#' @importFrom stats runif
-#' @rdname createTurtles
-setMethod(
-  "createTurtles",
-  signature = c("numeric", "missing", "NLworlds", "ANY", "ANY", "ANY"),
-  definition = function(n, coords, world, heading, breed, color, agent) {
-    li <- lapply(names(match.call()[-1]), function(x) eval(parse(text = x)))
-    names(li) <- names(match.call())[-1]
-
-    if (missing(heading))
-      li$heading <- runif(n = n, min = 0, max = 360)
-
-    if (length(li$heading) == 1) {
-      li$heading <- rep(li$heading, n)
-    }
-
-    if (missing(breed))
-      li$breed <- rep("turtle", n)
-
-    if (length(li$breed) == 1) {
-      li$breed <- rep(li$breed, n)
-    }
-
-    if (missing(color))
-      li$color <- rainbow(n)
-
-    coords <- cbind(xcor = rep((((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin), n),
-                    ycor = rep((((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin), n))
-
-    out <- createTurtles(n = n, coords = coords, heading = li$heading, breed = li$breed, color = li$color, agent = agent)
-    return(out)
-})
-
-#' \code{createTurtlesAM} is an alternative to \code{createTurtles}, with returned
-#' object of class \code{agentMatrix}.
-#'
-#' @return If using createTurtlesAM, then an agentMatrix class object of length \code{n}
-#'         with the columns being: "pxcor", "pycor", "who", "heading", "prevX", "prevY",
-#'         "breed", and "color".
-#'
-#' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t2 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
-#'
-#' @export
-#' @docType methods
-#' @rdname createTurtles
+#' @rdname createTurtlesAM
 #'
 #' @author Sarah Bauduin
 setGeneric(
   "createTurtlesAM",
-  function(n, coords, world, heading, breed, color, agent=FALSE) {
+  function(n, coords, world, heading, breed, color) {
     standardGeneric("createTurtlesAM")
 })
 
@@ -173,7 +60,7 @@ setGeneric(
 setMethod(
   "createTurtlesAM",
   signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
-  definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
+  definition = function(n, coords, world, heading, breed, color) {
 
     if (missing(heading)) heading <- runif(n = n, min = 0, max = 360)
 
@@ -200,7 +87,7 @@ setMethod(
 setMethod(
   "createTurtlesAM",
   signature = c("numeric", "missing", "ANY", "ANY", "ANY", "ANY"),
-  definition = function(n, coords, world, heading, breed, color, agent = FALSE) {
+  definition = function(n, coords, world, heading, breed, color) {
 
     coords <- cbind(xcor = rep(((maxPxcor(world) - minPxcor(world)) / 2) + minPxcor(world), n),
                     ycor = rep(((maxPycor(world) - minPycor(world)) / 2) + minPycor(world), n))
@@ -233,10 +120,10 @@ setMethod(
 #' Create \code{n} turtles at the center of the \code{world} with their headings evenly
 #' distributed.
 #'
-#' @inheritParams createTurtles
+#' @inheritParams createTurtlesAM
 #'
-#' @return SpatialPointsDataFrame of length \code{n} with the columns for the
-#'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
+#' @return AgentMatrix object of length \code{n} with data for the
+#'         turtles being: "xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", and "color".
 #'
 #' @details The identity of the turtles is defined by their "who" number. This
 #'          numbering starts at 0 and increments by 1.
@@ -251,81 +138,13 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createOTurtles(n = 10, world = w1)
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1") # automatically uses color column in SpatialPointsDataFrame
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createOTurtlesAM(n = 10, world = w1)
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 1)
-#' #Plot(t1, addTo ="w1")
-#'
-#' @export
-#' @docType methods
-#' @rdname createOTurtles
-#'
-#' @author Sarah Bauduin
-#'
-setGeneric(
-  "createOTurtles",
-  function(n, world, breed, color) {
-    standardGeneric("createOTurtles")
-})
-
-#' @export
-#' @importFrom grDevices rainbow
-#' @rdname createOTurtles
-setMethod(
-  "createOTurtles",
-  signature = c(n = "numeric", world = "NLworlds"),
-  definition = function(n, world, breed, color) {
-
-    heading <- numeric(n)
-    heading[1] <- 0
-    if (n > 1) {
-      heading[2:n] <- heading[1:(n-1)] + (360 / n) * (1:(n - 1))
-    }
-
-    li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
-    names(li) <- names(match.call())[-1]
-
-    if (missing(breed))
-      li$breed <- rep("turtle", n)
-
-    if (length(li$breed) == 1) {
-      li$breed <- rep(li$breed, n)
-    }
-
-    if (missing(color))
-      li$color <- rainbow(n)
-
-    createTurtles(n = n, world = world, heading = heading, breed = li$breed, color = li$color)
-})
-
-################################################################################
-#' Create ordered turtles (AM)
-#'
-#' Create \code{n} turtles at the center of the \code{world} with their headings evenly
-#' distributed.
-#'
-#' @inheritParams createTurtlesAM
-#'
-#' @return AgentMatrix of length \code{n} with the columns for the
-#'         dataframe being: "who", "heading", "prevX", "prevY", "breed", and "color".
-#'
-#' @details The identity of the turtles is defined by their "who" number. This
-#'          numbering starts at 0 and increments by 1.
-#'
-#'          The coordinates from the previous time step are stored in "prevX" and
-#'          "prevY". The initial values are \code{NA}.
-#'
-#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#create-ordered-turtles}
-#'
-#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
-#'             Center for Connected Learning and Computer-Based Modeling,
-#'             Northwestern University. Evanston, IL.
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -372,6 +191,7 @@ setMethod(
     createTurtlesAM(n = n, world = world, heading = heading, breed = li$breed, color = li$color)
 })
 
+
 ################################################################################
 #' Move forward
 #'
@@ -386,7 +206,7 @@ setMethod(
 #'                \code{torus = FALSE} and its ending position will be outside of
 #'                the \code{world}'s extent. Default is \code{out = TRUE}.
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#' @return AgentMatrix representing the \code{turtles} with updated
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
@@ -414,16 +234,14 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createOTurtles(world = w1, n = 10)
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createOTurtlesAM(n = 10, world = w1)
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 1)
-#' #Plot(t1, addTo ="w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @importFrom CircStats rad
@@ -438,47 +256,6 @@ setGeneric(
   function(turtles, dist, world, torus = FALSE, out = TRUE) {
     standardGeneric("fd")
 })
-
-#' @export
-#' @rdname fd
-setMethod(
-  "fd",
-  signature = c(turtles = "SpatialPointsDataFrame", dist = "numeric"),
-  definition = function(turtles, dist, world, torus, out) {
-
-    prevXcor <- turtles@coords[,1]
-    prevYcor <- turtles@coords[,2]
-
-    turtles@data$prevX <- prevXcor
-    turtles@data$prevY <- prevYcor
-
-    fdXcor <- prevXcor + sin(rad(turtles@data$heading)) * dist
-    fdYcor <- prevYcor + cos(rad(turtles@data$heading)) * dist
-
-    if (torus == TRUE) {
-      if (missing(world)) {
-        stop("A world must be provided as torus = TRUE")
-      }
-      tCoords <- wrap(cbind(x = fdXcor, y = fdYcor), extent(world))
-      fdXcor <- tCoords[,1]
-      fdYcor <- tCoords[,2]
-    }
-
-    if (torus == FALSE & out == FALSE) {
-      if (missing(world)) {
-        stop("A world must be provided as torus = FALSE and out = FALSE")
-      }
-      outX <- fdXcor < world@extent@xmin | fdXcor > world@extent@xmax
-      outY <- fdYcor < world@extent@ymin | fdYcor > world@extent@ymax
-      outXY <- which(outX | outY) # position of turtles out of the world's extent
-      fdXcor[outXY] <- prevXcor[outXY]
-      fdYcor[outXY] <- prevYcor[outXY]
-    }
-
-    turtles@coords <- cbind(xcor = round(fdXcor, digits = 5), ycor = round(fdYcor, digits = 5))
-    return(turtles)
-  }
-)
 
 #' @export
 #' @importFrom CircStats rad
@@ -535,7 +312,7 @@ setMethod(
 #'
 #' @inheritParams fd
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#' @return AgentMatrix representing the \code{turtles} with updated
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
@@ -566,20 +343,18 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createOTurtles(world = w1, n = 10)
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createOTurtlesAM(n = 10, world = w1)
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 2)
-#' #Plot(t1, addTo ="w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #' t1 <- bk(turtles = t1, dist = 1)
-#' #Plot(t1, addTo ="w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #' t1 <- fd(turtles = t1, dist = 0.5)
-#' #Plot(t1, addTo ="w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -592,16 +367,6 @@ setGeneric(
   function(turtles, dist, world, torus = FALSE, out = TRUE) {
     standardGeneric("bk")
 })
-
-#' @export
-#' @rdname bk
-setMethod(
-  "bk",
-  signature = c(turtles = "SpatialPointsDataFrame", dist = "numeric"),
-  definition = function(turtles, dist, world, torus, out) {
-    fd(turtles = turtles, dist = -dist, world = world, torus = torus, out = out)
-  }
-)
 
 #' @export
 #' @rdname bk
@@ -636,7 +401,7 @@ setMethod(
 #'                \code{home = "corner"} will place the \code{turtles} at the left bottom
 #'                corner of the \code{world}.
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#' @return AgentMatrix representing the \code{turtles} with updated
 #'         coordinates and updated data for their previous coordinates "prevX"
 #'         and "prevY".
 #'
@@ -647,16 +412,15 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
 #' t1 <- home(world = w1, turtles = t1, home = "pCorner")
-#' #Plot(t1, addTo ="w1")
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = "red", pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -669,39 +433,6 @@ setGeneric(
   function(world, turtles, home) {
     standardGeneric("home")
   })
-
-#' @export
-#' @rdname home
-setMethod(
-  "home",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "character"),
-  definition = function(world, turtles, home) {
-
-    if (home == "home0") {
-      if (world@extent@xmin <= 0 & world@extent@xmax >= 0 & world@extent@ymin <= 0 & world@extent@ymax >= 0) {
-        newTurtles<- setXY(turtles = turtles, xcor = 0, ycor = 0, world = world, torus = FALSE)
-      } else {
-        stop("The world provided does not contain the location [x = 0, y = 0]")
-      }
-    }
-
-    if (home == "center") {
-      newTurtles<- setXY(turtles = turtles, xcor = (((world@extent@xmax - world@extent@xmin) / 2) + world@extent@xmin),
-                         ycor = (((world@extent@ymax - world@extent@ymin) / 2) + world@extent@ymin),
-                         world = world, torus = FALSE)
-    }
-
-    if (home == "pCorner") {
-      newTurtles<- setXY(turtles = turtles, xcor = minPxcor(world), ycor = minPycor(world), world = world, torus = FALSE)
-    }
-
-    if (home == "corner") {
-      newTurtles<- setXY(turtles = turtles, xcor = world@extent@xmin, ycor = world@extent@ymin, world = world, torus = FALSE)
-    }
-
-    return(newTurtles)
-  }
-)
 
 #' @export
 #' @rdname home
@@ -764,8 +495,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createOTurtles(world = w1, n = 10)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createOTurtlesAM(world = w1, n = 10)
 #' dx(turtles = t1)
 #'
 #'
@@ -781,27 +512,6 @@ setGeneric(
   function(turtles, dist = 1) {
     standardGeneric("dx")
   })
-
-#' @export
-#' @rdname dx
-setMethod(
-  "dx",
-  signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, dist) {
-    xIncr <- round(sin(rad(turtles@data$heading)) * dist, digits = 5)
-    return(xIncr)
-  }
-)
-
-#' @export
-#' @rdname dx
-setMethod(
-  "dx",
-  signature = c("SpatialPointsDataFrame", "missing"),
-  definition = function(turtles) {
-    dx(turtles = turtles, dist = 1)
-  }
-)
 
 #' @export
 #' @rdname dx
@@ -849,8 +559,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createOTurtles(world = w1, n = 10)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createOTurtlesAM(world = w1, n = 10)
 #' dy(turtles = t1)
 #'
 #'
@@ -866,27 +576,6 @@ setGeneric(
   function(turtles, dist = 1) {
     standardGeneric("dy")
   })
-
-#' @export
-#' @rdname dy
-setMethod(
-  "dy",
-  signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, dist) {
-    yIncr <- round(cos(rad(turtles@data$heading)) * dist, digits = 5)
-    return(yIncr)
-  }
-)
-
-#' @export
-#' @rdname dy
-setMethod(
-  "dy",
-  signature = c("SpatialPointsDataFrame", "missing"),
-  definition = function(turtles) {
-    dy(turtles = turtles, dist = 1)
-  }
-)
 
 #' @export
 #' @rdname dy
@@ -917,12 +606,10 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with the selected
+#' @return AgentMatrix representing the \code{turtles} with the selected
 #'         ones removed.
 #'
 #' @details The "who" numbers of the remaining \code{turtles} are unchanged.
-#'
-#'          To remove all the \code{turtles}, you can use \code{clearTurtles()}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#die}
 #'
@@ -931,8 +618,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, world = w1)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtlesAM(n = 10, world = w1)
 #' NLcount(t1)
 #' t1 <- die(turtles = t1, who = c(2, 3, 4))
 #' NLcount(t1)
@@ -955,19 +642,6 @@ setGeneric(
 #' @rdname die
 setMethod(
   "die",
-  signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, who) {
-    if (length(who) != 0) {
-      turtles <- turtles[-na.omit(match(who, turtles@data$who)),]
-    }
-    return(turtles)
-})
-
-#' @export
-#' @importFrom stats na.omit
-#' @rdname die
-setMethod(
-  "die",
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
     if (length(who) != 0) {
@@ -975,6 +649,7 @@ setMethod(
     }
     return(turtles)
 })
+
 
 ################################################################################
 #' Hatch new turtles
@@ -989,7 +664,7 @@ setMethod(
 #' @param breed   Character. One "breed" name. If missing,
 #'                the created turtles are of the same "breed" as their parent turtle.
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with the new
+#' @return AgentMatrix representing the \code{turtles} with the new
 #'         hatched ones.
 #'
 #' @details The parent turtle must be contained in the \code{turtles}.
@@ -999,6 +674,8 @@ setMethod(
 #'          The "who" numbers of the turtles created take on following the highest
 #'          "who" number among the \code{turtles}.
 #'
+#'          All new hatched turtles are placed at the end of the agentMatrix object.
+#'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#hatch}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
@@ -1006,8 +683,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, world = w1)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtlesAM(n = 10, world = w1)
 #' NLcount(t1)
 #' t1 <- hatch(turtles = t1, who = 0, n = 2)
 #' NLcount(t1)
@@ -1026,46 +703,6 @@ setGeneric(
   })
 
 #' @export
-#' @importFrom sp SpatialPointsDataFrame
-#' @rdname hatch
-setMethod(
-  "hatch",
-  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "ANY"),
-  definition = function(turtles, who, n, breed) {
-
-    iTurtle <- match(who, turtles@data$who)
-    parentCoords <- turtles@coords[iTurtle, , drop = FALSE]
-    parentData <- turtles@data[iTurtle, , drop = FALSE]
-
-    if (length(n) != length(iTurtle)) {
-      n <- rep(n, length(iTurtle))
-    }
-    if (any(n == 0)) {
-      iTurtle <- iTurtle[n != 0]
-      parentCoords <- parentCoords[n != 0, , drop = FALSE]
-      parentData <- parentData[n != 0, , drop = FALSE]
-      n <- n[n != 0]
-    }
-
-    # if (length(iTurtle) == 1) { # parentCoords is numeric
-    #   newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[1]), n), ycor = rep(as.numeric(parentCoords[2]), n)))
-    # } else { # parentCoords is a matrix
-      newCoords <- rbind(turtles@coords, cbind(xcor = rep(as.numeric(parentCoords[,1]), n), ycor = rep(as.numeric(parentCoords[,2]), n)))
-    # }
-    newData <- rbind(turtles@data, parentData[rep(seq_len(nrow(parentData)), n),])
-    rownames(newData) <- seq_len(nrow(newData))
-
-    # Update the who numbers and breed
-    newData[(nrow(turtles) + 1):nrow(newData), "who"] <- (max(turtles@data$who) + 1):(max(turtles@data$who) + sum(n))
-    if (!missing(breed)) {
-      newData[(nrow(turtles) + 1):nrow(newData), "breed"] <- breed
-    }
-
-    newTurtles <- SpatialPointsDataFrame(coords = newCoords, data = newData)
-    return(newTurtles)
-})
-
-#' @export
 #' @rdname hatch
 setMethod(
   "hatch",
@@ -1074,12 +711,7 @@ setMethod(
 
     iTurtle <- match(who, turtles@.Data[,"who"])
     newData <- turtles@.Data[iTurtle,,drop = FALSE]
-    # if (n != 1) {
-    #   newData <- newData[rep(seq_len(nrow(newData)), each = n),]
-    # }
-    #
-    # newData[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(max(turtles@.Data[,"who"]) + (n * length(iTurtle)))
-    #
+
     # Allow n to be different
     if (length(n) != length(iTurtle)) {
       n <- rep(n, length(iTurtle))
@@ -1126,8 +758,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, world = w1)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtlesAM(n = 10, world = w1)
 #' canMove(world = w1, turtles = t1, dist = 1:10)
 #'
 #'
@@ -1142,19 +774,6 @@ setGeneric(
   function(world, turtles, dist) {
     standardGeneric("canMove")
   })
-
-#' @export
-#' @rdname canMove
-setMethod(
-  "canMove",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "numeric"),
-  definition = function(world, turtles, dist) {
-    wrapFalse <- fd(world = world, turtles = turtles, dist = dist, torus = FALSE)
-    wrapTrue <- fd(world = world, turtles = turtles, dist = dist, torus = TRUE)
-    test <- wrapFalse@coords == wrapTrue@coords
-    return(test[,1] & test[,2])
-  }
-)
 
 #' @export
 #' @rdname canMove
@@ -1187,13 +806,12 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createTurtlesAM(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                           ycor = randomYcor(world = w1, n = 10)))
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -1205,24 +823,6 @@ setGeneric(
   "randomXcor",
   function(world, n) {
     standardGeneric("randomXcor")
-})
-
-#' @export
-#' @importFrom stats runif
-#' @rdname randomXcor
-setMethod(
-  "randomXcor",
-  signature = c("NLworlds", "numeric"),
-  definition = function(world, n) {
-
-    if (n == 0) {
-      return(xcor = numeric())
-    } else {
-      xmin <- world@extent@xmin
-      xmax <- world@extent@xmax
-      xcor <- round(runif(n = n, min = xmin, max = xmax), digits = 5)
-      return(xcor)
-    }
 })
 
 #' @export
@@ -1256,13 +856,12 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                            ycor = randomYcor(world = w1, n = 10)))
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -1281,24 +880,6 @@ setGeneric(
 #' @rdname randomYcor
 setMethod(
   "randomYcor",
-  signature = c("NLworlds", "numeric"),
-  definition = function(world, n) {
-
-    if (n == 0) {
-      return(ycor = numeric())
-    } else {
-      ymin <- world@extent@ymin
-      ymax <- world@extent@ymax
-      ycor <- round(runif(n = n, min = ymin, max = ymax), digits = 5)
-      return(ycor)
-    }
-})
-
-#' @export
-#' @importFrom stats runif
-#' @rdname randomYcor
-setMethod(
-  "randomYcor",
   signature = c("NLworldMs", "numeric"),
   definition = function(world, n) {
 
@@ -1309,6 +890,7 @@ setMethod(
       return(ycor)
     }
 })
+
 
 ################################################################################
 #' Directions towards
@@ -1324,7 +906,7 @@ setMethod(
 #'          or if different, one of them must have only one agent/location. If
 #'          \code{agents} and \code{agents2} have the same number of agents/locations,
 #'          the directions are calculated for each pair \code{agents[i]} and \code{agents2[i]}
-#'          and not for each \code{agents} towards all the \code{agents2}.
+#'          and not for each \code{agents} towards every single \code{agents2}.
 #'
 #'          If \code{torus = FALSE}, \code{world} does not need to be provided.
 #'
@@ -1345,9 +927,9 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
-#' t1 <- createTurtles(n = 10, world = w1)
+#' t1 <- createTurtlesAM(n = 10, world = w1)
 #' towards(agents = t1, agents2 = cbind(x = 0, y = 0))
 #'
 #'
@@ -1467,42 +1049,6 @@ setMethod(
   }
 )
 
-#' @export
-#' @rdname towards
-setMethod(
-  "towards",
-  signature = c(agents = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(agents, agents2, world, torus) {
-    heading <- towards(agents = agents@coords, agents2 = agents2, world = world, torus = torus)
-    # The direction to a turtle's location return the turtle's heading
-    heading <- ifelse(agents@coords[,1] == agents2[,1] & agents@coords[,2] == agents2[,2], agents@data$heading, heading)
-    return(heading)
-  }
-)
-
-#' @export
-#' @rdname towards
-setMethod(
-  "towards",
-  signature = c(agents = "matrix", agents2 = "SpatialPointsDataFrame"),
-  definition = function(agents, agents2, world, torus) {
-    towards(agents = agents, agents2 = agents2@coords, world = world, torus = torus)
-  }
-)
-
-#' @export
-#' @rdname towards
-setMethod(
-  "towards",
-  signature = c(agents = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(agents, agents2, world, torus) {
-    heading <- towards(agents = agents@coords, agents2 = agents2@coords, world = world, torus = torus)
-    # The direction to a turtle's location return the turtle's heading
-    heading <- ifelse(agents@coords[,1] == agents2@coords[,1] & agents@coords[,2] == agents2@coords[,2], agents@data$heading, heading)
-    return(heading)
-  }
-)
-
 
 ################################################################################
 #' Face something
@@ -1511,7 +1057,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated headings.
+#' @return AgentMatrix representing the \code{turtles} with updated headings.
 #'
 #' @details The number of agents/locations in \code{agents2} must be equal to 1 or
 #'          to the length of \code{turtles}.
@@ -1534,17 +1080,15 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
 #' t1 <- fd(turtles = t1, dist = 0.5)
-#' #Plot(t1, addTo = "w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -1557,30 +1101,6 @@ setGeneric(
   function(turtles, agents2, world, torus = FALSE) {
     standardGeneric("face")
   })
-
-#' @export
-#' @rdname face
-setMethod(
-  "face",
-  signature = c(turtles = "SpatialPointsDataFrame", agents2 = "matrix"),
-  definition = function(turtles, agents2, world, torus) {
-
-    newHeading <- towards(agents = turtles, agents2 = agents2, world = world, torus = torus)
-    turtles@data$heading <- newHeading
-    return(turtles)
-
-  }
-)
-
-#' @export
-#' @rdname face
-setMethod(
-  "face",
-  signature = c(turtles = "SpatialPointsDataFrame", agents2 = "SpatialPointsDataFrame"),
-  definition = function(turtles, agents2, world, torus) {
-    face(turtles = turtles, agents2 = agents2@coords, world = world, torus = torus)
-  }
-)
 
 #' @export
 #' @rdname face
@@ -1606,7 +1126,7 @@ setMethod(
 #' @param angle   Numeric. Vector of angles in degrees by which to rotate the \code{turtles}'
 #'                headings. Must be of length 1 or of length \code{turtles}.
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated "heading" values.
+#' @return AgentMatrix representing the \code{turtles} with updated "heading" values.
 #'
 #' @details If a given \code{angle} value is negative, then the turtle rotates to the right.
 #'
@@ -1617,8 +1137,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, world = w1)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtlesAM(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- left(turtles = t1, angle = 180)
 #' of(agents = t1, var = "heading")
@@ -1635,21 +1155,6 @@ setGeneric(
   function(turtles, angle) {
     standardGeneric("left")
   })
-
-#' @export
-#' @rdname left
-setMethod(
-  "left",
-  signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, angle) {
-    newHeading <- turtles@data$heading - angle
-    newHeading[newHeading < 0] <- newHeading[newHeading < 0] + 360
-    newHeading[newHeading >= 360] <- newHeading[newHeading >= 360] - 360
-
-    turtles@data$heading <- newHeading
-    return(turtles)
-  }
-)
 
 #' @export
 #' @rdname left
@@ -1676,7 +1181,7 @@ setMethod(
 #'
 #' @inheritParams left
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated "heading" values.
+#' @return AgentMatrix representing the \code{turtles} with updated "heading" values.
 #'
 #' @details If a given \code{angle} value is negative, then the turtle rotates to the left.
 #'
@@ -1687,8 +1192,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtles(n = 10, world = w1)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' t1 <- createTurtlesAM(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- right(turtles = t1, angle = 180)
 #' of(agents = t1, var = "heading")
@@ -1710,16 +1215,6 @@ setGeneric(
 #' @rdname right
 setMethod(
   "right",
-  signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, angle) {
-    left(turtles = turtles, angle = -angle)
-  }
-)
-
-#' @export
-#' @rdname right
-setMethod(
-  "right",
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, angle) {
     left(turtles = turtles, angle = -angle)
@@ -1734,7 +1229,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#' @return AgentMatrix representing the \code{turtles} with updated
 #'         coordinates and updated data for their "heading" values and
 #'         previous coordinates "prevX"
 #'         and "prevY".
@@ -1760,16 +1255,14 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
+#' w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10, runif(100))
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
-#' #Plot(t1, addTo = "w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @importFrom data.table rbindlist
@@ -1789,76 +1282,14 @@ setGeneric(
 #' @rdname downhill
 setMethod(
   "downhill",
-  signature = c(world = "NLworld", pVar = "missing",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
-  definition = function(world, turtles, nNeighbors, torus) {
-
-    # ## Output neighbors() as a list
-    # pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
-    # pValues <- values(world) # ordered by cellNumbers
-    #
-    # pListDF <- lapply(pNeighbors, as.data.frame)
-    # pDF <- as.data.frame(rbindlist(pListDF)) # faster than do.call(rbind, ...)
-    # pDF$id <- rep(1:length(turtles), unlist(lapply(pNeighbors, nrow)))
-    # tDF <- data.frame(patchHere(world, turtles), id = 1:length(turtles))
-    # allPatches <- rbind(pDF, tDF) # neighbors patches + patches under the turtles
-    # ##
-
-    ## Output neighbors() as a matrix
-    pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
-    pValues <- values(world) # ordered by cellNumbers
-    tDF <- data.frame(patchHere(world, turtles), id = 1:length(turtles))
-    allPatches <- rbind(pNeighbors, tDF) # neighbors patches + patches under the turtles
-    ##
-
-    allPatches$cellNum <- cellFromPxcorPycor(world = world, pxcor = allPatches$pxcor, pycor = allPatches$pycor)
-    allPatches$pVal <- pValues[allPatches$cellNum]
-
-    # Slow
-    # pMin <- aggregate(pVal ~ id, allPatches, function(x) min(x)) # minimum patch value per id
-    # pMinCoords <- merge(pMin, allPatches)
-    # pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
-    # pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
-    # pMinCoords2 <- cbind(pxcor = pMinCoords1[,3], pycor = pMinCoords1[,4])
-
-    # Faster
-    rows <- split(1:nrow(allPatches), allPatches$id)
-    rowMin <- sapply(rows, function(rowi) {rowi[which.min(allPatches$pVal[rowi])]}) # minimum patch value per id
-    pMinCoords <- allPatches[rowMin,]
-    pMinCoords1 <- pMinCoords[tapply(1:nrow(pMinCoords), pMinCoords$id, some, 1),] # select randomly one row per id
-    pMinCoords1 <- pMinCoords1[order(pMinCoords1$id),] # order by turtles
-    pMinCoords2 <- cbind(pxcor = pMinCoords1[,1], pycor = pMinCoords1[,2])
-
-    newTurtles <- face(world = world, turtles = turtles, agents2 = pMinCoords2, torus = torus)
-    newTurtles <- moveTo(turtles = newTurtles, agents = pMinCoords2)
-    return(newTurtles)
-  }
-)
-
-#' @export
-#' @rdname downhill
-setMethod(
-  "downhill",
-  signature = c(world = "NLworldStack", pVar = "character",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
-  definition = function(world, pVar, turtles, nNeighbors, torus) {
-    pos_l <- which(names(world) == pVar, TRUE) # find the layer
-    world_l <- world[[pos_l]]
-    downhill(world = world_l, turtles = turtles, nNeighbors = nNeighbors, torus = torus)
-  }
-)
-
-#' @export
-#' @rdname downhill
-setMethod(
-  "downhill",
   signature = c(world = "NLworldMatrix", pVar = "missing",turtles = "agentMatrix", nNeighbors = "numeric"),
   definition = function(world, turtles, nNeighbors, torus) {
 
-    ## Output neighbors() as a matrix
+    # Output neighbors() as a matrix
     pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
     pValues <- as.numeric(t(world@.Data)) # ordered by cellNumbers
     tDF <- data.frame(patchHere(world, turtles), id = 1:NLcount(turtles))
     allPatches <- rbind(pNeighbors, tDF) # neighbors patches + patches under the turtles
-    ##
 
     allPatches$cellNum <- cellFromPxcorPycor(world = world, pxcor = allPatches$pxcor, pycor = allPatches$pycor)
     allPatches$pVal <- pValues[allPatches$cellNum]
@@ -1883,7 +1314,7 @@ setMethod(
   signature = c(world = "NLworldArray", pVar = "character",turtles = "agentMatrix", nNeighbors = "numeric"),
   definition = function(world, pVar, turtles, nNeighbors, torus) {
 
-    ## Output neighbors() as a matrix
+    # Output neighbors() as a matrix
     pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
 
     ## Only difference with method for NLworldMatrix
@@ -1893,7 +1324,6 @@ setMethod(
 
     tDF <- data.frame(patchHere(world, turtles), id = 1:NLcount(turtles))
     allPatches <- rbind(pNeighbors, tDF) # neighbors patches + patches under the turtles
-    ##
 
     allPatches$cellNum <- cellFromPxcorPycor(world = world, pxcor = allPatches$pxcor, pycor = allPatches$pycor)
     allPatches$pVal <- pValues[allPatches$cellNum]
@@ -1919,7 +1349,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#' @return AgentMatrix representing the \code{turtles} with updated
 #'         coordinates and updated data for their "heading" values and
 #'         previous coordinates "prevX"
 #'         and "prevY".
@@ -1945,16 +1375,14 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
+#' w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10, data = runif(100))
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
-#' #Plot(t1, addTo = "w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -1967,31 +1395,6 @@ setGeneric(
   function(world, pVar, turtles, nNeighbors, torus = FALSE) {
     standardGeneric("uphill")
   })
-
-#' @export
-#' @rdname uphill
-setMethod(
-  "uphill",
-  signature = c(world = "NLworld", pVar = "missing",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
-  definition = function(world, turtles, nNeighbors, torus) {
-    # Uphill is the inverse of downhill
-    worldInv <- world
-    worldInv[] <- 1 / values(world)
-    downhill(world = worldInv, turtles = turtles, nNeighbors = nNeighbors, torus = torus)
-  }
-)
-
-#' @export
-#' @rdname uphill
-setMethod(
-  "uphill",
-  signature = c(world = "NLworldStack", pVar = "character",turtles = "SpatialPointsDataFrame", nNeighbors = "numeric"),
-  definition = function(world, pVar, turtles, nNeighbors, torus) {
-    pos_l <- which(names(world) == pVar, TRUE) # find the layer
-    world_l <- world[[pos_l]]
-    uphill(world = world_l, turtles = turtles, nNeighbors = nNeighbors, torus = torus)
-  }
-)
 
 #' @export
 #' @rdname uphill
@@ -2045,8 +1448,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchAhead(world = w1, turtles = t1, dist = 1)
 #'
 #'
@@ -2062,21 +1465,6 @@ setGeneric(
   function(world, turtles, dist, torus = FALSE) {
     standardGeneric("patchAhead")
   })
-
-#' @export
-#' @rdname patchAhead
-setMethod(
-  "patchAhead",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric"),
-  definition = function(world, turtles, dist, torus) {
-
-    xcor <- round(turtles@coords[,1] + sin(rad(turtles@data$heading)) * dist, digits = 5)
-    ycor <- round(turtles@coords[,2] + cos(rad(turtles@data$heading)) * dist, digits = 5)
-    pAhead <- patch(world = world, x = xcor, y = ycor, duplicate = TRUE, torus = torus, out = TRUE)
-    return(pAhead)
-
-  }
-)
 
 #' @export
 #' @rdname patchAhead
@@ -2117,8 +1505,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchHere(world = w1, turtles = t1)
 #'
 #'
@@ -2138,32 +1526,6 @@ setGeneric(
 #' @rdname patchHere
 setMethod(
   "patchHere",
-  signature = c("NLworlds", "SpatialPointsDataFrame"),
-  definition = function(world, turtles) {
-
-    pTurtles <- patch(world = world, x = turtles@coords[,1], y = turtles@coords[,2], duplicate = TRUE, out = TRUE)
-    return(pTurtles)
-
-  }
-)
-
-#' @export
-#' @rdname patchHere
-setMethod(
-  "patchHere",
-  signature = c("NLworldMs", "SpatialPointsDataFrame"),
-  definition = function(world, turtles) {
-
-    pTurtles <- patch(world = world, x = turtles@coords[,1], y = turtles@coords[,2], duplicate = TRUE, out = TRUE)
-    return(pTurtles)
-
-  }
-)
-
-#' @export
-#' @rdname patchHere
-setMethod(
-  "patchHere",
   signature = c("NLworldMs", "agentMatrix"),
   definition = function(world, turtles) {
 
@@ -2173,6 +1535,7 @@ setMethod(
 
   }
 )
+
 
 ################################################################################
 #' Patches on the left
@@ -2208,8 +1571,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchLeft(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
 #'
@@ -2224,21 +1587,6 @@ setGeneric(
   function(world, turtles, dist, angle, torus = FALSE) {
     standardGeneric("patchLeft")
   })
-
-#' @export
-#' @rdname patchLeft
-setMethod(
-  "patchLeft",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", angle = "numeric"),
-  definition = function(world, turtles, dist, angle, torus) {
-
-    tLeft <- left(turtles = turtles, angle = angle)
-    tFd <- fd(world = world, turtles = tLeft, dist = dist, torus = torus)
-    pLeftFd <- patchHere(world = world, turtles = tFd)
-
-    return(pLeftFd)
-  }
-)
 
 #' @export
 #' @rdname patchLeft
@@ -2286,8 +1634,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchRight(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
 #'
@@ -2302,16 +1650,6 @@ setGeneric(
   function(world, turtles, dist, angle, torus = FALSE) {
     standardGeneric("patchRight")
   })
-
-#' @export
-#' @rdname patchRight
-setMethod(
-  "patchRight",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", dist = "numeric", angle = "numeric"),
-  definition = function(world, turtles, dist, angle, torus) {
-    patchLeft(world = world, turtles = turtles, dist = dist, angle = -angle, torus = torus)
-  }
-)
 
 #' @export
 #' @rdname patchRight
@@ -2337,10 +1675,10 @@ setMethod(
 #' @param ycor    Numeric. Vector of y coordinates. Must be of length 1 or
 #'                of length \code{turtles}.
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+#' @return AgentMatrix representing the \code{turtles} with updated coordinates
 #'         and updated data for their previous coordinates "prevX" and "prevY"
 #'
-#' @details \code{world} must be provided if only if \code{torus = TRUE}.
+#' @details \code{world} must be provided only if \code{torus = TRUE}.
 #'
 #'          If the given coordinates \code{[xcor, ycor]}
 #'          are located outside of the \code{world}'s extent and \code{torus = TRUE},
@@ -2355,16 +1693,14 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+#' t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- setXY(turtles = t1, xcor = 1:5, ycor = 1:5)
-#' #Plot(t1, addTo ="w1")
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -2378,41 +1714,6 @@ setGeneric(
     standardGeneric("setXY")
   })
 
-#' @export
-#' @rdname setXY
-setMethod(
-  "setXY",
-  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "missing", "ANY"),
-  definition = function(turtles, xcor, ycor, torus) {
-
-    turtles@data$prevX <- turtles@coords[,1]
-    turtles@data$prevY <- turtles@coords[,2]
-
-    if (length(xcor) == 1 & length(turtles) != 1) {
-      xcor <- as.numeric(rep(xcor, length(turtles)))
-    }
-    if (length(ycor) == 1 & length(turtles) != 1) {
-      ycor <- as.numeric(rep(ycor, length(turtles)))
-    }
-    turtles@coords <- cbind(xcor, ycor)
-
-    return(turtles)
-  }
-)
-
-#' @export
-#' @importFrom SpaDES wrap
-#' @rdname setXY
-setMethod(
-  "setXY",
-  signature = c("SpatialPointsDataFrame", "numeric", "numeric", "NLworlds", "logical"),
-  definition = function(turtles, xcor, ycor, world, torus) {
-
-    wrapCoords <- wrap(cbind(x = xcor, y = ycor), extent(world))
-    setXY(turtles = turtles, xcor = wrapCoords[,1], ycor = wrapCoords[,2], torus = FALSE)
-
-  }
-)
 
 #' @export
 #' @rdname setXY
@@ -2451,105 +1752,27 @@ setMethod(
   }
 )
 
+
 ################################################################################
 #' Sprout new turtles
 #'
 #' Create \code{n} new turtles on specific \code{patches}.
 #'
-#' @inheritParams createTurtles
+#' @param n Integer. Vector of length 1 or of length the number of \code{patches}.
+#'          Number of new turtles
+#'          to create on each patch.
 #'
-#' @inheritParams fargs
+#' @param heading	Numeric. Vector of values between 0 and 360.
+#'                Must be of length 1 or of length the number of \code{patches}.
+#'                If missing, a random heading is assigned to each sprouted turtle.
 #'
-#' @return SpatialPointsDataFrame including the new
-#'         sprouted turtles.
+#' @param breed	Character. Vector of "breed" names.
+#'              Must be of length 1 or of length the number of \code{patches}.
+#'              If missing, breed = "turtle" for all the sprouted turtles.
 #'
-#' @details \code{nrow(patches)} must be equal to 1 or to \code{n}.
-#'
-#'          If \code{turtles} is provided, the new turtles are added to
-#'          the \code{turtles} when returned. The who numbers of the sprouted turtles
-#'          therefore follow the ones from the \code{turtles}. If no \code{turtles}
-#'          is provided, a new SpatialPointsDataFrame is created and the who numbers
-#'          start at 0.
-#'
-#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#sprout}
-#'
-#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
-#'             Center for Connected Learning and Computer-Based Modeling,
-#'             Northwestern University. Evanston, IL.
-#'
-#' @examples
-#' t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)
-#' t2 <- sprout(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
-#'
-#'
-#' @export
-#' @docType methods
-#' @rdname sprout
-#'
-#' @author Sarah Bauduin
-#'
-setGeneric(
-  "sprout",
-  function(n, patches, breed, heading, color, turtles) {
-    standardGeneric("sprout")
-})
-
-#' @export
-#' @importFrom grDevices rainbow
-#' @importFrom sp SpatialPointsDataFrame
-#' @importFrom stats runif
-#' @rdname sprout
-setMethod(
-  "sprout",
-  signature = c(n = "numeric", patches = "matrix"),
-  definition = function(n, patches, breed, heading, color, turtles) {
-
-    li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
-    names(li) <- names(match.call())[-1]
-
-    if (nrow(li$patches) == 1 & n != 1) {
-      li$patches <- cbind(as.numeric(rep(li$patches[,1], n)), as.numeric(rep(li$patches[,2], n)))
-    }
-    colnames(li$patches) <- c("xcor", "ycor")
-
-    if (missing(breed))
-      li$breed <- rep("turtle", n)
-
-    if (length(li$breed) == 1) {
-      li$breed <- rep(li$breed, n)
-    }
-
-    if (missing(heading))
-      li$heading <- runif(n = n, min = 0, max = 360)
-
-    if (length(li$heading) == 1) {
-      li$heading <- rep(li$heading, n)
-    }
-
-    if (missing(color))
-      li$color <- rainbow(n)
-
-    newTurtles <- createTurtles(n = n, coords = li$patches, heading = li$heading, breed = li$breed, color = li$color)
-
-    if (missing(turtles)) {
-      return(newTurtles)
-    } else {
-      newTurtles@data$who <- (max(turtles@data$who) + 1):(n + max(turtles@data$who)) # unique who number
-      newColor <- rainbow(n + length(turtles))
-      newTurtles@data$color <- sample(newColor[! newColor %in% turtles@data$color], n) # unique color
-      bothTurtles <- SpatialPointsDataFrame(coords = rbind(turtles@coords, newTurtles@coords),
-                                            data = rbind(turtles@data, newTurtles@data))
-      return(bothTurtles)
-    }
-  }
-)
-
-################################################################################
-#' Sprout new turtles (AM)
-#'
-#' Create \code{n} new turtles on specific \code{patches}.
-#'
-#' @inheritParams createTurtles
+#' @param color	Character. Vector of color names.
+#'              Must be of length 1, of length the number of \code{patches} or of length \code{sum(n)}.
+#'              If missing, colors are assigned using the function rainbow(n)
 #'
 #' @inheritParams fargs
 #'
@@ -2560,7 +1783,9 @@ setMethod(
 #'
 #'          If \code{turtles} is provided, the new turtles are added to
 #'          the \code{turtles} when returned. The who numbers of the sprouted turtles
-#'          therefore follow the ones from the \code{turtles}. If no \code{turtles}
+#'          therefore follow the ones from the \code{turtles}.
+#'          All new sprouted turtles are placed at the end of the agentMatrix object.
+#'          If no \code{turtles}
 #'          is provided, a new agentMatrix is created and the who numbers
 #'          start at 0.
 #'
@@ -2598,46 +1823,68 @@ setMethod(
 
     li <- lapply(names(match.call()[-1]), function(x) eval(parse(text=x)))
     names(li) <- names(match.call())[-1]
+    if(length(n) == 1){
+      if (nrow(li$patches) == 1 & n != 1) {
+        li$patches <- cbind(as.numeric(rep(li$patches[,1], n)), as.numeric(rep(li$patches[,2], n)))
+      }
+      colnames(li$patches) <- c("xcor", "ycor")
 
-    if (nrow(li$patches) == 1 & n != 1) {
+      if (missing(breed))
+        li$breed <- rep("turtle", n)
+
+      if (length(li$breed) == 1) {
+        li$breed <- rep(li$breed, n)
+      }
+
+      if (missing(heading)) li$heading <- runif(n = n, min = 0, max = 360)
+
+      if (length(li$heading) == 1) {
+        li$heading <- rep(li$heading, n)
+      }
+
+      if (missing(color)) li$color <- rainbow(n)
+
+      newTurtles <- createTurtlesAM(n = n, coords = li$patches, heading = li$heading, breed = li$breed, color = li$color)
+
+    } else { # if length(n) != 0
+
       li$patches <- cbind(as.numeric(rep(li$patches[,1], n)), as.numeric(rep(li$patches[,2], n)))
+      colnames(li$patches) <- c("xcor", "ycor")
+
+      if (missing(breed)) li$breed <- rep("turtle", sum(n))
+      if (length(li$breed) == 1) {
+        li$breed <- rep(li$breed, sum(n))
+      } else if(length(li$breed) != sum(n)){
+        li$breed <- rep(li$breed, n)
+      }
+
+      if (missing(heading)) li$heading <- runif(n = sum(n), min = 0, max = 360)
+      if (length(li$heading) == 1) {
+        li$heading <- rep(li$heading, sum(n))
+      } else if(length(li$heading) != sum(n)){
+        li$heading <- rep(li$heading, n)
+      }
+
+      if (missing(color)) li$color <- rainbow(sum(n))
+      if (length(li$color) == 1) {
+        li$color <- rep(li$color, sum(n))
+      } else if(length(li$color) != sum(n)){
+        li$color <- rep(li$color, n)
+      }
+
+      newTurtles <- createTurtlesAM(n = sum(n), coords = li$patches, heading = li$heading, breed = li$breed, color = li$color)
     }
-    colnames(li$patches) <- c("xcor", "ycor")
-
-    if (missing(breed))
-      li$breed <- rep("turtle", n)
-
-    if (length(li$breed) == 1) {
-      li$breed <- rep(li$breed, n)
-    }
-
-    if (missing(heading)) li$heading <- runif(n = n, min = 0, max = 360)
-
-    if (length(li$heading) == 1) {
-      li$heading <- rep(li$heading, n)
-    }
-
-    if (missing(color)) li$color <- rainbow(n)
-
-    newTurtles <- createTurtlesAM(n = n, coords = li$patches, heading = li$heading, breed = li$breed, color = li$color)
 
     if (missing(turtles)) {
       return(newTurtles)
     } else {
-      newTurtles@.Data[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(n + max(turtles@.Data[,"who"])) # unique who number
-      newColor <- rainbow(n + length(turtles@levels$color))
-      newTurtlesColor <- sample(newColor[! newColor %in% turtles@levels$color], n) # unique color
-      newTurtles@.Data[,"color"] <- (length(turtles@levels$color) + 1):(n + length(turtles@levels$color)) # unique color number
-
-      if (is.na(match(newTurtles@levels$breed, turtles@levels$breed))) { # breed newTurtles not contained into turtles
-        newTurtles@.Data[,"breed"] <- (length(turtles@levels$breed) + 1) # unique breed number
-      }
+      newTurtles@.Data[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(NLcount(newTurtles) + max(turtles@.Data[,"who"])) # unique who number
+      newTurtlesBreed <- of(agents = newTurtles, var = "breed")
+      newTurtlesColor <- of(agents = newTurtles, var = "color")
 
       turtles@.Data <- rbind(turtles@.Data, newTurtles@.Data)
-      turtles@levels$color <- c(turtles@levels$color, newTurtlesColor)
-      if (is.na(match(newTurtles@levels$breed, turtles@levels$breed))) { # breed newTurtles not contained into turtles
-        turtles@levels$breed <- c(turtles@levels$breed, newTurtles@levels$breed)
-      }
+      turtles <- NLset(turtles = turtles, agents = newTurtles, var = "breed", val = newTurtlesBreed)
+      turtles <- NLset(turtles = turtles, agents = newTurtles, var = "color", val = newTurtlesColor)
 
       return(turtles)
     }
@@ -2662,8 +1909,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createOTurtles(world = w1, n = 10)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createOTurtlesAM(world = w1, n = 10)
 #' inspect(turtles = t1, who = c(2, 3))
 #'
 #'
@@ -2684,17 +1931,6 @@ setGeneric(
 #' @rdname inspect
 setMethod(
   "inspect",
-  signature = c("SpatialPointsDataFrame", "numeric"),
-  definition = function(turtles, who) {
-    tData <- cbind(turtles[turtles@data$who %in% who,]@data, turtles[turtles@data$who %in% who,]@coords)
-    return(tData)
-  }
-)
-
-#' @export
-#' @rdname inspect
-setMethod(
-  "inspect",
   signature = c("agentMatrix", "numeric"),
   definition = function(turtles, who) {
     tData <- as.data.frame(turtles@.Data[turtles@.Data[,"who"] %in% who,,drop = FALSE], stringsAsFactors = FALSE)
@@ -2707,6 +1943,7 @@ setMethod(
   }
 )
 
+
 ################################################################################
 #' Move to
 #'
@@ -2714,7 +1951,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated coordinates
+#' @return AgentMatrix representing the \code{turtles} with updated coordinates
 #'         and updated data for their previous coordinates "prevX" and "prevY".
 #'
 #' @details The number of \code{agents} must be equal to 1 or to
@@ -2732,18 +1969,17 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo ="w1")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+#' t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
 #' t1 <- moveTo(turtles = t1, agents = turtle(t1, who = 0))
-#' #Plot(t1, addTo ="w1")
+#' points(turtles2spdf(t1), col = "red", pch = 16)
+#'
 #' t1 <- moveTo(turtles = t1, agents = patch(w1, 9, 9))
-#' #Plot(t1, addTo ="w1")
+#' points(turtles2spdf(t1), col = "blue", pch = 16)
+#'
 #'
 #' @export
 #' @docType methods
@@ -2756,26 +1992,6 @@ setGeneric(
   function(turtles, agents) {
     standardGeneric("moveTo")
   })
-
-#' @export
-#' @rdname moveTo
-setMethod(
-  "moveTo",
-  signature = c("SpatialPointsDataFrame", "matrix"),
-  definition = function(turtles, agents) {
-    setXY(turtles = turtles, xcor = as.numeric(agents[,1]), ycor = as.numeric(agents[,2]), torus = FALSE)
-  }
-)
-
-#' @export
-#' @rdname moveTo
-setMethod(
-  "moveTo",
-  signature = c("SpatialPointsDataFrame", "SpatialPointsDataFrame"),
-  definition = function(turtles, agents) {
-    moveTo(turtles = turtles, agents = agents@coords)
-  }
-)
 
 #' @export
 #' @rdname moveTo
@@ -2805,13 +2021,11 @@ setMethod(
 #'         column "ycor".
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
 #'
 #' @export
 #' @docType methods
@@ -2829,17 +2043,6 @@ setGeneric(
 #' @rdname randomXYcor
 setMethod(
   "randomXYcor",
-  signature = c("NLworlds", "numeric"),
-  definition = function(world, n) {
-    xycor <- cbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
-    return(xycor)
-  }
-)
-
-#' @export
-#' @rdname randomXYcor
-setMethod(
-  "randomXYcor",
   signature = c("NLworldMs", "numeric"),
   definition = function(world, n) {
     xycor <- cbind(xcor = randomXcor(world = world, n = n), ycor = randomYcor(world = world, n = n))
@@ -2847,17 +2050,18 @@ setMethod(
   }
 )
 
+
 ################################################################################
 #' Do the turtles exist?
 #'
-#' Report \code{TRUE} if a turtle exists inside the \code{turtles} agentset, report
+#' Report \code{TRUE} if a turtle exists inside the \code{turtles}, report
 #' \code{FALSE} otherwise.
 #'
 #' @inheritParams fargs
 #'
 #' @return Logical. Vector of \code{TRUE} or \code{FALSE} if the \code{who} numbers
 #'         with any of the \code{breed}, if provided, exist or not
-#'         inside the \code{turtles} agentset.
+#'         inside the \code{turtles}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#member}
 #'
@@ -2866,11 +2070,12 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 #' tExist(turtles = t1, who = 3, breed = "sheep")
 #' tExist(turtles = t1, who = 9, breed = "sheep")
+#' tExist(turtles = t1, who = 9, breed = c("sheep", "wolf"))
 #' tExist(turtles = t1, who = c(3, 9))
 #'
 #'
@@ -2885,32 +2090,6 @@ setGeneric(
   function(turtles, who, breed) {
     standardGeneric("tExist")
   })
-
-#' @export
-#' @rdname tExist
-setMethod(
-  "tExist",
-  signature = c("SpatialPointsDataFrame", "numeric", "missing"),
-  definition = function(turtles, who) {
-
-    tExist <- who %in% turtles@data$who
-    return(tExist)
-
-  }
-)
-
-#' @export
-#' @rdname tExist
-setMethod(
-  "tExist",
-  signature = c("SpatialPointsDataFrame", "numeric", "character"),
-  definition = function(turtles, who, breed) {
-
-   tBreed <- turtles[turtles@data$breed %in% breed,]
-   tExist(tBreed, who)
-
-  }
-)
 
 #' @export
 #' @rdname tExist
@@ -2948,12 +2127,12 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame of the selected \code{turtles} sorted in the order of
+#' @return AgentMatrix of the selected \code{turtles} sorted in the order of
 #'         the \code{who} numbers requested. If \code{breed} was provided, the
 #'         \code{turtles} selected are of one of the \code{breed}.
 #'
 #' @details If no turtle matches the given \code{who} numbers, with potentially one of the given
-#'          \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
+#'          \code{breed}, inside \code{turtles}, then an empty agentMatrix is returned.
 #'
 #'          If there are duplicates "who" numbers among the \code{turtles}, the first
 #'          matching turtle with the requested \code{who} number is returned.
@@ -2965,8 +2144,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 #' t2 <- turtle(t1, who = 2)
 #'
 #'
@@ -2980,28 +2159,6 @@ setGeneric(
   "turtle",
   function(turtles, who, breed) {
     standardGeneric("turtle")
-})
-
-#' @export
-#' @importFrom stats na.omit
-#' @rdname turtle
-setMethod(
-  "turtle",
-  signature = c("SpatialPointsDataFrame", "numeric", "missing"),
-  definition = function(turtles, who) {
-    newTurtles <- turtles[na.omit(match(who, turtles@data$who)),] # %>% na.omit %>% sort
-    return(newTurtles)
-})
-
-#' @export
-#' @rdname turtle
-setMethod(
-  "turtle",
-  signature = c("SpatialPointsDataFrame", "numeric", "character"),
-  definition = function(turtles, who, breed) {
-    tBreed <- turtles[turtles@data$breed %in% breed,]
-    turtle(tBreed, who)
-
 })
 
 #' @export
@@ -3034,24 +2191,25 @@ setMethod(
 ################################################################################
 #' Turtles on
 #'
-#' Report the individuals among \code{turtles} that are at the same locations as
-#' the \code{agents}' patches.
+#' Report the individuals among \code{turtles} that are on the same patches as
+#' the \code{agents}.
 #'
 #' @inheritParams fargs
 #'
 #' @param simplify Logical. If \code{simplify = TRUE}, all \code{turtles} on the same
-#'                 location as any \code{agents} are returned; if \code{simplify = FALSE},
-#'                 the \code{turtles} are evaluated on each \code{agents} locations
+#'                 patches as any \code{agents} are returned; if \code{simplify = FALSE},
+#'                 the \code{turtles} are evaluated for each \code{agents}'s patches
 #'                 individually.
 #'
-#' @return SpatialPointsDataFrame representing any individuals from \code{turtles} of
+#' @return AgentMatrix representing any individuals from \code{turtles} of
 #'         any of the given \code{breed}, if speficied,
-#'         located at the same locations as any \code{agents}, if \code{simplify = TRUE}, or
+#'         located on the same patches as any of the \code{agents}, if \code{simplify = TRUE}, or
 #'
 #'         Matrix (ncol = 2) with the first column "whoTurtles" and the second column
 #'         "id" showing which \code{turtles} are on the same
-#'         locations as which \code{agents} represented by "id", if \code{simplify = FALSE}.
-#'         "id" represents and follows the order of the \code{agents}, not the "who" numbers
+#'         patches as which \code{agents} represented by "id", if \code{simplify = FALSE}.
+#'         "id" represents and follows the order of the \code{agents}. "id" does not represent
+#'         the "who" numbers
 #'         of the \code{agents} if \code{agents} are turtles.
 #'
 #' @details The \code{agents} must be located inside the
@@ -3064,13 +2222,10 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
-#'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, runif(100))
+#' t1 <- createTurtlesAM(n = 500, coords = randomXYcor(w1, n = 500))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, 2, 2))
 #'
@@ -3088,114 +2243,6 @@ setGeneric(
   })
 
 #' @export
-#' @rdname turtlesOn
-setMethod(
-  "turtlesOn",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame",
-                agents = "matrix", breed = "missing"),
-  definition = function(world, turtles, agents, simplify) {
-    pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    pTurtles <- cbind(pTurtles, who = turtles@data$who)
-
-
-    if (simplify == TRUE) {
-
-      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-
-      if (nrow(pOn) == 0) {
-        return(noTurtles())
-      } else {
-        turtle(turtles = turtles, who = pOn[,3])
-      }
-
-    } else {
-      agents <- cbind(agents, id = 1:nrow(agents))
-      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-      pOn <- pOn[order(pOn[,"id"]),]
-      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
-      return(turtlesID)
-    }
-  }
-)
-
-#' @export
-#' @rdname turtlesOn
-setMethod(
-  "turtlesOn",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame",
-                agents = "matrix", breed = "character"),
-  definition = function(world, turtles, agents, breed, simplify) {
-    tBreed <- turtles[turtles@data$breed %in% breed,]
-    turtlesOn(world = world, turtles = tBreed, agents = agents, simplify = simplify)
-  }
-)
-
-#' @export
-#' @rdname turtlesOn
-setMethod(
-  "turtlesOn",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame",
-                agents = "SpatialPointsDataFrame", breed = "missing"),
-  definition = function(world, turtles, agents, simplify) {
-    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), simplify = simplify)
-  }
-)
-
-#' @export
-#' @rdname turtlesOn
-setMethod(
-  "turtlesOn",
-  signature = c(world = "NLworlds", turtles = "SpatialPointsDataFrame", agents = "SpatialPointsDataFrame", breed = "character"),
-  definition = function(world, turtles, agents, breed, simplify) {
-    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), breed = breed, simplify = simplify)
-  }
-)
-
-#' @export
-#' @rdname turtlesOn
-setMethod(
-  "turtlesOn",
-  signature = c(world = "NLworldMs", turtles = "SpatialPointsDataFrame",
-                agents = "SpatialPointsDataFrame", breed = "missing"),
-  definition = function(world, turtles, agents, simplify) {
-    turtlesOn(world = world, turtles = turtles, agents = patchHere(world = world, turtles = agents), simplify = simplify)
-  }
-)
-
-
-
-#' @export
-#' @rdname turtlesOn
-setMethod(
-  "turtlesOn",
-  signature = c(world = "NLworldMs", turtles = "SpatialPointsDataFrame",
-                agents = "matrix", breed = "missing"),
-  definition = function(world, turtles, agents, simplify) {
-
-    pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    pTurtles <- cbind(pTurtles, who = turtles@data$who)
-
-    if (simplify == TRUE) {
-
-      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-
-      if (nrow(pOn) == 0) {
-        return(noTurtles())
-      } else {
-        turtle(turtles = turtles, who = pOn[,3])
-      }
-
-    } else {
-      agents <- cbind(agents, id = 1:nrow(agents))
-      pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-      pOn <- pOn[order(pOn[,"id"]),]
-      turtlesID <- cbind(whoTurtles = pOn[,"who"], id = pOn[,"id"])
-      return(turtlesID)
-    }
-  }
-)
-
-#' @export
 #' @importFrom stats na.omit
 #' @rdname turtlesOn
 setMethod(
@@ -3204,9 +2251,6 @@ setMethod(
                 agents = "matrix", breed = "missing"),
   definition = function(world, turtles, agents, simplify) {
 
-    #pTurtles <- patchHere(world = world, turtles = turtles) # patches where the turtles are
-    #pTurtles <- cbind(pTurtles, who = turtles@.Data[,"who"])
-
     if (class(agents) == "agentMatrix") {
       agents = patchHere(world = world, turtles = agents)
     }
@@ -3214,27 +2258,21 @@ setMethod(
     pTurtles <- round(turtles@.Data[,c("xcor", "ycor","who")])
     colnames(pTurtles)[1:2] <- c("pxcor", "pycor") # awkward column name change
 
-    # FASTER ALTERNATIVE TO THE MERGE pOn <- merge(agents, pTurtles)
-    # microbenchmark({
-    # },{
-    #   pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-    # })
-
     if (simplify == TRUE) {
-      #pOn <- merge(agents, pTurtles) # patches where the turtles are among the agents patches
-      # Instead of merge, which is slow, make an empty matrix (of NAs) and use the agents coordinates
-      #   directly
+
+      # Instead of merge, which is slow, make an empty matrix (of NAs) and use the agents coordinates directly
       a = matrix(ncol=ncol(world), nrow=nrow(world))
       a[agents-(c(attr(world, "minPxcor"), attr(world, "minPycor")) - 1)] <- 1 # change this 26 to the dimensions of the world, and next line
       pOn <- na.omit(a[pTurtles[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor")) - 1)] * pTurtles)
 
       if (nrow(pOn) == 0) {
-        return(noTurtles())
+        return(noTurtlesAM())
       } else {
         return(turtle(turtles = turtles, who = pOn[,3]))
       }
 
     } else {
+
       if (any(is.na(agents)))
         agents <- na.omit(agents) # There shouldn't be any NAs passed in here, probably
       agents <- cbind(agents, id = 1:dim(agents)[1])
@@ -3282,57 +2320,9 @@ setMethod(
 #'
 #' Report an empty turtle agentset.
 #'
-#' @param x  documentation needed
-#'
-#' @return SpatialPointsDataFrame with the turtle variables defined
-#'         as when using \code{createTurtles()} or \code{createOTurtles()} but
-#'         of length equals to 0.
-#'
-#' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#no-turtles}
-#'
-#' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
-#'             Center for Connected Learning and Computer-Based Modeling,
-#'             Northwestern University. Evanston, IL.
-#'
-#' @examples
-#' t1 <- noTurtles()
-#' NLcount(t1)
-#'
-#'
-#' @export
-#' @docType methods
-#' @rdname noTurtles
-#'
-#' @author Sarah Bauduin
-#'
-setGeneric(
-  "noTurtles",
-  function(x) {
-    standardGeneric("noTurtles")
-  })
-
-#' @export
-#' @rdname noTurtles
-setMethod(
-  "noTurtles",
-  signature = "missing",
-  definition = function() {
-    t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
-    return(t0[t0@data$who == 1,])
-  }
-)
-
-
-################################################################################
-#' No turtles (AM)
-#'
-#' Report an empty turtle agentset.
-#'
-#' @param x  documentation needed
-#'
 #' @return AgentMatrix with the turtle variables defined
-#'         as when using \code{createTurtles()} or \code{createOTurtles()} but
-#'         with 0 individual.
+#'         as when using \code{createTurtles()} but
+#'         with 0 turtle
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#no-turtles}
 #'
@@ -3341,7 +2331,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- noTurtles()
+#' t1 <- noTurtlesAM()
 #' NLcount(t1)
 #'
 #'
@@ -3371,6 +2361,7 @@ setMethod(
   }
 )
 
+
 ################################################################################
 #' Turtles at
 #'
@@ -3380,7 +2371,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame representing the individuals among \code{turtles}
+#' @return AgentMatrix representing the individuals among \code{turtles}
 #'         of any of the given \code{breed}, if specified,
 #'         which are located on the patches at \code{(dx, dy)} distances of the
 #'         \code{agents}.
@@ -3399,8 +2390,8 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
 #'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 #' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0),
 #'                 dx = 1, dy = 1)
@@ -3420,54 +2411,6 @@ setGeneric(
   function(world, turtles, agents, dx, dy, breed, torus = FALSE) {
     standardGeneric("turtlesAt")
   })
-
-#' @export
-#' @rdname turtlesAt
-setMethod(
-  "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric",
-                "numeric", "missing", "ANY"),
-  definition = function(world, turtles, agents, dx, dy, torus) {
-    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
-    turtlesOn(world = world, turtles = turtles, agents = pAt)
-  }
-)
-
-#' @export
-#' @rdname turtlesAt
-setMethod(
-  "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame",
-                "numeric", "numeric", "missing", "ANY"),
-  definition = function(world, turtles, agents, dx, dy, torus) {
-    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
-    turtlesOn(world = world, turtles = turtles, agents = pAt)
-  }
-)
-
-#' @export
-#' @rdname turtlesAt
-setMethod(
-  "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "matrix", "numeric",
-                "numeric", "character", "ANY"),
-  definition = function(world, turtles, agents, dx, dy, breed, torus) {
-    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
-    turtlesOn(world = world, turtles = turtles, agents = pAt, breed = breed)
-  }
-)
-
-#' @export
-#' @rdname turtlesAt
-setMethod(
-  "turtlesAt",
-  signature = c("NLworlds", "SpatialPointsDataFrame", "SpatialPointsDataFrame",
-                "numeric", "numeric", "character", "ANY"),
-  definition = function(world, turtles, agents, dx, dy, breed, torus) {
-    pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
-    turtlesOn(world = world, turtles = turtles, agents = pAt, breed = breed)
-  }
-)
 
 #' @export
 #' @rdname turtlesAt
@@ -3497,19 +2440,15 @@ setMethod(
 #'
 #' Report a turtle agentset containing all unique turtles provided in the inputs.
 #'
-#' @param ... SpatialPointsDataFrame objects created by \code{createTurtles()} or
-#'            by \code{createOTurtles()} representing the moving agents.
+#' @param ... AgentMatrix objects representing the moving agents.
 #'
-#' @return SpatialPointsDataFrame.
+#' @return AgentMatrix object containing all the unique turtles.
 #'
 #' @details Duplicated turtles are identified based only on their who numbers.
 #'          The turtle chosen for a who number is the first one given in the inputs.
 #'          To keep all turtles from the inputs, use NLset() to
 #'          reassign who numbers in some of the inputs, prior using
 #'          turtleSet(), to avoid turtles with duplicated who numbers.
-#'
-#'          Colors are not updated. Several turtles in the output may have the
-#'          same color.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtle-set}
 #'
@@ -3518,11 +2457,11 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
-#' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
+#' t2 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 #' t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
-#' t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+#' t3 <- createTurtlesAM(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
 #' t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
 #' t4 <- turtleSet(t1, t2, t3)
 #'
@@ -3541,48 +2480,6 @@ setGeneric(
   })
 
 #' @export
-#' @rdname turtleSet
-setMethod(
-  "turtleSet",
-  signature = "SpatialPointsDataFrame",
-  definition = function(...) {
-
-    # dots <-list(...)
-    # allList <- lapply(dots, function(x) {cbind(x@coords, x@data)})
-    # allDf <- as.data.frame(rbindlist(allList))
-    #
-    # if (anyDuplicated(allDf$who) != 0) {
-    #   warning("Duplicated turtles based on who numbers are present among the inputs.")
-    #   allDf <- allDf[!duplicated(allDf$who), ]
-    # }
-    #
-    # if (nrow(allDf) == 0) {
-    #   allTurtles <- noTurtles()
-    # } else {
-    #   allTurtles <- SpatialPointsDataFrame(coords = cbind(xcor = allDf[,1], ycor = allDf[,2]), data = allDf[,3:ncol(allDf)])
-    # }
-
-    dots <-list(...)
-    nTurtles <- lapply(dots, function(x) {length(x)})
-
-    if (sum(unlist(nTurtles)) == 0) {
-      return(noTurtles())
-    } else {
-
-      allTurtles <- rbind(...)
-
-      if (anyDuplicated(allTurtles@data$who) != 0) {
-        warning("Duplicated turtles based on who numbers are present among the inputs.")
-        allTurtles <- turtle(allTurtles, who = unique(allTurtles@data$who))
-      }
-
-      return(allTurtles)
-
-    }
-  }
-)
-
-#' @export
 #' @importFrom data.table rbindlist
 #' @rdname turtleSet
 setMethod(
@@ -3596,7 +2493,7 @@ setMethod(
     if (sum(unlist(nTurtles)) == 0) {
       return(noTurtlesAM())
     } else {
-      #dots <- dots[which(unlist(nTurtles) != 0)]
+
       if (do.call(all.equal, lapply(dots, colnames))) {
         allTurtles <- do.call(rbind, lapply(dots, function(x) {x}))
       } else {
@@ -3610,20 +2507,6 @@ setMethod(
 
       if (!is(allTurtles, "agentMatrix"))
         allTurtles <- as(allTurtles, "agentMatrix")
-      # allAgentMat <- createTurtlesAM(n = NROW(allTurtles),
-      #                                coords = cbind(xcor = allTurtles[,"xcor"], ycor =  allTurtles[,"ycor"]),
-      #                                heading = allTurtles[,"heading"], breed = allTurtles[,"breed"],
-      #                                color = allTurtles[,"color"])
-      #
-      # allAgentMat@.Data[,"prevX"] <- allTurtles[,"prevX"]
-      # allAgentMat@.Data[,"prevY"] <- allTurtles[,"prevY"]
-      # allAgentMat@.Data[,"who"] <- allTurtles[,"who"]
-      # if (ncol(allTurtles) > 8) { # there were new turtle variables added
-      #   for(j in 9:ncol(allTurtles)) {
-      #
-      #     allAgentMat <- turtlesOwn(turtles = allAgentMat, tVar = colnames(allTurtles)[j], tVal = allTurtles[,j])
-      #   }
-      # }
 
       return(allTurtles)
 
@@ -3635,7 +2518,7 @@ setMethod(
 ################################################################################
 #' New turtles variable
 #'
-#' Create a new variable for the turtles.
+#' Create a new variable for the \code{turtles}.
 #'
 #' @inheritParams fargs
 #'
@@ -3645,7 +2528,7 @@ setMethod(
 #'                Must be of length 1 or of length \code{turtles}.
 #'                If missing, \code{NA} is given.
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with the new
+#' @return AgentMatrix representing the \code{turtles} with the new
 #'         variable \code{tVar} added.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#turtles-own}
@@ -3655,7 +2538,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
+#' t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0, ycor = 0))
 #' t1 <- turtlesOwn(turtles = t1, tVar = "sex", tVal = c("F", "F", "F", "M", "M"))
 #'
 #'
@@ -3675,39 +2558,8 @@ setGeneric(
 #' @rdname turtlesOwn
 setMethod(
   "turtlesOwn",
-  signature = c("SpatialPointsDataFrame", "character", "missing"),
-  definition = function(turtles, tVar) {
-    #newData <- cbind(turtles@data, rep(NA, length(turtles))) # Not necessary
-    #colnames(newData)[ncol(turtles@data) + 1] <- tVar        # Not necessary
-    turtles@data[,tVar] <- NA
-    return(turtles)
-  }
-)
-
-#' @export
-#' @rdname turtlesOwn
-setMethod(
-  "turtlesOwn",
-  signature = c("SpatialPointsDataFrame", "character", "ANY"),
-  definition = function(turtles, tVar, tVal) {
-    turtles@data[,tVar] <- tVal
-    return(turtles)
-  }
-)
-
-
-#' @export
-#' @rdname turtlesOwn
-setMethod(
-  "turtlesOwn",
   signature = c("agentMatrix", "character", "missing"),
   definition = function(turtles, tVar) {
-    # a <- matrix(NA)
-    # names(a) <- tVar
-    # b <- agentMatrix(a)
-    # tNew <- cbind(turtles, b)
-    # colnames(tNew@.Data)[(ncol(turtles@.Data) + 1):ncol(tNew@.Data)] <- tVar
-    # return(tNew)
 
     turtles@.Data <- cbind(turtles@.Data, newCol = NA)
     colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
@@ -3722,25 +2574,23 @@ setMethod(
   signature = c("agentMatrix", "character", "ANY"),
   definition = function(turtles, tVar, tVal) {
 
-  #turtles <- turtlesOwn(turtles = turtles, tVar = tVar)
-    if (class(tVal) == "numeric" | class(tVal) == "integer") {
+  if (class(tVal) == "numeric" | class(tVal) == "integer") {
 
-      turtles@.Data <- cbind(turtles@.Data, newCol = tVal)
-      colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
+    turtles@.Data <- cbind(turtles@.Data, newCol = tVal)
+    colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
 
-    } else {
+  } else {
 
-      turtles@.Data <- cbind(turtles@.Data, newCol = as.factor(tVal))
-      colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
-      nameLevels <- names(turtles@levels)
-      listLevels <- c(turtles@levels, list(levels(as.factor(tVal))))
-      names(listLevels) <- c(nameLevels, tVar)
-      turtles@levels <- listLevels
-    }
-  return(turtles)
-
+    turtles@.Data <- cbind(turtles@.Data, newCol = as.factor(tVal))
+    colnames(turtles@.Data)[ncol(turtles@.Data)] <- tVar
+    nameLevels <- names(turtles@levels)
+    listLevels <- c(turtles@levels, list(levels(as.factor(tVal))))
+    names(listLevels) <- c(nameLevels, tVar)
+    turtles@levels <- listLevels
   }
-)
+
+  return(turtles)
+})
 
 
 ################################################################################
@@ -3748,13 +2598,11 @@ setMethod(
 #'
 #' Compute the difference between headings.
 #'
-#' @param angle1 SpatialPointsDataFrame created by \code{createTurtles()} or
-#'               by \code{createOTurtles()} representing the moving agents, or
+#' @param angle1 AgentMatrix object representing the moving agents, or
 #'
 #'               Numeric. Vector of angles.
 #'
-#' @param angle2 SpatialPointsDataFrame created by \code{createTurtles()} or
-#'               by \code{createOTurtles()} representing the moving agents, or
+#' @param angle2 AgentMatrix object representing the moving agents, or
 #'
 #'               Numeric. Vector of angles.
 #'
@@ -3783,9 +2631,10 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createOTurtles(n = 10, world = w1)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' t1 <- createOTurtlesAM(n = 10, world = w1)
 #' subHeadings(angle1 = t1, angle2 = 0)
+#'
 #'
 #' @export
 #' @importFrom CircStats rad
@@ -3837,34 +2686,6 @@ setMethod(
 #' @rdname subHeadings
 setMethod(
   "subHeadings",
-  signature = c(angle1 = "SpatialPointsDataFrame", angle2 = "numeric"),
-  definition = function(angle1, angle2, range360) {
-    subHeadings(angle1 = angle1@data$heading, angle2 = angle2, range360 = range360)
-  }
-)
-#' @export
-#' @rdname subHeadings
-setMethod(
-  "subHeadings",
-  signature = c(angle1 = "numeric", angle2 = "SpatialPointsDataFrame"),
-  definition = function(angle1, angle2, range360) {
-    subHeadings(angle1 = angle1, angle2 = angle2@data$heading, range360 = range360)
-  }
-)
-#' @export
-#' @rdname subHeadings
-setMethod(
-  "subHeadings",
-  signature = c(angle1 = "SpatialPointsDataFrame", angle2 = "SpatialPointsDataFrame"),
-  definition = function(angle1, angle2, range360) {
-    subHeadings(angle1 = angle1@data$heading, angle2 = angle2@data$heading, range360 = range360)
-  }
-)
-
-#' @export
-#' @rdname subHeadings
-setMethod(
-  "subHeadings",
   signature = c(angle1 = "agentMatrix", angle2 = "numeric"),
   definition = function(angle1, angle2, range360) {
     subHeadings(angle1 = angle1@.Data[,"heading"], angle2 = angle2, range360 = range360)
@@ -3889,6 +2710,7 @@ setMethod(
   }
 )
 
+
 ################################################################################
 #' Others
 #'
@@ -3899,14 +2721,13 @@ setMethod(
 #' @param except Matrix (ncol = 2) with the first column "pxcor" and the second
 #'               column "pycor" representing the patches coordinates, or
 #'
-#'               SpatialPointsDataFrame created by \code{createTurtles()} or
-#'               by \code{createOTurtles()} representing the moving agents.
+#'               AgentMatrix object representing the moving agents.
 #'
 #' @return Matrix (ncol = 2) with the first column "pxcor" and the second
 #'         column "pycor" representing the patches in \code{agents} without
 #'         the ones in \code{except}, or
 #'
-#'         SpatialPointsDataFrame representing the turtles in \code{agents} without
+#'         AgentMatrix representing the turtles in \code{agents} without
 #'         the ones in \code{except}.
 #'
 #' @details Both \code{agents} and \code{except} must be of the same class (e.g., both
@@ -3923,14 +2744,15 @@ setMethod(
 #'
 #' @examples
 #' # Patches
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
 #' p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
 #' NLcount(p1) # 99 patches
 #'
 #' # Turtles
-#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
+#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
 #' t2 <- other(agents = t1, except = turtle(t1, who = 0))
 #' NLcount(t2) # 9 turtles
+#'
 #'
 #' @export
 #' @docType methods
@@ -3952,43 +2774,19 @@ setMethod(
   definition = function(agents, except) {
 
     if (class(agents) == "agentMatrix" & class(except) == "agentMatrix") {
-      # turtles <- agents[which(!duplicated(rbind(except@.Data, agents@.Data))[-(1:nrow(except@.Data))]),]
+
       matchWho <- match(except@.Data[,"who"], agents@.Data[,"who"])
       matchWho <- matchWho[!is.na(matchWho)]
       matchBreed <- which(agents@.Data[matchWho, "breed"] == except@.Data[except@.Data[,"who"] == agents@.Data[matchWho, "who"], "breed"])
       if (length(matchBreed) != 0) {
         agents <- agents[-matchWho[matchBreed],]
       }
+
       return(agents)
 
     } else {
       pCoords <- agents[!duplicated(rbind(except, agents))[-(1:nrow(except))],]
       return(pCoords)
-
-    }
-
-  }
-)
-
-#' @export
-#' @rdname other
-setMethod(
-  "other",
-  signature = c("SpatialPointsDataFrame", "SpatialPointsDataFrame"),
-  definition = function(agents, except) {
-    t1Data <- agents@data[,c("who", "breed")]
-    t2Data <- except@data[,c("who", "breed")]
-    sameTurtles <- merge(t1Data, t2Data)
-
-    if (nrow(sameTurtles) == 0) {
-      # If agents does not contain except
-      return(agents)
-
-    } else {
-      tRemove <- match(sameTurtles$who, t1Data$who)
-      newTurtles <- agents[-tRemove, ]
-      return(newTurtles)
-
     }
   }
 )
@@ -4003,7 +2801,7 @@ setMethod(
 #'
 #' @param radius  Numeric. Radius of the circle.
 #'
-#' @return SpatialPointsDataFrame representing the \code{turtles} with updated
+#' @return AgentMatrix representing the \code{turtles} with updated
 #'         coordinates and updated data for their "heading" values and
 #'         previous coordinates "prevX"
 #'         and "prevY".
@@ -4024,16 +2822,14 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' plot(world2raster(w1))
+#' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
-#' #clearPlot()
-#' #Plot(w1)
-#' #Plot(t1, addTo = "w1")
+#' t1 <- layoutCircle(world = w1, turtles = t1, radius = 3)
+#' points(turtles2spdf(t1), col = "red", pch = 16)
 #'
-#' t2 <- layoutCircle(world = w1, turtles = t1, radius = 3)
-#' #Plot(t2, addTo = "w1")
 #'
 #' @export
 #' @docType methods
@@ -4051,22 +2847,9 @@ setGeneric(
 #' @rdname layoutCircle
 setMethod(
   "layoutCircle",
-  signature = c(world = "NLworld", turtles = "SpatialPointsDataFrame", radius = "numeric"),
-  definition = function(world, turtles, radius, torus) {
-    tSurrogates <- createOTurtles(n = length(turtles), world = world)
-    turtles@coords <- tSurrogates@coords
-    turtles@data$heading <- tSurrogates@data$heading
-    fd(world = world, turtles = turtles, dist = radius, torus = torus, out = TRUE)
-  }
-)
-
-#' @export
-#' @rdname layoutCircle
-setMethod(
-  "layoutCircle",
   signature = c(world = "NLworldMs", turtles = "agentMatrix", radius = "numeric"),
   definition = function(world, turtles, radius, torus) {
-    tSurrogates <- createOTurtles(n = NLcount(turtles), world = world)
+    tSurrogates <- createOTurtlesAM(n = NLcount(turtles), world = world)
     turtles@.Data[,c("xcor", "ycor")] <- tSurrogates@.Data[,c("xcor", "ycor")]
     turtles@.Data[,"heading"] <- tSurrogates@.Data[,"heading"]
     fd(world = world, turtles = turtles, dist = radius, torus = torus, out = TRUE)
@@ -4077,33 +2860,28 @@ setMethod(
 ################################################################################
 #' Values of an agents variable
 #'
-#' Report the \code{agents} values for the requested variable. This is equivalent to
-#' subsetting in R via $ or [,var].
+#' Report the \code{agents} values for the requested variable.
 #'
-#' @param world NLworlds or NLworldMs object.
 #' @inheritParams fargs
 #'
 #' @param var Character. Vector of the name of the selected \code{agents} variables.
 #'            If \code{agents} are patches and the \code{world} is a
-#'            \code{NLworld} or \code{NLworldMatrix} object, \code{var} must not be provided. If
-#'            \code{agents} are patches and the \code{world} is a \code{NLworldStack}
-#'            or \code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
+#'            \code{NLworldMatrix} object, \code{var} must not be provided. If
+#'            \code{agents} are patches and the \code{world} is a
+#'            \code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
 #'            values. If \code{agents} are turtles, \code{var} is some of
-#'            the turtles' variable and can be equal to \code{"xcor"},
-#'            \code{"ycor"}, any of the variables created when turtles were created,
-#'            as well as any variable created using \code{turtlesOwn()}.
+#'            the turtles' variable and can be any of the variables created when turtles were created,
+#'            as well as any variable created with \code{turtlesOwn()}.
 #'
 #' @return Vector of values for the \code{agents} if one variable is requested. The class depends
 #'         of the variable class. The order of the vector follows the order
 #'         of the \code{agents}, or
 #'
 #'         Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{NLcount(agents)})
-#'         if \code{agents} are patches or turtles, of the
-#'         values for the requested variables for the \code{agents}. The row order
-#'         of the returned matrix follws the order of the \code{agents}.
+#'         if more than one variable is requested. The row order
+#'         follows the order of the \code{agents}.
 #'
-#' @details If \code{agents} are patches, \code{world} must be provided.
-#'          If \code{agents} are turtles, \code{world} must not be provided.
+#' @details \code{world} must be provided only if \code{agents} are patches.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#of}
 #'
@@ -4112,11 +2890,12 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
+#' # Patches
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
 #' of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 #'
-#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+#' # Turtles
+#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 #' of(agents = t1, var = "heading")
 #'
 #'
@@ -4137,49 +2916,8 @@ setGeneric(
 #' @rdname of
 setMethod(
   "of",
-  signature = c("missing", "SpatialPointsDataFrame", "character"),
-  definition = function(agents, var) {
-
-    if (length(var) == 1) {
-      if (var == "xcor") {
-        return(agents@coords[,1])
-      } else if (var == "ycor") {
-        return(agents@coords[,2])
-      } else {
-        return(agents@data[,var])
-      }
-    } else {
-      if (any(var == "xcor" | var == "ycor")) {
-        agentsData <- cbind(agents@coords, agents@data)
-        return(agentsData[,var])
-      } else {
-        agents@data[,var]
-      }
-    }
-})
-
-#' @export
-#' @rdname of
-setMethod(
-  "of",
   signature = c("missing", "agentMatrix", "character"),
   definition = function(agents, var) {
-
-    # if (length(var) == 1) {
-    #   if (var == "xcor") {
-    #     return(agents@.Data[,1])
-    #   } else if (var == "ycor") {
-    #     return(agents@.Data[,2])
-    #   } else {
-    #     return(agents@.Data[,var, drop=FALSE])
-    #   }
-    # } else {
-    #   if (any(var == "xcor" | var == "ycor")) {
-    #     return(agents@.Data[,var, drop=FALSE])
-    #   } else {
-    #     agents@.Data[,var, drop=FALSE]
-    #   }
-    # }
 
     if (any(names(agents@levels) %in% var)) {
 
@@ -4208,50 +2946,6 @@ setMethod(
 
     }
   })
-
-#' @export
-#' @rdname of
-setMethod(
-  "of",
-  signature = c("NLworld", "matrix", "missing"),
-  definition = function(world, agents) {
-
-    valuesW <- values(world)
-
-    if (identical(patches(world), agents)) {
-      return(valuesW)
-    } else {
-      cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-      return(valuesW[cells])
-    }
-})
-
-#' @export
-#' @rdname of
-setMethod(
-  "of",
-  signature = c("NLworldStack", "matrix", "character"),
-  definition = function(world, agents, var) {
-
-    valuesW <- values(world)
-
-    if (identical(patches(world), agents)) {
-      return(valuesW[,var])
-
-    } else {
-
-      cells <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-      if (length(cells) != 1 | length(var) == 1) {
-        return(valuesW[cells, var])
-      } else {
-        cellVal <- valuesW[cells, var]
-        cellVatMat <- matrix(cellVal, ncol = length(var), dimnames = list(NULL, var))
-        return(cellVatMat)
-      }
-
-      #return(world[agents - c(attr(world, "minPxcor"), attr(world, "minPycor")) + 1])
-    }
-})
 
 #' @export
 #' @rdname of
@@ -4290,51 +2984,45 @@ setMethod(
   signature = c("NLworldArray", "matrix", "character"),
   definition = function(world, agents, var) {
 
+    if (identical(patches(world), agents)) {
+      allValues <- world[]
+      return(allValues[,var])
 
-    # #colNum <- match(var, dimnames(world)[[3]])
-    # if (length(var) == 1) {
-    #   world_l <- createNLworldMatrix(data = as.numeric(t(world[,,var])), minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
-    #                                  minPycor = minPycor(world), maxPycor = maxPycor(world))
-    #   of(world = world_l, agents = agents)
-    # } else {
-      if (identical(patches(world), agents)) {
-      #   listVar <- lapply(var, function(x) {as.numeric(t(world[,,x]))})
-      #   matVar <- do.call(cbind,listVar)
-      #   colnames(matVar) <- var
-      #   return(matVar)
-        allValues <- world[]
-        return(allValues[,var])
-
+    } else {
+      cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
+       allValues <- world[]
+      if (length(var) == 1) {
+        return(allValues[cellNum,var])
       } else {
-        cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
-        # listVar <- lapply(var, function(x) {as.numeric(t(world[,,x]))})
-        # matVar <- do.call(cbind,listVar)
-        # colnames(matVar) <- var
-        # return(matVar[cellNum,, drop = FALSE])
-        allValues <- world[]
-        if (length(var) == 1) {
-          return(allValues[cellNum,var])
-        } else {
-          return(allValues[cellNum,var, drop= FALSE])
-        }
-
+        return(allValues[cellNum,var, drop= FALSE])
+      }
     }
 })
 
 
 ################################################################################
-#' Convert a SPDF object into a agentMatrix object
+#' From SpatialPointsDataFrame to agentMatrix
 #'
+#' Convert a SpatialPointsDataFrame object into an agentMatrix object.
 #'
-#' @param spdf  description needed
+#' @param spdf SpatialPointsDataFrame object representing moving agents.
 #'
-#' @return agentMatrix
+#' @return AgentMatrix object representing the moving agents (coordinates and data)
+#'         as contained in \code{spdf}.
+#'
+#' @details If the \code{spdf} does not contain the variables created with
+#'          \code{createTurtlesAM()}, these variables will be created with the
+#'          default values as in \code{createTurtlesAM()}.
+#'
+#' @examples
+#' sp1 <- SpatialPointsDataFrame(coords = cbind(x = c(1,2,3), y = c(1,2,3)),
+#'                               data = cbind.data.frame(age = c(0,0,3), sex = c("F", "F", "M")))
+#' t1 <- spdf2turtles(spdf = sp1)
 #'
 #'
 #' @export
 #' @docType methods
 #' @rdname spdf2turtles
-#'
 #'
 #' @author Sarah Bauduin
 #'
@@ -4409,19 +3097,25 @@ setMethod(
     return(turtles)
   })
 
+
 ################################################################################
-#' Convert an agentMatrix object into a SPDF
+#' From agentMatrix to SpatialPointsDataFrame
 #'
+#' Convert an agentMatrix object into a SpatialPointsDataFrame object.
 #'
-#' @param turtles  description needed
+#' @inheritParams fargs
 #'
-#' @return SpatialPointsDataFrame
+#' @return SpatialPointsDataFrame object representing the moving agents (coordinates and data)
+#'         as contained in \code{turtles}.
+#'
+#' @examples
+#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
+#' sp1 <- turtles2spdf(turtles = t1)
 #'
 #'
 #' @export
 #' @docType methods
 #' @rdname turtles2spdf
-#'
 #'
 #' @author Sarah Bauduin
 #'

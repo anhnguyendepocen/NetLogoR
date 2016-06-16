@@ -3,25 +3,18 @@
 \docType{methods}
 \name{dx}
 \alias{dx}
-\alias{dx,SpatialPointsDataFrame,missing-method}
-\alias{dx,SpatialPointsDataFrame,numeric-method}
 \alias{dx,agentMatrix,missing-method}
 \alias{dx,agentMatrix,numeric-method}
 \title{x-increment}
 \usage{
 dx(turtles, dist = 1)
 
-\S4method{dx}{SpatialPointsDataFrame,numeric}(turtles, dist = 1)
-
-\S4method{dx}{SpatialPointsDataFrame,missing}(turtles)
-
 \S4method{dx}{agentMatrix,numeric}(turtles, dist = 1)
 
 \S4method{dx}{agentMatrix,missing}(turtles)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{dist}{Numeric. Vector of distances the \code{turtles} would have to
 move forward to
@@ -42,8 +35,8 @@ Report the sine of the \code{turtles}' heading multiplied by the \code{dist}
          clockwise manner.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createOTurtles(world = w1, n = 10)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createOTurtlesAM(world = w1, n = 10)
 dx(turtles = t1)
 
 

@@ -29,10 +29,9 @@ sortOn(agents, world, var)
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a

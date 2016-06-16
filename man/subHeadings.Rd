@@ -3,11 +3,8 @@
 \docType{methods}
 \name{subHeadings}
 \alias{subHeadings}
-\alias{subHeadings,SpatialPointsDataFrame,SpatialPointsDataFrame-method}
-\alias{subHeadings,SpatialPointsDataFrame,numeric-method}
 \alias{subHeadings,agentMatrix,agentMatrix-method}
 \alias{subHeadings,agentMatrix,numeric-method}
-\alias{subHeadings,numeric,SpatialPointsDataFrame-method}
 \alias{subHeadings,numeric,agentMatrix-method}
 \alias{subHeadings,numeric,numeric-method}
 \title{Substract headings}
@@ -15,15 +12,6 @@
 subHeadings(angle1, angle2, range360 = FALSE)
 
 \S4method{subHeadings}{numeric,numeric}(angle1, angle2, range360 = FALSE)
-
-\S4method{subHeadings}{SpatialPointsDataFrame,numeric}(angle1, angle2,
-  range360 = FALSE)
-
-\S4method{subHeadings}{numeric,SpatialPointsDataFrame}(angle1, angle2,
-  range360 = FALSE)
-
-\S4method{subHeadings}{SpatialPointsDataFrame,SpatialPointsDataFrame}(angle1,
-  angle2, range360 = FALSE)
 
 \S4method{subHeadings}{agentMatrix,numeric}(angle1, angle2, range360 = FALSE)
 
@@ -33,13 +21,11 @@ subHeadings(angle1, angle2, range360 = FALSE)
   range360 = FALSE)
 }
 \arguments{
-\item{angle1}{SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents, or
+\item{angle1}{AgentMatrix object representing the moving agents, or
 
               Numeric. Vector of angles.}
 
-\item{angle2}{SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents, or
+\item{angle2}{AgentMatrix object representing the moving agents, or
 
               Numeric. Vector of angles.}
 
@@ -67,9 +53,10 @@ This function does the opposite as the one in NetLogo where
          Positive values mean clockwise rotations, negative value mean counterclockwise rotations.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createOTurtles(n = 10, world = w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createOTurtlesAM(n = 10, world = w1)
 subHeadings(angle1 = t1, angle2 = 0)
+
 
 }
 \author{

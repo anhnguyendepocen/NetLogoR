@@ -3,24 +3,15 @@
 \docType{methods}
 \name{of}
 \alias{of}
-\alias{of,NLworld,matrix,missing-method}
 \alias{of,NLworldArray,matrix,character-method}
 \alias{of,NLworldMatrix,matrix,missing-method}
 \alias{of,NLworldMatrix,numeric,missing-method}
-\alias{of,NLworldStack,matrix,character-method}
-\alias{of,missing,SpatialPointsDataFrame,character-method}
 \alias{of,missing,agentMatrix,character-method}
 \title{Values of an agents variable}
 \usage{
 of(world, agents, var)
 
-\S4method{of}{missing,SpatialPointsDataFrame,character}(agents, var)
-
 \S4method{of}{missing,agentMatrix,character}(agents, var)
-
-\S4method{of}{NLworld,matrix,missing}(world, agents)
-
-\S4method{of}{NLworldStack,matrix,character}(world, agents, var)
 
 \S4method{of}{NLworldMatrix,matrix,missing}(world, agents)
 
@@ -29,23 +20,21 @@ of(world, agents, var)
 \S4method{of}{NLworldArray,matrix,character}(world, agents, var)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{var}{Character. Vector of the name of the selected \code{agents} variables.
 If \code{agents} are patches and the \code{world} is a
-\code{NLworld} or \code{NLworldMatrix} object, \code{var} must not be provided. If
-\code{agents} are patches and the \code{world} is a \code{NLworldStack}
-or \code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
+\code{NLworldMatrix} object, \code{var} must not be provided. If
+\code{agents} are patches and the \code{world} is a
+\code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
-the turtles' variable and can be equal to \code{"xcor"},
-\code{"ycor"}, any of the variables created when turtles were created,
-as well as any variable created using \code{turtlesOwn()}.}
+the turtles' variable and can be any of the variables created when turtles were created,
+as well as any variable created with \code{turtlesOwn()}.}
 }
 \value{
 Vector of values for the \code{agents} if one variable is requested. The class depends
@@ -53,24 +42,22 @@ Vector of values for the \code{agents} if one variable is requested. The class d
         of the \code{agents}, or
 
         Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{NLcount(agents)})
-        if \code{agents} are patches or turtles, of the
-        values for the requested variables for the \code{agents}. The row order
-        of the returned matrix follws the order of the \code{agents}.
+        if more than one variable is requested. The row order
+        follows the order of the \code{agents}.
 }
 \description{
-Report the \code{agents} values for the requested variable. This is equivalent to
-subsetting in R via $ or [,var].
+Report the \code{agents} values for the requested variable.
 }
 \details{
-If \code{agents} are patches, \code{world} must be provided.
-         If \code{agents} are turtles, \code{world} must not be provided.
+\code{world} must be provided only if \code{agents} are patches.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
+# Patches
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
 of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+# Turtles
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 of(agents = t1, var = "heading")
 
 

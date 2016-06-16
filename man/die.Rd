@@ -3,24 +3,20 @@
 \docType{methods}
 \name{die}
 \alias{die}
-\alias{die,SpatialPointsDataFrame,numeric-method}
 \alias{die,agentMatrix,numeric-method}
 \title{Kill turtles}
 \usage{
 die(turtles, who)
 
-\S4method{die}{SpatialPointsDataFrame,numeric}(turtles, who)
-
 \S4method{die}{agentMatrix,numeric}(turtles, who)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with the selected
+AgentMatrix representing the \code{turtles} with the selected
         ones removed.
 }
 \description{
@@ -28,12 +24,10 @@ Kill selected turtles.
 }
 \details{
 The "who" numbers of the remaining \code{turtles} are unchanged.
-
-         To remove all the \code{turtles}, you can use \code{clearTurtles()}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, world = w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtlesAM(n = 10, world = w1)
 NLcount(t1)
 t1 <- die(turtles = t1, who = c(2, 3, 4))
 NLcount(t1)

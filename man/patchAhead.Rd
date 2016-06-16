@@ -4,13 +4,9 @@
 \name{patchAhead}
 \alias{patchAhead}
 \alias{patchAhead,NLworldMs,agentMatrix,numeric-method}
-\alias{patchAhead,NLworlds,SpatialPointsDataFrame,numeric-method}
 \title{Patches ahead}
 \usage{
 patchAhead(world, turtles, dist, torus = FALSE)
-
-\S4method{patchAhead}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles,
-  dist, torus = FALSE)
 
 \S4method{patchAhead}{NLworldMs,agentMatrix,numeric}(world, turtles, dist,
   torus = FALSE)
@@ -43,8 +39,8 @@ If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
          coordinates from a wrapped \code{world} are returned.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 patchAhead(world = w1, turtles = t1, dist = 1)
 
 

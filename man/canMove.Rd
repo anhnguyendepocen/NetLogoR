@@ -4,21 +4,16 @@
 \name{canMove}
 \alias{canMove}
 \alias{canMove,NLworldMs,agentMatrix,numeric-method}
-\alias{canMove,NLworlds,SpatialPointsDataFrame,numeric-method}
 \title{Can the turtles move?}
 \usage{
 canMove(world, turtles, dist)
 
-\S4method{canMove}{NLworlds,SpatialPointsDataFrame,numeric}(world, turtles,
-  dist)
-
 \S4method{canMove}{NLworldMs,agentMatrix,numeric}(world, turtles, dist)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{dist}{Numeric. Vector of distances to move. Must
 be of length 1 or of length \code{turtles}.}
@@ -31,8 +26,8 @@ Report \code{TRUE} if a turtle can move the given distance without leaving
 the \code{world}'s extent, report \code{FALSE} otherwise.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, world = w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtlesAM(n = 10, world = w1)
 canMove(world = w1, turtles = t1, dist = 1:10)
 
 

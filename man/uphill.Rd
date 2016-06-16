@@ -3,19 +3,11 @@
 \docType{methods}
 \name{uphill}
 \alias{uphill}
-\alias{uphill,NLworld,missing,SpatialPointsDataFrame,numeric-method}
 \alias{uphill,NLworldArray,character,agentMatrix,numeric-method}
 \alias{uphill,NLworldMatrix,missing,agentMatrix,numeric-method}
-\alias{uphill,NLworldStack,character,SpatialPointsDataFrame,numeric-method}
 \title{Move uphill}
 \usage{
 uphill(world, pVar, turtles, nNeighbors, torus = FALSE)
-
-\S4method{uphill}{NLworld,missing,SpatialPointsDataFrame,numeric}(world,
-  turtles, nNeighbors, torus)
-
-\S4method{uphill}{NLworldStack,character,SpatialPointsDataFrame,numeric}(world,
-  pVar, turtles, nNeighbors, torus = FALSE)
 
 \S4method{uphill}{NLworldMatrix,missing,agentMatrix,numeric}(world, turtles,
   nNeighbors, torus)
@@ -24,14 +16,13 @@ uphill(world, pVar, turtles, nNeighbors, torus = FALSE)
   turtles, nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{pVar}{Character. If the \code{world} is a NLworldStack object, \code{pVar}
+\item{pVar}{Character. If the \code{world} is a NLworldArray object, \code{pVar}
 is the name of the layer to use to define the patches values.
-\code{pVar} must not be provided if the \code{world} is a NLworld object.}
+\code{pVar} must not be provided if the \code{world} is a NLworldMatrix object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{nNeighbors}{Integer: 4 or 8. Represents the number of neighbor patches
 considered.}
@@ -40,7 +31,7 @@ considered.}
 \code{torus = FALSE}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated
+AgentMatrix representing the \code{turtles} with updated
         coordinates and updated data for their "heading" values and
         previous coordinates "prevX"
         and "prevY".
@@ -64,16 +55,14 @@ If no neighboring patch has a larger value than the patch where the
          \code{nNeighbors}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo = "w1")
+w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10, data = runif(100))
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
-#Plot(t1, addTo = "w1")
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+
 
 }
 \author{

@@ -4,20 +4,16 @@
 \name{home}
 \alias{home}
 \alias{home,NLworldMs,agentMatrix,character-method}
-\alias{home,NLworlds,SpatialPointsDataFrame,character-method}
 \title{Return home}
 \usage{
 home(world, turtles, home)
 
-\S4method{home}{NLworlds,SpatialPointsDataFrame,character}(world, turtles, home)
-
 \S4method{home}{NLworldMs,agentMatrix,character}(world, turtles, home)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{home}{Character. Can take one of the following options to define where
                to relocate the \code{turtles}:
@@ -35,7 +31,7 @@ by \code{createOTurtles()} representing the moving agents.}
                corner of the \code{world}.}
 }
 \value{
-SpatialPointsDataFrame representing the \code{turtles} with updated
+AgentMatrix representing the \code{turtles} with updated
         coordinates and updated data for their previous coordinates "prevX"
         and "prevY".
 }
@@ -43,16 +39,15 @@ SpatialPointsDataFrame representing the \code{turtles} with updated
 Move the \code{turtles} back \code{home}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo ="w1")
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = "black", pch = 16)
 
 t1 <- home(world = w1, turtles = t1, home = "pCorner")
-#Plot(t1, addTo ="w1")
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = "red", pch = 16)
+
 
 }
 \author{

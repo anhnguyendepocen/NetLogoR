@@ -3,24 +3,17 @@
 \docType{methods}
 \name{patchHere}
 \alias{patchHere}
-\alias{patchHere,NLworldMs,SpatialPointsDataFrame-method}
 \alias{patchHere,NLworldMs,agentMatrix-method}
-\alias{patchHere,NLworlds,SpatialPointsDataFrame-method}
 \title{Patches here}
 \usage{
 patchHere(world, turtles)
 
-\S4method{patchHere}{NLworlds,SpatialPointsDataFrame}(world, turtles)
-
-\S4method{patchHere}{NLworldMs,SpatialPointsDataFrame}(world, turtles)
-
 \S4method{patchHere}{NLworldMs,agentMatrix}(world, turtles)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 }
 \value{
 Matrix (ncol = 2) with the first column "pxcor" and the second column
@@ -36,8 +29,8 @@ If a turtle is located outside of the \code{world}'s extent, \code{NA} are retur
          for the patch coordinates.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 patchHere(world = w1, turtles = t1)
 
 

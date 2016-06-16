@@ -4,17 +4,14 @@
 \name{randomYcor}
 \alias{randomYcor}
 \alias{randomYcor,NLworldMs,numeric-method}
-\alias{randomYcor,NLworlds,numeric-method}
 \title{Random ycor}
 \usage{
 randomYcor(world, n)
 
-\S4method{randomYcor}{NLworlds,numeric}(world, n)
-
 \S4method{randomYcor}{NLworldMs,numeric}(world, n)
 }
 \arguments{
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{n}{Integer.}
 }
@@ -25,13 +22,12 @@ Numeric. Vector of length \code{n} of ycor coordinates.
 Report \code{n} random ycor coordinates within the \code{world}'s extent.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
-t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
                                            ycor = randomYcor(world = w1, n = 10)))
-#clearPlot()
-#Plot(w1)
-#Plot(t1, addTo = "w1")
+plot(world2raster(w1))
+points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+
 
 }
 \author{

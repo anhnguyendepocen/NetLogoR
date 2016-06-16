@@ -3,25 +3,18 @@
 \docType{methods}
 \name{turtle}
 \alias{turtle}
-\alias{turtle,SpatialPointsDataFrame,numeric,character-method}
-\alias{turtle,SpatialPointsDataFrame,numeric,missing-method}
 \alias{turtle,agentMatrix,numeric,character-method}
 \alias{turtle,agentMatrix,numeric,missing-method}
 \title{Select turtles}
 \usage{
 turtle(turtles, who, breed)
 
-\S4method{turtle}{SpatialPointsDataFrame,numeric,missing}(turtles, who)
-
-\S4method{turtle}{SpatialPointsDataFrame,numeric,character}(turtles, who, breed)
-
 \S4method{turtle}{agentMatrix,numeric,missing}(turtles, who)
 
 \S4method{turtle}{agentMatrix,numeric,character}(turtles, who, breed)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 
@@ -29,7 +22,7 @@ by \code{createOTurtles()} representing the moving agents.}
 If missing, there is no distinction based upon "breed".}
 }
 \value{
-SpatialPointsDataFrame of the selected \code{turtles} sorted in the order of
+AgentMatrix of the selected \code{turtles} sorted in the order of
         the \code{who} numbers requested. If \code{breed} was provided, the
         \code{turtles} selected are of one of the \code{breed}.
 }
@@ -39,14 +32,14 @@ and \code{breed}.
 }
 \details{
 If no turtle matches the given \code{who} numbers, with potentially one of the given
-         \code{breed}, inside \code{turtles}, then an empty SpatialPointsDataFrame is returned.
+         \code{breed}, inside \code{turtles}, then an empty agentMatrix is returned.
 
          If there are duplicates "who" numbers among the \code{turtles}, the first
          matching turtle with the requested \code{who} number is returned.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 t2 <- turtle(t1, who = 2)
 
 
