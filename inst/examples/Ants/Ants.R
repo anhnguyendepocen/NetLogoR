@@ -1,6 +1,3 @@
-a = Sys.time()
-useFastClasses <- TRUE
-
 ################################################################################
 # Ants
 # by Wilensky (1997) NetLogo Ants model.
@@ -15,7 +12,6 @@ useFastClasses <- TRUE
 #library(NetLogoR)
 library(SpaDES)
 #library(testthat) # for testing
-#library(profvis) # to test function speed
 
 ## Global variables (model parameters)
 nAnts <- 125 # varies from 0 to 200 in the NetLogo model
@@ -26,16 +22,12 @@ rEvap <- 10 # varies from 0 to 99 in the NetLogo model
 
 ## Model setup
 # World
-# One NLworld for each patch variable, then stack them
-# As all the NLworld must have the same extent, you can copy past the object to a new name
+# One NLworldMatrix for each patch variable, then stack them
+# As all the NLworldMatrix must have the same extent, you can copy past the object to a new name
 # Patch values must be assigned to each world before stacking them
 
 # Chemical
-if(useFastClasses){
-  chemical <- createNLworldMatrix(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35) # amount of chemical on the patches
-} else {
-  chemical <- createNLworld(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35) # amount of chemical on the patches
-}
+chemical <- createNLworldMatrix(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35) # amount of chemical on the patches
 chemical <- NLset(world = chemical, agents = patches(chemical), val = 0)
 
 # Nest
@@ -63,25 +55,14 @@ foodSource <- NLset(world = foodSource, agents = PxcorPycorFromCell(world = food
 food <- NLset(world = food, agents = patches(food), val = 0)
 patchFood123 <- PxcorPycorFromCell(world = food, cellNum = c(patchFood1, patchFood2, patchFood3))
 food <- NLset(world = food, agents = patchFood123, val = sample(c(1,2), size = NLcount(patchFood123), replace = TRUE)) # set "food" at sources to either 1 or 2, randomly
-
-if(useFastClasses){
-  world <- NLworldArray(chemical, nest, nestScent, foodSource, food)
-} else {
-  world <- NLstack(chemical, nest, nestScent, foodSource, food)
-}
+world <- NLworldArray(chemical, nest, nestScent, foodSource, food)
 
 # Ants
-if(useFastClasses){
-  ants <- createTurtlesAM(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
-} else {
-  ants <- createTurtles(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
-}
+ants <- createTurtlesAM(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
 
 # # Visualize the world
-# dev() # open a new plotting window
-# clearPlot()
-# Plot(world)
-# Plot(ants, addTo = "world$foodSource") # plot on a new window
+# plot(world2raster(world)$layer.4) # foodSource
+# points(turtles2spdf(ants), pch = 16)
 
 # Initialize the output objects
 f_fS_world <- of(world = world, var = c("food", "foodSource"), agents = patches(world))
@@ -169,21 +150,6 @@ upPatch <- function(turtles, varPatch){
   return(turtles)
 }
 
-# # Test upPatch
-# w1 <- createNLworld(-1,1,-1,1)
-# w1[] <- 1:9
-# w2<- createNLworld(-1,1,-1,1)
-# w2[] <- 0
-# world <- NLstack(w1, w2)
-# turtles <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 0)
-# turtles <- upPatch(turtles, "w2")
-# turtles@data$heading == 0
-# turtles <- upPatch(turtles, "w1")
-# turtles@data$heading == 45
-# turtles <- upPatch(turtles, "w1")
-# turtles@data$heading == 90
-# #
-
 wiggle <- function(turtles){
   #print(paste("wiggle", NLcount(turtles)))
 
@@ -201,25 +167,6 @@ wiggle <- function(turtles){
   return(turtles)
 }
 
-# # Test wiggle
-# world <- createNLworld(-1,1,-1,1)
-# world[] <- 1:9
-# turtles <- createTurtles(n = 1, coords = cbind(xcor = 1, ycor = 1), heading = 0)
-# clearPlot()
-# Plot(world)
-# Plot(turtles, addTo = "world")
-# for(i in 1:1000){ # turtles' locations should be inside the world
-#   turtles <- wiggle(turtles)
-#   turtles <- fd(turtles, dist = 1)
-#   pHere <- patchHere(world = world, turtles = turtles) # shouldn't be NAs
-#   if(is.na(pHere[1,1]) | is.na(pHere[1,2])){
-#     print("warning")
-#   }
-#   #Plot(turtles, addTo = "world")
-# }
-# #
-
-#profile <- profvis({ # test function speed
 
 ## Go
 # time <- 0
@@ -263,15 +210,11 @@ while(sum(f_fS_world[, "food"]) != 0){ # as long as there is food in the world
   # #print(time)
   #
   # # Plots
-  # clearPlot()
-  # Plot(world)
-  # Plot(ants, addTo = "world$foodSource")
+  plot(world2raster(world)$layer.4) # foodSource
+  points(turtles2spdf(ants), pch = 16)
   #
-  expect_equivalent(NLcount(ants), nAnts)
+  #expect_equivalent(NLcount(ants), nAnts)
 }
-
-#}) # to test function speed
-#profile # to test function speed
 
 ## Plot outputs
 dev()

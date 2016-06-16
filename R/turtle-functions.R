@@ -2494,6 +2494,13 @@ setMethod(
       return(noTurtlesAM())
     } else {
 
+      if(any(nTurtles == 0)){
+        dots <- dots[which(nTurtles != 0)] # remove the empty agentMatrix
+        if(length(dots) == 1){ # if there is only one list element left
+          return(dots[[1]])
+        }
+      }
+
       if (do.call(all.equal, lapply(dots, colnames))) {
         allTurtles <- do.call(rbind, lapply(dots, function(x) {x}))
       } else {
