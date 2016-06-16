@@ -3,22 +3,12 @@
 \docType{methods}
 \name{maxNof}
 \alias{maxNof}
-\alias{maxNof,SpatialPointsDataFrame,numeric,missing,character-method}
 \alias{maxNof,agentMatrix,numeric,missing,character-method}
-\alias{maxNof,matrix,numeric,NLworld,missing-method}
 \alias{maxNof,matrix,numeric,NLworldArray,character-method}
 \alias{maxNof,matrix,numeric,NLworldMatrix,missing-method}
-\alias{maxNof,matrix,numeric,NLworldStack,character-method}
 \title{N agents with maximum}
 \usage{
 maxNof(agents, n, world, var)
-
-\S4method{maxNof}{matrix,numeric,NLworld,missing}(agents, n, world)
-
-\S4method{maxNof}{matrix,numeric,NLworldStack,character}(agents, n, world, var)
-
-\S4method{maxNof}{SpatialPointsDataFrame,numeric,missing,character}(agents, n,
-  var)
 
 \S4method{maxNof}{matrix,numeric,NLworldMatrix,missing}(agents, n, world)
 
@@ -30,12 +20,11 @@ maxNof(agents, n, world, var)
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{n}{Integer.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a
@@ -54,7 +43,7 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor" and
         the maximum values among the
         \code{agents}, or
 
-        SpatialPointsDataFrame of length \code{n} representing the turtles among the
+        AgentMatrix of length \code{n} representing the turtles among the
         \code{agents} which
         have their \code{var} values among the maximum values among the \code{agents}.
 }
@@ -70,14 +59,12 @@ among the maximum values.
 }
 \examples{
 # Patches
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1),
-          val = sample(1:10, size = NLcount(patches(w1)), replace = TRUE))
-plot(w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = sample(1:10, size = 25, replace = TRUE))
+plot(world2raster(w1))
 p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
                     heading = sample(1:5, size = 10, replace= TRUE))
 t2 <- maxNof(agents = t1, n = 5, var = "heading")
 

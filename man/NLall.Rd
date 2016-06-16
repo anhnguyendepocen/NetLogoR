@@ -3,22 +3,13 @@
 \docType{methods}
 \name{NLall}
 \alias{NLall}
-\alias{NLall,SpatialPointsDataFrame,missing,character-method}
 \alias{NLall,agentMatrix,missing,character-method}
-\alias{NLall,matrix,NLworld,missing-method}
 \alias{NLall,matrix,NLworldArray,character-method}
 \alias{NLall,matrix,NLworldMatrix,missing-method}
-\alias{NLall,matrix,NLworldStack,character-method}
 \alias{all}
 \title{All agents?}
 \usage{
 NLall(agents, world, var, val)
-
-\S4method{NLall}{matrix,NLworld,missing}(agents, world, val)
-
-\S4method{NLall}{matrix,NLworldStack,character}(agents, world, var, val)
-
-\S4method{NLall}{SpatialPointsDataFrame,missing,character}(agents, var, val)
 
 \S4method{NLall}{matrix,NLworldMatrix,missing}(agents, world, val)
 
@@ -30,10 +21,9 @@ NLall(agents, world, var, val)
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a
@@ -60,15 +50,14 @@ report \code{FALSE} otherwise.
 }
 \examples{
 # Patches
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
 NLall(agents = patches(w1), world = w1, val = 5)
 w2 <- w1
 w2 <- NLset(world = w1, agents = patches(w1), val = 5)
 NLall(agents = patches(w2), world = w2, val = 5)
 
 # Turtles
-t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
+t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
 NLall(agents = t1, var = "xcor", val = 1)
 NLall(agents = t1, var = "heading", val = 2)
 

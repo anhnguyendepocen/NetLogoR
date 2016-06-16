@@ -3,7 +3,6 @@
 \docType{methods}
 \name{NLcount}
 \alias{NLcount}
-\alias{NLcount,SpatialPointsDataFrame-method}
 \alias{NLcount,matrix-method}
 \alias{count}
 \title{Count agents}
@@ -11,31 +10,28 @@
 NLcount(agents)
 
 \S4method{NLcount}{matrix}(agents)
-
-\S4method{NLcount}{SpatialPointsDataFrame}(agents)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 }
 \value{
 Integer.
 }
 \description{
-Report the number of patches or turtles in the \code{agents}.
+Report the number of patches or turtles inside \code{agents}.
 }
 \examples{
 # Patches
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4) # 25 patches
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4) # 25 patches
 p1 <- patches(w1)
-NLcount(p1) # 25
+NLcount(p1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-NLcount(t1) # 10
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10)) # 10 turtles
+NLcount(t1)
 
 
 }

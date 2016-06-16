@@ -3,21 +3,12 @@
 \docType{methods}
 \name{withMin}
 \alias{withMin}
-\alias{withMin,SpatialPointsDataFrame,missing,character-method}
 \alias{withMin,agentMatrix,missing,character-method}
-\alias{withMin,matrix,NLworld,missing-method}
 \alias{withMin,matrix,NLworldArray,character-method}
 \alias{withMin,matrix,NLworldMatrix,missing-method}
-\alias{withMin,matrix,NLworldStack,character-method}
 \title{Agents with minimum}
 \usage{
 withMin(agents, world, var)
-
-\S4method{withMin}{matrix,NLworld,missing}(agents, world)
-
-\S4method{withMin}{matrix,NLworldStack,character}(agents, world, var)
-
-\S4method{withMin}{SpatialPointsDataFrame,missing,character}(agents, var)
 
 \S4method{withMin}{matrix,NLworldMatrix,missing}(agents, world)
 
@@ -29,10 +20,9 @@ withMin(agents, world, var)
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a
@@ -50,7 +40,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
         which have their variable
         equal to the minimum value among the \code{agents}, or
 
-        SpatialPointsDataFrame representing the turtles among the \code{agents}
+        AgentMatrix representing the turtles among the \code{agents}
         which have their variable
         \code{var} equal to the minimum value among the \code{agents}.
 }
@@ -63,14 +53,12 @@ equals to the minimum value.
 }
 \examples{
 # Patches
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1),
-          val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
-plot(w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = sample(1:5, size = 25, replace = TRUE))
+plot(world2raster(w1))
 p1 <- withMin(agents = patches(w1), world = w1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
                     heading = sample(1:3, size = 10, replace= TRUE))
 t2 <- withMin(agents = t1, var = "heading")
 

@@ -3,26 +3,16 @@
 \docType{methods}
 \name{inCone}
 \alias{inCone}
-\alias{inCone,SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame-method}
-\alias{inCone,SpatialPointsDataFrame,numeric,numeric,matrix-method}
 \alias{inCone,agentMatrix,numeric,numeric,matrix-method}
 \title{Agents in cone}
 \usage{
 inCone(turtles, radius, angle, agents, world, torus = FALSE)
 
-\S4method{inCone}{SpatialPointsDataFrame,numeric,numeric,matrix}(turtles,
-  radius, angle, agents, world, torus = FALSE)
-
-
-  \S4method{inCone}{SpatialPointsDataFrame,numeric,numeric,SpatialPointsDataFrame}(turtles,
-  radius, angle, agents, world, torus = FALSE)
-
 \S4method{inCone}{agentMatrix,numeric,numeric,matrix}(turtles, radius, angle,
   agents, world, torus = FALSE)
 }
 \arguments{
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{radius}{Numeric. Vector of distances from \code{turtles} to locate
 \code{agents}. Must be of length 1 or of length \code{turtles}.}
@@ -36,23 +26,27 @@ of length \code{turtles}.}
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
-\item{world}{NLworlds object.}
+\item{world}{NLworldMs object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}
 }
 \value{
-List of length equal to \code{length(turtles)}.
-        List items are either matrices (ncol = 2) with the first column "pxcor"
+Matrix (ncol = 3) with the first column "pxcor"
         and the second column "pycor" representing the coordinates of the
-        patches among \code{agents} within the cone of vision of each of  the
-        \code{turtles}, if \code{agents} are patches,
-        or SpatialPointsDataFrame objects representing the turtles among \code{agents}
-        within
-        the cone of vision of each of the \code{turtles} if \code{agents} are turtles.
+        patches among \code{agents2} within the cone of vision of each of the
+        \code{turtles}
+        which are reprensented by the "id" column, if
+        \code{agents} are patches, or
+
+        Matrix (ncol = 2) with the first column "who"
+        representing the "who" numbers of the
+        turtles among \code{agents2} within the cone of vision of each of  the
+        \code{turtles}
+        which are reprensented by the "id" column, if
+        \code{agents} are turtles.
 }
 \description{
 Report the \code{agents} within the "cone of vision" in front of each one of the
@@ -71,8 +65,8 @@ Report the \code{agents} within the "cone of vision" in front of each one of the
          around the sides of the \code{world} to select \code{agents}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 
 p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90)
 t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1)

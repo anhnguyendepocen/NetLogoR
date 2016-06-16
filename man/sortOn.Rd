@@ -3,21 +3,12 @@
 \docType{methods}
 \name{sortOn}
 \alias{sortOn}
-\alias{sortOn,SpatialPointsDataFrame,missing,character-method}
 \alias{sortOn,agentMatrix,missing,character-method}
-\alias{sortOn,matrix,NLworld,missing-method}
 \alias{sortOn,matrix,NLworldArray,character-method}
 \alias{sortOn,matrix,NLworldMatrix,missing-method}
-\alias{sortOn,matrix,NLworldStack,character-method}
 \title{Sort agents}
 \usage{
 sortOn(agents, world, var)
-
-\S4method{sortOn}{matrix,NLworld,missing}(agents, world)
-
-\S4method{sortOn}{matrix,NLworldStack,character}(agents, world, var)
-
-\S4method{sortOn}{SpatialPointsDataFrame,missing,character}(agents, var)
 
 \S4method{sortOn}{matrix,NLworldMatrix,missing}(agents, world)
 
@@ -45,16 +36,16 @@ as well as any variable created using \code{turtlesOwn()}.}
 }
 \value{
 Matrix (ncol = 2) with the first column "pxcor" and the second column
-        "pycor" representing the coordinates of the patches, sorted according to
+        "pycor" representing the coordinates of the patches sorted according to
         their values, if \code{agents}
         are patches, or
 
-        SpatialPointsDataFrame representing the turtles, sorted according
+        AgentMatrix representing the turtles sorted according
         to their \code{var} values, if \code{agents} are
         turtles.
 }
 \description{
-Report the \code{agents} sorted according to their value.
+Return the \code{agents} sorted according to their value.
 }
 \details{
 \code{world} must not be provided if \code{agents} are turtles.
@@ -63,14 +54,12 @@ Report the \code{agents} sorted according to their value.
 }
 \examples{
 # Patches
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1),
-          val = sample(1:5, size = NLcount(patches(w1)), replace = TRUE))
-plot(w1)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = sample(1:5, size = 25, replace = TRUE))
+plot(world2raster(w1))
 p1 <- sortOn(agents = patches(w1), world = w1)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 sortdHeadingst1 <- sortOn(agents = t1, var = "heading")
 
 

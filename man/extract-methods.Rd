@@ -4,12 +4,10 @@
 \name{[}
 \alias{$,agentMatrix-method}
 \alias{[}
-\alias{[,NLworld,numeric,numeric,ANY-method}
 \alias{[,NLworldArray,missing,missing,ANY-method}
 \alias{[,NLworldArray,numeric,numeric,ANY-method}
 \alias{[,NLworldMatrix,missing,missing,ANY-method}
 \alias{[,NLworldMatrix,numeric,numeric,ANY-method}
-\alias{[,NLworldStack,numeric,numeric,ANY-method}
 \alias{[,agentMatrix,logical,missing,ANY-method}
 \alias{[,agentMatrix,missing,character,ANY-method}
 \alias{[,agentMatrix,missing,missing,missing-method}
@@ -18,12 +16,10 @@
 \alias{[,agentMatrix,numeric,missing,ANY-method}
 \alias{[,agentMatrix,numeric,numeric,ANY-method}
 \alias{[<-}
-\alias{[<-,NLworld,numeric,numeric,ANY-method}
 \alias{[<-,NLworldArray,missing,missing,matrix-method}
 \alias{[<-,NLworldArray,numeric,numeric,matrix-method}
 \alias{[<-,NLworldMatrix,missing,missing,ANY-method}
 \alias{[<-,NLworldMatrix,numeric,numeric,ANY-method}
-\alias{[<-,NLworldStack,numeric,numeric,matrix-method}
 \alias{[<-,agentMatrix,missing,character,character-method}
 \alias{[<-,agentMatrix,missing,numeric,character-method}
 \alias{[<-,agentMatrix,missing,numeric,numeric-method}
@@ -34,14 +30,6 @@
 \alias{[<-,agentMatrix,numeric,numeric,numeric-method}
 \title{Extract or Replace Parts of an Object}
 \usage{
-\S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
-
-\S4method{[}{NLworld,numeric,numeric,ANY}(x, i, j) <- value
-
-\S4method{[}{NLworldStack,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
-
-\S4method{[}{NLworldStack,numeric,numeric,matrix}(x, i, j) <- value
-
 \S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{NLworldMatrix,missing,missing,ANY}(x, i, j, ..., drop = TRUE)

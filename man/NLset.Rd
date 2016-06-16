@@ -3,25 +3,14 @@
 \docType{methods}
 \name{NLset}
 \alias{NLset}
-\alias{NLset,NLworld,missing,matrix,missing-method}
 \alias{NLset,NLworldArray,missing,matrix,character-method}
 \alias{NLset,NLworldMatrix,missing,matrix,missing-method}
 \alias{NLset,NLworldMatrix,missing,numeric,missing-method}
-\alias{NLset,NLworldStack,missing,matrix,character-method}
-\alias{NLset,missing,SpatialPointsDataFrame,SpatialPointsDataFrame,character-method}
 \alias{NLset,missing,agentMatrix,agentMatrix,character-method}
 \alias{set}
 \title{Set an agents variable}
 \usage{
 NLset(world, turtles, agents, var, val)
-
-\S4method{NLset}{NLworld,missing,matrix,missing}(world, agents, val)
-
-\S4method{NLset}{NLworldStack,missing,matrix,character}(world, agents, var, val)
-
-
-  \S4method{NLset}{missing,SpatialPointsDataFrame,SpatialPointsDataFrame,character}(turtles,
-  agents, var, val)
 
 \S4method{NLset}{missing,agentMatrix,agentMatrix,character}(turtles, agents,
   var, val)
@@ -33,26 +22,23 @@ NLset(world, turtles, agents, var, val)
 \S4method{NLset}{NLworldArray,missing,matrix,character}(world, agents, var, val)
 }
 \arguments{
-\item{world}{NLworlds or NLworldMs object.}
+\item{world}{NLworldMs object.}
 
-\item{turtles}{SpatialPointsDataFrame created by \code{createTurtles()} or
-by \code{createOTurtles()} representing the moving agents.}
+\item{turtles}{AgentMatrix object representing the moving agents.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{var}{Character. Vector of the name of the selected \code{agents} variables.
 If \code{agents} are patches and the \code{world} is a
-\code{NLworld} or \code{NLworldMatrix} object, \code{var} must not be provided. If
-\code{agents} are patches and the \code{world} is a \code{NLworldStack}
-or \code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
+\code{NLworldMatrix} object, \code{var} must not be provided. If
+\code{agents} are patches and the \code{world} is a
+\code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
-the turtles' variable and can be equal to \code{"xcor"},
-\code{"ycor"}, any of the variables created when turtles were created,
-as well as any variable created using \code{turtlesOwn()}.}
+the turtles' variable and can be any of the variables created when turtles were created,
+as well as any variable created with \code{turtlesOwn()}.}
 
 \item{val}{Numeric or character. Vector of length 1 or length \code{NLcount(agents)}
            if \code{length(var) == 1}, or
@@ -61,14 +47,14 @@ as well as any variable created using \code{turtlesOwn()}.}
            Columns must be in the same order as \code{var}.}
 }
 \value{
-NLworlds object with the values \code{val} assigned to the patches variables \code{var}
+NLworldMs object with the values \code{val} assigned to the patches variables \code{var}
         for the \code{agents}, or
 
-        SpatialPointsDataFrame representing the \code{turtles} with
+        AgentMatrix representing the \code{turtles} with
         the values \code{val} assigned to the variables \code{var} for the \code{agents}.
 }
 \description{
-Assign values to the \code{agents} for their selected variables.
+Assign values to the \code{agents} for the selected variables.
 }
 \details{
 If \code{agents} are patches, \code{world} must be provided and \code{turtles}
@@ -76,14 +62,13 @@ If \code{agents} are patches, \code{world} must be provided and \code{turtles}
          provided and \code{world} must not be provided.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- NLset(world = w1, agents = patches(w1), val = 1)
-w1 <- NLset(world = w1, agents = patch(w1, 0, 4), val = 0) # set the patch[0,0] to 0
+w1 <- NLset(world = w1, agents = patch(w1, 0, 4), val = 0) # set the patch[0,4] to 0
 of(world = w1, agents = patches(w1))
 
-t1 <- createTurtles(n = 3, world = w1, heading = 0)
-# set the heading of turtle 0 to 180
-t2 <- NLset(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180)
+t1 <- createTurtlesAM(n = 3, world = w1, heading = 0)
+t2 <- NLset(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180) # set the heading of turtle 0 to 180
 of(agents = t2, var = "heading") # c(180, 0, 0)
 
 

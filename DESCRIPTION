@@ -58,7 +58,6 @@ Collate:
     'NetLogoR-package.R'
     'agentset-functions.R'
     'function-arguments.R'
-    'oldStuff.R'
     'patch-functions.R'
     'turtle-functions.R'
     'world-functions.R'

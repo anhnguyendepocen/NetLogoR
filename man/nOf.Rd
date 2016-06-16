@@ -3,15 +3,12 @@
 \docType{methods}
 \name{nOf}
 \alias{nOf}
-\alias{nOf,SpatialPointsDataFrame,numeric-method}
 \alias{nOf,matrix,numeric-method}
 \title{N random agents}
 \usage{
 nOf(agents, n)
 
 \S4method{nOf}{matrix,numeric}(agents, n)
-
-\S4method{nOf}{SpatialPointsDataFrame,numeric}(agents, n)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
@@ -21,16 +18,12 @@ nOf(agents, n)
               column "pycor" representing the patches coordinates and the
               third column "id", or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents, or
-
-              AgentMatrix created by \code{createTurtlesAM()} or
-              by \code{createOTurtlesAM()} representing the moving agents, or
+              AgentMatrix object representing the moving agents, or
 
               Matrix (ncol = 2) with the first column "whoTurtles" and the
               second column "id".}
 
-\item{n}{documentation needed}
+\item{n}{Integer. Number of patches or turtles to select from \code{agents}.}
 }
 \value{
 Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
@@ -40,9 +33,6 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
         Matrix (ncol = 2) with the first column "pxcor"
         and the second  column "pycor" representing the coordinates of the
         selected patches from \code{agents}, \code{n} per individual "id", or
-
-        SpatialPointsDataFrame of length \code{n} representing the turtles
-        selected from \code{agents},
 
         AgentMatrix (nrow = \code{n}) representing the turtles
         selected from \code{agents},
@@ -54,8 +44,8 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column "pxcor"
 Report \code{n} patches or turtles randomly selected among \code{agents}.
 }
 \details{
-\code{n} must be less or equal the number of patches (per "id"
-         if provided) or turtles in \code{agents}.
+\code{n} must be less or equal the number of patches
+         or turtles in \code{agents}.
 
          If \code{agents} is a matrix with ncol = 3, the selection of \code{n}
          random patches is done per individual "id". The order of the patches
@@ -67,11 +57,11 @@ Report \code{n} patches or turtles randomly selected among \code{agents}.
 }
 \examples{
 # Patches
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 pSelect <- nOf(agents = patches(w1), n = 5)
 
 # Turtles
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 tSelect <- nOf(agents = t1, n = 2)
 
 

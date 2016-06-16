@@ -3,22 +3,18 @@
 \docType{methods}
 \name{isNLclass}
 \alias{isNLclass}
-\alias{isNLclass,SpatialPointsDataFrame,character-method}
 \alias{isNLclass,matrix,character-method}
 \title{Type of object}
 \usage{
 isNLclass(agents, class)
 
 \S4method{isNLclass}{matrix,character}(agents, class)
-
-\S4method{isNLclass}{SpatialPointsDataFrame,character}(agents, class)
 }
 \arguments{
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              SpatialPointsDataFrame created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{class}{Character. Can take one of the following options to define
 the \code{class}: \code{"agent"}, \code{"agentset"},
@@ -49,8 +45,8 @@ Careful! The \code{class} tested does not correspond to actual R classes.
          \code{"patcheset"} or \code{"turtleset"}.
 }
 \examples{
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
                     heading = sample(1:3, size = 10, replace= TRUE))
 isNLclass(agents = patches(w1), class = "patch")
 isNLclass(agents = patches(w1), class = "patcheset")

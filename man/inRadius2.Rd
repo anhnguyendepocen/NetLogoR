@@ -4,7 +4,7 @@
 \name{inRadius2}
 \alias{inRadius2}
 \alias{inRadius2,matrix,numeric,matrix-method}
-\title{Agents in radius 2}
+\title{Agents in radius}
 \usage{
 inRadius2(agents, radius, agents2, world, torus = FALSE)
 
@@ -12,22 +12,70 @@ inRadius2(agents, radius, agents2, world, torus = FALSE)
   torus = FALSE)
 }
 \arguments{
-\item{agents}{description needed}
+\item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-\item{radius}{description needed}
+              AgentMatrix object representing the moving agents.}
 
-\item{agents2}{description needed}
+\item{radius}{Numeric. Vector of distances from \code{agents} to locate
+\code{agents2}. Must be of length 1 or of length \code{agents}.}
 
-\item{world}{description needed}
+\item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
+              column "pycor" representing the patches coordinates, or
 
-\item{torus}{description needed}
+              AgentMatrix created by \code{createTurtles()} or
+              by \code{createOTurtles()} representing the moving agents.}
+
+\item{world}{NLworldMs object.}
+
+\item{torus}{Logical to determine if the \code{world} is wrapped. Default is
+\code{torus = FALSE}.}
+}
+\value{
+Matrix (ncol = 3) with the first column "pxcor"
+        and the second column "pycor" representing the coordinates of the
+        patches among \code{agents2} within \code{radius} distances for each \code{agents}
+        which are reprensented by the "id" column, if
+        \code{agents2} are patches, or
+
+        Matrix (ncol = 2) with the first column "who"
+        representing the "who" numbers of the
+        turtles among \code{agents2} within \code{radius} distances for each \code{agents}
+        which are reprensented by the "id" column, if
+        \code{agents2} are turtles.
 }
 \description{
 Report the patches or turtles among \code{agents2} within given distances of
 each of the \code{agents}.
-For NLwordMs and agentMatrix and return a matrix/df instead of a list
+}
+\details{
+Distances from/to patches are calculated from/to their center.
+
+         If \code{torus = FALSE}, \code{world} does not need to be provided.
+
+         If \code{torus = TRUE}, the \code{radius} distances are calculared
+         around the sides of the \code{world} to select \code{agents2}.
+}
+\examples{
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+
+p1 <- inRadius2(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1))
+t2 <- inRadius2(agents = patch(w1, 0, 0), radius = 2, agents2 = t1)
+p2 <- inRadius2(agents = t1, radius = 2, agents2 = patches(w1))
+t3 <- inRadius2(agents = turtle(t1, who = 0), radius = 2, agents2 = t1)
+
+
 }
 \author{
 Sarah Bauduin
+}
+\references{
+Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
+            Center for Connected Learning and Computer-Based Modeling,
+            Northwestern University. Evanston, IL.
+}
+\seealso{
+\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#in-radius}
 }
 
