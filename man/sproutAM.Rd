@@ -27,7 +27,8 @@ Must be of length 1 or of length the number of \code{patches}.
 If missing, a random heading is assigned to each sprouted turtle.}
 
 \item{color}{Character. Vector of color names.
-Must be of length 1, of length the number of \code{patches} or of length \code{sum(n)}.
+Must be of length 1, of length the number of \code{patches} or
+of length \code{sum(n)}.
 If missing, colors are assigned using the function rainbow(n)}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}

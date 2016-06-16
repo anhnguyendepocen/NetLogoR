@@ -40,15 +40,18 @@ Each patch gives an equal share of a portion of its value to its neighbor patche
 \details{
 What is given is lost for the patches.
 
-         If \code{torus = TRUE}, all patches have \code{nNeighbors} patches around them, which
+         If \code{torus = TRUE}, all patches have \code{nNeighbors} patches around
+         them, which
          some may be on the other sides of the \code{world}. If \code{torus = FALSE},
-         patches located on the edges of the \code{world} have less than \code{nNeighbors} patches around them.
-         However, each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
+         patches located on the edges of the \code{world} have less than
+         \code{nNeighbors} patches around them.
+         However, each neighbor still gets 1/4 or 1/8 of the shared amount
+         and the diffusing
          patch keeps the leftover.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = sample(c(1,2,3), size = NLcount(patches(w1)), replace = TRUE))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+                          data = sample(1:3, size = 25, replace = TRUE))
 plot(world2raster(w1))
 # Diffuse 50\% of each patch value to its 8 neighbors
 w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)

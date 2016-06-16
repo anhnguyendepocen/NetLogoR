@@ -16,10 +16,13 @@ if (getRversion() >= "3.1.0") {
 #'
 #' @details What is given is lost for the patches.
 #'
-#'          If \code{torus = TRUE}, all patches have \code{nNeighbors} patches around them, which
+#'          If \code{torus = TRUE}, all patches have \code{nNeighbors} patches around
+#'          them, which
 #'          some may be on the other sides of the \code{world}. If \code{torus = FALSE},
-#'          patches located on the edges of the \code{world} have less than \code{nNeighbors} patches around them.
-#'          However, each neighbor still gets 1/4 or 1/8 of the shared amount and the diffusing
+#'          patches located on the edges of the \code{world} have less than
+#'          \code{nNeighbors} patches around them.
+#'          However, each neighbor still gets 1/4 or 1/8 of the shared amount
+#'          and the diffusing
 #'          patch keeps the leftover.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#diffuse}
@@ -31,8 +34,8 @@ if (getRversion() >= "3.1.0") {
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' w1 <- NLset(world = w1, agents = patches(w1), val = sample(c(1,2,3), size = NLcount(patches(w1)), replace = TRUE))
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#'                           data = sample(1:3, size = 25, replace = TRUE))
 #' plot(world2raster(w1))
 #' # Diffuse 50% of each patch value to its 8 neighbors
 #' w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)
@@ -59,7 +62,8 @@ setGeneric(
 #' @rdname diffuse
 setMethod(
   "diffuse",
-  signature = c(world = "NLworldMatrix", pVar = "missing", share = "numeric", nNeighbors = "numeric"),
+  signature = c(world = "NLworldMatrix", pVar = "missing", share = "numeric",
+                nNeighbors = "numeric"),
   definition = function(world, share, nNeighbors, torus) {
 
     val <- as.numeric(t(world@.Data))
@@ -89,7 +93,8 @@ setMethod(
 #' @rdname diffuse
 setMethod(
   "diffuse",
-  signature = c(world = "NLworldArray", pVar = "character", share = "numeric", nNeighbors = "numeric"),
+  signature = c(world = "NLworldArray", pVar = "character", share = "numeric",
+                nNeighbors = "numeric"),
   definition = function(world, pVar, share, nNeighbors, torus) {
 
     layer <- match(pVar, dimnames(world)[[3]])
@@ -97,7 +102,8 @@ setMethod(
     cellNum <- 1:length(val)
     toGive <- (val * share) / nNeighbors
 
-    df <- adj(world@.Data[,,layer], cells = cellNum, directions = nNeighbors, torus = torus)
+    df <- adj(world@.Data[,,layer], cells = cellNum, directions = nNeighbors,
+              torus = torus)
     nNeigh <- plyr::count(df[,"from"])
     toGiveNeigh <- rep(toGive, nNeigh$freq)
     df <- df[order(df[, "from"]),]
@@ -125,9 +131,11 @@ setMethod(
 #' @inheritParams fargs
 #'
 #' @param allPairs Logical. Only relevant if the number of agents/locations in
-#'                 \code{agents} and in \code{agents2} are the same. If \code{allPairs = FALSE},
+#'                 \code{agents} and in \code{agents2} are the same. If
+#'                 \code{allPairs = FALSE},
 #'                 the distance between each \code{agents} with the
-#'                 corresponding \code{agents2} is returned. If \code{allPairs = TRUE}, a full
+#'                 corresponding \code{agents2} is returned. If
+#'                 \code{allPairs = TRUE}, a full
 #'                 distance matrix is returned. Default is \code{allPairs = FALSE}.
 #'
 #' @return Numeric. Vector of distances between \code{agents} and \code{agents2} if
@@ -135,8 +143,10 @@ setMethod(
 #'         one agent/location, or if \code{agents} and \code{agents2} contained the same
 #'         number of agents/locations and \code{allPairs = FALSE}, or
 #'
-#'         Matrix of distances between \code{agents} (rows) and \code{agents2} (columns)
-#'         if \code{agents} and \code{agents2} are of different lengths, or of same length
+#'         Matrix of distances between \code{agents} (rows) and
+#'         \code{agents2} (columns)
+#'         if \code{agents} and \code{agents2} are of different lengths,
+#'         or of same length
 #'         and \code{allPairs = TRUE}.
 #'
 #' @details Distances from/to a patch are measured from/to its center.
@@ -157,7 +167,8 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
-#' NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)), world = w1, torus = TRUE)
+#' NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)),
+#'        world = w1, torus = TRUE)
 #' t1 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2))
 #' NLdist(agents = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 #'
@@ -200,14 +211,18 @@ setMethod(
 
       # Need to create coordinates for "agents2" in a wrapped world
       # For all the 8 possibilities of wrapping (to the left, right, top, bottom and 4 corners)
-      to1 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to1 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin),
+                   pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
       to2 <- cbind(pxcor = agents2[,1], pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
-      to3 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
+      to3 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin),
+                   pycor = agents2[,2] + (world@extent@ymax - world@extent@ymin))
       to4 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
       to5 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2])
-      to6 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
+      to6 <- cbind(pxcor = agents2[,1] - (world@extent@xmax - world@extent@xmin),
+                   pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
       to7 <- cbind(pxcor = agents2[,1], pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
-      to8 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin), pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
+      to8 <- cbind(pxcor = agents2[,1] + (world@extent@xmax - world@extent@xmin),
+                   pycor = agents2[,2] - (world@extent@ymax - world@extent@ymin))
 
       dist1 <- pointDistance(p1 = agents, p2 = to1, lonlat = FALSE, allpairs = allPairs)
       dist2 <- pointDistance(p1 = agents, p2 = to2, lonlat = FALSE, allpairs = allPairs)
@@ -299,8 +314,10 @@ setMethod(
 #'          returned.
 #'
 #'          If \code{torus = FALSE}, \code{agents} located on the edges of the \code{world}
-#'          have less than \code{nNeighbors} patches around them. If \code{torus = TRUE}, all \code{agents}
-#'          located on the egdes of the \code{world} have \code{nNeighbors} patches around them, which
+#'          have less than \code{nNeighbors} patches around them. If
+#'          \code{torus = TRUE}, all \code{agents}
+#'          located on the egdes of the \code{world} have \code{nNeighbors}
+#'          patches around them, which
 #'          some may be on the other sides of the \code{world}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#neighbors}
@@ -338,7 +355,8 @@ setMethod(
   definition = function(world, agents, nNeighbors, torus) {
 
     if(class(agents) == "agentMatrix"){
-      agents <- patch(world = world, x = agents@.Data[,"xcor"], y = agents@.Data[,"ycor"], duplicate = TRUE)
+      agents <- patch(world = world, x = agents@.Data[,"xcor"],
+                      y = agents@.Data[,"ycor"], duplicate = TRUE)
     }
 
     # To be used with adj()
@@ -348,7 +366,7 @@ setMethod(
       worldMat <- world@.Data[,,1]
     }
 
-    if(nrow(agents) < 100000) { # data.frame is faster below 100 agents, data.table faster above
+    if(nrow(agents) < 100000) { # df is faster below 100 agents, DT faster above
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
       neighbors <- adj(worldMat, cells = cellNum, directions = nNeighbors,
                        torus = torus, id = seq_along(cellNum))
@@ -357,7 +375,8 @@ setMethod(
 
       # Output as a matrix
       neighbors_df <- neighbors_df[order(neighbors_df$id),]
-      neighborsID <- cbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor, id = neighbors_df$id)
+      neighborsID <- cbind(pxcor = neighbors_df$pxcor, pycor = neighbors_df$pycor,
+                           id = neighbors_df$id)
 
     } else {
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
@@ -578,7 +597,8 @@ setMethod(
 
     pxcor <- agents[,1] + dx
     pycor <- agents[,2] + dy
-    pAt <- patch(world = world, x = pxcor, y = pycor, duplicate = TRUE, torus = torus, out = TRUE)
+    pAt <- patch(world = world, x = pxcor, y = pycor, duplicate = TRUE,
+                 torus = torus, out = TRUE)
 
     return(pAt)
   }
@@ -655,7 +675,8 @@ setMethod(
     radAngle <- rad(angle)
     pxcor <- agents[,1] + sin(radAngle) * dist
     pycor <- agents[,2] + cos(radAngle) * dist
-    pDistHead <- patch(world = world, x = pxcor, y = pycor, torus = torus, duplicate = TRUE, out = TRUE)
+    pDistHead <- patch(world = world, x = pxcor, y = pycor, torus = torus,
+                       duplicate = TRUE, out = TRUE)
 
     return(pDistHead)
   }
@@ -680,9 +701,9 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' allPatches <- patches(world = w1)
-#' NLcount(allPatches)
+#' NLcount(allPatches) # 100 patches
 #'
 #'
 #' @export

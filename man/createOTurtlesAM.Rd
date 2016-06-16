@@ -23,7 +23,8 @@ If missing, colors are assigned using the function \code{rainbow(n)}.}
 }
 \value{
 AgentMatrix object of length \code{n} with data for the
-        turtles being: "xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", and "color".
+        turtles being: "xcor", "ycor", "who", "heading", "prevX", "prevY", "breed",
+        and "color".
 }
 \description{
 Create \code{n} turtles at the center of the \code{world} with their headings evenly
@@ -37,7 +38,8 @@ The identity of the turtles is defined by their "who" number. This
          "prevY". The initial values are \code{NA}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+                          data = runif(25))
 t1 <- createOTurtlesAM(n = 10, world = w1)
 plot(world2raster(w1))
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)

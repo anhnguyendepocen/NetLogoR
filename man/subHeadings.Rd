@@ -50,7 +50,8 @@ This function does the opposite as the one in NetLogo where
         \code{angle1} and \code{angle2} must be of the same length or if different,
         one of them must be of length 1.
 
-         Positive values mean clockwise rotations, negative value mean counterclockwise rotations.
+         Positive values mean clockwise rotations, negative value mean
+         counterclockwise rotations.
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

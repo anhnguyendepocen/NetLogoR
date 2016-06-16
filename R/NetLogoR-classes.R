@@ -125,15 +125,18 @@ setReplaceMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param data Vector of length 1 or length \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}.
+#' @param data Vector of length 1 or length
+#'            \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}.
 #'             Default is \code{NA}.
 #'
-#' @return NLworldMatrix object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+#' @return NLworldMatrix object composed of
+#'         \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches (i.e., matrix cells).
 #'
 #' @details If \code{data} is provided, values are assigned by rows.
 #'
-#'          If no parameters value are provided, default values are: \code{minPxcor = -16},
+#'          If no parameters value are provided, default values are:
+#'          \code{minPxcor = -16},
 #'          \code{maxPxcor = 16}, \code{minPycor = -16}, and \code{maxPycor = 16}.
 #'
 #'          See \code{help("NLworldMatrix-class")} for more details on the NLworldMatrix class.
@@ -143,7 +146,8 @@ setReplaceMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#'                           data = 1:25)
 #' plot(world2raster(w1))
 #'
 #'
@@ -170,7 +174,8 @@ setMethod(
     numX <- (maxPxcor - minPxcor + 1)
     numY <- (maxPycor - minPycor + 1)
     data <- matrix(ncol = numX,
-                    nrow = numY, data = data, byrow = TRUE) # byrow = TRUE to be similar as a raster when assigning data
+                    nrow = numY, data = data, byrow = TRUE)
+    # byrow = TRUE to be similar as a raster when assigning data
 
     world <- new("NLworldMatrix",
                  .Data = data,
@@ -498,6 +503,6 @@ setMethod(
   signature = c("NLworldMatrix", "numeric"),
   definition = function(world, cellNum) {
     b <- dim(world)
-    floor((cellNum - 1) / b[2])  + seq.int(from = 1, to = prod(b), by = b[1])[(cellNum - 1) %% b[2] + 1]
+    floor((cellNum - 1) / b[2]) + seq.int(from = 1, to = prod(b), by = b[1])[(cellNum - 1) %% b[2] + 1]
   }
 )

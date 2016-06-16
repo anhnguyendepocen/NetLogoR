@@ -56,7 +56,8 @@ Report the indviduals among \code{turtles} that are located on the patches at
 }
 \details{
 If the patch at distance \code{(dx, dy)}
-         of an agent is outside of the \code{world}'s extent and \code{torus = FALSE}, no turtle is returned;
+         of an agent is outside of the \code{world}'s extent and \code{torus = FALSE},
+         no turtle is returned;
          if \code{torus = TRUE}, the turtle located on the patch whose coordinates
          are defined from the wrapped \code{world} is returned.
 }

@@ -40,8 +40,10 @@ The patch around which the neighbors are identified, or the patch where
          returned.
 
          If \code{torus = FALSE}, \code{agents} located on the edges of the \code{world}
-         have less than \code{nNeighbors} patches around them. If \code{torus = TRUE}, all \code{agents}
-         located on the egdes of the \code{world} have \code{nNeighbors} patches around them, which
+         have less than \code{nNeighbors} patches around them. If
+         \code{torus = TRUE}, all \code{agents}
+         located on the egdes of the \code{world} have \code{nNeighbors}
+         patches around them, which
          some may be on the other sides of the \code{world}.
 }
 \examples{

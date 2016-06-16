@@ -20,7 +20,8 @@ inCone(turtles, radius, angle, agents, world, torus = FALSE)
 \item{angle}{Numeric. Vector of angles to define the size of the cone of vision
 for the \code{turtles}. The cone of vision is defined between the
 direction of their headings minus \code{angle / 2}
-to the direction of their headings plus \code{angle / 2}. Must be of length 1 or
+to the direction of their headings plus \code{angle / 2}. Must be of
+length 1 or
 of length \code{turtles}.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second

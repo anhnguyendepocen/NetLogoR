@@ -41,7 +41,8 @@ If a given \code{dist} value is negative, then the turtle would move backward.
          If a given \code{angle} value is negative, then the turtle would rotate to the right.
 
          If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
-         and \code{angle} degrees to the left of its heading is outside the \code{world}'s extent, \code{NA}
+         and \code{angle} degrees to the left of its heading is outside the
+         \code{world}'s extent, \code{NA}
          are returned for the patch coordinates. If \code{torus = TRUE}, the patch
          coordinates from a wrapped \code{world} are returned.
 }

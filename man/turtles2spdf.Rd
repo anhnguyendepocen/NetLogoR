@@ -14,7 +14,8 @@ turtles2spdf(turtles)
 \item{turtles}{AgentMatrix object representing the moving agents.}
 }
 \value{
-SpatialPointsDataFrame object representing the moving agents (coordinates and data)
+SpatialPointsDataFrame object representing the moving agents
+       (coordinates and data)
         as contained in \code{turtles}.
 }
 \description{

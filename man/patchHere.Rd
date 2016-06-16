@@ -25,7 +25,8 @@ Report the coordinates of the patches under the \code{turtles}
 locations.
 }
 \details{
-If a turtle is located outside of the \code{world}'s extent, \code{NA} are returned
+If a turtle is located outside of the \code{world}'s extent,
+         \code{NA} are returned
          for the patch coordinates.
 }
 \examples{

@@ -38,7 +38,8 @@ If missing, colors are assigned using the function \code{rainbow(n)}.}
 }
 \value{
 AgentMatrix object of length \code{n} with data for the
-        turtles being: "xcor", "ycor", "who", "heading", "prevX", "prevY", "breed", and "color".
+        turtles being: "xcor", "ycor", "who", "heading", "prevX", "prevY",
+        "breed", and "color".
 }
 \description{
 Create \code{n} moving agents with a set of defined variables.
@@ -53,7 +54,8 @@ If \code{coords} is provided, \code{world} must not be provided.
          "prevY". The initial values are \code{NA}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+                          data = runif(25))
 t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 plot(world2raster(w1))
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)

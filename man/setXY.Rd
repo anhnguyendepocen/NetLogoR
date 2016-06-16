@@ -46,7 +46,8 @@ Set the turtles \code{xcor} and \code{ycor} coordinates.
          is located outside of the \code{world}'s extent with the given coordinates.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = runif(100))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
+                          data = runif(100))
 t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
 plot(world2raster(w1))
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)

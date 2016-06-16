@@ -23,11 +23,13 @@ createNLworldMatrix(minPxcor, maxPxcor, minPycor, maxPycor, data = NA)
 
 \item{maxPycor}{Integer. Maximum pycor for the patches (world's top border).}
 
-\item{data}{Vector of length 1 or length \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}.
-Default is \code{NA}.}
+\item{data}{Vector of length 1 or length
+\code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}.
+ Default is \code{NA}.}
 }
 \value{
-NLworldMatrix object composed of \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
+NLworldMatrix object composed of
+        \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
         patches (i.e., matrix cells).
 }
 \description{
@@ -36,13 +38,15 @@ Create a world of patches of class NLworldMatrix.
 \details{
 If \code{data} is provided, values are assigned by rows.
 
-         If no parameters value are provided, default values are: \code{minPxcor = -16},
+         If no parameters value are provided, default values are:
+         \code{minPxcor = -16},
          \code{maxPxcor = 16}, \code{minPycor = -16}, and \code{maxPycor = 16}.
 
          See \code{help("NLworldMatrix-class")} for more details on the NLworldMatrix class.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+                          data = 1:25)
 plot(world2raster(w1))
 
 

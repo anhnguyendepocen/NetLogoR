@@ -41,12 +41,12 @@ Both \code{agents} and \code{except} must be of the same class (e.g., both
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9) # 100 patches
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
 NLcount(p1) # 99 patches
 
 # Turtles
-t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0, ycor = 0)) # 10 turtles
+t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0, ycor = 0))
 t2 <- other(agents = t1, except = turtle(t1, who = 0))
 NLcount(t2) # 9 turtles
 

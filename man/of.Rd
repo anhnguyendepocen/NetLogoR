@@ -31,13 +31,16 @@ of(world, agents, var)
 If \code{agents} are patches and the \code{world} is a
 \code{NLworldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a
-\code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
+\code{NLworldArray} object, \code{var} is the name of the layers to
+use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
-the turtles' variable and can be any of the variables created when turtles were created,
+the turtles' variable and can be any of the variables created
+when turtles were created,
 as well as any variable created with \code{turtlesOwn()}.}
 }
 \value{
-Vector of values for the \code{agents} if one variable is requested. The class depends
+Vector of values for the \code{agents} if one variable is
+        requested. The class depends
         of the variable class. The order of the vector follows the order
         of the \code{agents}, or
 
@@ -53,7 +56,8 @@ Report the \code{agents} values for the requested variable.
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+                          data = 1:25)
 of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 
 # Turtles

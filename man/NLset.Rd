@@ -35,9 +35,11 @@ NLset(world, turtles, agents, var, val)
 If \code{agents} are patches and the \code{world} is a
 \code{NLworldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a
-\code{NLworldArray} object, \code{var} is the name of the layers to use to define the patches
+\code{NLworldArray} object, \code{var} is the name of the layers to
+use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
-the turtles' variable and can be any of the variables created when turtles were created,
+the turtles' variable and can be any of the variables created
+when turtles were created,
 as well as any variable created with \code{turtlesOwn()}.}
 
 \item{val}{Numeric or character. Vector of length 1 or length \code{NLcount(agents)}
@@ -47,7 +49,8 @@ as well as any variable created with \code{turtlesOwn()}.}
            Columns must be in the same order as \code{var}.}
 }
 \value{
-NLworldMs object with the values \code{val} assigned to the patches variables \code{var}
+NLworldMs object with the values \code{val} assigned to the patches
+        variables \code{var}
         for the \code{agents}, or
 
         AgentMatrix representing the \code{turtles} with
@@ -64,11 +67,13 @@ If \code{agents} are patches, \code{world} must be provided and \code{turtles}
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- NLset(world = w1, agents = patches(w1), val = 1)
-w1 <- NLset(world = w1, agents = patch(w1, 0, 4), val = 0) # set the patch[0,4] to 0
+# Set the patch[0,4] to 0
+w1 <- NLset(world = w1, agents = patch(w1, 0, 4), val = 0)
 of(world = w1, agents = patches(w1))
 
 t1 <- createTurtlesAM(n = 3, world = w1, heading = 0)
-t2 <- NLset(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180) # set the heading of turtle 0 to 180
+# Set the heading of turtle 0 to 180
+t2 <- NLset(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180)
 of(agents = t2, var = "heading") # c(180, 0, 0)
 
 

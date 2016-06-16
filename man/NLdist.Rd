@@ -32,9 +32,11 @@ NLdist(agents, agents2, world, torus = FALSE, allPairs = FALSE)
 \code{torus = FALSE}.}
 
 \item{allPairs}{Logical. Only relevant if the number of agents/locations in
-\code{agents} and in \code{agents2} are the same. If \code{allPairs = FALSE},
+\code{agents} and in \code{agents2} are the same. If
+\code{allPairs = FALSE},
 the distance between each \code{agents} with the
-corresponding \code{agents2} is returned. If \code{allPairs = TRUE}, a full
+corresponding \code{agents2} is returned. If
+\code{allPairs = TRUE}, a full
 distance matrix is returned. Default is \code{allPairs = FALSE}.}
 }
 \value{
@@ -43,8 +45,10 @@ Numeric. Vector of distances between \code{agents} and \code{agents2} if
         one agent/location, or if \code{agents} and \code{agents2} contained the same
         number of agents/locations and \code{allPairs = FALSE}, or
 
-        Matrix of distances between \code{agents} (rows) and \code{agents2} (columns)
-        if \code{agents} and \code{agents2} are of different lengths, or of same length
+        Matrix of distances between \code{agents} (rows) and
+        \code{agents2} (columns)
+        if \code{agents} and \code{agents2} are of different lengths,
+        or of same length
         and \code{allPairs = TRUE}.
 }
 \description{
@@ -61,7 +65,8 @@ Distances from/to a patch are measured from/to its center.
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
-NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)), world = w1, torus = TRUE)
+NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)),
+       world = w1, torus = TRUE)
 t1 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2))
 NLdist(agents = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 
