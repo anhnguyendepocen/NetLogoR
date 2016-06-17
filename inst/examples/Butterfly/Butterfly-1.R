@@ -10,7 +10,7 @@
 #library(NetLogoR)
 
 # Create a world with the desired extent
-elevation <- createNLworldMatrix(minPxcor = 0, maxPxcor = 149, minPycor = 0, maxPycor = 149)
+elevation <- createWorld(minPxcor = 0, maxPxcor = 149, minPycor = 0, maxPycor = 149)
 
 # Define the patches values
 # Elevation decreases linearly with distance from the center of the hill
@@ -23,11 +23,11 @@ pElevation <- ifelse(elev1 > elev2, elev1, elev2)
 elevation <- NLset(world = elevation, agents = patches(elevation), val = pElevation)
 
 # Visualize the world
-# plot(world2raster(elevation))
+plot(world2raster(elevation))
 
 # Create turtles (one butterfly in this model)
-t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 85, ycor = 95)) # the butterfly's initial location is [85, 95]
-# t1 <- createTurtlesAM(n = 100, coords = cbind(xcor = 85, ycor = 95)) # can try with 100 butterflies
+t1 <- createTurtles(n = 1, coords = cbind(xcor = 85, ycor = 95)) # the butterfly's initial location is [85, 95]
+# t1 <- createTurtles(n = 100, coords = cbind(xcor = 85, ycor = 95)) # can try with 100 butterflies
 # Visualize the turtle
 # points(turtles2spdf(t1), pch = 16)
 
@@ -59,7 +59,7 @@ for(time in 1:1000){ # what is inside this loop will be iterated 1000 times
 
   # Visualize each new position for t1
   # Very slow, remove for speed
-  # points(turtles2spdf(t1), pch = 16)
+  points(turtles2spdf(t1), pch = 16)
 
   # Show the time step on the screen
   # Slow, remove for speed

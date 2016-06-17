@@ -26,8 +26,7 @@ rEvap <- 10 # varies from 0 to 99 in the NetLogo model
 # Patch values must be assigned to each world before stacking them
 
 # Chemical
-chemical <- createNLworldMatrix(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35) # amount of chemical on the patches
-chemical <- NLset(world = chemical, agents = patches(chemical), val = 0)
+chemical <- createWorld(minPxcor = -35, maxPxcor = 35, minPycor = -35, maxPycor = 35, data = 0) # amount of chemical on the patches
 
 # Nest
 nest <- chemical # 1 on nest patches, 0 elsewhere
@@ -54,10 +53,10 @@ foodSource <- NLset(world = foodSource, agents = PxcorPycorFromCell(world = food
 food <- NLset(world = food, agents = patches(food), val = 0)
 patchFood123 <- PxcorPycorFromCell(world = food, cellNum = c(patchFood1, patchFood2, patchFood3))
 food <- NLset(world = food, agents = patchFood123, val = sample(c(1,2), size = NLcount(patchFood123), replace = TRUE)) # set "food" at sources to either 1 or 2, randomly
-world <- NLworldArray(chemical, nest, nestScent, foodSource, food)
+world <- stackWorlds(chemical, nest, nestScent, foodSource, food)
 
 # Ants
-ants <- createTurtlesAM(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
+ants <- createTurtles(n = nAnts, coords = cbind(xcor = 0, ycor = 0), color = "red") # red = not carrying food
 
 # # Visualize the world
 # plot(world2raster(world)$layer.5) # food
