@@ -265,7 +265,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @return NLworldMatrix object with \code{NA} values for all patches.
+#' @return WorldMatrix object with \code{NA} values for all patches.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#clear-patches}
 #'
@@ -301,7 +301,7 @@ setGeneric(
 #' @rdname clearPatches
 setMethod(
   "clearPatches",
-  signature = c("NLworldMatrix"),
+  signature = c("worldMatrix"),
   definition = function(world) {
     world@.Data[] <- NA
     return(world)
@@ -324,14 +324,14 @@ setMethod(
 ################################################################################
 #' Convert a Raster* object into a NLworldMs object
 #'
-#' Convert a RasterLayer object into a NLworldMatrix object or a RasterStack object
+#' Convert a RasterLayer object into a worldMatrix object or a RasterStack object
 #' into a NLworldArray object.
 #'
 #' @param raster RasterLayer or RasterStack object.
 #'
 #' @param method "ngb" or "bilinear" for the resample method.
 #'
-#' @return NLworldMatrix or NLworldArray object depending on the input \code{raster}.
+#' @return WorldMatrix or NLworldArray object depending on the input \code{raster}.
 #'         Patches value are retained from the \code{raster}.
 #'
 #' @details See \code{help("NLworldMs-class")} for more details on the NLworlds
@@ -427,7 +427,7 @@ setMethod(
 ################################################################################
 #' Convert a NLworldMs object into a Raster* object
 #'
-#' Convert a NLworldMatrix object into a RasterLayer object or a
+#' Convert a worldMatrix object into a RasterLayer object or a
 #' NLworldArray object into a RasterStack object
 #'
 #' @inheritParams fargs
@@ -463,7 +463,7 @@ setGeneric(
 #' @rdname world2raster
 setMethod(
   "world2raster",
-  signature = c("NLworldMatrix"),
+  signature = c("worldMatrix"),
   definition = function(world) {
 
     raster <- raster(world@.Data, xmn = world@extent@xmin, xmx = world@extent@xmax,

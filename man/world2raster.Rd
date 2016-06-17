@@ -4,12 +4,12 @@
 \name{world2raster}
 \alias{world2raster}
 \alias{world2raster,NLworldArray-method}
-\alias{world2raster,NLworldMatrix-method}
+\alias{world2raster,worldMatrix-method}
 \title{Convert a NLworldMs object into a Raster* object}
 \usage{
 world2raster(world)
 
-\S4method{world2raster}{NLworldMatrix}(world)
+\S4method{world2raster}{worldMatrix}(world)
 
 \S4method{world2raster}{NLworldArray}(world)
 }
@@ -21,7 +21,7 @@ RasterLayer or RasterStack object depending on the input \code{world}.
         Patches value are retained from the \code{world}.
 }
 \description{
-Convert a NLworldMatrix object into a RasterLayer object or a
+Convert a worldMatrix object into a RasterLayer object or a
 NLworldArray object into a RasterStack object
 }
 \details{

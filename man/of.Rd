@@ -4,18 +4,18 @@
 \name{of}
 \alias{of}
 \alias{of,NLworldArray,matrix,character-method}
-\alias{of,NLworldMatrix,matrix,missing-method}
-\alias{of,NLworldMatrix,numeric,missing-method}
 \alias{of,missing,agentMatrix,character-method}
+\alias{of,worldMatrix,matrix,missing-method}
+\alias{of,worldMatrix,numeric,missing-method}
 \title{Values of an agents variable}
 \usage{
 of(world, agents, var)
 
 \S4method{of}{missing,agentMatrix,character}(agents, var)
 
-\S4method{of}{NLworldMatrix,matrix,missing}(world, agents)
+\S4method{of}{worldMatrix,matrix,missing}(world, agents)
 
-\S4method{of}{NLworldMatrix,numeric,missing}(world, agents)
+\S4method{of}{worldMatrix,numeric,missing}(world, agents)
 
 \S4method{of}{NLworldArray,matrix,character}(world, agents, var)
 }
@@ -29,7 +29,7 @@ of(world, agents, var)
 
 \item{var}{Character. Vector of the name of the selected \code{agents} variables.
 If \code{agents} are patches and the \code{world} is a
-\code{NLworldMatrix} object, \code{var} must not be provided. If
+\code{worldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a
 \code{NLworldArray} object, \code{var} is the name of the layers to
 use to define the patches

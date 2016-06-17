@@ -5,13 +5,13 @@
 \alias{NLworldMs-class}
 \title{The NLworldMs class}
 \description{
-The \code{NLworldMs} class is the union of the \code{NLworldMatrix} and \code{NLworldArray}
+The \code{NLworldMs} class is the union of the \code{worldMatrix} and \code{NLworldArray}
 classes. Mostly used for building function purposes.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{members}}{NLworldMatrix, NLworldArray}
+\item{\code{members}}{worldMatrix, NLworldArray}
 }}
 \author{
 Sarah Bauduin, and Eliot McIntire

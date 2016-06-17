@@ -5,12 +5,12 @@
 \alias{withMax}
 \alias{withMax,agentMatrix,missing,character-method}
 \alias{withMax,matrix,NLworldArray,character-method}
-\alias{withMax,matrix,NLworldMatrix,missing-method}
+\alias{withMax,matrix,worldMatrix,missing-method}
 \title{Agents with maximum}
 \usage{
 withMax(agents, world, var)
 
-\S4method{withMax}{matrix,NLworldMatrix,missing}(agents, world)
+\S4method{withMax}{matrix,worldMatrix,missing}(agents, world)
 
 \S4method{withMax}{matrix,NLworldArray,character}(agents, world, var)
 

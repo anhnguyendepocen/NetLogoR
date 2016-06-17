@@ -5,12 +5,12 @@
 \alias{maxNof}
 \alias{maxNof,agentMatrix,numeric,missing,character-method}
 \alias{maxNof,matrix,numeric,NLworldArray,character-method}
-\alias{maxNof,matrix,numeric,NLworldMatrix,missing-method}
+\alias{maxNof,matrix,numeric,worldMatrix,missing-method}
 \title{N agents with maximum}
 \usage{
 maxNof(agents, n, world, var)
 
-\S4method{maxNof}{matrix,numeric,NLworldMatrix,missing}(agents, n, world)
+\S4method{maxNof}{matrix,numeric,worldMatrix,missing}(agents, n, world)
 
 \S4method{maxNof}{matrix,numeric,NLworldArray,character}(agents, n, world, var)
 

@@ -3,12 +3,12 @@
 \docType{methods}
 \name{NLworldIndex}
 \alias{NLworldIndex}
-\alias{NLworldIndex,NLworldMatrix,numeric-method}
-\title{NLWorldMatrix indices from vector indices}
+\alias{NLworldIndex,worldMatrix,numeric-method}
+\title{WorldMatrix indices from vector indices}
 \usage{
 NLworldIndex(world, cellNum)
 
-\S4method{NLworldIndex}{NLworldMatrix,numeric}(world, cellNum)
+\S4method{NLworldIndex}{worldMatrix,numeric}(world, cellNum)
 }
 \arguments{
 \item{world}{NLworldMs object.}
@@ -16,10 +16,10 @@ NLworldIndex(world, cellNum)
 \item{cellNum}{Integer. Vector of cells number.}
 }
 \value{
-Numeric. Vector of NLWorldMatrix indices.
+Numeric. Vector of worldMatrix indices.
 }
 \description{
-Convert vector indices or Raster* cellnumbers into NLWorldMatrix indices.
+Convert vector indices or Raster* cellnumbers into worldMatrix indices.
 }
 \examples{
 w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = 1:100)

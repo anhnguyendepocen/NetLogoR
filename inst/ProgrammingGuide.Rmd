@@ -1,7 +1,7 @@
 ---
 title: "Programming Guide NetLogoR"
 author: "Sarah Bauduin, Eliot McIntire"
-date: "March, 7th 2016"
+date: "June, 17th 2016"
 output: html_document
 ---
 
@@ -11,9 +11,9 @@ This document is based on the [NetLogo’s Programming Guide](https://ccl.northw
 
 ### World and agents
 
-In NetLogoR, the world is a `NLworlds` R object, either a `NLworld` or a `NLworldStack` R object. The world is two dimensional and is divided into a grid of square patches of resolution 1. 
+In NetLogoR, the world is a `NLworldMs` R object, either a `worldMatrix` or a `NLworldArray` R object. The world is a matrix, or a collection of matrices which represents a two dimensional landscape, divided into a grid of square patches (i.e., matrix cells) of resolution 1. 
 
-There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates `pxcor` and `pycor`, representing their center, as `matrix` objects. See `help("NLworld")` for more details on the patch coordinates system. Turtles are defined by their coordinates `xcor` and `ycor` and data associated as `SpatialPointDataFrame` objects. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).
+There are two types of agents in NetLogoR: the patches and the turtles. Patches cannot move whereas turtles can move. Patches are defined by their coordinates `pxcor` and `pycor`, representing the spatial location of their center, as `matrix` objects. See `help("NLworld")` for more details on the patch coordinates system. Turtles are defined by their coordinates `xcor` and `ycor` and data associated as `SpatialPointDataFrame` objects. Patches coordinates are always integers but turtles coordinates can have decimals (i.e., a turtle can be positioned anywhere on a patch).
 
 Links are not implemented in NetLogoR.
 

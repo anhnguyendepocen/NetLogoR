@@ -4,12 +4,12 @@
 \name{clearPatches}
 \alias{clearPatches}
 \alias{clearPatches,NLworldArray-method}
-\alias{clearPatches,NLworldMatrix-method}
+\alias{clearPatches,worldMatrix-method}
 \title{Clear world's patches}
 \usage{
 clearPatches(world)
 
-\S4method{clearPatches}{NLworldMatrix}(world)
+\S4method{clearPatches}{worldMatrix}(world)
 
 \S4method{clearPatches}{NLworldArray}(world)
 }
@@ -17,7 +17,7 @@ clearPatches(world)
 \item{world}{NLworldMs object.}
 }
 \value{
-NLworldMatrix object with \code{NA} values for all patches.
+WorldMatrix object with \code{NA} values for all patches.
 }
 \description{
 Reset all patches values to \code{NA}.

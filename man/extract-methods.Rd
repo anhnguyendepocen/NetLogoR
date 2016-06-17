@@ -6,8 +6,6 @@
 \alias{[}
 \alias{[,NLworldArray,missing,missing,ANY-method}
 \alias{[,NLworldArray,numeric,numeric,ANY-method}
-\alias{[,NLworldMatrix,missing,missing,ANY-method}
-\alias{[,NLworldMatrix,numeric,numeric,ANY-method}
 \alias{[,agentMatrix,logical,missing,ANY-method}
 \alias{[,agentMatrix,missing,character,ANY-method}
 \alias{[,agentMatrix,missing,missing,missing-method}
@@ -15,11 +13,11 @@
 \alias{[,agentMatrix,numeric,character,ANY-method}
 \alias{[,agentMatrix,numeric,missing,ANY-method}
 \alias{[,agentMatrix,numeric,numeric,ANY-method}
+\alias{[,worldMatrix,missing,missing,ANY-method}
+\alias{[,worldMatrix,numeric,numeric,ANY-method}
 \alias{[<-}
 \alias{[<-,NLworldArray,missing,missing,matrix-method}
 \alias{[<-,NLworldArray,numeric,numeric,matrix-method}
-\alias{[<-,NLworldMatrix,missing,missing,ANY-method}
-\alias{[<-,NLworldMatrix,numeric,numeric,ANY-method}
 \alias{[<-,agentMatrix,missing,character,character-method}
 \alias{[<-,agentMatrix,missing,numeric,character-method}
 \alias{[<-,agentMatrix,missing,numeric,numeric-method}
@@ -28,15 +26,17 @@
 \alias{[<-,agentMatrix,numeric,missing,numeric-method}
 \alias{[<-,agentMatrix,numeric,numeric,character-method}
 \alias{[<-,agentMatrix,numeric,numeric,numeric-method}
+\alias{[<-,worldMatrix,missing,missing,ANY-method}
+\alias{[<-,worldMatrix,numeric,numeric,ANY-method}
 \title{Extract or Replace Parts of an Object}
 \usage{
-\S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{worldMatrix,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{NLworldMatrix,missing,missing,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{worldMatrix,missing,missing,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{NLworldMatrix,numeric,numeric,ANY}(x, i, j) <- value
+\S4method{[}{worldMatrix,numeric,numeric,ANY}(x, i, j) <- value
 
-\S4method{[}{NLworldMatrix,missing,missing,ANY}(x, i, j) <- value
+\S4method{[}{worldMatrix,missing,missing,ANY}(x, i, j) <- value
 
 \S4method{[}{NLworldArray,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 

@@ -28,12 +28,12 @@ createWorld(minPxcor, maxPxcor, minPycor, maxPycor, data = NA)
  Default is \code{NA}.}
 }
 \value{
-NLworldMatrix object composed of
+WorldMatrix object composed of
         \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
         patches (i.e., matrix cells).
 }
 \description{
-Create a world of patches of class NLworldMatrix.
+Create a world of patches of class worldMatrix.
 }
 \details{
 If \code{data} is provided, values are assigned by rows.
@@ -42,7 +42,7 @@ If \code{data} is provided, values are assigned by rows.
          \code{minPxcor = -16},
          \code{maxPxcor = 16}, \code{minPycor = -16}, and \code{maxPycor = 16}.
 
-         See \code{help("NLworldMatrix-class")} for more details on the NLworldMatrix class.
+         See \code{help("worldMatrix-class")} for more details on the worldMatrix class.
 }
 \examples{
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,

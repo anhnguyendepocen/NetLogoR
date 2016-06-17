@@ -1305,7 +1305,7 @@ setGeneric(
 #' @rdname downhill
 setMethod(
   "downhill",
-  signature = c(world = "NLworldMatrix", pVar = "missing",turtles = "agentMatrix",
+  signature = c(world = "worldMatrix", pVar = "missing",turtles = "agentMatrix",
                 nNeighbors = "numeric"),
   definition = function(world, turtles, nNeighbors, torus) {
 
@@ -1345,7 +1345,7 @@ setMethod(
     # Output neighbors() as a matrix
     pNeighbors <- neighbors(world = world, agents = turtles, nNeighbors = nNeighbors, torus = torus)
 
-    ## Only difference with method for NLworldMatrix
+    ## Only difference with method for worldMatrix
     layer <- match(pVar, dimnames(world)[[3]])
     pValues <- as.numeric(t(world@.Data[,,layer])) # ordered by cellNumbers
     ##
@@ -1432,7 +1432,7 @@ setGeneric(
 #' @rdname uphill
 setMethod(
   "uphill",
-  signature = c(world = "NLworldMatrix", pVar = "missing",turtles = "agentMatrix",
+  signature = c(world = "worldMatrix", pVar = "missing",turtles = "agentMatrix",
                 nNeighbors = "numeric"),
   definition = function(world, turtles, nNeighbors, torus) {
     # Uphill is the inverse of downhill
@@ -2945,7 +2945,7 @@ setMethod(
 #'
 #' @param var Character. Vector of the name of the selected \code{agents} variables.
 #'            If \code{agents} are patches and the \code{world} is a
-#'            \code{NLworldMatrix} object, \code{var} must not be provided. If
+#'            \code{worldMatrix} object, \code{var} must not be provided. If
 #'            \code{agents} are patches and the \code{world} is a
 #'            \code{NLworldArray} object, \code{var} is the name of the layers to
 #'            use to define the patches
@@ -3034,7 +3034,7 @@ setMethod(
 #' @rdname of
 setMethod(
   "of",
-  signature = c("NLworldMatrix", "matrix", "missing"),
+  signature = c("worldMatrix", "matrix", "missing"),
   definition = function(world, agents) {
 
     if (identical(patches(world), agents)) {
@@ -3049,7 +3049,7 @@ setMethod(
 #' @rdname of
 setMethod(
   "of",
-  signature = c("NLworldMatrix", "numeric", "missing"),
+  signature = c("worldMatrix", "numeric", "missing"),
   definition = function(world, agents) {
 
     if (identical(patches(world), agents)) {

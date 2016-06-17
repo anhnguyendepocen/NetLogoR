@@ -5,12 +5,12 @@
 \alias{sortOn}
 \alias{sortOn,agentMatrix,missing,character-method}
 \alias{sortOn,matrix,NLworldArray,character-method}
-\alias{sortOn,matrix,NLworldMatrix,missing-method}
+\alias{sortOn,matrix,worldMatrix,missing-method}
 \title{Sort agents}
 \usage{
 sortOn(agents, world, var)
 
-\S4method{sortOn}{matrix,NLworldMatrix,missing}(agents, world)
+\S4method{sortOn}{matrix,worldMatrix,missing}(agents, world)
 
 \S4method{sortOn}{matrix,NLworldArray,character}(agents, world, var)
 

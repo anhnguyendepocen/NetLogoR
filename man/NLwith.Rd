@@ -5,13 +5,13 @@
 \alias{NLwith}
 \alias{NLwith,agentMatrix,missing,character-method}
 \alias{NLwith,matrix,NLworldArray,character-method}
-\alias{NLwith,matrix,NLworldMatrix,missing-method}
+\alias{NLwith,matrix,worldMatrix,missing-method}
 \alias{with}
 \title{Agents with}
 \usage{
 NLwith(agents, world, var, val)
 
-\S4method{NLwith}{matrix,NLworldMatrix,missing}(agents, world, val)
+\S4method{NLwith}{matrix,worldMatrix,missing}(agents, world, val)
 
 \S4method{NLwith}{matrix,NLworldArray,character}(agents, world, var, val)
 

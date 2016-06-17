@@ -3,24 +3,24 @@
 \docType{methods}
 \name{stackWorlds}
 \alias{stackWorlds}
-\alias{stackWorlds,NLworldMatrix-method}
+\alias{stackWorlds,worldMatrix-method}
 \title{Stack worlds}
 \usage{
 stackWorlds(...)
 
-\S4method{stackWorlds}{NLworldMatrix}(...)
+\S4method{stackWorlds}{worldMatrix}(...)
 }
 \arguments{
-\item{...}{NLworldMatrix objects.}
+\item{...}{worldMatrix objects.}
 }
 \value{
 NLworldArray object.
 }
 \description{
-Stack multiple NLworldMatrix into a NLworldArray.
+Stack multiple worldMatrix into a NLworldArray.
 }
 \details{
-The NLworldMatrix objects must all have the same extents.
+The worldMatrix objects must all have the same extents.
 }
 \examples{
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)

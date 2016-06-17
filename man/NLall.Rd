@@ -5,13 +5,13 @@
 \alias{NLall}
 \alias{NLall,agentMatrix,missing,character-method}
 \alias{NLall,matrix,NLworldArray,character-method}
-\alias{NLall,matrix,NLworldMatrix,missing-method}
+\alias{NLall,matrix,worldMatrix,missing-method}
 \alias{all}
 \title{All agents?}
 \usage{
 NLall(agents, world, var, val)
 
-\S4method{NLall}{matrix,NLworldMatrix,missing}(agents, world, val)
+\S4method{NLall}{matrix,worldMatrix,missing}(agents, world, val)
 
 \S4method{NLall}{matrix,NLworldArray,character}(agents, world, var, val)
 

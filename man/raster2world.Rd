@@ -19,11 +19,11 @@ raster2world(raster, method)
 \item{method}{"ngb" or "bilinear" for the resample method.}
 }
 \value{
-NLworldMatrix or NLworldArray object depending on the input \code{raster}.
+WorldMatrix or NLworldArray object depending on the input \code{raster}.
         Patches value are retained from the \code{raster}.
 }
 \description{
-Convert a RasterLayer object into a NLworldMatrix object or a RasterStack object
+Convert a RasterLayer object into a worldMatrix object or a RasterStack object
 into a NLworldArray object.
 }
 \details{

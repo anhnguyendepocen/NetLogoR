@@ -5,12 +5,12 @@
 \alias{maxOneOf}
 \alias{maxOneOf,agentMatrix,missing,character-method}
 \alias{maxOneOf,matrix,NLworldArray,character-method}
-\alias{maxOneOf,matrix,NLworldMatrix,missing-method}
+\alias{maxOneOf,matrix,worldMatrix,missing-method}
 \title{One agent with maximum}
 \usage{
 maxOneOf(agents, world, var)
 
-\S4method{maxOneOf}{matrix,NLworldMatrix,missing}(agents, world)
+\S4method{maxOneOf}{matrix,worldMatrix,missing}(agents, world)
 
 \S4method{maxOneOf}{matrix,NLworldArray,character}(agents, world, var)
 

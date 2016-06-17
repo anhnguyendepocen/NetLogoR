@@ -62,7 +62,7 @@ setGeneric(
 #' @rdname diffuse
 setMethod(
   "diffuse",
-  signature = c(world = "NLworldMatrix", pVar = "missing", share = "numeric",
+  signature = c(world = "worldMatrix", pVar = "missing", share = "numeric",
                 nNeighbors = "numeric"),
   definition = function(world, share, nNeighbors, torus) {
 
@@ -360,7 +360,7 @@ setMethod(
     }
 
     # To be used with adj()
-    if(class(world) == "NLworldMatrix"){
+    if(class(world) == "worldMatrix"){
       worldMat <- world@.Data
     } else { # NLworldArray
       worldMat <- world@.Data[,,1]

@@ -55,7 +55,7 @@ test_that("stackWorlds works",{
   expect_equivalent(w6@.Data[,,"w3"], w3@.Data)
 })
 
-test_that("[] works for NLworldMatrix",{
+test_that("[] works for worldMatrix",{
   w1 <- createWorld(minPxcor = 0, maxPxcor = 1, minPycor = 0, maxPycor = 1, data = c(1, 2, 3, 4))
   expect_equivalent(w1[], c(1,2,3,4))
 

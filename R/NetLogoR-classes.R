@@ -1,8 +1,8 @@
 ################################################################################
-#' The NLworldMatrix class
+#' The worldMatrix class
 #'
 #' This is an s4 class extension of \code{matrix} with 7 additional slots.
-#' A \code{NLworldMatrix} object can be viewes as a grid composed of squared patches
+#' A \code{worldMatrix} object can be viewes as a grid composed of squared patches
 #' (i.e., matrix cells). Patches have two spatial coordinates \code{pxcor} and
 #' \code{pycor}, representing the location of their center. \code{pxcor} and
 #' \code{pycor} are always integer and increment by 1. \code{pxcor} increases as
@@ -10,15 +10,15 @@
 #' \code{pycor} can be negative if there are patches to the left or below the patch
 #' \code{[pxcor = 0, pycor = 0]}.
 #'
-#' The first four slots of the \code{NLworldMatrix} are: \code{minPxcor}, \code{maxPxcor},
+#' The first four slots of the \code{worldMatrix} are: \code{minPxcor}, \code{maxPxcor},
 #' \code{minPycor}, \code{maxPycor} which represent the minimum and maximum patches
-#' coordinates in the \code{NLworldMatrix}.
+#' coordinates in the \code{worldMatrix}.
 #' The slot \code{extext} is similar to a \code{Raster*} extent. Because \code{pxcor}
 #' and \code{pycor} represent the spatial location at the center of the patches and the
-#' resolution of them is 1, the extent of the \code{NLworldMatrix} is equal to
+#' resolution of them is 1, the extent of the \code{worldMatrix} is equal to
 #' \code{xmin = minPxcor - 0.5}, code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5},
 #' and \code{ymax = maxPycor + 0.5}.
-#' The number of patches in a \code{NLworldMatrix} is equal to
+#' The number of patches in a \code{worldMatrix} is equal to
 #' \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
 #' The slot \code{res} is equal to \code{1} as it is the spatial resolution of the patches.
 #' The last slot \code{pCoords} is a \code{matrix} representing the patches coordinates
@@ -33,15 +33,15 @@
 #'             Center for Connected Learning and Computer-Based Modeling,
 #'             Northwestern University. Evanston, IL.
 #'
-#' @aliases NLworldMatrix
-#' @name NLworldMatrix-class
-#' @rdname NLworldMatrix-class
+#' @aliases worldMatrix
+#' @name worldMatrix-class
+#' @rdname worldMatrix-class
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
-#' @exportClass NLworldMatrix
+#' @exportClass worldMatrix
 #' @importClassesFrom raster Extent
 #'
 setClass(
-  "NLworldMatrix",
+  "worldMatrix",
   representation(
     .Data = "matrix",
     minPxcor = "numeric",
@@ -56,12 +56,12 @@ setClass(
 
 #' @export
 #' @name [
-#' @aliases [,NLworldMatrix,numeric,numeric,ANY-method
+#' @aliases [,worldMatrix,numeric,numeric,ANY-method
 #' @docType methods
 #' @rdname extract-methods
 setMethod(
   "[",
-  signature("NLworldMatrix", "numeric", "numeric", "ANY"),
+  signature("worldMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, ..., drop) {
 
     colMat <- i - x@minPxcor + 1
@@ -73,22 +73,22 @@ setMethod(
 
 #' @export
 #' @name [
-#' @aliases [,NLworldMatrix,missing,missing,ANY-method
+#' @aliases [,worldMatrix,missing,missing,ANY-method
 #' @rdname extract-methods
 setMethod(
   "[",
-  signature("NLworldMatrix", "missing", "missing", "ANY"),
+  signature("worldMatrix", "missing", "missing", "ANY"),
   definition = function(x, ..., drop) {
     return(as.numeric(t(x@.Data)))
 })
 
 #' @export
 #' @name [<-
-#' @aliases [<-,NLworldMatrix,numeric,numeric,ANY-method
+#' @aliases [<-,worldMatrix,numeric,numeric,ANY-method
 #' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldMatrix", "numeric", "numeric", "ANY"),
+  signature("worldMatrix", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, value) {
 
     colMat <- i - x@minPxcor + 1
@@ -101,11 +101,11 @@ setReplaceMethod(
 
 #' @export
 #' @name [<-
-#' @aliases [<-,NLworldMatrix,missing,missing,ANY-method
+#' @aliases [<-,worldMatrix,missing,missing,ANY-method
 #' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldMatrix", "missing", "missing", "ANY"),
+  signature("worldMatrix", "missing", "missing", "ANY"),
   definition = function(x, i, j, value) {
 
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
@@ -121,7 +121,7 @@ setReplaceMethod(
 ################################################################################
 #' Create a world
 #'
-#' Create a world of patches of class NLworldMatrix.
+#' Create a world of patches of class worldMatrix.
 #'
 #' @inheritParams fargs
 #'
@@ -129,7 +129,7 @@ setReplaceMethod(
 #'            \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}.
 #'             Default is \code{NA}.
 #'
-#' @return NLworldMatrix object composed of
+#' @return WorldMatrix object composed of
 #'         \code{(maxPxcor - minPxcor + 1) * (maxPycor - minPycor + 1)}
 #'         patches (i.e., matrix cells).
 #'
@@ -139,7 +139,7 @@ setReplaceMethod(
 #'          \code{minPxcor = -16},
 #'          \code{maxPxcor = 16}, \code{minPycor = -16}, and \code{maxPycor = 16}.
 #'
-#'          See \code{help("NLworldMatrix-class")} for more details on the NLworldMatrix class.
+#'          See \code{help("worldMatrix-class")} for more details on the worldMatrix class.
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -177,7 +177,7 @@ setMethod(
                     nrow = numY, data = data, byrow = TRUE)
     # byrow = TRUE to be similar as a raster when assigning data
 
-    world <- new("NLworldMatrix",
+    world <- new("worldMatrix",
                  .Data = data,
                  minPxcor = minPxcor, maxPxcor = maxPxcor, minPycor = minPycor, maxPycor = maxPycor,
                  extent = extent(minPxcor - 0.5, maxPxcor + 0.5, minPycor - 0.5, maxPycor + 0.5),
@@ -203,7 +203,7 @@ setMethod(
 #' The NLworldArray class
 #'
 #' This is an s4 class extension of \code{array}. It is a collection of several
-#' \code{NLworldMatrix} objects with the same extent (i.e., same values for all their
+#' \code{worldMatrix} objects with the same extent (i.e., same values for all their
 #' slots) stacked together. It is used to keep more than one value per patch.
 #'
 #' @name NLworldArray-class
@@ -302,13 +302,13 @@ setReplaceMethod(
 ################################################################################
 #' Stack worlds
 #'
-#' Stack multiple NLworldMatrix into a NLworldArray.
+#' Stack multiple worldMatrix into a NLworldArray.
 #'
-#' @param ... NLworldMatrix objects.
+#' @param ... worldMatrix objects.
 #'
 #' @return NLworldArray object.
 #'
-#' @details The NLworldMatrix objects must all have the same extents.
+#' @details The worldMatrix objects must all have the same extents.
 #'
 #' @examples
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
@@ -335,14 +335,14 @@ setGeneric(
 #' @rdname stackWorlds
 setMethod(
   "stackWorlds",
-  signature = "NLworldMatrix",
+  signature = "worldMatrix",
   definition = function(...) {
     NLwMs <- list(...)
     # similar dimensions can have different extent
     if (length(unique(lapply(NLwMs, FUN = function(x){x@extent}))) == 1) {
       out <- abind::abind(NLwMs@.Data, along = 3)
     } else {
-      stop("NLworldMatrix extents must all be equal")
+      stop("worldMatrix extents must all be equal")
     }
     objNames <- as.character(substitute(deparse(...))[-1])
     dimnames(out) <- list(NULL, NULL, objNames)
@@ -364,10 +364,10 @@ setMethod(
 #' The NLworldMs class
 #'
 #'
-#' The \code{NLworldMs} class is the union of the \code{NLworldMatrix} and \code{NLworldArray}
+#' The \code{NLworldMs} class is the union of the \code{worldMatrix} and \code{NLworldArray}
 #' classes. Mostly used for building function purposes.
 #'
-#' @slot members  NLworldMatrix, NLworldArray
+#' @slot members  worldMatrix, NLworldArray
 #'
 #' @aliases NLworldMs
 #' @name NLworldMs-class
@@ -375,7 +375,7 @@ setMethod(
 #' @author Sarah Bauduin, and Eliot McIntire
 #' @exportClass NLworldMs
 setClassUnion(name = "NLworldMs",
-              members = c("NLworldMatrix", "NLworldArray")
+              members = c("worldMatrix", "NLworldArray")
 )
 
 
@@ -462,13 +462,13 @@ setMethod(
 
 
 ################################################################################
-#' NLWorldMatrix indices from vector indices
+#' WorldMatrix indices from vector indices
 #'
-#' Convert vector indices or Raster* cellnumbers into NLWorldMatrix indices.
+#' Convert vector indices or Raster* cellnumbers into worldMatrix indices.
 #'
 #' @inheritParams fargs
 #'
-#' @return Numeric. Vector of NLWorldMatrix indices.
+#' @return Numeric. Vector of worldMatrix indices.
 #'
 #' @export
 #' @docType methods
@@ -500,7 +500,7 @@ setGeneric(
 #' @rdname NLworldIndex
 setMethod(
   "NLworldIndex",
-  signature = c("NLworldMatrix", "numeric"),
+  signature = c("worldMatrix", "numeric"),
   definition = function(world, cellNum) {
     b <- dim(world)
     floor((cellNum - 1) / b[2]) + seq.int(from = 1, to = prod(b), by = b[1])[(cellNum - 1) %% b[2] + 1]

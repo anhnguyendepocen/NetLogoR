@@ -5,12 +5,12 @@
 \alias{minNof}
 \alias{minNof,agentMatrix,numeric,missing,character-method}
 \alias{minNof,matrix,numeric,NLworldArray,character-method}
-\alias{minNof,matrix,numeric,NLworldMatrix,missing-method}
+\alias{minNof,matrix,numeric,worldMatrix,missing-method}
 \title{N agents with minimum}
 \usage{
 minNof(agents, n, world, var)
 
-\S4method{minNof}{matrix,numeric,NLworldMatrix,missing}(agents, n, world)
+\S4method{minNof}{matrix,numeric,worldMatrix,missing}(agents, n, world)
 
 \S4method{minNof}{matrix,numeric,NLworldArray,character}(agents, n, world, var)
 
