@@ -27,8 +27,8 @@ NLall(agents, world, var, val)
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a
-\code{NLworld} object, \code{var} must not be provided. If
-\code{agents} are patches and the \code{world} is a \code{NLworldStack}
+worldMatrix object, \code{var} must not be provided. If
+\code{agents} are patches and the \code{world} is a worldArray
 object, \code{var} is the name of the layer to use to define the patches
 values. If \code{agents} are turtles, \code{var} is one of
 the turtles' variable and can be equal to \code{"xcor"},
