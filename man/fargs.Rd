@@ -27,7 +27,7 @@ or of the same length as \code{pxcor}.}
 
 \item{cellNum}{Integer. Vector of cells number.}
 
-\item{pVar}{Character. If the \code{world} is a NLworldArray object, \code{pVar}
+\item{pVar}{Character. If the \code{world} is a worldArray object, \code{pVar}
 is the name of the layer to use to define the patches values.
 \code{pVar} must not be provided if the \code{world} is a worldMatrix object.}
 

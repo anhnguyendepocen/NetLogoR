@@ -4,8 +4,6 @@
 \name{[}
 \alias{$,agentMatrix-method}
 \alias{[}
-\alias{[,NLworldArray,missing,missing,ANY-method}
-\alias{[,NLworldArray,numeric,numeric,ANY-method}
 \alias{[,agentMatrix,logical,missing,ANY-method}
 \alias{[,agentMatrix,missing,character,ANY-method}
 \alias{[,agentMatrix,missing,missing,missing-method}
@@ -13,11 +11,11 @@
 \alias{[,agentMatrix,numeric,character,ANY-method}
 \alias{[,agentMatrix,numeric,missing,ANY-method}
 \alias{[,agentMatrix,numeric,numeric,ANY-method}
+\alias{[,worldArray,missing,missing,ANY-method}
+\alias{[,worldArray,numeric,numeric,ANY-method}
 \alias{[,worldMatrix,missing,missing,ANY-method}
 \alias{[,worldMatrix,numeric,numeric,ANY-method}
 \alias{[<-}
-\alias{[<-,NLworldArray,missing,missing,matrix-method}
-\alias{[<-,NLworldArray,numeric,numeric,matrix-method}
 \alias{[<-,agentMatrix,missing,character,character-method}
 \alias{[<-,agentMatrix,missing,numeric,character-method}
 \alias{[<-,agentMatrix,missing,numeric,numeric-method}
@@ -26,6 +24,8 @@
 \alias{[<-,agentMatrix,numeric,missing,numeric-method}
 \alias{[<-,agentMatrix,numeric,numeric,character-method}
 \alias{[<-,agentMatrix,numeric,numeric,numeric-method}
+\alias{[<-,worldArray,missing,missing,matrix-method}
+\alias{[<-,worldArray,numeric,numeric,matrix-method}
 \alias{[<-,worldMatrix,missing,missing,ANY-method}
 \alias{[<-,worldMatrix,numeric,numeric,ANY-method}
 \title{Extract or Replace Parts of an Object}
@@ -38,13 +38,13 @@
 
 \S4method{[}{worldMatrix,missing,missing,ANY}(x, i, j) <- value
 
-\S4method{[}{NLworldArray,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{worldArray,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{NLworldArray,missing,missing,ANY}(x, i, j, ..., drop = TRUE)
+\S4method{[}{worldArray,missing,missing,ANY}(x, i, j, ..., drop = TRUE)
 
-\S4method{[}{NLworldArray,numeric,numeric,matrix}(x, i, j) <- value
+\S4method{[}{worldArray,numeric,numeric,matrix}(x, i, j) <- value
 
-\S4method{[}{NLworldArray,missing,missing,matrix}(x, i, j) <- value
+\S4method{[}{worldArray,missing,missing,matrix}(x, i, j) <- value
 
 \S4method{[}{agentMatrix,numeric,numeric,ANY}(x, i, j, ..., drop = TRUE)
 

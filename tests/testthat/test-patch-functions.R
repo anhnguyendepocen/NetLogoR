@@ -20,7 +20,7 @@ test_that("diffuse works with 4 neighbors", {
   val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 4) + (6 * 0.5 / 4) + (3 * 0.5 / 4) + (2 * 0.5 / 4)
   expect_identical(as.numeric(w3[0,2]),val03)
 
-  # NLworldArray
+  # worldArray
   w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- stackWorlds(w1, w2)
@@ -67,7 +67,7 @@ test_that("diffuse works with 8 neighbors", {
   val03 <- 1 - (0.5 * 1) + (3 * 0.5 / 8) + (6 * 0.5 / 8) + (3 * 0.5 / 8) + (2 * 0.5 / 8) + (2 * 0.5 / 8) + (8 * 0.5 / 8) + (10 * 0.5 / 8) + (8 * 0.5 / 8)
   expect_identical(as.numeric(w3[0,2]),val03)
 
-  # NLworldArray
+  # worldArray
   w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- stackWorlds(w1, w2)

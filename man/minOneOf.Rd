@@ -4,7 +4,7 @@
 \name{minOneOf}
 \alias{minOneOf}
 \alias{minOneOf,agentMatrix,missing,character-method}
-\alias{minOneOf,matrix,NLworldArray,character-method}
+\alias{minOneOf,matrix,worldArray,character-method}
 \alias{minOneOf,matrix,worldMatrix,missing-method}
 \title{One agent with minimum}
 \usage{
@@ -12,7 +12,7 @@ minOneOf(agents, world, var)
 
 \S4method{minOneOf}{matrix,worldMatrix,missing}(agents, world)
 
-\S4method{minOneOf}{matrix,NLworldArray,character}(agents, world, var)
+\S4method{minOneOf}{matrix,worldArray,character}(agents, world, var)
 
 \S4method{minOneOf}{agentMatrix,missing,character}(agents, var)
 }

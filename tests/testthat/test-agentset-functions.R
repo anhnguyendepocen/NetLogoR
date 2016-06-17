@@ -114,7 +114,7 @@ test_that("NLwith works",{
   p4 <- NLwith(agents = patches(world = w1), world = w1, val = 10)
   expect_equivalent(p4, noPatches())
 
-  # With NLworldArray
+  # With worldArray
   valw2 <- rep(0, 25)
   valw2[c(3, 13)] <- 1
   w2 <- createWorld(data = valw2, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)

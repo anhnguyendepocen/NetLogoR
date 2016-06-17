@@ -312,7 +312,7 @@ setMethod(
 #' @rdname clearPatches
 setMethod(
   "clearPatches",
-  signature = c("NLworldArray"),
+  signature = c("worldArray"),
   definition = function(world) {
     worldNA <- createWorld(minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
                                    minPycor = minPycor(world), maxPycor = maxPycor(world))
@@ -325,13 +325,13 @@ setMethod(
 #' Convert a Raster* object into a NLworldMs object
 #'
 #' Convert a RasterLayer object into a worldMatrix object or a RasterStack object
-#' into a NLworldArray object.
+#' into a worldArray object.
 #'
 #' @param raster RasterLayer or RasterStack object.
 #'
 #' @param method "ngb" or "bilinear" for the resample method.
 #'
-#' @return WorldMatrix or NLworldArray object depending on the input \code{raster}.
+#' @return WorldMatrix or worldArray object depending on the input \code{raster}.
 #'         Patches value are retained from the \code{raster}.
 #'
 #' @details See \code{help("NLworldMs-class")} for more details on the NLworlds
@@ -411,7 +411,7 @@ setMethod(
     out <- abind::abind(worldR, along = 3)
     dimnames(out) <- list(NULL, NULL, names(raster))
 
-    worldArray <- new("NLworldArray",
+    wArray <- new("worldArray",
                       .Data = out,
                       minPxcor = minPxcor, maxPxcor = maxPxcor,
                       minPycor = minPycor, maxPycor = maxPycor,
@@ -420,7 +420,7 @@ setMethod(
                       pCoords = world@pCoords
     )
 
-    return(worldArray)
+    return(wArray)
   })
 
 
@@ -428,7 +428,7 @@ setMethod(
 #' Convert a NLworldMs object into a Raster* object
 #'
 #' Convert a worldMatrix object into a RasterLayer object or a
-#' NLworldArray object into a RasterStack object
+#' worldArray object into a RasterStack object
 #'
 #' @inheritParams fargs
 #'
@@ -477,7 +477,7 @@ setMethod(
 #' @rdname world2raster
 setMethod(
   "world2raster",
-  signature = c("NLworldArray"),
+  signature = c("worldArray"),
   definition = function(world) {
 
     listRaster <- lapply(1:dim(world)[3],function(x) {

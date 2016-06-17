@@ -82,7 +82,7 @@ test_that("[] works for worldMatrix",{
   expect_equivalent(w1[], as.numeric(c(NA,NA,NA,NA)))
 })
 
-test_that("[] works with NLworldArray",{
+test_that("[] works with worldArray",{
   w1 <- createWorld(minPxcor = 0, maxPxcor = 1, minPycor = 0, maxPycor = 1, data = c(1, 2, 3, 4))
   w2 <- w1
   w2[] <- c(10, 20, 30, 40)

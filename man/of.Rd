@@ -3,8 +3,8 @@
 \docType{methods}
 \name{of}
 \alias{of}
-\alias{of,NLworldArray,matrix,character-method}
 \alias{of,missing,agentMatrix,character-method}
+\alias{of,worldArray,matrix,character-method}
 \alias{of,worldMatrix,matrix,missing-method}
 \alias{of,worldMatrix,numeric,missing-method}
 \title{Values of an agents variable}
@@ -17,7 +17,7 @@ of(world, agents, var)
 
 \S4method{of}{worldMatrix,numeric,missing}(world, agents)
 
-\S4method{of}{NLworldArray,matrix,character}(world, agents, var)
+\S4method{of}{worldArray,matrix,character}(world, agents, var)
 }
 \arguments{
 \item{world}{NLworldMs object.}
@@ -31,7 +31,7 @@ of(world, agents, var)
 If \code{agents} are patches and the \code{world} is a
 \code{worldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a
-\code{NLworldArray} object, \code{var} is the name of the layers to
+\code{worldArray} object, \code{var} is the name of the layers to
 use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
 the turtles' variable and can be any of the variables created

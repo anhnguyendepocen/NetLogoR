@@ -200,20 +200,20 @@ setMethod(
 
 
 ################################################################################
-#' The NLworldArray class
+#' The worldArray class
 #'
 #' This is an s4 class extension of \code{array}. It is a collection of several
 #' \code{worldMatrix} objects with the same extent (i.e., same values for all their
 #' slots) stacked together. It is used to keep more than one value per patch.
 #'
-#' @name NLworldArray-class
-#' @rdname NLworldArray-class
+#' @name worldArray-class
+#' @rdname worldArray-class
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
-#' @exportClass NLworldArray
+#' @exportClass worldArray
 #' @importClassesFrom raster Extent
 #'
 setClass(
-  "NLworldArray",
+  "worldArray",
   representation(
     .Data = "array",
     minPxcor = "numeric",
@@ -228,12 +228,12 @@ setClass(
 
 #' @export
 #' @name [
-#' @aliases [,NLworldArray,numeric,numeric,ANY-method
+#' @aliases [,worldArray,numeric,numeric,ANY-method
 #' @docType methods
 #' @rdname extract-methods
 setMethod(
   "[",
-  signature("NLworldArray", "numeric", "numeric", "ANY"),
+  signature("worldArray", "numeric", "numeric", "ANY"),
   definition = function(x, i, j, ..., drop) {
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
@@ -248,12 +248,12 @@ setMethod(
 
 #' @export
 #' @name [
-#' @aliases [,NLworldArray,missing,missing,ANY-method
+#' @aliases [,worldArray,missing,missing,ANY-method
 #' @docType methods
 #' @rdname extract-methods
 setMethod(
   "[",
-  signature("NLworldArray", "missing", "missing", "ANY"),
+  signature("worldArray", "missing", "missing", "ANY"),
   definition = function(x, ..., drop) {
     cellValues <- unlist(lapply(1:dim(x)[3], function(z){as.numeric(t(x@.Data[,,z]))}))
     dim(cellValues) <- c(dim(x)[1] * dim(x)[2], dim(x)[3])
@@ -263,11 +263,11 @@ setMethod(
 
 #' @export
 #' @name [<-
-#' @aliases [<-,NLworldArray,numeric,numeric,matrix-method
+#' @aliases [<-,worldArray,numeric,numeric,matrix-method
 #' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldArray", "numeric", "numeric", "matrix"),
+  signature("worldArray", "numeric", "numeric", "matrix"),
   definition = function(x, i, j, value) {
     colMat <- i - x@minPxcor + 1
     rowMat <- x@maxPycor - j + 1
@@ -281,11 +281,11 @@ setReplaceMethod(
 
 #' @export
 #' @name [<-
-#' @aliases [<-,NLworldArray,missing,missing,matrix-method
+#' @aliases [<-,worldArray,missing,missing,matrix-method
 #' @rdname extract-methods
 setReplaceMethod(
   "[",
-  signature("NLworldArray", "missing", "missing", "matrix"),
+  signature("worldArray", "missing", "missing", "matrix"),
   definition = function(x, i, j, value) {
     nCell <- dim(x@.Data)[1] * dim(x@.Data)[2]
     if (NROW(value) != nCell) { # assuming value has one row
@@ -302,11 +302,11 @@ setReplaceMethod(
 ################################################################################
 #' Stack worlds
 #'
-#' Stack multiple worldMatrix into a NLworldArray.
+#' Stack multiple worldMatrix into a worldArray.
 #'
 #' @param ... worldMatrix objects.
 #'
-#' @return NLworldArray object.
+#' @return WorldArray object.
 #'
 #' @details The worldMatrix objects must all have the same extents.
 #'
@@ -347,7 +347,7 @@ setMethod(
     objNames <- as.character(substitute(deparse(...))[-1])
     dimnames(out) <- list(NULL, NULL, objNames)
 
-    world <- new("NLworldArray",
+    world <- new("worldArray",
                  .Data = out,
                  minPxcor = NLwMs[[1]]@minPxcor, maxPxcor = NLwMs[[1]]@maxPxcor,
                  minPycor = NLwMs[[1]]@minPycor, maxPycor = NLwMs[[1]]@maxPycor,
@@ -364,10 +364,10 @@ setMethod(
 #' The NLworldMs class
 #'
 #'
-#' The \code{NLworldMs} class is the union of the \code{worldMatrix} and \code{NLworldArray}
+#' The \code{NLworldMs} class is the union of the \code{worldMatrix} and \code{worldArray}
 #' classes. Mostly used for building function purposes.
 #'
-#' @slot members  worldMatrix, NLworldArray
+#' @slot members  worldMatrix, worldArray
 #'
 #' @aliases NLworldMs
 #' @name NLworldMs-class
@@ -375,7 +375,7 @@ setMethod(
 #' @author Sarah Bauduin, and Eliot McIntire
 #' @exportClass NLworldMs
 setClassUnion(name = "NLworldMs",
-              members = c("worldMatrix", "NLworldArray")
+              members = c("worldMatrix", "worldArray")
 )
 
 

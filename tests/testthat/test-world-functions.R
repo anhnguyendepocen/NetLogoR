@@ -53,7 +53,7 @@ test_that("clearPatches works", {
   w3 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3)
   expect_equivalent(w2, w3)
 
-  # NLworldArray
+  # worldArray
   w4 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3, data = 1:20)
   w5 <- w4
   w6 <- stackWorlds(w4, w5)

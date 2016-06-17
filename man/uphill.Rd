@@ -3,7 +3,7 @@
 \docType{methods}
 \name{uphill}
 \alias{uphill}
-\alias{uphill,NLworldArray,character,agentMatrix,numeric-method}
+\alias{uphill,worldArray,character,agentMatrix,numeric-method}
 \alias{uphill,worldMatrix,missing,agentMatrix,numeric-method}
 \title{Move uphill}
 \usage{
@@ -12,13 +12,13 @@ uphill(world, pVar, turtles, nNeighbors, torus = FALSE)
 \S4method{uphill}{worldMatrix,missing,agentMatrix,numeric}(world, turtles,
   nNeighbors, torus)
 
-\S4method{uphill}{NLworldArray,character,agentMatrix,numeric}(world, pVar,
+\S4method{uphill}{worldArray,character,agentMatrix,numeric}(world, pVar,
   turtles, nNeighbors, torus = FALSE)
 }
 \arguments{
 \item{world}{NLworldMs object.}
 
-\item{pVar}{Character. If the \code{world} is a NLworldArray object, \code{pVar}
+\item{pVar}{Character. If the \code{world} is a worldArray object, \code{pVar}
 is the name of the layer to use to define the patches values.
 \code{pVar} must not be provided if the \code{world} is a worldMatrix object.}
 

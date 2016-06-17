@@ -60,7 +60,7 @@ setMethod(
 #' @rdname NLall
 setMethod(
   "NLall",
-  signature = c("matrix", "NLworldArray", "character", "ANY"),
+  signature = c("matrix", "worldArray", "character", "ANY"),
   definition = function(agents, world, var, val) {
     withVal <- NLwith(agents = agents, world = world, var = var, val = val)
     allTrue <- ifelse(nrow(agents) == nrow(withVal), TRUE, FALSE)
@@ -268,7 +268,7 @@ setMethod(
 #' @rdname sortOn
 setMethod(
   "sortOn",
-  signature = c("matrix", "NLworldArray", "character"),
+  signature = c("matrix", "worldArray", "character"),
   definition = function(agents, world, var) {
 
     agentsVal <- world[agents[,1], agents[,2]]
@@ -364,7 +364,7 @@ setMethod(
 #' @rdname NLwith
 setMethod(
   "NLwith",
-  signature = c("matrix", "NLworldArray", "character", "ANY"),
+  signature = c("matrix", "worldArray", "character", "ANY"),
   definition = function(agents, world, var, val) {
 
     agentsCell <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
@@ -474,7 +474,7 @@ setMethod(
 #' @rdname withMax
 setMethod(
   "withMax",
-  signature = c("matrix", "NLworldArray", "character"),
+  signature = c("matrix", "worldArray", "character"),
   definition = function(agents, world, var) {
 
     val <- of(world = world, agents = agents, var = var)
@@ -582,7 +582,7 @@ setMethod(
 #' @rdname withMin
 setMethod(
   "withMin",
-  signature = c("matrix", "NLworldArray", "character"),
+  signature = c("matrix", "worldArray", "character"),
   definition = function(agents, world, var) {
 
     val <- of(world = world, agents = agents, var = var)
@@ -691,7 +691,7 @@ setMethod(
 #' @rdname maxOneOf
 setMethod(
   "maxOneOf",
-  signature = c("matrix", "NLworldArray", "character"),
+  signature = c("matrix", "worldArray", "character"),
   definition = function(agents, world, var) {
     maxAgents <- withMax(world = world, agents = agents, var = var)
     row <- sample(1:NROW(maxAgents), size = 1)
@@ -786,7 +786,7 @@ setMethod(
 #' @rdname minOneOf
 setMethod(
   "minOneOf",
-  signature = c("matrix", "NLworldArray", "character"),
+  signature = c("matrix", "worldArray", "character"),
   definition = function(agents, world, var) {
     minAgents <- withMin(world = world, agents = agents, var = var)
     row <- sample(1:NROW(minAgents), size = 1)
@@ -1227,7 +1227,7 @@ setMethod(
 #' @rdname maxNof
 setMethod(
   "maxNof",
-  signature = c("matrix", "numeric", "NLworldArray", "character"),
+  signature = c("matrix", "numeric", "worldArray", "character"),
   definition = function(agents, n, world, var) {
 
     if (n == 1) {
@@ -1393,7 +1393,7 @@ setMethod(
 #' @rdname minNof
 setMethod(
   "minNof",
-  signature = c("matrix", "numeric", "NLworldArray", "character"),
+  signature = c("matrix", "numeric", "worldArray", "character"),
   definition = function(agents, n, world, var) {
 
     if (n == 1) {
@@ -2038,7 +2038,7 @@ setMethod(
 #' @rdname NLset
 setMethod(
   "NLset",
-  signature = c(world = "NLworldArray", turtles = "missing", agents = "matrix",
+  signature = c(world = "worldArray", turtles = "missing", agents = "matrix",
                 var = "character", val = "ANY"),
   definition = function(world, agents, var, val) {
 

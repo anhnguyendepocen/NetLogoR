@@ -3,8 +3,8 @@
 \docType{methods}
 \name{NLset}
 \alias{NLset}
-\alias{NLset,NLworldArray,missing,matrix,character-method}
 \alias{NLset,missing,agentMatrix,agentMatrix,character-method}
+\alias{NLset,worldArray,missing,matrix,character-method}
 \alias{NLset,worldMatrix,missing,matrix,missing-method}
 \alias{NLset,worldMatrix,missing,numeric,missing-method}
 \alias{set}
@@ -19,7 +19,7 @@ NLset(world, turtles, agents, var, val)
 
 \S4method{NLset}{worldMatrix,missing,numeric,missing}(world, agents, val)
 
-\S4method{NLset}{NLworldArray,missing,matrix,character}(world, agents, var, val)
+\S4method{NLset}{worldArray,missing,matrix,character}(world, agents, var, val)
 }
 \arguments{
 \item{world}{NLworldMs object.}
@@ -35,7 +35,7 @@ NLset(world, turtles, agents, var, val)
 If \code{agents} are patches and the \code{world} is a
 \code{worldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a
-\code{NLworldArray} object, \code{var} is the name of the layers to
+\code{worldArray} object, \code{var} is the name of the layers to
 use to define the patches
 values. If \code{agents} are turtles, \code{var} is some of
 the turtles' variable and can be any of the variables created

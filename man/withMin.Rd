@@ -4,7 +4,7 @@
 \name{withMin}
 \alias{withMin}
 \alias{withMin,agentMatrix,missing,character-method}
-\alias{withMin,matrix,NLworldArray,character-method}
+\alias{withMin,matrix,worldArray,character-method}
 \alias{withMin,matrix,worldMatrix,missing-method}
 \title{Agents with minimum}
 \usage{
@@ -12,7 +12,7 @@ withMin(agents, world, var)
 
 \S4method{withMin}{matrix,worldMatrix,missing}(agents, world)
 
-\S4method{withMin}{matrix,NLworldArray,character}(agents, world, var)
+\S4method{withMin}{matrix,worldArray,character}(agents, world, var)
 
 \S4method{withMin}{agentMatrix,missing,character}(agents, var)
 }

@@ -14,10 +14,10 @@ stackWorlds(...)
 \item{...}{worldMatrix objects.}
 }
 \value{
-NLworldArray object.
+WorldArray object.
 }
 \description{
-Stack multiple worldMatrix into a NLworldArray.
+Stack multiple worldMatrix into a worldArray.
 }
 \details{
 The worldMatrix objects must all have the same extents.

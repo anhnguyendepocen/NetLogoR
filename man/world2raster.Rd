@@ -3,7 +3,7 @@
 \docType{methods}
 \name{world2raster}
 \alias{world2raster}
-\alias{world2raster,NLworldArray-method}
+\alias{world2raster,worldArray-method}
 \alias{world2raster,worldMatrix-method}
 \title{Convert a NLworldMs object into a Raster* object}
 \usage{
@@ -11,7 +11,7 @@ world2raster(world)
 
 \S4method{world2raster}{worldMatrix}(world)
 
-\S4method{world2raster}{NLworldArray}(world)
+\S4method{world2raster}{worldArray}(world)
 }
 \arguments{
 \item{world}{NLworldMs object.}
@@ -22,7 +22,7 @@ RasterLayer or RasterStack object depending on the input \code{world}.
 }
 \description{
 Convert a worldMatrix object into a RasterLayer object or a
-NLworldArray object into a RasterStack object
+worldArray object into a RasterStack object
 }
 \details{
 The Raster* returned has the same extent and resolution as the \code{world}

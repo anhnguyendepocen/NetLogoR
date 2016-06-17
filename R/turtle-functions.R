@@ -1338,7 +1338,7 @@ setMethod(
 #' @rdname downhill
 setMethod(
   "downhill",
-  signature = c(world = "NLworldArray", pVar = "character",turtles = "agentMatrix",
+  signature = c(world = "worldArray", pVar = "character",turtles = "agentMatrix",
                 nNeighbors = "numeric"),
   definition = function(world, pVar, turtles, nNeighbors, torus) {
 
@@ -1445,7 +1445,7 @@ setMethod(
 #' @rdname uphill
 setMethod(
   "uphill",
-  signature = c(world = "NLworldArray", pVar = "character",turtles = "agentMatrix",
+  signature = c(world = "worldArray", pVar = "character",turtles = "agentMatrix",
                 nNeighbors = "numeric"),
   definition = function(world, pVar, turtles, nNeighbors, torus) {
     world[] <- 1 / world[]
@@ -2947,7 +2947,7 @@ setMethod(
 #'            If \code{agents} are patches and the \code{world} is a
 #'            \code{worldMatrix} object, \code{var} must not be provided. If
 #'            \code{agents} are patches and the \code{world} is a
-#'            \code{NLworldArray} object, \code{var} is the name of the layers to
+#'            \code{worldArray} object, \code{var} is the name of the layers to
 #'            use to define the patches
 #'            values. If \code{agents} are turtles, \code{var} is some of
 #'            the turtles' variable and can be any of the variables created
@@ -3064,7 +3064,7 @@ setMethod(
 #' @rdname of
 setMethod(
   "of",
-  signature = c("NLworldArray", "matrix", "character"),
+  signature = c("worldArray", "matrix", "character"),
   definition = function(world, agents, var) {
 
     if (identical(patches(world), agents)) {

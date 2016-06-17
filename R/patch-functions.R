@@ -93,7 +93,7 @@ setMethod(
 #' @rdname diffuse
 setMethod(
   "diffuse",
-  signature = c(world = "NLworldArray", pVar = "character", share = "numeric",
+  signature = c(world = "worldArray", pVar = "character", share = "numeric",
                 nNeighbors = "numeric"),
   definition = function(world, pVar, share, nNeighbors, torus) {
 
@@ -362,7 +362,7 @@ setMethod(
     # To be used with adj()
     if(class(world) == "worldMatrix"){
       worldMat <- world@.Data
-    } else { # NLworldArray
+    } else { # worldArray
       worldMat <- world@.Data[,,1]
     }
 

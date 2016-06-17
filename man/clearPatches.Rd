@@ -3,7 +3,7 @@
 \docType{methods}
 \name{clearPatches}
 \alias{clearPatches}
-\alias{clearPatches,NLworldArray-method}
+\alias{clearPatches,worldArray-method}
 \alias{clearPatches,worldMatrix-method}
 \title{Clear world's patches}
 \usage{
@@ -11,7 +11,7 @@ clearPatches(world)
 
 \S4method{clearPatches}{worldMatrix}(world)
 
-\S4method{clearPatches}{NLworldArray}(world)
+\S4method{clearPatches}{worldArray}(world)
 }
 \arguments{
 \item{world}{NLworldMs object.}

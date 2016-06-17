@@ -3,7 +3,7 @@
 \docType{methods}
 \name{diffuse}
 \alias{diffuse}
-\alias{diffuse,NLworldArray,character,numeric,numeric-method}
+\alias{diffuse,worldArray,character,numeric,numeric-method}
 \alias{diffuse,worldMatrix,missing,numeric,numeric-method}
 \title{Diffuse values in a world}
 \usage{
@@ -12,13 +12,13 @@ diffuse(world, pVar, share, nNeighbors, torus = FALSE)
 \S4method{diffuse}{worldMatrix,missing,numeric,numeric}(world, share,
   nNeighbors, torus)
 
-\S4method{diffuse}{NLworldArray,character,numeric,numeric}(world, pVar, share,
+\S4method{diffuse}{worldArray,character,numeric,numeric}(world, pVar, share,
   nNeighbors, torus = FALSE)
 }
 \arguments{
 \item{world}{NLworldMs object.}
 
-\item{pVar}{Character. If the \code{world} is a NLworldArray object, \code{pVar}
+\item{pVar}{Character. If the \code{world} is a worldArray object, \code{pVar}
 is the name of the layer to use to define the patches values.
 \code{pVar} must not be provided if the \code{world} is a worldMatrix object.}
 
