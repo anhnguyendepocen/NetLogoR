@@ -86,8 +86,7 @@ setMethod(
     world[] <- newVal
     return(world)
 
-  }
-)
+})
 
 #' @export
 #' @rdname diffuse
@@ -119,9 +118,7 @@ setMethod(
     world@.Data[,,layer] <- matrix(newVal, ncol = dim(world)[2], byrow = TRUE)
 
     return(world)
-  }
-)
-
+})
 
 ################################################################################
 #' Distances between agents
@@ -184,7 +181,7 @@ setGeneric(
   "NLdist",
   function(agents, agents2, world, torus = FALSE, allPairs = FALSE) {
     standardGeneric("NLdist")
-  })
+})
 
 #' @export
 #' @rdname NLdist
@@ -193,19 +190,18 @@ setMethod(
   signature = c(agents = "matrix", agents2 = "matrix"),
   definition = function(agents, agents2, world, torus, allPairs) {
 
-    if(class(agents) == "agentMatrix"){
+    if (class(agents) == "agentMatrix") {
       agents <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
     }
 
-    if(class(agents2) == "agentMatrix"){
+    if (class(agents2) == "agentMatrix") {
       agents2 <- agents2@.Data[,c("xcor", "ycor"), drop = FALSE]
     }
 
     dist <- pointDistance(p1 = agents, p2 = agents2, lonlat = FALSE, allpairs = allPairs)
 
-    if(torus == TRUE){
-
-      if(missing(world)){
+    if (torus == TRUE) {
+      if (missing(world)) {
         stop("A world must be provided as torus = TRUE")
       }
 
@@ -237,9 +233,7 @@ setMethod(
     }
 
     return(dist)
-  }
-)
-
+})
 
 ################################################################################
 #' Do the patches exist?
@@ -272,7 +266,7 @@ setGeneric(
   "pExist",
   function(world, pxcor, pycor) {
     standardGeneric("pExist")
-  })
+})
 
 #' @export
 #' @rdname pExist
@@ -281,10 +275,10 @@ setMethod(
   signature = c("worldNLR", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
 
-    if(length(pxcor) == 1 & length(pycor) != 1){
+    if (length(pxcor) == 1 & length(pycor) != 1) {
       pxcor <- rep(pxcor, length(pycor))
     }
-    if(length(pycor) == 1 & length(pxcor) != 1){
+    if (length(pycor) == 1 & length(pxcor) != 1) {
       pycor <- rep(pycor, length(pxcor))
     }
 
@@ -293,9 +287,7 @@ setMethod(
     pExist <- pxcorIn & pycorIn
 
     return(pExist)
-  }
-)
-
+})
 
 ################################################################################
 #' Neighbors patches
@@ -354,19 +346,19 @@ setMethod(
   signature = c(world = "worldNLR", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
-    if(class(agents) == "agentMatrix"){
+    if (class(agents) == "agentMatrix") {
       agents <- patch(world = world, x = agents@.Data[,"xcor"],
                       y = agents@.Data[,"ycor"], duplicate = TRUE)
     }
 
     # To be used with adj()
-    if(class(world) == "worldMatrix"){
+    if (class(world) == "worldMatrix") {
       worldMat <- world@.Data
     } else { # worldArray
       worldMat <- world@.Data[,,1]
     }
 
-    if(nrow(agents) < 100000) { # df is faster below 100 agents, DT faster above
+    if (nrow(agents) < 100000) { # df is faster below 100 agents, DT faster above
       cellNum <- cellFromPxcorPycor(world = world, pxcor = agents[,1], pycor = agents[,2])
       neighbors <- adj(worldMat, cells = cellNum, directions = nNeighbors,
                        torus = torus, id = seq_along(cellNum))
@@ -392,9 +384,7 @@ setMethod(
     }
 
     return(neighborsID)
-  }
-)
-
+})
 
 ################################################################################
 #' Patches coordinates
@@ -458,7 +448,7 @@ setGeneric(
   "patch",
   function(world, x, y, duplicate = FALSE, torus = FALSE, out = FALSE) {
     standardGeneric("patch")
-  })
+})
 
 #' @export
 #' @rdname patch
@@ -470,7 +460,7 @@ setMethod(
     pxcor_ <- round(x)
     pycor_ <- round(y)
 
-    if(torus == TRUE){
+    if (torus == TRUE) {
       pCoords <- wrap(cbind(x = pxcor_, y = pycor_), world@extent)
       pxcor_ <- pCoords[,1]
       pycor_ <- pCoords[,2]
@@ -481,7 +471,7 @@ setMethod(
     pxcor_[is.na(pycor_)] <- NA
     pycor_[is.na(pxcor_)] <- NA
 
-    if(out == FALSE){
+    if (out == FALSE) {
       pxcor_ = pxcor_[!is.na(pxcor_)]
       pycor_ = pycor_[!is.na(pycor_)]
     }
@@ -489,7 +479,7 @@ setMethod(
     pCoords <- matrix(data = c(pxcor_, pycor_), ncol = 2,
                       nrow = length(pxcor_), dimnames = list(NULL, c("pxcor", "pycor")))
 
-    if(duplicate == FALSE){
+    if (duplicate == FALSE) {
       pCoords <- unique(pCoords)
     }
     return(pCoords)
@@ -536,7 +526,6 @@ setMethod(
     return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
 })
 
-
 ################################################################################
 #' Patches at
 #'
@@ -581,7 +570,7 @@ setGeneric(
   "patchAt",
   function(world, agents, dx, dy, torus = FALSE) {
     standardGeneric("patchAt")
-  })
+})
 
 #' @export
 #' @rdname patchAt
@@ -590,7 +579,7 @@ setMethod(
   signature = c(world = "worldNLR", agents = "matrix", dx = "numeric", dy = "numeric"),
   definition = function(world, agents, dx, dy, torus) {
 
-    if(class(agents) == "agentMatrix"){
+    if (class(agents) == "agentMatrix") {
       agents <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
     }
 
@@ -600,9 +589,7 @@ setMethod(
                  torus = torus, out = TRUE)
 
     return(pAt)
-  }
-)
-
+})
 
 ################################################################################
 #' Patches at certain distances and certain directions
@@ -658,7 +645,7 @@ setGeneric(
   "patchDistDir",
   function(world, agents, dist, angle, torus = FALSE) {
     standardGeneric("patchDistDir")
-  })
+})
 
 #' @export
 #' @rdname patchDistDir
@@ -667,7 +654,7 @@ setMethod(
   signature = c(world = "worldNLR", agents = "matrix", dist = "numeric", angle = "numeric"),
   definition = function(world, agents, dist, angle, torus) {
 
-    if(class(agents) == "agentMatrix"){
+    if (class(agents) == "agentMatrix") {
       agents <- agents@.Data[,c("xcor", "ycor"), drop = FALSE]
     }
 
@@ -678,9 +665,7 @@ setMethod(
                        duplicate = TRUE, out = TRUE)
 
     return(pDistHead)
-  }
-)
-
+})
 
 ################################################################################
 #' All the patches in a world
@@ -715,7 +700,7 @@ setGeneric(
   "patches",
   function(world) {
     standardGeneric("patches")
-  })
+})
 
 #' @export
 #' @rdname patches
@@ -724,9 +709,7 @@ setMethod(
   signature = "worldNLR",
   definition = function(world) {
     return(world@pCoords)
-  }
-)
-
+})
 
 ################################################################################
 #' Patch set
@@ -765,7 +748,7 @@ setGeneric(
   "patchSet",
   function(...) {
     standardGeneric("patchSet")
-  })
+})
 
 #' @export
 #' @rdname patchSet
@@ -777,9 +760,7 @@ setMethod(
     dots <-list(...)
     pCoords <- unique(do.call(rbind, dots))
     return(pCoords)
-  }
-)
-
+})
 
 ################################################################################
 #' Random pxcor
@@ -811,7 +792,7 @@ setGeneric(
   "randomPxcor",
   function(world, n) {
     standardGeneric("randomPxcor")
-  })
+})
 
 #' @export
 #' @rdname randomPxcor
@@ -821,9 +802,7 @@ setMethod(
   definition = function(world, n) {
     pxcor <- sample(minPxcor(world):maxPxcor(world), size = n, replace = TRUE)
     return(pxcor)
-  }
-)
-
+})
 
 ################################################################################
 #' Random pycor
@@ -855,7 +834,7 @@ setGeneric(
   "randomPycor",
   function(world, n) {
     standardGeneric("randomPycor")
-  })
+})
 
 #' @export
 #' @rdname randomPycor
@@ -865,5 +844,4 @@ setMethod(
   definition = function(world, n) {
     pycor <- sample(minPycor(world):maxPycor(world), size = n, replace = TRUE)
     return(pycor)
-  }
-)
+})
