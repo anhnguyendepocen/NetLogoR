@@ -34,7 +34,7 @@ NLany(p2)
 
 # Turtles
 t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
-t2 <- noTurtlesAM()
+t2 <- noTurtles()
 NLany(t1)
 NLany(t2)
 

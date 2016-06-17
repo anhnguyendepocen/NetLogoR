@@ -107,7 +107,7 @@ setMethod(
 #'
 #' # Turtles
 #' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
-#' t2 <- noTurtlesAM()
+#' t2 <- noTurtles()
 #' NLany(t1)
 #' NLany(t2)
 #'
@@ -1269,7 +1269,7 @@ setMethod(
     if (n == 1) {
       maxOneOf(agents = agents, var = var)
     } else if (n == 0) {
-      noTurtlesAM()
+      noTurtles()
     } else if (n == NLcount(agents)) {
       return(agents)
     } else {
@@ -1435,7 +1435,7 @@ setMethod(
     if (n == 1) {
       minOneOf(agents = agents, var = var)
     } else if (n == 0) {
-      noTurtlesAM()
+      noTurtles()
     } else if (n == NLcount(agents)) {
       return(agents)
     } else {

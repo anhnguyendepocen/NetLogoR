@@ -665,7 +665,7 @@ test_that("turtle works",{
   t15 <- turtle(t6, 3)
   expect_equivalent(t15, t13)
   t16 <- turtle(t1, 11)
-  expect_equivalent(noTurtlesAM(),t16)
+  expect_equivalent(noTurtles(),t16)
 })
 
 test_that("turtlesOn works",{
@@ -726,8 +726,8 @@ test_that("turtlesOn works",{
   expect_equivalent(nrow(t12), 0)
 })
 
-test_that("noTurtlesAM works",{
-  t1 <- noTurtlesAM()
+test_that("noTurtles works",{
+  t1 <- noTurtles()
   expect_equivalent(NLcount(t1), 0)
   expect_equivalent(nrow(t1@.Data), 0)
   expect_equivalent(ncol(t1@.Data), 8)
@@ -788,11 +788,11 @@ test_that("turtleSet works",{
   # tAll2 <- turtleSet(t1, t1) # cause warnings
   # expect_identical(tAll2@.Data, t1@.Data)
 
-  t4 <- turtleSet(t1, noTurtlesAM())
+  t4 <- turtleSet(t1, noTurtles())
   expect_equivalent(t4, t1)
 
-  t5 <- turtleSet(noTurtlesAM(), noTurtlesAM())
-  expect_equivalent(noTurtlesAM(), t5)
+  t5 <- turtleSet(noTurtles(), noTurtles())
+  expect_equivalent(noTurtles(), t5)
 
   t3 <- turtlesOwn(turtles = t3, tVar = "age", tVal = 10)
   tAll <- turtleSet(t1, t2, t3)

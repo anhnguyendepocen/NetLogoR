@@ -36,7 +36,7 @@ test_that("NLany works",{
 
   # Turtles
   t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world= w1, n = 10))
-  t2 <- noTurtlesAM()
+  t2 <- noTurtles()
   t3 <- NLwith(agents = t1, var = "xcor", val = 10)
   t4 <- turtle(t1, who = 0)
   expect_identical(NLany(t1), TRUE)
@@ -62,7 +62,7 @@ test_that("NLcount works",{
 
   # Turtles
   w1 <- createNLworldMatrix(0, 4, 0, 4)
-  t1 <- noTurtlesAM()
+  t1 <- noTurtles()
   t2 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
   t3 <- turtle(turtles = t2, who = c(1, 2, 3))
   expect_equivalent(NLcount(t1), 0)
@@ -138,7 +138,7 @@ test_that("NLwith works",{
   t6 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
   expect_equivalent(t6, turtle(turtles = t1, who = c(0, 1, 2, 3)))
   t7 <- NLwith(agents = t1, var = "breed", val = "moose")
-  expect_equivalent(t7, noTurtlesAM())
+  expect_equivalent(t7, noTurtles())
 })
 
 test_that("withMax works",{
@@ -290,7 +290,7 @@ test_that("isNLclass works",{
   expect_identical(isNLclass(agents = patch(w1, x = c(0,2), y = c(1,0)), class = "patch"), FALSE)
   expect_identical(isNLclass(agents = noPatches(), class = "patchset"), FALSE)
   expect_identical(isNLclass(agents = turtle(t1, who = c(0,2)), class = "turtle"), FALSE)
-  expect_identical(isNLclass(agents = noTurtlesAM(), class = "turtleset"), FALSE)
+  expect_identical(isNLclass(agents = noTurtles(), class = "turtleset"), FALSE)
   expect_identical(isNLclass(agents = cbind(xcor = 2, ycor = 3), class = "agent"), FALSE)
   expect_identical(isNLclass(agents = patches(w1), class = "agent"), FALSE)
   expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "agentset"), FALSE)
@@ -397,7 +397,7 @@ test_that("maxNof works",{
   t6 <- maxNof(agents = t5, n = 5, var = "heading")
   expect_equivalent(NLcount(t6), 5)
   t7 <- maxNof(agents = t1, n = 0, var = "heading")
-  expect_equivalent(t7, noTurtlesAM())
+  expect_equivalent(t7, noTurtles())
   expect_equivalent(NLcount(t7), 0)
 
   w2 <- w1
@@ -444,7 +444,7 @@ test_that("minNof works",{
   t6 <- minNof(agents = t5, n = 5, var = "heading")
   expect_equivalent(NLcount(t6), 5)
   t7 <- minNof(agents = t1, n = 0, var = "heading")
-  expect_equivalent(t7, noTurtlesAM())
+  expect_equivalent(t7, noTurtles())
   expect_equivalent(NLcount(t7), 0)
 
   w2 <- w1

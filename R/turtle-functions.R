@@ -2238,7 +2238,7 @@ setMethod(
 
     breedFactor <- which(turtles@levels$breed %in% breed)
     if (length(breedFactor) == 0) {
-      noTurtlesAM()
+      noTurtles()
     } else {
       tBreed <- turtles[which(turtles@.Data[,"breed"] %in% breedFactor),]
       turtle(tBreed, who)
@@ -2328,7 +2328,7 @@ setMethod(
                                          attr(world, "minPycor")) - 1)] * pTurtles)
 
       if (nrow(pOn) == 0) {
-        return(noTurtlesAM())
+        return(noTurtles())
       } else {
         return(turtle(turtles = turtles, who = pOn[,3]))
       }
@@ -2370,7 +2370,7 @@ setMethod(
 
     breedFactor <- which(turtles@levels$breed %in% breed)
     if (length(breedFactor) == 0) {
-      tBreed <- noTurtlesAM()
+      tBreed <- noTurtles()
     } else {
       tBreed <- turtles[which(turtles@.Data[,"breed"] %in% breedFactor),]
     }
@@ -2394,26 +2394,26 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- noTurtlesAM()
+#' t1 <- noTurtles()
 #' NLcount(t1)
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname noTurtlesAM
+#' @rdname noTurtles
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "noTurtlesAM",
+  "noTurtles",
   function(x) {
-    standardGeneric("noTurtlesAM")
+    standardGeneric("noTurtles")
   })
 
 #' @export
-#' @rdname noTurtlesAM
+#' @rdname noTurtles
 setMethod(
-  "noTurtlesAM",
+  "noTurtles",
   signature = "missing",
   definition = function() {
     t0 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0))
@@ -2557,7 +2557,7 @@ setMethod(
     nTurtles <- lapply(dots, function(x) {NROW(x)})
 
     if (sum(unlist(nTurtles)) == 0) {
-      return(noTurtlesAM())
+      return(noTurtles())
     } else {
 
       if(any(nTurtles == 0)){
