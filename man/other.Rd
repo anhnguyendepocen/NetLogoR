@@ -46,7 +46,7 @@ p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
 NLcount(p1) # 99 patches
 
 # Turtles
-t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0, ycor = 0))
+t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
 t2 <- other(agents = t1, except = turtle(t1, who = 0))
 NLcount(t2) # 9 turtles
 

@@ -36,7 +36,7 @@ newAgent <- agentMatrix(
 
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
 
 }

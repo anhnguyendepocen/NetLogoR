@@ -39,28 +39,28 @@
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname createTurtlesAM
+#' @rdname createTurtles
 #'
 #' @author Sarah Bauduin
 setGeneric(
-  "createTurtlesAM",
+  "createTurtles",
   function(n, coords, world, heading, breed, color) {
-    standardGeneric("createTurtlesAM")
+    standardGeneric("createTurtles")
 })
 
 #' @export
 #' @importFrom grDevices rainbow
 #' @importFrom stats runif
-#' @rdname createTurtlesAM
+#' @rdname createTurtles
 setMethod(
-  "createTurtlesAM",
+  "createTurtles",
   signature = c("numeric", "matrix", "missing", "ANY", "ANY", "ANY"),
   definition = function(n, coords, world, heading, breed, color) {
 
@@ -85,9 +85,9 @@ setMethod(
 #' @export
 #' @importFrom grDevices rainbow
 #' @importFrom stats runif
-#' @rdname createTurtlesAM
+#' @rdname createTurtles
 setMethod(
-  "createTurtlesAM",
+  "createTurtles",
   signature = c("numeric", "missing", "ANY", "ANY", "ANY", "ANY"),
   definition = function(n, coords, world, heading, breed, color) {
 
@@ -122,7 +122,7 @@ setMethod(
 #' Create \code{n} turtles at the center of the \code{world} with their headings evenly
 #' distributed.
 #'
-#' @inheritParams createTurtlesAM
+#' @inheritParams createTurtles
 #'
 #' @return AgentMatrix object of length \code{n} with data for the
 #'         turtles being: "xcor", "ycor", "who", "heading", "prevX", "prevY", "breed",
@@ -192,7 +192,7 @@ setMethod(
       li$color <- rainbow(n)
     }
 
-    createTurtlesAM(n = n, world = world, heading = heading, breed = li$breed,
+    createTurtles(n = n, world = world, heading = heading, breed = li$breed,
                     color = li$color)
 })
 
@@ -421,7 +421,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
@@ -631,7 +631,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, world = w1)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' NLcount(t1)
 #' t1 <- die(turtles = t1, who = c(2, 3, 4))
 #' NLcount(t1)
@@ -696,7 +696,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, world = w1)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' NLcount(t1)
 #' t1 <- hatch(turtles = t1, who = 0, n = 2)
 #' NLcount(t1)
@@ -771,7 +771,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, world = w1)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' canMove(world = w1, turtles = t1, dist = 1:10)
 #'
 #'
@@ -820,7 +820,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createTurtlesAM(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                           ycor = randomYcor(world = w1, n = 10)))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
@@ -871,7 +871,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                            ycor = randomYcor(world = w1, n = 10)))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
@@ -943,7 +943,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
-#' t1 <- createTurtlesAM(n = 10, world = w1)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' towards(agents = t1, agents2 = cbind(x = 0, y = 0))
 #'
 #'
@@ -1103,7 +1103,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -1160,7 +1160,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, world = w1)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- left(turtles = t1, angle = 180)
 #' of(agents = t1, var = "heading")
@@ -1215,7 +1215,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, world = w1)
+#' t1 <- createTurtles(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- right(turtles = t1, angle = 180)
 #' of(agents = t1, var = "heading")
@@ -1279,7 +1279,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
 #'                           data = runif(100))
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -1408,7 +1408,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
 #'                           data = runif(100))
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -1484,7 +1484,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchAhead(world = w1, turtles = t1, dist = 1)
 #'
 #'
@@ -1543,7 +1543,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchHere(world = w1, turtles = t1)
 #'
 #'
@@ -1610,7 +1610,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchLeft(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
 #'
@@ -1676,7 +1676,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchRight(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
 #'
@@ -1738,7 +1738,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
-#' t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -1891,7 +1891,7 @@ setMethod(
 
       if (missing(color)) li$color <- rainbow(n)
 
-      newTurtles <- createTurtlesAM(n = n, coords = li$patches, heading = li$heading,
+      newTurtles <- createTurtles(n = n, coords = li$patches, heading = li$heading,
                                     breed = li$breed, color = li$color)
 
     } else { # if length(n) != 0
@@ -1920,7 +1920,7 @@ setMethod(
         li$color <- rep(li$color, n)
       }
 
-      newTurtles <- createTurtlesAM(n = sum(n), coords = li$patches, heading = li$heading,
+      newTurtles <- createTurtles(n = sum(n), coords = li$patches, heading = li$heading,
                                     breed = li$breed, color = li$color)
     }
 
@@ -2023,7 +2023,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
-#' t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
@@ -2078,7 +2078,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -2128,7 +2128,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 #' tExist(turtles = t1, who = 3, breed = "sheep")
 #' tExist(turtles = t1, who = 9, breed = "sheep")
@@ -2203,7 +2203,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' t2 <- turtle(t1, who = 2)
 #'
 #'
@@ -2282,7 +2282,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
-#' t1 <- createTurtlesAM(n = 500, coords = randomXYcor(w1, n = 500))
+#' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -2416,7 +2416,7 @@ setMethod(
   "noTurtles",
   signature = "missing",
   definition = function() {
-    t0 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0))
+    t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
     empty <- t0[which(t0@.Data[,"who"] == 1),]
     empty@levels$breed <- character(0)
     empty@levels$color <- character(0)
@@ -2455,7 +2455,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
 #'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 #' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0),
 #'                 dx = 1, dy = 1)
@@ -2524,10 +2524,10 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
-#' t2 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
+#' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 #' t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
-#' t3 <- createTurtlesAM(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+#' t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
 #' t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
 #' t4 <- turtleSet(t1, t2, t3)
 #'
@@ -2612,7 +2612,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0, ycor = 0))
+#' t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
 #' t1 <- turtlesOwn(turtles = t1, tVar = "sex", tVal = c("F", "F", "F", "M", "M"))
 #'
 #'
@@ -2827,7 +2827,7 @@ setMethod(
 #' NLcount(p1) # 99 patches
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 0, ycor = 0))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0, ycor = 0))
 #' t2 <- other(agents = t1, except = turtle(t1, who = 0))
 #' NLcount(t2) # 9 turtles
 #'
@@ -2902,7 +2902,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
@@ -2978,7 +2978,7 @@ setMethod(
 #' of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' of(agents = t1, var = "heading")
 #'
 #'
@@ -3095,8 +3095,8 @@ setMethod(
 #'         as contained in \code{spdf}.
 #'
 #' @details If the \code{spdf} does not contain the variables created with
-#'          \code{createTurtlesAM()}, these variables will be created with the
-#'          default values as in \code{createTurtlesAM()}.
+#'          \code{createTurtles()}, these variables will be created with the
+#'          default values as in \code{createTurtles()}.
 #'
 #' @examples
 #' sp1 <- SpatialPointsDataFrame(coords = cbind(x = c(1,2,3), y = c(1,2,3)),
@@ -3196,7 +3196,7 @@ setMethod(
 #'         as contained in \code{turtles}.
 #'
 #' @examples
-#' t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
+#' t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
 #' sp1 <- turtles2spdf(turtles = t1)
 #'
 #'

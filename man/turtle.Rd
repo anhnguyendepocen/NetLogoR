@@ -40,7 +40,7 @@ If no turtle matches the given \code{who} numbers, with potentially
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 t2 <- turtle(t1, who = 2)
 
 

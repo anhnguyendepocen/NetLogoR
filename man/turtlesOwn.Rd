@@ -30,7 +30,7 @@ AgentMatrix representing the \code{turtles} with the new
 Create a new variable for the \code{turtles}.
 }
 \examples{
-t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0, ycor = 0))
+t1 <- createTurtles(n = 5, coords = cbind(xcor = 0, ycor = 0))
 t1 <- turtlesOwn(turtles = t1, tVar = "sex", tVal = c("F", "F", "F", "M", "M"))
 
 

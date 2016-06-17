@@ -64,7 +64,7 @@ plot(world2raster(w1))
 p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 
 # Turtles
-t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5),
+t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5),
                     breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
 t3 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))

@@ -56,7 +56,7 @@ Report the directions of each \code{agents} towards each corresponding \code{age
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
-t1 <- createTurtlesAM(n = 10, world = w1)
+t1 <- createTurtles(n = 10, world = w1)
 towards(agents = t1, agents2 = cbind(x = 0, y = 0))
 
 

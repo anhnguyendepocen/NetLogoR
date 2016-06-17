@@ -65,7 +65,7 @@ plot(world2raster(w1))
 p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 
 # Turtles
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
                     heading = sample(1:5, size = 10, replace= TRUE))
 t2 <- maxNof(agents = t1, n = 5, var = "heading")
 

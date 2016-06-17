@@ -169,7 +169,7 @@ setMethod(
 #' NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
 #' NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)),
 #'        world = w1, torus = TRUE)
-#' t1 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2))
+#' t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
 #' NLdist(agents = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 #'
 #'
@@ -329,7 +329,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' neighbors(world = w1, agents = patch(w1, c(0,9), c(0,7)), nNeighbors = 8)
-#' t1 <- createTurtlesAM(n = 3, coords = randomXYcor(w1, n = 3))
+#' t1 <- createTurtles(n = 3, coords = randomXYcor(w1, n = 3))
 #' neighbors(world = w1, agents = t1, nNeighbors = 4)
 #'
 #'
@@ -568,7 +568,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' patchCorner <- patchAt(world = w1, agents = patch(w1, 0, 0), dx = 1, dy = 1)
-#' t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0))
+#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
 #' patchCorner <- patchAt(world = w1, agents = t1, dx = 1, dy = 1)
 #'
 #'
@@ -644,7 +644,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' p1 <- patchDistDir(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
-#' t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
+#' t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
 #' p2 <- patchDistDir(world = w1, agents = t1, dist = 1, angle = 45)
 #'
 #'

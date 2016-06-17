@@ -41,7 +41,7 @@ Move the \code{turtles} back \code{home}.
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 plot(world2raster(w1))
 points(turtles2spdf(t1), col = "black", pch = 16)
 

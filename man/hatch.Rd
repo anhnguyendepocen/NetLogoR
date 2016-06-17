@@ -40,7 +40,7 @@ The parent turtle must be contained in the \code{turtles}.
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createTurtlesAM(n = 10, world = w1)
+t1 <- createTurtles(n = 10, world = w1)
 NLcount(t1)
 t1 <- hatch(turtles = t1, who = 0, n = 2)
 NLcount(t1)

@@ -31,7 +31,7 @@ If a turtle is located outside of the \code{world}'s extent,
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 patchHere(world = w1, turtles = t1)
 
 

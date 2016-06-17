@@ -28,10 +28,10 @@ Duplicated turtles are identified based only on their who numbers.
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
-t2 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
+t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
-t3 <- createTurtlesAM(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
+t3 <- createTurtles(n = 1, coords = randomXYcor(w1, n = 1), breed = "sheperd")
 t3 <- NLset(turtles = t3, agents = t3, var = "who", val = 12)
 t4 <- turtleSet(t1, t2, t3)
 

@@ -22,8 +22,8 @@ Convert a SpatialPointsDataFrame object into an agentMatrix object.
 }
 \details{
 If the \code{spdf} does not contain the variables created with
-         \code{createTurtlesAM()}, these variables will be created with the
-         default values as in \code{createTurtlesAM()}.
+         \code{createTurtles()}, these variables will be created with the
+         default values as in \code{createTurtles()}.
 }
 \examples{
 sp1 <- SpatialPointsDataFrame(coords = cbind(x = c(1,2,3), y = c(1,2,3)),

@@ -48,7 +48,7 @@ Set the turtles \code{xcor} and \code{ycor} coordinates.
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
                           data = runif(100))
-t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5))
+t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 plot(world2raster(w1))
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 

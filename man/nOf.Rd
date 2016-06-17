@@ -61,7 +61,7 @@ w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4
 pSelect <- nOf(agents = patches(w1), n = 5)
 
 # Turtles
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 tSelect <- nOf(agents = t1, n = 2)
 
 

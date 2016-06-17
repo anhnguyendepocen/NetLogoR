@@ -30,7 +30,7 @@ p1 <- patches(w1)
 NLcount(p1) # 25 patches
 
 # Turtles
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 NLcount(t1) # 10 turtles
 
 

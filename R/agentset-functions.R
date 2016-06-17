@@ -26,7 +26,7 @@
 #' NLall(agents = patches(w2), world = w2, val = 5)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
+#' t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
 #' NLall(agents = t1, var = "xcor", val = 1)
 #' NLall(agents = t1, var = "heading", val = 2)
 #'
@@ -106,7 +106,7 @@ setMethod(
 #' NLany(p2)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' t2 <- noTurtles()
 #' NLany(t1)
 #' NLany(t2)
@@ -174,7 +174,7 @@ setMethod(
 #' NLcount(p1) # 25 patches
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' NLcount(t1) # 10 turtles
 #'
 #'
@@ -236,7 +236,7 @@ setMethod(
 #' p1 <- sortOn(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' sortdHeadingst1 <- sortOn(agents = t1, var = "heading")
 #'
 #'
@@ -327,7 +327,7 @@ setMethod(
 #' p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 5, coords = randomXYcor(w1, n = 5),
+#' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5),
 #'                     breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
 #' t2 <- NLwith(agents = t1, var = "breed", val = "sheep")
 #' t3 <- NLwith(agents = t1, var = "breed", val = c("sheep", "wolf"))
@@ -434,7 +434,7 @@ setMethod(
 #' p1 <- withMax(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- withMax(agents = t1, var = "heading")
 #'
@@ -542,7 +542,7 @@ setMethod(
 #' p1 <- withMin(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- withMin(agents = t1, var = "heading")
 #'
@@ -658,7 +658,7 @@ setMethod(
 #' p1 <- maxOneOf(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- maxOneOf(agents = t1, var = "heading")
 #'
@@ -753,7 +753,7 @@ setMethod(
 #' p1 <- minOneOf(agents = patches(w1), world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     heading = sample(1:3, size = 10, replace= TRUE))
 #' t2 <- minOneOf(agents = t1, var = "heading")
 #'
@@ -845,7 +845,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     heading = sample(1:3, size = 10, replace= TRUE))
 #' isNLclass(agents = patches(w1), class = "patch")
 #' isNLclass(agents = patches(w1), class = "patcheset")
@@ -969,7 +969,7 @@ setMethod(
 #' pSelect <- nOf(agents = patches(w1), n = 5)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' tSelect <- nOf(agents = t1, n = 2)
 #'
 #'
@@ -1086,7 +1086,7 @@ setMethod(
 #' pSelect <- oneOf(agents = patches(w1))
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' tSelect <- oneOf(agents = t1)
 #'
 #'
@@ -1170,7 +1170,7 @@ setMethod(
 #' p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     heading = sample(1:5, size = 10, replace= TRUE))
 #' t2 <- maxNof(agents = t1, n = 5, var = "heading")
 #'
@@ -1336,7 +1336,7 @@ setMethod(
 #' p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 #'
 #' # Turtles
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10),
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     heading = sample(1:5, size = 10, replace= TRUE))
 #' t2 <- minNof(agents = t1, n = 5, var = "heading")
 #'
@@ -1509,7 +1509,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1))
 #' t2 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = t1)
@@ -1703,7 +1703,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+#' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #'
 #' p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90)
 #' t2 <- inCone(turtles = turtle(t1, who = 0), radius = 2, angle = 90, agents = t1)
@@ -1823,7 +1823,7 @@ setMethod(
 #' w1 <- NLset(world = w1, agents = patch(w1, 0, 4), val = 0)
 #' of(world = w1, agents = patches(w1))
 #'
-#' t1 <- createTurtlesAM(n = 3, world = w1, heading = 0)
+#' t1 <- createTurtles(n = 3, world = w1, heading = 0)
 #' # Set the heading of turtle 0 to 180
 #' t2 <- NLset(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180)
 #' of(agents = t2, var = "heading") # c(180, 0, 0)

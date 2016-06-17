@@ -71,7 +71,7 @@ w1 <- NLset(world = w1, agents = patches(w1), val = 1)
 w1 <- NLset(world = w1, agents = patch(w1, 0, 4), val = 0)
 of(world = w1, agents = patches(w1))
 
-t1 <- createTurtlesAM(n = 3, world = w1, heading = 0)
+t1 <- createTurtles(n = 3, world = w1, heading = 0)
 # Set the heading of turtle 0 to 180
 t2 <- NLset(turtles = t1, agents = turtle(t1, who = 0), var = "heading", val = 180)
 of(agents = t2, var = "heading") # c(180, 0, 0)

@@ -14,7 +14,7 @@ test_that("NLall works",{
   expect_identical(NLall(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w3", val = 5), TRUE)
 
   # Turtles
-  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
   expect_identical(NLall(agents = t1, var = "xcor", val = 1), TRUE)
   expect_identical(NLall(agents = t1, var = "heading", val = 2), FALSE)
   expect_identical(NLall(agents = turtle(t1, who = c(1, 2, 4)), var = "heading", val = 2), TRUE)
@@ -35,7 +35,7 @@ test_that("NLany works",{
   expect_identical(NLany(p5), TRUE)
 
   # Turtles
-  t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world= w1, n = 10))
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world= w1, n = 10))
   t2 <- noTurtles()
   t3 <- NLwith(agents = t1, var = "xcor", val = 10)
   t4 <- turtle(t1, who = 0)
@@ -63,7 +63,7 @@ test_that("NLcount works",{
   # Turtles
   w1 <- createNLworldMatrix(0, 4, 0, 4)
   t1 <- noTurtles()
-  t2 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+  t2 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
   t3 <- turtle(turtles = t2, who = c(1, 2, 3))
   expect_equivalent(NLcount(t1), 0)
   expect_equivalent(NLcount(t2), 10)
@@ -85,7 +85,7 @@ test_that("sortOn works",{
   expect_equivalent(p2, cbind(pxcor = c(0,1,2,3,4), pycor = c(4,4,4,4,4)))
 
   #Turtles
-  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1:5, ycor = 5:1), heading = c(4,5,1,3,2))
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 1:5, ycor = 5:1), heading = c(4,5,1,3,2))
   t2 <- sortOn(agents = t1, var = "xcor")
   t3 <- sortOn(agents = t1, var = "ycor")
   t4 <- sortOn(agents = t1, var = "heading")
@@ -95,7 +95,7 @@ test_that("sortOn works",{
 
   t5 <- sortOn(agents = turtle(turtles = t1, who = 0), var = "heading")
   expect_equivalent(t5@.Data[,"who"], 0)
-  t6 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = 1)
+  t6 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = 1)
   t7 <- sortOn(agents = t6, var = "xcor")
   expect_equivalent(t6, t7)
 })
@@ -125,7 +125,7 @@ test_that("NLwith works",{
   expect_equivalent(p6, noPatches())
 
   # Turtles
-  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = c(1,1,1,2,3), ycor = c(2,3,4,4,5)), heading = 0,
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = c(1,1,1,2,3), ycor = c(2,3,4,4,5)), heading = 0,
                       breed = c("sheep", "sheep", "wolf", "sheep", "sheperd"))
   t2 <- NLwith(agents = t1, var = "xcor", val = 1)
   expect_equivalent(t2, turtle(turtles = t1, who = c(0, 1, 2)))
@@ -165,7 +165,7 @@ test_that("withMax works",{
   expect_equivalent(pMax, patch(w1, x = 1, y = 4))
 
   #Turtles
-  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
   maxXcor <- withMax(agents = t1, var = "xcor")
   expect_equivalent(maxXcor, turtle(t1, who = 9))
   maxHeading <- withMax(agents = t1, var = "heading")
@@ -200,7 +200,7 @@ test_that("withMin works",{
   expect_equivalent(pMin, patch(w1, x = 1, y = 4))
 
   # Turtles
-  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 10:1, ycor = 10:1), heading = c(1,2,3,0,0,2,3,0,0,3))
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 10:1, ycor = 10:1), heading = c(1,2,3,0,0,2,3,0,0,3))
   maxXcor <- withMin(agents = t1, var = "xcor")
   expect_equivalent(maxXcor, turtle(t1, who = 9))
   maxHeading <- withMin(agents = t1, var = "heading")
@@ -231,7 +231,7 @@ test_that("maxOneOf works",{
   expect_less_than(length(compare2[compare2 == TRUE]), 2)
 
   # Turtles
-  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
   maxXcor1 <- withMax(agents = t1, var = "xcor")
   maxXcor2 <- maxOneOf(agents = t1, var = "xcor")
   expect_equivalent(maxXcor1, maxXcor2)
@@ -263,7 +263,7 @@ test_that("minOneOf works",{
   expect_less_than(length(compare2[compare2 == TRUE]), 2)
 
   # Turtles
-  t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
+  t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
   minXcor1 <- withMin(agents = t1, var = "xcor")
   minXcor2 <- minOneOf(agents = t1, var = "xcor")
   expect_equivalent(minXcor1, minXcor2)
@@ -277,7 +277,7 @@ test_that("minOneOf works",{
 
 test_that("isNLclass works",{
   w1 <- createNLworldMatrix(0, 4, 0, 4)
-  t1 <- createTurtlesAM(n = 10, randomXYcor(w1, n = 10))
+  t1 <- createTurtles(n = 10, randomXYcor(w1, n = 10))
   expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "patch"), TRUE)
   expect_identical(isNLclass(agents = patches(w1), class = "patchset"), TRUE)
   expect_identical(isNLclass(agents = turtle(t1, who = 0), class = "turtle"), TRUE)
@@ -316,7 +316,7 @@ test_that("nOf works",{
   p3 <- nOf(agents = patches(w1), n = 10)
   expect_identical(nrow(p3), nrow(unique(p3)))
 
-  t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
   t2 <- nOf(agents = t1, n = 2)
   expect_equivalent(NLcount(t2), 2)
   t2data <- merge(t2@.Data, t1@.Data)
@@ -349,7 +349,7 @@ test_that("oneOf works",{
   p3 <- nOf(agents = patch(w1, x = 0, y = 0), n = 1)
   expect_identical(p2, p3)
 
-  t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10))
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
   t2 <- oneOf(agents = t1)
   expect_equivalent(NLcount(t2), 1)
   t2data <- merge(t2@.Data, t1@.Data)
@@ -386,14 +386,14 @@ test_that("maxNof works",{
   expect_equivalent(nrow(p5), 0)
   expect_equivalent(p5, noPatches())
 
-  t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 1:10)
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 1:10)
   t2 <- maxNof(agents = t1, n = 5, var = "heading")
   expect_equivalent(t2, turtle(t1, who = c(5,6,7,8,9)))
   t3 <- maxNof(agents = t1, n = 1, var = "heading")
   expect_equivalent(t3, turtle(t1, who = 9))
   t4 <- maxNof(agents = t1, n = 10, var = "heading")
   expect_equivalent(t4, t1)
-  t5 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
+  t5 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
   t6 <- maxNof(agents = t5, n = 5, var = "heading")
   expect_equivalent(NLcount(t6), 5)
   t7 <- maxNof(agents = t1, n = 0, var = "heading")
@@ -433,14 +433,14 @@ test_that("minNof works",{
   expect_equivalent(nrow(p5), 0)
   expect_equivalent(p5, noPatches())
 
-  t1 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10:1)
+  t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10:1)
   t2 <- minNof(agents = t1, n = 5, var = "heading")
   expect_equivalent(t2, turtle(t1, who = c(5,6,7,8,9)))
   t3 <- minNof(agents = t1, n = 1, var = "heading")
   expect_equivalent(t3, turtle(t1, who = 9))
   t4 <- minNof(agents = t1, n = 10, var = "heading")
   expect_equivalent(t4, t1)
-  t5 <- createTurtlesAM(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
+  t5 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10), heading = 10)
   t6 <- minNof(agents = t5, n = 5, var = "heading")
   expect_equivalent(NLcount(t6), 5)
   t7 <- minNof(agents = t1, n = 0, var = "heading")
@@ -481,7 +481,7 @@ test_that("inRadius works",{
   expect_equivalent(p4[p4[,"id"] == 1, c("pxcor", "pycor")], p4[p4[,"id"] == 2, c("pxcor", "pycor")])
 
   # Patches to turtles
-  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4))
   t2 <- inRadius(agents = patch(w1, x = 0, y = 0), radius = 1, agents2 = t1, world = w1)
   expect_equivalent(t2[t2[,"id"] == 1, "who"], 0)
   t3 <- inRadius(agents = patch(w1, x = 0, y = 0), radius = 2, agents2 = t1, world = w1)
@@ -562,7 +562,7 @@ test_that("inRadius works",{
 
 test_that("inCone works",{
   w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
 
   # Turtles to patches
   t2 <- inCone(turtles = t1, radius = 1, angle = 5, agents = patches(w1))
@@ -649,7 +649,7 @@ test_that("set works",{
   expect_equivalent(of(world = w6, var = "w2", agents = patch(w6, 1, 2)), as.numeric(NA))
 
   # Turtles
-  t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
+  t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
   t2 <- NLset(turtles = t1, agents = t1, var = "heading", val = 0)
   expect_equivalent(t2@.Data[,"heading"], rep(0, NLcount(t2)))
   t3 <- NLset(turtles = t1, agents = turtle(t1, 0), var = "xcor", val = 3)

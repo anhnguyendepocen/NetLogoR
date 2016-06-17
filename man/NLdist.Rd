@@ -67,7 +67,7 @@ w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9
 NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)))
 NLdist(agents = patch(w1, 0, 0), agents2 = patch(w1, c(1, 9), c(1, 9)),
        world = w1, torus = TRUE)
-t1 <- createTurtlesAM(n = 2, coords = randomXYcor(w1, n = 2))
+t1 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2))
 NLdist(agents = t1, agents2 = patch(w1, c(1,9), c(1,9)), allPairs = TRUE)
 
 

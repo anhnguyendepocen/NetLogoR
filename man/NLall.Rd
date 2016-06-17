@@ -57,7 +57,7 @@ w2 <- NLset(world = w1, agents = patches(w1), val = 5)
 NLall(agents = patches(w2), world = w2, val = 5)
 
 # Turtles
-t1 <- createTurtlesAM(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
+t1 <- createTurtles(n = 5, coords = cbind(xcor = 1, ycor = 1), heading = c(1, 2, 2, 1, 2))
 NLall(agents = t1, var = "xcor", val = 1)
 NLall(agents = t1, var = "heading", val = 2)
 

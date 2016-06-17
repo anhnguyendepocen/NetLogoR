@@ -60,7 +60,7 @@ plot(world2raster(w1))
 p1 <- sortOn(agents = patches(w1), world = w1)
 
 # Turtles
-t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
+t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 sortdHeadingst1 <- sortOn(agents = t1, var = "heading")
 
 

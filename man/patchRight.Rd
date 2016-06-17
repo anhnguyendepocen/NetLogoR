@@ -49,7 +49,7 @@ If a given \code{dist} value is negative, then the turtle would move backward.
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-t1 <- createTurtlesAM(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
+t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 patchRight(world = w1, turtles = t1, dist = 2, angle = 90)
 
 

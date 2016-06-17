@@ -22,7 +22,7 @@ SpatialPointsDataFrame object representing the moving agents
 Convert an agentMatrix object into a SpatialPointsDataFrame object.
 }
 \examples{
-t1 <- createTurtlesAM(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
+t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 1:10))
 sp1 <- turtles2spdf(turtles = t1)
 
 
