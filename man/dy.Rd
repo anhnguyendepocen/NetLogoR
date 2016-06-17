@@ -36,7 +36,7 @@ Report the cosine of the \code{turtles}' heading multiplied by the \code{dist}
 }
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-t1 <- createOTurtlesAM(world = w1, n = 10)
+t1 <- createOTurtles(world = w1, n = 10)
 dy(turtles = t1)
 
 

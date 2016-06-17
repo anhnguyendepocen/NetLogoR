@@ -143,7 +143,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createOTurtlesAM(n = 10, world = w1)
+#' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -153,21 +153,21 @@ setMethod(
 #'
 #' @export
 #' @docType methods
-#' @rdname createOTurtlesAM
+#' @rdname createOTurtles
 #'
 #' @author Sarah Bauduin and Eliot McIntire
 #'
 setGeneric(
-  "createOTurtlesAM",
+  "createOTurtles",
   function(n, world, breed, color) {
-    standardGeneric("createOTurtlesAM")
+    standardGeneric("createOTurtles")
 })
 
 #' @export
 #' @importFrom grDevices rainbow
-#' @rdname createOTurtlesAM
+#' @rdname createOTurtles
 setMethod(
-  "createOTurtlesAM",
+  "createOTurtles",
   signature = c(n = "numeric", world = "ANY"),
   definition = function(n, world, breed, color) {
 
@@ -241,7 +241,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createOTurtlesAM(n = 10, world = w1)
+#' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -351,7 +351,7 @@ setMethod(
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
-#' t1 <- createOTurtlesAM(n = 10, world = w1)
+#' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
@@ -508,7 +508,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createOTurtlesAM(world = w1, n = 10)
+#' t1 <- createOTurtles(world = w1, n = 10)
 #' dx(turtles = t1)
 #'
 #'
@@ -572,7 +572,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-#' t1 <- createOTurtlesAM(world = w1, n = 10)
+#' t1 <- createOTurtles(world = w1, n = 10)
 #' dy(turtles = t1)
 #'
 #'
@@ -1961,7 +1961,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createOTurtlesAM(world = w1, n = 10)
+#' t1 <- createOTurtles(world = w1, n = 10)
 #' inspect(turtles = t1, who = c(2, 3))
 #'
 #'
@@ -2707,7 +2707,7 @@ setMethod(
 #'
 #' @examples
 #' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-#' t1 <- createOTurtlesAM(n = 10, world = w1)
+#' t1 <- createOTurtles(n = 10, world = w1)
 #' subHeadings(angle1 = t1, angle2 = 0)
 #'
 #'
@@ -2928,7 +2928,7 @@ setMethod(
   "layoutCircle",
   signature = c(world = "NLworldMs", turtles = "agentMatrix", radius = "numeric"),
   definition = function(world, turtles, radius, torus) {
-    tSurrogates <- createOTurtlesAM(n = NLcount(turtles), world = world)
+    tSurrogates <- createOTurtles(n = NLcount(turtles), world = world)
     turtles@.Data[,c("xcor", "ycor")] <- tSurrogates@.Data[,c("xcor", "ycor")]
     turtles@.Data[,"heading"] <- tSurrogates@.Data[,"heading"]
     fd(world = world, turtles = turtles, dist = radius, torus = torus, out = TRUE)

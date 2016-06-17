@@ -24,10 +24,10 @@ test_that("createTurtles works",{
   expect_equivalent(c(rep("caribou", 5), rep("moose", 5)), of(agents = t6, var = "breed"))
 })
 
-test_that("createOTurtlesAM with NLworldMs",{
+test_that("createOTurtles with NLworldMs",{
   w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 
-  t1 <- createOTurtlesAM(world = w1, n = 10)
+  t1 <- createOTurtles(world = w1, n = 10)
   expect_equivalent(cbind(xcor = rep(2, 10), ycor = rep(2, 10)), of(agents = t1, var = c("xcor", "ycor")))
   expect_equivalent(seq(0, 360 - (360 / 10), by = 360 /10), of(agents = t1, var = "heading"))
   expect_equivalent(of(agents = t1, var = "breed"), rep("turtle", 10))
@@ -37,17 +37,17 @@ test_that("createOTurtlesAM with NLworldMs",{
   expect_equivalent(of(agents = t1, var = "prevY"), as.numeric(rep(NA, 10)))
   expect_equivalent(NLcount(t1), 10)
 
-  t2 <- createOTurtlesAM(world = w1, n = 10, breed = "caribou")
+  t2 <- createOTurtles(world = w1, n = 10, breed = "caribou")
   expect_equivalent(rep("caribou", 10), of(agents = t2, var = "breed"))
-  t3 <- createOTurtlesAM(world = w1, n = 10, breed = c(rep("caribou", 5), rep("moose", 5)))
+  t3 <- createOTurtles(world = w1, n = 10, breed = c(rep("caribou", 5), rep("moose", 5)))
   expect_equivalent(c(rep("caribou", 5), rep("moose", 5)), of(agents = t3, var = "breed"))
 
-  t4 <- createOTurtlesAM(world = w1, n = 1)
+  t4 <- createOTurtles(world = w1, n = 1)
   expect_equivalent(of(agents = t4, var = "heading"), 0)
   expect_equivalent(cbind(xcor = 2, ycor = 2), of(agents = t4, var = c("xcor", "ycor")))
 
   # Create one turtle
-  t7 <- createOTurtlesAM(world = w1, n = 1)
+  t7 <- createOTurtles(world = w1, n = 1)
   expect_equivalent(of(agents = t7, var = "heading"), 0)
   expect_equivalent(cbind(xcor = 2, ycor = 2), of(agents = t7, var = c("xcor", "ycor")))
 })
@@ -891,7 +891,7 @@ test_that("layoutCircle works",{
   w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
   t2 <- layoutCircle(world = w1, turtles = t1, radius = 3)
-  t3 <- createOTurtlesAM(n = 10, world = w1)
+  t3 <- createOTurtles(n = 10, world = w1)
   expect_equivalent(of(agents = t2, var = "heading"), of(agents = t3, var = "heading"))
   t4 <- layoutCircle(world = w1, turtles = turtle(turtles = t1, who = 0), radius = 3)
   expect_equivalent(of(agents = t4, var = c("xcor", "ycor")), cbind(xcor = 4.5, ycor = 7.5))

@@ -56,7 +56,7 @@ If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
 \examples{
 w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
-t1 <- createOTurtlesAM(n = 10, world = w1)
+t1 <- createOTurtles(n = 10, world = w1)
 plot(world2raster(w1))
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
