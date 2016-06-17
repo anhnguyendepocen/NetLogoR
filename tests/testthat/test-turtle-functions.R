@@ -524,14 +524,14 @@ test_that("setXY works",{
   expect_equivalent(of(agents = t3, var = c("xcor", "ycor")), cbind(xcor = c(1, 1, 1, 1, 0), ycor = rep(1, 5)))
 })
 
-test_that("sproutAM works",{
-  t1 <- sproutAM(patches = cbind(pxcor = 2, pycor = 2), n = 3)
-  t2 <- sproutAM(patches = cbind(pxcor = c(1,2,3), pycor = c(1,2,3)), n = 3)
-  t3 <- sproutAM(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
-  t4 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1)
-  t5 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
+test_that("sprout works",{
+  t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)
+  t2 <- sprout(patches = cbind(pxcor = c(1,2,3), pycor = c(1,2,3)), n = 3)
+  t3 <- sprout(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
+  t4 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1)
+  t5 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
                breed = "wolf", heading = c(0, 180))
-  t6 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
+  t6 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = 2, turtles = t1,
                breed = "wolf", heading = 90)
   expect_identical(of(agents = t1, var = c("xcor", "ycor")), cbind(xcor = c(2, 2, 2), ycor = c(2, 2, 2)))
   expect_identical(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = c(1, 2, 3), ycor = c(1, 2, 3)))
@@ -547,14 +547,14 @@ test_that("sproutAM works",{
   expect_equivalent(of(agents = t6, var = "heading")[c(4,5)], c(90,90))
 
   # length(n) != 0
-  t7 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3))
+  t7 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3))
   expect_equivalent(NLcount(t7), 5)
   expect_equivalent(cbind(xcor = c(3,3,2,2,2), ycor = c(0,0,3,3,3)), of(agents = t7, var = c("xcor", "ycor")))
-  t8 <- sproutAM(patches = cbind(pxcor = c(1, 1), pycor = c(0,1)), n = c(2,1), breed = "wolf", turtles = t7)
+  t8 <- sprout(patches = cbind(pxcor = c(1, 1), pycor = c(0,1)), n = c(2,1), breed = "wolf", turtles = t7)
   expect_equivalent(NLcount(t8), 8)
   expect_equivalent(cbind(xcor = c(3,3,2,2,2,1,1,1), ycor = c(0,0,3,3,3,0,0,1)), of(agents = t8, var = c("xcor", "ycor")))
   expect_equivalent(c(rep("turtle", 5), rep("wolf", 3)), of(agents = t8, var = "breed"))
-  t9 <- sproutAM(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), heading = c(0, 90))
+  t9 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), heading = c(0, 90))
   expect_equivalent(c(0,0,90,90,90), of(agents = t9, var = "heading"))
 })
 

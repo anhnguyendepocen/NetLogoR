@@ -34,9 +34,9 @@ newAgent <- agentMatrix(
       char2 = LETTERS[c(4, 24, 3)],
       nums = 5:7)
 
-w1 <- createNLworld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-w1 <- NLset(world = w1, agents = patches(w1), val = runif (NLcount(patches(w1))))
-t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
+w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+                          data = runif(25))
+t1 <- createTurtlesAM(n = 10, coords = randomXYcor(w1, n = 10))
 
 
 }

@@ -1842,28 +1842,28 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' t1 <- sproutAM(patches = cbind(pxcor = 2, pycor = 2), n = 3)
-#' t2 <- sproutAM(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
+#' t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)
+#' t2 <- sprout(patches = cbind(pxcor = 3, pycor = 3), n = 3, turtles = t1)
 #'
 #'
 #' @export
 #' @docType methods
-#' @rdname sproutAM
+#' @rdname sprout
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "sproutAM",
+  "sprout",
   function(n, patches, breed, heading, color, turtles) {
-    standardGeneric("sproutAM")
+    standardGeneric("sprout")
 })
 
 #' @export
 #' @importFrom grDevices rainbow
 #' @importFrom stats runif
-#' @rdname sproutAM
+#' @rdname sprout
 setMethod(
-  "sproutAM",
+  "sprout",
   signature = c(n = "numeric", patches = "matrix"),
   definition = function(n, patches, breed, heading, color, turtles) {
 
