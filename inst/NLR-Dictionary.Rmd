@@ -589,7 +589,7 @@ See http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf for more colors.
 
 * patches: `patches()` from NetLogoR.
 
-* patches-own: a new world must be created with `createWorld()` to create a new patch variable. This new world can then be stacked with others using `stackWorlds()` to create a single world object with the different patch values.
+* patches-own: a new world must be created with `createWorld()` to create a new patch variable. This new world can then be stacked with others using `stackWorlds()` to create a single object with the different patch values.
 
 * pcolor: not implemented.
 
