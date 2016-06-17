@@ -300,9 +300,9 @@ setReplaceMethod(
 
 
 ################################################################################
-#' Create a NLworldArray
+#' Stack worlds
 #'
-#' Stack multiple NLworldMatrix data in an array.
+#' Stack multiple NLworldMatrix into a NLworldArray.
 #'
 #' @param ... NLworldMatrix objects.
 #'
@@ -313,28 +313,28 @@ setReplaceMethod(
 #' @examples
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
 #' w2 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
-#' w3 <- NLworldArray(w1, w2)
+#' w3 <- stackWorlds(w1, w2)
 #' plot(world2raster(w3))
 #'
 #' @export
 #' @importFrom SpaDES updateList
 #' @importFrom abind abind
 #' @docType methods
-#' @rdname NLworldArray
+#' @rdname stackWorlds
 #'
 #' @author Sarah Bauduin
 #'
 setGeneric(
-  "NLworldArray",
+  "stackWorlds",
   signature = "...",
   function(...) {
-    standardGeneric("NLworldArray")
+    standardGeneric("stackWorlds")
 })
 
 #' @export
-#' @rdname NLworldArray
+#' @rdname stackWorlds
 setMethod(
-  "NLworldArray",
+  "stackWorlds",
   signature = "NLworldMatrix",
   definition = function(...) {
     NLwMs <- list(...)

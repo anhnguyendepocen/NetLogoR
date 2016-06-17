@@ -241,7 +241,7 @@ test_that("randomXcor and randomYcor work",{
   w2 <- w1
   w1[] <- runif(10000)
   w2[] <- runif(10000)
-  ws <-NLworldArray(w1, w2)
+  ws <-stackWorlds(w1, w2)
   t2 <- createTurtles(n = 10000,
                       coords = cbind(xcor = randomXcor(world = ws, n = 10000), ycor = randomYcor(world = ws, n = 10000)))
   expect_identical(canMove(world = ws, turtles = t2, dist = 0), rep(TRUE, NLcount(t2)))
@@ -367,7 +367,7 @@ test_that("downhill works",{
 
   w2 <- w1
   w2[] <- 25:1
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   t2 <- downhill(world = ws, pVar = "w1", turtles = t1, nNeighbors = 4)
   t3 <- downhill(world = ws, pVar = "w1",turtles = t1, nNeighbors = 8)
   expect_equivalent(of(agents = t2, var = c("xcor", "ycor")), cbind(xcor = 2, ycor = 3))
@@ -428,7 +428,7 @@ test_that("uphill works",{
 
   w2 <- w1
   w2[] <- 25:1
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2))
   t2 <- uphill(world = ws, pVar = "w1", turtles = t1, nNeighbors = 4)
   t3 <- uphill(world = ws, pVar = "w1",turtles = t1, nNeighbors = 8)
@@ -602,7 +602,7 @@ test_that("randomXYcor works",{
   w2 <- w1
   w1[] <- runif(10000)
   w2[] <- runif(10000)
-  ws <-NLworldArray(w1, w2)
+  ws <-stackWorlds(w1, w2)
   t2 <- createTurtles(n = 10000, coords = randomXYcor(world = w1, n = 10000))
   expect_identical(canMove(world = ws, turtles = t2, dist = 0), rep(TRUE, NLcount(t2)))
 })
@@ -861,7 +861,7 @@ test_that("other works", {
 
   w2 <- w1
   w2[] <- 100:1
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p4 <- other(agents = patches(ws), except = cbind(pxcor = 0, pycor = 0))
   expect_equivalent(nrow(p4), 99)
   p5 <- other(agents = patches(ws), except = cbind(pxcor = c(0,1,2,2), pycor = c(0,1,2,2)))
@@ -916,7 +916,7 @@ test_that("of works",{
   expect_equivalent(w1_31, c(3,1))
 
   w2 <- createWorld(data = 0, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-  w3 <- NLworldArray(w1, w2)
+  w3 <- stackWorlds(w1, w2)
   w1_1 <- of(world = w3, var = "w1", agents = patch(w1, 0, 4))
   expect_equivalent(w1_1, 1)
   w1_12 <- of(world = w3, var = "w1", agents = patch(w1, c(0,1), c(4,4)))

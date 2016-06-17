@@ -23,14 +23,14 @@ test_that("createWorld works",{
   expect_equivalent(rep(as.numeric(NA), length(w1)), as.numeric(t(w3@.Data)))
 })
 
-test_that("NLworldArray works",{
+test_that("stackWorlds works",{
   w1 <- createWorld(minPxcor = -2, maxPxcor = 7, minPycor = -4, maxPycor = 5, data = 1:100)
   w2 <- createWorld(minPxcor = -2, maxPxcor = 7, minPycor = -4, maxPycor = 5, data = 101:200)
   w3 <- createWorld(minPxcor = -3, maxPxcor = 6, minPycor = -4, maxPycor = 5, data = 1:100)
   w4 <- createWorld(minPxcor = -2, maxPxcor = 6, minPycor = -4, maxPycor = 5, data = 1:90)
-  expect_error(NLworldArray(w2, w3))
-  expect_error(NLworldArray(w2, w4))
-  w5 <- NLworldArray(w1, w2)
+  expect_error(stackWorlds(w2, w3))
+  expect_error(stackWorlds(w2, w4))
+  w5 <- stackWorlds(w1, w2)
   expect_identical(w5@extent, w2@extent)
   expect_identical(w5@pCoords, w2@pCoords)
   expect_identical(w5@res, w2@res)
@@ -42,7 +42,7 @@ test_that("NLworldArray works",{
   expect_equivalent(w5@.Data[,,"w2"], w2@.Data)
 
   w3 <- createWorld(minPxcor = -2, maxPxcor = 7, minPycor = -4, maxPycor = 5, data = -1:-100)
-  w6 <- NLworldArray(w1, w2, w3)
+  w6 <- stackWorlds(w1, w2, w3)
   expect_identical(w5@extent, w6@extent)
   expect_identical(w5@pCoords, w6@pCoords)
   expect_identical(w5@res, w6@res)
@@ -86,7 +86,7 @@ test_that("[] works with NLworldArray",{
   w1 <- createWorld(minPxcor = 0, maxPxcor = 1, minPycor = 0, maxPycor = 1, data = c(1, 2, 3, 4))
   w2 <- w1
   w2[] <- c(10, 20, 30, 40)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   expect_equivalent(ws[], cbind(c(1,2,3,4), c(10, 20, 30, 40)))
 
   ws_00 <- ws[0,0]
@@ -114,7 +114,7 @@ test_that("cellFromPxcorPycor works",{
   cellNum <- cellFromPxcorPycor(world = w3, pxcor = c(1, 0, 9), pycor = c(9, 0, 0))
   expect_equivalent(cellNum, c(2, 91, 100))
   w4 <- w3
-  w5 <- NLworldArray(w3, w4)
+  w5 <- stackWorlds(w3, w4)
   cellNum <- cellFromPxcorPycor(world = w5, pxcor = c(9,0,1), pycor = c(0, 0, 9))
   expect_equivalent(cellNum, c(100, 91, 2))
 })
@@ -125,7 +125,7 @@ test_that("PxcorPycorFromCell works",{
   pCoords2 <- cbind(pxcor = c(9,0,1), pycor = c(0, 0, 9))
   expect_equivalent(pCoords1, pCoords2)
   w4 <- w3
-  w5 <- NLworldArray(w3, w4)
+  w5 <- stackWorlds(w3, w4)
   pCoords1 <- PxcorPycorFromCell(world = w5, cellNum = c(100, 91, 2))
   expect_equivalent(pCoords1, pCoords2)
   pxcor <- sample(0:9, size = 5)

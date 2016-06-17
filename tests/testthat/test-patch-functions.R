@@ -23,7 +23,7 @@ test_that("diffuse works with 4 neighbors", {
   # NLworldArray
   w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   ws2 <- diffuse(world = ws,pVar = "w1", share = 0.6, nNeighbors = 4)
   expect_identical(sum(ws[][,1]), sum(ws2[][,1]))
 
@@ -70,7 +70,7 @@ test_that("diffuse works with 8 neighbors", {
   # NLworldArray
   w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   ws2 <- diffuse(world = ws,pVar = "w1", share = 0.6, nNeighbors = 8)
   expect_identical(sum(ws[][,1]), sum(ws2[][,1]))
 
@@ -108,7 +108,7 @@ test_that("NLdist works for patches", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   dist <- NLdist(world = ws, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1))
   expect_identical(as.numeric(dist), sqrt(1^2+1^2))
   dist <- NLdist(world = ws, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)))
@@ -179,7 +179,7 @@ test_that("NLdist works with turtles", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   distPT <- NLdist(world = ws, agents = cbind(pxcor = 8, pycor = 1), agents2 = t1, torus = TRUE)
   expect_identical(distPT[1], 3)
   distTP <- NLdist(world = ws, agents = t1, agents2 = cbind(pxcor = 2, pycor = 3))
@@ -220,7 +220,7 @@ test_that("pExist works", {
 
   w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
 
   # Same as for w1
   expect_false(pExist(ws, 1, 3))
@@ -248,7 +248,7 @@ test_that("neighbors works", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
 
   # Same as for w1
   n4 <- neighbors(world = ws, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
@@ -331,7 +331,7 @@ test_that("neighbors works", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
 
   # Same as for w1
   n4 <- neighbors(world = ws, agents = t1, nNeighbors = 4)
@@ -359,7 +359,7 @@ test_that("patch works", {
   expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
   w2 <- createWorld(data = 100:1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   expect_identical(patch(world = ws, x = 0.1, y = -0.4), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = ws, x = c(1, 0), y = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
   expect_identical(patch(world = ws, x = c(0,-1), y = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
@@ -388,7 +388,7 @@ test_that("patchAt works", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p1 <- patchAt(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = 1, dy = 2)
   expect_identical(p1, patch(ws, c(0+1, 1+1, 3+1), c(0+2, 1+2, 5+2)))
   p1 <- patchAt(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = c(1,3,5), dy = c(2, 4, 6))
@@ -413,7 +413,7 @@ test_that("patchAt works", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p1 <- patchAt(world = ws, agents = t1, dx = 1, dy = 2)
   expect_identical(p1, patch(ws, c(0+1, 1+1, 3+1), c(0+2, 1+2, 5+2)))
   p1 <- patchAt(world = ws, agents = t1, dx = c(1,3,5), dy = c(2, 4, 6))
@@ -441,7 +441,7 @@ test_that("patchDistDir works", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p1 <- patchDistDir(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, angle = 45)
   expect_identical(p1, patch(ws, c(2, 3, 5), c(2, 3, 7)))
   p1 <- patchDistDir(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, angle = -45, torus = TRUE)
@@ -472,7 +472,7 @@ test_that("patchDistDir works", {
   w1[] <- runif(100)
   w2 <- w1
   w2[] <- runif(100)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p1 <- patchDistDir(world = ws, agents = t1, dist = 3, angle = 45)
   expect_identical(p1, patch(ws, c(2, 3, 5), c(2, 3, 7)))
   p1 <- patchDistDir(world = ws, agents = t1, dist = 3, angle = -45, torus = TRUE)
@@ -496,7 +496,7 @@ test_that("patches work",{
   p2 <- cbind(pxcor = rep(0:9, 10), pycor = rep(9:0, each = 10))
   expect_equivalent(p1, p2)
   w2 <- createWorld(data = runif(100), minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
-  w3 <- NLworldArray(w1, w2)
+  w3 <- stackWorlds(w1, w2)
   p3 <- patches(w3)
   expect_identical(p3, p1)
 })
@@ -520,7 +520,7 @@ test_that("randomPxcor and randomPycor work", {
   w1[] <- runif(60)
   w2 <- w1
   w2[] <- runif(60)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   pxcor100 <- randomPxcor(world = ws, n = 100)
   expect_equivalent(min(pxcor100), minPxcor(ws))
   expect_equivalent(max(pxcor100), maxPxcor(ws))

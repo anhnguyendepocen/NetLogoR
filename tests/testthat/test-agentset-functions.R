@@ -8,7 +8,7 @@ test_that("NLall works",{
   w3[0,0] <- 4
   expect_identical(NLall(world = w2, agents = patch(world = w2, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), val = 5), TRUE)
 
-  ws <- NLworldArray(w1, w2, w3)
+  ws <- stackWorlds(w1, w2, w3)
   expect_identical(NLall(world = ws, agents = patches(world = ws), var = "w1", val = 5), FALSE)
   expect_identical(NLall(world = ws, agents = patches(world = ws), var = "w2", val = 5), TRUE)
   expect_identical(NLall(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w3", val = 5), TRUE)
@@ -78,7 +78,7 @@ test_that("sortOn works",{
 
   w2 <- w1
   w2[] <- 1:25
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p1 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w1")
   p2 <- sortOn(world = ws, agents = patch(world = ws, x = c(0,1,2,3,4), y = c(4,4,4,4,4)), var = "w2")
   expect_equivalent(p1, cbind(pxcor = c(4,3,2,1,0), pycor = c(4,4,4,4,4)))
@@ -118,7 +118,7 @@ test_that("NLwith works",{
   valw2 <- rep(0, 25)
   valw2[c(3, 13)] <- 1
   w2 <- createWorld(data = valw2, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-  w3 <- NLworldArray(w1, w2)
+  w3 <- stackWorlds(w1, w2)
   p5 <- NLwith(world = w3, agents = patches(world = w3), var = "w1", val = 1)
   expect_equivalent(p1, p5)
   p6 <- NLwith(agents = patches(world = w3), world = w3, var = "w1", val = 10)
@@ -154,7 +154,7 @@ test_that("withMax works",{
   w2 <- w1
   w2[] <- runif(25)
   w2[2,c(2,4)] <- c(2,2)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   pMaxw1 <- withMax(world = ws, agents = patches(world = ws), var = "w1")
   pMaxw2 <- withMax(world = ws, agents = patches(world = ws), var = "w2")
   expect_equivalent(pMaxw1, patch(ws, x = c(1,1), y = c(4,1)))
@@ -189,7 +189,7 @@ test_that("withMin works",{
   w2 <- w1
   w2[] <- runif(25)
   w2[2,c(2,4)] <- c(-1,-1)
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   pMinw1 <- withMin(world = ws, agents = patches(world = ws), var = "w1")
   pMinw2 <- withMin(world = ws, agents = patches(world = ws), var = "w2")
   expect_equivalent(pMinw1, patch(ws, x = c(1,1), y = c(4,1)))
@@ -221,7 +221,7 @@ test_that("maxOneOf works",{
 
   w2 <- w1
   w2[] <- 1 / w1[]
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   onepMax1 <- maxOneOf(world = ws, agents = patches(world = w1), var = "w1")
   onepMax2 <- maxOneOf(world = ws, agents = patches(world = w1), var = "w2")
   compare1 <- cbind(a = as.numeric(allpMax[,1])==as.numeric(onepMax1[1]),b = as.numeric(allpMax[,2])==as.numeric(onepMax1[2]))
@@ -253,7 +253,7 @@ test_that("minOneOf works",{
 
   w2 <- w1
   w2[] <- 1 / w1[]
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   onepMin1 <- minOneOf(world = ws, agents = patches(world = w1), var = "w1")
   onepMin2 <- minOneOf(world = ws, agents = patches(world = w1), var = "w2")
   compare1 <- cbind(a = as.numeric(allpMin[,1])==as.numeric(onepMin1[1]),b = as.numeric(allpMin[,2])==as.numeric(onepMin1[2]))
@@ -402,7 +402,7 @@ test_that("maxNof works",{
 
   w2 <- w1
   w2[] <- 25:1
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p1 <- maxNof(agents = patches(world = ws), n = 5, world = ws, var = "w2")
   expect_equivalent(p1, PxcorPycorFromCell(world = w2, 1:5))
   p2 <- maxNof(agents = patches(world = ws), n = 1, world = ws, var = "w2")
@@ -449,7 +449,7 @@ test_that("minNof works",{
 
   w2 <- w1
   w2[] <- 1:25
-  ws <- NLworldArray(w1, w2)
+  ws <- stackWorlds(w1, w2)
   p1 <- minNof(agents = patches(world = ws), n = 5, world = ws, var = "w2")
   expect_equivalent(p1, PxcorPycorFromCell(world = w2, 1:5))
   p2 <- minNof(agents = patches(world = ws), n = 1, world = ws, var = "w2")
@@ -614,7 +614,7 @@ test_that("set works",{
 
   w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
   w2 <- createWorld(data = 25:1, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
-  w3 <- NLworldArray(w1, w2)
+  w3 <- stackWorlds(w1, w2)
   w3 <- NLset(world = w3, agents = patches(w3), var = "w1", val = 0)
   expect_equivalent(as.numeric(t(w3@.Data[,,"w1"])), rep(0, length(w1)))
   w3 <- NLset(world = w3, agents = patches(w3), var = "w1", val = 1:25)
