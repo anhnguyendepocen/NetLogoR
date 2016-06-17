@@ -54,7 +54,7 @@ If \code{torus = FALSE} and \code{out = TRUE}, \code{world}
          \code{turtles} do not face backward).
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createOTurtles(n = 10, world = w1)
 plot(world2raster(w1))

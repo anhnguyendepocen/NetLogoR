@@ -57,7 +57,7 @@ Report \code{n} patches or turtles randomly selected among \code{agents}.
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 pSelect <- nOf(agents = patches(w1), n = 5)
 
 # Turtles

@@ -20,7 +20,7 @@ Integer.
 Report the patches maximum pycor in the \code{world}.
 }
 \examples{
-w1 <- createNLworldMatrix()
+w1 <- createWorld()
 maxPycor(w1)
 
 

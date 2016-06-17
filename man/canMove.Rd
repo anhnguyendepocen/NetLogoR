@@ -26,7 +26,7 @@ Report \code{TRUE} if a turtle can move the given distance without leaving
 the \code{world}'s extent, report \code{FALSE} otherwise.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, world = w1)
 canMove(world = w1, turtles = t1, dist = 1:10)
 

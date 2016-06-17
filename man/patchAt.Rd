@@ -50,7 +50,7 @@ If the patch at distance \code{(dx, dy)}
          returned.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 patchCorner <- patchAt(world = w1, agents = patch(w1, 0, 0), dx = 1, dy = 1)
 t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
 patchCorner <- patchAt(world = w1, agents = t1, dx = 1, dy = 1)

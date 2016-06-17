@@ -65,7 +65,7 @@ If \code{agents} are patches, \code{world} must be provided and \code{turtles}
          provided and \code{world} must not be provided.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 w1 <- NLset(world = w1, agents = patches(w1), val = 1)
 # Set the patch[0,4] to 0
 w1 <- NLset(world = w1, agents = patch(w1, 0, 4), val = 0)

@@ -22,7 +22,7 @@ Numeric. Vector of NLWorldMatrix indices.
 Convert vector indices or Raster* cellnumbers into NLWorldMatrix indices.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = 1:100)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = 1:100)
 w1Ras <- world2raster(w1)
 index <- 24
 pxpy <- PxcorPycorFromCell(world = w1, cellNum = index)

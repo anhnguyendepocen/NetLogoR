@@ -62,7 +62,7 @@ If the patch at distance \code{(dx, dy)}
          are defined from the wrapped \code{world} is returned.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0),

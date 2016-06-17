@@ -47,7 +47,7 @@ The patch around which the neighbors are identified, or the patch where
          some may be on the other sides of the \code{world}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 neighbors(world = w1, agents = patch(w1, c(0,9), c(0,7)), nNeighbors = 8)
 t1 <- createTurtles(n = 3, coords = randomXYcor(w1, n = 3))
 neighbors(world = w1, agents = t1, nNeighbors = 4)

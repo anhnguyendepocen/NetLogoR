@@ -27,7 +27,7 @@ Report \code{TRUE} if a patch exists inside the \code{world}'s extent, report
 \code{FALSE} otherwise.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 pExist(world = w1, pxcor = -1, pycor = 2)
 
 

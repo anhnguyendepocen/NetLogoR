@@ -55,7 +55,7 @@ If no neighboring patch has a larger value than the patch where the
          \code{nNeighbors}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
+w1 <- createWorld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
                           data = runif(100))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 plot(world2raster(w1))

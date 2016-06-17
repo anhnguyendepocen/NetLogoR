@@ -23,7 +23,7 @@ NLworldMatrix object with \code{NA} values for all patches.
 Reset all patches values to \code{NA}.
 }
 \examples{
-w1 <- createNLworldMatrix()
+w1 <- createWorld()
 w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 w1Val <- of(world = w1, agents = patches(w1))
 summary(w1Val)

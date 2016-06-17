@@ -45,7 +45,7 @@ Careful! The \code{class} tested does not correspond to actual R classes.
          \code{"patcheset"} or \code{"turtleset"}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
                     heading = sample(1:3, size = 10, replace= TRUE))
 isNLclass(agents = patches(w1), class = "patch")

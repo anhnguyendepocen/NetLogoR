@@ -24,7 +24,7 @@ Report the patches coordinates \code{pxcor} and \code{pycor} given the cells
 numbers as defined for a Raster* object.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 cellNum <- cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
 PxcorPycorFromCell(world = w1, cellNum = cellNum)
 cellNum <- cellFromPxcorPycor(world = w1, pxcor = c(0, 1, 2), pycor = 0)

@@ -27,7 +27,7 @@ Duplicated turtles are identified based only on their who numbers.
          turtleSet(), to avoid turtles with duplicated who numbers.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))

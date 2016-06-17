@@ -20,7 +20,7 @@ Integer.
 Report the patches minimum pxcor in the \code{world}.
 }
 \examples{
-w1 <- createNLworldMatrix()
+w1 <- createWorld()
 minPxcor(w1)
 
 

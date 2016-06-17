@@ -66,7 +66,7 @@ Report the \code{agents} within the "cone of vision" in front of each one of the
          around the sides of the \code{world} to select \code{agents}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 
 p1 <- inCone(turtles = t1, radius = 2, agents = patches(w1), angle = 90)

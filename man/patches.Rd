@@ -22,7 +22,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
 Report the coordinates of all the patches in the \code{world}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 allPatches <- patches(world = w1)
 NLcount(allPatches) # 100 patches
 

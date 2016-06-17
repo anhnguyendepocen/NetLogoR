@@ -20,7 +20,7 @@ Integer.
 Report the width of the \code{world} in patch number.
 }
 \examples{
-w1 <- createNLworldMatrix()
+w1 <- createWorld()
 worldWidth(w1)
 
 

@@ -37,7 +37,7 @@
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
@@ -141,7 +141,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(world2raster(w1))
@@ -239,7 +239,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(world2raster(w1))
@@ -349,7 +349,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(world2raster(w1))
@@ -419,7 +419,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
@@ -507,7 +507,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createOTurtles(world = w1, n = 10)
 #' dx(turtles = t1)
 #'
@@ -571,7 +571,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createOTurtles(world = w1, n = 10)
 #' dy(turtles = t1)
 #'
@@ -630,7 +630,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
 #' NLcount(t1)
 #' t1 <- die(turtles = t1, who = c(2, 3, 4))
@@ -695,7 +695,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
 #' NLcount(t1)
 #' t1 <- hatch(turtles = t1, who = 0, n = 2)
@@ -770,7 +770,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
 #' canMove(world = w1, turtles = t1, dist = 1:10)
 #'
@@ -818,7 +818,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                           ycor = randomYcor(world = w1, n = 10)))
@@ -869,7 +869,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                            ycor = randomYcor(world = w1, n = 10)))
@@ -941,7 +941,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' towards(agents = patches(w1), agents2 = cbind(x = 0, y = 0))
 #' t1 <- createTurtles(n = 10, world = w1)
 #' towards(agents = t1, agents2 = cbind(x = 0, y = 0))
@@ -1101,7 +1101,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
@@ -1159,7 +1159,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- left(turtles = t1, angle = 180)
@@ -1214,7 +1214,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 #' t1 <- createTurtles(n = 10, world = w1)
 #' of(agents = t1, var = "heading")
 #' t1 <- right(turtles = t1, angle = 180)
@@ -1277,7 +1277,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
+#' w1 <- createWorld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
@@ -1406,7 +1406,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
+#' w1 <- createWorld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
@@ -1483,7 +1483,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchAhead(world = w1, turtles = t1, dist = 1)
 #'
@@ -1542,7 +1542,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' patchHere(world = w1, turtles = t1)
 #'
@@ -1609,7 +1609,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchLeft(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
@@ -1675,7 +1675,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 1, coords = cbind(xcor = 2, ycor = 2), heading = 90)
 #' patchRight(world = w1, turtles = t1, dist = 2, angle = 90)
 #'
@@ -1736,7 +1736,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #' plot(world2raster(w1))
@@ -1960,7 +1960,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createOTurtles(world = w1, n = 10)
 #' inspect(turtles = t1, who = c(2, 3))
 #'
@@ -2021,7 +2021,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #' plot(world2raster(w1))
@@ -2076,7 +2076,7 @@ setMethod(
 #'         column "ycor".
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' plot(world2raster(w1))
@@ -2127,7 +2127,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
 #'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 #' tExist(turtles = t1, who = 3, breed = "sheep")
@@ -2202,7 +2202,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' t2 <- turtle(t1, who = 2)
 #'
@@ -2280,7 +2280,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
 #' plot(world2raster(w1))
@@ -2454,7 +2454,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = 0:9, ycor = 0:9),
 #'                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 #' t2 <- turtlesAt(world = w1, turtles = t1, agents = turtle(t1, who = 0),
@@ -2523,7 +2523,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10), breed = "sheep")
 #' t2 <- createTurtles(n = 2, coords = randomXYcor(w1, n = 2), breed = "wolf")
 #' t2 <- NLset(turtles = t2, agents = t2, var = "who", val = c(10, 11))
@@ -2706,7 +2706,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' t1 <- createOTurtles(n = 10, world = w1)
 #' subHeadings(angle1 = t1, angle2 = 0)
 #'
@@ -2822,7 +2822,7 @@ setMethod(
 #'
 #' @examples
 #' # Patches
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
 #' NLcount(p1) # 99 patches
 #'
@@ -2900,7 +2900,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(world2raster(w1))
@@ -2973,7 +2973,7 @@ setMethod(
 #'
 #' @examples
 #' # Patches
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = 1:25)
 #' of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 #'

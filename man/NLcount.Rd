@@ -25,7 +25,7 @@ Report the number of patches or turtles inside \code{agents}.
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 p1 <- patches(w1)
 NLcount(p1) # 25 patches
 

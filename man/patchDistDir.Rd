@@ -51,7 +51,7 @@ If \code{torus = FALSE} and the patch at distance \code{dist} and
          \code{patchLeft()} or \code{patchRight()}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 p1 <- patchDistDir(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
 t1 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0), heading = 315)
 p2 <- patchDistDir(world = w1, agents = t1, dist = 1, angle = 45)

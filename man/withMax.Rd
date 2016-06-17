@@ -53,7 +53,7 @@ equals to the maximum value.
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = sample(1:5, size = 25, replace = TRUE))
 plot(world2raster(w1))
 p1 <- withMax(agents = patches(w1), world = w1)

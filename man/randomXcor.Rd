@@ -22,7 +22,7 @@ Numeric. Vector of length \code{n} of xcor coordinates.
 Report \code{n} random xcor coordinates within the \code{world}'s extent.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
                                           ycor = randomYcor(world = w1, n = 10)))

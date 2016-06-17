@@ -41,7 +41,7 @@ The \code{turtles} point outwards.
          the world's extent.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
                           data = runif(100))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 plot(world2raster(w1))

@@ -1,6 +1,6 @@
 test_that("diffuse works with 4 neighbors", {
   # NLworldMatrix
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 2, minPycor = 0, maxPycor = 2, data = c(1,3,6,2,8,10,3,8,2))
   w2 <- diffuse(world = w1, share = 0.6, nNeighbors = 4)
   expect_identical(sum(w1[]), sum(w2[]))
 
@@ -21,7 +21,7 @@ test_that("diffuse works with 4 neighbors", {
   expect_identical(as.numeric(w3[0,2]),val03)
 
   # NLworldArray
-  w2 <- createNLworldMatrix(0, 2, 0, 2)
+  w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- NLworldArray(w1, w2)
   ws2 <- diffuse(world = ws,pVar = "w1", share = 0.6, nNeighbors = 4)
@@ -46,7 +46,7 @@ test_that("diffuse works with 4 neighbors", {
 
 test_that("diffuse works with 8 neighbors", {
   # NLworldMatrix
-  w1 <- createNLworldMatrix(0, 2, 0, 2)
+  w1 <- createWorld(0, 2, 0, 2)
   w1[] <- c(1,3,6,2,8,10,3,8,2)
   w2 <- diffuse(world = w1, share = 0.6, nNeighbors = 8)
   expect_identical(sum(w1[]), sum(w2[]))
@@ -68,7 +68,7 @@ test_that("diffuse works with 8 neighbors", {
   expect_identical(as.numeric(w3[0,2]),val03)
 
   # NLworldArray
-  w2 <- createNLworldMatrix(0, 2, 0, 2)
+  w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- NLworldArray(w1, w2)
   ws2 <- diffuse(world = ws,pVar = "w1", share = 0.6, nNeighbors = 8)
@@ -92,7 +92,7 @@ test_that("diffuse works with 8 neighbors", {
 })
 
 test_that("NLdist works for patches", {
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   dist <- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = 1, pycor = 1))
   expect_identical(as.numeric(dist), sqrt(1^2+1^2))
   dist <- NLdist(world = w1, agents = cbind(pxcor = 0, pycor = 0), agents2 = cbind(pxcor = c(0,0), pycor = c(1,9)))
@@ -121,7 +121,7 @@ test_that("NLdist works for patches", {
   expect_identical(dist[,1], c(2, 1))
   expect_identical(dist[,2], c(9, 8))
 
-  w3 <- createNLworldMatrix(-5, 5, -10, -2)
+  w3 <- createWorld(-5, 5, -10, -2)
   dist <- NLdist(world = w3, agents = cbind(pxcor = -2, pycor = -5), agents2 = cbind(pxcor = c(-1,5), pycor = c(-5, -5)), torus = TRUE)
   expect_identical(dist, c(1, 4))
 
@@ -156,7 +156,7 @@ test_that("NLdist works for patches", {
 })
 
 test_that("NLdist works with turtles", {
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(1,2,3,4), ycor = c(1,2,3,4)))
   # Patches to turtles
   distPT <- NLdist(world = w1, agents = cbind(pxcor = 2, pycor = 3), agents2 = t1)
@@ -211,14 +211,14 @@ test_that("NLdist works with turtles", {
 })
 
 test_that("pExist works", {
-  w1 <- createNLworldMatrix(0, 2, 0, 2)
+  w1 <- createWorld(0, 2, 0, 2)
   expect_false(pExist(w1, 1, 3))
   expect_true(pExist(w1, 1, 1))
 
   w1[] <- c(1,3,6,2,8,10,3,8,2)
   expect_identical(pExist(w1, c(0, 1), c(3, 1)), c(FALSE, TRUE))
 
-  w2 <- createNLworldMatrix(0, 2, 0, 2)
+  w2 <- createWorld(0, 2, 0, 2)
   w2[] <- runif(9)
   ws <- NLworldArray(w1, w2)
 
@@ -234,7 +234,7 @@ test_that("pExist works", {
 })
 
 test_that("neighbors works", {
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9), pycor = c(9, 9, 0, 0)), nNeighbors = 4)
   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
   n43 <- cbind(pxcor = c(0, 1), pycor = c(1, 0))
@@ -268,7 +268,7 @@ test_that("neighbors works", {
   expect_equivalent(nCorner[nCorner[,"id"] == 1, c("pxcor", "pycor")], cbind(pxcor = c(9, 8, 0, 9), pycor = c(0, 9, 9, 8)))
 
   # Large number of agents
-  w1 <- createNLworldMatrix(0, 500, 0, 500)
+  w1 <- createWorld(0, 500, 0, 500)
   n4 <- neighbors(world = w1, agents = patches(w1), nNeighbors = 4)
   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(500, 499))
   n4_251001 <- cbind(pxcor = c(500, 499), pycor = c(1, 0))
@@ -304,19 +304,19 @@ test_that("neighbors works", {
   expect_equivalent(n4double[n4double[,3] == 503 + length(w1), c("pxcor", "pycor")], n4double_503[,c("pxcor", "pycor")])
 
   # With duplicate
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   n4 <- neighbors(world = w1, agents = cbind(pxcor = c(0, 9, 0, 9, 0), pycor = c(9, 9, 0, 0, 9)), nNeighbors = 4)
   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
   expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n4_1)
   expect_equivalent(n4[n4[,"id"] == 5, c("pxcor", "pycor")], n4[n4[,"id"] == 5, c("pxcor", "pycor")])
-  w1 <- createNLworldMatrix(0, 50, 0, 50)
+  w1 <- createWorld(0, 50, 0, 50)
   n4 <- neighbors(world = w1, agents = rbind(patches(w1), patches(w1)[1,]), nNeighbors = 4)
   n4_1 <- cbind(pxcor = c(1, 0), pycor = c(50, 49))
   expect_equivalent(n4[n4[,"id"] == 1, c("pxcor", "pycor")], n4_1)
   expect_equivalent(n4[n4[,"id"] == 2602, c("pxcor", "pycor")], n4[n4[,"id"] == 1, c("pxcor", "pycor")])
 
   # With turtles
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   t1 <- createTurtles(n = 4, coords = cbind(xcor = c(0, 9, 0, 9), ycor = c(9, 9, 0, 0)))
   n4 <- neighbors(world = w1, agents = t1, nNeighbors = 4)
   n41 <- cbind(pxcor = c(1, 0), pycor = c(9, 8))
@@ -349,7 +349,7 @@ test_that("neighbors works", {
 })
 
 test_that("patch works", {
-  w1 <- createNLworldMatrix(data = 1:100, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  w1 <- createWorld(data = 1:100, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   expect_identical(patch(world = w1, x = 0.1, y = -0.4), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = w1, x = c(1, 0), y = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
   expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), out = FALSE), cbind(pxcor = 0, pycor = 0))
@@ -358,7 +358,7 @@ test_that("patch works", {
   expect_identical(patch(world = w1, x = c(0,-1), y = c(0,0), torus = TRUE, out = TRUE), cbind(pxcor = c(0, 9), pycor = c(0, 0)))
   expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2)), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = w1, x = c(0, 0.1, 0.4), y = c(-0.4, 0, 0.2), duplicate = TRUE), cbind(pxcor = c(0,0,0), pycor = c(0,0,0)))
-  w2 <- createNLworldMatrix(data = 100:1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  w2 <- createWorld(data = 100:1, minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   ws <- NLworldArray(w1, w2)
   expect_identical(patch(world = ws, x = 0.1, y = -0.4), cbind(pxcor = 0, pycor = 0))
   expect_identical(patch(world = ws, x = c(1, 0), y = c(0, 0)), cbind(pxcor = c(1, 0), pycor = c(0, 0)))
@@ -377,7 +377,7 @@ test_that("noPatches works", {
 })
 
 test_that("patchAt works", {
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = 1, dy = 2)
   expect_identical(p1, patch(w1, c(0+1, 1+1, 3+1), c(0+2, 1+2, 5+2)))
   p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = c(1,3,5), dy = c(2, 4, 6))
@@ -396,12 +396,12 @@ test_that("patchAt works", {
   p1 <- patchAt(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dx = c(1,3,5), dy = c(2, 4, 6), torus = TRUE)
   expect_identical(p1, patch(ws, c(1, 4, 8), c(2, 5, 1)))
 
-  w1 <- createNLworldMatrix(-5, 5, -5, 5)
+  w1 <- createWorld(-5, 5, -5, 5)
   p1 <- patchAt(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dx = -4, dy = 1)
   expect_identical(p1, patch(w1, c(-4, -6, -1), c(1, 2, 6), out = TRUE, duplicate = TRUE))
 
   # Turtles
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   t1 <- createTurtles(n = 3, coords = cbind(xcor = c(0.2, 0.9, 3.1), ycor = c(-0.4, 1, 5.4)))
   p1 <- patchAt(world = w1, agents = t1, dx = 1, dy = 2)
   expect_identical(p1, patch(w1, c(0+1, 1+1, 3+1), c(0+2, 1+2, 5+2)))
@@ -421,14 +421,14 @@ test_that("patchAt works", {
   p1 <- patchAt(world = ws, agents = t1, dx = c(1,3,5), dy = c(2, 4, 6), torus = TRUE)
   expect_identical(p1, patch(ws, c(1, 4, 8), c(2, 5, 1)))
 
-  w1 <- createNLworldMatrix(-5, 5, -5, 5)
+  w1 <- createWorld(-5, 5, -5, 5)
   t2 <- createTurtles(n = 3, coords = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)))
   p1 <- patchAt(world = w1, agents = t2, dx = -4, dy = 1)
   expect_identical(p1, patch(w1, c(-4, -6, -1), c(1, 2, 6), out = TRUE, duplicate = TRUE))
 })
 
 test_that("patchDistDir works", {
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   p1 <- patchDistDir(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, angle = 45)
   expect_identical(p1, patch(w1, c(2, 3, 5), c(2, 3, 7)))
   p1 <- patchDistDir(world = w1, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, angle = -45, torus = TRUE)
@@ -451,14 +451,14 @@ test_that("patchDistDir works", {
   p1 <- patchDistDir(world = ws, agents = cbind(pxcor = c(0, 1, 3), pycor = c(0, 1, 5)), dist = 3, angle = -45)
   expect_identical(p1, patch(ws, c(-2, -1, 1), c(-2, -1, 7), duplicate = TRUE, out = TRUE))
 
-  w1 <- createNLworldMatrix(-5, 5, -5, 5)
+  w1 <- createWorld(-5, 5, -5, 5)
   p1 <- patchDistDir(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dist = 4, angle = 270, torus = TRUE)
   expect_identical(p1, patch(w1, c(-4, 5, -1), c(0, 1, 5)))
   p1 <- patchDistDir(world = w1, agents = cbind(pxcor = c(0, -2, 3), pycor = c(0, 1, 5)), dist = -4, angle = 270, torus = FALSE)
   expect_identical(p1, patch(w1, c(4, 2, 7), c(0, 1, 5), duplicate = TRUE, out = TRUE))
 
   # Turtles
-  w1 <- createNLworldMatrix(0, 9, 0, 9)
+  w1 <- createWorld(0, 9, 0, 9)
   t1 <- createTurtles(n = 3, coords = cbind(xcor = c(0.1, 0.9, 3), ycor = c(-0.4, 1, 5.2)))
   p1 <- patchDistDir(world = w1, agents = t1, dist = 3, angle = 45)
   expect_identical(p1, patch(w1, c(2, 3, 5), c(2, 3, 7)))
@@ -482,7 +482,7 @@ test_that("patchDistDir works", {
   p1 <- patchDistDir(world = ws, agents = t1, dist = 3, angle = -45)
   expect_identical(p1, patch(ws, c(-2, -1, 1), c(-2, -1, 7), duplicate = TRUE, out = TRUE))
 
-  w1 <- createNLworldMatrix(-5, 5, -5, 5)
+  w1 <- createWorld(-5, 5, -5, 5)
   t2 <- createTurtles(n = 3, coords = cbind(pxcor = c(-0.1, -2.2, 3.4), pycor = c(0.2, 0.8, 5.4)))
   p1 <- patchDistDir(world = w1, agents = t2, dist = 4, angle = 270, torus = TRUE)
   expect_identical(p1, patch(w1, c(-4, 5, -1), c(0, 1, 5)))
@@ -491,18 +491,18 @@ test_that("patchDistDir works", {
 })
 
 test_that("patches work",{
-  w1 <- createNLworldMatrix(data = runif(100), minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  w1 <- createWorld(data = runif(100), minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   p1 <- patches(w1)
   p2 <- cbind(pxcor = rep(0:9, 10), pycor = rep(9:0, each = 10))
   expect_equivalent(p1, p2)
-  w2 <- createNLworldMatrix(data = runif(100), minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  w2 <- createWorld(data = runif(100), minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   w3 <- NLworldArray(w1, w2)
   p3 <- patches(w3)
   expect_identical(p3, p1)
 })
 
 test_that("patchSet works",{
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
   p1 <- patchAt(world = w1, agents = patch(w1, c(0,1,2), c(0,0,0)), dx = 1, dy = 1)
   p2 <- patchDistDir(world = w1, agents = patch(w1, 0, 0), dist = 1, angle = 45)
   p3 <- patch(world = w1, x = 4.3, y = 8)
@@ -512,7 +512,7 @@ test_that("patchSet works",{
 })
 
 test_that("randomPxcor and randomPycor work", {
-  w1 <- createNLworldMatrix(0, 9, -10, -5)
+  w1 <- createWorld(0, 9, -10, -5)
   pxcor100 <- randomPxcor(world = w1, n = 100)
   expect_equivalent(min(pxcor100), minPxcor(w1))
   expect_equivalent(max(pxcor100), maxPxcor(w1))

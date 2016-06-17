@@ -23,7 +23,7 @@ Dataframe (nrow = \code{length(who)}) with the variables for the selected
 Display the variables values for the selected individuals among the \code{turtles}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createOTurtles(world = w1, n = 10)
 inspect(turtles = t1, who = c(2, 3))
 

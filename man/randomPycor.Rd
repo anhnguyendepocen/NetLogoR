@@ -22,7 +22,7 @@ Integer. Vector of length \code{n} of pycor coordinates.
 Report \code{n} random pycor coordinates within the \code{world}'s extent.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 pycor <- randomPycor(world = w1, n = 10)
 
 

@@ -39,7 +39,7 @@ The parent turtle must be contained in the \code{turtles}.
          All new hatched turtles are placed at the end of the agentMatrix object.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createTurtles(n = 10, world = w1)
 NLcount(t1)
 t1 <- hatch(turtles = t1, who = 0, n = 2)

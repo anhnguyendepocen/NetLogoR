@@ -26,7 +26,7 @@ Report \code{TRUE} if \code{agents} is non empty, report \code{FALSE} otherwise.
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 p1 <- noPatches()
 p2 <- patch(w1, 0, 0)
 NLany(p1)

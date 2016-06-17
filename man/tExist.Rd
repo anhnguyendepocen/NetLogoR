@@ -31,7 +31,7 @@ Report \code{TRUE} if a turtle exists inside the \code{turtles}, report
 \code{FALSE} otherwise.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10),
                     breed = c(rep("sheep", 5), rep("wolf", 5)))
 tExist(turtles = t1, who = 3, breed = "sheep")

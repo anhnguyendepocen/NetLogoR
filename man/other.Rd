@@ -41,7 +41,7 @@ Both \code{agents} and \code{except} must be of the same class (e.g., both
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 p1 <- other(agents = patches(w1), except = patch(w1, 0, 0))
 NLcount(p1) # 99 patches
 

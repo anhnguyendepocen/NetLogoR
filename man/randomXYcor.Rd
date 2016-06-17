@@ -23,7 +23,7 @@ Matrix (ncol = 2, nrow = \code{n}) with the first column "xcor" and the second
 Report \code{n} random xcor and ycor coordinates within the \code{world}'s extent.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 plot(world2raster(w1))

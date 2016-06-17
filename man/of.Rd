@@ -56,7 +56,7 @@ Report the \code{agents} values for the requested variable.
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = 1:25)
 of(world = w1, agents = patch(w1, c(0,0), c(4,0)))
 

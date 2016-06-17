@@ -39,7 +39,7 @@ If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
          coordinates from a wrapped \code{world} are returned.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 patchAhead(world = w1, turtles = t1, dist = 1)
 

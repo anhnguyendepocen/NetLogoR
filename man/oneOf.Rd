@@ -52,7 +52,7 @@ If \code{agents} is a matrix with ncol = 3, the selection of one
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 pSelect <- oneOf(agents = patches(w1))
 
 # Turtles

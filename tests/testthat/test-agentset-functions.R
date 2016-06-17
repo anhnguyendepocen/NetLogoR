@@ -1,5 +1,5 @@
 test_that("NLall works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
+  w1 <- createWorld(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
   expect_identical(NLall(world = w1, agents = patches(world = w1), val = 5), FALSE)
   w2 <- w1
   w2[] <- 5
@@ -22,7 +22,7 @@ test_that("NLall works",{
 })
 
 test_that("NLany works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  w1 <- createWorld(0, 4, 0, 4)
   p1 <- noPatches()
   p2 <- patch(world = w1, x = 0, y = 0)
   p3 <- patch(world = w1, x = -1, y = -1)
@@ -46,7 +46,7 @@ test_that("NLany works",{
 })
 
 test_that("NLcount works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  w1 <- createWorld(0, 4, 0, 4)
   p1 <- noPatches()
   p2 <- patch(world = w1, x = 0, y = 0)
   p3 <- patch(world = w1, x = -1, y = -1)
@@ -61,7 +61,7 @@ test_that("NLcount works",{
   expect_equivalent(NLcount(p6), 1)
 
   # Turtles
-  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  w1 <- createWorld(0, 4, 0, 4)
   t1 <- noTurtles()
   t2 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
   t3 <- turtle(turtles = t2, who = c(1, 2, 3))
@@ -71,7 +71,7 @@ test_that("NLcount works",{
 })
 
 test_that("sortOn works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4, data = 25:1)
+  w1 <- createWorld(0, 4, 0, 4, data = 25:1)
   p1 <- sortOn(world = w1, agents = patches(world = w1))
   expect_equivalent(cbind(p1[1,1], p1[1,2]), patch(w1, x = 4, y = 0))
   expect_equivalent(cbind(p1[25,1],p1[25,2]), patch(w1, x = 0, y = 4))
@@ -104,7 +104,7 @@ test_that("NLwith works",{
   # Patches
   valw1 <- rep(0, 25)
   valw1[c(2, 17)] <- 1
-  w1 <- createNLworldMatrix(data = valw1, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1 <- createWorld(data = valw1, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   p1 <- NLwith(world = w1, agents = patches(world = w1), val = 1)
   expect_equivalent(cbind(pxcor = c(1,1), pycor = c(4,1)), p1)
   p2 <- NLwith(agents = patches(world = w1), world = w1, val = 0)
@@ -117,7 +117,7 @@ test_that("NLwith works",{
   # With NLworldArray
   valw2 <- rep(0, 25)
   valw2[c(3, 13)] <- 1
-  w2 <- createNLworldMatrix(data = valw2, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w2 <- createWorld(data = valw2, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w3 <- NLworldArray(w1, w2)
   p5 <- NLwith(world = w3, agents = patches(world = w3), var = "w1", val = 1)
   expect_equivalent(p1, p5)
@@ -142,7 +142,7 @@ test_that("NLwith works",{
 })
 
 test_that("withMax works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  w1 <- createWorld(0, 4, 0, 4)
   expect_error(withMax(agents = patches(world = w1), world = w1))
   w1[] <- 1
   expect_equivalent(withMax(agents = patches(w1), world = w1), patches(w1))
@@ -177,7 +177,7 @@ test_that("withMax works",{
 })
 
 test_that("withMin works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  w1 <- createWorld(0, 4, 0, 4)
   expect_error(withMin(agents = patches(world = w1), world = w1))
   w1[] <- 1
   expect_equivalent(withMin(agents = patches(w1), world = w1), patches(w1))
@@ -212,7 +212,7 @@ test_that("withMin works",{
 })
 
 test_that("maxOneOf works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
+  w1 <- createWorld(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
   allpMax <- withMax(world = w1, agents = patches(world = w1))
   onepMax <- maxOneOf(world = w1, agents = patches(world = w1))
   compare <- cbind(a = as.numeric(allpMax[,1])==as.numeric(onepMax[1]),b = as.numeric(allpMax[,2])==as.numeric(onepMax[2]))
@@ -244,7 +244,7 @@ test_that("maxOneOf works",{
 })
 
 test_that("minOneOf works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
+  w1 <- createWorld(0, 4, 0, 4, data = sample(1:5, size = 25, replace = TRUE))
   allpMin <- withMin(world = w1, agents = patches(world = w1))
   onepMin <- minOneOf(world = w1, agents = patches(world = w1))
   compare <- cbind(a = as.numeric(allpMin[,1])==as.numeric(onepMin[1]),b = as.numeric(allpMin[,2])==as.numeric(onepMin[2]))
@@ -276,7 +276,7 @@ test_that("minOneOf works",{
 })
 
 test_that("isNLclass works",{
-  w1 <- createNLworldMatrix(0, 4, 0, 4)
+  w1 <- createWorld(0, 4, 0, 4)
   t1 <- createTurtles(n = 10, randomXYcor(w1, n = 10))
   expect_identical(isNLclass(agents = patch(w1, x = 0, y = 0), class = "patch"), TRUE)
   expect_identical(isNLclass(agents = patches(w1), class = "patchset"), TRUE)
@@ -305,7 +305,7 @@ test_that("isNLclass works",{
 })
 
 test_that("nOf works",{
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   p1 <- nOf(agents = patches(world = w1), n = 1)
   expect_equivalent(nrow(p1), 1)
   p11 <- as.matrix(merge(p1, patches(world = w1)))
@@ -340,7 +340,7 @@ test_that("nOf works",{
 })
 
 test_that("oneOf works",{
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   p1 <- oneOf(agents = patches(world = w1))
   expect_equivalent(nrow(p1), 1)
   p11 <- as.matrix(merge(p1, patches(world = w1)))
@@ -371,7 +371,7 @@ test_that("oneOf works",{
 })
 
 test_that("maxNof works",{
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
   p1 <- maxNof(agents = patches(world = w1), n = 5, world = w1)
   expect_equivalent(p1, PxcorPycorFromCell(world = w1, 1:5))
   p2 <- maxNof(agents = patches(world = w1), n = 1, world = w1)
@@ -418,7 +418,7 @@ test_that("maxNof works",{
 })
 
 test_that("minNof works",{
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
   p1 <- minNof(agents = patches(world = w1), n = 5, world = w1)
   expect_equivalent(p1, PxcorPycorFromCell(world = w1, 1:5))
   p2 <- minNof(agents = patches(world = w1), n = 1, world = w1)
@@ -466,7 +466,7 @@ test_that("minNof works",{
 
 test_that("inRadius works",{
   # Patches to patches
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   p1 <- inRadius(agents = patch(w1, 0, 0), radius = 2, agents2 = patches(w1), world = w1)
   expect_error(inRadius(agents = patch(w1, x = 0, y = 0), radius = 2, agents2 = patches(w1), torus = TRUE))
   expect_equivalent(p1[p1[,"id"] == 1, c("pxcor", "pycor")], cbind(pxcor = c(0, 0, 1, 0, 1, 2), pycor = c(2, 1, 1, 0, 0, 0)))
@@ -561,7 +561,7 @@ test_that("inRadius works",{
 })
 
 test_that("inCone works",{
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   t1 <- createTurtles(n = 5, coords = cbind(xcor = 0:4, ycor = 0:4), heading = c(0, 90, 180, 270, 0))
 
   # Turtles to patches
@@ -600,7 +600,7 @@ test_that("inCone works",{
 
 test_that("set works",{
   # Set work with patches
-  w1 <- createNLworldMatrix(data = 1:25, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w1 <- createWorld(data = 1:25, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w1 <- NLset(world = w1, agents = patches(w1), val = 0)
   expect_equivalent(as.numeric(t(w1)), rep(0, length(w1)))
   w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
@@ -613,7 +613,7 @@ test_that("set works",{
   expect_equivalent(w1, w1_)
 
   w1 <- NLset(world = w1, agents = patches(w1), val = 1:25)
-  w2 <- createNLworldMatrix(data = 25:1, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+  w2 <- createWorld(data = 25:1, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w3 <- NLworldArray(w1, w2)
   w3 <- NLset(world = w3, agents = patches(w3), var = "w1", val = 0)
   expect_equivalent(as.numeric(t(w3@.Data[,,"w1"])), rep(0, length(w1)))

@@ -146,7 +146,7 @@ setReplaceMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = 1:25)
 #' plot(world2raster(w1))
 #'
@@ -154,20 +154,20 @@ setReplaceMethod(
 #' @export
 #' @importFrom raster extent
 #' @docType methods
-#' @rdname createNLworldMatrix
+#' @rdname createWorld
 #'
 #' @author Sarah Bauduin, Eliot McIntire, and Alex Chubaty
 #'
 setGeneric(
-  "createNLworldMatrix",
+  "createWorld",
   function(minPxcor, maxPxcor, minPycor, maxPycor, data = NA) {
-    standardGeneric("createNLworldMatrix")
+    standardGeneric("createWorld")
 })
 
 #' @export
-#' @rdname createNLworldMatrix
+#' @rdname createWorld
 setMethod(
-  "createNLworldMatrix",
+  "createWorld",
   signature = c(minPxcor = "numeric", maxPxcor = "numeric", minPycor = "numeric", maxPycor = "numeric"),
   definition = function(minPxcor, maxPxcor, minPycor, maxPycor, data) {
 
@@ -190,12 +190,12 @@ setMethod(
 })
 
 #' @export
-#' @rdname createNLworldMatrix
+#' @rdname createWorld
 setMethod(
-  "createNLworldMatrix",
+  "createWorld",
   signature = c("missing", "missing", "missing", "missing", "missing"),
   definition = function() {
-    createNLworldMatrix(-16, 16, -16, 16, data = NA)
+    createWorld(-16, 16, -16, 16, data = NA)
 })
 
 
@@ -311,8 +311,8 @@ setReplaceMethod(
 #' @details The NLworldMatrix objects must all have the same extents.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
-#' w2 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
+#' w2 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
 #' w3 <- NLworldArray(w1, w2)
 #' plot(world2raster(w3))
 #'
@@ -390,7 +390,7 @@ setClassUnion(name = "NLworldMs",
 #' @return Numeric. Vector of cells number.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
 #' cellFromPxcorPycor(world = w1, pxcor = c(0, 1, 2), pycor = 0)
 #'
@@ -430,7 +430,7 @@ setMethod(
 #'         column "pycor" in the order of the given \code{cellNum}.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)
 #' cellNum <- cellFromPxcorPycor(world = w1, pxcor = 0, pycor = 9)
 #' PxcorPycorFromCell(world = w1, cellNum = cellNum)
 #' cellNum <- cellFromPxcorPycor(world = w1, pxcor = c(0, 1, 2), pycor = 0)
@@ -477,7 +477,7 @@ setMethod(
 #' @author Eliot McIntire
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = 1:100)
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9, data = 1:100)
 #' w1Ras <- world2raster(w1)
 #' index <- 24
 #' pxpy <- PxcorPycorFromCell(world = w1, cellNum = index)

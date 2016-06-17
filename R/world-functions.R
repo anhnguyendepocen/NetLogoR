@@ -14,7 +14,7 @@
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix()
+#' w1 <- createWorld()
 #' maxPxcor(w1)
 #'
 #'
@@ -57,7 +57,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix()
+#' w1 <- createWorld()
 #' maxPycor(w1)
 #'
 #'
@@ -100,7 +100,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix()
+#' w1 <- createWorld()
 #' minPxcor(w1)
 #'
 #'
@@ -143,7 +143,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix()
+#' w1 <- createWorld()
 #' minPycor(w1)
 #'
 #'
@@ -186,7 +186,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix()
+#' w1 <- createWorld()
 #' worldWidth(w1)
 #'
 #'
@@ -230,7 +230,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix()
+#' w1 <- createWorld()
 #' worldHeight(w1)
 #'
 #'
@@ -274,7 +274,7 @@ setMethod(
 #'             Northwestern University. Evanston, IL.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix()
+#' w1 <- createWorld()
 #' w1 <- NLset(world = w1, agents = patches(w1), val = runif(NLcount(patches(w1))))
 #' w1Val <- of(world = w1, agents = patches(w1))
 #' summary(w1Val)
@@ -314,7 +314,7 @@ setMethod(
   "clearPatches",
   signature = c("NLworldArray"),
   definition = function(world) {
-    worldNA <- createNLworldMatrix(minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
+    worldNA <- createWorld(minPxcor = minPxcor(world), maxPxcor = maxPxcor(world),
                                    minPycor = minPycor(world), maxPycor = maxPycor(world))
     return(worldNA)
   }
@@ -374,7 +374,7 @@ setMethod(
     maxPxcor <- round(raster@extent@xmax)
     minPycor <- round(raster@extent@ymin)
     maxPycor <- round(raster@extent@ymax)
-    world <- createNLworldMatrix(minPxcor = minPxcor, maxPxcor = maxPxcor,
+    world <- createWorld(minPxcor = minPxcor, maxPxcor = maxPxcor,
                                  minPycor = minPycor, maxPycor = maxPycor)
     worldRaster <- raster(world@extent)
     res(worldRaster) <- c(1, 1)
@@ -398,7 +398,7 @@ setMethod(
     maxPxcor <- round(raster@extent@xmax)
     minPycor <- round(raster@extent@ymin)
     maxPycor <- round(raster@extent@ymax)
-    world <- createNLworldMatrix(minPxcor = minPxcor, maxPxcor = maxPxcor,
+    world <- createWorld(minPxcor = minPxcor, maxPxcor = maxPxcor,
                                  minPycor = minPycor, maxPycor = maxPycor)
     worldRaster <- raster(world@extent)
     res(worldRaster) <- c(1, 1)
@@ -440,7 +440,7 @@ setMethod(
 #'          at the edges of the cells.
 #'
 #' @examples
-#' w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
+#' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' r1 <- world2raster(w1)
 #' plot(r1)

@@ -50,7 +50,7 @@ report \code{FALSE} otherwise.
 }
 \examples{
 # Patches
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = runif(25))
 NLall(agents = patches(w1), world = w1, val = 5)
 w2 <- w1
 w2 <- NLset(world = w1, agents = patches(w1), val = 5)

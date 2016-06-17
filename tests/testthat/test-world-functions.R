@@ -1,5 +1,5 @@
 test_that("maxPxcor works", {
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
   expect_identical(10, maxPxcor(w1))
   w2 <- w1
   w3 <- NLworldArray(w1, w2)
@@ -7,7 +7,7 @@ test_that("maxPxcor works", {
 })
 
 test_that("maxPycor works", {
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
   expect_identical(15, maxPycor(w1))
   w2 <- w1
   w3 <- NLworldArray(w1, w2)
@@ -15,7 +15,7 @@ test_that("maxPycor works", {
 })
 
 test_that("minPxcor works", {
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
   expect_identical(0, minPxcor(w1))
   w2 <- w1
   w3 <- NLworldArray(w1, w2)
@@ -23,7 +23,7 @@ test_that("minPxcor works", {
 })
 
 test_that("minPycor works", {
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
   expect_identical(-5, minPycor(w1))
   w2 <- w1
   w3 <- NLworldArray(w1, w2)
@@ -31,7 +31,7 @@ test_that("minPycor works", {
 })
 
 test_that("worldWidth works", {
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
   expect_identical(11, worldWidth(w1))
   w2 <- w1
   w3 <- NLworldArray(w1, w2)
@@ -39,7 +39,7 @@ test_that("worldWidth works", {
 })
 
 test_that("worldHeight works", {
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 10, minPycor = -5, maxPycor = 15)
   expect_identical(21, worldHeight(w1))
   w2 <- w1
   w3 <- NLworldArray(w1, w2)
@@ -48,13 +48,13 @@ test_that("worldHeight works", {
 
 test_that("clearPatches works", {
   # NLworldMatrix
-  w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3, data = 1:20)
+  w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3, data = 1:20)
   w2 <- clearPatches(w1)
-  w3 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3)
+  w3 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3)
   expect_equivalent(w2, w3)
 
   # NLworldArray
-  w4 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3, data = 1:20)
+  w4 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 3, data = 1:20)
   w5 <- w4
   w6 <- NLworldArray(w4, w5)
   w7 <- clearPatches(w6)

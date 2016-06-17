@@ -38,7 +38,7 @@ The identity of the turtles is defined by their "who" number. This
          "prevY". The initial values are \code{NA}.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createOTurtles(n = 10, world = w1)
 plot(world2raster(w1))

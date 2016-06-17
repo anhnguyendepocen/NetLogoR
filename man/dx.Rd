@@ -35,7 +35,7 @@ Report the sine of the \code{turtles}' heading multiplied by the \code{dist}
          clockwise manner.
 }
 \examples{
-w1 <- createNLworldMatrix(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
+w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 t1 <- createOTurtles(world = w1, n = 10)
 dx(turtles = t1)
 
