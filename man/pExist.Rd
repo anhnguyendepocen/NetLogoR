@@ -3,15 +3,15 @@
 \docType{methods}
 \name{pExist}
 \alias{pExist}
-\alias{pExist,NLworldMs,numeric,numeric-method}
+\alias{pExist,worldNLR,numeric,numeric-method}
 \title{Do the patches exist?}
 \usage{
 pExist(world, pxcor, pycor)
 
-\S4method{pExist}{NLworldMs,numeric,numeric}(world, pxcor, pycor)
+\S4method{pExist}{worldNLR,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{pxcor}{Integer. Vector of patches pxcor coordinates. Must be of length 1
 or of the same length as \code{pycor}.}

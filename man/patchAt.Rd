@@ -3,16 +3,16 @@
 \docType{methods}
 \name{patchAt}
 \alias{patchAt}
-\alias{patchAt,NLworldMs,matrix,numeric,numeric-method}
+\alias{patchAt,worldNLR,matrix,numeric,numeric-method}
 \title{Patches at}
 \usage{
 patchAt(world, agents, dx, dy, torus = FALSE)
 
-\S4method{patchAt}{NLworldMs,matrix,numeric,numeric}(world, agents, dx, dy,
+\S4method{patchAt}{worldNLR,matrix,numeric,numeric}(world, agents, dx, dy,
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or

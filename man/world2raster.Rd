@@ -5,7 +5,7 @@
 \alias{world2raster}
 \alias{world2raster,worldArray-method}
 \alias{world2raster,worldMatrix-method}
-\title{Convert a NLworldMs object into a Raster* object}
+\title{Convert a worldMatrix or worldArray object into a Raster* object}
 \usage{
 world2raster(world)
 
@@ -14,7 +14,7 @@ world2raster(world)
 \S4method{world2raster}{worldArray}(world)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 }
 \value{
 RasterLayer or RasterStack object depending on the input \code{world}.

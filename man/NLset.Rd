@@ -22,7 +22,7 @@ NLset(world, turtles, agents, var, val)
 \S4method{NLset}{worldArray,missing,matrix,character}(world, agents, var, val)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 
@@ -49,7 +49,7 @@ as well as any variable created with \code{turtlesOwn()}.}
            Columns must be in the same order as \code{var}.}
 }
 \value{
-NLworldMs object with the values \code{val} assigned to the patches
+WorldMatrix or worldArray object with the values \code{val} assigned to the patches
         variables \code{var}
         for the \code{agents}, or
 

@@ -21,7 +21,7 @@ if (getRversion() >= "3.1.0") {
 #' @importFrom raster extent
 setMethod(
   "extent",
-  signature("NLworldMs"),
+  signature("worldNLR"),
   definition = function(x, ...) {
     attr(x, "extent")
 })

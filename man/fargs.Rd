@@ -6,7 +6,7 @@
 \arguments{
 \item{n}{Integer.}
 
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}

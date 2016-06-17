@@ -3,16 +3,16 @@
 \docType{methods}
 \name{patchAhead}
 \alias{patchAhead}
-\alias{patchAhead,NLworldMs,agentMatrix,numeric-method}
+\alias{patchAhead,worldNLR,agentMatrix,numeric-method}
 \title{Patches ahead}
 \usage{
 patchAhead(world, turtles, dist, torus = FALSE)
 
-\S4method{patchAhead}{NLworldMs,agentMatrix,numeric}(world, turtles, dist,
+\S4method{patchAhead}{worldNLR,agentMatrix,numeric}(world, turtles, dist,
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 

@@ -13,7 +13,7 @@ createOTurtles(n, world, breed, color)
 \arguments{
 \item{n}{Integer.}
 
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{breed}{Character. Vector of "breed" names. Must be of length 1 or of length
 \code{n}. If missing, \code{breed = "turtle"} for all turtles.}

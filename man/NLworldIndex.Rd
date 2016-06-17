@@ -11,7 +11,7 @@ NLworldIndex(world, cellNum)
 \S4method{NLworldIndex}{worldMatrix,numeric}(world, cellNum)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{cellNum}{Integer. Vector of cells number.}
 }

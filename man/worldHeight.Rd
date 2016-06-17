@@ -3,15 +3,15 @@
 \docType{methods}
 \name{worldHeight}
 \alias{worldHeight}
-\alias{worldHeight,NLworldMs-method}
+\alias{worldHeight,worldNLR-method}
 \title{World height}
 \usage{
 worldHeight(world)
 
-\S4method{worldHeight}{NLworldMs}(world)
+\S4method{worldHeight}{worldNLR}(world)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 }
 \value{
 Integer.

@@ -3,16 +3,16 @@
 \docType{methods}
 \name{patchLeft}
 \alias{patchLeft}
-\alias{patchLeft,NLworldMs,agentMatrix,numeric,numeric-method}
+\alias{patchLeft,worldNLR,agentMatrix,numeric,numeric-method}
 \title{Patches on the left}
 \usage{
 patchLeft(world, turtles, dist, angle, torus = FALSE)
 
-\S4method{patchLeft}{NLworldMs,agentMatrix,numeric,numeric}(world, turtles,
-  dist, angle, torus = FALSE)
+\S4method{patchLeft}{worldNLR,agentMatrix,numeric,numeric}(world, turtles, dist,
+  angle, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 

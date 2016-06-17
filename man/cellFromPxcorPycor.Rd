@@ -3,15 +3,15 @@
 \docType{methods}
 \name{cellFromPxcorPycor}
 \alias{cellFromPxcorPycor}
-\alias{cellFromPxcorPycor,NLworldMs,numeric,numeric-method}
+\alias{cellFromPxcorPycor,worldNLR,numeric,numeric-method}
 \title{Cells numbers from patches coordinates}
 \usage{
 cellFromPxcorPycor(world, pxcor, pycor)
 
-\S4method{cellFromPxcorPycor}{NLworldMs,numeric,numeric}(world, pxcor, pycor)
+\S4method{cellFromPxcorPycor}{worldNLR,numeric,numeric}(world, pxcor, pycor)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{pxcor}{Integer. Vector of patches pxcor coordinates. Must be of length 1
 or of the same length as \code{pycor}.}

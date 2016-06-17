@@ -3,20 +3,20 @@
 \docType{methods}
 \name{turtlesOn}
 \alias{turtlesOn}
-\alias{turtlesOn,NLworldMs,agentMatrix,matrix,character-method}
-\alias{turtlesOn,NLworldMs,agentMatrix,matrix,missing-method}
+\alias{turtlesOn,worldNLR,agentMatrix,matrix,character-method}
+\alias{turtlesOn,worldNLR,agentMatrix,matrix,missing-method}
 \title{Turtles on}
 \usage{
 turtlesOn(world, turtles, agents, breed, simplify = TRUE)
 
-\S4method{turtlesOn}{NLworldMs,agentMatrix,matrix,missing}(world, turtles,
+\S4method{turtlesOn}{worldNLR,agentMatrix,matrix,missing}(world, turtles,
   agents, simplify)
 
-\S4method{turtlesOn}{NLworldMs,agentMatrix,matrix,character}(world, turtles,
+\S4method{turtlesOn}{worldNLR,agentMatrix,matrix,character}(world, turtles,
   agents, breed, simplify = TRUE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 

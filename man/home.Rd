@@ -3,15 +3,15 @@
 \docType{methods}
 \name{home}
 \alias{home}
-\alias{home,NLworldMs,agentMatrix,character-method}
+\alias{home,worldNLR,agentMatrix,character-method}
 \title{Return home}
 \usage{
 home(world, turtles, home)
 
-\S4method{home}{NLworldMs,agentMatrix,character}(world, turtles, home)
+\S4method{home}{worldNLR,agentMatrix,character}(world, turtles, home)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 

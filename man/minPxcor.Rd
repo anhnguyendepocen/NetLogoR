@@ -3,15 +3,15 @@
 \docType{methods}
 \name{minPxcor}
 \alias{minPxcor}
-\alias{minPxcor,NLworldMs-method}
+\alias{minPxcor,worldNLR-method}
 \title{Minimum pxcor}
 \usage{
 minPxcor(world)
 
-\S4method{minPxcor}{NLworldMs}(world)
+\S4method{minPxcor}{worldNLR}(world)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 }
 \value{
 Integer.

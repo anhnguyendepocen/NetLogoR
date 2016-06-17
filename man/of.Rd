@@ -20,7 +20,7 @@ of(world, agents, var)
 \S4method{of}{worldArray,matrix,character}(world, agents, var)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or

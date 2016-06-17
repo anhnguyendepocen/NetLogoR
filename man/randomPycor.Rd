@@ -3,15 +3,15 @@
 \docType{methods}
 \name{randomPycor}
 \alias{randomPycor}
-\alias{randomPycor,NLworldMs,numeric-method}
+\alias{randomPycor,worldNLR,numeric-method}
 \title{Random pycor}
 \usage{
 randomPycor(world, n)
 
-\S4method{randomPycor}{NLworldMs,numeric}(world, n)
+\S4method{randomPycor}{worldNLR,numeric}(world, n)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{n}{Integer.}
 }

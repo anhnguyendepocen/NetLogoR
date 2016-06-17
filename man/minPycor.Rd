@@ -3,15 +3,15 @@
 \docType{methods}
 \name{minPycor}
 \alias{minPycor}
-\alias{minPycor,NLworldMs-method}
+\alias{minPycor,worldNLR-method}
 \title{Minimum pycor}
 \usage{
 minPycor(world)
 
-\S4method{minPycor}{NLworldMs}(world)
+\S4method{minPycor}{worldNLR}(world)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 }
 \value{
 Integer.

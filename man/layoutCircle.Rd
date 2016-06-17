@@ -3,16 +3,16 @@
 \docType{methods}
 \name{layoutCircle}
 \alias{layoutCircle}
-\alias{layoutCircle,NLworldMs,agentMatrix,numeric-method}
+\alias{layoutCircle,worldNLR,agentMatrix,numeric-method}
 \title{Layout turtles on a circle}
 \usage{
 layoutCircle(world, turtles, radius, torus = FALSE)
 
-\S4method{layoutCircle}{NLworldMs,agentMatrix,numeric}(world, turtles, radius,
+\S4method{layoutCircle}{worldNLR,agentMatrix,numeric}(world, turtles, radius,
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 

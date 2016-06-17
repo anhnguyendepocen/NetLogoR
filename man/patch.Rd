@@ -3,16 +3,16 @@
 \docType{methods}
 \name{patch}
 \alias{patch}
-\alias{patch,NLworldMs,numeric,numeric-method}
+\alias{patch,worldNLR,numeric,numeric-method}
 \title{Patches coordinates}
 \usage{
 patch(world, x, y, duplicate = FALSE, torus = FALSE, out = FALSE)
 
-\S4method{patch}{NLworldMs,numeric,numeric}(world, x, y, duplicate = FALSE,
+\S4method{patch}{worldNLR,numeric,numeric}(world, x, y, duplicate = FALSE,
   torus = FALSE, out = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{x}{Numeric. Vector of x coordinates. Must be of same
 length as \code{y}.}

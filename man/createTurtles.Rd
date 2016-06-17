@@ -24,7 +24,7 @@ column "ycor" representing the turtles inital locations.
 Given coordinates must be inside the \code{world}'s extent. If missing,
 turtles are put in the center of the \code{world}.}
 
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{heading}{Numeric. Vector of values between 0 and 360. Must be of length 1 or
 of length \code{n}. If missing, a random heading is assigned to

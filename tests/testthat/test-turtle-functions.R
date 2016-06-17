@@ -24,7 +24,7 @@ test_that("createTurtles works",{
   expect_equivalent(c(rep("caribou", 5), rep("moose", 5)), of(agents = t6, var = "breed"))
 })
 
-test_that("createOTurtles with NLworldMs",{
+test_that("createOTurtles works",{
   w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
 
   t1 <- createOTurtles(world = w1, n = 10)

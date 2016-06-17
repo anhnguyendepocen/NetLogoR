@@ -12,7 +12,7 @@ if (getRversion() >= "3.1.0") {
 #' @param share      Numeric. Value between 0 and 1 representing the portion of
 #'                   the patches values to be diffused among the neighbors.
 #'
-#' @return NLworldMs object with patches values updated.
+#' @return WorldMatrix or worldArray object with patches values updated.
 #'
 #' @details What is given is lost for the patches.
 #'
@@ -278,7 +278,7 @@ setGeneric(
 #' @rdname pExist
 setMethod(
   "pExist",
-  signature = c("NLworldMs", "numeric", "numeric"),
+  signature = c("worldNLR", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
 
     if(length(pxcor) == 1 & length(pycor) != 1){
@@ -351,7 +351,7 @@ setGeneric(
 #' @rdname neighbors
 setMethod(
   "neighbors",
-  signature = c(world = "NLworldMs", agents = "matrix", nNeighbors = "numeric"),
+  signature = c(world = "worldNLR", agents = "matrix", nNeighbors = "numeric"),
   definition = function(world, agents, nNeighbors, torus) {
 
     if(class(agents) == "agentMatrix"){
@@ -464,7 +464,7 @@ setGeneric(
 #' @rdname patch
 setMethod(
   "patch",
-  signature = c(world = "NLworldMs", x = "numeric", y = "numeric"),
+  signature = c(world = "worldNLR", x = "numeric", y = "numeric"),
   definition = function(world, x, y, duplicate, torus, out) {
 
     pxcor_ <- round(x)
@@ -588,7 +588,7 @@ setGeneric(
 #' @rdname patchAt
 setMethod(
   "patchAt",
-  signature = c(world = "NLworldMs", agents = "matrix", dx = "numeric", dy = "numeric"),
+  signature = c(world = "worldNLR", agents = "matrix", dx = "numeric", dy = "numeric"),
   definition = function(world, agents, dx, dy, torus) {
 
     if(class(agents) == "agentMatrix"){
@@ -665,7 +665,7 @@ setGeneric(
 #' @rdname patchDistDir
 setMethod(
   "patchDistDir",
-  signature = c(world = "NLworldMs", agents = "matrix", dist = "numeric", angle = "numeric"),
+  signature = c(world = "worldNLR", agents = "matrix", dist = "numeric", angle = "numeric"),
   definition = function(world, agents, dist, angle, torus) {
 
     if(class(agents) == "agentMatrix"){
@@ -722,7 +722,7 @@ setGeneric(
 #' @rdname patches
 setMethod(
   "patches",
-  signature = "NLworldMs",
+  signature = "worldNLR",
   definition = function(world) {
     return(world@pCoords)
   }
@@ -818,7 +818,7 @@ setGeneric(
 #' @rdname randomPxcor
 setMethod(
   "randomPxcor",
-  signature = c("NLworldMs", "numeric"),
+  signature = c("worldNLR", "numeric"),
   definition = function(world, n) {
     pxcor <- sample(minPxcor(world):maxPxcor(world), size = n, replace = TRUE)
     return(pxcor)
@@ -862,7 +862,7 @@ setGeneric(
 #' @rdname randomPycor
 setMethod(
   "randomPycor",
-  signature = c("NLworldMs", "numeric"),
+  signature = c("worldNLR", "numeric"),
   definition = function(world, n) {
     pycor <- sample(minPycor(world):maxPycor(world), size = n, replace = TRUE)
     return(pycor)

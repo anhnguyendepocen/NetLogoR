@@ -3,16 +3,16 @@
 \docType{methods}
 \name{neighbors}
 \alias{neighbors}
-\alias{neighbors,NLworldMs,matrix,numeric-method}
+\alias{neighbors,worldNLR,matrix,numeric-method}
 \title{Neighbors patches}
 \usage{
 neighbors(world, agents, nNeighbors, torus = FALSE)
 
-\S4method{neighbors}{NLworldMs,matrix,numeric}(world, agents, nNeighbors,
+\S4method{neighbors}{worldNLR,matrix,numeric}(world, agents, nNeighbors,
   torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or

@@ -3,15 +3,15 @@
 \docType{methods}
 \name{canMove}
 \alias{canMove}
-\alias{canMove,NLworldMs,agentMatrix,numeric-method}
+\alias{canMove,worldNLR,agentMatrix,numeric-method}
 \title{Can the turtles move?}
 \usage{
 canMove(world, turtles, dist)
 
-\S4method{canMove}{NLworldMs,agentMatrix,numeric}(world, turtles, dist)
+\S4method{canMove}{worldNLR,agentMatrix,numeric}(world, turtles, dist)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 

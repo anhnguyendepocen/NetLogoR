@@ -34,7 +34,7 @@ setGeneric(
 #' @rdname maxPxcor
 setMethod(
   "maxPxcor",
-  signature = "NLworldMs",
+  signature = "worldNLR",
   definition = function(world) {
     return(world@maxPxcor)
   }
@@ -77,7 +77,7 @@ setGeneric(
 #' @rdname maxPycor
 setMethod(
   "maxPycor",
-  signature = "NLworldMs",
+  signature = "worldNLR",
   definition = function(world) {
     return(world@maxPycor)
   }
@@ -120,7 +120,7 @@ setGeneric(
 #' @rdname minPxcor
 setMethod(
   "minPxcor",
-  signature = "NLworldMs",
+  signature = "worldNLR",
   definition = function(world) {
     return(world@minPxcor)
   }
@@ -163,7 +163,7 @@ setGeneric(
 #' @rdname minPycor
 setMethod(
   "minPycor",
-  signature = "NLworldMs",
+  signature = "worldNLR",
   definition = function(world) {
     return(world@minPycor)
   }
@@ -206,7 +206,7 @@ setGeneric(
 #' @rdname worldWidth
 setMethod(
   "worldWidth",
-  signature = "NLworldMs",
+  signature = "worldNLR",
   definition = function(world) {
     w_width <- maxPxcor(world) - minPxcor(world) + 1
     return(w_width)
@@ -250,7 +250,7 @@ setGeneric(
 #' @rdname worldHeight
 setMethod(
   "worldHeight",
-  signature = "NLworldMs",
+  signature = "worldNLR",
   definition = function(world) {
     w_height <- maxPycor(world) - minPycor(world) + 1
     return(w_height)
@@ -322,7 +322,7 @@ setMethod(
 
 
 ################################################################################
-#' Convert a Raster* object into a NLworldMs object
+#' Convert a Raster* object into a worldMatrix or worldArray object
 #'
 #' Convert a RasterLayer object into a worldMatrix object or a RasterStack object
 #' into a worldArray object.
@@ -334,11 +334,11 @@ setMethod(
 #' @return WorldMatrix or worldArray object depending on the input \code{raster}.
 #'         Patches value are retained from the \code{raster}.
 #'
-#' @details See \code{help("NLworldMs-class")} for more details on the NLworlds
-#'          classes.
+#' @details See \code{help("worldMatrix-class")} or \code{help("worldArray-class")}
+#'          for more details on the classes.
 #'
 #'          The \code{raster} is resampled to match the coordinates system and
-#'          resolution of a NLworldMs using the chosen \code{method}. The
+#'          resolution of a worldMatrix or worldArray using the chosen \code{method}. The
 #'          extent will be bigger by 1 on the width and on the height.
 #'
 #' @examples
@@ -425,7 +425,7 @@ setMethod(
 
 
 ################################################################################
-#' Convert a NLworldMs object into a Raster* object
+#' Convert a worldMatrix or worldArray object into a Raster* object
 #'
 #' Convert a worldMatrix object into a RasterLayer object or a
 #' worldArray object into a RasterStack object

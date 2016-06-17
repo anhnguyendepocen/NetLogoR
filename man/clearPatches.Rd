@@ -14,7 +14,7 @@ clearPatches(world)
 \S4method{clearPatches}{worldArray}(world)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 }
 \value{
 WorldMatrix object with \code{NA} values for all patches.

@@ -3,15 +3,15 @@
 \docType{methods}
 \name{patchHere}
 \alias{patchHere}
-\alias{patchHere,NLworldMs,agentMatrix-method}
+\alias{patchHere,worldNLR,agentMatrix-method}
 \title{Patches here}
 \usage{
 patchHere(world, turtles)
 
-\S4method{patchHere}{NLworldMs,agentMatrix}(world, turtles)
+\S4method{patchHere}{worldNLR,agentMatrix}(world, turtles)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 }

@@ -3,22 +3,22 @@
 \docType{methods}
 \name{turtlesAt}
 \alias{turtlesAt}
-\alias{turtlesAt,NLworldMs,agentMatrix,matrix,numeric,numeric,character-method}
-\alias{turtlesAt,NLworldMs,agentMatrix,matrix,numeric,numeric,missing-method}
+\alias{turtlesAt,worldNLR,agentMatrix,matrix,numeric,numeric,character-method}
+\alias{turtlesAt,worldNLR,agentMatrix,matrix,numeric,numeric,missing-method}
 \title{Turtles at}
 \usage{
 turtlesAt(world, turtles, agents, dx, dy, breed, torus = FALSE)
 
 
-  \S4method{turtlesAt}{NLworldMs,agentMatrix,matrix,numeric,numeric,missing}(world,
+  \S4method{turtlesAt}{worldNLR,agentMatrix,matrix,numeric,numeric,missing}(world,
   turtles, agents, dx, dy, torus)
 
 
-  \S4method{turtlesAt}{NLworldMs,agentMatrix,matrix,numeric,numeric,character}(world,
+  \S4method{turtlesAt}{worldNLR,agentMatrix,matrix,numeric,numeric,character}(world,
   turtles, agents, dx, dy, breed, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{turtles}{AgentMatrix object representing the moving agents.}
 

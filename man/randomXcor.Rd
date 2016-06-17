@@ -3,15 +3,15 @@
 \docType{methods}
 \name{randomXcor}
 \alias{randomXcor}
-\alias{randomXcor,NLworldMs,numeric-method}
+\alias{randomXcor,worldNLR,numeric-method}
 \title{Random xcor}
 \usage{
 randomXcor(world, n)
 
-\S4method{randomXcor}{NLworldMs,numeric}(world, n)
+\S4method{randomXcor}{worldNLR,numeric}(world, n)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{n}{Integer.}
 }

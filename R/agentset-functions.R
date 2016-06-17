@@ -1799,7 +1799,7 @@ setMethod(
 #'            Matrix or Dataframe (ncol = \code{length(var)}, nrow = \code{NLcount(agents)}).
 #'            Columns must be in the same order as \code{var}.
 #'
-#' @return NLworldMs object with the values \code{val} assigned to the patches
+#' @return WorldMatrix or worldArray object with the values \code{val} assigned to the patches
 #'         variables \code{var}
 #'         for the \code{agents}, or
 #'

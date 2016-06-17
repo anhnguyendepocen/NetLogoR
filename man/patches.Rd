@@ -3,15 +3,15 @@
 \docType{methods}
 \name{patches}
 \alias{patches}
-\alias{patches,NLworldMs-method}
+\alias{patches,worldNLR-method}
 \title{All the patches in a world}
 \usage{
 patches(world)
 
-\S4method{patches}{NLworldMs}(world)
+\S4method{patches}{worldNLR}(world)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 }
 \value{
 Matrix (ncol = 2) with the first column "pxcor" and the second column

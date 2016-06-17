@@ -3,8 +3,8 @@
 \docType{methods}
 \name{setXY}
 \alias{setXY}
-\alias{setXY,agentMatrix,numeric,numeric,NLworldMs,logical-method}
 \alias{setXY,agentMatrix,numeric,numeric,missing,ANY-method}
+\alias{setXY,agentMatrix,numeric,numeric,worldNLR,logical-method}
 \title{Set turtles' locations}
 \usage{
 setXY(turtles, xcor, ycor, world, torus = FALSE)
@@ -12,7 +12,7 @@ setXY(turtles, xcor, ycor, world, torus = FALSE)
 \S4method{setXY}{agentMatrix,numeric,numeric,missing,ANY}(turtles, xcor, ycor,
   torus)
 
-\S4method{setXY}{agentMatrix,numeric,numeric,NLworldMs,logical}(turtles, xcor,
+\S4method{setXY}{agentMatrix,numeric,numeric,worldNLR,logical}(turtles, xcor,
   ycor, world, torus = FALSE)
 }
 \arguments{
@@ -24,7 +24,7 @@ of length \code{turtles}.}
 \item{ycor}{Numeric. Vector of y coordinates. Must be of length 1 or
 of length \code{turtles}.}
 
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}

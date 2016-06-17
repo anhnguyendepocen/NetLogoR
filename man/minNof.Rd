@@ -24,7 +24,7 @@ minNof(agents, n, world, var)
 
 \item{n}{Integer.}
 
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{var}{Character. The name of the selected \code{agents} variable.
 If \code{agents} are patches and the \code{world} is a

@@ -3,15 +3,15 @@
 \docType{methods}
 \name{maxPxcor}
 \alias{maxPxcor}
-\alias{maxPxcor,NLworldMs-method}
+\alias{maxPxcor,worldNLR-method}
 \title{Maximum pxcor}
 \usage{
 maxPxcor(world)
 
-\S4method{maxPxcor}{NLworldMs}(world)
+\S4method{maxPxcor}{worldNLR}(world)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 }
 \value{
 Integer.

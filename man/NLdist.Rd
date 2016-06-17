@@ -26,7 +26,7 @@ NLdist(agents, agents2, world, torus = FALSE, allPairs = FALSE)
                Matrix (ncol = 2) with the first column "x and the second column
                "y" representing locations coordinates.}
 
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}

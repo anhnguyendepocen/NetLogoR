@@ -5,7 +5,7 @@
 \alias{raster2world}
 \alias{raster2world,RasterLayer,character-method}
 \alias{raster2world,RasterStack,character-method}
-\title{Convert a Raster* object into a NLworldMs object}
+\title{Convert a Raster* object into a worldMatrix or worldArray object}
 \usage{
 raster2world(raster, method)
 
@@ -27,11 +27,11 @@ Convert a RasterLayer object into a worldMatrix object or a RasterStack object
 into a worldArray object.
 }
 \details{
-See \code{help("NLworldMs-class")} for more details on the NLworlds
-         classes.
+See \code{help("worldMatrix-class")} or \code{help("worldArray-class")}
+         for more details on the classes.
 
          The \code{raster} is resampled to match the coordinates system and
-         resolution of a NLworldMs using the chosen \code{method}. The
+         resolution of a worldMatrix or worldArray using the chosen \code{method}. The
          extent will be bigger by 1 on the width and on the height.
 }
 \examples{

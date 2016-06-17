@@ -8,7 +8,7 @@
 #'
 #' @param n Integer.
 #'
-#' @param world NLworldMs object.
+#' @param world WorldMatrix or worldArray object.
 #'
 #' @param torus Logical to determine if the \code{world} is wrapped. Default is
 #'              \code{torus = FALSE}.

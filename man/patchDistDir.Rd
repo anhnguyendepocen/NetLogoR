@@ -3,16 +3,16 @@
 \docType{methods}
 \name{patchDistDir}
 \alias{patchDistDir}
-\alias{patchDistDir,NLworldMs,matrix,numeric,numeric-method}
+\alias{patchDistDir,worldNLR,matrix,numeric,numeric-method}
 \title{Patches at certain distances and certain directions}
 \usage{
 patchDistDir(world, agents, dist, angle, torus = FALSE)
 
-\S4method{patchDistDir}{NLworldMs,matrix,numeric,numeric}(world, agents, dist,
+\S4method{patchDistDir}{worldNLR,matrix,numeric,numeric}(world, agents, dist,
   angle, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{agents}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or

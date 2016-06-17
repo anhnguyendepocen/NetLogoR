@@ -3,15 +3,15 @@
 \docType{methods}
 \name{randomXYcor}
 \alias{randomXYcor}
-\alias{randomXYcor,NLworldMs,numeric-method}
+\alias{randomXYcor,worldNLR,numeric-method}
 \title{Random turtles coordinates}
 \usage{
 randomXYcor(world, n)
 
-\S4method{randomXYcor}{NLworldMs,numeric}(world, n)
+\S4method{randomXYcor}{worldNLR,numeric}(world, n)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{n}{Integer.}
 }

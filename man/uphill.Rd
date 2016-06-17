@@ -16,7 +16,7 @@ uphill(world, pVar, turtles, nNeighbors, torus = FALSE)
   turtles, nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{pVar}{Character. If the \code{world} is a worldArray object, \code{pVar}
 is the name of the layer to use to define the patches values.

@@ -446,7 +446,7 @@ setGeneric(
 #' @rdname home
 setMethod(
   "home",
-  signature = c("NLworldMs", "agentMatrix", "character"),
+  signature = c("worldNLR", "agentMatrix", "character"),
   definition = function(world, turtles, home) {
 
     if (home == "home0") {
@@ -791,7 +791,7 @@ setGeneric(
 #' @rdname canMove
 setMethod(
   "canMove",
-  signature = c("NLworldMs", "agentMatrix", "numeric"),
+  signature = c("worldNLR", "agentMatrix", "numeric"),
   definition = function(world, turtles, dist) {
     wrapFalse <- fd(world = world, turtles = turtles, dist = dist, torus = FALSE)
     wrapTrue <- fd(world = world, turtles = turtles, dist = dist, torus = TRUE)
@@ -843,7 +843,7 @@ setGeneric(
 #' @rdname randomXcor
 setMethod(
   "randomXcor",
-  signature = c("NLworldMs", "numeric"),
+  signature = c("worldNLR", "numeric"),
   definition = function(world, n) {
     if (n == 0) {
       return(xcor = numeric())
@@ -894,7 +894,7 @@ setGeneric(
 #' @rdname randomYcor
 setMethod(
   "randomYcor",
-  signature = c("NLworldMs", "numeric"),
+  signature = c("worldNLR", "numeric"),
   definition = function(world, n) {
 
     if (n == 0) {
@@ -1505,7 +1505,7 @@ setGeneric(
 #' @rdname patchAhead
 setMethod(
   "patchAhead",
-  signature = c(world = "NLworldMs", turtles = "agentMatrix", dist = "numeric"),
+  signature = c(world = "worldNLR", turtles = "agentMatrix", dist = "numeric"),
   definition = function(world, turtles, dist, torus) {
 
     radHeading <- rad(turtles@.Data[,"heading"])
@@ -1563,7 +1563,7 @@ setGeneric(
 #' @rdname patchHere
 setMethod(
   "patchHere",
-  signature = c("NLworldMs", "agentMatrix"),
+  signature = c("worldNLR", "agentMatrix"),
   definition = function(world, turtles) {
 
     pTurtles <- patch(world = world, x = turtles@.Data[,1], y = turtles@.Data[,2],
@@ -1630,7 +1630,7 @@ setGeneric(
 #' @rdname patchLeft
 setMethod(
   "patchLeft",
-  signature = c(world = "NLworldMs", turtles = "agentMatrix", dist = "numeric",
+  signature = c(world = "worldNLR", turtles = "agentMatrix", dist = "numeric",
                 angle = "numeric"),
   definition = function(world, turtles, dist, angle, torus) {
 
@@ -1696,7 +1696,7 @@ setGeneric(
 #' @rdname patchRight
 setMethod(
   "patchRight",
-  signature = c(world = "NLworldMs", turtles = "agentMatrix", dist = "numeric",
+  signature = c(world = "worldNLR", turtles = "agentMatrix", dist = "numeric",
                 angle = "numeric"),
   definition = function(world, turtles, dist, angle, torus) {
     patchLeft(world = world, turtles = turtles, dist = dist, angle = -angle,
@@ -1787,7 +1787,7 @@ setMethod(
 #' @rdname setXY
 setMethod(
   "setXY",
-  signature = c("agentMatrix", "numeric", "numeric", "NLworldMs", "logical"),
+  signature = c("agentMatrix", "numeric", "numeric", "worldNLR", "logical"),
   definition = function(turtles, xcor, ycor, world, torus) {
 
     wrapCoords <- wrap(cbind(x = xcor, y = ycor), world@extent)
@@ -2099,7 +2099,7 @@ setGeneric(
 #' @rdname randomXYcor
 setMethod(
   "randomXYcor",
-  signature = c("NLworldMs", "numeric"),
+  signature = c("worldNLR", "numeric"),
   definition = function(world, n) {
     xycor <- cbind(xcor = randomXcor(world = world, n = n),
                    ycor = randomYcor(world = world, n = n))
@@ -2306,7 +2306,7 @@ setGeneric(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c(world = "NLworldMs", turtles = "agentMatrix",
+  signature = c(world = "worldNLR", turtles = "agentMatrix",
                 agents = "matrix", breed = "missing"),
   definition = function(world, turtles, agents, simplify) {
 
@@ -2364,7 +2364,7 @@ setMethod(
 #' @rdname turtlesOn
 setMethod(
   "turtlesOn",
-  signature = c(world = "NLworldMs", turtles = "agentMatrix",
+  signature = c(world = "worldNLR", turtles = "agentMatrix",
                 agents = "matrix", breed = "character"),
   definition = function(world, turtles, agents, breed, simplify) {
 
@@ -2480,7 +2480,7 @@ setGeneric(
 #' @rdname turtlesAt
 setMethod(
   "turtlesAt",
-  signature = c("NLworldMs", "agentMatrix", "matrix", "numeric", "numeric",
+  signature = c("worldNLR", "agentMatrix", "matrix", "numeric", "numeric",
                 "missing", "ANY"),
   definition = function(world, turtles, agents, dx, dy, torus) {
     pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
@@ -2492,7 +2492,7 @@ setMethod(
 #' @rdname turtlesAt
 setMethod(
   "turtlesAt",
-  signature = c("NLworldMs", "agentMatrix", "matrix", "numeric", "numeric",
+  signature = c("worldNLR", "agentMatrix", "matrix", "numeric", "numeric",
                 "character", "ANY"),
   definition = function(world, turtles, agents, dx, dy, breed, torus) {
     pAt <- patchAt(world = world, agents = agents, dx = dx, dy = dy)
@@ -2926,7 +2926,7 @@ setGeneric(
 #' @rdname layoutCircle
 setMethod(
   "layoutCircle",
-  signature = c(world = "NLworldMs", turtles = "agentMatrix", radius = "numeric"),
+  signature = c(world = "worldNLR", turtles = "agentMatrix", radius = "numeric"),
   definition = function(world, turtles, radius, torus) {
     tSurrogates <- createOTurtles(n = NLcount(turtles), world = world)
     turtles@.Data[,c("xcor", "ycor")] <- tSurrogates@.Data[,c("xcor", "ycor")]

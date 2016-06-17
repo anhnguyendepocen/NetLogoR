@@ -16,7 +16,7 @@ diffuse(world, pVar, share, nNeighbors, torus = FALSE)
   nNeighbors, torus = FALSE)
 }
 \arguments{
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{pVar}{Character. If the \code{world} is a worldArray object, \code{pVar}
 is the name of the layer to use to define the patches values.
@@ -32,7 +32,7 @@ considered.}
 \code{torus = FALSE}.}
 }
 \value{
-NLworldMs object with patches values updated.
+WorldMatrix or worldArray object with patches values updated.
 }
 \description{
 Each patch gives an equal share of a portion of its value to its neighbor patches.

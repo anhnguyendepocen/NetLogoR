@@ -26,7 +26,7 @@ inRadius(agents, radius, agents2, world, torus = FALSE)
               AgentMatrix created by \code{createTurtles()} or
               by \code{createOTurtles()} representing the moving agents.}
 
-\item{world}{NLworldMs object.}
+\item{world}{WorldMatrix or worldArray object.}
 
 \item{torus}{Logical to determine if the \code{world} is wrapped. Default is
 \code{torus = FALSE}.}

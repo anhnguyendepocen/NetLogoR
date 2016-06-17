@@ -361,20 +361,20 @@ setMethod(
 
 
 ################################################################################
-#' The NLworldMs class
+#' The worldNLR class
 #'
 #'
-#' The \code{NLworldMs} class is the union of the \code{worldMatrix} and \code{worldArray}
+#' The \code{worldNLR} class is the union of the \code{worldMatrix} and \code{worldArray}
 #' classes. Mostly used for building function purposes.
 #'
 #' @slot members  worldMatrix, worldArray
 #'
-#' @aliases NLworldMs
-#' @name NLworldMs-class
-#' @rdname NLworldMs-class
+#' @aliases worldNLR
+#' @name worldNLR-class
+#' @rdname worldNLR-class
 #' @author Sarah Bauduin, and Eliot McIntire
-#' @exportClass NLworldMs
-setClassUnion(name = "NLworldMs",
+#' @exportClass worldNLR
+setClassUnion(name = "worldNLR",
               members = c("worldMatrix", "worldArray")
 )
 
@@ -410,7 +410,7 @@ setGeneric(
 #' @rdname cellFromPxcorPycor
 setMethod(
   "cellFromPxcorPycor",
-  signature = c("NLworldMs", "numeric", "numeric"),
+  signature = c("worldNLR", "numeric", "numeric"),
   definition = function(world, pxcor, pycor) {
     j <- pxcor - world@minPxcor + 1
     i <- world@maxPycor - pycor + 1
@@ -453,7 +453,7 @@ setGeneric(
 #' @rdname PxcorPycorFromCell
 setMethod(
   "PxcorPycorFromCell",
-  signature = c("NLworldMs", "numeric"),
+  signature = c("worldNLR", "numeric"),
   definition = function(world, cellNum) {
     pCoords <- world@pCoords[cellNum,,drop = FALSE]
     return(pCoords)
