@@ -10,6 +10,9 @@ noPatches(x)
 
 \S4method{noPatches}{missing}()
 }
+\arguments{
+\item{x}{Not used.}
+}
 \value{
 Matrix (ncol = 2, nrow = 0) with the first column "pxcor" and the
         second column "pycor".
@@ -20,7 +23,6 @@ Report an empty patch agentset.
 \examples{
 p1 <- noPatches()
 NLcount(p1)
-
 
 }
 \author{

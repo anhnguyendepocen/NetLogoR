@@ -493,14 +493,14 @@ setMethod(
       pCoords <- unique(pCoords)
     }
     return(pCoords)
-  }
-)
-
+})
 
 ################################################################################
 #' No patches
 #'
 #' Report an empty patch agentset.
+#'
+#' @param x  Not used.
 #'
 #' @return Matrix (ncol = 2, nrow = 0) with the first column "pxcor" and the
 #'         second column "pycor".
@@ -514,7 +514,6 @@ setMethod(
 #' @examples
 #' p1 <- noPatches()
 #' NLcount(p1)
-#'
 #'
 #' @export
 #' @docType methods

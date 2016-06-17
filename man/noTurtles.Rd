@@ -10,10 +10,12 @@ noTurtles(x)
 
 \S4method{noTurtles}{missing}()
 }
+\arguments{
+\item{x}{Not used.}
+}
 \value{
-AgentMatrix with the turtle variables defined
-        as when using \code{createTurtles()} but
-        with 0 turtle
+AgentMatrix with the turtle variables defined as when using
+        \code{createTurtles()} but with 0 turtles.
 }
 \description{
 Report an empty turtle agentset.
@@ -21,7 +23,6 @@ Report an empty turtle agentset.
 \examples{
 t1 <- noTurtles()
 NLcount(t1)
-
 
 }
 \author{

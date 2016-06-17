@@ -2383,9 +2383,10 @@ setMethod(
 #'
 #' Report an empty turtle agentset.
 #'
-#' @return AgentMatrix with the turtle variables defined
-#'         as when using \code{createTurtles()} but
-#'         with 0 turtle
+#' @param x Not used.
+#'
+#' @return AgentMatrix with the turtle variables defined as when using
+#'         \code{createTurtles()} but with 0 turtles.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#no-turtles}
 #'
@@ -2397,7 +2398,6 @@ setMethod(
 #' t1 <- noTurtles()
 #' NLcount(t1)
 #'
-#'
 #' @export
 #' @docType methods
 #' @rdname noTurtles
@@ -2408,7 +2408,7 @@ setGeneric(
   "noTurtles",
   function(x) {
     standardGeneric("noTurtles")
-  })
+})
 
 #' @export
 #' @rdname noTurtles
