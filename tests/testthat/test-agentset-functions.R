@@ -644,6 +644,8 @@ test_that("NLset works",{
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, c(0,1), c(0,1))), cbind(w1 = c(10,10), w2 = c(11, 11)))
   w3 <- NLset(world = w3, agents = patch(w3,c(0, 1), c(0, 1)), var = "w1", val = c(100,110))
   expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, c(0,1), c(0,1))), cbind(w1 = c(100,110), w2 = c(11, 11)))
+  w3 <- NLset(world = w3, agents = patch(w3,c(0, 1), c(0, 1)), var = c("w1", "w2"), val = cbind.data.frame(w1 = 10, w2 = 11))
+  expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, c(0,1), c(0,1))), cbind(w1 = c(10,10), w2 = c(11, 11)))
 
   # With NAs
   w4 <- NLset(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
@@ -714,4 +716,21 @@ test_that("NLset works",{
                val = cbind(xcor = 21:25, heading = 0))
   expect_equivalent(of(agents = t14, var = "xcor"), 21:25)
   expect_equivalent(of(agents = t14, var = "heading"), rep(0, 5))
-})
+  t14 <- NLset(turtles = t1, agents = t1, var = c("xcor", "heading"),
+               val = cbind.data.frame(xcor = 21:25, heading = 0))
+  expect_equivalent(of(agents = t14, var = "xcor"), 21:25)
+  expect_equivalent(of(agents = t14, var = "heading"), rep(0, 5))
+  t15 <- NLset(turtles = t1, agents = t1, var = c("xcor", "heading", "breed"),
+               val = cbind(xcor = 21:25, heading = 0, breed = "rabbit"))
+  expect_equivalent(of(agents = t15, var = "xcor"), 21:25)
+  expect_equivalent(of(agents = t15, var = "heading"), rep(0, 5))
+  expect_equivalent(of(agents = t15, var = "breed"), rep("rabbit", 5))
+  t16 <- NLset(turtles = t1, agents = t1, var = "ycor", val = 0)
+  expect_equivalent(of(agents = t16, var = "ycor"), rep(0, 5))
+  t17 <- NLset(turtles = t1, agents = t1, var = "ycor", val = c(1,3,5,7,9))
+  expect_equivalent(of(agents = t17, var = "ycor"), c(1,3,5,7,9))
+  t18 <- NLset(turtles = t1, agents = t1, var = c("xcor", "breed"),
+               val = cbind(xcor = c(1,3,5,7,9), breed = "tomato"))
+  expect_equivalent(of(agents = t18, var = "xcor"), c(1,3,5,7,9))
+  expect_equivalent(of(agents = t18, var = "breed"), rep("tomato", 5))
+ })
