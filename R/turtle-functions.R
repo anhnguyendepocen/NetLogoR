@@ -2567,12 +2567,12 @@ setMethod(
         }
       }
 
-      if (do.call(all.equal, lapply(dots, colnames))) {
-        allTurtles <- do.call(rbind, lapply(dots, function(x) {x}))
-      } else {
-        allTurtles <- as.data.frame(rbindlist(lapply(dots, function(x) {
-          inspect(x, who = of(agents = x, var = "who"))}), fill = TRUE))
-      }
+      # if (do.call(all.equal, lapply(dots, colnames))) {
+         allTurtles <- do.call(rbind, lapply(dots, function(x) {x}))
+      # } else {
+      #   allTurtles <- as.data.frame(rbindlist(lapply(dots, function(x) {
+      #     inspect(x, who = of(agents = x, var = "who"))}), fill = TRUE))
+      # }
 
       if (anyDuplicated(allTurtles$who) != 0) {
         warning("Duplicated turtles based on who numbers are present among the inputs.")
@@ -3005,7 +3005,7 @@ setMethod(
     if (any(names(agents@levels) %in% var)) {
 
       wh <- var %in% names(agents@levels)
-      if (any(wh)) {
+      #if (any(wh)) {
         newNames <- var[wh]
         df <- do.call(data.frame, args = append(list(stringsAsFactors = FALSE),
                                                 lapply(which(wh), function(w)
@@ -3016,9 +3016,9 @@ setMethod(
         }
         colnames(df) <- newNames
         return(df[,match(newNames, var)])
-      } else {
-        return(data.frame(agents@.Data[,var]))
-      }
+      #} else {
+      #  return(data.frame(agents@.Data[,var]))
+      #}
 
     } else {
       if (length(var) == 1) {
