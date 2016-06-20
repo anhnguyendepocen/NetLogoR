@@ -289,7 +289,6 @@ setAs("agentMatrix", "data.frame",
         rownames(tmp) <- seq_len(NROW(tmp))
         nam <- names(from@levels)
         tmp[,nam] <- lapply(nam, function(n) from@levels[[n]][tmp[,n]])
-
         tmp
 })
 
@@ -300,6 +299,8 @@ setAs("agentMatrix", "data.frame",
 #' @note Extract methods for agentMatrix class will generally maintain the \code{agentMatrix} class.
 #' This means that there will still be coordinates, character columns represented as numerics etc.
 #' \code{$} is for extracting the raw columns and does not maintain the \code{agentMatrix} class.
+#' \code{[]} will extract all values, and result in a data.frame with the correct character and
+#' numeric columns.
 #'
 #' @param x     A \code{NLworld} object from which to extract element(s) or
 #'                in which to replace element(s).
@@ -323,7 +324,7 @@ setMethod(
     if (all(is.na(levelInd))) {
       x@levels <- list(NULL)
     } else {
-      x@levels <- x@levels[colNames]
+      x@levels <- x@levels[colNames[!is.na(levelInd)]]
     }
     x@bbox <- .bboxCoords(x@.Data[, 1:2, drop = FALSE])
     x
@@ -370,7 +371,7 @@ setMethod(
   "[",
   signature(x = "agentMatrix", "missing", "missing", "missing"),
   definition = function(x, i, j, ..., drop) {
-    x@.Data
+    as(x, "data.frame")
 })
 
 #' @export
@@ -414,8 +415,7 @@ setMethod(
     if (all(is.na(levelInd))) {
       x@levels <- list(NULL)
     } else {
-      #x@levels[[levelInd]][x@.Data[,j]]
-      x@levels <- x@levels[colNames]
+      x@levels <- x@levels[colNames[!is.na(levelInd)]]
     }
     x@bbox <- .bboxCoords(x@.Data[, 1:2, drop = FALSE])
     x
@@ -470,12 +470,37 @@ setReplaceMethod(
   "[",
   signature("agentMatrix", "numeric", "character", "data.frame"),
   definition = function(x, i, j, value) {
-    colNums <- match(j, colnames(x))
-    x[i,colNums] <- value
-    x@.Data[i,colNums] <- value
+    nam <- names(x@levels)
+    charCols <- unlist(lapply(value, is.character))
+    #charCols <- match(j, nam)
+    #charCols <- match(nam, j)
+    numCols <- which(!charCols)#colNums[!(colNums %in% charCols)]
+    newCols <- match(j, colnames(x))
+    if(any(is.na(newCols))) {
+      stop("Can only replace columns that are existing. Use cbind.")
+    }
+
+    if(any(numCols)) {
+      #numColsJ <- which(colNums %in% numCols)
+      x@.Data[i, j[numCols]] <- as.matrix(value[,j[numCols]])
+    }
+
+    if(any(charCols)) {
+      #charColsJ <- which(colNums %in% charCols)
+      for(y in j[charCols]) {
+        x[i,y] <- value[,y]
+      }
+    }
     validObject(x)
     return(x)
 })
+
+
+#tmp <- data.frame(from@.Data)
+#rownames(tmp) <- seq_len(NROW(tmp))
+#nam <- names(from@levels)
+#tmp[,nam] <- lapply(nam, function(n) from@levels[[n]][tmp[,n]])
+
 
 #' @export
 #' @name [<-

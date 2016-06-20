@@ -161,7 +161,7 @@ test_that("agentMatrix benchmarking", {
                                                         nums = 5:7)}))
    }
    expect_gt(mb$median[1]/mb$median[3], 4) # expect it is 8 times faster, but use 4 for safety cushion in tests
-   if(interactive()) expect_gt(mb$median[1]/mb$median[3], 4) # expect it is 8 times faster, but use 4 for safety cushion in tests
+   if(interactive()) expect_gt(mb$median[1]/mb$median[3], 8) # expect it is 8 times faster, but use 4 for safety cushion in tests
 
 
 })
@@ -215,7 +215,8 @@ test_that("agentMatrix subsetting", {
    expect_true(all.equal(tmpA, tmpB))
 
    # test various [ ]
-   expect_equal(newAgent[], newAgent@.Data)
+   expect_equal(newAgent[], data.frame(xcor=newAgent$xcor, ycor=newAgent$ycor,
+                                       tmp=newAgent$tmp, tmp2=newAgent$tmp2, stringsAsFactors = FALSE))
    expect_equal(newAgent[,"tmp"], agentMatrix(coords = coordinates(newAgent), tmp=newAgent@.Data[,"tmp",drop=FALSE]))
    expect_equal(newAgent[1:2,"tmp"], agentMatrix(coords = coordinates(newAgent)[1:2,,drop=FALSE],
                                                  tmp=newAgent@.Data[1:2,"tmp",drop=FALSE]))
@@ -329,3 +330,53 @@ test_that("agentMatrix rbind cbind, tail, head, nrow, length, show", {
 
 })
 
+
+
+
+test_that("agentMatrix replace methods don't work", {
+
+  mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp1=1:3, tmp2=c("e","f","g")),
+               tmpCh = LETTERS[3:5])
+  newAgent <- as(mat, "agentMatrix")
+
+  newAgent[1,4] <- 3
+  expect_true(newAgent[1,4]==3)
+
+  newAgent[,4] <- 4:2
+  expect_true(all(newAgent[][,4]== (4:2)))
+
+  newAgent[,"tmp"] <- 5:3
+  expect_true(all(newAgent[][,"tmp"]== (5:3)))
+
+  newAgent[1,"tmp2"] <- "s"
+  expect_true(newAgent$tmp2[1] == "s")
+
+  # simple data.frame
+  newAgent[1:2,c("tmp", "tmp2")] <- data.frame(tmp=6:7, tmp2=c("r","w"), stringsAsFactors = FALSE)
+  expect_true(all(newAgent$tmp[1:2] == 6:7)) # is numeric
+  expect_true(all(newAgent$tmp2[1:2] == c("r","w"))) # maintains character
+  expect_true(all(newAgent$tmp2[3] == c("g"))) # untouched
+
+  # more complicated data.frame
+  newAgent[1:2,c("tmp", "tmp1", "tmp2", "tmpCh")] <- data.frame(tmp=6:7, tmp1=11:12, tmp2=c("r","w"),
+                                               tmpCh = LETTERS[13:14], stringsAsFactors = FALSE)
+  expect_true(all(newAgent$tmp[1:2] == 6:7)) # is numeric
+  expect_true(all(newAgent$tmp2[1:2] == c("r","w"))) # maintains character
+  expect_true(all(newAgent$tmp2[3] == c("g"))) # untouched
+
+  # character
+  newAgent[,5] <- letters[6:8]
+  expect_true(all(newAgent[,5]==letters[6:8]))
+
+  newAgent[,"tmp2"] <- letters[9:11]
+  expect_true(all(newAgent$tmp2==letters[9:11]))
+
+  newAgent[1,5] <- "t" # test a new value for the column
+  expect_true(newAgent[1,5]=="t")
+
+  # data.frame with non existent columns
+  expect_error(newAgent[1:2,c("tmp", "tmp4")] <-
+                 data.frame(tmp = 9:10, tmp4 = 15:16, stringsAsFactors = FALSE))
+
+
+})
