@@ -33,6 +33,7 @@ test_that("NLany works",{
   expect_identical(NLany(p3), FALSE)
   expect_identical(NLany(p4), TRUE)
   expect_identical(NLany(p5), TRUE)
+  expect_identical(NLany(cbind(pxcor = c(NA, NA), pycor = c(NA, NA))), FALSE)
 
   # Turtles
   t1 <- createTurtles(n = 10, coords = randomXYcor(world= w1, n = 10))
@@ -159,6 +160,8 @@ test_that("withMax works",{
   pMaxw2 <- withMax(world = ws, agents = patches(world = ws), var = "w2")
   expect_equivalent(pMaxw1, patch(ws, x = c(1,1), y = c(4,1)))
   expect_equivalent(pMaxw2, patch(ws, x = c(2,2), y = c(4,2)))
+  ws[,,1] <- NA
+  expect_error(withMax(agents = patches(world = ws), world = ws, var = "w1"))
 
   w1[1,1] <- 0
   pMax <- withMax(world = w1, agents = patches(world = w1))
@@ -171,9 +174,6 @@ test_that("withMax works",{
   maxHeading <- withMax(agents = t1, var = "heading")
   expect_equivalent(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
   expect_error(withMax(agents = t1, var = "prevX"))
-
-  ws[] <- NA
-  expect_error(withMax(agents = patches(world = ws), world = ws))
 })
 
 test_that("withMin works",{
@@ -194,6 +194,9 @@ test_that("withMin works",{
   pMinw2 <- withMin(world = ws, agents = patches(world = ws), var = "w2")
   expect_equivalent(pMinw1, patch(ws, x = c(1,1), y = c(4,1)))
   expect_equivalent(pMinw2, patch(ws, x = c(2,2), y = c(4,2)))
+  ws[] <- NA
+  expect_error(withMin(agents = patches(world = ws), world = ws, var = "w1"))
+
 
   w1[1,1] <- 0
   pMin <- withMin(world = w1, agents = patches(world = w1))
@@ -206,9 +209,6 @@ test_that("withMin works",{
   maxHeading <- withMin(agents = t1, var = "heading")
   expect_equivalent(maxHeading, turtle(t1, who = c(3, 4, 7, 8)))
   expect_error(withMin(agents = t1, var = "prevX"))
-
-  ws[] <- NA
-  expect_error(withMax(agents = patches(world = ws), world = ws))
 })
 
 test_that("maxOneOf works",{
@@ -598,7 +598,7 @@ test_that("inCone works",{
   expect_equivalent(t13[t13[,"id"] == 1, "who"], c(0,1,4))
 })
 
-test_that("set works",{
+test_that("NLset works",{
   # Set work with patches
   w1 <- createWorld(data = 1:25, minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4)
   w1 <- NLset(world = w1, agents = patches(w1), val = 0)
@@ -674,6 +674,9 @@ test_that("set works",{
   t9 <- NLset(turtles = t1, agents = turtle(t1, 0), var = "breed", val = "dog")
   expect_equivalent(of(agents = t9, var = "breed"), c("dog", rep("turtle", 4)))
   expect_equivalent(t9@levels$breed, c("turtle", "dog"))
+  t92 <- NLset(turtles = t1, agents = t1, var = "breed", val = "cat")
+  expect_equivalent(of(agents = t92, var = "breed"), rep("cat", 5))
+  expect_equivalent(t92@levels$breed, c("turtle", "cat"))
   t10 <- NLset(turtles = t1, agents = turtle(t1, c(0, 1)), var = "breed", val = c("dog", "cat"))
   expect_equivalent(of(agents = t10, var = "breed"), c("dog", "cat", rep("turtle", 3)))
   expect_equivalent(t10@levels$breed, c("turtle", "dog", "cat"))

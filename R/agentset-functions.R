@@ -2006,35 +2006,6 @@ setMethod(
   })
 
 #' @export
-#' @importFrom stats na.omit
-#' @rdname NLset
-setMethod(
-  "NLset",
-  signature = c(world = "worldMatrix", turtles = "missing",
-                agents = "numeric", var = "missing", val = "ANY"),
-  definition = function(world, agents, val) {
-
-    if (length(agents) != 0) {
-
-      if (length(val) == 1 & length(agents) != 1) {
-
-        val <- rep(val, length(na.omit(agents)))
-      }
-
-      if (identical(patches(world), agents)) {
-
-        world@.Data[] <- matrix(val, ncol = dim(world)[2], byrow = TRUE)
-
-      } else {
-
-        world[na.omit(agents)] <- val
-      }
-    }
-
-    return(world)
-  })
-
-#' @export
 #' @rdname NLset
 setMethod(
   "NLset",
