@@ -556,6 +556,12 @@ test_that("sprout works",{
   expect_equivalent(c(rep("turtle", 5), rep("wolf", 3)), of(agents = t8, var = "breed"))
   t9 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), heading = c(0, 90))
   expect_equivalent(c(0,0,90,90,90), of(agents = t9, var = "heading"))
+  t10 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), heading = 90, breed = c("wolf", "sheep"), color = c("black", "white"))
+  expect_equivalent(c(90,90,90,90,90), of(agents = t10, var = "heading"))
+  expect_equivalent(c(rep("wolf", 2), rep("sheep", 3)), of(agents = t10, var = "breed"))
+  expect_equivalent(c(rep("black", 2), rep("white", 3)), of(agents = t10, var = "color"))
+  t11 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), color = "blue")
+  expect_equivalent(rep("blue", 5), of(agents = t11, var = "color"))
 })
 
 test_that("inspect works",{
@@ -846,6 +852,8 @@ test_that("subHeadings works",{
   expect_equivalent(angles1, c(0, -90, -180, 90))
   angles1 <- subHeadings(angle1 = 0, angle2 = t1)
   expect_equivalent(angles1, c(0, 90, 180, -90))
+
+  expect_error(subHeadings(angle1 = t1, angle2 = turtle(turtles = t1, who = c(0,1))))
 })
 
 test_that("other works", {
@@ -1010,4 +1018,11 @@ test_that("spdf2turtles and turtles2spdf work", {
   expect_equivalent(of(agents = sp1Turtles, var = "sex"), c("F", "F", "M"))
   expect_equivalent(of(agents = sp1Turtles, var = "who"), c(0,1,2))
   expect_equivalent(of(agents = sp1Turtles, var = "xcor"), c(1,2,3))
+
+  sp2 <- spdf2turtles(t2)
+  expect_equivalent(colnames(sp2@.Data), c("xcor", "ycor","who", "heading", "prevX", "prevY", "breed", "color", "age", "sex"))
+  expect_equivalent(of(agents = sp2, var = "age"), 1:10)
+  expect_equivalent(of(agents = sp2, var = "sex"), c(rep("M", 5), rep("F", 5)))
+  expect_equivalent(of(agents = sp2, var = "who"), 0:9)
+  expect_equivalent(of(agents = sp2, var = "xcor"), 1:10)
 })

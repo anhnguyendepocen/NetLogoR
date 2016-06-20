@@ -3049,21 +3049,6 @@ setMethod(
 #' @rdname of
 setMethod(
   "of",
-  signature = c("worldMatrix", "numeric", "missing"),
-  definition = function(world, agents) {
-
-    if (identical(patches(world), agents)) {
-      return(as.numeric(world[agents])) # values must be returned by row
-    } else {
-
-      return(world[agents])
-    }
-  })
-
-#' @export
-#' @rdname of
-setMethod(
-  "of",
   signature = c("worldArray", "matrix", "character"),
   definition = function(world, agents, var) {
 
