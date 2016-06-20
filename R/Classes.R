@@ -96,8 +96,15 @@ setMethod(
     if (missing(coords)) {
       coords <- NULL
     }
+
+    dotCols <- list(...)
+
     if (is.null(coords)) {
-      coords <- matrix(c(NA, NA), ncol = 2)
+      if(length(dotCols)==0) {
+        coords <- cbind(xcor = integer(), ycor = integer())
+      } else {
+        coords <- matrix(c(NA, NA), ncol = 2)
+      }
       Coords <- FALSE
     } else {
       coords <- unname(coords)
@@ -105,7 +112,6 @@ setMethod(
     if (is.data.frame(coords)) {
       coords <- as.matrix(coords)
     }
-    dotCols <- list(...)
 
     if (missing(levelsAM)) {
       if (all(sapply(dotCols, is.numeric))) {

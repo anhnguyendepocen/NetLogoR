@@ -328,6 +328,11 @@ test_that("agentMatrix rbind cbind, tail, head, nrow, length, show", {
   expect_true(all(grep(outShow, pattern = c("e   1"))==c(2)))
   expect_true(all(grep(outShow, pattern = c("f   1"))==3))
 
+  newAgent <- agentMatrix()
+  outShow <- capture.output(newAgent)
+  expect_equivalent(outShow, "<0 x 0 matrix>")
+  expect_is(newAgent, "agentMatrix")
+
 })
 
 
@@ -377,6 +382,14 @@ test_that("agentMatrix replace methods don't work", {
   # data.frame with non existent columns
   expect_error(newAgent[1:2,c("tmp", "tmp4")] <-
                  data.frame(tmp = 9:10, tmp4 = 15:16, stringsAsFactors = FALSE))
+
+
+  # Weird, numeric missing numeric ... this replaces a whole row
+  mat <- cbind(coords = matrix(1:6,ncol=2), data.frame(tmp=1:3, tmp1=1:3))
+  newAgent <- as(mat, "agentMatrix")
+
+  newAgent[1,] <- 1:4
+  expect_true(all(newAgent[][1,]==1:4))
 
 
 })
