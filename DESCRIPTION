@@ -44,9 +44,10 @@ Imports:
     methods,
     plyr,
     sp,
-    SpaDES,
     stats,
     rgeos
+Remotes:
+    PredicitiveEcology/SpaDES@development
 License: GPL-3
 VignetteBuilder: knitr
 ByteCompile: yes
