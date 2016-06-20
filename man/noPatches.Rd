@@ -3,15 +3,9 @@
 \docType{methods}
 \name{noPatches}
 \alias{noPatches}
-\alias{noPatches,missing-method}
 \title{No patches}
 \usage{
-noPatches(x)
-
-\S4method{noPatches}{missing}()
-}
-\arguments{
-\item{x}{Not used.}
+noPatches()
 }
 \value{
 Matrix (ncol = 2, nrow = 0) with the first column "pxcor" and the

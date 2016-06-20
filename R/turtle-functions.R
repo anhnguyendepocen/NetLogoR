@@ -2383,8 +2383,6 @@ setMethod(
 #'
 #' Report an empty turtle agentset.
 #'
-#' @param x Not used.
-#'
 #' @return AgentMatrix with the turtle variables defined as when using
 #'         \code{createTurtles()} but with 0 turtles.
 #'
@@ -2404,25 +2402,35 @@ setMethod(
 #'
 #' @author Sarah Bauduin
 #'
-setGeneric(
-  "noTurtles",
-  function(x) {
-    standardGeneric("noTurtles")
-})
+#'
+noTurtles <- function(){ # S3 function
+  t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
+  empty <- t0[which(t0@.Data[,"who"] == 1),]
+  empty@levels$breed <- character(0)
+  empty@levels$color <- character(0)
+  return(empty)
+}
 
-#' @export
-#' @rdname noTurtles
-setMethod(
-  "noTurtles",
-  signature = "missing",
-  definition = function() {
-    t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
-    empty <- t0[which(t0@.Data[,"who"] == 1),]
-    empty@levels$breed <- character(0)
-    empty@levels$color <- character(0)
-    return(empty)
-  }
-)
+# S4 function
+# setGeneric(
+#   "noTurtles",
+#   function(x) {
+#     standardGeneric("noTurtles")
+# })
+#
+# #' @export
+# #' @rdname noTurtles
+# setMethod(
+#   "noTurtles",
+#   signature = "missing",
+#   definition = function() {
+#    t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
+#     empty <- t0[which(t0@.Data[,"who"] == 1),]
+#     empty@levels$breed <- character(0)
+#     empty@levels$color <- character(0)
+#     return(empty)
+#   }
+# )
 
 
 ################################################################################

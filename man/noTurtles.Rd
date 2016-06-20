@@ -3,15 +3,9 @@
 \docType{methods}
 \name{noTurtles}
 \alias{noTurtles}
-\alias{noTurtles,missing-method}
 \title{No turtles}
 \usage{
-noTurtles(x)
-
-\S4method{noTurtles}{missing}()
-}
-\arguments{
-\item{x}{Not used.}
+noTurtles()
 }
 \value{
 AgentMatrix with the turtle variables defined as when using

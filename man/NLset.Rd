@@ -6,7 +6,6 @@
 \alias{NLset,missing,agentMatrix,agentMatrix,character-method}
 \alias{NLset,worldArray,missing,matrix,character-method}
 \alias{NLset,worldMatrix,missing,matrix,missing-method}
-\alias{NLset,worldMatrix,missing,numeric,missing-method}
 \alias{set}
 \title{Set an agents variable}
 \usage{
@@ -16,8 +15,6 @@ NLset(world, turtles, agents, var, val)
   var, val)
 
 \S4method{NLset}{worldMatrix,missing,matrix,missing}(world, agents, val)
-
-\S4method{NLset}{worldMatrix,missing,numeric,missing}(world, agents, val)
 
 \S4method{NLset}{worldArray,missing,matrix,character}(world, agents, var, val)
 }

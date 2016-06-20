@@ -6,7 +6,6 @@
 \alias{of,missing,agentMatrix,character-method}
 \alias{of,worldArray,matrix,character-method}
 \alias{of,worldMatrix,matrix,missing-method}
-\alias{of,worldMatrix,numeric,missing-method}
 \title{Values of an agents variable}
 \usage{
 of(world, agents, var)
@@ -14,8 +13,6 @@ of(world, agents, var)
 \S4method{of}{missing,agentMatrix,character}(agents, var)
 
 \S4method{of}{worldMatrix,matrix,missing}(world, agents)
-
-\S4method{of}{worldMatrix,numeric,missing}(world, agents)
 
 \S4method{of}{worldArray,matrix,character}(world, agents, var)
 }

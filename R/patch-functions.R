@@ -490,8 +490,6 @@ setMethod(
 #'
 #' Report an empty patch agentset.
 #'
-#' @param x  Not used.
-#'
 #' @return Matrix (ncol = 2, nrow = 0) with the first column "pxcor" and the
 #'         second column "pycor".
 #'
@@ -511,20 +509,26 @@ setMethod(
 #'
 #' @author Sarah Bauduin
 #'
-setGeneric(
-  "noPatches",
-  function(x) {
-    standardGeneric("noPatches")
-})
+#'
+noPatches <- function(){ # S3 function
+  return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
+}
 
-#' @export
-#' @rdname noPatches
-setMethod(
-  "noPatches",
-  signature = "missing",
-  definition = function() {
-    return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
-})
+# S4 function
+# setGeneric(
+#   "noPatches",
+#   function(x) {
+#     standardGeneric("noPatches")
+# })
+#
+# #' @export
+# #' @rdname noPatches
+# setMethod(
+#   "noPatches",
+#   signature = "missing",
+#   definition = function() {
+#     return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
+# })
 
 ################################################################################
 #' Patches at
