@@ -47,7 +47,7 @@ Imports:
     stats,
     rgeos
 Remotes:
-    PredicitiveEcology/SpaDES@development
+    PredictiveEcology/SpaDES@development
 License: GPL-3
 VignetteBuilder: knitr
 ByteCompile: yes
