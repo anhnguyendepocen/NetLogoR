@@ -9,8 +9,8 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-This document is based on the [NetLogo’s Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html).
-It describes how the NetLogo’s programming language is translated in the R language.
+This document is based on the [NetLogo's Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html).
+It describes how the NetLogo's programming language is translated in the R language.
 
 ## `NetLogoR` features
 
@@ -31,7 +31,7 @@ Links are not implemented in `NetLogoR`.
 In `NetLogoR`, functions act on the worlds and on the agents.
 Functions can modify or used them to compute some value.
 Functions available from the R software and from different packages can be used, as well as the functions from `NetLogoR`.
-Most of the `NetLogoR` functions are a translation into the R language of the NetLogo’s primitives (*i.e.*, "built-in commands and reporters").
+Most of the `NetLogoR` functions are a translation into the R language of the NetLogo's primitives (*i.e.*, "built-in commands and reporters").
 You can create new functions or wrap several existing functions into one.
 The rules to do so are imposed by the R language.  
 
@@ -98,7 +98,7 @@ t1 <- turtlesOwn (turtles = t1, tVar = "sex",
                   tVal = c("M", "M", "M", "M", "M", "F", "F", "F", "F", "F"))
 ```
 
-Turtle’s breed is a turtle variable and you can have different breeds behaving differently.
+Turtle's breed is a turtle variable and you can have different breeds behaving differently.
 For example, you could have breeds called `sheep` and `wolf`, and have the wolves trying to eat the sheep.
 You can either specify different breeds in the same turtles object or create two objects, one sheep and one wolf.
 
