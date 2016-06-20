@@ -2403,7 +2403,7 @@ setMethod(
 #' @author Sarah Bauduin
 #'
 #'
-noTurtles <- function(){ # S3 function
+noTurtles <- function(){ # normal function
   t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
   empty <- t0[which(t0@.Data[,"who"] == 1),]
   empty@levels$breed <- character(0)
