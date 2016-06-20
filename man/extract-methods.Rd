@@ -101,5 +101,7 @@ Operators acting on vectors, matrices, arrays and lists to extract or replace pa
 Extract methods for agentMatrix class will generally maintain the \code{agentMatrix} class.
 This means that there will still be coordinates, character columns represented as numerics etc.
 \code{$} is for extracting the raw columns and does not maintain the \code{agentMatrix} class.
+\code{[]} will extract all values, and result in a data.frame with the correct character and
+numeric columns.
 }
 
