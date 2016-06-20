@@ -1915,8 +1915,7 @@ setMethod(
         if (length(var_num) != 0) {
 
           if (length(var_num) == 1) {
-
-            if (identical(agents, turtles)) {
+            if (identical(agents@.Data[,"who"], turtles@.Data[,"who"])) {
 
               turtles@.Data[,var[var_num]] <- as.numeric(val[,var_num])
 

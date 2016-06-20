@@ -729,5 +729,8 @@ test_that("NLset works",{
   expect_equivalent(of(agents = t16, var = "ycor"), rep(0, 5))
   t17 <- NLset(turtles = t1, agents = t1, var = "ycor", val = c(1,3,5,7,9))
   expect_equivalent(of(agents = t17, var = "ycor"), c(1,3,5,7,9))
-
+  t18 <- NLset(turtles = t1, agents = t1, var = c("xcor", "breed"),
+               val = cbind(xcor = c(1,3,5,7,9), breed = "tomato"))
+  expect_equivalent(of(agents = t18, var = "xcor"), c(1,3,5,7,9))
+  expect_equivalent(of(agents = t18, var = "breed"), rep("tomato", 5))
  })
