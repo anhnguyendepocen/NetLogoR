@@ -640,6 +640,10 @@ test_that("NLset works",{
   valW3 <- of(world = w3, var = c("w1", "w2"), agents = patches(w3))
   expect_equivalent(length(valW3[is.na(valW3[,1]),1]), 0)
   expect_equivalent(length(valW3[is.na(valW3[,2]),2]), 0)
+  w3 <- NLset(world = w3, agents = patch(w3,c(0, 1), c(0, 1)), var = c("w1", "w2"), val = cbind(w1 = 10, w2 = 11))
+  expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, c(0,1), c(0,1))), cbind(w1 = c(10,10), w2 = c(11, 11)))
+  w3 <- NLset(world = w3, agents = patch(w3,c(0, 1), c(0, 1)), var = "w1", val = c(100,110))
+  expect_equivalent(of(world = w3, var = c("w1", "w2"), agents = patch(w3, c(0,1), c(0,1))), cbind(w1 = c(100,110), w2 = c(11, 11)))
 
   # With NAs
   w4 <- NLset(world = w3, agents = cbind(pxcor = c(NA, 1, NA), pycor = c(NA, 2, NA)), var = c("w2", "w1"), val = cbind(w2 = c(1,2,3), w1 = c(1,2,3)))
@@ -700,4 +704,14 @@ test_that("NLset works",{
   expect_equivalent(of(agents = t12, var = "xcor"), c(10,10,2,12,4))
   expect_equivalent(of(agents = t12, var = "color")[c(1,2,4)], rep("red",3))
   expect_equivalent(of(agents = t12, var = "heading"), c(222,222,180,222,0))
+  t13 <- NLset(turtles = t1, agents = t1, var = c("breed", "xcor", "color", "heading"),
+               val = cbind.data.frame(breed = c("aa", "aa", "bb", "cc", "cc"), xcor = 15, color = "red", heading = 1:5))
+  expect_equivalent(of(agents = t13, var = "breed"), c("aa", "aa","bb", "cc", "cc"))
+  expect_equivalent(of(agents = t13, var = "xcor"), c(15,15,15,15,15))
+  expect_equivalent(of(agents = t13, var = "color"), rep("red",5))
+  expect_equivalent(of(agents = t13, var = "heading"), 1:5)
+  t14 <- NLset(turtles = t1, agents = t1, var = c("xcor", "heading"),
+               val = cbind(xcor = 21:25, heading = 0))
+  expect_equivalent(of(agents = t14, var = "xcor"), 21:25)
+  expect_equivalent(of(agents = t14, var = "heading"), rep(0, 5))
 })

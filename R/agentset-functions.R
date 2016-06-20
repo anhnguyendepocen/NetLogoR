@@ -1900,7 +1900,7 @@ setMethod(
             if (identical(agents, turtles)) {
 
               for(i in var_levels) {
-                turtles[,var[var_levels[i]]] <- as.character(val[,var_levels[i]])
+                turtles[,var[i]] <- as.character(val[,var[i]])
               }
             } else {
 
