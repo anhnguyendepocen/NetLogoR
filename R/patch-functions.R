@@ -1,7 +1,3 @@
-if (getRversion() >= "3.1.0") {
-  utils::globalVariables(c("from", "id", "to"))
-}
-
 ################################################################################
 #' Diffuse values in a world
 #'
