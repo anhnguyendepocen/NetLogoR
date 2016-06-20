@@ -510,7 +510,7 @@ setMethod(
 #' @author Sarah Bauduin
 #'
 #'
-noPatches <- function(){ # normal function
+noPatches <- function(){ # S3 function
   return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
 }
 
