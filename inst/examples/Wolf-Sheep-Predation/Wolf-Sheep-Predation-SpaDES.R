@@ -15,7 +15,7 @@ wolfSheepSim <- simInit(
   times = list(start = 0, end = 500),
   params = list(WolfSheepPredation = wolfSheepParams),
   modules = list("WolfSheepPredation"),
-  paths = list(modulePath = paste(getwd(), "/examples/Wolf-Sheep-Predation", sep = ""))
+  paths = list(modulePath = paste(getwd(), "/inst/examples/Wolf-Sheep-Predation/", sep = ""))
 )
 # Run the model
 # spades(wolfSheepSim, debug = TRUE) # helpful for debuging

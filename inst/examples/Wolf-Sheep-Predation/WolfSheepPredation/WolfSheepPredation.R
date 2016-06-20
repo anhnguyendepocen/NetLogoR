@@ -95,27 +95,27 @@ doEvent.WolfSheepPredation = function(sim, eventTime, eventType, debug = FALSE) 
 WolfSheepPredationInit <- function(sim) {
 
   # Create the world
-  grass <- createNLworldMatrix(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
+  grass <- createWorld(minPxcor = -25, maxPxcor = 25, minPycor = -25, maxPycor = 25)
   if(params(sim)$WolfSheepPredation$grassOn == FALSE){
     grass <- NLset(world = grass, agents = patches(grass), val = 1) # cannot plot an empty world
   }
   # If grassOn is TRUE, assign grass and countdown values to patches
-  # Because there are multiple patches variables, a NLworldStack is needed
+  # Because there are multiple patches variables, a worldArray is needed
   # If grassOn is TRUE, the grass grows and the sheep eat it, if FALSE, the sheep don't need to eat
   if(params(sim)$WolfSheepPredation$grassOn == TRUE){
     # Initialize patch values (grass and countdown) at random
     grassVal <- sample(c(0,1), size = NLcount(patches(grass)), replace = TRUE) # 0 or 1 (i.e., green or brown in the NetLogo model)
     grass <- NLset(world = grass, agents = patches(grass), val = grassVal)
-    countdown <- grass # countdown is a new NLworld with the same extent as grass
+    countdown <- grass # countdown is a new world with the same extent as grass
     countdownVal <- runif(n = NLcount(patches(grass)), min = 0, max = params(sim)$WolfSheepPredation$grassTGrowth) # grass grow clock
     countdown <- NLset(world = countdown, agents = patches(countdown), val = countdownVal)
-    sim$field <- NLworldArray(grass, countdown)
+    sim$field <- stackWorlds(grass, countdown)
   }
   # When no patches values are used, using grass, countdown or field as the world argument required by a function does not change anything
   # because they all have the same extent and number of patches
   # When patches values are used (e.g., when the sheep eat the grass), use only field as the world argument for the functions
   # which update and retrieve the patches values
-  # When field is updated, the values on the individual NLworld grass and countdown are not updated, only the layers in field are
+  # When field is updated, the values on the individual world grass and countdown are not updated, only the layers in field are
 
   # Assign the created world to the sim object
   sim$grass <- grass
@@ -124,7 +124,7 @@ WolfSheepPredationInit <- function(sim) {
   }
 
   # Create the sheep
-  sheep <- createTurtlesAM(n = params(sim)$WolfSheepPredation$nSheep,
+  sheep <- createTurtles(n = params(sim)$WolfSheepPredation$nSheep,
                          coords = randomXYcor(world = grass, n = params(sim)$WolfSheepPredation$nSheep),
                          breed = "aSheep", color = rep("red", params(sim)$WolfSheepPredation$nSheep))
   # Add the energy variable
@@ -133,7 +133,7 @@ WolfSheepPredationInit <- function(sim) {
   sim$sheep <- sheep # assign the created sheep to the sim object
 
   # Create the wolves
-  wolves <- createTurtlesAM(n = params(sim)$WolfSheepPredation$nWolf,
+  wolves <- createTurtles(n = params(sim)$WolfSheepPredation$nWolf,
                           coords = randomXYcor(world = grass, n = params(sim)$WolfSheepPredation$nWolf),
                           breed = "wolf", color = rep("black", params(sim)$WolfSheepPredation$nWolf))
   # Add the energy variable
