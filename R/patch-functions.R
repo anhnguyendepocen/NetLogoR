@@ -509,26 +509,9 @@ setMethod(
 #'
 #' @author Sarah Bauduin
 #'
-#'
-noPatches <- function(){ # S3 function
+noPatches <- function() {
   return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
 }
-
-# S4 function
-# setGeneric(
-#   "noPatches",
-#   function(x) {
-#     standardGeneric("noPatches")
-# })
-#
-# #' @export
-# #' @rdname noPatches
-# setMethod(
-#   "noPatches",
-#   signature = "missing",
-#   definition = function() {
-#     return(matrix(0, nrow = 0, ncol = 2, dimnames = list(NULL, c("pxcor", "pycor"))))
-# })
 
 ################################################################################
 #' Patches at

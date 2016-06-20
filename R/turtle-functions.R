@@ -2377,7 +2377,6 @@ setMethod(
     turtlesOn(world = world, turtles = tBreed, agents = agents, simplify = simplify)
 })
 
-
 ################################################################################
 #' No turtles
 #'
@@ -2402,36 +2401,13 @@ setMethod(
 #'
 #' @author Sarah Bauduin
 #'
-#'
-noTurtles <- function(){ # S3 function
+noTurtles <- function() {
   t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
   empty <- t0[which(t0@.Data[,"who"] == 1),]
   empty@levels$breed <- character(0)
   empty@levels$color <- character(0)
   return(empty)
 }
-
-# S4 function
-# setGeneric(
-#   "noTurtles",
-#   function(x) {
-#     standardGeneric("noTurtles")
-# })
-#
-# #' @export
-# #' @rdname noTurtles
-# setMethod(
-#   "noTurtles",
-#   signature = "missing",
-#   definition = function() {
-#    t0 <- createTurtles(n = 1, coords = cbind(xcor = 0, ycor = 0))
-#     empty <- t0[which(t0@.Data[,"who"] == 1),]
-#     empty@levels$breed <- character(0)
-#     empty@levels$color <- character(0)
-#     return(empty)
-#   }
-# )
-
 
 ################################################################################
 #' Turtles at

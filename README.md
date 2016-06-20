@@ -8,4 +8,4 @@
 `NetLogoR` provides the necessary [NetLogo's primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) as well as complementary functions to build agent-based models.
 A programming guide derived from the [NetLogo’s Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html) is available. 
 
-This package is under construction and therefore function errors and mismatchs with the documentation may occur.
+This package is under construction and therefore function errors and mismatches with the documentation may occur.
