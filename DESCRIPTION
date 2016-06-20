@@ -32,6 +32,7 @@ Suggests:
     knitr,
     magrittr,
     microbenchmark,
+    rmarkdown,
     testthat
 Imports:
     abind,
@@ -44,6 +45,7 @@ Imports:
     methods,
     plyr,
     sp,
+    SpaDES,
     stats,
     rgeos
 Remotes:
