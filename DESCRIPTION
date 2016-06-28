@@ -46,7 +46,8 @@ Imports:
     plyr,
     sp,
     SpaDES,
-    stats
+    stats,
+    rgeos
 Remotes:
     PredictiveEcology/SpaDES@development
 License: GPL-3

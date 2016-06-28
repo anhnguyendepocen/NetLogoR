@@ -1518,6 +1518,7 @@ setMethod(
 #'
 #'
 #' @export
+#' @importFrom rgeos gBuffer
 #' @importFrom sp over
 #' @importFrom sp SpatialPoints
 #' @importFrom SpaDES wrap
@@ -1558,8 +1559,8 @@ setMethod(
       # Transform the agents into SP to use gBuffer
       agentsSP <- SpatialPoints(coords = agents)
 
-      #pBuffer <- gBuffer(agentsSP, byid = TRUE, id = 1:NROW(agents), width = radius, quadsegs = 50)
-      pBuffer <- raster::buffer(agentsSP, dissolve = FALSE, width = radius)
+      # Create buffers around the locations of agents
+      pBuffer <- gBuffer(agentsSP, byid = TRUE, id = 1:NROW(agents), width = radius, quadsegs = 50)
 
       if (torus == TRUE) {
         if (missing(world)) {
