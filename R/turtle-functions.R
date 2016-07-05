@@ -1835,6 +1835,10 @@ setMethod(
 #'          is provided, a new agentMatrix is created and the who numbers
 #'          start at 0.
 #'
+#'          If \code{turtles} is provided and had additional variables created
+#'          with \code{turtlesOwn()}, \code{NA} is given for these variables
+#'          for the new sprouted turtles.
+#'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#sprout}
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
@@ -1927,15 +1931,32 @@ setMethod(
     if (missing(turtles)) {
       return(newTurtles)
     } else {
-      newTurtles@.Data[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(NLcount(newTurtles) +
-                                                                      max(turtles@.Data[,"who"]))
-      # unique who number
-      newTurtlesBreed <- of(agents = newTurtles, var = "breed")
-      newTurtlesColor <- of(agents = newTurtles, var = "color")
 
-      turtles@.Data <- rbind(turtles@.Data, newTurtles@.Data)
-      turtles <- NLset(turtles = turtles, agents = newTurtles, var = "breed", val = newTurtlesBreed)
-      turtles <- NLset(turtles = turtles, agents = newTurtles, var = "color", val = newTurtlesColor)
+      turtles <- hatch(turtles = turtles, who = max(turtles@.Data[,"who"]), n = NLcount(newTurtles))
+      # Replace the locations and headings of newTurtles inside turtles
+      turtles@.Data[(nrow(turtles@.Data) - NLcount(newTurtles) + 1):nrow(turtles@.Data), c(1,2,4)] <- newTurtles@.Data[,c(1,2,4)]
+      # Replace the breed and color of the newTurtles inside turtles
+      whoNewTurtles <- turtles@.Data[(nrow(turtles@.Data) - NLcount(newTurtles) + 1):nrow(turtles@.Data), 3]
+      turtles <- NLset(turtles = turtles, agents = turtle(turtles, who = whoNewTurtles), var = "breed", val = of(agents = newTurtles, var = "breed"))
+      turtles <- NLset(turtles = turtles, agents = turtle(turtles, who = whoNewTurtles), var = "color", val = of(agents = newTurtles, var = "color"))
+      # Replace any other additional variables
+      if(ncol(turtles@.Data) > 8){
+        valToReplace <- matrix(NA, ncol = (ncol(turtles@.Data) - 8), nrow = NLcount(newTurtles))
+        colnames(valToReplace) <- colnames(turtles@.Data)[9:ncol(turtles@.Data)]
+        turtles <- NLset(turtles = turtles, agents = turtle(turtles, who = whoNewTurtles),
+                         var = colnames(turtles@.Data)[9:ncol(turtles@.Data)],
+                         val = valToReplace)
+      }
+
+      # newTurtles@.Data[,"who"] <- (max(turtles@.Data[,"who"]) + 1):(NLcount(newTurtles) +
+      #                                                                 max(turtles@.Data[,"who"]))
+      # # unique who number
+      # newTurtlesBreed <- of(agents = newTurtles, var = "breed")
+      # newTurtlesColor <- of(agents = newTurtles, var = "color")
+      #
+      # turtles@.Data <- rbind(turtles@.Data, newTurtles@.Data)
+      # turtles <- NLset(turtles = turtles, agents = newTurtles, var = "breed", val = newTurtlesBreed)
+      # turtles <- NLset(turtles = turtles, agents = newTurtles, var = "color", val = newTurtlesColor)
 
       return(turtles)
     }
