@@ -3016,7 +3016,7 @@ setMethod(
                                                 lapply(which(wh), function(w)
             agents@levels[[var[w]]][agents@.Data[,var[w]]])))
         if (!all(wh))  {
-          df <- data.frame(agents@.Data[,var[!wh]], df)
+          df <- data.frame(agents@.Data[,var[!wh], drop = FALSE], df)
           newNames <- c(var[!wh],newNames)
         }
         colnames(df) <- newNames
