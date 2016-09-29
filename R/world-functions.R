@@ -465,11 +465,10 @@ setMethod(
   "world2raster",
   signature = c("worldMatrix"),
   definition = function(world) {
-
-    raster <- raster(world@.Data, xmn = world@extent@xmin, xmx = world@extent@xmax,
+    ras <- raster(world@.Data, xmn = world@extent@xmin, xmx = world@extent@xmax,
                      ymn = world@extent@ymin, ymx = world@extent@ymax)
 
-    return(raster)
+    return(ras)
   })
 
 
