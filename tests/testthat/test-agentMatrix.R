@@ -295,7 +295,7 @@ test_that("agentMatrix rbind cbind, tail, head, nrow, length, show", {
   expect_true(ncol(cbound)==6)
   expect_true(nrow(cbound)==3)
   expect_true(all(colnames(cbound)==c("xcor", "ycor", "tmp3", "tmp4","tmp", "tmp2")))
-  expect_true(all(cbound$tmp2 == 1:3 ))
+  expect_true(all(cbound@.Data[,"tmp2"] == 1:3 ))
   expect_true(all(cbound$tmp4 == c("e","f","g") ))
 
   expect_error(cbound <- cbind(newAgent1, newAgent2, newAgent))
@@ -324,7 +324,7 @@ test_that("agentMatrix rbind cbind, tail, head, nrow, length, show", {
   outShow <- capture.output(cbound)
   expect_true(length(outShow)==4)
   expect_true(grep(outShow, pattern = c("tmp3 tmp4 tmp tmp2"))==1)
-  expect_true(all(grep(outShow, pattern = c("1    1"))==c(2,3,4)))
+  expect_true(all(grep(outShow, pattern = c("1    1"))==c(2)))
   expect_true(all(grep(outShow, pattern = c("e   1"))==c(2)))
   expect_true(all(grep(outShow, pattern = c("f   1"))==3))
 

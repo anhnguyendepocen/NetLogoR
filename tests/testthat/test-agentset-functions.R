@@ -228,7 +228,7 @@ test_that("maxOneOf works",{
   rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
   expect_equivalent(nrow(rowTRUE),1)
   compare2 <- onepMax2 == onepMax1
-  expect_less_than(length(compare2[compare2 == TRUE]), 2)
+  expect_lt(length(compare2[compare2 == TRUE]), 2)
 
   # Turtles
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
@@ -260,7 +260,7 @@ test_that("minOneOf works",{
   rowTRUE <- compare1[compare1[,1] == TRUE & compare1[,2] == TRUE,,drop = FALSE]
   expect_equivalent(nrow(rowTRUE),1)
   compare2 <- onepMin2 == onepMin1
-  expect_less_than(length(compare2[compare2 == TRUE]), 2)
+  expect_lt(length(compare2[compare2 == TRUE]), 2)
 
   # Turtles
   t1 <- createTurtles(n = 10, coords = cbind(xcor = 1:10, ycor = 10:1), heading = c(1,2,3,4,4,2,3,4,4,3))
