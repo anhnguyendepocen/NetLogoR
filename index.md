@@ -12,6 +12,13 @@ description: This is the main web page for the NetLogoR package for writing and 
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 
+# NetLogoR
+
+NetLogoR is an R package which aims to help translating agent-based models built in NetLogo (Wilensky, 1999) into R or help directly with creating new agent-based models in R following the NetLogo framework.
+
+NetLogoR provides the necessary NetLogo's primitives as well as complementary functions to build agent-based models. A programming guide derived from the NetLogo’s Programming Guide is available.
+
+This package is under construction and therefore function errors and mismatches with the documentation may occur.
 
 [**Programming Guide**](https://github.com/PredictiveEcology/NetLogoR/blob/master/vignettes/ProgrammingGuide.Rmd) [https://github.com/PredictiveEcology/NetLogoR/blob/master/vignettes/ProgrammingGuide.Rmd](https://github.com/PredictiveEcology/NetLogoR/blob/master/vignettes/ProgrammingGuide.Rmd) 
 
