@@ -1521,7 +1521,6 @@ setMethod(
 #' @importFrom rgeos gBuffer
 #' @importFrom sp over
 #' @importFrom sp SpatialPoints
-#' @importFrom SpaDES wrap
 #' @docType methods
 #' @rdname inRadius
 #'

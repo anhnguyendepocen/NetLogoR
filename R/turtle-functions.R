@@ -251,7 +251,6 @@ setMethod(
 #'
 #' @export
 #' @importFrom CircStats rad
-#' @importFrom SpaDES wrap
 #' @docType methods
 #' @rdname fd
 #'
@@ -284,7 +283,7 @@ setMethod(
       coords <- c(fdXcor, fdYcor)
       dim(coords) <- c(length(fdXcor), 2L)
       colnames(coords) <- c("x","y")
-      tCoords <- SpaDES::wrap(coords, extent(world))
+      tCoords <- wrap(coords, extent(world))
       fdXcor <- tCoords[,1]
       fdYcor <- tCoords[,2]
     }
@@ -1783,7 +1782,6 @@ setMethod(
 )
 
 #' @export
-#' @importFrom SpaDES wrap
 #' @rdname setXY
 setMethod(
   "setXY",

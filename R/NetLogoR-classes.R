@@ -317,7 +317,6 @@ setReplaceMethod(
 #' plot(world2raster(w3))
 #'
 #' @export
-#' @importFrom SpaDES updateList
 #' @importFrom abind abind
 #' @docType methods
 #' @rdname stackWorlds

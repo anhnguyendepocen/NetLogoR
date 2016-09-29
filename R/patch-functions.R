@@ -43,7 +43,6 @@ if (getRversion() >= "3.1.0") {
 #'
 #'
 #' @export
-#' @importFrom SpaDES adj
 #' @importFrom data.table data.table ':='
 #' @importFrom data.table setkey
 #' @importFrom plyr count
@@ -326,7 +325,6 @@ setMethod(
 #'
 #'
 #' @export
-#' @importFrom SpaDES adj
 #' @importFrom data.table data.table setkey
 #' @docType methods
 #' @rdname neighbors
@@ -438,7 +436,6 @@ setMethod(
 #'
 #'
 #' @export
-#' @importFrom SpaDES wrap
 #' @docType methods
 #' @rdname patch
 #'

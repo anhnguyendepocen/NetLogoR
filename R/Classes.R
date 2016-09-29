@@ -746,7 +746,6 @@ tail.agentMatrix <- function(x, n = 6L, ...) {
 #' @param ... Two agentMatrix objects
 #'
 #' @method cbind agentMatrix
-#' @importFrom SpaDES updateList
 #' @export
 #' @name cbind
 #' @docType methods
@@ -766,7 +765,7 @@ cbind.agentMatrix <- function(..., deparse.level) {
     newMat <- cbind(tmp[[1]]@.Data, tmp[[2]]@.Data[, -(1:2), drop = FALSE])
     tmp[[1]]@.Data <- newMat
     colnames(newMat)
-    tmp[[1]]@levels <- SpaDES::updateList(tmp[[2]]@levels, tmp[[1]]@levels)
+    tmp[[1]]@levels <- updateList(tmp[[2]]@levels, tmp[[1]]@levels)
     tmp[[1]]
 }
 
