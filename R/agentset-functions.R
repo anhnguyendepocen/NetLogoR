@@ -1856,6 +1856,15 @@ setMethod(
 
         if (!is.na(match(var, names(turtles@levels)))) {
 
+          # Update the levels as some may have disapeared
+          turtlesLevelsVar <- turtles@levels[[var]] # old levels
+          turtlesVar <- turtles@.Data[,var] # old levels number
+          turtlesVarUnique <- unique(turtlesVar) # unique old levels numbers
+          turtlesLevelsVarUpdated <- turtlesLevelsVar[unique(turtlesVar)[order(turtlesVarUnique)]] # levels in the order of the unique old levels numbers
+          turtles@levels[[var]] <- turtlesLevelsVarUpdated
+          turtlesVarUpdated <- mapvalues(x = turtlesVar, from = turtlesVarUnique, to = rank(turtlesVarUnique)) # replace the levels number starting to 1 and increasing by 1
+          turtles@.Data[,var] <- turtlesVarUpdated
+
           if (identical(agents, turtles)) {
             turtles[,var] <- as.character(val)
 
@@ -1887,6 +1896,16 @@ setMethod(
 
         if (length(var_levels) != 0) {
           if (length(var_levels) == 1) {
+
+            # Update the levels as some may have disapeared
+            turtlesLevelsVar <- turtles@levels[[var[var_levels]]] # old levels
+            turtlesVar <- turtles@.Data[,var[var_levels]] # old levels number
+            turtlesVarUnique <- unique(turtlesVar) # unique old levels numbers
+            turtlesLevelsVarUpdated <- turtlesLevelsVar[unique(turtlesVar)[order(turtlesVarUnique)]] # levels in the order of the unique old levels numbers
+            turtles@levels[[var[var_levels]]] <- turtlesLevelsVarUpdated
+            turtlesVarUpdated <- mapvalues(x = turtlesVar, from = turtlesVarUnique, to = rank(turtlesVarUnique)) # replace the levels number starting to 1 and increasing by 1
+            turtles@.Data[,var[var_levels]] <- turtlesVarUpdated
+
             if (identical(agents, turtles)) {
               turtles[,var[var_levels]] <- as.character(val[,var_levels])
 
@@ -1895,17 +1914,38 @@ setMethod(
               iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
               turtles[iAgents,var[var_levels]] <- as.character(val[,var_levels])
             }
+
           } else {
 
             if (identical(agents, turtles)) {
 
               for(i in var_levels) {
+
+                # Update the levels as some may have disapeared
+                turtlesLevelsVar <- turtles@levels[[var[i]]] # old levels
+                turtlesVar <- turtles@.Data[,var[i]] # old levels number
+                turtlesVarUnique <- unique(turtlesVar) # unique old levels numbers
+                turtlesLevelsVarUpdated <- turtlesLevelsVar[unique(turtlesVar)[order(turtlesVarUnique)]] # levels in the order of the unique old levels numbers
+                turtles@levels[[var[i]]] <- turtlesLevelsVarUpdated
+                turtlesVarUpdated <- mapvalues(x = turtlesVar, from = turtlesVarUnique, to = rank(turtlesVarUnique)) # replace the levels number starting to 1 and increasing by 1
+                turtles@.Data[,var[i]] <- turtlesVarUpdated
+
                 turtles[,var[i]] <- as.character(val[,var[i]])
               }
             } else {
 
               iAgents <- match(agents@.Data[,"who"], turtles@.Data[,"who"])
               for(i in var_levels) {
+
+                # Update the levels as some may have disapeared
+                turtlesLevelsVar <- turtles@levels[[var[i]]] # old levels
+                turtlesVar <- turtles@.Data[,var[i]] # old levels number
+                turtlesVarUnique <- unique(turtlesVar) # unique old levels numbers
+                turtlesLevelsVarUpdated <- turtlesLevelsVar[unique(turtlesVar)[order(turtlesVarUnique)]] # levels in the order of the unique old levels numbers
+                turtles@levels[[var[i]]] <- turtlesLevelsVarUpdated
+                turtlesVarUpdated <- mapvalues(x = turtlesVar, from = turtlesVarUnique, to = rank(turtlesVarUnique)) # replace the levels number starting to 1 and increasing by 1
+                turtles@.Data[,var[i]] <- turtlesVarUpdated
+
                 turtles[iAgents,var[i]] <- as.character(val[,i])
               }
             }

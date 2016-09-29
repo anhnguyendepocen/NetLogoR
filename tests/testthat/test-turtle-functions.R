@@ -562,6 +562,16 @@ test_that("sprout works",{
   expect_equivalent(c(rep("black", 2), rep("white", 3)), of(agents = t10, var = "color"))
   t11 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), color = "blue")
   expect_equivalent(rep("blue", 5), of(agents = t11, var = "color"))
+
+  # When turtles have additional variables
+  t1 <- turtlesOwn(turtles = t1, tVar = "sex", tVal = c("F", "F", "M"))
+  t12 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), breed = "sheep", turtles = t1)
+  expect_equivalent(c(rep("turtle", 3), rep("sheep", 5)), of(agents = t12, var = "breed"))
+  expect_equivalent(c("F", "F", "M", rep(NA, 5)), of(agents = t12, var = "sex"))
+  t1 <- turtlesOwn(turtles = t1, tVar = "age", tVal = c(1,2,3))
+  t12 <- sprout(patches = cbind(pxcor = c(3, 2), pycor = c(0,3)), n = c(2,3), breed = "sheep", turtles = t1)
+  expect_equivalent(c("F", "F", "M", rep(NA, 5)), of(agents = t12, var = "sex"))
+  expect_equivalent(c(1,2,3, rep(NA, 5)), of(agents = t12, var = "age"))
 })
 
 test_that("inspect works",{

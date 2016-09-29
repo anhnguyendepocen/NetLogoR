@@ -12,6 +12,9 @@ addons:
     - tcl8.5-dev
     - tk8.5-dev
 
+r_binary_packages:
+  - matrixStats
+
 r_github_packages:
   - jimhester/covr
 

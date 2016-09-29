@@ -733,4 +733,15 @@ test_that("NLset works",{
                val = cbind(xcor = c(1,3,5,7,9), breed = "tomato"))
   expect_equivalent(of(agents = t18, var = "xcor"), c(1,3,5,7,9))
   expect_equivalent(of(agents = t18, var = "breed"), rep("tomato", 5))
+
+  t19 <- NLset(turtles = t1, agents = t1, var = "breed", val = "wolf")
+  t20 <- NLset(turtles = t19, agents = turtle(t19, 1), var = "breed", val = "sheep")
+  t20_breed <- of(agents = t20, var = "breed")
+  expect_equivalent(c("wolf", "sheep", "wolf", "wolf", "wolf"), t20_breed)
+  t21 <- createTurtles(n = 20, coords = cbind(xcor = 1:20, ycor = 1:20))
+  t22 <- die(turtles = t21, who = c(0,1,2,3,4))
+  t23 <- NLset(turtles = t22, agents = turtle(t22, 10), var = "color", val = "red")
+  colt23 <- of(agents = t21, var = "color")[6:20]
+  colt23[6] <- "red"
+  expect_equivalent(of(agents = t23, var = "color"), colt23)
  })

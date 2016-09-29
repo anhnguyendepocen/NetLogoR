@@ -50,6 +50,10 @@ Create \code{n} new turtles on specific \code{patches}.
          If no \code{turtles}
          is provided, a new agentMatrix is created and the who numbers
          start at 0.
+
+         If \code{turtles} is provided and had additional variables created
+         with \code{turtlesOwn()}, \code{NA} is given for these variables
+         for the new sprouted turtles.
 }
 \examples{
 t1 <- sprout(patches = cbind(pxcor = 2, pycor = 2), n = 3)
