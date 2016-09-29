@@ -83,7 +83,6 @@ r_binary_packages:
   - raster
   - rgeos
   - sp
-  - SpaDES
 
 notifications:
   email:
