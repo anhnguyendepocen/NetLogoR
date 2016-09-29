@@ -1,0 +1,7 @@
+Known issues: https://github.com/PredictiveEcology/NetLogoR/issues
+
+version 0.0.0.9005
+==================
+* first CRAN release
+* all key NetLogo functions rewritten in R, except visualizations and agent lists
+* plot methods
