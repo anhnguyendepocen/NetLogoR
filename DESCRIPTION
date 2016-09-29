@@ -1,20 +1,20 @@
 Package: NetLogoR
 Title: A port of NetLogo functions and language to R
-Description: This package is under active development and therefore function
-    errors and documentation mismatches may occur. `NetLogoR` is an R package
-    which aims to help translating agent-based models built in `NetLogo`
+Description: NetLogoR is an R package that
+    aims to help translating agent-based models built in *NetLogo*
     ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)) into R or help
-    directly with creating new agent-based models in R following the `NetLogo`
-    framework. `NetLogoR` provides the necessary [`NetLogo` primitives]
+    directly with creating new agent-based models in R following the *NetLogo*
+    framework. *NetLogoR* provides the necessary [*NetLogo* primitives]
     (https://ccl.northwestern.edu/netlogo/docs/dictionary.html) as well as
     complementary functions to build agent-based models. A programming guide
-    derived from the [`NetLogo`'s Programming Guide]
+    derived from the *NetLogo*'s Programming Guide
     (https://ccl.northwestern.edu/netlogo/docs/programming.html) is
-    available. NOTE: there is no support for 'time' in this package -- it is
-    currently intended to be used with `SpaDES`.
+    available. NOTE: To increment 'time', these functions can use
+    a for loop or can be integrated with a discrete event simulator,
+    such as *SpaDES*.
 URL: https://github.com/PredictiveEcology/NetLogoR
-Version: 0.0.0.9002
-Date: 2016-06-08
+Version: 0.0.0.9005
+Date: 2016-09-29
 Authors@R: c(
     person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr",
     role = c("aut")),
@@ -26,13 +26,14 @@ Authors@R: c(
     role = "cph")
     )
 Depends:
-    R (>= 3.2.2),
+    R (>= 3.3.1),
     raster
 Suggests:
     knitr,
     magrittr,
     microbenchmark,
     rmarkdown,
+    SpaDES,
     testthat
 Imports:
     abind,
@@ -45,11 +46,8 @@ Imports:
     methods,
     plyr,
     sp,
-    SpaDES,
     stats,
     rgeos
-Remotes:
-    PredictiveEcology/SpaDES@development
 License: GPL-3
 VignetteBuilder: knitr
 ByteCompile: yes
@@ -62,5 +60,6 @@ Collate:
     'agentset-functions.R'
     'function-arguments.R'
     'patch-functions.R'
+    'spades-functions.R'
     'turtle-functions.R'
     'world-functions.R'
