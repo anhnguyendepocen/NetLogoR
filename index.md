@@ -14,9 +14,10 @@ description: This is the main web page for the NetLogoR package for writing and 
 
 # NetLogoR
 
-NetLogoR is an R package which aims to help translating agent-based models built in NetLogo (Wilensky, 1999) into R or help directly with creating new agent-based models in R following the NetLogo framework.
+`NetLogoR` is an R package which aims to help translating agent-based models built in NetLogo ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)) into R or help directly with creating new agent-based models in R following the NetLogo framework.
 
-NetLogoR provides the necessary NetLogo's primitives as well as complementary functions to build agent-based models. A programming guide derived from the NetLogo’s Programming Guide is available.
+`NetLogoR` provides the necessary [NetLogo's primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) as well as complementary functions to build agent-based models.
+A programming guide derived from the [NetLogo’s Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html) is available. 
 
 This package is under construction and therefore function errors and mismatches with the documentation may occur.
 
@@ -28,25 +29,21 @@ This package is under construction and therefore function errors and mismatches 
 
 ## Installation
 
-Building packages from source requires the appropriate development libraries for your operating system (*e.g.*, Windows users should install [Rtools](http://cran.r-project.org/bin/windows/Rtools/)).
-
-
-### Current stable release [![Build Status](https://travis-ci.org/PredictiveEcology/NetLogoR.svg?branch=master)](https://travis-ci.org/PredictiveEcology/NetLogoR) [![Coverage Status](https://coveralls.io/repos/PredictiveEcology/NetLogoR/badge.svg?branch=master)](https://coveralls.io/r/PredictiveEcology/NetLogoR?branch=master) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/NetLogoR)](https://cran.r-project.org/package=NetLogoR) [![Downloads](http://cranlogs.r-pkg.org/badges/NetLogoR)](https://cran.rstudio.com/package=NetLogoR)
+### Current stable release [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/k65nup6cuqr5p2hy/branch/master?svg=true)](https://ci.appveyor.com/project/achubaty/netlogor/branch/master) [![Build Status](https://travis-ci.org/PredictiveEcology/NetLogoR.svg?branch=master)](https://travis-ci.org/PredictiveEcology/NetLogoR) [![Coverage Status](https://coveralls.io/repos/PredictiveEcology/NetLogoR/badge.svg?branch=master)](https://coveralls.io/r/PredictiveEcology/NetLogoR?branch=master) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/NetLogoR)](https://cran.r-project.org/package=NetLogoR) [![Downloads](http://cranlogs.r-pkg.org/badges/NetLogoR)](https://cran.rstudio.com/package=NetLogoR)
 
 **Install from CRAN:**
 
 Not yet available on CRAN
 
 **Install from GitHub:**
-    
+
+Building packages from source requires the appropriate development libraries for your operating system (*e.g.*, Windows users should install [Rtools](http://cran.r-project.org/bin/windows/Rtools/)).
+
 ```r
 #install.packages("devtools")
 library("devtools")
 install_github("PredictiveEcology/NetLogoR", build_vignettes = TRUE) # stable
 ```
-
-```
-
 
 ## Reporting bugs
 
