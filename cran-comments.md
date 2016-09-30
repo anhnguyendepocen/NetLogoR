@@ -19,8 +19,8 @@ This is a first release to CRAN.
 * Windows 10              (local), R 3.3.1
 
 ### Development R version
-* Ubuntu 12.04        (travis-ci), R 3.4.0 (2016-09-21 r71333)
-* Windows              (appveyor), R 3.4.0 (2016-09-21 r71333)
+* Ubuntu 12.04        (travis-ci), R 3.4.0 (2016-09-30 r71425)
+* Windows              (appveyor), R 3.4.0 (2016-09-28 r71397)
 * Windows           (win-builder), R 3.4.0 (2016-09-21 r71333)
 
 ## R CMD check results
