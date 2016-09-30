@@ -12,7 +12,7 @@ Description: NetLogoR is an R package that
     available. NOTE: To increment 'time', these functions can use
     a for loop or can be integrated with a discrete event simulator,
     such as 'SpaDES'.
-URL: https://github.com/PredictiveEcology/NetLogoR
+URL: http://NetLogoR.PredictiveEcology.org, https://github.com/PredictiveEcology/NetLogoR
 Version: 0.0.0.9006
 Date: 2016-09-29
 Authors@R: c(
