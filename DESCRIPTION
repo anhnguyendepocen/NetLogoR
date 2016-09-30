@@ -2,19 +2,19 @@ Package: NetLogoR
 Title: A port of NetLogo functions and language to R
 Description: NetLogoR is an R package that
     aims to help translating agent-based models built in 'NetLogo'
-    (Wilensky, 1999; \url{http://ccl.northwestern.edu/netlogo/}) into R or help
+    (Wilensky, 1999; http://ccl.northwestern.edu/netlogo/) into R or help
     directly with creating new agent-based models in R following the 'NetLogo'
     framework. 'NetLogoR' provides the necessary 'NetLogo' primitives
-    (\url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html}) as well as
+    (https://ccl.northwestern.edu/netlogo/docs/dictionary.html) as well as
     complementary functions to build agent-based models. A programming guide
     derived from that of 'NetLogo' 
-    (\url{https://ccl.northwestern.edu/netlogo/docs/programming.html}) is
+    (https://ccl.northwestern.edu/netlogo/docs/programming.html) is
     available. NOTE: To increment 'time', these functions can use
     a for loop or can be integrated with a discrete event simulator,
     such as 'SpaDES'.
 URL: http://NetLogoR.PredictiveEcology.org, https://github.com/PredictiveEcology/NetLogoR
 Version: 0.1.0
-Date: 2016-09-29
+Date: 2016-09-30
 Authors@R: c(
     person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr",
     role = c("aut", "cre")),
