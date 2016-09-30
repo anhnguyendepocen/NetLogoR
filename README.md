@@ -1,6 +1,7 @@
 # NetLogoR
 
 [![Build Status](https://travis-ci.org/PredictiveEcology/NetLogoR.svg?branch=master)](https://travis-ci.org/PredictiveEcology/NetLogoR)
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/k65nup6cuqr5p2hy/branch/master?svg=true)](https://ci.appveyor.com/project/achubaty/netlogor/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/PredictiveEcology/NetLogoR/badge.svg?branch=master)](https://coveralls.io/github/PredictiveEcology/NetLogoR?branch=master)
 
 `NetLogoR` is an R package which aims to help translating agent-based models built in NetLogo ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)) into R or help directly with creating new agent-based models in R following the NetLogo framework.
