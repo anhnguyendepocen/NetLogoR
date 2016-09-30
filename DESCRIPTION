@@ -17,9 +17,9 @@ Version: 0.0.0.9006
 Date: 2016-09-29
 Authors@R: c(
     person("Sarah", "Bauduin", email = "sarahbauduin@hotmail.fr",
-    role = c("aut")),
-    person(c("Eliot", "J", "B"), "McIntire", email = "eliot.mcintire@canada.ca",
     role = c("aut", "cre")),
+    person(c("Eliot", "J", "B"), "McIntire", email = "eliot.mcintire@canada.ca",
+    role = c("aut")),
     person(c("Alex", "M"), "Chubaty", email = "alexander.chubaty@canada.ca",
     role = c("aut")),
     person("Her Majesty the Queen in Right of Canada, as represented by the Minister of Natural Resources Canada",
