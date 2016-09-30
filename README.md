@@ -10,4 +10,3 @@
 It is based on the NetLogo software ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)).
 `NetLogoR` provides the necessary [NetLogo's primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) as well as complementary functions to easily build agent-based models or translate NetLogo's models in R.
 A programming guide derived from the [NetLogo Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html), a dictionary for [NetLogo's primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) equivalences, and model examples are available.
-
