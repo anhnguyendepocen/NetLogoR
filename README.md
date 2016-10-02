@@ -7,8 +7,8 @@
 [![Downloads](http://cranlogs.r-pkg.org/badges/NetLogoR)](https://cran.rstudio.com/package=NetLogoR)
 
 ## A Port of NetLogo Functions and Language to R
-Easily create agent-based models in R following the NetLogo's framework ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)).
-`NetLogoR` provides classes to represent raster cells (i.e., "patches") and individuals (i.e., "turtles"), the necessary [NetLogo primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html), and complementary functions to easily build agent-based models or translate NetLogo models in R.
+Easily create agent-based models in R following the NetLogo framework ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)).
+`NetLogoR` provides classes to represent "patches" (raster cells) and "turtles" (individuals), the necessary [NetLogo primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html), and complementary functions to easily build agent-based models or translate NetLogo models in R.
 
 
 ## Getting Started
