@@ -7,10 +7,10 @@
 [![Downloads](http://cranlogs.r-pkg.org/badges/NetLogoR)](https://cran.rstudio.com/package=NetLogoR)
 
 ## A Port of NetLogo Functions and Language to R
-Easily create agent-based models in R using the NetLogo's framework ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)).
+Easily create agent-based models in R following the NetLogo's framework ([Wilensky, 1999](http://ccl.northwestern.edu/netlogo/)).
 `NetLogoR` provides classes to represent raster cells (i.e., "patches") and individuals (i.e., "turtles"), the necessary [NetLogo primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html), and complementary functions to easily build agent-based models or translate NetLogo models in R.
 
 
 ## Getting Started
-A programming guide derived from the [NetLogo Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html) and a dictionary for the [NetLogo primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) equivalences are available.
-Three NetLogo models ([Ants](http://ccl.northwestern.edu/netlogo/models/Ants), Butterfly (Railsback and Grimm, 2012) and [Wolf-Sheep-Predation](http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation)) were translated in R language using `NetLogoR` as examples.
+A programming guide derived from the [NetLogo Programming Guide](https://ccl.northwestern.edu/netlogo/docs/programming.html) and a dictionary of [NetLogo primitives](https://ccl.northwestern.edu/netlogo/docs/dictionary.html) equivalences are available.
+As examples, three NetLogo models ([Ants](http://ccl.northwestern.edu/netlogo/models/Ants), Butterfly (Railsback and Grimm, 2012) and [Wolf-Sheep-Predation](http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation)) were translated in R language using `NetLogoR`.
