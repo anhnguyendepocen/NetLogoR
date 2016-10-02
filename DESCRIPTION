@@ -1,5 +1,5 @@
 Package: NetLogoR
-Title: A port of NetLogo functions and language to R
+Title: A Port of NetLogo Functions and Language to R
 Description: NetLogoR is an R package that
     aims to help translating agent-based models built in 'NetLogo'
     (Wilensky, 1999; http://ccl.northwestern.edu/netlogo/) into R or help
