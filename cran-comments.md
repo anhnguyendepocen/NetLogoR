@@ -21,11 +21,20 @@ This is a first release to CRAN.
 ### Development R version
 * Ubuntu 12.04        (travis-ci), R 3.4.0 (2016-09-30 r71425)
 * Windows              (appveyor), R 3.4.0 (2016-09-28 r71397)
-* Windows           (win-builder), R 3.4.0 (2016-09-21 r71333)
+* Windows           (win-builder), R 3.4.0 (2016-10-01 r71432)
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs or NOTES
+There were no ERRORs or WARNINGs.
+
+There was 1 NOTE:
+```
+Possibly mis-spelled words in DESCRIPTION:
+  Predation (20:16)
+  Railsback (19:16)
+  Wilensky (5:6)
+```
+These words are not mispelled.
 
 ## Downstream dependencies
 
