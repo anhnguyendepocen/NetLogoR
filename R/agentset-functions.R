@@ -232,12 +232,12 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:5, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p1 <- sortOn(agents = patches(w1), world = w1)
 #'
 #' # Turtles
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' sortdHeadingst1 <- sortOn(agents = t1, var = "heading")
+#' sortHeadingT1 <- sortOn(agents = t1, var = "heading")
 #'
 #'
 #' @export
@@ -296,7 +296,7 @@ setMethod(
 #' Agents with
 #'
 #' Report the patches or the turtles among \code{agents} which have their variable
-#' equals to a specific value.
+#' equals to specific values.
 #'
 #' @inheritParams fargs
 #'
@@ -323,7 +323,7 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:5, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 #'
 #' # Turtles
@@ -430,7 +430,7 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:5, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p1 <- withMax(agents = patches(w1), world = w1)
 #'
 #' # Turtles
@@ -538,7 +538,7 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:5, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p1 <- withMin(agents = patches(w1), world = w1)
 #'
 #' # Turtles
@@ -654,7 +654,7 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:5, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p1 <- maxOneOf(agents = patches(w1), world = w1)
 #'
 #' # Turtles
@@ -749,7 +749,7 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:5, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p1 <- minOneOf(agents = patches(w1), world = w1)
 #'
 #' # Turtles
@@ -828,10 +828,10 @@ setMethod(
 #'          one row. \code{agents} is \code{"patcheset"} if the matrix has more than
 #'          one row.
 #'
-#'          \code{agents} is \code{"turtle"} if it is a SpatialPointsDataFrame
-#'          of length 1 with the variables created when using \code{createTurtles()}
-#'          or \code{createOTurtles()}. \code{agents} is \code{"turtleset"} if the
-#'          SpatialPointsDataFrame is of length larger than 1.
+#'          \code{agents} is \code{"turtle"} if it is an agentMatrix
+#'          containing only one turtle.
+#'          \code{agents} is \code{"turtleset"} if the
+#'          agentMatrix contains more than one turtle.
 #'
 #'          \code{agents} is \code{"agent"} if it is either \code{"patch"} or
 #'          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either
@@ -1166,7 +1166,7 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:10, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p1 <- maxNof(agents = patches(w1), n = 6, world = w1)
 #'
 #' # Turtles
@@ -1332,7 +1332,7 @@ setMethod(
 #' # Patches
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:10, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 #'
 #' # Turtles
@@ -1479,8 +1479,7 @@ setMethod(
 #' @param agents2 Matrix (ncol = 2) with the first column "pxcor" and the second
 #'               column "pycor" representing the patches coordinates, or
 #'
-#'               AgentMatrix created by \code{createTurtles()} or
-#'               by \code{createOTurtles()} representing the moving agents.
+#'               AgentMatrix object representing the moving agents.
 #'
 #' @return Matrix (ncol = 3) with the first column "pxcor"
 #'         and the second column "pycor" representing the coordinates of the
