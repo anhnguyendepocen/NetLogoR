@@ -5,6 +5,7 @@
 \alias{plot.agentMatrix}
 \alias{plot.worldArray}
 \alias{plot.worldMatrix}
+\alias{points.agentMatrix}
 \title{Basic plot methods for agentMatrix, worldMatrix, worldArray}
 \usage{
 \method{plot}{agentMatrix}(x, ...)
@@ -12,6 +13,8 @@
 \method{plot}{worldMatrix}(x, ...)
 
 \method{plot}{worldArray}(x, ...)
+
+\method{points}{agentMatrix}(x, ...)
 }
 \arguments{
 \item{x}{an agentMatrix, worldMatrix or worldArray object}
@@ -42,5 +45,14 @@ w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data =
 w2 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
 w3 <- stackWorlds(w1, w2)
 plot(w3)
+
+# agentMatrix
+ newAgent <- new("agentMatrix",
+   coords = cbind(pxcor = c(1, 2, 5), pycor = c(3, 4, 6)),
+   char = letters[c(1, 2, 6)],
+   nums2 = c(4.5, 2.6, 2343),
+   char2 = LETTERS[c(4, 24, 3)],
+   nums = 5:7)
+ points(newAgent)
 }
 

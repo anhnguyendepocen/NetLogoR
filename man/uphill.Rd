@@ -59,10 +59,10 @@ w1 <- createWorld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
                           data = runif(100))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 plot(w1)
-points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+points(t1, col = of(agents = t1, var = "color"), pch = 16)
 
 t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
-points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+points(t1, col = of(agents = t1, var = "color"), pch = 16)
 
 
 }

@@ -27,7 +27,7 @@ w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
                                           ycor = randomYcor(world = w1, n = 10)))
 plot(w1)
-points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+points(t1, col = of(agents = t1, var = "color"), pch = 16)
 
 
 }

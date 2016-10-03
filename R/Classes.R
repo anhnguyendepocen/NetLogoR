@@ -826,6 +826,8 @@ plot.agentMatrix <- function(x, ...) {
   plot(x@.Data, ...)
 }
 
+
+
 #' @export
 #' @docType methods
 #' @rdname plotMethods
@@ -854,4 +856,22 @@ plot.worldMatrix <- function(x, ...) {
 plot.worldArray <- function(x, ...) {
   Ras <- world2raster(x)
   plot(Ras, ...)
+}
+
+#' @export
+#' @docType methods
+#' @rdname plotMethods
+#' @method points agentMatrix
+#' @examples
+#'
+#' # agentMatrix
+#'  newAgent <- new("agentMatrix",
+#'    coords = cbind(pxcor = c(1, 2, 5), pycor = c(3, 4, 6)),
+#'    char = letters[c(1, 2, 6)],
+#'    nums2 = c(4.5, 2.6, 2343),
+#'    char2 = LETTERS[c(4, 24, 3)],
+#'    nums = 5:7)
+#'  points(newAgent)
+points.agentMatrix <- function(x, ...) {
+  points(x@.Data, ...)
 }

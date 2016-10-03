@@ -41,7 +41,7 @@
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -145,10 +145,10 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -243,10 +243,10 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -352,14 +352,14 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 2)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #' t1 <- bk(turtles = t1, dist = 1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #' t1 <- fd(turtles = t1, dist = 0.5)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -422,10 +422,10 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = "black", pch = 16)
+#' points(t1, col = "black", pch = 16)
 #'
 #' t1 <- home(world = w1, turtles = t1, home = "pCorner")
-#' points(turtles2spdf(t1), col = "red", pch = 16)
+#' points(t1, col = "red", pch = 16)
 #'
 #'
 #' @export
@@ -821,7 +821,7 @@ setMethod(
 #' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                           ycor = randomYcor(world = w1, n = 10)))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -872,7 +872,7 @@ setMethod(
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                            ycor = randomYcor(world = w1, n = 10)))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -1103,11 +1103,11 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
 #' t1 <- fd(turtles = t1, dist = 0.5)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -1279,10 +1279,10 @@ setMethod(
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -1408,10 +1408,10 @@ setMethod(
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -1738,10 +1738,10 @@ setMethod(
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- setXY(turtles = t1, xcor = 1:5, ycor = 1:5)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -2043,13 +2043,13 @@ setMethod(
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = "black", pch = 16)
+#' points(t1, col = "black", pch = 16)
 #'
 #' t1 <- moveTo(turtles = t1, agents = turtle(t1, who = 0))
-#' points(turtles2spdf(t1), col = "red", pch = 16)
+#' points(t1, col = "red", pch = 16)
 #'
 #' t1 <- moveTo(turtles = t1, agents = patch(w1, 9, 9))
-#' points(turtles2spdf(t1), col = "blue", pch = 16)
+#' points(t1, col = "blue", pch = 16)
 #'
 #'
 #' @export
@@ -2098,7 +2098,7 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
 #' @export
@@ -2302,7 +2302,7 @@ setMethod(
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+#' points(t1, col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, 2, 2))
 #'
@@ -2906,10 +2906,10 @@ setMethod(
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 #' plot(w1)
-#' points(turtles2spdf(t1), col = "black", pch = 16)
+#' points(t1, col = "black", pch = 16)
 #'
 #' t1 <- layoutCircle(world = w1, turtles = t1, radius = 3)
-#' points(turtles2spdf(t1), col = "red", pch = 16)
+#' points(t1, col = "red", pch = 16)
 #'
 #'
 #' @export

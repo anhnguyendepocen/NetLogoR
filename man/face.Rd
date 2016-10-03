@@ -50,11 +50,11 @@ w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
 plot(w1)
-points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+points(t1, col = of(agents = t1, var = "color"), pch = 16)
 
 t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
 t1 <- fd(turtles = t1, dist = 0.5)
-points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
+points(t1, col = of(agents = t1, var = "color"), pch = 16)
 
 
 }
