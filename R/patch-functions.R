@@ -36,10 +36,10 @@ if (getRversion() >= "3.1.0") {
 #' @examples
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = sample(1:3, size = 25, replace = TRUE))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' # Diffuse 50% of each patch value to its 8 neighbors
 #' w2 <- diffuse(world = w1, share = 0.5, nNeighbors = 8)
-#' plot(world2raster(w2))
+#' plot(w2)
 #'
 #'
 #' @export
@@ -576,7 +576,7 @@ setMethod(
 })
 
 ################################################################################
-#' Patches at certain distances and certain directions
+#' Patches at given distances and directions
 #'
 #' Report the coordinates of the patches at the given
 #' distances and directions from the \code{agents}.

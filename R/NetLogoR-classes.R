@@ -2,7 +2,7 @@
 #' The worldMatrix class
 #'
 #' This is an s4 class extension of \code{matrix} with 7 additional slots.
-#' A \code{worldMatrix} object can be viewes as a grid composed of squared patches
+#' A \code{worldMatrix} object can be viewed as a grid composed of squared patches
 #' (i.e., matrix cells). Patches have two spatial coordinates \code{pxcor} and
 #' \code{pycor}, representing the location of their center. \code{pxcor} and
 #' \code{pycor} are always integer and increment by 1. \code{pxcor} increases as
@@ -13,10 +13,10 @@
 #' The first four slots of the \code{worldMatrix} are: \code{minPxcor}, \code{maxPxcor},
 #' \code{minPycor}, \code{maxPycor} which represent the minimum and maximum patches
 #' coordinates in the \code{worldMatrix}.
-#' The slot \code{extext} is similar to a \code{Raster*} extent. Because \code{pxcor}
+#' The slot \code{extent} is similar to a \code{Raster*} extent. Because \code{pxcor}
 #' and \code{pycor} represent the spatial location at the center of the patches and the
 #' resolution of them is 1, the extent of the \code{worldMatrix} is equal to
-#' \code{xmin = minPxcor - 0.5}, code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5},
+#' \code{xmin = minPxcor - 0.5}, \code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5},
 #' and \code{ymax = maxPycor + 0.5}.
 #' The number of patches in a \code{worldMatrix} is equal to
 #' \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
@@ -27,7 +27,7 @@
 #' Careful: The methods \code{[]} and \code{[] <-} retrieve or assign values for
 #' the patches in the given order of the patches coordinates provided.
 #' When no patches coordinates are provided, the values retrieved or assigned
-#' is done in the order of the cell numbers as defined in in \code{Raster*} objects.
+#' is done in the order of the cell numbers as defined in in \code{Raster*} objects (i.e., by rows).
 #'
 #' @references Wilensky, U. 1999. NetLogo. http://ccl.northwestern.edu/netlogo/.
 #'             Center for Connected Learning and Computer-Based Modeling,
@@ -148,7 +148,7 @@ setReplaceMethod(
 #' @examples
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = 1:25)
-#' plot(world2raster(w1))
+#' plot(w1)
 #'
 #'
 #' @export
@@ -314,7 +314,7 @@ setReplaceMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
 #' w2 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
 #' w3 <- stackWorlds(w1, w2)
-#' plot(world2raster(w3))
+#' plot(w3)
 #'
 #' @export
 #' @importFrom abind abind
