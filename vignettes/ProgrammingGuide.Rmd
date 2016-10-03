@@ -220,8 +220,7 @@ Defining the world's extent in `createWorld()` is similar as going in the "Inter
 You can visualize the world with `plot(nameWorld)`.
 
 - Create the turtles (*i.e.*, moving agents) with the function `createTurtles()`.
-You can visualize the turtles by plotting them on the world.
-As `points` cannot handle `agentdMatrix` objects, you need to convert it to a `SpatialPointsDataFrame` object before: `points(turtles2spdf(nameTurtles), pch = 16)`.
+You can visualize the turtles by plotting them on the world with `points(nameTurtles, pch = 16)`.
 
 - Create the different procedures (*i.e.*, functions affecting the agents) by using the `NetLogoR` functions, the R functions or some from other packages.
 
