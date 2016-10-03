@@ -41,7 +41,7 @@ The identity of the turtles is defined by their "who" number. This
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createOTurtles(n = 10, world = w1)
-plot(world2raster(w1))
+plot(w1)
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 t1 <- fd(turtles = t1, dist = 1)

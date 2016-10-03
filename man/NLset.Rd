@@ -28,7 +28,7 @@ NLset(world, turtles, agents, var, val)
 
               AgentMatrix object representing the moving agents.}
 
-\item{var}{Character. Vector of the name of the selected \code{agents} variables.
+\item{var}{Character. Vector of the names of the selected \code{agents} variables.
 If \code{agents} are patches and the \code{world} is a
 \code{worldMatrix} object, \code{var} must not be provided. If
 \code{agents} are patches and the \code{world} is a

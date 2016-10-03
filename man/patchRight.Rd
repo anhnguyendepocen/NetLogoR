@@ -34,12 +34,12 @@ Matrix (ncol = 2) with the first column "pxcor" and the second
 }
 \description{
 Report the coordinates of the patches at the given distances of the \code{turtles}
-on the right of their headings.
+and given \code{angle} right of their headings.
 }
 \details{
-If a given \code{dist} value is negative, then the turtle would move backward.
+If a given \code{dist} value is negative, then the turtle would look backward.
          If a given \code{angle} value is negative, then the turtle would
-         rotate to the left.
+         look to the left.
 
          If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
          and \code{angle} degrees to the right of its heading is outside the

@@ -42,11 +42,10 @@ Move the \code{turtles} back \code{home}.
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-plot(world2raster(w1))
+plot(w1)
 points(turtles2spdf(t1), col = "black", pch = 16)
 
 t1 <- home(world = w1, turtles = t1, home = "pCorner")
-plot(world2raster(w1))
 points(turtles2spdf(t1), col = "red", pch = 16)
 
 

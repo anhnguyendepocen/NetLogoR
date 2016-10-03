@@ -49,7 +49,7 @@ Matrix (ncol = 2) with the first column "pxcor" and the second column
 }
 \description{
 Report the patches or the turtles among \code{agents} which have their variable
-equals to a specific value.
+equals to specific values.
 }
 \details{
 \code{world} must not be provided if \code{agents} are turtles.
@@ -60,7 +60,7 @@ equals to a specific value.
 # Patches
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = sample(1:5, size = 25, replace = TRUE))
-plot(world2raster(w1))
+plot(w1)
 p2 <- NLwith(agents = patches(w1), world = w1, val = 2)
 
 # Turtles

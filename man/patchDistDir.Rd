@@ -4,7 +4,7 @@
 \name{patchDistDir}
 \alias{patchDistDir}
 \alias{patchDistDir,worldNLR,matrix,numeric,numeric-method}
-\title{Patches at certain distances and certain directions}
+\title{Patches at given distances and directions}
 \usage{
 patchDistDir(world, agents, dist, angle, torus = FALSE)
 

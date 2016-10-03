@@ -57,7 +57,7 @@ The \code{agents} must be located inside the
 w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
                           data = runif(100))
 t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
-plot(world2raster(w1))
+plot(w1)
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, 2, 2))

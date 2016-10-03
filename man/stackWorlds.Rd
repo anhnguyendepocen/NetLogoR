@@ -26,7 +26,7 @@ The worldMatrix objects must all have the same extents.
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 1:25)
 w2 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4, data = 25:1)
 w3 <- stackWorlds(w1, w2)
-plot(world2raster(w3))
+plot(w3)
 
 }
 \author{

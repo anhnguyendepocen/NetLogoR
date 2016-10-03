@@ -16,11 +16,11 @@ inspect(turtles, who)
 \item{who}{Integer. Vector of the "who" numbers for the selected \code{turtles}.}
 }
 \value{
-Dataframe (nrow = \code{length(who)}) with the variables for the selected
+Dataframe (nrow = \code{length(who)}) of the variables of the selected
         individuals among the \code{turtles}.
 }
 \description{
-Display the variables values for the selected individuals among the \code{turtles}.
+Display all variables values for the selected individuals among the \code{turtles}.
 }
 \examples{
 w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9)

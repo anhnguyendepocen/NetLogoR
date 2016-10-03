@@ -40,7 +40,7 @@
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
@@ -144,7 +144,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 1)
@@ -242,7 +242,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 1)
@@ -351,7 +351,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createOTurtles(n = 10, world = w1)
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- fd(turtles = t1, dist = 2)
@@ -421,11 +421,10 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
 #' t1 <- home(world = w1, turtles = t1, home = "pCorner")
-#' plot(world2raster(w1))
 #' points(turtles2spdf(t1), col = "red", pch = 16)
 #'
 #'
@@ -821,7 +820,7 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10,coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                           ycor = randomYcor(world = w1, n = 10)))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
@@ -872,7 +871,7 @@ setMethod(
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = cbind(xcor = randomXcor(world = w1, n = 10),
 #'                                            ycor = randomYcor(world = w1, n = 10)))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
@@ -1103,7 +1102,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- face(turtles = t1, agents2 = cbind(x = 0, y = 0))
@@ -1279,7 +1278,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- downhill(world = w1, turtles = t1, nNeighbors = 8)
@@ -1408,7 +1407,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 1, maxPxcor = 10, minPycor = 1, maxPycor = 10,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- uphill(world = w1, turtles = t1, nNeighbors = 8)
@@ -1577,7 +1576,7 @@ setMethod(
 #' Patches on the left
 #'
 #' Report the coordinates of the patches at the given distances of the \code{turtles}
-#' on the left of their headings.
+#' and given \code{angle} left of their headings.
 #'
 #' @inheritParams fargs
 #'
@@ -1592,8 +1591,8 @@ setMethod(
 #'         distances of the \code{turtles} and \code{angle} to the left of their headings.
 #'         The order of the patches follows the order of the \code{turtles}.
 #'
-#' @details If a given \code{dist} value is negative, then the turtle would move backward.
-#'          If a given \code{angle} value is negative, then the turtle would rotate to the right.
+#' @details If a given \code{dist} value is negative, then the turtle would look backward.
+#'          If a given \code{angle} value is negative, then the turtle would look to the right.
 #'
 #'          If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
 #'          and \code{angle} degrees to the left of its heading is outside the
@@ -1646,7 +1645,7 @@ setMethod(
 #' Patches on the right
 #'
 #' Report the coordinates of the patches at the given distances of the \code{turtles}
-#' on the right of their headings.
+#' and given \code{angle} right of their headings.
 #'
 #' @inheritParams fargs
 #'
@@ -1657,9 +1656,9 @@ setMethod(
 #'         distances of the \code{turtles} and \code{angle} to the right of their headings.
 #'         The order of the patches follows the order of the \code{turtles}.
 #'
-#' @details If a given \code{dist} value is negative, then the turtle would move backward.
+#' @details If a given \code{dist} value is negative, then the turtle would look backward.
 #'          If a given \code{angle} value is negative, then the turtle would
-#'          rotate to the left.
+#'          look to the left.
 #'
 #'          If \code{torus = FALSE} and the patch at distance \code{dist} of a turtle
 #'          and \code{angle} degrees to the right of its heading is outside the
@@ -1738,7 +1737,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t1 <- setXY(turtles = t1, xcor = 1:5, ycor = 1:5)
@@ -1965,11 +1964,11 @@ setMethod(
 ################################################################################
 #' Inspect turtles
 #'
-#' Display the variables values for the selected individuals among the \code{turtles}.
+#' Display all variables values for the selected individuals among the \code{turtles}.
 #'
 #' @inheritParams fargs
 #'
-#' @return Dataframe (nrow = \code{length(who)}) with the variables for the selected
+#' @return Dataframe (nrow = \code{length(who)}) of the variables of the selected
 #'         individuals among the \code{turtles}.
 #'
 #' @seealso \url{https://ccl.northwestern.edu/netlogo/docs/dictionary.html#inspect}
@@ -2043,7 +2042,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 5, coords = randomXYcor(w1, n = 5))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
 #' t1 <- moveTo(turtles = t1, agents = turtle(t1, who = 0))
@@ -2098,7 +2097,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
 #'                           data = runif(25))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #'
@@ -2302,7 +2301,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 500, coords = randomXYcor(w1, n = 500))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 #'
 #' t2 <- turtlesOn(world = w1, turtles = t1, agents = patch(w1, 2, 2))
@@ -2906,7 +2905,7 @@ setMethod(
 #' w1 <- createWorld(minPxcor = 0, maxPxcor = 9, minPycor = 0, maxPycor = 9,
 #'                           data = runif(100))
 #' t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-#' plot(world2raster(w1))
+#' plot(w1)
 #' points(turtles2spdf(t1), col = "black", pch = 16)
 #'
 #' t1 <- layoutCircle(world = w1, turtles = t1, radius = 3)
@@ -2946,7 +2945,7 @@ setMethod(
 #'
 #' @inheritParams fargs
 #'
-#' @param var Character. Vector of the name of the selected \code{agents} variables.
+#' @param var Character. Vector of the names of the selected \code{agents} variables.
 #'            If \code{agents} are patches and the \code{world} is a
 #'            \code{worldMatrix} object, \code{var} must not be provided. If
 #'            \code{agents} are patches and the \code{world} is a

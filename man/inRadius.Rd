@@ -23,8 +23,7 @@ inRadius(agents, radius, agents2, world, torus = FALSE)
 \item{agents2}{Matrix (ncol = 2) with the first column "pxcor" and the second
               column "pycor" representing the patches coordinates, or
 
-              AgentMatrix created by \code{createTurtles()} or
-              by \code{createOTurtles()} representing the moving agents.}
+              AgentMatrix object representing the moving agents.}
 
 \item{world}{WorldMatrix or worldArray object.}
 

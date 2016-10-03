@@ -56,12 +56,12 @@ Return the \code{agents} sorted according to their value.
 # Patches
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = sample(1:5, size = 25, replace = TRUE))
-plot(world2raster(w1))
+plot(w1)
 p1 <- sortOn(agents = patches(w1), world = w1)
 
 # Turtles
 t1 <- createTurtles(n = 10, coords = randomXYcor(w1, n = 10))
-sortdHeadingst1 <- sortOn(agents = t1, var = "heading")
+sortHeadingT1 <- sortOn(agents = t1, var = "heading")
 
 
 }

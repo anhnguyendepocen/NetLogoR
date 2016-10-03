@@ -26,7 +26,7 @@ Report \code{n} random xcor and ycor coordinates within the \code{world}'s exten
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = runif(25))
 t1 <- createTurtles(n = 10, coords = randomXYcor(world = w1, n = 10))
-plot(world2raster(w1))
+plot(w1)
 points(turtles2spdf(t1), col = of(agents = t1, var = "color"), pch = 16)
 
 

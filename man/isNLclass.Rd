@@ -35,10 +35,10 @@ Careful! The \code{class} tested does not correspond to actual R classes.
          one row. \code{agents} is \code{"patcheset"} if the matrix has more than
          one row.
 
-         \code{agents} is \code{"turtle"} if it is a SpatialPointsDataFrame
-         of length 1 with the variables created when using \code{createTurtles()}
-         or \code{createOTurtles()}. \code{agents} is \code{"turtleset"} if the
-         SpatialPointsDataFrame is of length larger than 1.
+         \code{agents} is \code{"turtle"} if it is an agentMatrix
+         containing only one turtle.
+         \code{agents} is \code{"turtleset"} if the
+         agentMatrix contains more than one turtle.
 
          \code{agents} is \code{"agent"} if it is either \code{"patch"} or
          \code{"turtle"}. \code{agents} is \code{"agentset"} if it is either

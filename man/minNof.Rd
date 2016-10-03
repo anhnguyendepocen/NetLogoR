@@ -61,7 +61,7 @@ among the minimum values.
 # Patches
 w1 <- createWorld(minPxcor = 0, maxPxcor = 4, minPycor = 0, maxPycor = 4,
                           data = sample(1:10, size = 25, replace = TRUE))
-plot(world2raster(w1))
+plot(w1)
 p1 <- minNof(agents = patches(w1), n = 6, world = w1)
 
 # Turtles

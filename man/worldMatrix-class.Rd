@@ -7,7 +7,7 @@
 \title{The worldMatrix class}
 \description{
 This is an s4 class extension of \code{matrix} with 7 additional slots.
-A \code{worldMatrix} object can be viewes as a grid composed of squared patches
+A \code{worldMatrix} object can be viewed as a grid composed of squared patches
 (i.e., matrix cells). Patches have two spatial coordinates \code{pxcor} and
 \code{pycor}, representing the location of their center. \code{pxcor} and
 \code{pycor} are always integer and increment by 1. \code{pxcor} increases as
@@ -19,10 +19,10 @@ you move right and \code{pycor} increases as you move up.  \code{pxcor} and
 The first four slots of the \code{worldMatrix} are: \code{minPxcor}, \code{maxPxcor},
 \code{minPycor}, \code{maxPycor} which represent the minimum and maximum patches
 coordinates in the \code{worldMatrix}.
-The slot \code{extext} is similar to a \code{Raster*} extent. Because \code{pxcor}
+The slot \code{extent} is similar to a \code{Raster*} extent. Because \code{pxcor}
 and \code{pycor} represent the spatial location at the center of the patches and the
 resolution of them is 1, the extent of the \code{worldMatrix} is equal to
-\code{xmin = minPxcor - 0.5}, code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5},
+\code{xmin = minPxcor - 0.5}, \code{xmax = maxPxcor + 0.5}, \code{ymin = minPycor - 0.5},
 and \code{ymax = maxPycor + 0.5}.
 The number of patches in a \code{worldMatrix} is equal to
 \code{((maxPxcor - minPxcor) + 1) * ((maxPycor - minPycor) + 1)}.
@@ -33,7 +33,7 @@ of all the matrix cells in the order of cells in a \code{Raster*} (i.e., by rows
 Careful: The methods \code{[]} and \code{[] <-} retrieve or assign values for
 the patches in the given order of the patches coordinates provided.
 When no patches coordinates are provided, the values retrieved or assigned
-is done in the order of the cell numbers as defined in in \code{Raster*} objects.
+is done in the order of the cell numbers as defined in in \code{Raster*} objects (i.e., by rows).
 }
 \author{
 Sarah Bauduin, Eliot McIntire, and Alex Chubaty
