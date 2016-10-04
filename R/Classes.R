@@ -862,6 +862,7 @@ plot.worldArray <- function(x, ...) {
 #' @docType methods
 #' @rdname plotMethods
 #' @method points agentMatrix
+#' @importFrom graphics points
 #' @examples
 #'
 #' # agentMatrix
