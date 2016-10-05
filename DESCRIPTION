@@ -6,22 +6,22 @@ Description: Easily create agent-based models in R
     'NetLogoR' provides classes to represent 'patches' (raster cells)
     and 'turtles' (individuals),
     the necessary 'NetLogo' primitives
-    (https://ccl.northwestern.edu/netlogo/docs/dictionary.html),
+    (<https://ccl.northwestern.edu/netlogo/docs/dictionary.html>),
     and complementary functions to easily build agent-based models
     or translate 'NetLogo' models in R.
     A programming guide derived from the 'NetLogo' Programming Guide
-    (https://ccl.northwestern.edu/netlogo/docs/programming.html)
+    (<https://ccl.northwestern.edu/netlogo/docs/programming.html>)
     and a dictionary of 'NetLogo' primitives
-    (https://ccl.northwestern.edu/netlogo/docs/dictionary.html)
+    (>https://ccl.northwestern.edu/netlogo/docs/dictionary.html>)
     equivalences are available.
     As examples, three 'NetLogo' models
-    (Ants; http://ccl.northwestern.edu/netlogo/models/Ants;
+    (Ants; <http://ccl.northwestern.edu/netlogo/models/Ants>;
     Butterfly; Railsback and Grimm, 2012;
-    Wolf-Sheep-Predation; http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation)
+    Wolf-Sheep-Predation; <http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation>)
     were translated in R language using 'NetLogoR'.
     NOTE: To increment 'time', these functions can use
     a for loop or can be integrated with a discrete event simulator,
-    such as 'SpaDES'.
+    such as 'SpaDES' (<https://cran.r-project.org/package=SpaDES>).
 URL: http://NetLogoR.PredictiveEcology.org, https://github.com/PredictiveEcology/NetLogoR
 Version: 0.1.0
 Date: 2016-09-30
