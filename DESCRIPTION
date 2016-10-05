@@ -12,7 +12,7 @@ Description: Easily create agent-based models in R
     A programming guide derived from the 'NetLogo' Programming Guide
     (<https://ccl.northwestern.edu/netlogo/docs/programming.html>)
     and a dictionary of 'NetLogo' primitives
-    (>https://ccl.northwestern.edu/netlogo/docs/dictionary.html>)
+    (<https://ccl.northwestern.edu/netlogo/docs/dictionary.html>)
     equivalences are available.
     As examples, three 'NetLogo' models
     (Ants; <http://ccl.northwestern.edu/netlogo/models/Ants>;
