@@ -2,7 +2,7 @@ Package: NetLogoR
 Title: A Port of 'NetLogo' Functions and Language to R
 Description: Easily create agent-based models in R
     following the 'NetLogo' framework
-    (Wilensky, 1999; http://ccl.northwestern.edu/netlogo/).
+    (Wilensky, 1999; <http://ccl.northwestern.edu/netlogo/>).
     'NetLogoR' provides classes to represent 'patches' (raster cells)
     and 'turtles' (individuals),
     the necessary 'NetLogo' primitives
