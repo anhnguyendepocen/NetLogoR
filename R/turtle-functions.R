@@ -2332,7 +2332,7 @@ setMethod(
       agents = patchHere(world = world, turtles = agents)
     }
 
-    pTurtles <- round(turtles@.Data[,c("xcor", "ycor","who")])
+    pTurtles <- round(turtles@.Data[,c("xcor", "ycor","who"), drop = FALSE])
     colnames(pTurtles)[1:2] <- c("pxcor", "pycor") # awkward column name change
 
     if (simplify == TRUE) {
@@ -2342,7 +2342,7 @@ setMethod(
       a = matrix(ncol=ncol(world), nrow=nrow(world))
       a[agents-(c(attr(world, "minPxcor"), attr(world, "minPycor")) - 1)] <- 1
       # change this 26 to the dimensions of the world, and next line
-      pOn <- na.omit(a[pTurtles[,1:2]-(c(attr(world, "minPxcor"),
+      pOn <- na.omit(a[pTurtles[,1:2, drop = FALSE]-(c(attr(world, "minPxcor"),
                                          attr(world, "minPycor")) - 1)] * pTurtles)
 
       if (nrow(pOn) == 0) {
@@ -2358,17 +2358,17 @@ setMethod(
       agents <- cbind(agents, id = 1:dim(agents)[1])
 
       b <- a <- matrix(ncol=ncol(world), nrow=nrow(world))
-      a[agents[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- 1
+      a[agents[,1:2, drop = FALSE]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- 1
       # change this 26 to the dimensions of the world, and next line
-      b[agents[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- agents[,3]
+      b[agents[,1:2, drop = FALSE]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] <- agents[,3]
       # change this 26 to the dimensions of the world, and next line
-      pOn <- na.omit(a[pTurtles[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] * pTurtles)
+      pOn <- na.omit(a[pTurtles[,1:2, drop = FALSE]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)] * pTurtles)
       dims <- c(nrow(pOn), ncol(pOn))
       colNames <- colnames(pOn)
       length(pOn) <- length(pOn) + dims[1]
       dim(pOn) <- dims+c(0,1)
       colnames(pOn) <- c(colNames, "id")
-      pOn[,"id"] <- na.omit(b[pTurtles[,1:2]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)])
+      pOn[,"id"] <- na.omit(b[pTurtles[,1:2, drop = FALSE]-(c(attr(world, "minPxcor"), attr(world, "minPycor"))-1)])
 
       pOn <- pOn[order(pOn[,"id"]),,drop=FALSE]
       turtlesID <- pOn[,c("who","id"), drop=FALSE]
