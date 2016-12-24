@@ -17,7 +17,7 @@ As examples, three NetLogo models ([Ants](http://ccl.northwestern.edu/netlogo/mo
 
 To do this, you will require the devtools package.
 
-```{r}
+```{r, eval=FALSE}
 library(devtools)
 install_github("PredictiveEcology/NetLogoR")
 
